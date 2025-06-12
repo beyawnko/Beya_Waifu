@@ -568,6 +568,11 @@ public:
     long unsigned int TaskNumTotal_CurrentFile=0;
     long unsigned int TaskNumFinished_CurrentFile=0;
     bool NewTaskFinished_CurrentFile=false;
+
+    // Utility to run a QProcess using signal based event loop
+    bool runProcess(QProcess *process, const QString &cmd,
+                    QByteArray *stdOut = nullptr,
+                    QByteArray *stdErr = nullptr);
     long unsigned int ETA_CurrentFile=0;
     bool isStart_CurrentFile=false;
     //=============================================

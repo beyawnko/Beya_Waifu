@@ -67,13 +67,12 @@ bool MainWindow::Gif_DoubleScaleRatioPrep(int RowNumber)
 int MainWindow::Gif_getDuration(QString gifPath)
 {
     //========================= 调用ffprobe读取GIF信息 ======================
-    QProcess *Get_GifAvgFPS_process = new QProcess();
+    QProcess Get_GifAvgFPS_process;
     QString cmd = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+gifPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
-    Get_GifAvgFPS_process->start(cmd);
-    while(!Get_GifAvgFPS_process->waitForStarted(100)&&!QProcess_stop) {}
-    while(!Get_GifAvgFPS_process->waitForFinished(100)&&!QProcess_stop) {}
+    QByteArray ffprobe_out;
+    runProcess(&Get_GifAvgFPS_process, cmd, &ffprobe_out);
     //============= 保存ffprobe输出的ini格式文本 =============
-    QString ffprobe_output_str = Get_GifAvgFPS_process->readAllStandardOutput();
+    QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
     //================ 将ini写入文件保存 ================
     QFileInfo videoFileInfo(gifPath);
     QString Path_gif_info_ini = "";
@@ -150,17 +149,13 @@ void MainWindow::Gif_splitGif(QString gifPath,QString SplitFramesFolderPath)
     //开始用convert处理
     QString program = Current_Path+"/convert_waifu2xEX.exe";
     QString cmd = "\"" + program + "\"" + " -coalesce " + "\"" + gifPath + "\"" + " " + "\"" + SplitFramesFolderPath + "/%0"+QString::number(FrameDigits,10)+"d.png\"";
-    QProcess *SplitGIF=new QProcess();
-    SplitGIF->start(cmd);
-    while(!SplitGIF->waitForStarted(100)&&!QProcess_stop) {}
-    while(!SplitGIF->waitForFinished(100)&&!QProcess_stop) {}
+    QProcess SplitGIF;
+    runProcess(&SplitGIF, cmd);
     if(file_isDirEmpty(SplitFramesFolderPath))//如果拆分失败,尝试win7兼容指令
     {
         QString cmd = "\"" + program + "\"" + " -coalesce " + "\"" + gifPath + "\"" + " " + "\"" + SplitFramesFolderPath + "/%%0"+QString::number(FrameDigits,10)+"d.png\"";
-        QProcess *SplitGIF=new QProcess();
-        SplitGIF->start(cmd);
-        while(!SplitGIF->waitForStarted(100)&&!QProcess_stop) {}
-        while(!SplitGIF->waitForFinished(100)&&!QProcess_stop) {}
+        QProcess SplitGIF;
+        runProcess(&SplitGIF, cmd);
     }
     emit Send_TextBrowser_NewMessage(tr("Finish splitting GIF:[")+gifPath+"]");
 }
@@ -204,10 +199,8 @@ void MainWindow::Gif_assembleGif(QString ResGifPath,QString ScaledFramesPath,int
             }
         }
         QString cmd = "\"" + program + "\" "+resize_cmd+" -delay " + QString::number(Duration, 10) + " -loop 0 \"" + ScaledFramesPath + "/*png\" \""+ResGifPath+"\"";
-        QProcess *AssembleGIF=new QProcess();
-        AssembleGIF->start(cmd);
-        while(!AssembleGIF->waitForStarted(100)&&!QProcess_stop) {}
-        while(!AssembleGIF->waitForFinished(100)&&!QProcess_stop) {}
+        QProcess AssembleGIF;
+        runProcess(&AssembleGIF, cmd);
         //======= 纠正文件名称错误(当 结果gif文件路径内有 % 符号时) ======
         if(QFile::exists(ResGifPath)==false)
         {
@@ -248,10 +241,8 @@ void MainWindow::Gif_assembleGif(QString ResGifPath,QString ScaledFramesPath,int
         ImagesResize_Folder_MultiThread(New_width,New_height,ScaledFramesPath);
     }
     QString cmd = "\"" + program + "\" \"" + ScaledFramesPath + "/*png\" -delay " + QString::number(Duration, 10) + " -loop 0 \""+ResGifPath+"\"";
-    QProcess *AssembleGIF_1=new QProcess();
-    AssembleGIF_1->start(cmd);
-    while(!AssembleGIF_1->waitForStarted(100)&&!QProcess_stop) {}
-    while(!AssembleGIF_1->waitForFinished(100)&&!QProcess_stop) {}
+    QProcess AssembleGIF_1;
+    runProcess(&AssembleGIF_1, cmd);
     //======= 纠正文件名称错误(当 结果gif文件路径内有 % 符号时) ======
     if(QFile::exists(ResGifPath)==false)
     {
@@ -282,10 +273,8 @@ QString MainWindow::Gif_compressGif(QString gifPath,QString gifPath_compressd)
     //=====
     QString program = Current_Path+"/gifsicle_waifu2xEX.exe";
     QString cmd = "\"" + program + "\"" + " -O3 -i \""+gifPath+"\" -o \""+gifPath_compressd+"\"";
-    QProcess *CompressGIF=new QProcess();
-    CompressGIF->start(cmd);
-    while(!CompressGIF->waitForStarted(100)&&!QProcess_stop) {}
-    while(!CompressGIF->waitForFinished(100)&&!QProcess_stop) {}
+    QProcess CompressGIF;
+    runProcess(&CompressGIF, cmd);
     //======
     //判断是否生成压缩后的gif
     if(QFile::exists(gifPath_compressd) == false)
