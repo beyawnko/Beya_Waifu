@@ -19,7 +19,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 /*
-根据行数从自定义分辨率列表移除视频文件
+Remove a video file from the custom resolution list by row number
 */
 void MainWindow::video_RemoveFromCustResList(int RowNumber)
 {
@@ -28,19 +28,19 @@ void MainWindow::video_RemoveFromCustResList(int RowNumber)
 }
 
 /*
-当视频没有自定义分辨率且此时放大倍率为double,则计算一个添加到自定义列表里
+If the video has no custom resolution and the scale ratio is double, compute one and add it to the custom list
 */
 bool MainWindow::video_DoubleScaleRatioPrep(int RowNumber)
 {
     QString SourceFile_fullPath = Table_model_video->item(RowNumber,2)->text();
     if(CustRes_isContained(SourceFile_fullPath) == true || ui->checkBox_FrameInterpolationOnly_Video->isChecked())
     {
-        //如果已经被定义自定义分辨率,或者仅进行插帧
+        // If a custom resolution already exists or frame interpolation only is enabled
         return false;
     }
-    //===================== 获取分辨率 =============================
+    //===================== Get resolution =============================
     QMap<QString,int> Map_OrgRes = video_get_Resolution(SourceFile_fullPath);
-    //========= 计算新的高度宽度 ==================
+    //========= Calculate new height and width ==================
     double ScaleRatio_double = ui->doubleSpinBox_ScaleRatio_video->value();
     int Height_new = qRound(ScaleRatio_double * Map_OrgRes["height"]);
     int width_new = qRound(ScaleRatio_double * Map_OrgRes["width"]);
@@ -51,7 +51,7 @@ bool MainWindow::video_DoubleScaleRatioPrep(int RowNumber)
     }
     if(Height_new%2!=0)Height_new++;
     if(width_new%2!=0)width_new++;
-    //======== 存入自定义分辨率列表中 ============
+    //======== Save to custom resolution list ============
     QMap<QString,QString> res_map;
     res_map["fullpath"] = SourceFile_fullPath;
     res_map["height"] = QString::number(Height_new,10);
@@ -61,7 +61,7 @@ bool MainWindow::video_DoubleScaleRatioPrep(int RowNumber)
     return true;
 }
 /*
-计算数字的位数
+Calculate number of digits
 */
 int MainWindow::CalNumDigits(int input_num)
 {
@@ -70,19 +70,19 @@ int MainWindow::CalNumDigits(int input_num)
 }
 
 /*
-判断视频是否是可变帧率的
+Determine whether the video is variable frame rate
 */
 bool MainWindow::video_isVFR(QString videoPath)
 {
-    //========================= 调用ffprobe读取视频信息 ======================
+    //========================= Use ffprobe to read video information ======================
     QProcess *Get_VideoFPS_process = new QProcess();
     QString cmd = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+videoPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
     Get_VideoFPS_process->start(cmd);
     while(!Get_VideoFPS_process->waitForStarted(100)&&!QProcess_stop) {}
     while(!Get_VideoFPS_process->waitForFinished(100)&&!QProcess_stop) {}
-    //============= 保存ffprobe输出的ini格式文本 =============
+    //============= Save ffprobe output as INI text =============
     QString ffprobe_output_str = Get_VideoFPS_process->readAllStandardOutput();
-    //================ 将ini写入文件保存 ================
+    //================ Save the INI file ================
     QFileInfo videoFileInfo(videoPath);
     QString Path_video_info_ini = "";
     QString video_dir = file_getFolderPath(videoPath);
@@ -96,13 +96,13 @@ bool MainWindow::video_isVFR(QString videoPath)
     //=========
     QFile video_info_ini(Path_video_info_ini);
     video_info_ini.remove();
-    if (video_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
+    if (video_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) // QIODevice::ReadWrite supports reading and writing
     {
         QTextStream stream(&video_info_ini);
         stream << ffprobe_output_str;
     }
     video_info_ini.close();
-    //================== 读取ini获得参数 =====================
+    //================== Read parameters from INI =====================
     QString avg_frame_rate = "";
     QString r_frame_rate = "";
     QSettings *configIniRead_videoInfo = new QSettings(Path_video_info_ini, QSettings::IniFormat);
@@ -123,8 +123,8 @@ bool MainWindow::video_isVFR(QString videoPath)
     }
 }
 /*
-根据分辨率判断是否跳过
-true = 跳过
+Determine whether to skip based on resolution
+true = skip
 */
 bool MainWindow::Video_AutoSkip_CustRes(int rowNum)
 {
@@ -139,7 +139,7 @@ bool MainWindow::Video_AutoSkip_CustRes(int rowNum)
         QMap<QString,int> res_map = video_get_Resolution(SourceFile_fullPath);
         int original_height = res_map["height"];
         int original_width = res_map["width"];
-        if(original_height<=0||original_width<=0)//判断是否读取失败
+        if(original_height<=0||original_width<=0)// check if reading failed
         {
             return false;
         }
@@ -160,20 +160,20 @@ bool MainWindow::Video_AutoSkip_CustRes(int rowNum)
 }
 
 /*
-直接获取视频的分辨率
+Directly obtain the video resolution
 */
 QMap<QString,int> MainWindow::video_get_Resolution(QString VideoFileFullPath)
 {
     emit Send_TextBrowser_NewMessage(tr("Get resolution of the video:[")+VideoFileFullPath+"]");
-    //========================= 调用ffprobe读取视频信息 ======================
+    //========================= Use ffprobe to read video information ======================
     QProcess *Get_resolution_process = new QProcess();
     QString cmd = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+VideoFileFullPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
     Get_resolution_process->start(cmd);
     while(!Get_resolution_process->waitForStarted(100)&&!QProcess_stop) {}
     while(!Get_resolution_process->waitForFinished(100)&&!QProcess_stop) {}
-    //============= 保存ffprobe输出的ini格式文本 =============
+    //============= Save ffprobe output as INI text =============
     QString ffprobe_output_str = Get_resolution_process->readAllStandardOutput();
-    //================ 将ini写入文件保存 ================
+    //================ Save the INI file ================
     QFileInfo videoFileInfo(VideoFileFullPath);
     QString Path_video_info_ini = "";
     QString video_dir = file_getFolderPath(VideoFileFullPath);
@@ -187,13 +187,13 @@ QMap<QString,int> MainWindow::video_get_Resolution(QString VideoFileFullPath)
     //=========
     QFile video_info_ini(Path_video_info_ini);
     video_info_ini.remove();
-    if (video_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
+    if (video_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) // QIODevice::ReadWrite supports reading and writing
     {
         QTextStream stream(&video_info_ini);
         stream << ffprobe_output_str;
     }
     video_info_ini.close();
-    //================== 读取ini获得参数 =====================
+    //================== Read parameters from INI =====================
     QSettings *configIniRead_videoInfo = new QSettings(Path_video_info_ini, QSettings::IniFormat);
     QString width_str = "";
     QString height_str = "";
@@ -224,11 +224,11 @@ QMap<QString,int> MainWindow::video_get_Resolution(QString VideoFileFullPath)
 }
 
 /*
-根据视频时长,判断是否需要分段处理
+Determine whether to process the video in segments based on its length
 */
 bool MainWindow::video_isNeedProcessBySegment(int rowNum)
 {
-    if(ui->checkBox_ProcessVideoBySegment->isChecked()==false)return false;//如果没启用分段处理,直接返回false
+    if(ui->checkBox_ProcessVideoBySegment->isChecked()==false)return false;// if segment processing is disabled, return false
     QString VideoFile = Table_model_video->item(rowNum,2)->text();
     if(video_get_duration(VideoFile)>ui->spinBox_SegmentDuration->value())
     {
@@ -242,7 +242,7 @@ bool MainWindow::video_isNeedProcessBySegment(int rowNum)
 }
 
 /*
-生成视频片段文件夹编号
+Generate a folder number for video clips
 */
 QString MainWindow::video_getClipsFolderNo()
 {
@@ -250,7 +250,7 @@ QString MainWindow::video_getClipsFolderNo()
     return current_date;
 }
 /*
-组装视频(从mp4片段组装)
+Assemble video from MP4 segments
 */
 void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString VideoClipsFolderName,QString video_mp4_scaled_fullpath,QString AudioPath)
 {
@@ -262,7 +262,7 @@ void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString V
     QFileInfo vfinfo(video_mp4_scaled_fullpath);
     QString video_dir = file_getFolderPath(video_mp4_scaled_fullpath);
     /*
-    生成视频片段文件完整路径QStringList
+    Generate a QStringList of full paths for video clip files
     */
     for (int VideoNameNo = 0; VideoNameNo<VideoClips_Scan_list.size(); VideoNameNo++)
     {
@@ -272,10 +272,10 @@ void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString V
             VideoClips_fileName_list.append(VideoClip_FullPath_tmp);
         }
     }
-    //获取一个有效的mp4片段文件完整路径
+    // Get a valid full path for an mp4 clip
     QString Mp4Clip_forReadInfo = VideoClips_fileName_list.at(0);
     /*
-    生成文件列表QString
+    Generate file list QString
     */
     QString FFMpegFileList_QString = "";
     for(int CurrentVideoClipNo = 0; CurrentVideoClipNo < VideoClips_fileName_list.size(); CurrentVideoClipNo++)
@@ -284,7 +284,7 @@ void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString V
         QString Line = "file \'"+VideoClip_fullPath+"\'\n";
         FFMpegFileList_QString.append(Line);
     }
-    //================ 将文件列表写入文件保存 ================
+    //================ Save the file list to disk ================
     QFileInfo videoFileInfo(video_mp4_scaled_fullpath);
     QString Path_FFMpegFileList = "";
     int FileNo = 0;
@@ -600,7 +600,7 @@ int MainWindow::video_get_duration(QString videoPath)
     Get_Duration_process->start(cmd);
     while(!Get_Duration_process->waitForStarted(100)&&!QProcess_stop) {}
     while(!Get_Duration_process->waitForFinished(100)&&!QProcess_stop) {}
-    //============= 保存ffprobe输出的ini格式文本 =============
+    //============= Save ffprobe output as INI text =============
     QString ffprobe_output_str = Get_Duration_process->readAllStandardOutput();
     //================ 将ini写入文件保存 ================
     QFileInfo videoFileInfo(videoPath);
@@ -831,7 +831,7 @@ QString MainWindow::video_get_bitrate(QString videoPath,bool isReturnFullCMD,boo
     Get_Bitrate_process->start(cmd);
     while(!Get_Bitrate_process->waitForStarted(100)&&!QProcess_stop) {}
     while(!Get_Bitrate_process->waitForFinished(100)&&!QProcess_stop) {}
-    //============= 保存ffprobe输出的ini格式文本 =============
+    //============= Save ffprobe output as INI text =============
     QString ffprobe_output_str = Get_Bitrate_process->readAllStandardOutput();
     //================ 将ini写入文件保存 ================
     //创建文件夹
@@ -905,7 +905,7 @@ QString MainWindow::video_get_fps(QString videoPath)
     Get_VideoFPS_process->start(cmd);
     while(!Get_VideoFPS_process->waitForStarted(100)&&!QProcess_stop) {}
     while(!Get_VideoFPS_process->waitForFinished(100)&&!QProcess_stop) {}
-    //============= 保存ffprobe输出的ini格式文本 =============
+    //============= Save ffprobe output as INI text =============
     QString ffprobe_output_str = Get_VideoFPS_process->readAllStandardOutput();
     //================ 将ini写入文件保存 ================
     QFileInfo videoFileInfo(videoPath);
@@ -963,7 +963,7 @@ int MainWindow::video_get_frameNum(QString videoPath)
     Get_VideoFrameNumDigits_process->start(cmd);
     while(!Get_VideoFrameNumDigits_process->waitForStarted(100)&&!QProcess_stop) {}
     while(!Get_VideoFrameNumDigits_process->waitForFinished(100)&&!QProcess_stop) {}
-    //============= 保存ffprobe输出的ini格式文本 =============
+    //============= Save ffprobe output as INI text =============
     QString ffprobe_output_str = Get_VideoFrameNumDigits_process->readAllStandardOutput();
     //================ 将ini写入文件保存 ================
     QFileInfo videoFileInfo(videoPath);
