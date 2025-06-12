@@ -287,42 +287,9 @@ public:
     //兼容性测试完成后的操作 -兼容性测试进度条
     void Finish_progressBar_CompatibilityTest();
     //兼容性检测
-    bool isCompatible_Waifu2x_NCNN_Vulkan_OLD=false;
-    bool isCompatible_Waifu2x_NCNN_Vulkan_NEW=false;
-    bool isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P=false;
-    bool isCompatible_SRMD_NCNN_Vulkan=false;
-    bool isCompatible_SRMD_CUDA=false;
-    bool isCompatible_Waifu2x_Converter=false;
-    bool isCompatible_Anime4k_CPU=false;
-    bool isCompatible_Anime4k_GPU=false;
-    bool isCompatible_FFmpeg=false;
-    bool isCompatible_FFprobe=false;
-    bool isCompatible_ImageMagick=false;
-    bool isCompatible_Gifsicle=false;
-    bool isCompatible_SoX=false;
-    bool isCompatible_Waifu2x_Caffe_CPU=false;
-    bool isCompatible_Waifu2x_Caffe_GPU=false;
-    bool isCompatible_Waifu2x_Caffe_cuDNN=false;
-    bool isCompatible_Realsr_NCNN_Vulkan=false;
-    bool isCompatible_RifeNcnnVulkan=false;
-    bool isCompatible_CainNcnnVulkan=false;
-    bool isCompatible_DainNcnnVulkan=false;
     bool isCompatible_RealCUGAN_NCNN_Vulkan=false;
     bool isCompatible_RealESRGAN_NCNN_Vulkan=false;
     //============================== 多显卡 ==========================================
-    //waifu2x-ncnn-vulkan
-    int GPU_ID_Waifu2x_NCNN_Vulkan_MultiGPU = 0;
-    QMap<QString,QString> Waifu2x_NCNN_Vulkan_MultiGPU();
-    QMutex MultiGPU_QMutex_Waifu2xNCNNVulkan;
-    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan;
-    void AddGPU_MultiGPU_Waifu2xNCNNVulkan(QString GPUID);
-
-    //SRMD-ncnn-vulkan
-    int GPU_ID_SrmdNcnnVulkan_MultiGPU = 0;
-    QMap<QString,QString> SrmdNcnnVulkan_MultiGPU();
-    QMutex MultiGPU_QMutex_SrmdNcnnVulkan;
-    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_SrmdNcnnVulkan;
-    void AddGPU_MultiGPU_SrmdNcnnVulkan(QString GPUID);
 
     //RealsrNcnnVulkan
     int GPU_ID_RealsrNcnnVulkan_MultiGPU = 0;

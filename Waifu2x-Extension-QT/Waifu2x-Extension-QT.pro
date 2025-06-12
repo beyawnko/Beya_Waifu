@@ -36,7 +36,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     AnimatedPNG.cpp \
-    Anime4K.cpp \
     CompatibilityTest.cpp \
     Current_File_Progress.cpp \
     CustomResolution.cpp \
@@ -55,18 +54,11 @@ SOURCES += \
     progressBar.cpp \
     realcugan_ncnn_vulkan.cpp \
     realesrgan_ncnn_vulkan.cpp \
-    realsr_ncnn_vulkan.cpp \
     settings.cpp \
-    srmd-cuda.cpp \
-    srmd_ncnn_vulkan.cpp \
     table.cpp \
     textBrowser.cpp \
     topsupporterslist.cpp \
-    video.cpp \
-    waifu2x.cpp \
-    waifu2x_caffe.cpp \
-    waifu2x_converter.cpp \
-    waifu2x_ncnn_vulkan.cpp
+    video.cpp 
 
 HEADERS += \
     mainwindow.h \
