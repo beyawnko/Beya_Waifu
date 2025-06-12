@@ -76,7 +76,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(int maxThreadsOverride = 0, QWidget *parent = nullptr);
     void changeEvent(QEvent *e);
     //=======================
     QString VERSION = "v3.41.02-beta";//软件版本号
@@ -89,6 +89,7 @@ public:
     TopSupportersList *TopSupportersList_widget;
     //=======
     QString Current_Path = qApp->applicationDirPath();//当前路径
+    int globalMaxThreadCount = 0; // maximum threads for global pool
     //=======
     void Set_Font_fixed();
     //=================================  File 文件 =================================

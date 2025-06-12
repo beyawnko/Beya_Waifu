@@ -20,13 +20,25 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include <QCommandLineParser>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);//高分辨率屏幕支持
     QApplication a(argc,argv);
+    QCommandLineParser parser;
+    parser.setApplicationDescription("Waifu2x-Extension-GUI");
+    parser.addHelpOption();
+    QCommandLineOption maxThreadsOpt(QStringLiteral("max-threads"),
+                                     QStringLiteral("Override global thread limit"),
+                                     QStringLiteral("count"));
+    parser.addOption(maxThreadsOpt);
+    parser.process(a);
+    int overrideThreads = 0;
+    if(parser.isSet(maxThreadsOpt))
+        overrideThreads = parser.value(maxThreadsOpt).toInt();
     a.setQuitOnLastWindowClosed(false);//隐藏无窗口时保持运行
-    MainWindow *w = new MainWindow;
+    MainWindow *w = new MainWindow(overrideThreads);
     w->show();
     return a.exec();
 }

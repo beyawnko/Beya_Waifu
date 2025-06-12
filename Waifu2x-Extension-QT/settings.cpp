@@ -50,6 +50,7 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/settings/ImageThreadNum", ui->spinBox_ThreadNum_image->value());
     configIniWrite->setValue("/settings/GIFThreadNumInternal", ui->spinBox_ThreadNum_gif_internal->value());
     configIniWrite->setValue("/settings/VideoThreadNumInternal", ui->spinBox_ThreadNum_video_internal->value());
+    configIniWrite->setValue("/settings/MaxThreadCount", globalMaxThreadCount);
     //================== Save engine settings =========================
     configIniWrite->setValue("/settings/ImageEngine", ui->comboBox_Engine_Image->currentIndex());
     configIniWrite->setValue("/settings/GIFEngine", ui->comboBox_Engine_GIF->currentIndex());
@@ -316,6 +317,8 @@ int MainWindow::Settings_Read_Apply()
     ui->spinBox_ThreadNum_image->setValue(Settings_Read_value("/settings/ImageThreadNum").toInt());
     ui->spinBox_ThreadNum_gif_internal->setValue(Settings_Read_value("/settings/GIFThreadNumInternal").toInt());
     ui->spinBox_ThreadNum_video_internal->setValue(Settings_Read_value("/settings/VideoThreadNumInternal").toInt());
+    globalMaxThreadCount = Settings_Read_value("/settings/MaxThreadCount", globalMaxThreadCount).toInt();
+    QThreadPool::globalInstance()->setMaxThreadCount(globalMaxThreadCount);
     //================ Load engine settings ================================
     isShowAnime4kWarning=false;
     ui->comboBox_Engine_Image->setCurrentIndex(Settings_Read_value("/settings/ImageEngine").toInt());
