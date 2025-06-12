@@ -39,3 +39,13 @@ make
 After compilation run `Waifu2x-Extension-GUI` (or the launcher) from its build
 folder. Place the realcugan-ncnn-vulkan and realesrgan-ncnn-vulkan executables in
 the same directory so the GUI can invoke them.
+
+### Thread control
+
+By default the application limits its internal thread pool to twice the number
+of detected CPU cores. You can override this via the command line:
+
+```bash
+Waifu2x-Extension-GUI --max-threads 8
+```
+or by editing `settings.ini` and setting `MaxThreadCount`.

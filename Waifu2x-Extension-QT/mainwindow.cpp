@@ -22,13 +22,24 @@
 #include <QEventLoop>
 #include <QTimer>
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     qRegisterMetaTypeStreamOperators<QList_QMap_QStrQStr >("QList_QMap_QStrQStr");
-    QThreadPool::globalInstance()->setMaxThreadCount(60);//解除全局线程池的最大线程数量限制
+    globalMaxThreadCount = Settings_Read_value("/settings/MaxThreadCount", 0).toInt();
+    if(maxThreadsOverride > 0) globalMaxThreadCount = maxThreadsOverride;
+    if(globalMaxThreadCount <= 0) {
+        int cores = QThread::idealThreadCount();
+        if(cores < 1) cores = 1;
+        globalMaxThreadCount = cores * 2;
+    }
+    QThreadPool::globalInstance()->setMaxThreadCount(globalMaxThreadCount);
+    ui->spinBox_ThreadNum_image->setMaximum(globalMaxThreadCount);
+    ui->spinBox_ThreadNum_gif_internal->setMaximum(globalMaxThreadCount);
+    ui->spinBox_ThreadNum_video_internal->setMaximum(globalMaxThreadCount);
+    if(ui->spinBox_NumOfThreads_VFI) ui->spinBox_NumOfThreads_VFI->setMaximum(globalMaxThreadCount);
     //==============
     this->setWindowTitle("Waifu2x-Extension-GUI "+VERSION+" by Aaron Feng");
     //==============
