@@ -257,6 +257,24 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_Missing
     QString inputFile = item_InFile->text();
     QString outputFile = item_OutFile->text();
 
+    // --- handle alpha channel by splitting it before processing ---
+    QTemporaryDir alphaTempDir;
+    QString alphaFilePath;
+    QString rgbInputPath = inputFile;
+    QString rgbOutputPath = outputFile;
+    QImage alphaImage;
+    QImage sourceImage(inputFile);
+    bool hasAlpha = sourceImage.hasAlphaChannel();
+    if (hasAlpha && alphaTempDir.isValid()) {
+        alphaImage = sourceImage.alphaChannel();
+        QImage rgbImage = sourceImage.convertToFormat(QImage::Format_RGB888);
+        rgbInputPath = alphaTempDir.filePath("rgb_in.png");
+        rgbOutputPath = alphaTempDir.filePath("rgb_out.png");
+        alphaFilePath = alphaTempDir.filePath("alpha.png");
+        rgbImage.save(rgbInputPath);
+        alphaImage.save(alphaFilePath);
+    }
+
     RealESRGAN_NCNN_Vulkan_ReadSettings();
 
     int uiTargetScale = ui->doubleSpinBox_ScaleRatio_image->value();
@@ -271,12 +289,19 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_Missing
 
     // This function is called by Waifu2xMainThread which should wrap it in QtConcurrent::run
     bool success = RealESRGAN_ProcessSingleFileIteratively(
-        inputFile, outputFile, uiTargetScale,
+        rgbInputPath, rgbOutputPath, uiTargetScale,
         m_realesrgan_ModelNativeScale, m_realesrgan_ModelName, m_realesrgan_TileSize,
         gpuConfigToUse, isMultiConfig, m_realesrgan_TTA,
         ui->comboBox_OutFormat_Image->currentText(),
         rowNum
     );
+
+    if (success && hasAlpha && QFile::exists(rgbOutputPath)) {
+        QImage processedImage(rgbOutputPath);
+        processedImage = processedImage.convertToFormat(QImage::Format_ARGB32);
+        processedImage.setAlphaChannel(alphaImage);
+        processedImage.save(outputFile);
+    }
 
     if (success && !Stopping) {
         item_Status->setText(tr("Finished"));

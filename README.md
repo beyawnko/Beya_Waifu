@@ -10,6 +10,7 @@ single GUI.
 - Queue based processing with per-file progress information
 - Multi-GPU configuration and compatibility tests
 - System tray integration and drag & drop of files
+- Preserves transparency by splitting the alpha channel and recombining after upscaling
 
 RealCUGAN and RealESRGAN are currently the only supported upscaling engines.
 
