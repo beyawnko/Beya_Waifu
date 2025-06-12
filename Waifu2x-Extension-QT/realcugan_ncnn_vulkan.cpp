@@ -496,6 +496,22 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingA
     QDir tempDir(QDir::tempPath() + "/Waifu2xEX_RealCUGAN_Temp/");
     if (!tempDir.exists()) tempDir.mkpath(".");
 
+    // --- split alpha channel if present ---
+    bool hasAlpha = false;
+    QString rgbInputFile = originalInFile;
+    QString finalRgbOutput = tempPathBase + "final_rgb." + finalOutFileInfo.suffix().toLower();
+    QString alphaPath = tempPathBase + "alpha.png";
+    QImage alphaImage;
+    QImage srcImg(originalInFile);
+    if (srcImg.hasAlphaChannel()) {
+        hasAlpha = true;
+        alphaImage = srcImg.alphaChannel();
+        QImage rgb = srcImg.convertToFormat(QImage::Format_RGB888);
+        rgbInputFile = tempPathBase + "input_rgb.png";
+        rgb.save(rgbInputFile);
+        alphaImage.save(alphaPath);
+    }
+
     // Clean up old temp files for this specific base name pattern
     QDirIterator dirIt(tempDir.path(), QStringList() << finalOutFileInfo.completeBaseName() + "_pass_*", QDir::Files);
     while(dirIt.hasNext()) {
@@ -535,13 +551,13 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingA
 
 
     QList<QPair<QString, QStringList>> *processQueue = new QList<QPair<QString, QStringList>>();
-    QString currentInputFile = originalInFile;
+    QString currentInputFile = rgbInputFile;
 
     for (int i = 0; i < scaleSequence.size(); ++i) {
         int currentPassScale = scaleSequence[i];
         QString currentOutputFile;
         if (i == scaleSequence.size() - 1) {
-            currentOutputFile = finalOutFile; // Final pass outputs to the target file
+            currentOutputFile = hasAlpha ? finalRgbOutput : finalOutFile; // Final pass outputs to the target file
         } else {
             currentOutputFile = tempPathBase + QString::number(i) + "." + ui->comboBox_OutFormat_Image->currentText().toLower();
         }
@@ -588,6 +604,9 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingA
     firstProcess->setProperty("processQueue", QVariant::fromValue(processQueue));
     firstProcess->setProperty("currentPassIndex", 0);
     firstProcess->setProperty("finalOutFile", finalOutFile);
+    firstProcess->setProperty("finalRGBFile", hasAlpha ? finalRgbOutput : finalOutFile);
+    firstProcess->setProperty("alphaFile", alphaPath);
+    firstProcess->setProperty("hasAlpha", hasAlpha);
     firstProcess->setProperty("tempPathBase", tempPathBase); // For cleanup
     firstProcess->setProperty("originalInFile", originalInFile);
 
@@ -741,8 +760,24 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished() {
     } else {
         // All passes successfully completed
         if(item_Status) item_Status->setText(tr("Finished"));
-        qDebug() << "RealCUGAN: All passes completed successfully for" << finalOutFile;
-        Realcugan_NCNN_Vulkan_CleanupTempFiles(process->property("tempPathBase").toString(), processQueue->size()-1, true /* keepFinal */, finalOutFile);
+        QString finalRGBFile = process->property("finalRGBFile").toString();
+        QString alphaFile = process->property("alphaFile").toString();
+        bool hasAlphaFlag = process->property("hasAlpha").toBool();
+        qDebug() << "RealCUGAN: All passes completed successfully for" << finalRGBFile;
+        Realcugan_NCNN_Vulkan_CleanupTempFiles(process->property("tempPathBase").toString(), processQueue->size()-1, true /* keepFinal */, finalRGBFile);
+
+        if (hasAlphaFlag && QFile::exists(finalRGBFile)) {
+            QImage rgb(finalRGBFile);
+            QImage alpha(alphaFile);
+            rgb = rgb.convertToFormat(QImage::Format_ARGB32);
+            rgb.setAlphaChannel(alpha);
+            rgb.save(finalOutFile);
+            QFile::remove(finalRGBFile);
+            QFile::remove(alphaFile);
+        } else if (finalRGBFile != finalOutFile && QFile::exists(finalRGBFile)) {
+            QFile::remove(finalOutFile);
+            QFile::rename(finalRGBFile, finalOutFile);
+        }
 
         ProcList_RealCUGAN.removeAll(process);
         delete processQueue;
