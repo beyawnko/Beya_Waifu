@@ -49,25 +49,25 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     //==============
     translator = new QTranslator(this);
     //==============
-    ui->tabWidget->setCurrentIndex(1);//显示home tab
+    ui->tabWidget->setCurrentIndex(1);// show the home tab
     ui->tabWidget->tabBar()->setTabTextColor(0,Qt::red);
     on_tabWidget_currentChanged(1);
     ui->tabWidget_Engines->setCurrentIndex(0);
-    this->setAcceptDrops(true);//mainwindow接收drop
-    Init_Table();//初始化table
-    ui->groupBox_CurrentFile->setVisible(0);//隐藏当前文件进度
-    pushButton_Stop_setEnabled_self(0);//禁用隐藏暂停按钮
+    this->setAcceptDrops(true);// mainwindow accepts drop
+    Init_Table();// initialize table
+    ui->groupBox_CurrentFile->setVisible(0);// hide current file progress
+    pushButton_Stop_setEnabled_self(0);// disable and hide pause button
     ui->pushButton_ForceRetry->setVisible(0);
     ui->progressBar_CompatibilityTest->setVisible(0);
-    //=================== 初始隐藏所有table和禁用按钮 ======================
+    //=================== initially hide all tables and disable buttons ======================
     ui->tableView_image->setVisible(0);
     ui->tableView_gif->setVisible(0);
     ui->tableView_video->setVisible(0);
-    Table_FileCount_reload();//重载文件列表下的文件数量统计
+    Table_FileCount_reload();// reload file count display
     //==============
-    Init_ActionsMenu_checkBox_ReplaceOriginalFile();//第一次初始化[替换原文件]的右键菜单(需要在载入设定前设置为checkable
+    Init_ActionsMenu_checkBox_ReplaceOriginalFile();// first initialize the [replace original file] menu (needs to be checkable before settings load)
     Init_ActionsMenu_checkBox_DelOriginal();
-    //=========安装事件过滤器==========
+    //========= install event filters ==========
     ui->tableView_image->installEventFilter(this);
     ui->tableView_gif->installEventFilter(this);
     ui->tableView_video->installEventFilter(this);
