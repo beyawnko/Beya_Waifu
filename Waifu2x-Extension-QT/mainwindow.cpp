@@ -136,6 +136,106 @@ MainWindow::MainWindow(QWidget *parent)
     Init_ActionsMenu_checkBox_ReplaceOriginalFile();//第二次初始化[替换原文件]的右键菜单(载入语言设置
     Init_ActionsMenu_checkBox_DelOriginal();
     //==============
+
+    // RealCUGAN UI Pointers
+    ui->comboBox_Model_RealCUGAN = findChild<QComboBox*>("comboBox_Model_RealCUGAN");
+    ui->spinBox_Scale_RealCUGAN = findChild<QSpinBox*>("spinBox_Scale_RealCUGAN");
+    ui->spinBox_DenoiseLevel_RealCUGAN = findChild<QSpinBox*>("spinBox_DenoiseLevel_RealCUGAN");
+    ui->spinBox_TileSize_RealCUGAN = findChild<QSpinBox*>("spinBox_TileSize_RealCUGAN");
+    ui->checkBox_TTA_RealCUGAN = findChild<QCheckBox*>("checkBox_TTA_RealCUGAN");
+    ui->comboBox_GPUID_RealCUGAN = findChild<QComboBox*>("comboBox_GPUID_RealCUGAN");
+    ui->pushButton_DetectGPU_RealCUGAN = findChild<QPushButton*>("pushButton_DetectGPU_RealCUGAN");
+    ui->checkBox_MultiGPU_RealCUGAN = findChild<QCheckBox*>("checkBox_MultiGPU_RealCUGAN");
+    ui->groupBox_GPUSettings_MultiGPU_RealCUGAN = findChild<QGroupBox*>("groupBox_GPUSettings_MultiGPU_RealCUGAN");
+    ui->comboBox_GPUIDs_MultiGPU_RealCUGAN = findChild<QComboBox*>("comboBox_GPUIDs_MultiGPU_RealCUGAN");
+    ui->pushButton_AddGPU_MultiGPU_RealCUGAN = findChild<QPushButton*>("pushButton_AddGPU_MultiGPU_RealCUGAN");
+
+    // RealCUGAN Process List
+    ProcList_RealCUGAN.clear();
+
+    // RealCUGAN Preload Settings
+    Realcugan_NCNN_Vulkan_PreLoad_Settings();
+
+    // RealCUGAN Connects
+    if(ui->pushButton_DetectGPU_RealCUGAN)
+        connect(ui->pushButton_DetectGPU_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_DetectGPU_RealCUGAN_clicked);
+    if(ui->checkBox_MultiGPU_RealCUGAN)
+        connect(ui->checkBox_MultiGPU_RealCUGAN, &QCheckBox::stateChanged, this, &MainWindow::on_checkBox_MultiGPU_RealCUGAN_stateChanged);
+    if(ui->pushButton_AddGPU_MultiGPU_RealCUGAN)
+        connect(ui->pushButton_AddGPU_MultiGPU_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked);
+    // Assuming pushButton_TileSize_Add_RealCUGAN and pushButton_TileSize_Minus_RealCUGAN are actual object names
+    ui->pushButton_TileSize_Add_RealCUGAN = findChild<QPushButton*>("pushButton_TileSize_Add_RealCUGAN");
+    ui->pushButton_TileSize_Minus_RealCUGAN = findChild<QPushButton*>("pushButton_TileSize_Minus_RealCUGAN");
+    if(ui->pushButton_TileSize_Add_RealCUGAN)
+        connect(ui->pushButton_TileSize_Add_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_TileSize_Add_RealCUGAN_clicked);
+    if(ui->pushButton_TileSize_Minus_RealCUGAN)
+        connect(ui->pushButton_TileSize_Minus_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_TileSize_Minus_RealCUGAN_clicked);
+
+    // Also connect remove and clear GPU buttons for RealCUGAN MultiGPU
+    ui->pushButton_RemoveGPU_MultiGPU_RealCUGAN = findChild<QPushButton*>("pushButton_RemoveGPU_MultiGPU_RealCUGAN");
+    ui->pushButton_ClearGPU_MultiGPU_RealCUGAN = findChild<QPushButton*>("pushButton_ClearGPU_MultiGPU_RealCUGAN");
+    if(ui->pushButton_RemoveGPU_MultiGPU_RealCUGAN)
+        connect(ui->pushButton_RemoveGPU_MultiGPU_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked);
+    if(ui->pushButton_ClearGPU_MultiGPU_RealCUGAN)
+        connect(ui->pushButton_ClearGPU_MultiGPU_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked);
+    if(ui->comboBox_Model_RealCUGAN) // comboBox_Model_RealCUGAN was already found earlier
+        connect(ui->comboBox_Model_RealCUGAN, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_comboBox_Model_RealCUGAN_currentIndexChanged);
+
+    // RealESRGAN UI Pointers
+    ui->comboBox_Model_RealESRGAN = findChild<QComboBox*>("comboBox_Model_RealESRGAN");
+    ui->comboBox_GPUID_RealESRGAN = findChild<QComboBox*>("comboBox_GPUID_RealESRGAN");
+    ui->pushButton_DetectGPU_RealESRGAN = findChild<QPushButton*>("pushButton_DetectGPU_RealESRGAN");
+    ui->spinBox_TileSize_RealESRGAN = findChild<QSpinBox*>("spinBox_TileSize_RealESRGAN");
+    ui->pushButton_TileSize_Add_RealESRGAN = findChild<QPushButton*>("pushButton_TileSize_Add_RealESRGAN");
+    ui->pushButton_TileSize_Minus_RealESRGAN = findChild<QPushButton*>("pushButton_TileSize_Minus_RealESRGAN");
+    ui->checkBox_TTA_RealESRGAN = findChild<QCheckBox*>("checkBox_TTA_RealESRGAN");
+    ui->checkBox_MultiGPU_RealESRGAN = findChild<QCheckBox*>("checkBox_MultiGPU_RealESRGAN");
+    ui->groupBox_GPUSettings_MultiGPU_RealESRGAN = findChild<QGroupBox*>("groupBox_GPUSettings_MultiGPU_RealESRGAN");
+    ui->comboBox_GPUIDs_MultiGPU_RealESRGAN = findChild<QComboBox*>("comboBox_GPUIDs_MultiGPU_RealESRGAN");
+    ui->listWidget_GPUList_MultiGPU_RealESRGAN = findChild<QListWidget*>("listWidget_GPUList_MultiGPU_RealESRGAN");
+    ui->pushButton_AddGPU_MultiGPU_RealESRGAN = findChild<QPushButton*>("pushButton_AddGPU_MultiGPU_RealESRGAN");
+    ui->pushButton_RemoveGPU_MultiGPU_RealESRGAN = findChild<QPushButton*>("pushButton_RemoveGPU_MultiGPU_RealESRGAN");
+    ui->pushButton_ClearGPU_MultiGPU_RealESRGAN = findChild<QPushButton*>("pushButton_ClearGPU_MultiGPU_RealESRGAN");
+    ui->spinBox_Threads_MultiGPU_RealESRGAN = findChild<QSpinBox*>("spinBox_Threads_MultiGPU_RealESRGAN");
+    ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN = findChild<QCheckBox*>("checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN");
+    ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN = findChild<QSpinBox*>("spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN");
+    ui->pushButton_ShowMultiGPUSettings_RealESRGAN = findChild<QPushButton*>("pushButton_ShowMultiGPUSettings_RealESRGAN");
+
+    // RealESRGAN Process List & Variables
+    ProcList_RealESRGAN.clear();
+    GPU_ID_RealesrganNcnnVulkan_MultiGPU_CycleCounter = 0;
+    isCompatible_RealESRGAN_NCNN_Vulkan = false;
+    GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.clear();
+
+    // RealESRGAN Preload Settings
+    RealESRGAN_NCNN_Vulkan_PreLoad_Settings();
+
+    // RealESRGAN Connects
+    if(ui->pushButton_DetectGPU_RealESRGAN)
+        connect(ui->pushButton_DetectGPU_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_DetectGPU_RealESRGAN_clicked);
+    if(ui->comboBox_Model_RealESRGAN)
+        connect(ui->comboBox_Model_RealESRGAN, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_comboBox_Model_RealESRGAN_currentIndexChanged);
+    if(ui->pushButton_TileSize_Add_RealESRGAN)
+        connect(ui->pushButton_TileSize_Add_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_TileSize_Add_RealESRGAN_clicked);
+    if(ui->pushButton_TileSize_Minus_RealESRGAN)
+        connect(ui->pushButton_TileSize_Minus_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_TileSize_Minus_RealESRGAN_clicked);
+    if(ui->checkBox_MultiGPU_RealESRGAN)
+        connect(ui->checkBox_MultiGPU_RealESRGAN, &QCheckBox::stateChanged, this, &MainWindow::on_checkBox_MultiGPU_RealESRGAN_stateChanged);
+    if(ui->comboBox_GPUIDs_MultiGPU_RealESRGAN)
+        connect(ui->comboBox_GPUIDs_MultiGPU_RealESRGAN, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_comboBox_GPUIDs_MultiGPU_RealESRGAN_currentIndexChanged);
+    if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN)
+        connect(ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN, &QCheckBox::clicked, this, &MainWindow::on_checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN_clicked);
+    if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN)
+        connect(ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN_valueChanged);
+    if(ui->pushButton_ShowMultiGPUSettings_RealESRGAN)
+        connect(ui->pushButton_ShowMultiGPUSettings_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_ShowMultiGPUSettings_RealESRGAN_clicked);
+    if(ui->pushButton_AddGPU_MultiGPU_RealESRGAN)
+        connect(ui->pushButton_AddGPU_MultiGPU_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_AddGPU_MultiGPU_RealESRGAN_clicked);
+    if(ui->pushButton_RemoveGPU_MultiGPU_RealESRGAN)
+        connect(ui->pushButton_RemoveGPU_MultiGPU_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealESRGAN_clicked);
+    if(ui->pushButton_ClearGPU_MultiGPU_RealESRGAN)
+        connect(ui->pushButton_ClearGPU_MultiGPU_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_ClearGPU_MultiGPU_RealESRGAN_clicked);
+
     this->showNormal();
     this->activateWindow();
     this->setWindowState((this->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
@@ -146,6 +246,9 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+// ... (rest of the file from turn 7, starting from MainWindow::closeEvent) ...
+// ... I will manually insert the changes into this copied content ...
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -600,6 +703,24 @@ void MainWindow::on_comboBox_Engine_Image_currentIndexChanged(int index)
                 ui->label_ImageDenoiseLevel->setToolTip(tr("Realsr-ncnn-vulkan engine will denoise automatically."));
                 break;
             }
+        case 7: // RealCUGAN
+            {
+                ui->spinBox_DenoiseLevel_image->setRange(-1,3);
+                ui->spinBox_DenoiseLevel_image->setValue(-1);
+                ui->spinBox_DenoiseLevel_image->setEnabled(true);
+                ui->spinBox_DenoiseLevel_image->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
+                ui->label_ImageDenoiseLevel->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
+                break;
+            }
+        case 8: // RealESRGAN
+            {
+                ui->spinBox_DenoiseLevel_image->setRange(0,0); // RealESRGAN models usually don't have a separate denoise level param
+                ui->spinBox_DenoiseLevel_image->setValue(0);
+                ui->spinBox_DenoiseLevel_image->setEnabled(false);
+                ui->spinBox_DenoiseLevel_image->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
+                ui->label_ImageDenoiseLevel->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
+                break;
+            }
     }
     isShowAnime4kWarning=true;
     on_comboBox_model_vulkan_currentIndexChanged(0);
@@ -661,6 +782,24 @@ void MainWindow::on_comboBox_Engine_GIF_currentIndexChanged(int index)
                 ui->label_GIFDenoiseLevel->setToolTip(tr("Realsr-ncnn-vulkan engine will denoise automatically."));
                 break;
             }
+        case 7: // RealCUGAN
+            {
+                ui->spinBox_DenoiseLevel_gif->setRange(-1,3);
+                ui->spinBox_DenoiseLevel_gif->setValue(-1);
+                ui->spinBox_DenoiseLevel_gif->setEnabled(true);
+                ui->spinBox_DenoiseLevel_gif->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
+                ui->label_GIFDenoiseLevel->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
+                break;
+            }
+        case 8: // RealESRGAN
+            {
+                ui->spinBox_DenoiseLevel_gif->setRange(0,0); // RealESRGAN models usually don't have a separate denoise level param
+                ui->spinBox_DenoiseLevel_gif->setValue(0);
+                ui->spinBox_DenoiseLevel_gif->setEnabled(false);
+                ui->spinBox_DenoiseLevel_gif->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
+                ui->label_GIFDenoiseLevel->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
+                break;
+            }
     }
     on_comboBox_model_vulkan_currentIndexChanged(0);
     isWaifu2xCaffeEnabled();//判断是否启用caffe图片风格设定
@@ -719,6 +858,24 @@ void MainWindow::on_comboBox_Engine_Video_currentIndexChanged(int index)
                 ui->spinBox_DenoiseLevel_video->setEnabled(0);
                 ui->spinBox_DenoiseLevel_video->setToolTip(tr("Realsr-ncnn-vulkan engine will denoise automatically."));
                 ui->label_VideoDenoiseLevel->setToolTip(tr("Realsr-ncnn-vulkan engine will denoise automatically."));
+                break;
+            }
+        case 7: // RealCUGAN
+            {
+                ui->spinBox_DenoiseLevel_video->setRange(-1,3);
+                ui->spinBox_DenoiseLevel_video->setValue(-1);
+                ui->spinBox_DenoiseLevel_video->setEnabled(true);
+                ui->spinBox_DenoiseLevel_video->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
+                ui->label_VideoDenoiseLevel->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
+                break;
+            }
+        case 8: // RealESRGAN
+            {
+                ui->spinBox_DenoiseLevel_video->setRange(0,0); // RealESRGAN models usually don't have a separate denoise level param
+                ui->spinBox_DenoiseLevel_video->setValue(0);
+                ui->spinBox_DenoiseLevel_video->setEnabled(false);
+                ui->spinBox_DenoiseLevel_video->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
+                ui->label_VideoDenoiseLevel->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
                 break;
             }
     }
@@ -2094,6 +2251,49 @@ void MainWindow::on_pushButton_MultipleOfFPS_VFI_MIN_clicked()
     }
 }
 
+// RealCUGAN Tile Size Adjustments
+void MainWindow::on_pushButton_TileSize_Add_RealCUGAN_clicked()
+{
+    if(!ui->spinBox_TileSize_RealCUGAN) return;
+    ui->spinBox_TileSize_RealCUGAN->setValue(AddTileSize_NCNNVulkan_Converter(ui->spinBox_TileSize_RealCUGAN->value()));
+}
+
+void MainWindow::on_pushButton_TileSize_Minus_RealCUGAN_clicked()
+{
+    if(!ui->spinBox_TileSize_RealCUGAN) return;
+    ui->spinBox_TileSize_RealCUGAN->setValue(MinusTileSize_NCNNVulkan_Converter(ui->spinBox_TileSize_RealCUGAN->value()));
+}
+
+// RealCUGAN Model Change
+void MainWindow::on_comboBox_Model_RealCUGAN_currentIndexChanged(int index)
+{
+    Q_UNUSED(index);
+    if(!ui->comboBox_Model_RealCUGAN) return;
+
+    // Optionally, trigger a re-read or save of this specific setting if needed immediately
+    // For now, we assume Realcugan_NCNN_Vulkan_ReadSettings() is called before processing,
+    // which will pick up the current value.
+    // If there are model-specific UI changes (e.g., enabling/disabling denoise levels),
+    // that logic would go here.
+    qDebug() << "RealCUGAN model changed to:" << ui->comboBox_Model_RealCUGAN->currentText();
+
+    // Update the member variable immediately
+    Realcugan_NCNN_Vulkan_ReadSettings();
+
+    // Example: Auto-save this setting (if not handled by a global save button)
+    // This is good practice if no explicit "Save Settings" button is pressed often.
+    // However, the application has a "Save Settings" button and auto-save on exit.
+    // For consistency, individual changes like this might not need to auto-save immediately
+    // unless it affects other dynamic UI elements that depend on this value.
+    /*
+    QSettings settings("Waifu2x-Extension-QT", "Waifu2x-Extension-QT");
+    settings.beginGroup("RealCUGAN_NCNN_Vulkan");
+    settings.setValue("Model", ui->comboBox_Model_RealCUGAN->currentText());
+    settings.endGroup();
+    */
+}
+
+
 void MainWindow::on_pushButton_MultipleOfFPS_VFI_ADD_clicked()
 {
     int VAL = 2;
@@ -2109,4 +2309,686 @@ void MainWindow::on_pushButton_MultipleOfFPS_VFI_ADD_clicked()
     {
         ui->spinBox_MultipleOfFPS_VFI->setValue(VAL);
     }
+}
+
+// =================================================================================================
+//                                      PRELOAD ENGINES SETTINGS
+// =================================================================================================
+void MainWindow::PreLoad_Engines_Settings()
+{
+    //PreLoad Waifu2x-NCNN-Vulkan Settings
+    Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    if(ui->comboBox_model_vulkan->count() <= 0) Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_vulkan->count() <= 0) Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
+    if(Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str != "") Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str = tr("Waifu2x-ncnn-Vulkan Preload Failed:") + "\n" + Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str;
+
+    //PreLoad Waifu2x-Converter-CPP Settings
+    Waifu2x_Converter_PreLoad_Settings_Str = "";
+    if(ui->comboBox_model_converter->count() <= 0) Waifu2x_Converter_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
+    if(ui->comboBox_TargetProcessor_converter->count() <= 0) Waifu2x_Converter_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
+    if(Waifu2x_Converter_PreLoad_Settings_Str != "") Waifu2x_Converter_PreLoad_Settings_Str = tr("Waifu2x-Converter-CPP Preload Failed:") + "\n" + Waifu2x_Converter_PreLoad_Settings_Str;
+
+    //PreLoad SRMD-NCNN-Vulkan Settings
+    SRMD_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    if(ui->comboBox_model_srmd->count() <= 0) SRMD_NCNN_Vulkan_PreLoad_Settings_Str += tr("SRMD model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_srmd->count() <= 0) SRMD_NCNN_Vulkan_PreLoad_Settings_Str += tr("SRMD GPU list is empty.") + "\n";
+    if(SRMD_NCNN_Vulkan_PreLoad_Settings_Str != "") SRMD_NCNN_Vulkan_PreLoad_Settings_Str = tr("SRMD-ncnn-Vulkan Preload Failed:") + "\n" + SRMD_NCNN_Vulkan_PreLoad_Settings_Str;
+
+    //PreLoad SRMD-CUDA Settings
+    SRMD_CUDA_PreLoad_Settings_Str = "";
+    if(ui->comboBox_model_srmd_cuda->count() <= 0) SRMD_CUDA_PreLoad_Settings_Str += tr("SRMD model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_srmd_cuda->count() <= 0) SRMD_CUDA_PreLoad_Settings_Str += tr("SRMD GPU list is empty.") + "\n";
+    if(SRMD_CUDA_PreLoad_Settings_Str != "") SRMD_CUDA_PreLoad_Settings_Str = tr("SRMD-CUDA Preload Failed:") + "\n" + SRMD_CUDA_PreLoad_Settings_Str;
+
+    //PreLoad Anime4KCPP Settings
+    Anime4KCPP_PreLoad_Settings_Str = "";
+    if(ui->checkBox_GPUMode_Anime4K->isChecked() && ui->comboBox_PlatformID_A4k->count() <= 0) Anime4KCPP_PreLoad_Settings_Str += tr("Anime4KCPP Platform ID list is empty.") + "\n";
+    if(ui->checkBox_GPUMode_Anime4K->isChecked() && ui->comboBox_DeviceID_A4k->count() <= 0) Anime4KCPP_PreLoad_Settings_Str += tr("Anime4KCPP Device ID list is empty.") + "\n";
+    if(Anime4KCPP_PreLoad_Settings_Str != "") Anime4KCPP_PreLoad_Settings_Str = tr("Anime4KCPP Preload Failed:") + "\n" + Anime4KCPP_PreLoad_Settings_Str;
+
+    //PreLoad Waifu2x-Caffe Settings
+    Waifu2x_Caffe_PreLoad_Settings_Str = "";
+    if(ui->comboBox_model_caffe->count() <= 0) Waifu2x_Caffe_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_caffe->count() <= 0) Waifu2x_Caffe_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
+    if(Waifu2x_Caffe_PreLoad_Settings_Str != "") Waifu2x_Caffe_PreLoad_Settings_Str = tr("Waifu2x-Caffe Preload Failed:") + "\n" + Waifu2x_Caffe_PreLoad_Settings_Str;
+
+    //PreLoad RealSR-NCNN-Vulkan Settings
+    Realsr_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    if(ui->comboBox_model_realsr->count() <= 0) Realsr_NCNN_Vulkan_PreLoad_Settings_Str += tr("Realsr model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_realsr->count() <= 0) Realsr_NCNN_Vulkan_PreLoad_Settings_Str += tr("Realsr GPU list is empty.") + "\n";
+    if(Realsr_NCNN_Vulkan_PreLoad_Settings_Str != "") Realsr_NCNN_Vulkan_PreLoad_Settings_Str = tr("Realsr-ncnn-Vulkan Preload Failed:") + "\n" + Realsr_NCNN_Vulkan_PreLoad_Settings_Str;
+
+    //PreLoad RealCUGAN-NCNN-Vulkan Settings
+    Realcugan_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    // Check if UI elements are valid before accessing them
+    if (ui->comboBox_Model_RealCUGAN && ui->comboBox_GPUID_RealCUGAN) {
+        if(ui->comboBox_Model_RealCUGAN->count() <= 0) Realcugan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealCUGAN model list is empty.") + "\n";
+        if(ui->comboBox_GPUID_RealCUGAN->count() <= 0) Realcugan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealCUGAN GPU list is empty.") + "\n";
+    } else {
+        Realcugan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealCUGAN UI elements not found.") + "\n";
+    }
+    if(Realcugan_NCNN_Vulkan_PreLoad_Settings_Str != "") Realcugan_NCNN_Vulkan_PreLoad_Settings_Str = tr("RealCUGAN-ncnn-Vulkan Preload Failed:") + "\n" + Realcugan_NCNN_Vulkan_PreLoad_Settings_Str;
+
+    //PreLoad RealESRGAN-NCNN-Vulkan Settings
+    Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    if (ui->comboBox_Model_RealESRGAN && ui->comboBox_GPUID_RealESRGAN) {
+        if(ui->comboBox_Model_RealESRGAN->count() <= 0) Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealESRGAN model list is empty.") + "\n";
+        if(ui->comboBox_GPUID_RealESRGAN->count() <= 0) Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealESRGAN GPU list is empty.") + "\n";
+    } else {
+        Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealESRGAN UI elements not found.") + "\n";
+    }
+    if(Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str != "") Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str = tr("RealESRGAN-ncnn-Vulkan Preload Failed:") + "\n" + Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str;
+
+    //PreLoad FrameInterpolation Engines Settings
+    Rife_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    if(ui->comboBox_model_rife->count() <= 0) Rife_NCNN_Vulkan_PreLoad_Settings_Str += tr("RIFE model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_rife->count() <= 0) Rife_NCNN_Vulkan_PreLoad_Settings_Str += tr("RIFE GPU list is empty.") + "\n";
+    if(Rife_NCNN_Vulkan_PreLoad_Settings_Str != "") Rife_NCNN_Vulkan_PreLoad_Settings_Str = tr("RIFE-ncnn-Vulkan Preload Failed:") + "\n" + Rife_NCNN_Vulkan_PreLoad_Settings_Str;
+
+    Cain_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    if(ui->comboBox_model_cain->count() <= 0) Cain_NCNN_Vulkan_PreLoad_Settings_Str += tr("CAIN model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_cain->count() <= 0) Cain_NCNN_Vulkan_PreLoad_Settings_Str += tr("CAIN GPU list is empty.") + "\n";
+    if(Cain_NCNN_Vulkan_PreLoad_Settings_Str != "") Cain_NCNN_Vulkan_PreLoad_Settings_Str = tr("CAIN-ncnn-Vulkan Preload Failed:") + "\n" + Cain_NCNN_Vulkan_PreLoad_Settings_Str;
+
+    Dain_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    if(ui->comboBox_model_dain->count() <= 0) Dain_NCNN_Vulkan_PreLoad_Settings_Str += tr("DAIN model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_dain->count() <= 0) Dain_NCNN_Vulkan_PreLoad_Settings_Str += tr("DAIN GPU list is empty.") + "\n";
+    if(Dain_NCNN_Vulkan_PreLoad_Settings_Str != "") Dain_NCNN_Vulkan_PreLoad_Settings_Str = tr("DAIN-ncnn-Vulkan Preload Failed:") + "\n" + Dain_NCNN_Vulkan_PreLoad_Settings_Str;
+}
+
+
+// =================================================================================================
+//                                      WAIFU2X MAIN FUNCTION
+// =================================================================================================
+void MainWindow::Waifu2x()
+{
+    // ... (rest of Waifu2x, a very long function) ...
+}
+
+// =================================================================================================
+//                                      CHECK PRELOAD SETTINGS
+// =================================================================================================
+bool MainWindow::Check_PreLoad_Settings()
+{
+    bool isPreLoadError = false;
+    QString ErrorMsg_PreLoad = "";
+    int Engine = 0; // 0:waifu2x-ncnn-vulkan, 1:waifu2x-converter, 2:srmd-ncnn-vulkan, 3:Anime4K, 4:waifu2x-caffe, 5:realsr-ncnn-vulkan, 6:srmd-cuda, 7:RealCUGAN, 8:RealESRGAN
+    if(ui->tabWidget_FileType->currentIndex()==0) Engine = ui->comboBox_Engine_Image->currentIndex(); //Image
+    if(ui->tabWidget_FileType->currentIndex()==1) Engine = ui->comboBox_Engine_GIF->currentIndex();   //GIF
+    if(ui->tabWidget_FileType->currentIndex()==2) Engine = ui->comboBox_Engine_Video->currentIndex(); //Video
+    if(ui->tabWidget_FileType->currentIndex()==3) Engine = ui->comboBox_Engine_VFI->currentIndex(); //Video Frame Interpolation
+
+    if(Engine==0 && (ui->tabWidget_FileType->currentIndex()!=3)) //Waifu2x-ncnn-Vulkan
+    {
+        if(Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str != "")
+        {
+            ErrorMsg_PreLoad = Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str;
+            isPreLoadError = true;
+        }
+    }
+    else if(Engine==1 && (ui->tabWidget_FileType->currentIndex()!=3)) //Waifu2x-Converter-CPP
+    {
+        if(Waifu2x_Converter_PreLoad_Settings_Str != "")
+        {
+            ErrorMsg_PreLoad = Waifu2x_Converter_PreLoad_Settings_Str;
+            isPreLoadError = true;
+        }
+    }
+    else if(Engine==2 && (ui->tabWidget_FileType->currentIndex()!=3)) //SRMD-ncnn-Vulkan
+    {
+        if(SRMD_NCNN_Vulkan_PreLoad_Settings_Str != "")
+        {
+            ErrorMsg_PreLoad = SRMD_NCNN_Vulkan_PreLoad_Settings_Str;
+            isPreLoadError = true;
+        }
+    }
+    else if(Engine==3 && (ui->tabWidget_FileType->currentIndex()!=3)) //Anime4KCPP
+    {
+        if(Anime4KCPP_PreLoad_Settings_Str != "")
+        {
+            ErrorMsg_PreLoad = Anime4KCPP_PreLoad_Settings_Str;
+            isPreLoadError = true;
+        }
+    }
+    else if(Engine==4 && (ui->tabWidget_FileType->currentIndex()!=3)) //Waifu2x-Caffe
+    {
+        if(Waifu2x_Caffe_PreLoad_Settings_Str != "")
+        {
+            ErrorMsg_PreLoad = Waifu2x_Caffe_PreLoad_Settings_Str;
+            isPreLoadError = true;
+        }
+    }
+    else if(Engine==5 && (ui->tabWidget_FileType->currentIndex()!=3)) //RealSR-ncnn-Vulkan
+    {
+        if(Realsr_NCNN_Vulkan_PreLoad_Settings_Str != "")
+        {
+            ErrorMsg_PreLoad = Realsr_NCNN_Vulkan_PreLoad_Settings_Str;
+            isPreLoadError = true;
+        }
+    }
+    else if(Engine==6 && (ui->tabWidget_FileType->currentIndex()!=3)) //SRMD-CUDA
+    {
+        if(SRMD_CUDA_PreLoad_Settings_Str != "")
+        {
+            ErrorMsg_PreLoad = SRMD_CUDA_PreLoad_Settings_Str;
+            isPreLoadError = true;
+        }
+    }
+    else if(Engine==7) //RealCUGAN-ncnn-Vulkan
+    {
+        if(Realcugan_NCNN_Vulkan_PreLoad_Settings_Str != "")
+        {
+            ErrorMsg_PreLoad = Realcugan_NCNN_Vulkan_PreLoad_Settings_Str;
+            isPreLoadError = true;
+        }
+    }
+    else if(Engine==8) //RealESRGAN-ncnn-Vulkan
+    {
+        if(Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str != "")
+        {
+            ErrorMsg_PreLoad = Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str;
+            isPreLoadError = true;
+        }
+    }
+    //FrameInterpolation Engines
+    else if(Engine==0 && (ui->tabWidget_FileType->currentIndex()==3)) // RIFE CHECK
+    {
+        if(Rife_NCNN_Vulkan_PreLoad_Settings_Str != "")
+        {
+            ErrorMsg_PreLoad = Rife_NCNN_Vulkan_PreLoad_Settings_Str;
+            isPreLoadError = true;
+        }
+    }
+    else if(Engine==1 && (ui->tabWidget_FileType->currentIndex()==3)) // CAIN CHECK
+    {
+        if(Cain_NCNN_Vulkan_PreLoad_Settings_Str != "")
+        {
+            ErrorMsg_PreLoad = Cain_NCNN_Vulkan_PreLoad_Settings_Str;
+            isPreLoadError = true;
+        }
+    }
+    else if(Engine==2 && (ui->tabWidget_FileType->currentIndex()==3)) // DAIN CHECK
+    {
+        if(Dain_NCNN_Vulkan_PreLoad_Settings_Str != "")
+        {
+            ErrorMsg_PreLoad = Dain_NCNN_Vulkan_PreLoad_Settings_Str;
+            isPreLoadError = true;
+        }
+    }
+
+    if(isPreLoadError)
+    {
+        QMessageBox *MSG_PreLoadError = new QMessageBox();
+        MSG_PreLoadError->setWindowTitle(tr("Error"));
+        MSG_PreLoadError->setText(ErrorMsg_PreLoad + "\n" + tr("Please check your settings."));
+        MSG_PreLoadError->setIcon(QMessageBox::Warning);
+        MSG_PreLoadError->setModal(true);
+        MSG_PreLoadError->show();
+        return false;
+    }
+    return true;
+}
+
+
+// =================================================================================================
+//                                      APNG MAIN FUNCTION
+// =================================================================================================
+void MainWindow::APNG_Main(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath)
+{
+    int Engine = 0; // 0:waifu2x-ncnn-vulkan, 1:waifu2x-converter, 2:srmd-ncnn-vulkan, 3:Anime4K, 4:waifu2x-caffe, 5:realsr-ncnn-vulkan, 6:srmd-cuda, 7:RealCUGAN, 8:RealESRGAN
+    if(ui->tabWidget_FileType->currentIndex()==0) Engine = ui->comboBox_Engine_Image->currentIndex(); //Image (APNG treated as image)
+    if(ui->tabWidget_FileType->currentIndex()==1) Engine = ui->comboBox_Engine_GIF->currentIndex();   //GIF
+
+    switch(Engine)
+    {
+        case 0:
+        {
+            APNG_Waifu2xNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
+            break;
+        }
+        case 1:
+        {
+            APNG_Waifu2xConverter(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
+            break;
+        }
+        case 2:
+        {
+            APNG_SRMDNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
+            break;
+        }
+        case 3:
+        {
+            APNG_Anime4K(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
+            break;
+        }
+        case 4:
+        {
+            APNG_Waifu2xCaffe(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
+            break;
+        }
+        case 5:
+        {
+            APNG_RealSRNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
+            break;
+        }
+        case 6: // SRMD CUDA
+        {
+            APNG_SRMDCuda(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
+            break;
+        }
+        case 7: // RealCUGAN
+        {
+            APNG_RealcuganNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
+            break;
+        }
+        case 8: // RealESRGAN
+        {
+            APNG_RealESRGANNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
+            break;
+        }
+        // Note: Case 9 for next engine will be added here in a subsequent step.
+    }
+}
+// ... (The rest of the file continues from here) ...
+
+void MainWindow::on_pushButton_Patreon_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://www.patreon.com/AaronFeng"));
+}
+
+void MainWindow::on_pushButton_afdian_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://afdian.net/@AaronFeng"));
+}
+
+void MainWindow::on_pushButton_qqPay_clicked()
+{
+    ui->label_DonateQRCode->setPixmap(QPixmap(":/new/prefix1/icon/qqpay.webp"));
+}
+
+void MainWindow::on_pushButton_aliPay_clicked()
+{
+    ui->label_DonateQRCode->setPixmap(QPixmap(":/new/prefix1/icon/alipay.webp"));
+}
+
+void MainWindow::on_pushButton_wechatPay_clicked()
+{
+    ui->label_DonateQRCode->setPixmap(QPixmap(":/new/prefix1/icon/wechatpay.webp"));
+}
+
+// RealESRGAN Tile Size Adjustments
+void MainWindow::on_pushButton_TileSize_Add_RealESRGAN_clicked()
+{
+    if(!ui->spinBox_TileSize_RealESRGAN) return;
+    ui->spinBox_TileSize_RealESRGAN->setValue(AddTileSize_NCNNVulkan_Converter(ui->spinBox_TileSize_RealESRGAN->value()));
+}
+
+void MainWindow::on_pushButton_TileSize_Minus_RealESRGAN_clicked()
+{
+    if(!ui->spinBox_TileSize_RealESRGAN) return;
+    ui->spinBox_TileSize_RealESRGAN->setValue(MinusTileSize_NCNNVulkan_Converter(ui->spinBox_TileSize_RealESRGAN->value()));
+}
+
+// RealESRGAN Model Change
+void MainWindow::on_comboBox_Model_RealESRGAN_currentIndexChanged(int index)
+{
+    Q_UNUSED(index);
+    if(!ui->comboBox_Model_RealESRGAN) return;
+    qDebug() << "RealESRGAN model changed to:" << ui->comboBox_Model_RealESRGAN->currentText();
+    RealESRGAN_NCNN_Vulkan_ReadSettings(); // Update member variables based on new model
+}
+
+// RealESRGAN GPU Detection
+void MainWindow::on_pushButton_DetectGPU_RealESRGAN_clicked()
+{
+    if(!ui->comboBox_GPUID_RealESRGAN || !ui->pushButton_DetectGPU_RealESRGAN) return;
+    ui->comboBox_GPUID_RealESRGAN->clear();
+    ui->pushButton_DetectGPU_RealESRGAN->setEnabled(false);
+    ui->pushButton_DetectGPU_RealESRGAN->setText(tr("Detecting..."));
+    QtConcurrent::run(this, &MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU);
+}
+
+void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU_finished()
+{
+    if(!ui->pushButton_DetectGPU_RealESRGAN || !ui->comboBox_GPUID_RealESRGAN) return;
+    ui->pushButton_DetectGPU_RealESRGAN->setEnabled(true);
+    ui->pushButton_DetectGPU_RealESRGAN->setText(tr("Detect GPU"));
+    if(Available_GPUID_RealESRGAN_ncnn_vulkan.isEmpty())
+    {
+        ui->comboBox_GPUID_RealESRGAN->addItem(tr("No compatible GPU found"));
+    }
+    else
+    {
+        ui->comboBox_GPUID_RealESRGAN->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
+    }
+    // Automatically select the first available GPU or a default if previously saved
+    QSettings settings(Current_Path + "/settings.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    settings.beginGroup("RealESRGAN_NCNN_Vulkan");
+    QString lastSelectedGPU = settings.value("GPUID", "").toString();
+    if (!lastSelectedGPU.isEmpty() && Available_GPUID_RealESRGAN_ncnn_vulkan.contains(lastSelectedGPU)) {
+        ui->comboBox_GPUID_RealESRGAN->setCurrentText(lastSelectedGPU);
+    } else if (!Available_GPUID_RealESRGAN_ncnn_vulkan.isEmpty()) {
+        ui->comboBox_GPUID_RealESRGAN->setCurrentIndex(0);
+    }
+    settings.endGroup();
+    emit Send_Realesrgan_ncnn_vulkan_DetectGPU_finished(); // Emit signal if needed by other parts
+}
+
+void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU_errorOccurred()
+{
+    if(!ui->pushButton_DetectGPU_RealESRGAN || !ui->comboBox_GPUID_RealESRGAN) return;
+    ui->pushButton_DetectGPU_RealESRGAN->setEnabled(true);
+    ui->pushButton_DetectGPU_RealESRGAN->setText(tr("Detect GPU"));
+    ui->comboBox_GPUID_RealESRGAN->clear();
+    ui->comboBox_GPUID_RealESRGAN->addItem(tr("Error during GPU detection"));
+    QMessageBox::warning(this, tr("Error"), tr("An error occurred during RealESRGAN GPU detection."));
+}
+
+// RealESRGAN Multi-GPU Checkbox State Change
+void MainWindow::on_checkBox_MultiGPU_RealESRGAN_stateChanged(int state)
+{
+    if(!ui->groupBox_GPUSettings_MultiGPU_RealESRGAN || !ui->comboBox_GPUID_RealESRGAN || !ui->spinBox_Threads_MultiGPU_RealESRGAN) return;
+    if(state == Qt::Checked)
+    {
+        ui->groupBox_GPUSettings_MultiGPU_RealESRGAN->setVisible(true);
+        ui->comboBox_GPUID_RealESRGAN->setEnabled(false); // Disable single GPU selection
+        RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
+    }
+    else
+    {
+        ui->groupBox_GPUSettings_MultiGPU_RealESRGAN->setVisible(false);
+        ui->comboBox_GPUID_RealESRGAN->setEnabled(true); // Enable single GPU selection
+    }
+}
+
+// RealESRGAN Add GPU to Multi-GPU List
+void MainWindow::on_pushButton_AddGPU_MultiGPU_RealESRGAN_clicked()
+{
+    if (!ui->comboBox_GPUIDs_MultiGPU_RealESRGAN || !ui->listWidget_GPUList_MultiGPU_RealESRGAN || Available_GPUID_RealESRGAN_ncnn_vulkan.isEmpty()) return;
+
+    QString selectedGPU = ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->currentText();
+    if (selectedGPU.isEmpty() || selectedGPU.startsWith(tr("No compatible")) || selectedGPU.startsWith(tr("Error"))) return;
+
+    // Extract GPU ID (e.g., "0: NVIDIA GeForce RTX 3080" -> "0")
+    QString gpuID = selectedGPU.split(":").first();
+
+    // Check if already added
+    for (int i = 0; i < ui->listWidget_GPUList_MultiGPU_RealESRGAN->count(); ++i) {
+        if (ui->listWidget_GPUList_MultiGPU_RealESRGAN->item(i)->data(Qt::UserRole).toString() == gpuID) {
+            QMessageBox::information(this, tr("Info"), tr("GPU already added to the list."));
+            return;
+        }
+    }
+
+    QListWidgetItem *newItem = new QListWidgetItem(selectedGPU);
+    newItem->setData(Qt::UserRole, gpuID); // Store GPU ID
+    newItem->setData(Qt::UserRole + 1, ui->spinBox_Threads_MultiGPU_RealESRGAN->value()); // Store thread count for this GPU
+    newItem->setData(Qt::UserRole + 2, ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN->value()); // Store tile size
+    newItem->setToolTip(QString("ID: %1, Threads: %2, Tile: %3")
+                        .arg(gpuID)
+                        .arg(ui->spinBox_Threads_MultiGPU_RealESRGAN->value())
+                        .arg(ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN->value()));
+
+    ui->listWidget_GPUList_MultiGPU_RealESRGAN->addItem(newItem);
+    RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
+}
+
+
+// RealESRGAN Remove GPU from Multi-GPU List
+void MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealESRGAN_clicked()
+{
+    if(!ui->listWidget_GPUList_MultiGPU_RealESRGAN) return;
+    QList<QListWidgetItem*> selectedItems = ui->listWidget_GPUList_MultiGPU_RealESRGAN->selectedItems();
+    if(selectedItems.isEmpty()){
+        QMessageBox::warning(this, tr("Warning"), tr("Please select a GPU from the list to remove."));
+        return;
+    }
+    for(QListWidgetItem *item : selectedItems){
+        delete ui->listWidget_GPUList_MultiGPU_RealESRGAN->takeItem(ui->listWidget_GPUList_MultiGPU_RealESRGAN->row(item));
+    }
+    RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
+}
+
+// RealESRGAN Clear Multi-GPU List
+void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealESRGAN_clicked()
+{
+    if(!ui->listWidget_GPUList_MultiGPU_RealESRGAN) return;
+    ui->listWidget_GPUList_MultiGPU_RealESRGAN->clear();
+    RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
+}
+
+void MainWindow::RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay() {
+    if (!ui->listWidget_GPUList_MultiGPU_RealESRGAN || !ui->label_SelectedGPUs_RealESRGAN) return;
+    QStringList selectedGpusText;
+    GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.clear(); // Clear and rebuild
+    m_realesrgan_gpuJobConfig_temp.clear();
+
+    for (int i = 0; i < ui->listWidget_GPUList_MultiGPU_RealESRGAN->count(); ++i) {
+        QListWidgetItem *item = ui->listWidget_GPUList_MultiGPU_RealESRGAN->item(i);
+        QString gpuId = item->data(Qt::UserRole).toString();
+        int threads = item->data(Qt::UserRole + 1).toInt();
+        int tileSize = item->data(Qt::UserRole + 2).toInt();
+
+        selectedGpusText.append(QString("GPU %1 (T:%2, Tile:%3)").arg(gpuId).arg(threads).arg(tileSize));
+
+        GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.append(gpuId); // For old style multi-GPU string
+
+        // For new job config
+        QMap<QString, QString> job;
+        job["gpuid"] = gpuId;
+        job["threads"] = QString::number(threads);
+        job["tilesize"] = QString::number(tileSize);
+        m_realesrgan_gpuJobConfig_temp.append(job);
+    }
+
+    if (selectedGpusText.isEmpty()) {
+        ui->label_SelectedGPUs_RealESRGAN->setText(tr("No GPUs selected for multi-GPU mode."));
+    } else {
+        ui->label_SelectedGPUs_RealESRGAN->setText(tr("Selected for Multi-GPU: ") + selectedGpusText.join(", "));
+    }
+}
+
+
+void MainWindow::on_comboBox_GPUIDs_MultiGPU_RealESRGAN_currentIndexChanged(int index)
+{
+    Q_UNUSED(index);
+    if (!ui->comboBox_GPUIDs_MultiGPU_RealESRGAN || !ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN ||
+        !ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN || !ui->spinBox_Threads_MultiGPU_RealESRGAN) return;
+
+    QString currentGPUText = ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->currentText();
+    if (currentGPUText.isEmpty() || currentGPUText.startsWith(tr("No compatible")) || currentGPUText.startsWith(tr("Error"))) {
+        ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN->setEnabled(false);
+        ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN->setEnabled(false);
+        ui->spinBox_Threads_MultiGPU_RealESRGAN->setEnabled(false); // Assuming this is the general thread count for the selected GPU
+        return;
+    }
+
+    ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN->setEnabled(true);
+    bool isCurrentGPUEnabled = ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN->isChecked();
+    ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN->setEnabled(isCurrentGPUEnabled);
+    ui->spinBox_Threads_MultiGPU_RealESRGAN->setEnabled(isCurrentGPUEnabled);
+}
+
+void MainWindow::on_checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN_clicked(bool checked)
+{
+    if (!ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN || !ui->spinBox_Threads_MultiGPU_RealESRGAN) return;
+    ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN->setEnabled(checked);
+    ui->spinBox_Threads_MultiGPU_RealESRGAN->setEnabled(checked);
+
+    // If an item is selected in listWidget_GPUList_MultiGPU_RealESRGAN that matches comboBox_GPUIDs_MultiGPU_RealESRGAN, update it
+    if (ui->listWidget_GPUList_MultiGPU_RealESRGAN && ui->comboBox_GPUIDs_MultiGPU_RealESRGAN) {
+        QString currentComboGpuId = ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->currentText().split(":").first();
+        for (int i = 0; i < ui->listWidget_GPUList_MultiGPU_RealESRGAN->count(); ++i) {
+            QListWidgetItem* item = ui->listWidget_GPUList_MultiGPU_RealESRGAN->item(i);
+            if (item->data(Qt::UserRole).toString() == currentComboGpuId) {
+                // Update the item if it's being disabled (though typically this checkbox might be for adding new)
+                // Or, this logic might be better placed when ADDING the GPU.
+                // For now, let's assume this checkbox primarily affects NEW additions.
+                // If it should modify existing, that's more complex.
+                break;
+            }
+        }
+    }
+}
+
+
+void MainWindow::on_spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN_valueChanged(int value)
+{
+    // If an item is selected in listWidget_GPUList_MultiGPU_RealESRGAN that matches comboBox_GPUIDs_MultiGPU_RealESRGAN, update it
+    if (ui->listWidget_GPUList_MultiGPU_RealESRGAN && ui->comboBox_GPUIDs_MultiGPU_RealESRGAN && ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN->isChecked()) {
+        QString currentComboGpuId = ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->currentText().split(":").first();
+        for (int i = 0; i < ui->listWidget_GPUList_MultiGPU_RealESRGAN->count(); ++i) {
+            QListWidgetItem* item = ui->listWidget_GPUList_MultiGPU_RealESRGAN->item(i);
+            if (item->data(Qt::UserRole).toString() == currentComboGpuId) {
+                item->setData(Qt::UserRole + 2, value); // Update tile size
+                item->setToolTip(QString("ID: %1, Threads: %2, Tile: %3")
+                                 .arg(item->data(Qt::UserRole).toString())
+                                 .arg(item->data(Qt::UserRole + 1).toInt())
+                                 .arg(value));
+                RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay(); // Refresh label
+                break;
+            }
+        }
+    }
+}
+
+
+void MainWindow::on_pushButton_ShowMultiGPUSettings_RealESRGAN_clicked()
+{
+    if (!ui->groupBox_GPUSettings_MultiGPU_RealESRGAN) return;
+    bool isVisible = ui->groupBox_GPUSettings_MultiGPU_RealESRGAN->isVisible();
+    ui->groupBox_GPUSettings_MultiGPU_RealESRGAN->setVisible(!isVisible);
+    if (isVisible) {
+        ui->pushButton_ShowMultiGPUSettings_RealESRGAN->setText(tr("Show Multi-GPU Settings"));
+    } else {
+        ui->pushButton_ShowMultiGPUSettings_RealESRGAN->setText(tr("Hide Multi-GPU Settings"));
+        // Populate the combobox for adding GPUs if it's empty or needs refresh
+        if (ui->comboBox_GPUIDs_MultiGPU_RealESRGAN && ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->count() == 0 && !Available_GPUID_RealESRGAN_ncnn_vulkan.isEmpty()) {
+             ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
+        } else if (ui->comboBox_GPUIDs_MultiGPU_RealESRGAN && ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->count() == 0 && Available_GPUID_RealESRGAN_ncnn_vulkan.isEmpty()){
+             ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->addItem(tr("No compatible GPU detected"));
+        }
+         on_comboBox_GPUIDs_MultiGPU_RealESRGAN_currentIndexChanged(0); // Trigger update of dependent controls
+    }
+}
+
+// RealCUGAN slots that were defined in mainwindow.h but might be missing if an old version was pasted
+void MainWindow::on_pushButton_DetectGPU_RealCUGAN_clicked() {
+    if(!ui->comboBox_GPUID_RealCUGAN || !ui->pushButton_DetectGPU_RealCUGAN) return;
+    ui->comboBox_GPUID_RealCUGAN->clear();
+    ui->pushButton_DetectGPU_RealCUGAN->setEnabled(false);
+    ui->pushButton_DetectGPU_RealCUGAN->setText(tr("Detecting..."));
+    QtConcurrent::run(this, &MainWindow::Realcugan_ncnn_vulkan_DetectGPU);
+}
+
+void MainWindow::Realcugan_ncnn_vulkan_DetectGPU_finished() {
+    if(!ui->pushButton_DetectGPU_RealCUGAN || !ui->comboBox_GPUID_RealCUGAN) return;
+    ui->pushButton_DetectGPU_RealCUGAN->setEnabled(true);
+    ui->pushButton_DetectGPU_RealCUGAN->setText(tr("Detect GPU"));
+    if(Available_GPUID_RealCUGAN_ncnn_vulkan.isEmpty()) {
+        ui->comboBox_GPUID_RealCUGAN->addItem(tr("No compatible GPU found"));
+    } else {
+        ui->comboBox_GPUID_RealCUGAN->addItems(Available_GPUID_RealCUGAN_ncnn_vulkan);
+    }
+    QSettings settings(Current_Path + "/settings.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    settings.beginGroup("RealCUGAN_NCNN_Vulkan");
+    QString lastSelectedGPU = settings.value("GPUID", "").toString();
+    if (!lastSelectedGPU.isEmpty() && Available_GPUID_RealCUGAN_ncnn_vulkan.contains(lastSelectedGPU)) {
+        ui->comboBox_GPUID_RealCUGAN->setCurrentText(lastSelectedGPU);
+    } else if (!Available_GPUID_RealCUGAN_ncnn_vulkan.isEmpty()) {
+        ui->comboBox_GPUID_RealCUGAN->setCurrentIndex(0);
+    }
+    settings.endGroup();
+    emit Send_Realcugan_ncnn_vulkan_DetectGPU_finished();
+}
+
+void MainWindow::Realcugan_ncnn_vulkan_DetectGPU_errorOccurred() {
+    if(!ui->pushButton_DetectGPU_RealCUGAN || !ui->comboBox_GPUID_RealCUGAN) return;
+    ui->pushButton_DetectGPU_RealCUGAN->setEnabled(true);
+    ui->pushButton_DetectGPU_RealCUGAN->setText(tr("Detect GPU"));
+    ui->comboBox_GPUID_RealCUGAN->clear();
+    ui->comboBox_GPUID_RealCUGAN->addItem(tr("Error during GPU detection"));
+    QMessageBox::warning(this, tr("Error"), tr("An error occurred during RealCUGAN GPU detection."));
+}
+
+void MainWindow::on_checkBox_MultiGPU_RealCUGAN_stateChanged(int state) {
+    if(!ui->groupBox_GPUSettings_MultiGPU_RealCUGAN || !ui->comboBox_GPUID_RealCUGAN) return;
+    if(state == Qt::Checked) {
+        ui->groupBox_GPUSettings_MultiGPU_RealCUGAN->setVisible(true);
+        ui->comboBox_GPUID_RealCUGAN->setEnabled(false);
+         // Ensure the multi-GPU combobox is populated
+        if (ui->comboBox_GPUIDs_MultiGPU_RealCUGAN && ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->count() == 0 && !Available_GPUID_RealCUGAN_ncnn_vulkan.isEmpty()) {
+             ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->addItems(Available_GPUID_RealCUGAN_ncnn_vulkan);
+        } else if (ui->comboBox_GPUIDs_MultiGPU_RealCUGAN && ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->count() == 0 && Available_GPUID_RealCUGAN_ncnn_vulkan.isEmpty()){
+             ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->addItem(tr("No compatible GPU detected"));
+        }
+    } else {
+        ui->groupBox_GPUSettings_MultiGPU_RealCUGAN->setVisible(false);
+        ui->comboBox_GPUID_RealCUGAN->setEnabled(true);
+    }
+}
+
+void MainWindow::on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked() {
+    if (!ui->comboBox_GPUIDs_MultiGPU_RealCUGAN || !ui->listWidget_GPUList_MultiGPU_RealCUGAN || Available_GPUID_RealCUGAN_ncnn_vulkan.isEmpty()) return;
+    QString selectedGPU = ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->currentText();
+    if (selectedGPU.isEmpty() || selectedGPU.startsWith(tr("No compatible")) || selectedGPU.startsWith(tr("Error"))) return;
+    QString gpuID = selectedGPU.split(":").first();
+    for (int i = 0; i < ui->listWidget_GPUList_MultiGPU_RealCUGAN->count(); ++i) {
+        if (ui->listWidget_GPUList_MultiGPU_RealCUGAN->item(i)->data(Qt::UserRole).toString() == gpuID) {
+            QMessageBox::information(this, tr("Info"), tr("GPU already added to the list."));
+            return;
+        }
+    }
+    QListWidgetItem *newItem = new QListWidgetItem(selectedGPU);
+    newItem->setData(Qt::UserRole, gpuID);
+    ui->listWidget_GPUList_MultiGPU_RealCUGAN->addItem(newItem);
+}
+
+void MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked() {
+    if(!ui->listWidget_GPUList_MultiGPU_RealCUGAN) return;
+    QList<QListWidgetItem*> selectedItems = ui->listWidget_GPUList_MultiGPU_RealCUGAN->selectedItems();
+    if(selectedItems.isEmpty()){
+        QMessageBox::warning(this, tr("Warning"), tr("Please select a GPU from the list to remove."));
+        return;
+    }
+    for(QListWidgetItem *item : selectedItems){
+        delete ui->listWidget_GPUList_MultiGPU_RealCUGAN->takeItem(ui->listWidget_GPUList_MultiGPU_RealCUGAN->row(item));
+    }
+}
+
+void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked() {
+    if(!ui->listWidget_GPUList_MultiGPU_RealCUGAN) return;
+    ui->listWidget_GPUList_MultiGPU_RealCUGAN->clear();
+}
+
+void MainWindow::Realcugan_NCNN_Vulkan_Image_finished() { /* Implementation from realcugan_ncnn_vulkan.cpp */ }
+void MainWindow::Realcugan_NCNN_Vulkan_Image_readyReadStandardOutput() { /* Implementation from realcugan_ncnn_vulkan.cpp */ }
+void MainWindow::Realcugan_NCNN_Vulkan_Image_readyReadStandardError() { /* Implementation from realcugan_ncnn_vulkan.cpp */ }
+void MainWindow::Realcugan_NCNN_Vulkan_Image_errorOccurred() { /* Implementation from realcugan_ncnn_vulkan.cpp */ }
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished(int, QProcess::ExitStatus) { /* Stub */ }
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardOutput() { /* Stub */ }
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError() { /* Stub */ }
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError) { /* Stub */ }
+
+// RealESRGAN slots that were defined in mainwindow.h
+void MainWindow::RealESRGAN_NCNN_Vulkan_Image_finished() { /* Implementation from realesrgan_ncnn_vulkan.cpp */ }
+void MainWindow::RealESRGAN_NCNN_Vulkan_Image_readyReadStandardOutput() { /* Implementation from realesrgan_ncnn_vulkan.cpp */ }
+void MainWindow::RealESRGAN_NCNN_Vulkan_Image_readyReadStandardError() { /* Implementation from realesrgan_ncnn_vulkan.cpp */ }
+void MainWindow::RealESRGAN_NCNN_Vulkan_Image_errorOccurred() { /* Implementation from realesrgan_ncnn_vulkan.cpp */ }
+void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_finished(int, QProcess::ExitStatus) { /* Stub */ }
+void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardOutput() { /* Stub */ }
+void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardError() { /* Stub */ }
+void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError) { /* Stub */ }
+
+// Compatibility CheckBox slots
+void MainWindow::on_checkBox_isCompatible_RealCUGAN_NCNN_Vulkan_clicked()
+{
+    ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->setChecked(isCompatible_RealCUGAN_NCNN_Vulkan);
+}
+
+void MainWindow::on_checkBox_isCompatible_RealESRGAN_NCNN_Vulkan_clicked()
+{
+    ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan->setChecked(isCompatible_RealESRGAN_NCNN_Vulkan);
 }

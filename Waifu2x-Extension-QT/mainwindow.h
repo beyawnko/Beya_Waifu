@@ -306,6 +306,8 @@ public:
     bool isCompatible_RifeNcnnVulkan=false;
     bool isCompatible_CainNcnnVulkan=false;
     bool isCompatible_DainNcnnVulkan=false;
+    bool isCompatible_RealCUGAN_NCNN_Vulkan=false;
+    bool isCompatible_RealESRGAN_NCNN_Vulkan=false;
     //============================== 多显卡 ==========================================
     //waifu2x-ncnn-vulkan
     int GPU_ID_Waifu2x_NCNN_Vulkan_MultiGPU = 0;
@@ -334,6 +336,80 @@ public:
     QMutex MultiGPU_QMutex_Waifu2xConverter;
     QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_Waifu2xConverter;
     void AddGPU_MultiGPU_Waifu2xConverter(QString GPUID);
+
+    //RealCUGAN-ncnn-Vulkan
+    QList<QProcess*> ProcList_RealCUGAN;
+    QStringList Available_GPUID_RealCUGAN;
+    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_RealCUGAN;
+    // RealCUGAN Member variables for settings
+    QString m_realcugan_Model;
+    int m_realcugan_DenoiseLevel;
+    int m_realcugan_TileSize;
+    bool m_realcugan_TTA;
+    QString m_realcugan_GPUID; // Stores single GPU ID or potentially base for multi-GPU config
+    QString m_realcugan_gpuJobConfig_temp; // Temporary storage for complex GPU job config string for batch processing
+
+    void Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingAlphaChannel);
+    void Realcugan_NCNN_Vulkan_GIF(int rowNum);
+    void Realcugan_NCNN_Vulkan_Video(int rowNum);
+    void Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum);
+    void Realcugan_NCNN_Vulkan_ReadSettings();
+    void Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
+    void APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
+    void Realcugan_ncnn_vulkan_DetectGPU();
+    QString RealcuganNcnnVulkan_MultiGPU(); // Modified to return QString for command arguments
+    void AddGPU_MultiGPU_RealcuganNcnnVulkan(QString GPUID);
+    void Realcugan_NCNN_Vulkan_PreLoad_Settings();
+    QStringList Realcugan_NCNN_Vulkan_PrepareArguments(const QString &inputFile, const QString &outputFile, int currentPassScale, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuId, bool ttaEnabled, const QString &outputFormat, bool isMultiGPU, const QString &multiGpuJobArgs);
+    void StartNextRealCUGANPass(QProcess *process);
+    void Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString &tempPathBase, int maxPassIndex, bool keepFinal = false, const QString& finalFile = "");
+    bool Realcugan_ProcessSingleFileIteratively(const QString &inputFile, const QString &outputFile, int targetScale, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat, int rowNumForStatusUpdate = -1);
+
+
+    //RealESRGAN-ncnn-Vulkan UI Pointers
+    QComboBox *comboBox_Model_RealESRGAN;
+    QComboBox *comboBox_GPUID_RealESRGAN;
+    QPushButton *pushButton_DetectGPU_RealESRGAN;
+    QSpinBox *spinBox_TileSize_RealESRGAN;
+    QPushButton *pushButton_TileSize_Add_RealESRGAN;
+    QPushButton *pushButton_TileSize_Minus_RealESRGAN;
+    QCheckBox *checkBox_TTA_RealESRGAN;
+    QCheckBox *checkBox_MultiGPU_RealESRGAN;
+    QGroupBox *groupBox_GPUSettings_MultiGPU_RealESRGAN;
+    QComboBox *comboBox_GPUIDs_MultiGPU_RealESRGAN;
+    QCheckBox *checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN;
+    QSpinBox *spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN;
+    QPushButton *pushButton_ShowMultiGPUSettings_RealESRGAN;
+    // RealESRGAN Member variables for settings
+    QString m_realesrgan_ModelName; // e.g., "realesrgan-x4plus"
+    int m_realesrgan_ModelNativeScale; // e.g., 4
+    int m_realesrgan_TileSize;
+    bool m_realesrgan_TTA;
+    QString m_realesrgan_GPUID;
+    QString m_realesrgan_gpuJobConfig_temp; // For batch processing gpu string
+
+    QList<QProcess*> ProcList_RealESRGAN;
+    QStringList Available_GPUID_RealESRGAN_ncnn_vulkan;
+    QString Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str; // Potentially for caching settings string
+    int GPU_ID_RealesrganNcnnVulkan_MultiGPU_CycleCounter; // For cycling through GPUs in multi-GPU mode if needed
+    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_RealesrganNcnnVulkan;
+    QMutex MultiGPU_QMutex_RealesrganNcnnVulkan;
+
+    void RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingAlphaChannel);
+    void RealESRGAN_NCNN_Vulkan_GIF(int rowNum);
+    void RealESRGAN_NCNN_Vulkan_Video(int rowNum);
+    void RealESRGAN_NCNN_Vulkan_Video_BySegment(int rowNum);
+    void RealESRGAN_NCNN_Vulkan_ReadSettings(); // Main settings reader
+    void RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum); // For batch (frames)
+    void APNG_RealESRGANCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
+    void RealESRGAN_ncnn_vulkan_DetectGPU();
+    QString RealesrganNcnnVulkan_MultiGPU(); // Returns job string for multi-GPU
+    void AddGPU_MultiGPU_RealesrganNcnnVulkan(QString GPUID);
+    void RealESRGAN_NCNN_Vulkan_PreLoad_Settings();
+    QStringList RealESRGAN_NCNN_Vulkan_PrepareArguments(const QString &inputFile, const QString &outputFile, int currentPassScale, const QString &modelName, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat);
+    bool RealESRGAN_ProcessSingleFileIteratively(const QString &inputFile, const QString &outputFile, int targetScale, int modelNativeScale, const QString &modelName, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat, int rowNumForStatusUpdate = -1);
+    QList<int> CalculateRealESRGANScaleSequence(int targetScale, int modelNativeScale);
+
 
     //Anime4k
     int GPU_ID_Anime4k_GetGPUInfo = 0;
@@ -1014,6 +1090,35 @@ private slots:
 
     void on_checkBox_isCompatible_SRMD_CUDA_clicked();
 
+    // RealESRGAN UI slots
+    void on_pushButton_DetectGPU_RealESRGAN_clicked();
+    void on_comboBox_Model_RealESRGAN_currentIndexChanged(int index);
+    void on_pushButton_TileSize_Add_RealESRGAN_clicked();
+    void on_pushButton_TileSize_Minus_RealESRGAN_clicked();
+    void on_checkBox_MultiGPU_RealESRGAN_stateChanged(int state);
+    // Removed RealESRGAN multi-GPU slots that were mistakenly added here from a previous context.
+    // void on_comboBox_GPUIDs_MultiGPU_RealESRGAN_currentIndexChanged(int index);
+    // void on_checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN_clicked();
+    // void on_spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN_valueChanged(int arg1);
+    // void on_pushButton_ShowMultiGPUSettings_RealESRGAN_clicked();
+
+    // RealCUGAN specific UI slots that were missing explicit declaration
+    void on_pushButton_DetectGPU_RealCUGAN_clicked();
+    void on_checkBox_MultiGPU_RealCUGAN_stateChanged(int state);
+    void on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked();
+    void on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked();
+    void on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked();
+    // Add other RealCUGAN specific UI slots if they are implemented in mainwindow.cpp and need declaration
+    // void on_comboBox_Model_RealCUGAN_currentIndexChanged(int index);
+    // void on_pushButton_TileSize_Add_RealCUGAN_clicked();
+    // void on_pushButton_TileSize_Minus_RealCUGAN_clicked();
+    // void on_checkBox_MultiGPU_RealCUGAN_clicked(); // If it has separate logic from stateChanged
+    // void on_comboBox_GPUIDs_MultiGPU_RealCUGAN_currentIndexChanged(int index);
+    // void on_checkBox_isEnable_CurrentGPU_MultiGPU_RealCUGAN_clicked();
+    // void on_spinBox_TileSize_CurrentGPU_MultiGPU_RealCUGAN_valueChanged(int arg1);
+    // void on_pushButton_ShowMultiGPUSettings_RealCUGAN_clicked();
+
+
 signals:
     void Send_Table_EnableSorting(bool EnableSorting);
 
@@ -1045,6 +1150,7 @@ signals:
 
     void Send_Realsr_ncnn_vulkan_DetectGPU_finished();
     void Send_FrameInterpolation_DetectGPU_finished();
+    // void Send_Realesrgan_ncnn_vulkan_DetectGPU_finished(); // This signal might be for RealESRGAN, ensure it's correctly named if used
 
     void Send_CheckUpadte_NewUpdate(QString, QString);
 
@@ -1069,6 +1175,20 @@ signals:
 
     void Send_SRMD_DetectGPU_finished();
 
+    // RealCUGAN slots for iterative processing and specific detection error
+    void Realcugan_NCNN_Vulkan_Iterative_finished();
+    void Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error);
+    void Realcugan_ncnn_vulkan_DetectGPU_finished(int exitCode, QProcess::ExitStatus exitStatus); // Already existed, ensure signature match
+    void Realcugan_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error); // Specific error slot for GPU detection
+
+    // RealESRGAN slots
+    void RealESRGAN_NCNN_Vulkan_finished();
+    void RealESRGAN_NCNN_Vulkan_errorOccurred(QProcess::ProcessError error); // General error
+    void RealESRGAN_NCNN_Vulkan_Iterative_finished(); // For iterative processing
+    void RealESRGAN_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error); // For iterative processing
+    void RealESRGAN_ncnn_vulkan_DetectGPU_finished(int exitCode, QProcess::ExitStatus exitStatus);
+    void RealESRGAN_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error); // Specific for GPU detection
+
     void Send_video_write_VideoConfiguration(QString VideoConfiguration_fullPath,int ScaleRatio,int DenoiseLevel,bool CustRes_isEnabled,int CustRes_height,int CustRes_width,QString EngineName,bool isProcessBySegment,QString VideoClipsFolderPath,QString VideoClipsFolderName,bool isVideoFrameInterpolationEnabled,int MultipleOfFPS);
 
     void Send_Settings_Save();
@@ -1086,8 +1206,9 @@ signals:
 
     void Send_Set_checkBox_DisableResize_gif_Checked();
 
+    void Send_Realesrgan_ncnn_vulkan_DetectGPU_finished(); // Signal for RealESRGAN GPU detection
+
 private:
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
-
