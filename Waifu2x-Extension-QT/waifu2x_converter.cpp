@@ -1613,10 +1613,9 @@ int MainWindow::Waifu2x_DumpProcessorList_converter()
     QString program = Waifu2x_folder_path + "/waifu2x-converter-cpp_waifu2xEX.exe";
     QProcess *Waifu2x = new QProcess();
     QString cmd = "\"" + program + "\"" + " -l ";
-    Waifu2x->start(cmd);
-    while(!Waifu2x->waitForStarted(100)&&!QProcess_stop) {}
-    while(!Waifu2x->waitForFinished(100)&&!QProcess_stop) {}
-    QString waifu2x_stdOut = Waifu2x->readAllStandardOutput();
+    QByteArray out;
+    runProcess(Waifu2x, cmd, &out);
+    QString waifu2x_stdOut = QString::fromUtf8(out);
     Core_num = waifu2x_stdOut.count("num_core");
     emit Send_TextBrowser_NewMessage(tr("\nWaifu2x-converter processor list:\n")+waifu2x_stdOut.trimmed());
     //====================================================================
@@ -1640,9 +1639,7 @@ int MainWindow::Waifu2x_DumpProcessorList_converter()
         QProcess *Waifu2x = new QProcess();
         QString Processor_str = " -p "+QString::number(Processor_ID,10)+" ";
         QString cmd = "\"" + program + "\"" + " -i " + "\"" + InputPath + "\"" + " -o " + "\"" + OutputPath + "\"" + " --scale-ratio 2 --noise-level 1 --model-dir " + "\"" + model_path + "\""+Processor_str;
-        Waifu2x->start(cmd);
-        while(!Waifu2x->waitForStarted(100)&&!QProcess_stop) {}
-        while(!Waifu2x->waitForFinished(100)&&!QProcess_stop) {}
+        runProcess(Waifu2x, cmd);
         if(QFile::exists(OutputPath))
         {
             Available_ProcessorList_converter.append(QString::number(Processor_ID,10));

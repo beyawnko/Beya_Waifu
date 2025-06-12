@@ -19,6 +19,8 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QEventLoop>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -2981,6 +2983,40 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_finished(int, QProcess::ExitSt
 void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardOutput() { /* Stub */ }
 void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardError() { /* Stub */ }
 void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError) { /* Stub */ }
+
+// Utility helper to run a QProcess without busy waiting
+bool MainWindow::runProcess(QProcess *process, const QString &cmd,
+                            QByteArray *stdOut, QByteArray *stdErr)
+{
+    QEventLoop loop;
+    if(stdOut) stdOut->clear();
+    if(stdErr) stdErr->clear();
+
+    connect(process, &QProcess::readyReadStandardOutput, [&](){
+        if(stdOut) stdOut->append(process->readAllStandardOutput());
+    });
+    connect(process, &QProcess::readyReadStandardError, [&](){
+        if(stdErr) stdErr->append(process->readAllStandardError());
+    });
+    connect(process, qOverload<int, QProcess::ExitStatus>(&QProcess::finished), &loop, &QEventLoop::quit);
+    connect(process, &QProcess::errorOccurred, &loop, &QEventLoop::quit);
+
+    QTimer stopTimer;
+    stopTimer.setInterval(200);
+    connect(&stopTimer, &QTimer::timeout, [&](){
+        if(QProcess_stop && process->state() != QProcess::NotRunning){
+            process->kill();
+            loop.quit();
+        }
+    });
+
+    process->start(cmd);
+    stopTimer.start();
+    loop.exec();
+    stopTimer.stop();
+
+    return process->exitStatus() == QProcess::NormalExit && process->exitCode() == 0 && !QProcess_stop;
+}
 
 // Compatibility CheckBox slots
 void MainWindow::on_checkBox_isCompatible_RealCUGAN_NCNN_Vulkan_clicked()

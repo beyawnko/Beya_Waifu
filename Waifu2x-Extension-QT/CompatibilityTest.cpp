@@ -50,11 +50,7 @@ int MainWindow::Waifu2x_Compatibility_Test()
     QString cmd = "\"" + program + "\"" + " -i " + "\"" + InputPath + "\"" + " -o " + "\"" + OutputPath + "\"" + " -s 2 -n 0 -t 32 -m " + "\"" + model_path + "\"" + " -j 1:1:1";
     for(int CompatTest_retry=0; CompatTest_retry<3; CompatTest_retry++)
     {
-        Waifu2x_vulkan->start(cmd);
-        if(Waifu2x_vulkan->waitForStarted(30000))
-        {
-            while(!Waifu2x_vulkan->waitForFinished(100)&&!QProcess_stop) {}
-        }
+        runProcess(Waifu2x_vulkan, cmd);
         QString ErrorMSG = Waifu2x_vulkan->readAllStandardError().toLower();
         QString StanderMSG = Waifu2x_vulkan->readAllStandardOutput().toLower();
         if(ErrorMSG.contains("failed")||StanderMSG.contains("failed"))
@@ -86,11 +82,7 @@ int MainWindow::Waifu2x_Compatibility_Test()
     cmd = "\"" + program + "\"" + " -i " + "\"" + InputPath + "\"" + " -o " + "\"" + OutputPath + "\"" + " -s 2 -n 0 -t 32 -m " + "\"" + model_path + "\"" + " -j 1:1:1";
     for(int CompatTest_retry=0; CompatTest_retry<3; CompatTest_retry++)
     {
-        Waifu2x_vulkan_old->start(cmd);
-        if(Waifu2x_vulkan_old->waitForStarted(30000))
-        {
-            while(!Waifu2x_vulkan_old->waitForFinished(100)&&!QProcess_stop) {}
-        }
+        runProcess(Waifu2x_vulkan_old, cmd);
         QString ErrorMSG = Waifu2x_vulkan_old->readAllStandardError().toLower();
         QString StanderMSG = Waifu2x_vulkan_old->readAllStandardOutput().toLower();
         if(ErrorMSG.contains("failed")||StanderMSG.contains("failed"))
@@ -122,11 +114,7 @@ int MainWindow::Waifu2x_Compatibility_Test()
     cmd = "\"" + program + "\"" + " -i " + "\"" + InputPath + "\"" + " -o " + "\"" + OutputPath + "\"" + " -s 2 -n 0 -t 32 -m " + "\"" + model_path + "\"" + " -j 1:1:1";
     for(int CompatTest_retry=0; CompatTest_retry<3; CompatTest_retry++)
     {
-        Waifu2x_vulkan_fp16p->start(cmd);
-        if(Waifu2x_vulkan_fp16p->waitForStarted(30000))
-        {
-            while(!Waifu2x_vulkan_fp16p->waitForFinished(100)&&!QProcess_stop) {}
-        }
+        runProcess(Waifu2x_vulkan_fp16p, cmd);
         //=========
         QString ErrorMSG = Waifu2x_vulkan_fp16p->readAllStandardError().toLower();
         QString StanderMSG = Waifu2x_vulkan_fp16p->readAllStandardOutput().toLower();
@@ -161,11 +149,7 @@ int MainWindow::Waifu2x_Compatibility_Test()
     QProcess *Waifu2x_converter = new QProcess();
     for(int CompatTest_retry=0; CompatTest_retry<3; CompatTest_retry++)
     {
-        Waifu2x_converter->start(cmd);
-        if(Waifu2x_converter->waitForStarted(30000))
-        {
-            while(!Waifu2x_converter->waitForFinished(100)&&!QProcess_stop) {}
-        }
+        runProcess(Waifu2x_converter, cmd);
         if(QFile::exists(OutputPath))break;
     }
     if(QFile::exists(OutputPath))
