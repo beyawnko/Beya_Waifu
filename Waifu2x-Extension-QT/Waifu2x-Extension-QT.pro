@@ -82,6 +82,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     OtherPic.qrc \
     donate.qrc \
-    icon.qrc
+    icon.qrc \
+    style.qrc
 
 RC_ICONS =icon/icon.ico
