@@ -357,10 +357,9 @@ int MainWindow::Force_close()
 {
     //=============
     QStringList TaskNameList;
-    TaskNameList << "convert_waifu2xEX.exe"<<"ffmpeg_waifu2xEX.exe"<<"ffprobe_waifu2xEX.exe"<<"identify_waifu2xEX.exe"<<"gifsicle_waifu2xEX.exe"<<"waifu2x-ncnn-vulkan_waifu2xEX.exe"
-                 <<"waifu2x-ncnn-vulkan-fp16p_waifu2xEX.exe"<<"Anime4K_waifu2xEX.exe"<<"waifu2x-caffe_waifu2xEX.exe"<<"srmd-ncnn-vulkan_waifu2xEX.exe"<<"realsr-ncnn-vulkan_waifu2xEX.exe"
-                 <<"waifu2x-converter-cpp_waifu2xEX.exe"<<"sox_waifu2xEX.exe"<<"wget_waifu2xEX.exe"<<"rife-ncnn-vulkan_waifu2xEX.exe"<<"cain-ncnn-vulkan_waifu2xEX.exe"<<"dain-ncnn-vulkan_waifu2xEX.exe"
-                 <<"srmd-cuda_waifu2xEX.exe"<<"apngdis_waifu2xEX.exe"<<"apngasm_waifu2xEX.exe";
+    TaskNameList << "convert_waifu2xEX.exe"<<"ffmpeg_waifu2xEX.exe"<<"ffprobe_waifu2xEX.exe"<<"identify_waifu2xEX.exe"<<"gifsicle_waifu2xEX.exe"
+                 <<"sox_waifu2xEX.exe"<<"wget_waifu2xEX.exe"<<"rife-ncnn-vulkan_waifu2xEX.exe"<<"cain-ncnn-vulkan_waifu2xEX.exe"<<"dain-ncnn-vulkan_waifu2xEX.exe"
+                 <<"apngdis_waifu2xEX.exe"<<"apngasm_waifu2xEX.exe"<<"RealCUGAN-ncnn-Vulkan_waifu2xEX.exe"<<"RealESRGAN-ncnn-Vulkan_waifu2xEX.exe";
     KILL_TASK_QStringList(TaskNameList,true);
     //===========
     QProcess Close;
@@ -663,237 +662,65 @@ void MainWindow::on_pushButton_ReadMe_clicked()
 
 void MainWindow::on_comboBox_Engine_Image_currentIndexChanged(int index)
 {
-    switch(ui->comboBox_Engine_Image->currentIndex())
+    if(index == 0) // RealCUGAN
     {
-        case 0:
-            {
-                ui->spinBox_DenoiseLevel_image->setRange(-1,3);
-                ui->spinBox_DenoiseLevel_image->setValue(2);
-                ui->spinBox_DenoiseLevel_image->setEnabled(1);
-                ui->spinBox_DenoiseLevel_image->setToolTip(tr("Range:-1(No noise reduction)~3"));
-                ui->label_ImageDenoiseLevel->setToolTip(tr("Range:-1(No noise reduction)~3"));
-                break;
-            }
-        case 1:
-            {
-                ui->spinBox_DenoiseLevel_image->setRange(0,3);
-                ui->spinBox_DenoiseLevel_image->setValue(2);
-                ui->spinBox_DenoiseLevel_image->setEnabled(1);
-                ui->spinBox_DenoiseLevel_image->setToolTip(tr("Range:0(No noise reduction)~3"));
-                ui->label_ImageDenoiseLevel->setToolTip(tr("Range:0(No noise reduction)~3"));
-                break;
-            }
-        case 2:
-        case 6:
-            {
-                ui->spinBox_DenoiseLevel_image->setRange(-1,10);
-                ui->spinBox_DenoiseLevel_image->setValue(4);
-                ui->spinBox_DenoiseLevel_image->setEnabled(1);
-                ui->spinBox_DenoiseLevel_image->setToolTip(tr("Range:-1(No noise reduction)~10"));
-                ui->label_ImageDenoiseLevel->setToolTip(tr("Range:-1(No noise reduction)~10"));
-                break;
-            }
-        case 3:
-            {
-                DenoiseLevelSpinboxSetting_Anime4k();
-                break;
-            }
-        case 4:
-            {
-                ui->spinBox_DenoiseLevel_image->setRange(-1,3);
-                ui->spinBox_DenoiseLevel_image->setValue(2);
-                ui->spinBox_DenoiseLevel_image->setEnabled(1);
-                ui->spinBox_DenoiseLevel_image->setToolTip(tr("Range:-1(No noise reduction)~3"));
-                ui->label_ImageDenoiseLevel->setToolTip(tr("Range:-1(No noise reduction)~3"));
-                break;
-            }
-        case 5:
-            {
-                ui->spinBox_DenoiseLevel_image->setRange(0,1);
-                ui->spinBox_DenoiseLevel_image->setValue(1);
-                ui->spinBox_DenoiseLevel_image->setEnabled(0);
-                ui->spinBox_DenoiseLevel_image->setToolTip(tr("Realsr-ncnn-vulkan engine will denoise automatically."));
-                ui->label_ImageDenoiseLevel->setToolTip(tr("Realsr-ncnn-vulkan engine will denoise automatically."));
-                break;
-            }
-        case 7: // RealCUGAN
-            {
-                ui->spinBox_DenoiseLevel_image->setRange(-1,3);
-                ui->spinBox_DenoiseLevel_image->setValue(-1);
-                ui->spinBox_DenoiseLevel_image->setEnabled(true);
-                ui->spinBox_DenoiseLevel_image->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
-                ui->label_ImageDenoiseLevel->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
-                break;
-            }
-        case 8: // RealESRGAN
-            {
-                ui->spinBox_DenoiseLevel_image->setRange(0,0); // RealESRGAN models usually don't have a separate denoise level param
-                ui->spinBox_DenoiseLevel_image->setValue(0);
-                ui->spinBox_DenoiseLevel_image->setEnabled(false);
-                ui->spinBox_DenoiseLevel_image->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
-                ui->label_ImageDenoiseLevel->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
-                break;
-            }
+        ui->spinBox_DenoiseLevel_image->setRange(-1,3);
+        ui->spinBox_DenoiseLevel_image->setValue(-1);
+        ui->spinBox_DenoiseLevel_image->setEnabled(true);
+        ui->spinBox_DenoiseLevel_image->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
+        ui->label_ImageDenoiseLevel->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
     }
-    isShowAnime4kWarning=true;
+    else // RealESRGAN
+    {
+        ui->spinBox_DenoiseLevel_image->setRange(0,0);
+        ui->spinBox_DenoiseLevel_image->setValue(0);
+        ui->spinBox_DenoiseLevel_image->setEnabled(false);
+        ui->spinBox_DenoiseLevel_image->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
+        ui->label_ImageDenoiseLevel->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
+    }
     on_comboBox_model_vulkan_currentIndexChanged(0);
-    isWaifu2xCaffeEnabled();//判断是否启用caffe图片风格设定
 }
 
 void MainWindow::on_comboBox_Engine_GIF_currentIndexChanged(int index)
 {
-    switch(ui->comboBox_Engine_GIF->currentIndex())
+    if(index == 0) // RealCUGAN
     {
-        case 0:
-            {
-                ui->spinBox_DenoiseLevel_gif->setRange(-1,3);
-                ui->spinBox_DenoiseLevel_gif->setValue(2);
-                ui->spinBox_DenoiseLevel_gif->setEnabled(1);
-                ui->spinBox_DenoiseLevel_gif->setToolTip(tr("Range:-1(No noise reduction)~3"));
-                ui->label_GIFDenoiseLevel->setToolTip(tr("Range:-1(No noise reduction)~3"));
-                break;
-            }
-        case 1:
-            {
-                ui->spinBox_DenoiseLevel_gif->setRange(0,3);
-                ui->spinBox_DenoiseLevel_gif->setValue(2);
-                ui->spinBox_DenoiseLevel_gif->setEnabled(1);
-                ui->spinBox_DenoiseLevel_gif->setToolTip(tr("Range:0(No noise reduction)~3"));
-                ui->label_GIFDenoiseLevel->setToolTip(tr("Range:0(No noise reduction)~3"));
-                break;
-            }
-        case 2:
-        case 6:
-            {
-                ui->spinBox_DenoiseLevel_gif->setRange(-1,10);
-                ui->spinBox_DenoiseLevel_gif->setValue(4);
-                ui->spinBox_DenoiseLevel_gif->setEnabled(1);
-                ui->spinBox_DenoiseLevel_gif->setToolTip(tr("Range:-1(No noise reduction)~10"));
-                ui->label_GIFDenoiseLevel->setToolTip(tr("Range:-1(No noise reduction)~10"));
-                break;
-            }
-        case 3:
-            {
-                DenoiseLevelSpinboxSetting_Anime4k();
-                break;
-            }
-        case 4:
-            {
-                ui->spinBox_DenoiseLevel_gif->setRange(-1,3);
-                ui->spinBox_DenoiseLevel_gif->setValue(2);
-                ui->spinBox_DenoiseLevel_gif->setEnabled(1);
-                ui->spinBox_DenoiseLevel_gif->setToolTip(tr("Range:-1(No noise reduction)~3"));
-                ui->label_GIFDenoiseLevel->setToolTip(tr("Range:-1(No noise reduction)~3"));
-                break;
-            }
-        case 5:
-            {
-                ui->spinBox_DenoiseLevel_gif->setRange(0,1);
-                ui->spinBox_DenoiseLevel_gif->setValue(1);
-                ui->spinBox_DenoiseLevel_gif->setEnabled(0);
-                ui->spinBox_DenoiseLevel_gif->setToolTip(tr("Realsr-ncnn-vulkan engine will denoise automatically."));
-                ui->label_GIFDenoiseLevel->setToolTip(tr("Realsr-ncnn-vulkan engine will denoise automatically."));
-                break;
-            }
-        case 7: // RealCUGAN
-            {
-                ui->spinBox_DenoiseLevel_gif->setRange(-1,3);
-                ui->spinBox_DenoiseLevel_gif->setValue(-1);
-                ui->spinBox_DenoiseLevel_gif->setEnabled(true);
-                ui->spinBox_DenoiseLevel_gif->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
-                ui->label_GIFDenoiseLevel->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
-                break;
-            }
-        case 8: // RealESRGAN
-            {
-                ui->spinBox_DenoiseLevel_gif->setRange(0,0); // RealESRGAN models usually don't have a separate denoise level param
-                ui->spinBox_DenoiseLevel_gif->setValue(0);
-                ui->spinBox_DenoiseLevel_gif->setEnabled(false);
-                ui->spinBox_DenoiseLevel_gif->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
-                ui->label_GIFDenoiseLevel->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
-                break;
-            }
+        ui->spinBox_DenoiseLevel_gif->setRange(-1,3);
+        ui->spinBox_DenoiseLevel_gif->setValue(-1);
+        ui->spinBox_DenoiseLevel_gif->setEnabled(true);
+        ui->spinBox_DenoiseLevel_gif->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
+        ui->label_GIFDenoiseLevel->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
+    }
+    else // RealESRGAN
+    {
+        ui->spinBox_DenoiseLevel_gif->setRange(0,0);
+        ui->spinBox_DenoiseLevel_gif->setValue(0);
+        ui->spinBox_DenoiseLevel_gif->setEnabled(false);
+        ui->spinBox_DenoiseLevel_gif->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
+        ui->label_GIFDenoiseLevel->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
     }
     on_comboBox_model_vulkan_currentIndexChanged(0);
-    isWaifu2xCaffeEnabled();//判断是否启用caffe图片风格设定
 }
 
 void MainWindow::on_comboBox_Engine_Video_currentIndexChanged(int index)
 {
-    switch(ui->comboBox_Engine_Video->currentIndex())
+    if(index == 0) // RealCUGAN
     {
-        case 0:
-            {
-                ui->spinBox_DenoiseLevel_video->setRange(-1,3);
-                ui->spinBox_DenoiseLevel_video->setValue(2);
-                ui->spinBox_DenoiseLevel_video->setEnabled(1);
-                ui->spinBox_DenoiseLevel_video->setToolTip(tr("Range:-1(No noise reduction)~3"));
-                ui->label_VideoDenoiseLevel->setToolTip(tr("Range:-1(No noise reduction)~3"));
-                break;
-            }
-        case 1:
-            {
-                ui->spinBox_DenoiseLevel_video->setRange(0,3);
-                ui->spinBox_DenoiseLevel_video->setValue(2);
-                ui->spinBox_DenoiseLevel_video->setEnabled(1);
-                ui->spinBox_DenoiseLevel_video->setToolTip(tr("Range:0(No noise reduction)~3"));
-                ui->label_VideoDenoiseLevel->setToolTip(tr("Range:0(No noise reduction)~3"));
-                break;
-            }
-        case 2:
-            {
-                DenoiseLevelSpinboxSetting_Anime4k();
-                break;
-            }
-        case 3:
-        case 6:
-            {
-                ui->spinBox_DenoiseLevel_video->setRange(-1,10);
-                ui->spinBox_DenoiseLevel_video->setValue(4);
-                ui->spinBox_DenoiseLevel_video->setEnabled(1);
-                ui->spinBox_DenoiseLevel_video->setToolTip(tr("Range:-1(No noise reduction)~10"));
-                ui->label_VideoDenoiseLevel->setToolTip(tr("Range:-1(No noise reduction)~10"));
-                break;
-            }
-        case 4:
-            {
-                ui->spinBox_DenoiseLevel_video->setRange(-1,3);
-                ui->spinBox_DenoiseLevel_video->setValue(2);
-                ui->spinBox_DenoiseLevel_video->setEnabled(1);
-                ui->spinBox_DenoiseLevel_video->setToolTip(tr("Range:-1(No noise reduction)~3"));
-                ui->label_VideoDenoiseLevel->setToolTip(tr("Range:-1(No noise reduction)~3"));
-                break;
-            }
-        case 5:
-            {
-                ui->spinBox_DenoiseLevel_video->setRange(0,1);
-                ui->spinBox_DenoiseLevel_video->setValue(1);
-                ui->spinBox_DenoiseLevel_video->setEnabled(0);
-                ui->spinBox_DenoiseLevel_video->setToolTip(tr("Realsr-ncnn-vulkan engine will denoise automatically."));
-                ui->label_VideoDenoiseLevel->setToolTip(tr("Realsr-ncnn-vulkan engine will denoise automatically."));
-                break;
-            }
-        case 7: // RealCUGAN
-            {
-                ui->spinBox_DenoiseLevel_video->setRange(-1,3);
-                ui->spinBox_DenoiseLevel_video->setValue(-1);
-                ui->spinBox_DenoiseLevel_video->setEnabled(true);
-                ui->spinBox_DenoiseLevel_video->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
-                ui->label_VideoDenoiseLevel->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
-                break;
-            }
-        case 8: // RealESRGAN
-            {
-                ui->spinBox_DenoiseLevel_video->setRange(0,0); // RealESRGAN models usually don't have a separate denoise level param
-                ui->spinBox_DenoiseLevel_video->setValue(0);
-                ui->spinBox_DenoiseLevel_video->setEnabled(false);
-                ui->spinBox_DenoiseLevel_video->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
-                ui->label_VideoDenoiseLevel->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
-                break;
-            }
+        ui->spinBox_DenoiseLevel_video->setRange(-1,3);
+        ui->spinBox_DenoiseLevel_video->setValue(-1);
+        ui->spinBox_DenoiseLevel_video->setEnabled(true);
+        ui->spinBox_DenoiseLevel_video->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
+        ui->label_VideoDenoiseLevel->setToolTip(tr("Denoise Level for RealCUGAN (-1 to 3)"));
+    }
+    else // RealESRGAN
+    {
+        ui->spinBox_DenoiseLevel_video->setRange(0,0);
+        ui->spinBox_DenoiseLevel_video->setValue(0);
+        ui->spinBox_DenoiseLevel_video->setEnabled(false);
+        ui->spinBox_DenoiseLevel_video->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
+        ui->label_VideoDenoiseLevel->setToolTip(tr("Denoise level is model-specific for RealESRGAN and not set here."));
     }
     on_comboBox_model_vulkan_currentIndexChanged(0);
-    isWaifu2xCaffeEnabled();//判断是否启用caffe图片风格设定
 }
 
 void MainWindow::on_pushButton_clear_textbrowser_clicked()

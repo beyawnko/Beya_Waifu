@@ -3984,55 +3984,14 @@ process at the same time.</string>
                      </size>
                     </property>
                     <property name="toolTip">
-                     <string>Waifu2x-NCNN-Vulkan [Speed:★★   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Converter   [Speed:★☆   Image quality:★★☆] [2D Anime]
-Anime4K             [Speed:★★★ Image quality:★☆  ] [2D Anime]
-SRMD-NCNN-Vulkan    [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Caffe       [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-RealSR-NCNN-Vulkan  [Speed:☆     Image quality:★★★] [3D Real-life]
-SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D Real-life]</string>
+                     <string>RealCUGAN-ncnn-Vulkan | RealESRGAN-ncnn-Vulkan</string>
                     </property>
                     <property name="currentText">
-                     <string notr="true">waifu2x-ncnn-vulkan</string>
+                     <string notr="true">RealCUGAN-ncnn-Vulkan</string>
                     </property>
                     <property name="sizeAdjustPolicy">
                      <enum>QComboBox::AdjustToContents</enum>
                     </property>
-                    <item>
-                     <property name="text">
-                      <string notr="true">waifu2x-ncnn-vulkan</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">waifu2x-converter</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">srmd-ncnn-vulkan</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">Anime4K</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">waifu2x-caffe</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">realsr-ncnn-vulkan</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>[BETA] srmd-cuda</string>
-                     </property>
-                    </item>
                     <item>
                      <property name="text">
                       <string notr="true">RealCUGAN-ncnn-Vulkan</string>
@@ -4121,55 +4080,14 @@ SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D
                      </size>
                     </property>
                     <property name="toolTip">
-                     <string>Waifu2x-NCNN-Vulkan [Speed:★★   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Converter   [Speed:★☆   Image quality:★★☆] [2D Anime]
-Anime4K             [Speed:★★★ Image quality:★☆  ] [2D Anime]
-SRMD-NCNN-Vulkan    [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Caffe       [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-RealSR-NCNN-Vulkan  [Speed:☆     Image quality:★★★] [3D Real-life]
-SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D Real-life]</string>
+                     <string>RealCUGAN-ncnn-Vulkan | RealESRGAN-ncnn-Vulkan</string>
                     </property>
                     <property name="currentText">
-                     <string notr="true">waifu2x-ncnn-vulkan</string>
+                     <string notr="true">RealCUGAN-ncnn-Vulkan</string>
                     </property>
                     <property name="sizeAdjustPolicy">
                      <enum>QComboBox::AdjustToContents</enum>
                     </property>
-                    <item>
-                     <property name="text">
-                      <string notr="true">waifu2x-ncnn-vulkan</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">waifu2x-converter</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">Anime4k</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">srmd-ncnn-vulkan</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">waifu2x-caffe</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">realsr-ncnn-vulkan</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>[BETA] srmd-cuda</string>
-                     </property>
-                    </item>
                     <item>
                      <property name="text">
                       <string notr="true">RealCUGAN-ncnn-Vulkan</string>
@@ -4200,55 +4118,14 @@ SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D
                      </size>
                     </property>
                     <property name="toolTip">
-                     <string>Waifu2x-NCNN-Vulkan [Speed:★★   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Converter   [Speed:★☆   Image quality:★★☆] [2D Anime]
-Anime4K             [Speed:★★★ Image quality:★☆  ] [2D Anime]
-SRMD-NCNN-Vulkan    [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Caffe       [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-RealSR-NCNN-Vulkan  [Speed:☆     Image quality:★★★] [3D Real-life]
-SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D Real-life]</string>
+                     <string>RealCUGAN-ncnn-Vulkan | RealESRGAN-ncnn-Vulkan</string>
                     </property>
                     <property name="currentText">
-                     <string notr="true">waifu2x-ncnn-vulkan</string>
+                     <string notr="true">RealCUGAN-ncnn-Vulkan</string>
                     </property>
                     <property name="sizeAdjustPolicy">
                      <enum>QComboBox::AdjustToContents</enum>
                     </property>
-                    <item>
-                     <property name="text">
-                      <string notr="true">waifu2x-ncnn-vulkan</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">waifu2x-converter</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">srmd-ncnn-vulkan</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">Anime4K</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">waifu2x-caffe</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string notr="true">realsr-ncnn-vulkan</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>[BETA] srmd-cuda</string>
-                     </property>
-                    </item>
                     <item>
                      <property name="text">
                       <string notr="true">RealCUGAN-ncnn-Vulkan</string>
