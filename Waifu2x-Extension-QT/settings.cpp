@@ -21,8 +21,8 @@
 #include "ui_mainwindow.h"
 
 /*
-保存设置
-删除原设置文件,保存设置
+Save settings
+Remove the original settings file before saving
 */
 int MainWindow::Settings_Save()
 {
@@ -31,26 +31,26 @@ int MainWindow::Settings_Save()
     //=================
     QSettings *configIniWrite = new QSettings(settings_ini, QSettings::IniFormat);
     configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8"));
-    //================= 添加警告 =========================
+    //================= Add warning =========================
     configIniWrite->setValue("/Warning/.", "Do not modify this file! It may cause the program to crash! If problems occur after the modification, delete this file and restart the program.");
-    //==================== 存储版本识别 ==================================
+    //==================== Save version identifier ==================================
     configIniWrite->setValue("/settings/VERSION", VERSION);
-    //=======  存储放大值和降噪值  =================================
+    //======= Save scale and denoise values  =================================
     configIniWrite->setValue("/settings/ImageScaleRatio", ui->doubleSpinBox_ScaleRatio_image->value());
     configIniWrite->setValue("/settings/GIFScaleRatio", ui->doubleSpinBox_ScaleRatio_gif->value());
     configIniWrite->setValue("/settings/VideoScaleRatio", ui->doubleSpinBox_ScaleRatio_video->value());
     configIniWrite->setValue("/settings/ImageDenoiseLevel", ui->spinBox_DenoiseLevel_image->value());
     configIniWrite->setValue("/settings/GIFDenoiseLevel", ui->spinBox_DenoiseLevel_gif->value());
     configIniWrite->setValue("/settings/VideoDenoiseLevel", ui->spinBox_DenoiseLevel_video->value());
-    //============ 存储自定义宽度和高度及设置 ============================
+    //============ Save custom width, height and settings ============================
     configIniWrite->setValue("/settings/CustResWidth", ui->spinBox_CustRes_width->value());
     configIniWrite->setValue("/settings/CustResHeight", ui->spinBox_CustRes_height->value());
     configIniWrite->setValue("/settings/CustResAspectRatioMode", ui->comboBox_AspectRatio_custRes->currentIndex());
-    //============ 存储线程数量 ====================================
+    //============ Save thread count ====================================
     configIniWrite->setValue("/settings/ImageThreadNum", ui->spinBox_ThreadNum_image->value());
     configIniWrite->setValue("/settings/GIFThreadNumInternal", ui->spinBox_ThreadNum_gif_internal->value());
     configIniWrite->setValue("/settings/VideoThreadNumInternal", ui->spinBox_ThreadNum_video_internal->value());
-    //================== 存储引擎设置 =========================
+    //================== Save engine settings =========================
     configIniWrite->setValue("/settings/ImageEngine", ui->comboBox_Engine_Image->currentIndex());
     configIniWrite->setValue("/settings/GIFEngine", ui->comboBox_Engine_GIF->currentIndex());
     configIniWrite->setValue("/settings/VideoEngine", ui->comboBox_Engine_Video->currentIndex());
@@ -117,10 +117,10 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/settings/RealESRGAN_Available_GPUID", Available_GPUID_RealESRGAN_ncnn_vulkan);
     if(ui->checkBox_MultiGPU_RealESRGAN) configIniWrite->setValue("/settings/RealESRGAN_MultiGPU_Enabled", ui->checkBox_MultiGPU_RealESRGAN->isChecked());
     configIniWrite->setValue("/settings/RealESRGAN_GPUJobConfig_MultiGPU", QVariant::fromValue(m_realesrgan_gpuJobConfig_temp));
-    //================== 存储 扩展名 =================================
+    //================== Save file extensions =================================
     configIniWrite->setValue("/settings/ImageEXT", ui->Ext_image->text());
     configIniWrite->setValue("/settings/VideoEXT", ui->Ext_video->text());
-    //=================== 存储 杂项设置 =================================
+    //=================== Save miscellaneous settings =================================
     configIniWrite->setValue("/settings/checkBox_SummaryPopup", ui->checkBox_SummaryPopup->isChecked());
     configIniWrite->setValue("/settings/checkBox_DisableResize_gif", ui->checkBox_DisableResize_gif->isChecked());
     configIniWrite->setValue("/settings/checkBox_AutoSkip_CustomRes", ui->checkBox_AutoSkip_CustomRes->isChecked());
@@ -161,15 +161,15 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/settings/AudioDenoiseLevel", ui->doubleSpinBox_AudioDenoiseLevel->value());
     //=====
     configIniWrite->setValue("/settings/checkBox_PreProcessImage", ui->checkBox_PreProcessImage->isChecked());
-    //===================== 存储 textbrowser 设置 =====================
+    //===================== Save text browser settings =====================
     configIniWrite->setValue("/settings/TextBrowserFontSize", ui->spinBox_textbrowser_fontsize->value());
-    //===================== 存储语言设置 ================================
+    //===================== Save language settings ================================
     configIniWrite->setValue("/settings/Language", ui->comboBox_language->currentIndex());
-    //================== 存储全局字体 =========================
+    //================== Save global font settings =========================
     configIniWrite->setValue("/settings/GlobalFontSize", ui->spinBox_GlobalFontSize->value());
     configIniWrite->setValue("/settings/CustFont", ui->fontComboBox_CustFont->currentFont());
     configIniWrite->setValue("/settings/CustFont_isEnabled", ui->checkBox_isCustFontEnable->isChecked());
-    //=================== 存储视频设置 ===========================
+    //=================== Save video settings ===========================
     configIniWrite->setValue("/settings/VideoSettingsIsEnabled", ui->groupBox_video_settings->isChecked());
     configIniWrite->setValue("/settings/EncoderVideo", ui->lineEdit_encoder_vid->text());
     configIniWrite->setValue("/settings/EncoderAudio", ui->lineEdit_encoder_audio->text());
@@ -184,13 +184,13 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/settings/acodecCopy", ui->checkBox_acodec_copy_2mp4->isChecked());
     configIniWrite->setValue("/settings/checkBox_IgnoreFrameRateMode", ui->checkBox_IgnoreFrameRateMode->isChecked());
     configIniWrite->setValue("/settings/ExtraCommand2mp4", ui->lineEdit_ExCommand_2mp4->text());
-    //==================== 存储输出路径设置 ========================
+    //==================== Save output path settings ========================
     configIniWrite->setValue("/settings/OutPutPath", ui->lineEdit_outputPath->text());
     configIniWrite->setValue("/settings/OutPutPathIsEnabled", ui->checkBox_OutPath_isEnabled->isChecked());
     configIniWrite->setValue("/settings/checkBox_OutPath_KeepOriginalFileName", ui->checkBox_OutPath_KeepOriginalFileName->isChecked());
     configIniWrite->setValue("/settings/checkBox_OutPath_Overwrite", ui->checkBox_OutPath_Overwrite->isChecked());
     configIniWrite->setValue("/settings/checkBox_AutoOpenOutputPath", ui->checkBox_AutoOpenOutputPath->isChecked());
-    //=================== 存储Anime4k设置 =============================
+    //=================== Save Anime4k settings =============================
     configIniWrite->setValue("/settings/spinBox_OpenCLCommandQueues_A4k", ui->spinBox_OpenCLCommandQueues_A4k->value());
     configIniWrite->setValue("/settings/checkBox_OpenCLParallelIO_A4k", ui->checkBox_OpenCLParallelIO_A4k->isChecked());
     configIniWrite->setValue("/settings/comboBox_GPGPUModel_A4k", ui->comboBox_GPGPUModel_A4k->currentIndex());
@@ -222,7 +222,7 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/settings/checkBox_GaussianBlur_Post_Anime4k", ui->checkBox_GaussianBlur_Post_Anime4k->isChecked());
     configIniWrite->setValue("/settings/checkBox_BilateralFilter_Post_Anime4k", ui->checkBox_BilateralFilter_Post_Anime4k->isChecked());
     configIniWrite->setValue("/settings/checkBox_BilateralFilterFaster_Post_Anime4k", ui->checkBox_BilateralFilterFaster_Post_Anime4k->isChecked());
-    //========================= 存储兼容性测试结果 ================
+    //========================= Save compatibility test results ================
     configIniWrite->setValue("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW", ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW->isChecked());
     configIniWrite->setValue("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P", ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P->isChecked());
     configIniWrite->setValue("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD", ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD->isChecked());
@@ -245,7 +245,7 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/settings/checkBox_isCompatible_DainNcnnVulkan", ui->checkBox_isCompatible_DainNcnnVulkan->isChecked());
     configIniWrite->setValue("/settings/checkBox_isCompatible_RealCUGAN_NCNN_Vulkan", ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->isChecked());
     configIniWrite->setValue("/settings/checkBox_isCompatible_RealESRGAN_NCNN_Vulkan", ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan->isChecked());
-    //======================== 存储VFI 设定 ========================
+    //======================== Save VFI settings ========================
     configIniWrite->setValue("/settings/checkBox_VfiAfterScale_VFI", ui->checkBox_VfiAfterScale_VFI->isChecked());
     configIniWrite->setValue("/settings/checkBox_MultiThread_VFI", ui->checkBox_MultiThread_VFI->isChecked());
     configIniWrite->setValue("/settings/checkBox_AutoAdjustNumOfThreads_VFI", ui->checkBox_AutoAdjustNumOfThreads_VFI->isChecked());
@@ -266,8 +266,8 @@ int MainWindow::Settings_Save()
     return 0;
 }
 /*
-读取&应用设置
-如果设置文件不存在则生成默认设置文件,读取设置,应用设置
+Read and apply settings
+If the settings file does not exist, create a default one, then read and apply settings
 */
 int MainWindow::Settings_Read_Apply()
 {
@@ -299,24 +299,24 @@ int MainWindow::Settings_Read_Apply()
     //=================
     QSettings *configIniRead = new QSettings(settings_ini, QSettings::IniFormat);
     configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
-    //=================== 加载全局字体设置 =========================
+    //=================== Load global font settings =========================
     ui->spinBox_GlobalFontSize->setValue(Settings_Read_value("/settings/GlobalFontSize").toInt());
     ui->fontComboBox_CustFont->setCurrentFont(Settings_Read_value("/settings/CustFont").value<QFont>());
     ui->checkBox_isCustFontEnable->setChecked(Settings_Read_value("/settings/CustFont_isEnabled").toBool());
     Set_Font_fixed();
-    //=======  加载放大值和降噪值  ======
+    //=======  Load scale and denoise values  ======
     ui->doubleSpinBox_ScaleRatio_image->setValue(Settings_Read_value("/settings/ImageScaleRatio").toDouble());
     ui->doubleSpinBox_ScaleRatio_gif->setValue(Settings_Read_value("/settings/GIFScaleRatio").toDouble());
     ui->doubleSpinBox_ScaleRatio_video->setValue(Settings_Read_value("/settings/VideoScaleRatio").toDouble());
-    //============= 加载自定义宽度和高度 ============================
+    //============= Load custom width and height ============================
     ui->spinBox_CustRes_width->setValue(Settings_Read_value("/settings/CustResWidth").toInt());
     ui->spinBox_CustRes_height->setValue(Settings_Read_value("/settings/CustResHeight").toInt());
     ui->comboBox_AspectRatio_custRes->setCurrentIndex(Settings_Read_value("/settings/CustResAspectRatioMode").toInt());
-    //============ 加载 线程数量 ==================================
+    //============ Load thread count ==================================
     ui->spinBox_ThreadNum_image->setValue(Settings_Read_value("/settings/ImageThreadNum").toInt());
     ui->spinBox_ThreadNum_gif_internal->setValue(Settings_Read_value("/settings/GIFThreadNumInternal").toInt());
     ui->spinBox_ThreadNum_video_internal->setValue(Settings_Read_value("/settings/VideoThreadNumInternal").toInt());
-    //================ 加载 引擎设置 ================================
+    //================ Load engine settings ================================
     isShowAnime4kWarning=false;
     ui->comboBox_Engine_Image->setCurrentIndex(Settings_Read_value("/settings/ImageEngine").toInt());
     ui->comboBox_Engine_GIF->setCurrentIndex(Settings_Read_value("/settings/GIFEngine").toInt());
@@ -351,7 +351,7 @@ int MainWindow::Settings_Read_Apply()
     Available_GPUID = Settings_Read_value("/settings/Available_GPUID_Waifu2xNCNNVulkan").toStringList();
     Waifu2x_DetectGPU_finished();
     ui->comboBox_GPUID->setCurrentIndex(Settings_Read_value("/settings/CurrentGPUID_Waifu2xNCNNVulkan").toInt());
-    //读取多显卡设定
+    // Load multi-GPU settings
     GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan").value<QList<QMap<QString, QString>> >();
     if(GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_Waifu2xNCNNVulkan) // Check if combobox exists
     {
@@ -364,7 +364,7 @@ int MainWindow::Settings_Read_Apply()
     Available_GPUID_Realsr_ncnn_vulkan = Settings_Read_value("/settings/Available_GPUID_Realsr_ncnn_vulkan").toStringList();
     Realsr_ncnn_vulkan_DetectGPU_finished();
     if(ui->comboBox_GPUID_RealsrNCNNVulkan) ui->comboBox_GPUID_RealsrNCNNVulkan->setCurrentIndex(Settings_Read_value("/settings/comboBox_GPUID_RealsrNCNNVulkan").toInt());
-    //读取多显卡设定
+    // Load multi-GPU settings
     GPUIDs_List_MultiGPU_RealsrNcnnVulkan = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_RealsrNcnnVulkan").value<QList<QMap<QString, QString>> >();
     if(GPUIDs_List_MultiGPU_RealsrNcnnVulkan.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan)
     {
@@ -378,7 +378,7 @@ int MainWindow::Settings_Read_Apply()
     Waifu2x_DumpProcessorList_converter_finished();
     if(ui->comboBox_TargetProcessor_converter) ui->comboBox_TargetProcessor_converter->setCurrentIndex(Settings_Read_value("/settings/comboBox_TargetProcessor_converter").toInt());
     on_comboBox_TargetProcessor_converter_currentIndexChanged(0); // Ensure dependent UI updates
-    //读取多显卡设定
+    // Load multi-GPU settings
     GPUIDs_List_MultiGPU_Waifu2xConverter = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_Waifu2xConverter").value<QList<QMap<QString, QString>> >();
     if(GPUIDs_List_MultiGPU_Waifu2xConverter.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_Waifu2xConverter)
     {
@@ -391,7 +391,7 @@ int MainWindow::Settings_Read_Apply()
     Available_GPUID_srmd = Settings_Read_value("/settings/Available_GPUID_srmd").toStringList();
     SRMD_DetectGPU_finished();
     if(ui->comboBox_GPUID_srmd) ui->comboBox_GPUID_srmd->setCurrentIndex(Settings_Read_value("/settings/comboBox_GPUID_srmd").toInt());
-    //读取多显卡设定
+    // Load multi-GPU settings
     GPUIDs_List_MultiGPU_SrmdNcnnVulkan = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_SrmdNcnnVulkan").value<QList<QMap<QString, QString>> >();
     if(GPUIDs_List_MultiGPU_SrmdNcnnVulkan.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_SrmdNCNNVulkan)
     {
@@ -478,10 +478,10 @@ int MainWindow::Settings_Read_Apply()
     }
 
 
-    //================= 加载 扩展名 ===========================
+    //================= Load file extensions ===========================
     ui->Ext_image->setText(Settings_Read_value("/settings/ImageEXT").toString());
     ui->Ext_video->setText(Settings_Read_value("/settings/VideoEXT").toString());
-    //================== 加载 杂项设置 ==================================
+    //================== Load miscellaneous settings ==================================
     ui->checkBox_SummaryPopup->setChecked(Settings_Read_value("/settings/checkBox_SummaryPopup").toBool());
     ui->checkBox_DisableResize_gif->setChecked(Settings_Read_value("/settings/checkBox_DisableResize_gif").toBool());
     ui->checkBox_AutoSkip_CustomRes->setChecked(Settings_Read_value("/settings/checkBox_AutoSkip_CustomRes").toBool());
@@ -520,9 +520,9 @@ int MainWindow::Settings_Read_Apply()
     ui->doubleSpinBox_AudioDenoiseLevel->setValue(Settings_Read_value("/settings/AudioDenoiseLevel").toDouble());
     //=========
     ui->checkBox_PreProcessImage->setChecked(Settings_Read_value("/settings/checkBox_PreProcessImage").toBool());
-    //=================== 加载 textbrowser 设置 ==========================
+    //=================== Load text browser settings ==========================
     ui->spinBox_textbrowser_fontsize->setValue(Settings_Read_value("/settings/TextBrowserFontSize").toInt());
-    //=================== 加载视频设置 ===========================
+    //=================== Load video settings ===========================
     ui->groupBox_video_settings->setChecked(Settings_Read_value("/settings/VideoSettingsIsEnabled").toBool());
     //===
     ui->lineEdit_encoder_vid->setText(Settings_Read_value("/settings/EncoderVideo").toString());
@@ -538,13 +538,13 @@ int MainWindow::Settings_Read_Apply()
     ui->checkBox_acodec_copy_2mp4->setChecked(Settings_Read_value("/settings/acodecCopy").toBool());
     ui->checkBox_IgnoreFrameRateMode->setChecked(Settings_Read_value("/settings/checkBox_IgnoreFrameRateMode").toBool());
     ui->lineEdit_ExCommand_2mp4->setText(Settings_Read_value("/settings/ExtraCommand2mp4").toString());
-    //=============== 加载输出路径设置 ===========================
+    //=============== Load output path settings ===========================
     ui->lineEdit_outputPath->setText(Settings_Read_value("/settings/OutPutPath").toString());
     ui->checkBox_OutPath_isEnabled->setChecked(Settings_Read_value("/settings/OutPutPathIsEnabled").toBool());
     ui->checkBox_OutPath_KeepOriginalFileName->setChecked(Settings_Read_value("/settings/checkBox_OutPath_KeepOriginalFileName").toBool());
     ui->checkBox_OutPath_Overwrite->setChecked(Settings_Read_value("/settings/checkBox_OutPath_Overwrite").toBool());
     ui->checkBox_AutoOpenOutputPath->setChecked(Settings_Read_value("/settings/checkBox_AutoOpenOutputPath").toBool());
-    //================== 加载Anime4k设置 ===================================
+    //================== Load Anime4k settings ===================================
     ui->spinBox_OpenCLCommandQueues_A4k->setValue(Settings_Read_value("/settings/spinBox_OpenCLCommandQueues_A4k").toInt());
     ui->checkBox_OpenCLParallelIO_A4k->setChecked(Settings_Read_value("/settings/checkBox_OpenCLParallelIO_A4k").toBool());
     ui->comboBox_GPGPUModel_A4k->setCurrentIndex(Settings_Read_value("/settings/comboBox_GPGPUModel_A4k").toInt());
@@ -576,7 +576,7 @@ int MainWindow::Settings_Read_Apply()
     ui->checkBox_GaussianBlur_Post_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_GaussianBlur_Post_Anime4k").toBool());
     ui->checkBox_BilateralFilter_Post_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_BilateralFilter_Post_Anime4k").toBool());
     ui->checkBox_BilateralFilterFaster_Post_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_BilateralFilterFaster_Post_Anime4k").toBool());
-    //===================== 加载兼容性测试结果 ============================
+    //===================== Load compatibility test results ============================
     isCompatible_Waifu2x_NCNN_Vulkan_NEW = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW").toBool();
     isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P").toBool();
     isCompatible_Waifu2x_NCNN_Vulkan_OLD = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD").toBool();
@@ -622,7 +622,7 @@ int MainWindow::Settings_Read_Apply()
     ui->checkBox_isCompatible_DainNcnnVulkan->setChecked(isCompatible_DainNcnnVulkan);
     ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->setChecked(isCompatible_RealCUGAN_NCNN_Vulkan);
     if(ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan) ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan->setChecked(isCompatible_RealESRGAN_NCNN_Vulkan);
-    //======================== 加载 VFI 设定 ========================
+    //======================== Load VFI settings ========================
     ui->checkBox_VfiAfterScale_VFI->setChecked(Settings_Read_value("/settings/checkBox_VfiAfterScale_VFI").toBool());
     ui->checkBox_MultiThread_VFI->setChecked(Settings_Read_value("/settings/checkBox_MultiThread_VFI").toBool());
     ui->checkBox_AutoAdjustNumOfThreads_VFI->setChecked(Settings_Read_value("/settings/checkBox_AutoAdjustNumOfThreads_VFI").toBool());
@@ -641,7 +641,7 @@ int MainWindow::Settings_Read_Apply()
     ui->comboBox_Engine_VFI->setCurrentIndex(Old_FrameInterpolation_Engine_Index);
     ui->spinBox_MultipleOfFPS_VFI->setValue(Settings_Read_value("/settings/spinBox_MultipleOfFPS_VFI").toInt());
     ui->spinBox_TileSize_VFI->setValue(Settings_Read_value("/settings/spinBox_TileSize_VFI").toInt());
-    //==================== 加载语言设置 =====================
+    //==================== Load language settings =====================
     ui->comboBox_language->setCurrentIndex(Settings_Read_value("/settings/Language").toInt());
     on_comboBox_language_currentIndexChanged(0);
     //====================================================
@@ -720,8 +720,8 @@ QVariant MainWindow::Settings_Read_value(QString Key, QVariant defaultValue)
 }
 
 /*
-保存设置pushbutton
-保存设置,弹窗
+Save settings pushbutton
+Save settings and show a popup
 */
 void MainWindow::on_pushButton_SaveSettings_clicked()
 {
@@ -734,8 +734,8 @@ void MainWindow::on_pushButton_SaveSettings_clicked()
     MSG->show();
 }
 /*
-重置设置
-删除设置文件,重置标记=true,弹窗
+Reset settings
+Delete the settings file, set reset flag to true, and show a popup
 */
 void MainWindow::on_pushButton_ResetSettings_clicked()
 {
