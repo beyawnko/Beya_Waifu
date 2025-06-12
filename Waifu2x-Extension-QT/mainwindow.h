@@ -92,6 +92,8 @@ public:
     int globalMaxThreadCount = 0; // maximum threads for global pool
     //=======
     void Set_Font_fixed();
+    bool SystemPrefersDark() const;
+    void ApplyDarkStyle();
     //=================================  File 文件 =================================
     void dragEnterEvent(QDragEnterEvent *event);//拖放文件event
     void dropEvent(QDropEvent *event);

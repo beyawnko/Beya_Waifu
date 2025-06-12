@@ -21,6 +21,10 @@
 #include "ui_mainwindow.h"
 #include <QEventLoop>
 #include <QTimer>
+#include <QSettings>
+#include <QFile>
+#include <QPalette>
+#include <QColor>
 
 MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     : QMainWindow(parent)
@@ -117,6 +121,7 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     Settings_Read_Apply();//读取与应用设置
     //=====================================
     Set_Font_fixed();//固定字体
+    ApplyDarkStyle();
     //=====================================
     QtConcurrent::run(this, &MainWindow::DeleteErrorLog_Waifu2xCaffe);//删除Waifu2xCaffe生成的错误日志
     QtConcurrent::run(this, &MainWindow::Del_TempBatFile);//删除bat文件缓存
@@ -480,6 +485,37 @@ void MainWindow::Set_Font_fixed()
         font.setPixelSize(15);
     }
     qApp->setFont(font);
+}
+
+bool MainWindow::SystemPrefersDark() const
+{
+#ifdef Q_OS_WIN
+    QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", QSettings::NativeFormat);
+    return settings.value("AppsUseLightTheme", 1).toInt() == 0;
+#else
+    QColor bg = qApp->palette().color(QPalette::Window);
+    return bg.lightness() < 128;
+#endif
+}
+
+void MainWindow::ApplyDarkStyle()
+{
+    int mode = Settings_Read_value("/settings/DarkMode", 2).toInt();
+    bool enable = false;
+    if(mode == 1)
+        enable = true;
+    else if(mode == 2)
+        enable = SystemPrefersDark();
+    if(enable)
+    {
+        QFile f(":/style/styles/dark.qss");
+        if(f.open(QIODevice::ReadOnly))
+            qApp->setStyleSheet(QString::fromUtf8(f.readAll()));
+    }
+    else
+    {
+        qApp->setStyleSheet("");
+    }
 }
 
 void MainWindow::on_pushButton_ClearList_clicked()

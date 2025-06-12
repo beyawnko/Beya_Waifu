@@ -35,6 +35,8 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/Warning/.", "Do not modify this file! It may cause the program to crash! If problems occur after the modification, delete this file and restart the program.");
     //==================== Save version identifier ==================================
     configIniWrite->setValue("/settings/VERSION", VERSION);
+    //===== UI style settings =====
+    configIniWrite->setValue("/settings/DarkMode", 2); // 0=light,1=dark,2=auto
     //======= Save scale and denoise values  =================================
     configIniWrite->setValue("/settings/ImageScaleRatio", ui->doubleSpinBox_ScaleRatio_image->value());
     configIniWrite->setValue("/settings/GIFScaleRatio", ui->doubleSpinBox_ScaleRatio_gif->value());
