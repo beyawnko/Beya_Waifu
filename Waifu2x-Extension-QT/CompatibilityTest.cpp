@@ -676,6 +676,98 @@ int MainWindow::Waifu2x_Compatibility_Test()
     }
     QFile::remove(OutputPath);
     emit Send_Add_progressBar_CompatibilityTest();
+    //==========================================
+    //            RealCUGAN-ncnn-vulkan
+    //==========================================
+    program = Current_Path + "/realcugan-ncnn-vulkan Win/realcugan-ncnn-vulkan.exe";
+    QProcess *RealCUGAN_process_compat = new QProcess();
+    cmd = "\"" + program + "\" -h";
+    bool realcugan_ok_compat = false;
+
+    for(int CompatTest_retry=0; CompatTest_retry<2; CompatTest_retry++)
+    {
+        RealCUGAN_process_compat->start(cmd);
+        if(RealCUGAN_process_compat->waitForStarted(15000))
+        {
+            while(!RealCUGAN_process_compat->waitForFinished(100)&&!QProcess_stop) {}
+        }
+        QString ErrorMSG_RC = RealCUGAN_process_compat->readAllStandardError().toLower();
+        QString StanderMSG_RC = RealCUGAN_process_compat->readAllStandardOutput().toLower();
+
+        if((StanderMSG_RC.contains("usage:") || StanderMSG_RC.contains("realcugan-ncnn-vulkan") || ErrorMSG_RC.contains("usage:") || ErrorMSG_RC.contains("realcugan-ncnn-vulkan") ) && !ErrorMSG_RC.contains("failed") && !StanderMSG_RC.contains("failed"))
+        {
+            if(RealCUGAN_process_compat->exitCode() == 0)
+            {
+                 realcugan_ok_compat = true;
+                 break;
+            }
+        }
+        RealCUGAN_process_compat->close();
+    }
+
+    if(RealCUGAN_process_compat->state() != QProcess::NotRunning) {
+      RealCUGAN_process_compat->kill();
+      RealCUGAN_process_compat->waitForFinished(5000);
+    }
+    delete RealCUGAN_process_compat;
+
+    if(realcugan_ok_compat)
+    {
+        emit Send_TextBrowser_NewMessage(tr("Compatible with RealCUGAN-ncnn-Vulkan: Yes"));
+        isCompatible_RealCUGAN_NCNN_Vulkan=true;
+    }
+    else
+    {
+        emit Send_TextBrowser_NewMessage(tr("Compatible with RealCUGAN-ncnn-Vulkan: No. [Advice: Check executable and Vulkan driver.]"));
+        isCompatible_RealCUGAN_NCNN_Vulkan=false;
+    }
+    emit Send_Add_progressBar_CompatibilityTest();
+    //==========================================
+    //            RealESRGAN-ncnn-vulkan
+    //==========================================
+    program = Current_Path + "/realesrgan-ncnn-vulkan Win/realesrgan-ncnn-vulkan.exe"; // Adjusted path
+    QProcess *RealESRGAN_process_compat = new QProcess();
+    cmd = "\"" + program + "\" -h";
+    bool realesrgan_ok_compat = false;
+
+    for(int CompatTest_retry=0; CompatTest_retry<2; CompatTest_retry++)
+    {
+        RealESRGAN_process_compat->start(cmd);
+        if(RealESRGAN_process_compat->waitForStarted(15000))
+        {
+            while(!RealESRGAN_process_compat->waitForFinished(100)&&!QProcess_stop) {}
+        }
+        QString ErrorMSG_RE = RealESRGAN_process_compat->readAllStandardError().toLower();
+        QString StanderMSG_RE = RealESRGAN_process_compat->readAllStandardOutput().toLower();
+
+        if((StanderMSG_RE.contains("usage:") || StanderMSG_RE.contains("realesrgan-ncnn-vulkan") || ErrorMSG_RE.contains("usage:") || ErrorMSG_RE.contains("realesrgan-ncnn-vulkan") ) && !ErrorMSG_RE.contains("failed") && !StanderMSG_RE.contains("failed"))
+        {
+            if(RealESRGAN_process_compat->exitCode() == 0)
+            {
+                 realesrgan_ok_compat = true;
+                 break;
+            }
+        }
+        RealESRGAN_process_compat->close();
+    }
+
+    if(RealESRGAN_process_compat->state() != QProcess::NotRunning) {
+      RealESRGAN_process_compat->kill();
+      RealESRGAN_process_compat->waitForFinished(5000);
+    }
+    delete RealESRGAN_process_compat;
+
+    if(realesrgan_ok_compat)
+    {
+        emit Send_TextBrowser_NewMessage(tr("Compatible with RealESRGAN-ncnn-Vulkan: Yes"));
+        isCompatible_RealESRGAN_NCNN_Vulkan=true;
+    }
+    else
+    {
+        emit Send_TextBrowser_NewMessage(tr("Compatible with RealESRGAN-ncnn-Vulkan: No. [Advice: Check executable and Vulkan driver.]"));
+        isCompatible_RealESRGAN_NCNN_Vulkan=false;
+    }
+    emit Send_Add_progressBar_CompatibilityTest();
     //=================
     // 杀死滞留的进程
     //=================
@@ -683,7 +775,8 @@ int MainWindow::Waifu2x_Compatibility_Test()
     TaskNameList << "convert_waifu2xEX.exe"<<"ffmpeg_waifu2xEX.exe"<<"ffprobe_waifu2xEX.exe"<<"identify_waifu2xEX.exe"<<"gifsicle_waifu2xEX.exe"<<"waifu2x-ncnn-vulkan_waifu2xEX.exe"
                  <<"waifu2x-ncnn-vulkan-fp16p_waifu2xEX.exe"<<"Anime4K_waifu2xEX.exe"<<"waifu2x-caffe_waifu2xEX.exe"<<"srmd-ncnn-vulkan_waifu2xEX.exe"<<"realsr-ncnn-vulkan_waifu2xEX.exe"
                  <<"waifu2x-converter-cpp_waifu2xEX.exe"<<"sox_waifu2xEX.exe"<<"rife-ncnn-vulkan_waifu2xEX.exe"<<"cain-ncnn-vulkan_waifu2xEX.exe"<<"dain-ncnn-vulkan_waifu2xEX.exe"
-                 <<"srmd-cuda_waifu2xEX.exe"<<"apngdis_waifu2xEX.exe"<<"apngasm_waifu2xEX.exe";
+                 <<"srmd-cuda_waifu2xEX.exe"<<"apngdis_waifu2xEX.exe"<<"apngasm_waifu2xEX.exe"
+                 <<"realcugan-ncnn-vulkan.exe" <<"realesrgan-ncnn-vulkan.exe"; // Added new executables
     KILL_TASK_QStringList(TaskNameList,true);
     //================
     //测试结束
@@ -717,6 +810,8 @@ int MainWindow::Waifu2x_Compatibility_Test_finished()
     ui->checkBox_isCompatible_RifeNcnnVulkan->setChecked(isCompatible_RifeNcnnVulkan);
     ui->checkBox_isCompatible_CainNcnnVulkan->setChecked(isCompatible_CainNcnnVulkan);
     ui->checkBox_isCompatible_DainNcnnVulkan->setChecked(isCompatible_DainNcnnVulkan);
+    ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->setChecked(isCompatible_RealCUGAN_NCNN_Vulkan);
+    if(ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan) ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan->setChecked(isCompatible_RealESRGAN_NCNN_Vulkan);
     //解除界面管制
     Finish_progressBar_CompatibilityTest();
     ui->tab_Home->setEnabled(1);
@@ -985,7 +1080,7 @@ void MainWindow::Init_progressBar_CompatibilityTest()
 {
     ui->progressBar_CompatibilityTest->setEnabled(1);
     ui->progressBar_CompatibilityTest->setVisible(1);
-    ui->progressBar_CompatibilityTest->setRange(0,20);
+    ui->progressBar_CompatibilityTest->setRange(0,22); // Incremented for RealCUGAN and RealESRGAN
     ui->progressBar_CompatibilityTest->setValue(0);
 }
 //进度+1 -兼容性测试进度条

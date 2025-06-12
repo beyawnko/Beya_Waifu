@@ -53,6 +53,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     progressBar.cpp \
+    realcugan_ncnn_vulkan.cpp \
+    realesrgan_ncnn_vulkan.cpp \
     realsr_ncnn_vulkan.cpp \
     settings.cpp \
     srmd-cuda.cpp \

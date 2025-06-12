@@ -366,6 +366,22 @@ int MainWindow::Waifu2xMainThread()
                         QtConcurrent::run(this, &MainWindow::SRMD_CUDA_Image, currentRowNumber, false);
                         break;
                     }
+                case 7: // RealCUGAN-ncnn-Vulkan
+                    {
+                        mutex_ThreadNumRunning.lock();
+                        ThreadNumRunning++;//线程数量统计+1
+                        mutex_ThreadNumRunning.unlock();
+                        QtConcurrent::run(this, &MainWindow::Realcugan_NCNN_Vulkan_Image, currentRowNumber, false);
+                        break;
+                    }
+                case 8: // RealESRGAN-ncnn-Vulkan
+                    {
+                        mutex_ThreadNumRunning.lock();
+                        ThreadNumRunning++;//线程数量统计+1
+                        mutex_ThreadNumRunning.unlock();
+                        QtConcurrent::run(this, &MainWindow::RealESRGAN_NCNN_Vulkan_Image, currentRowNumber, false);
+                        break;
+                    }
             }
             //================
             while (ThreadNumRunning >= ThreadNumMax)
@@ -488,6 +504,16 @@ int MainWindow::Waifu2xMainThread()
                 case 6:
                     {
                         SRMD_CUDA_GIF(currentRowNumber);
+                        break;
+                    }
+                case 7: // RealCUGAN-ncnn-Vulkan
+                    {
+                        Realcugan_NCNN_Vulkan_GIF(currentRowNumber);
+                        break;
+                    }
+                case 8: // RealESRGAN-ncnn-Vulkan
+                    {
+                        RealESRGAN_NCNN_Vulkan_GIF(currentRowNumber);
                         break;
                     }
             }
@@ -644,6 +670,30 @@ int MainWindow::Waifu2xMainThread()
                         else
                         {
                             SRMD_CUDA_Video(currentRowNumber);
+                        }
+                        break;
+                    }
+                case 7: // RealCUGAN-ncnn-Vulkan
+                    {
+                        if(video_isNeedProcessBySegment(currentRowNumber))
+                        {
+                            Realcugan_NCNN_Vulkan_Video_BySegment(currentRowNumber);
+                        }
+                        else
+                        {
+                            Realcugan_NCNN_Vulkan_Video(currentRowNumber);
+                        }
+                        break;
+                    }
+                case 8: // RealESRGAN-ncnn-Vulkan
+                    {
+                        if(video_isNeedProcessBySegment(currentRowNumber))
+                        {
+                            RealESRGAN_NCNN_Vulkan_Video_BySegment(currentRowNumber);
+                        }
+                        else
+                        {
+                            RealESRGAN_NCNN_Vulkan_Video(currentRowNumber);
                         }
                         break;
                     }
@@ -1348,4 +1398,94 @@ void MainWindow::ShowFileProcessSummary()
     MSG_Summary->show();
     //===
     return;
+}
+
+// Helper function to map engine name string to index
+int MainWindow::EngineNameToIndex(QString EngineName) {
+    int EngineIndex = -1;
+    if (EngineName == "waifu2x-ncnn-vulkan") {
+        EngineIndex = 0;
+    } else if (EngineName == "waifu2x-converter-cpp") {
+        EngineIndex = 1;
+    } else if (EngineName == "srmd-ncnn-vulkan") {
+        EngineIndex = 2;
+    } else if (EngineName == "Anime4KCPP") {
+        EngineIndex = 3;
+    } else if (EngineName == "waifu2x-caffe") {
+        EngineIndex = 4;
+    } else if (EngineName == "realsr-ncnn-vulkan") {
+        EngineIndex = 5;
+    } else if (EngineName == "srmd-cuda") {
+        EngineIndex = 6;
+    } else if (EngineName == "RealCUGAN-ncnn-Vulkan") {
+        EngineIndex = 7; // RealCUGAN-ncnn-Vulkan
+    } else if (EngineName == "RealESRGAN-ncnn-Vulkan") {
+        EngineIndex = 8; // RealESRGAN-ncnn-Vulkan
+    } else {
+        EngineIndex = -1; // Unknown or invalid engine name
+    }
+    return EngineIndex;
+}
+
+// Function to get engine name from index (inverse of EngineNameToIndex)
+QString MainWindow::EngineIndexToName(int EngineIndex) {
+    QString EngineName = "";
+    // Assuming standard engine indexing for Image/GIF/Video tabs
+    // This might need adjustment if VFI tab has different indexing or names
+    if (EngineIndex == 0) {
+        EngineName = "waifu2x-ncnn-vulkan";
+    } else if (EngineIndex == 1) {
+        EngineName = "waifu2x-converter-cpp";
+    } else if (EngineIndex == 2) {
+        EngineName = "srmd-ncnn-vulkan";
+    } else if (EngineIndex == 3) {
+        EngineName = "Anime4KCPP";
+    } else if (EngineIndex == 4) {
+        EngineName = "waifu2x-caffe";
+    } else if (EngineIndex == 5) {
+        EngineName = "realsr-ncnn-vulkan";
+    } else if (EngineIndex == 6) {
+        EngineName = "srmd-cuda";
+    } else if (EngineIndex == 7) {
+        EngineName = "RealCUGAN-ncnn-Vulkan";
+    } else if (EngineIndex == 8) {
+        EngineName = "RealESRGAN-ncnn-Vulkan";
+    }
+    // Add more mappings as needed
+    return EngineName;
+}
+
+
+// This function is a placeholder for where video_getReady_copyFrames_waifu2x_NCNN would be if it's not global
+// It seems like it's a member function based on the context from other files.
+// If it's not, this structure might need to be outside the class or handled differently.
+QStringList MainWindow::video_getReady_copyFrames_waifu2x_NCNN(int rowNum, QString sourceFileFullPath, QString outputFolderFullPath, QString &outputFramesFolder, int Engine)
+{
+    Q_UNUSED(rowNum); // May not be needed if all info comes from paths and engine
+    QStringList inputFramesList; // To be populated
+
+    // 0:waifu2x-ncnn-vulkan, 2:srmd-ncnn-vulkan, 5:realsr-ncnn-vulkan, 7:realcugan-ncnn-vulkan, 8:realesrgan-ncnn-vulkan
+    if(Engine == 0 || Engine == 2 || Engine == 5 || Engine == 7 || Engine == 8) //NCNN Vulkan Engines
+    {
+        QString TempVideoFramesPath = Current_Path + "/tempVideoFrames_waifu2xEX/" + file_getRandomStr();
+        outputFramesFolder = TempVideoFramesPath + "/outputFrames";
+        file_mkDir(TempVideoFramesPath); // Create base temp folder
+        file_mkDir(outputFramesFolder);  // Create outputFrames within temp
+
+        // Assuming extract_all_frames is a global or accessible utility function
+        // int extract_all_frames(QString video_path, QString output_folder_path, QString output_format)
+        int frameCount = extract_all_frames(sourceFileFullPath, TempVideoFramesPath, "png");
+        if (frameCount <= 0) {
+            emit Send_TextBrowser_NewMessage(tr("Error: Failed to extract frames from video ") + sourceFileFullPath);
+            return inputFramesList; // Return empty list on failure
+        }
+        // Populate inputFramesList based on extracted frames
+        for (int i = 1; i <= frameCount; ++i) {
+            inputFramesList.append(TempVideoFramesPath + "/" + QString::number(i) + ".png");
+        }
+    } else {
+        // Handle other engines or default case if necessary
+        emit Send_TextBrowser_NewMessage(tr("Error: Unsupported engine for frame extraction in video_getReady_copyFrames_waifu2x_NCNN."));
+    }
+    return inputFramesList;
 }

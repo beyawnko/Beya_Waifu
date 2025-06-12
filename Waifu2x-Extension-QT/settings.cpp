@@ -99,6 +99,24 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/settings/Available_GPUID_srmd", Available_GPUID_srmd);
     configIniWrite->setValue("/settings/GPUIDs_List_MultiGPU_SrmdNcnnVulkan", QVariant::fromValue(GPUIDs_List_MultiGPU_SrmdNcnnVulkan));
     configIniWrite->setValue("/settings/checkBox_MultiGPU_SrmdNCNNVulkan", ui->checkBox_MultiGPU_SrmdNCNNVulkan->isChecked());
+    //== RealCUGAN
+    if(ui->comboBox_Model_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_Model", ui->comboBox_Model_RealCUGAN->currentIndex());
+    if(ui->spinBox_Scale_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_Scale", ui->spinBox_Scale_RealCUGAN->value()); // Though scale is not directly saved, this was in the original
+    if(ui->spinBox_DenoiseLevel_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_DenoiseLevel", ui->spinBox_DenoiseLevel_RealCUGAN->value()); // Though denoise is not directly saved, this was in the original
+    if(ui->spinBox_TileSize_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_TileSize", ui->spinBox_TileSize_RealCUGAN->value());
+    if(ui->checkBox_TTA_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_TTA", ui->checkBox_TTA_RealCUGAN->isChecked());
+    if(ui->comboBox_GPUID_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_GPUID", ui->comboBox_GPUID_RealCUGAN->currentIndex());
+    configIniWrite->setValue("/settings/RealCUGAN_Available_GPUID", Available_GPUID_RealCUGAN_ncnn_vulkan); // Corrected variable name
+    if(ui->checkBox_MultiGPU_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_MultiGPU_Enabled", ui->checkBox_MultiGPU_RealCUGAN->isChecked());
+    configIniWrite->setValue("/settings/RealCUGAN_GPUJobConfig_MultiGPU", QVariant::fromValue(m_realcugan_gpuJobConfig_temp));
+    //== RealESRGAN
+    if(ui->comboBox_Model_RealESRGAN) configIniWrite->setValue("/settings/RealESRGAN_ModelName", ui->comboBox_Model_RealESRGAN->currentText()); // Save model name string
+    if(ui->spinBox_TileSize_RealESRGAN) configIniWrite->setValue("/settings/RealESRGAN_TileSize", ui->spinBox_TileSize_RealESRGAN->value());
+    if(ui->checkBox_TTA_RealESRGAN) configIniWrite->setValue("/settings/RealESRGAN_TTA", ui->checkBox_TTA_RealESRGAN->isChecked());
+    if(ui->comboBox_GPUID_RealESRGAN) configIniWrite->setValue("/settings/RealESRGAN_GPUID", ui->comboBox_GPUID_RealESRGAN->currentIndex());
+    configIniWrite->setValue("/settings/RealESRGAN_Available_GPUID", Available_GPUID_RealESRGAN_ncnn_vulkan);
+    if(ui->checkBox_MultiGPU_RealESRGAN) configIniWrite->setValue("/settings/RealESRGAN_MultiGPU_Enabled", ui->checkBox_MultiGPU_RealESRGAN->isChecked());
+    configIniWrite->setValue("/settings/RealESRGAN_GPUJobConfig_MultiGPU", QVariant::fromValue(m_realesrgan_gpuJobConfig_temp));
     //================== 存储 扩展名 =================================
     configIniWrite->setValue("/settings/ImageEXT", ui->Ext_image->text());
     configIniWrite->setValue("/settings/VideoEXT", ui->Ext_video->text());
@@ -225,6 +243,8 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/settings/checkBox_isCompatible_RifeNcnnVulkan", ui->checkBox_isCompatible_RifeNcnnVulkan->isChecked());
     configIniWrite->setValue("/settings/checkBox_isCompatible_CainNcnnVulkan", ui->checkBox_isCompatible_CainNcnnVulkan->isChecked());
     configIniWrite->setValue("/settings/checkBox_isCompatible_DainNcnnVulkan", ui->checkBox_isCompatible_DainNcnnVulkan->isChecked());
+    configIniWrite->setValue("/settings/checkBox_isCompatible_RealCUGAN_NCNN_Vulkan", ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->isChecked());
+    configIniWrite->setValue("/settings/checkBox_isCompatible_RealESRGAN_NCNN_Vulkan", ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan->isChecked());
     //======================== 存储VFI 设定 ========================
     configIniWrite->setValue("/settings/checkBox_VfiAfterScale_VFI", ui->checkBox_VfiAfterScale_VFI->isChecked());
     configIniWrite->setValue("/settings/checkBox_MultiThread_VFI", ui->checkBox_MultiThread_VFI->isChecked());
@@ -333,53 +353,131 @@ int MainWindow::Settings_Read_Apply()
     ui->comboBox_GPUID->setCurrentIndex(Settings_Read_value("/settings/CurrentGPUID_Waifu2xNCNNVulkan").toInt());
     //读取多显卡设定
     GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan").value<QList<QMap<QString, QString>> >();
-    if(GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan.isEmpty()==false)
+    if(GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_Waifu2xNCNNVulkan) // Check if combobox exists
     {
         QMap<QString,QString> GPUInfo_waifu2xNcnnVulkan = GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan.at(ui->comboBox_GPUIDs_MultiGPU_Waifu2xNCNNVulkan->currentIndex());
-        ui->checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan->setChecked(GPUInfo_waifu2xNcnnVulkan["isEnabled"] == "true");
-        ui->spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan->setValue(GPUInfo_waifu2xNcnnVulkan["TileSize"].toInt());
+        if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan) ui->checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan->setChecked(GPUInfo_waifu2xNcnnVulkan["isEnabled"] == "true");
+        if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan) ui->spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan->setValue(GPUInfo_waifu2xNcnnVulkan["TileSize"].toInt());
     }
-    ui->checkBox_MultiGPU_Waifu2xNCNNVulkan->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_Waifu2xNCNNVulkan").toBool());
+    if(ui->checkBox_MultiGPU_Waifu2xNCNNVulkan) ui->checkBox_MultiGPU_Waifu2xNCNNVulkan->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_Waifu2xNCNNVulkan").toBool());
     //Realsr_ncnn_vulkan
     Available_GPUID_Realsr_ncnn_vulkan = Settings_Read_value("/settings/Available_GPUID_Realsr_ncnn_vulkan").toStringList();
     Realsr_ncnn_vulkan_DetectGPU_finished();
-    ui->comboBox_GPUID_RealsrNCNNVulkan->setCurrentIndex(Settings_Read_value("/settings/comboBox_GPUID_RealsrNCNNVulkan").toInt());
+    if(ui->comboBox_GPUID_RealsrNCNNVulkan) ui->comboBox_GPUID_RealsrNCNNVulkan->setCurrentIndex(Settings_Read_value("/settings/comboBox_GPUID_RealsrNCNNVulkan").toInt());
     //读取多显卡设定
     GPUIDs_List_MultiGPU_RealsrNcnnVulkan = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_RealsrNcnnVulkan").value<QList<QMap<QString, QString>> >();
-    if(GPUIDs_List_MultiGPU_RealsrNcnnVulkan.isEmpty()==false)
+    if(GPUIDs_List_MultiGPU_RealsrNcnnVulkan.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan)
     {
         QMap<QString,QString> GPUInfo_RealsrNcnnVulkan = GPUIDs_List_MultiGPU_RealsrNcnnVulkan.at(ui->comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->currentIndex());
-        ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setChecked(GPUInfo_RealsrNcnnVulkan["isEnabled"] == "true");
-        ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setValue(GPUInfo_RealsrNcnnVulkan["TileSize"].toInt());
+        if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan) ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setChecked(GPUInfo_RealsrNcnnVulkan["isEnabled"] == "true");
+        if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan) ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setValue(GPUInfo_RealsrNcnnVulkan["TileSize"].toInt());
     }
-    ui->checkBox_MultiGPU_RealsrNcnnVulkan->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_RealsrNcnnVulkan").toBool());
+    if(ui->checkBox_MultiGPU_RealsrNcnnVulkan) ui->checkBox_MultiGPU_RealsrNcnnVulkan->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_RealsrNcnnVulkan").toBool());
     //Waifu2x-Converter
     Available_ProcessorList_converter = Settings_Read_value("/settings/Available_ProcessorList_converter").toStringList();
     Waifu2x_DumpProcessorList_converter_finished();
-    ui->comboBox_TargetProcessor_converter->setCurrentIndex(Settings_Read_value("/settings/comboBox_TargetProcessor_converter").toInt());
-    on_comboBox_TargetProcessor_converter_currentIndexChanged(0);
+    if(ui->comboBox_TargetProcessor_converter) ui->comboBox_TargetProcessor_converter->setCurrentIndex(Settings_Read_value("/settings/comboBox_TargetProcessor_converter").toInt());
+    on_comboBox_TargetProcessor_converter_currentIndexChanged(0); // Ensure dependent UI updates
     //读取多显卡设定
     GPUIDs_List_MultiGPU_Waifu2xConverter = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_Waifu2xConverter").value<QList<QMap<QString, QString>> >();
-    if(GPUIDs_List_MultiGPU_Waifu2xConverter.isEmpty()==false)
+    if(GPUIDs_List_MultiGPU_Waifu2xConverter.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_Waifu2xConverter)
     {
         QMap<QString,QString> GPUInfo_Waifu2xConverter = GPUIDs_List_MultiGPU_Waifu2xConverter.at(ui->comboBox_GPUIDs_MultiGPU_Waifu2xConverter->currentIndex());
-        ui->checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xConverter->setChecked(GPUInfo_Waifu2xConverter["isEnabled"] == "true");
-        ui->spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xConverter->setValue(GPUInfo_Waifu2xConverter["TileSize"].toInt());
+        if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xConverter) ui->checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xConverter->setChecked(GPUInfo_Waifu2xConverter["isEnabled"] == "true");
+        if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xConverter) ui->spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xConverter->setValue(GPUInfo_Waifu2xConverter["TileSize"].toInt());
     }
-    ui->checkBox_MultiGPU_Waifu2xConverter->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_Waifu2xConverter").toBool());
+    if(ui->checkBox_MultiGPU_Waifu2xConverter) ui->checkBox_MultiGPU_Waifu2xConverter->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_Waifu2xConverter").toBool());
     //SRMD-NCNN-Vulkan
     Available_GPUID_srmd = Settings_Read_value("/settings/Available_GPUID_srmd").toStringList();
     SRMD_DetectGPU_finished();
-    ui->comboBox_GPUID_srmd->setCurrentIndex(Settings_Read_value("/settings/comboBox_GPUID_srmd").toInt());
+    if(ui->comboBox_GPUID_srmd) ui->comboBox_GPUID_srmd->setCurrentIndex(Settings_Read_value("/settings/comboBox_GPUID_srmd").toInt());
     //读取多显卡设定
     GPUIDs_List_MultiGPU_SrmdNcnnVulkan = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_SrmdNcnnVulkan").value<QList<QMap<QString, QString>> >();
-    if(GPUIDs_List_MultiGPU_SrmdNcnnVulkan.isEmpty()==false)
+    if(GPUIDs_List_MultiGPU_SrmdNcnnVulkan.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_SrmdNCNNVulkan)
     {
         QMap<QString,QString> GPUInfo_SrmdNcnnVulkan = GPUIDs_List_MultiGPU_SrmdNcnnVulkan.at(ui->comboBox_GPUIDs_MultiGPU_SrmdNCNNVulkan->currentIndex());
-        ui->checkBox_isEnable_CurrentGPU_MultiGPU_SrmdNCNNVulkan->setChecked(GPUInfo_SrmdNcnnVulkan["isEnabled"] == "true");
-        ui->spinBox_TileSize_CurrentGPU_MultiGPU_SrmdNCNNVulkan->setValue(GPUInfo_SrmdNcnnVulkan["TileSize"].toInt());
+        if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_SrmdNCNNVulkan) ui->checkBox_isEnable_CurrentGPU_MultiGPU_SrmdNCNNVulkan->setChecked(GPUInfo_SrmdNcnnVulkan["isEnabled"] == "true");
+        if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_SrmdNCNNVulkan) ui->spinBox_TileSize_CurrentGPU_MultiGPU_SrmdNCNNVulkan->setValue(GPUInfo_SrmdNcnnVulkan["TileSize"].toInt());
     }
-    ui->checkBox_MultiGPU_SrmdNCNNVulkan->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_SrmdNCNNVulkan").toBool());
+    if(ui->checkBox_MultiGPU_SrmdNCNNVulkan) ui->checkBox_MultiGPU_SrmdNCNNVulkan->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_SrmdNCNNVulkan").toBool());
+
+    // RealCUGAN Settings
+    if(ui->comboBox_Model_RealCUGAN) ui->comboBox_Model_RealCUGAN->setCurrentIndex(Settings_Read_value("/settings/RealCUGAN_Model").toInt());
+    // Scale and Denoise for RealCUGAN are not directly saved from dedicated spinboxes in latest UI, but read from main UI if needed.
+    // However, if old settings exist, we try to read them.
+    if(ui->spinBox_Scale_RealCUGAN) ui->spinBox_Scale_RealCUGAN->setValue(Settings_Read_value("/settings/RealCUGAN_Scale", ui->spinBox_Scale_RealCUGAN->value()).toInt());
+    if(ui->spinBox_DenoiseLevel_RealCUGAN) ui->spinBox_DenoiseLevel_RealCUGAN->setValue(Settings_Read_value("/settings/RealCUGAN_DenoiseLevel", ui->spinBox_DenoiseLevel_RealCUGAN->value()).toInt());
+    if(ui->spinBox_TileSize_RealCUGAN) ui->spinBox_TileSize_RealCUGAN->setValue(Settings_Read_value("/settings/RealCUGAN_TileSize").toInt());
+    if(ui->checkBox_TTA_RealCUGAN) ui->checkBox_TTA_RealCUGAN->setChecked(Settings_Read_value("/settings/RealCUGAN_TTA").toBool());
+    Available_GPUID_RealCUGAN_ncnn_vulkan = Settings_Read_value("/settings/RealCUGAN_Available_GPUID").toStringList(); // Corrected variable
+    Realcugan_ncnn_vulkan_DetectGPU_finished(); // This will populate the GPU lists
+    if(ui->comboBox_GPUID_RealCUGAN) ui->comboBox_GPUID_RealCUGAN->setCurrentIndex(Settings_Read_value("/settings/RealCUGAN_GPUID").toInt());
+    if(ui->checkBox_MultiGPU_RealCUGAN) ui->checkBox_MultiGPU_RealCUGAN->setChecked(Settings_Read_value("/settings/RealCUGAN_MultiGPU_Enabled").toBool());
+    m_realcugan_gpuJobConfig_temp = Settings_Read_value("/settings/RealCUGAN_GPUJobConfig_MultiGPU").value<QList<QMap<QString, QString>>>();
+    if (ui->checkBox_MultiGPU_RealCUGAN && ui->checkBox_MultiGPU_RealCUGAN->isChecked()) {
+        // Populate listWidget_GPUList_MultiGPU_RealCUGAN from m_realcugan_gpuJobConfig_temp
+        if (ui->listWidget_GPUList_MultiGPU_RealCUGAN) {
+            ui->listWidget_GPUList_MultiGPU_RealCUGAN->clear();
+            for (const auto& job : m_realcugan_gpuJobConfig_temp) {
+                QString gpuDesc = job.value("gpuid") + ": (Threads: " + job.value("threads","1") + ", Tile: " + job.value("tilesize","0") + ")"; // Construct description
+                QListWidgetItem *newItem = new QListWidgetItem(gpuDesc); // This needs to be more descriptive based on available list
+                // Find full description from Available_GPUID_RealCUGAN_ncnn_vulkan
+                QString fullDesc = "";
+                for(const QString& desc : Available_GPUID_RealCUGAN_ncnn_vulkan){
+                    if(desc.startsWith(job.value("gpuid") + ":")){
+                        fullDesc = desc;
+                        break;
+                    }
+                }
+                if (fullDesc.isEmpty()) fullDesc = job.value("gpuid"); // Fallback
+
+                newItem->setText(fullDesc + QString(" (T:%1, Tile:%2)").arg(job.value("threads","1")).arg(job.value("tilesize","0")));
+                newItem->setData(Qt::UserRole, job.value("gpuid"));
+                newItem->setData(Qt::UserRole + 1, job.value("threads","1").toInt());
+                newItem->setData(Qt::UserRole + 2, job.value("tilesize","0").toInt());
+                ui->listWidget_GPUList_MultiGPU_RealCUGAN->addItem(newItem);
+            }
+        }
+    }
+
+    // RealESRGAN Settings
+    if(ui->comboBox_Model_RealESRGAN) {
+        QString modelName = Settings_Read_value("/settings/RealESRGAN_ModelName").toString();
+        int modelIndex = ui->comboBox_Model_RealESRGAN->findText(modelName);
+        if (modelIndex != -1) ui->comboBox_Model_RealESRGAN->setCurrentIndex(modelIndex);
+    }
+    if(ui->spinBox_TileSize_RealESRGAN) ui->spinBox_TileSize_RealESRGAN->setValue(Settings_Read_value("/settings/RealESRGAN_TileSize").toInt());
+    if(ui->checkBox_TTA_RealESRGAN) ui->checkBox_TTA_RealESRGAN->setChecked(Settings_Read_value("/settings/RealESRGAN_TTA").toBool());
+    Available_GPUID_RealESRGAN_ncnn_vulkan = Settings_Read_value("/settings/RealESRGAN_Available_GPUID").toStringList();
+    RealESRGAN_ncnn_vulkan_DetectGPU_finished(); // Populates GPU lists
+    if(ui->comboBox_GPUID_RealESRGAN) ui->comboBox_GPUID_RealESRGAN->setCurrentIndex(Settings_Read_value("/settings/RealESRGAN_GPUID").toInt());
+    if(ui->checkBox_MultiGPU_RealESRGAN) ui->checkBox_MultiGPU_RealESRGAN->setChecked(Settings_Read_value("/settings/RealESRGAN_MultiGPU_Enabled").toBool());
+    m_realesrgan_gpuJobConfig_temp = Settings_Read_value("/settings/RealESRGAN_GPUJobConfig_MultiGPU").value<QList<QMap<QString, QString>>>();
+    if (ui->checkBox_MultiGPU_RealESRGAN && ui->checkBox_MultiGPU_RealESRGAN->isChecked()) {
+        if (ui->listWidget_GPUList_MultiGPU_RealESRGAN) {
+            ui->listWidget_GPUList_MultiGPU_RealESRGAN->clear();
+            for (const auto& job : m_realesrgan_gpuJobConfig_temp) {
+                QString gpuDesc = job.value("gpuid") + ": (Threads: " + job.value("threads","1") + ", Tile: " + job.value("tilesize","0") + ")";
+                QString fullDesc = "";
+                for(const QString& desc : Available_GPUID_RealESRGAN_ncnn_vulkan){
+                    if(desc.startsWith(job.value("gpuid") + ":")){
+                        fullDesc = desc;
+                        break;
+                    }
+                }
+                if (fullDesc.isEmpty()) fullDesc = job.value("gpuid");
+
+                QListWidgetItem *newItem = new QListWidgetItem(fullDesc + QString(" (T:%1, Tile:%2)").arg(job.value("threads","1")).arg(job.value("tilesize","0")));
+                newItem->setData(Qt::UserRole, job.value("gpuid"));
+                newItem->setData(Qt::UserRole + 1, job.value("threads","1").toInt());
+                newItem->setData(Qt::UserRole + 2, job.value("tilesize","0").toInt());
+                ui->listWidget_GPUList_MultiGPU_RealESRGAN->addItem(newItem);
+            }
+        }
+        RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay(); // Update the display label
+    }
+
+
     //================= 加载 扩展名 ===========================
     ui->Ext_image->setText(Settings_Read_value("/settings/ImageEXT").toString());
     ui->Ext_video->setText(Settings_Read_value("/settings/VideoEXT").toString());
@@ -499,6 +597,8 @@ int MainWindow::Settings_Read_Apply()
     isCompatible_RifeNcnnVulkan = Settings_Read_value("/settings/checkBox_isCompatible_RifeNcnnVulkan").toBool();
     isCompatible_CainNcnnVulkan = Settings_Read_value("/settings/checkBox_isCompatible_CainNcnnVulkan").toBool();
     isCompatible_DainNcnnVulkan = Settings_Read_value("/settings/checkBox_isCompatible_DainNcnnVulkan").toBool();
+    isCompatible_RealCUGAN_NCNN_Vulkan = Settings_Read_value("/settings/checkBox_isCompatible_RealCUGAN_NCNN_Vulkan").toBool();
+    isCompatible_RealESRGAN_NCNN_Vulkan = Settings_Read_value("/settings/checkBox_isCompatible_RealESRGAN_NCNN_Vulkan").toBool();
     //===
     ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW->setChecked(isCompatible_Waifu2x_NCNN_Vulkan_NEW);
     ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P->setChecked(isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P);
@@ -520,6 +620,8 @@ int MainWindow::Settings_Read_Apply()
     ui->checkBox_isCompatible_RifeNcnnVulkan->setChecked(isCompatible_RifeNcnnVulkan);
     ui->checkBox_isCompatible_CainNcnnVulkan->setChecked(isCompatible_CainNcnnVulkan);
     ui->checkBox_isCompatible_DainNcnnVulkan->setChecked(isCompatible_DainNcnnVulkan);
+    ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->setChecked(isCompatible_RealCUGAN_NCNN_Vulkan);
+    if(ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan) ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan->setChecked(isCompatible_RealESRGAN_NCNN_Vulkan);
     //======================== 加载 VFI 设定 ========================
     ui->checkBox_VfiAfterScale_VFI->setChecked(Settings_Read_value("/settings/checkBox_VfiAfterScale_VFI").toBool());
     ui->checkBox_MultiThread_VFI->setChecked(Settings_Read_value("/settings/checkBox_MultiThread_VFI").toBool());
@@ -583,12 +685,12 @@ int MainWindow::Settings_Read_Apply()
     //==================================
     isReadOldSettings=false;
     QFile::remove(Current_Path+"/settings_old.ini");
-    Settings_Save();
+    Settings_Save(); // Re-save to ensure new fields are present if it was an old version
     //==================================
     return 0;
 }
 
-QVariant MainWindow::Settings_Read_value(QString Key)
+QVariant MainWindow::Settings_Read_value(QString Key, QVariant defaultValue)
 {
     QString settings_ini_old = Current_Path+"/settings_old.ini";
     QString settings_ini_new = Current_Path+"/settings.ini";
@@ -600,17 +702,21 @@ QVariant MainWindow::Settings_Read_value(QString Key)
         QSettings *configIniRead_old = new QSettings(settings_ini_old, QSettings::IniFormat);
         configIniRead_old->setIniCodec(QTextCodec::codecForName("UTF-8"));
         //====
-        if(configIniRead_old->value(Key)!=QVariant())
+        if(configIniRead_old->contains(Key))
         {
             return configIniRead_old->value(Key);
         }
-        else
+        else if (configIniRead_new->contains(Key))
         {
             return configIniRead_new->value(Key);
         }
+        return defaultValue;
     }
     //====
-    return configIniRead_new->value(Key);
+    if (configIniRead_new->contains(Key)) {
+        return configIniRead_new->value(Key);
+    }
+    return defaultValue;
 }
 
 /*

@@ -122,7 +122,8 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
     //=======================
     //开始放大&组装
     bool isSuccessfullyScaled = false;
-    switch(ui->comboBox_Engine_GIF->currentIndex())
+    int engineIndex = ui->comboBox_Engine_GIF->currentIndex(); // Use engine from GIF tab for APNG
+    switch(engineIndex)
     {
         case 0:
             {
@@ -157,6 +158,16 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
         case 6:
             {
                 isSuccessfullyScaled = APNG_SrmdCUDA(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
+                break;
+            }
+        case 7: // RealCUGAN-ncnn-Vulkan
+            {
+                isSuccessfullyScaled = APNG_RealcuganNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
+                break;
+            }
+        case 8: // RealESRGAN-ncnn-Vulkan
+            {
+                isSuccessfullyScaled = APNG_RealESRGANNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
                 break;
             }
     }
