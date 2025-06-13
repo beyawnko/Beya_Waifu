@@ -280,8 +280,6 @@ public:
     //======================== Image processing ================================
     bool Image_Gif_AutoSkip_CustRes(int rowNum,bool isGif);
     QMap<QString,int> Image_Gif_Read_Resolution(QString SourceFileFullPath);// obtain image/GIF resolution
-    bool Imgae_hasAlphaChannel(int rowNum);
-    QString Imgae_PreProcess(QString ImagePath,bool ReProcess_AlphaChannel);
     QString SaveImageAs_FormatAndQuality(QString OriginalSourceImage_fullPath,QString ScaledImage_fullPath,bool isDenoiseLevelEnabled,int DenoiseLevel);
     struct AlphaInfo {
         bool hasAlpha = false;
