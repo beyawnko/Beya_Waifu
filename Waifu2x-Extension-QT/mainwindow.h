@@ -389,6 +389,8 @@ public:
     QStringList RealESRGAN_NCNN_Vulkan_PrepareArguments(const QString &inputFile, const QString &outputFile, int currentPassScale, const QString &modelName, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat);
     bool RealESRGAN_ProcessSingleFileIteratively(const QString &inputFile, const QString &outputFile, int targetScale, int modelNativeScale, const QString &modelName, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat, int rowNumForStatusUpdate = -1);
     QList<int> CalculateRealESRGANScaleSequence(int targetScale, int modelNativeScale);
+    bool RealESRGAN_SetupTempDir(const QString &inputFile, const QString &outputFile, QDir &tempDir, QString &tempPathBase);
+    void RealESRGAN_CleanupTempDir(const QDir &tempDir);
 
 
     //Anime4k

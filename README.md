@@ -84,6 +84,14 @@ realcugan-ncnn-vulkan -i input.jpg -o output.png -n 1 -s 2
 realesrgan-ncnn-vulkan -i input.jpg -o output.png -n realesrgan-x4plus -s 4
 ```
 
+### Unsupported scales
+
+If a scale not natively provided by the selected RealESRGAN model is requested,
+the application repeats the model until the next higher multiple is reached.
+When this happens a message is emitted indicating that manual downscaling may be
+required. If the computed sequence cannot satisfy the requested scale at all the
+operation fails with an error.
+
 ### Screenshot
 
 Below is the start-up screen of the optional launcher:
