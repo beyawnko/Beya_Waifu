@@ -341,3 +341,67 @@ QString MainWindow::Imgae_PreProcess(QString ImagePath,bool ReProcess_AlphaChann
     //======
     return OutPut_Path;
 }
+
+MainWindow::AlphaInfo MainWindow::PrepareAlpha(const QString &inputImagePath)
+{
+    AlphaInfo info;
+    info.rgbPath = inputImagePath;
+
+    QImage src(inputImagePath);
+    if(src.isNull())
+        return info;
+
+    if(src.hasAlphaChannel())
+    {
+        info.hasAlpha = true;
+        info.is16Bit = src.depth() > 32;
+        info.tempDir = QDir::tempPath() + "/W2xEX_alpha_" + QString::number(QRandomGenerator::global()->generate());
+        QDir().mkpath(info.tempDir);
+        info.rgbPath = QDir(info.tempDir).filePath("rgb.png");
+        info.alphaPath = QDir(info.tempDir).filePath("alpha.png");
+
+        QImage rgb = info.is16Bit ? src.convertToFormat(QImage::Format_RGBX64) : src.convertToFormat(QImage::Format_RGB888);
+        QImage alpha = src.alphaChannel();
+        if(info.is16Bit)
+            alpha = alpha.convertToFormat(QImage::Format_Grayscale16);
+
+        rgb.save(info.rgbPath);
+        alpha.save(info.alphaPath);
+    }
+
+    return info;
+}
+
+void MainWindow::RestoreAlpha(const AlphaInfo &info, const QString &processedRgbPath, const QString &finalOutputPath)
+{
+    if(!info.hasAlpha)
+    {
+        if(processedRgbPath != finalOutputPath)
+        {
+            QFile::remove(finalOutputPath);
+            QFile::rename(processedRgbPath, finalOutputPath);
+        }
+        return;
+    }
+
+    QImage rgb(processedRgbPath);
+    QImage alpha(info.alphaPath);
+
+    if(info.is16Bit)
+    {
+        rgb = rgb.convertToFormat(QImage::Format_RGBA64);
+        alpha = alpha.convertToFormat(QImage::Format_Grayscale16);
+    }
+    else
+    {
+        rgb = rgb.convertToFormat(QImage::Format_ARGB32);
+    }
+
+    rgb.setAlphaChannel(alpha);
+    rgb.save(finalOutputPath);
+
+    QFile::remove(processedRgbPath);
+    QFile::remove(info.alphaPath);
+    if(!info.tempDir.isEmpty())
+        QDir(info.tempDir).removeRecursively();
+}
