@@ -324,6 +324,10 @@ void MainWindow::RestoreAlpha(const AlphaInfo &info, const QString &processedRgb
         rgb = rgb.convertToFormat(QImage::Format_ARGB32);
     }
 
+    if (info.hasAlpha && alpha.size() != rgb.size()) {
+        qDebug() << "Scaling alpha channel from" << alpha.size() << "to" << rgb.size();
+        alpha = alpha.scaled(rgb.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    }
     rgb.setAlphaChannel(alpha);
     QByteArray outData;
     QBuffer outBuf(&outData);

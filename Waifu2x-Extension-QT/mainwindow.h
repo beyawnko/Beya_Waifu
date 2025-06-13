@@ -60,10 +60,28 @@
 #include <QThread>
 #include <QThreadPool>
 #include <QFileSystemWatcher>
+#include <atomic> // Added for std::atomic
 #include "topsupporterslist.h"
 
 typedef QList<QMap<QString, QString>> QList_QMap_QStrQStr;
 Q_DECLARE_METATYPE(QList_QMap_QStrQStr)
+
+// Struct for caching file metadata
+struct FileMetadataCache {
+    bool isValid = false; // Flag to indicate if metadata is successfully populated
+    int width = 0;
+    int height = 0;
+    QString fps; // e.g., "30/1" or "29.97"
+    double duration = 0.0; // seconds
+    QString bitRate; // e.g., "5000k" or just numeric string
+    long long frameCount = 0;
+    bool isVFR = false; // Variable Frame Rate
+    QString identifyOutput; // For Image_Gif_Read_Resolution fallback
+    bool isAnimated = false; // True for GIF/APNG with multiple frames
+    QString fileFormat; // e.g., "png", "gif", "apng", "mp4" (typically the suffix)
+};
+Q_DECLARE_METATYPE(FileMetadataCache)
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -249,11 +267,11 @@ public:
     //====================================
 
     void Wait_waifu2x_stop();// watchdog thread waiting for waifu2x threads to stop
-    bool waifu2x_STOP = false;// signal to request waifu2x stop
-    bool waifu2x_STOP_confirm = false;// confirmation from waifu2x stop watchdog
+    std::atomic<bool> waifu2x_STOP{false};// signal to request waifu2x stop
+    std::atomic<bool> waifu2x_STOP_confirm{false};// confirmation from waifu2x stop watchdog
 
     int ThreadNumMax = 0;// maximum number of waifu2x threads
-    int ThreadNumRunning = 0;// current running waifu2x thread count
+    std::atomic<int> ThreadNumRunning{0};// current running waifu2x thread count
 
     QMutex mutex_ThreadNumRunning;// mutex guarding total thread count
     QMutex mutex_SubThreadNumRunning;// mutex guarding internal thread count
@@ -290,6 +308,10 @@ public:
     };
     AlphaInfo PrepareAlpha(const QString &inputImagePath);
     void RestoreAlpha(const AlphaInfo &info, const QString &processedRgbPath, const QString &finalOutputPath);
+    //======================== Metadata Cache ================================
+    FileMetadataCache getOrFetchMetadata(const QString &filePath);
+    QMap<QString, FileMetadataCache> m_metadataCache;
+    QMutex m_metadataCacheMutex;
     //================================================================
     int Waifu2x_Compatibility_Test();// engine compatibility check
     // initialize compatibility test progress bar
@@ -379,7 +401,7 @@ public:
     void RealESRGAN_NCNN_Vulkan_Video_BySegment(int rowNum);
     void RealESRGAN_NCNN_Vulkan_ReadSettings(); // Main settings reader
     void RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum); // For batch (frames)
-    void APNG_RealESRGANCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
+    void APNG_RealESRGANNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
     void RealESRGAN_ncnn_vulkan_DetectGPU();
     QString RealesrganNcnnVulkan_MultiGPU(); // Returns job string for multi-GPU
     void AddGPU_MultiGPU_RealesrganNcnnVulkan(QString GPUID);
@@ -430,8 +452,8 @@ public:
     QMap<QString,int> video_get_Resolution(QString VideoFileFullPath);// get video frame rate
     QString video_get_fps(QString videoPath);// get video fps
     int video_get_frameNumDigits(QString videoPath);// get digits of frame count
-    int video_get_frameNum(QString videoPath);// get number of frames
-
+    long long video_get_frameNum(QString videoPath); // Changed to long long
+    int video_get_duration(QString videoPath);
     // check whether video is variable frame rate
     bool video_isVFR(QString videoPath);
     // split video
@@ -447,8 +469,6 @@ public:
     int video_UseRes2CalculateBitrate(QString VideoFileFullPath);// calculate recommended bitrate based on resolution
     // audio denoise
     QString video_AudioDenoise(QString OriginalAudioPath);
-    // get duration (seconds)
-    int video_get_duration(QString videoPath);
     // convert to mp4
     QString video_To_CFRMp4(QString VideoPath);
     // extract audio
@@ -539,13 +559,13 @@ public:
     //=========== code executed when closing window ===============
     void closeEvent(QCloseEvent* event);// close event
     //void Close_self();// code executed when closing
-    bool QProcess_stop=false;// flag to stop all QProcess
+    std::atomic<bool> QProcess_stop{false};// flag to stop all QProcess
     int Auto_Save_Settings_Watchdog(bool isWaitForSave);// watchdog to auto save settings
     QFuture<int> AutoUpdate;// monitor auto update thread
     QFuture<int> DownloadOnlineQRCode;// monitor online QR code download
     QFuture<int> Waifu2xMain;// monitor main waifu2x thread
     int Force_close();// forcibly close using cmd
-    bool isAlreadyClosed=false;
+    std::atomic<bool> isAlreadyClosed{false};
     //================== current file progress =========================
     long unsigned int TimeCost_CurrentFile =0;
     long unsigned int TaskNumTotal_CurrentFile=0;
@@ -1002,23 +1022,13 @@ private slots:
 
     void on_pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan_clicked();
 
-    void on_checkBox_HDNMode_Anime4k_stateChanged(int arg1);
-
     void on_tableView_image_pressed(const QModelIndex &index);
 
     void on_tableView_gif_pressed(const QModelIndex &index);
 
     void on_tableView_video_pressed(const QModelIndex &index);
 
-    void on_comboBox_UpdateChannel_currentIndexChanged(int index);
-
-    void on_checkBox_ReplaceOriginalFile_stateChanged(int arg1);
-
-    void on_checkBox_isCustFontEnable_stateChanged(int arg1);
-
     void on_comboBox_ImageSaveFormat_currentIndexChanged(int index);
-
-    void on_pushButton_ResizeFilesListSplitter_clicked();
 
     void on_pushButton_TileSize_Add_W2xNCNNVulkan_clicked();
 
@@ -1035,12 +1045,6 @@ private slots:
     void on_pushButton_Add_TileSize_RealsrNCNNVulkan_clicked();
 
     void on_pushButton_Minus_TileSize_RealsrNCNNVulkan_clicked();
-
-    void on_comboBox_GPGPUModel_A4k_currentIndexChanged(int index);
-
-    void on_checkBox_DisableGPU_converter_stateChanged(int arg1);
-
-    void on_groupBox_video_settings_clicked();
 
     void on_pushButton_DetectGPU_VFI_clicked();
 
@@ -1064,19 +1068,9 @@ private slots:
 
     void on_checkBox_MultiThread_VFI_clicked();
 
-    void on_pushButton_TurnOffScreen_clicked();
-
     void on_checkBox_isCompatible_DainNcnnVulkan_clicked();
 
-    void on_pushButton_MultipleOfFPS_VFI_MIN_clicked();
-
-    void on_pushButton_MultipleOfFPS_VFI_ADD_clicked();
-
-    void on_pushButton_Patreon_clicked();
-
     void on_pushButton_SupportersList_clicked();
-
-    void on_checkBox_isCompatible_SRMD_CUDA_clicked();
 
     // RealESRGAN UI slots
     void on_pushButton_DetectGPU_RealESRGAN_clicked();
@@ -1084,11 +1078,14 @@ private slots:
     void on_pushButton_TileSize_Add_RealESRGAN_clicked();
     void on_pushButton_TileSize_Minus_RealESRGAN_clicked();
     void on_checkBox_MultiGPU_RealESRGAN_stateChanged(int state);
-    // Removed RealESRGAN multi-GPU slots that were mistakenly added here from a previous context.
-    // void on_comboBox_GPUIDs_MultiGPU_RealESRGAN_currentIndexChanged(int index);
-    // void on_checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN_clicked();
-    // void on_spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN_valueChanged(int arg1);
-    // void on_pushButton_ShowMultiGPUSettings_RealESRGAN_clicked();
+    void on_comboBox_GPUIDs_MultiGPU_RealESRGAN_currentIndexChanged(int index);
+    void on_checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN_clicked(bool checked);
+    void on_spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN_valueChanged(int value);
+    void on_pushButton_ShowMultiGPUSettings_RealESRGAN_clicked();
+    void on_pushButton_AddGPU_MultiGPU_RealESRGAN_clicked();
+    void on_pushButton_RemoveGPU_MultiGPU_RealESRGAN_clicked();
+    void on_pushButton_ClearGPU_MultiGPU_RealESRGAN_clicked();
+
 
     // RealCUGAN specific UI slots that were missing explicit declaration
     void on_pushButton_DetectGPU_RealCUGAN_clicked();
@@ -1097,15 +1094,9 @@ private slots:
     void on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked();
     void on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked();
     // Add other RealCUGAN specific UI slots if they are implemented in mainwindow.cpp and need declaration
-    // void on_comboBox_Model_RealCUGAN_currentIndexChanged(int index);
-    // void on_pushButton_TileSize_Add_RealCUGAN_clicked();
-    // void on_pushButton_TileSize_Minus_RealCUGAN_clicked();
-    // void on_checkBox_MultiGPU_RealCUGAN_clicked(); // If it has separate logic from stateChanged
-    // void on_comboBox_GPUIDs_MultiGPU_RealCUGAN_currentIndexChanged(int index);
-    // void on_checkBox_isEnable_CurrentGPU_MultiGPU_RealCUGAN_clicked();
-    // void on_spinBox_TileSize_CurrentGPU_MultiGPU_RealCUGAN_valueChanged(int arg1);
-    // void on_pushButton_ShowMultiGPUSettings_RealCUGAN_clicked();
-
+    // void on_comboBox_Model_RealCUGAN_currentIndexChanged(int index); // Already connected
+    // void on_pushButton_TileSize_Add_RealCUGAN_clicked(); // Already connected
+    // void on_pushButton_TileSize_Minus_RealCUGAN_clicked(); // Already connected
 
 signals:
     void Send_Table_EnableSorting(bool EnableSorting);
@@ -1138,7 +1129,7 @@ signals:
 
     void Send_Realsr_ncnn_vulkan_DetectGPU_finished();
     void Send_FrameInterpolation_DetectGPU_finished();
-    // void Send_Realesrgan_ncnn_vulkan_DetectGPU_finished(); // This signal might be for RealESRGAN, ensure it's correctly named if used
+    void Send_Realesrgan_ncnn_vulkan_DetectGPU_finished();
 
     void Send_CheckUpadte_NewUpdate(QString, QString);
 
@@ -1164,17 +1155,17 @@ signals:
     void Send_SRMD_DetectGPU_finished();
 
     // RealCUGAN slots for iterative processing and specific detection error
-    void Realcugan_NCNN_Vulkan_Iterative_finished();
+    void Realcugan_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess::ExitStatus exitStatus); // Match QProcess signal
     void Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error);
-    void Realcugan_ncnn_vulkan_DetectGPU_finished(int exitCode, QProcess::ExitStatus exitStatus); // Already existed, ensure signature match
+    void Send_Realcugan_ncnn_vulkan_DetectGPU_finished(); // Renamed from Realcugan_ncnn_vulkan_DetectGPU_finished(int, QProcess::ExitStatus)
     void Realcugan_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error); // Specific error slot for GPU detection
 
     // RealESRGAN slots
-    void RealESRGAN_NCNN_Vulkan_finished();
+    void RealESRGAN_NCNN_Vulkan_finished(int exitCode, QProcess::ExitStatus exitStatus); // Match QProcess signal
     void RealESRGAN_NCNN_Vulkan_errorOccurred(QProcess::ProcessError error); // General error
-    void RealESRGAN_NCNN_Vulkan_Iterative_finished(); // For iterative processing
+    void RealESRGAN_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess::ExitStatus exitStatus); // For iterative processing
     void RealESRGAN_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error); // For iterative processing
-    void RealESRGAN_ncnn_vulkan_DetectGPU_finished(int exitCode, QProcess::ExitStatus exitStatus);
+    // void Send_Realesrgan_ncnn_vulkan_DetectGPU_finished(); // Already exists
     void RealESRGAN_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error); // Specific for GPU detection
 
     void Send_video_write_VideoConfiguration(QString VideoConfiguration_fullPath,int ScaleRatio,int DenoiseLevel,bool CustRes_isEnabled,int CustRes_height,int CustRes_width,QString EngineName,bool isProcessBySegment,QString VideoClipsFolderPath,QString VideoClipsFolderName,bool isVideoFrameInterpolationEnabled,int MultipleOfFPS);
@@ -1194,9 +1185,10 @@ signals:
 
     void Send_Set_checkBox_DisableResize_gif_Checked();
 
-    void Send_Realesrgan_ncnn_vulkan_DetectGPU_finished(); // Signal for RealESRGAN GPU detection
 
 private:
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
+
+[end of Waifu2x-Extension-QT/mainwindow.h]

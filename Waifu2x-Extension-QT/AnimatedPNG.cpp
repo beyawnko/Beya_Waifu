@@ -17,8 +17,9 @@
     My Github homepage: https://github.com/AaronFeng753
 */
 #include "mainwindow.h"
-#include "utils/ffprobe_helpers.h"
+// #include "utils/ffprobe_helpers.h" // Not needed anymore due to getOrFetchMetadata
 #include "ui_mainwindow.h"
+
 /*
 Main function for processing APNG files
 */
@@ -41,20 +42,33 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
     //===============================
     // Check if we should auto add to the custom resolution list
     double double_ScaleRatio_gif = ui->doubleSpinBox_ScaleRatio_gif->value();
-    // If no custom resolution and scale ratio is fractional
+
     if((CustRes_isContained(sourceFileFullPath) == false) && (double_ScaleRatio_gif != qRound(double_ScaleRatio_gif)))
     {
-        //===================== Get resolution =============================
-        QMap<QString,int> Map_OrgRes = Image_Gif_Read_Resolution(sourceFileFullPath);
-        //========= Calculate new height and width ==================
-        double ScaleRatio_double = ui->doubleSpinBox_ScaleRatio_gif->value();
-        int Height_new = qRound(ScaleRatio_double * Map_OrgRes["height"]);
-        int width_new = qRound(ScaleRatio_double * Map_OrgRes["width"]);
+        FileMetadataCache metadata = getOrFetchMetadata(sourceFileFullPath);
+        if (!metadata.isValid || metadata.width == 0 || metadata.height == 0) {
+            emit Send_TextBrowser_NewMessage(tr("Warning! Unable to read the resolution of [") + sourceFileFullPath + tr("]. This file will only be scaled to ") + QString::number((int)double_ScaleRatio_gif,10) + "X.");
+            if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
+            else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
+            emit Send_progressbar_Add();
+            return;
+        }
+        int original_width = metadata.width;
+        int original_height = metadata.height;
+
+        int Height_new = qRound(double_ScaleRatio_gif * original_height);
+        int width_new = qRound(double_ScaleRatio_gif * original_width);
+
         if(Height_new<1 || width_new<1)
         {
-            emit Send_TextBrowser_NewMessage("Warning! Unable to read the resolution of ["+sourceFileFullPath+"]. This file will only be scaled to "+QString::number((int)ScaleRatio_double,10)+"X.");
+            emit Send_TextBrowser_NewMessage("Warning! Invalid new dimensions calculated for ["+sourceFileFullPath+"]. This file will only be scaled to "+QString::number((int)double_ScaleRatio_gif,10)+"X.");
+             // If fractional scaling cannot determine original size, it's an error for this path.
+            if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
+            else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
+            emit Send_progressbar_Add();
+            return;
         }
-        //======== Store into custom resolution list ============
+
         QMap<QString,QString> res_map;
         res_map["fullpath"] = sourceFileFullPath;
         res_map["height"] = QString::number(Height_new,10);
@@ -63,221 +77,124 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
         isNeedRemoveFromCustResList = true;
     }
     //======================
-    // Read source file info
     QFileInfo fileinfo_sourceFileFullPath(sourceFileFullPath);
     QString sourceFileFullPath_baseName = file_getBaseName(sourceFileFullPath);
     QString sourceFileFullPath_fileExt = fileinfo_sourceFileFullPath.suffix();
     QString sourceFileFullPath_folderPath = file_getFolderPath(fileinfo_sourceFileFullPath);
-    // Generate various paths
+
     QString splitFramesFolder = sourceFileFullPath_folderPath+"/"+sourceFileFullPath_baseName+"_"+sourceFileFullPath_fileExt+"_splitFramesFolder_W2xEX";
     QString scaledFramesFolder = sourceFileFullPath_folderPath+"/"+sourceFileFullPath_baseName+"_"+sourceFileFullPath_fileExt+"_scaledFramesFolder_W2xEX";
     QString resultFileFullPath="";
+
     if(CustRes_isContained(sourceFileFullPath) && isNeedRemoveFromCustResList==false)
     {
-        QMap<QString, QString> Res_map = CustRes_getResMap(sourceFileFullPath);//res_map["fullpath"],["height"],["width"]
+        QMap<QString, QString> Res_map = CustRes_getResMap(sourceFileFullPath);
         resultFileFullPath = sourceFileFullPath_folderPath+"/"+sourceFileFullPath_baseName+"_"+QString::number(Res_map["width"].toInt(), 10)+"x"+QString::number(Res_map["height"].toInt(),10)+"_"+QString("%1").arg(ui->spinBox_DenoiseLevel_gif->value())+"n_W2xEX"+"."+sourceFileFullPath_fileExt;
     }
     else
     {
         resultFileFullPath = sourceFileFullPath_folderPath+"/"+sourceFileFullPath_baseName+"_"+QString("%1").arg(ui->doubleSpinBox_ScaleRatio_gif->value())+"x_"+QString("%1").arg(ui->spinBox_DenoiseLevel_gif->value())+"n_W2xEX"+"."+sourceFileFullPath_fileExt;
     }
-    //=======================
-    // Start splitting
+
     APNG_Split2Frames(sourceFileFullPath,splitFramesFolder);
-    // Was the process paused?
+
     if(waifu2x_STOP)
     {
-        if(isFromImageList)
-        {
-            emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted");
-        }
-        else
-        {
-            emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted");
-        }
+        if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted"); }
+        else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted"); }
         file_DelDir(splitFramesFolder);
         file_DelDir(scaledFramesFolder);
         if(isNeedRemoveFromCustResList)CustRes_remove(sourceFileFullPath);
         return;
     }
-    // Check whether splitting succeeded
-    // Get the list of split frame files
+
     QStringList framesFileName_qStrList = file_getFileNames_in_Folder_nofilter(splitFramesFolder);
-    if(framesFileName_qStrList.isEmpty())//Check if GIF was split successfully
+    if(framesFileName_qStrList.isEmpty())
     {
-        emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+sourceFileFullPath+tr("]. Error: [Can't split GIF into frames.]"));
-        if(isFromImageList)
-        {
-            emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        }
-        else
-        {
-            emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        }
+        emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+sourceFileFullPath+tr("]. Error: [Can't split APNG into frames.]"));
+        if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
+        else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
         file_DelDir(splitFramesFolder);
         file_DelDir(scaledFramesFolder);
         if(isNeedRemoveFromCustResList)CustRes_remove(sourceFileFullPath);
         emit Send_progressbar_Add();
         return;
     }
-    //=======================
-    // Start scaling & assembling
+
     bool isSuccessfullyScaled = false;
-    int engineIndex = ui->comboBox_Engine_GIF->currentIndex(); // Use engine from GIF tab for APNG
+    int engineIndex = ui->comboBox_Engine_GIF->currentIndex();
     switch(engineIndex)
     {
-        case 0:
-            {
-                isSuccessfullyScaled = APNG_Waifu2xNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
-                break;
-            }
-        case 1:
-            {
-                isSuccessfullyScaled = APNG_Waifu2xConverter(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
-                break;
-            }
-        case 2:
-            {
-                isSuccessfullyScaled = APNG_SrmdNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
-                break;
-            }
-        case 3:
-            {
-                isSuccessfullyScaled = APNG_Anime4k(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
-                break;
-            }
-        case 4:
-            {
-                isSuccessfullyScaled = APNG_Waifu2xCaffe(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
-                break;
-            }
-        case 5:
-            {
-                isSuccessfullyScaled = APNG_RealsrNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
-                break;
-            }
-        case 6:
-            {
-                isSuccessfullyScaled = APNG_SrmdCUDA(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
-                break;
-            }
-        case 7: // RealCUGAN-ncnn-Vulkan
-            {
-                isSuccessfullyScaled = APNG_RealcuganNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
-                break;
-            }
-        case 8: // RealESRGAN-ncnn-Vulkan
-            {
-                isSuccessfullyScaled = APNG_RealESRGANNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath);
-                break;
-            }
+        case 0: isSuccessfullyScaled = APNG_Waifu2xNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
+        case 1: isSuccessfullyScaled = APNG_Waifu2xConverter(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
+        case 2: isSuccessfullyScaled = APNG_SrmdNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
+        case 3: isSuccessfullyScaled = APNG_Anime4K(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
+        case 4: isSuccessfullyScaled = APNG_Waifu2xCaffe(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
+        case 5: isSuccessfullyScaled = APNG_RealsrNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
+        case 6: isSuccessfullyScaled = APNG_SrmdCUDA(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
+        case 7: isSuccessfullyScaled = APNG_RealcuganNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
+        case 8: isSuccessfullyScaled = APNG_RealESRGANNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
     }
-    //============
-    // Delete cache
+
     file_DelDir(splitFramesFolder);
     file_DelDir(scaledFramesFolder);
     if(isNeedRemoveFromCustResList)CustRes_remove(sourceFileFullPath);
-    //============
-    // Failure or pause during scaling
+
     if(waifu2x_STOP)
     {
-        if(isFromImageList)
-        {
-            emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted");
-        }
-        else
-        {
-            emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted");
-        }
+        if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted"); }
+        else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted"); }
         return;
     }
     if(isSuccessfullyScaled==false)
     {
-        if(isFromImageList)
-        {
-            emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        }
-        else
-        {
-            emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        }
+        if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
+        else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
         emit Send_progressbar_Add();
         return;
     }
-    // Check whether result file exists
+
     if(QFile::exists(resultFileFullPath)==false)
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+sourceFileFullPath+tr("]. Error: [Unable to assemble APNG.]"));
-        if(isFromImageList)
-        {
-            emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        }
-        else
-        {
-            emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        }
+        if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
+        else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
         emit Send_progressbar_Add();
         return;
     }
-    //===================
-    // Delete original file and update table
+
     if(ui->checkBox_DelOriginal->isChecked()||ui->checkBox_ReplaceOriginalFile->isChecked())
     {
         if(ReplaceOriginalFile(sourceFileFullPath,resultFileFullPath)==false)
         {
-            if(QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal->isChecked())
-            {
-                file_MoveToTrash(sourceFileFullPath);
-            }
-            else
-            {
-                QFile::remove(sourceFileFullPath);
-            }
+            if(QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal->isChecked()) { file_MoveToTrash(sourceFileFullPath); }
+            else { QFile::remove(sourceFileFullPath); }
         }
-        if(isFromImageList)
-        {
-            emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Finished, original file deleted");
-        }
-        else
-        {
-            emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Finished, original file deleted");
-        }
+        if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Finished, original file deleted"); }
+        else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Finished, original file deleted"); }
     }
     else
     {
-        if(isFromImageList)
-        {
-            emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Finished");
-        }
-        else
-        {
-            emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Finished");
-        }
+        if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Finished"); }
+        else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Finished"); }
     }
-    // Move to output path
+
     if(ui->checkBox_OutPath_isEnabled->isChecked())
     {
         MoveFileToOutputPath(resultFileFullPath,sourceFileFullPath);
     }
-    // Update progress bar
     emit Send_progressbar_Add();
-    //=====
     return;
 }
-/*
-Split APNG into frames
-*/
+
 void MainWindow::APNG_Split2Frames(QString sourceFileFullPath,QString splitFramesFolder)
 {
     emit Send_TextBrowser_NewMessage(tr("Start splitting APNG:[")+sourceFileFullPath+"]");
-    //========================
     file_DelDir(splitFramesFolder);
     file_mkDir(splitFramesFolder);
-    //========================
     QString sourceFileFullPath_baseName = file_getBaseName(sourceFileFullPath);
     QString splitCopy = splitFramesFolder+"/W2xEX_"+sourceFileFullPath_baseName+".apng";
     QFile::copy(sourceFileFullPath,splitCopy);
-    //========================
     QString program = Current_Path+"/apngdis_waifu2xEX.exe";
     QString cmd = "\""+program+"\" \""+splitCopy+"\" \"0\"";
     QProcess SplitAPNG;
@@ -287,24 +204,27 @@ void MainWindow::APNG_Split2Frames(QString sourceFileFullPath,QString splitFrame
         SplitAPNG.close();
         return;
     }
-    //========================
     QFile::remove(splitCopy);
     QStringList framesFileName_qStrList = file_getFileNames_in_Folder_nofilter(splitFramesFolder);
     foreach (QString fname, framesFileName_qStrList)
     {
         if(fname.toLower().contains(".txt"))QFile::remove(splitFramesFolder+"/"+fname);
     }
-    //========================
     emit Send_TextBrowser_NewMessage(tr("Finish splitting APNG:[")+sourceFileFullPath+"]");
     return;
 }
-/*
-Assemble frames into an APNG
-*/
+
 void MainWindow::APNG_Frames2APNG(QString sourceFileFullPath,QString scaledFramesFolder,QString resultFileFullPath,bool isOverScaled)
 {
     emit Send_TextBrowser_NewMessage(tr("Start assembling APNG:[")+sourceFileFullPath+"]");
-    // Manually resize frames if needed
+
+    FileMetadataCache metadata = getOrFetchMetadata(sourceFileFullPath);
+    if(!metadata.isValid)
+    {
+        emit Send_TextBrowser_NewMessage(tr("ERROR! Unable to read metadata for APNG: [") + sourceFileFullPath + tr("]. Failed to assemble APNG.") );
+        return;
+    }
+
     bool CustRes_isEnabled = CustRes_isContained(sourceFileFullPath);
     if(CustRes_isEnabled || isOverScaled)
     {
@@ -312,51 +232,61 @@ void MainWindow::APNG_Frames2APNG(QString sourceFileFullPath,QString scaledFrame
         int New_height=0;
         if(isOverScaled==true && CustRes_isEnabled==false)
         {
-            QMap<QString,int> res_map = Image_Gif_Read_Resolution(sourceFileFullPath);
             int OriginalScaleRatio = ui->doubleSpinBox_ScaleRatio_gif->value();
-            New_width = res_map["width"]*OriginalScaleRatio;
-            New_height = res_map["height"]*OriginalScaleRatio;
+            New_width = metadata.width * OriginalScaleRatio;
+            New_height = metadata.height * OriginalScaleRatio;
         }
         if(CustRes_isEnabled==true)
         {
-            QMap<QString, QString> Res_map = CustRes_getResMap(sourceFileFullPath);//res_map["fullpath"],["height"],["width"]
+            QMap<QString, QString> Res_map = CustRes_getResMap(sourceFileFullPath);
             New_width = Res_map["width"].toInt();
             New_height = Res_map["height"].toInt();
         }
-        ImagesResize_Folder_MultiThread(New_width,New_height,scaledFramesFolder);
+        if (New_width > 0 && New_height > 0) {
+             ImagesResize_Folder_MultiThread(New_width,New_height,scaledFramesFolder);
+        } else {
+            emit Send_TextBrowser_NewMessage(tr("ERROR! Invalid dimensions for resizing APNG frames: [") + sourceFileFullPath + "]");
+            return;
+        }
     }
-    //========================= Use ffprobe to read APNG info ======================
-    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", sourceFileFullPath);
-    QString FPS_Division = doc.object().value("streams").toArray().isEmpty() ? QString() :
-                           doc.object().value("streams").toArray().at(0).toObject().value("avg_frame_rate").toString();
-    //=======================
-    int fps = 0;
-    if(!FPS_Division.isEmpty())
-    {
-        QStringList FPS_Nums = FPS_Division.split("/");
-        if(FPS_Nums.size()==2)
-        {
-            double FPS_Num_0 = FPS_Nums.at(0).toDouble();
-            double FPS_Num_1 = FPS_Nums.at(1).toDouble();
-            if(FPS_Num_0>0&&FPS_Num_1>0)
-            {
-                double fps_double = FPS_Num_0/FPS_Num_1;
-                fps = qRound(fps_double);
+
+    double fps_double = 0.0;
+    if (!metadata.fps.isEmpty()) {
+        QStringList fpsParts = metadata.fps.split('/');
+        if (fpsParts.size() == 2) {
+            double num = fpsParts[0].toDouble();
+            double den = fpsParts[1].toDouble();
+            if (den > 0) fps_double = num / den;
+        } else if (fpsParts.size() == 1 && !fpsParts[0].isEmpty()) {
+            fps_double = fpsParts[0].toDouble();
+        }
+    }
+
+    int fps_int = qRound(fps_double);
+    // Fallback to identifyOutput if FPS is still invalid and identifyOutput has info
+    if(fps_int <=0 && metadata.isValid && !metadata.identifyOutput.isEmpty()){
+        QStringList lines = metadata.identifyOutput.split('\n');
+        if(!lines.isEmpty()){
+            QStringList parts = lines[0].trimmed().split(" ");
+            if(parts.size() >= 4){ // %w %h %n %T
+                double frameDelayHundredths = parts[3].toDouble();
+                if(frameDelayHundredths > 0){
+                    fps_double = 100.0 / frameDelayHundredths;
+                    fps_int = qRound(fps_double);
+                }
             }
         }
     }
-    //==========
-    if(fps<=0)
+
+    if(fps_int <= 0)
     {
-        emit Send_TextBrowser_NewMessage(tr("ERROR! Unable to read the FPS of this APNG. Failed to assemble APNG:[")+sourceFileFullPath+"]");
+        emit Send_TextBrowser_NewMessage(tr("ERROR! Unable to read or parse FPS of this APNG. FPS value: ") + metadata.fps + tr(". Failed to assemble APNG:[") + sourceFileFullPath + "]");
         return;
     }
-    //========================
-    // Delete existing result file
+
     QFile::remove(resultFileFullPath);
-    //========================
     QString program = Current_Path+"/apngasm_waifu2xEX.exe";
-    QString cmd ="\""+program+"\" \""+resultFileFullPath+"\" \""+scaledFramesFolder.replace("%","%%")+"/*.png\" -kp -kc -z1 1 "+QString::number(fps,10)+" -l0";
+    QString cmd ="\""+program+"\" \""+resultFileFullPath+"\" \""+scaledFramesFolder.replace("%","%%")+"/*.png\" -kp -kc -z1 1 "+QString::number(fps_int,10)+" -l0";
     QProcess AssembleAPNG;
     bool ok = runProcess(&AssembleAPNG, cmd);
     if(waifu2x_STOP || !ok)
@@ -365,20 +295,14 @@ void MainWindow::APNG_Frames2APNG(QString sourceFileFullPath,QString scaledFrame
         QFile::remove(resultFileFullPath);
         return;
     }
-    //========================
     emit Send_TextBrowser_NewMessage(tr("Finish assembling APNG:[")+sourceFileFullPath+"]");
 }
-/*
-Detect whether a PNG file is animated
-*/
+
 bool MainWindow::APNG_isAnimatedPNG(int rowNum)
 {
     QString sourceFileFullPath = Table_model_image->item(rowNum,2)->text();
-    //========================= Use ffprobe to read APNG info ======================
-    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", sourceFileFullPath);
-    QJsonArray streams = doc.object().value("streams").toArray();
-    if(streams.isEmpty())
-        return false;
-    QString codec = streams.at(0).toObject().value("codec_name").toString().trimmed().toLower();
-    return codec == "apng";
+    FileMetadataCache metadata = getOrFetchMetadata(sourceFileFullPath);
+    return metadata.isValid && metadata.isAnimated && metadata.fileFormat == "apng";
 }
+
+[end of Waifu2x-Extension-QT/AnimatedPNG.cpp]
