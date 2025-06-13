@@ -18,6 +18,7 @@
 */
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QEventLoop>
 /*
 对视频进行仅插帧(分段)
 */
@@ -563,49 +564,43 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
             //=====
             QProcess FrameInterpolation_QProcess;
             CMD ="\""+FrameInterpolation_ProgramPath+"\" -i \""+SourcePath_Curr+"\" -o \""+OutputPath_Curr+"\" -f %0"+QString("%1").arg(FrameNumDigits)+"d.png"+FrameInterpolation_ReadConfig(isUhdInput,FileNum_MAX);
-            FrameInterpolation_QProcess.start(CMD);
-            while(!FrameInterpolation_QProcess.waitForStarted(200)&&!QProcess_stop) {}
-            while(!FrameInterpolation_QProcess.waitForFinished(200)&&!QProcess_stop)
-            {
-                if(waifu2x_STOP)
-                {
-                    FrameInterpolation_QProcess.close();
-                    file_DelDir(OutputPath_Curr);
-                    if(SourcePath_Curr != SourcePath)file_DelDir(SourcePath_Curr);
-                    if(is_progressBar_CurrentFile_available)
-                    {
-                        emit Send_CurrentFileProgress_Stop();//停止当前文件进度条
-                    }
-                    return false;
+            QByteArray stdOut, stdErr;
+            QEventLoop loop;
+            QTimer timer;
+            timer.setInterval(200);
+            connect(&timer,&QTimer::timeout,[&](){
+                if(waifu2x_STOP){
+                    FrameInterpolation_QProcess.kill();
+                    loop.quit();
+                    return;
                 }
-                //=========
-                ErrorMSG.append(FrameInterpolation_QProcess.readAllStandardError().toLower());
-                StanderMSG.append(FrameInterpolation_QProcess.readAllStandardOutput().toLower());
-                if(ErrorMSG.contains("failed")||StanderMSG.contains("failed"))
-                {
-                    FrameInterpolation_QProcess_failed = true;
-                    FrameInterpolation_QProcess.close();
+                stdErr.append(FrameInterpolation_QProcess.readAllStandardError().toLower());
+                stdOut.append(FrameInterpolation_QProcess.readAllStandardOutput().toLower());
+                if(stdErr.contains("failed")||stdOut.contains("failed")){
+                    FrameInterpolation_QProcess_failed=true;
+                    FrameInterpolation_QProcess.kill();
                     file_DelDir(OutputPath_Curr);
-                    break;
+                    loop.quit();
                 }
-                //=========
-                if(ui->checkBox_ShowInterPro->isChecked())
-                {
+                if(ui->checkBox_ShowInterPro->isChecked()){
                     FileNum_New = file_getFileNames_in_Folder_nofilter(OutputPath_Curr).size();
-                    if(FileNum_New!=FileNum_Old)
-                    {
+                    if(FileNum_New!=FileNum_Old){
                         if(is_progressBar_CurrentFile_available==false)
-                        {
                             emit Send_TextBrowser_NewMessage(tr("Interpolating frames in:[")+SourcePath_Curr+tr("] Progress:[")+QString::number(FileNum_New,10)+"/"+QString::number(FileNum_MAX,10)+"]");
-                        }
                         else
-                        {
                             emit Send_CurrentFileProgress_progressbar_SetFinishedValue(FileNum_New);
-                        }
                         FileNum_Old=FileNum_New;
                     }
                 }
-            }
+            });
+            connect(&FrameInterpolation_QProcess,qOverload<int,QProcess::ExitStatus>(&QProcess::finished),&loop,&QEventLoop::quit);
+            connect(&FrameInterpolation_QProcess,&QProcess::errorOccurred,&loop,&QEventLoop::quit);
+            FrameInterpolation_QProcess.start(CMD);
+            timer.start();
+            loop.exec();
+            timer.stop();
+            ErrorMSG.append(stdErr);
+            StanderMSG.append(stdOut);
             if(FrameInterpolation_QProcess_failed==false)
             {
                 ErrorMSG.append(FrameInterpolation_QProcess.readAllStandardError().toLower());
