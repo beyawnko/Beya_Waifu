@@ -117,6 +117,10 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     //======
     TimeCostTimer = new QTimer();
     connect(TimeCostTimer, SIGNAL(timeout()), this, SLOT(TimeSlot()));
+    FileProgressWatcher = new QFileSystemWatcher(this);
+    FileProgressWatcher_Text = new QFileSystemWatcher(this);
+    FileProgressStopTimer = new QTimer();
+    FileProgressStopTimer_Text = new QTimer();
     //==================================================
     Settings_Read_Apply(); // Read and apply settings
     //=====================================

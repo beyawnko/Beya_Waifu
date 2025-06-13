@@ -59,6 +59,7 @@
 #include <QScrollBar>
 #include <QThread>
 #include <QThreadPool>
+#include <QFileSystemWatcher>
 #include "topsupporterslist.h"
 
 typedef QList<QMap<QString, QString>> QList_QMap_QStrQStr;
@@ -481,6 +482,10 @@ public:
     QFuture<void> TurnOffScreen_QF;//监视是否连续多次点击关闭屏幕,避免连续启动nircmd
 
     bool FileProgressWatch_isEnabled = true;//是否启用输出文件夹进度监控线程
+    QFileSystemWatcher *FileProgressWatcher = nullptr;//监控输出文件夹
+    QFileSystemWatcher *FileProgressWatcher_Text = nullptr;//监控输出文件夹(文本)
+    QTimer *FileProgressStopTimer = nullptr;//监控停止计时器
+    QTimer *FileProgressStopTimer_Text = nullptr;//监控停止计时器(文本)
 
     int ForceRetryCount = 1;
 
