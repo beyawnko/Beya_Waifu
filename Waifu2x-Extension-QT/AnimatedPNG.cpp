@@ -17,6 +17,7 @@
     My Github homepage: https://github.com/AaronFeng753
 */
 #include "mainwindow.h"
+#include "utils/ffprobe_helpers.h"
 #include "ui_mainwindow.h"
 /*
 Main function for processing APNG files
@@ -325,43 +326,12 @@ void MainWindow::APNG_Frames2APNG(QString sourceFileFullPath,QString scaledFrame
         ImagesResize_Folder_MultiThread(New_width,New_height,scaledFramesFolder);
     }
     //========================= Use ffprobe to read APNG info ======================
-    QProcess Get_APNGAvgFPS_process;
-    QString cmd_Get_APNGAvgFPS_process = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+sourceFileFullPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
-    QByteArray ffprobe_out;
-    runProcess(&Get_APNGAvgFPS_process, cmd_Get_APNGAvgFPS_process, &ffprobe_out);
-    //============= Save ffprobe output in ini format =============
-    QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
-    //================ Write ini to file ================
-    QFileInfo videoFileInfo(sourceFileFullPath);
-    QString Path_APNG_info_ini = "";
-    QString video_dir = file_getFolderPath(sourceFileFullPath);
-    int FileNo = 0;
-    do
-    {
-        FileNo++;
-        Path_APNG_info_ini = video_dir+"/"+file_getBaseName(sourceFileFullPath)+"_Info_"+QString::number(FileNo,10)+"_W2xEX.ini";
-    }
-    while(QFile::exists(Path_APNG_info_ini));
-    //=========
-    QFile APNG_info_ini(Path_APNG_info_ini);
-    APNG_info_ini.remove();
-    if (APNG_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) // QIODevice::ReadWrite allows read/write
-    {
-        QTextStream stream(&APNG_info_ini);
-        stream << ffprobe_output_str;
-    }
-    APNG_info_ini.close();
-    //================== Read parameters from ini =====================
-    QString FPS_Division = "";
-    QSettings *configIniRead_videoInfo = new QSettings(Path_APNG_info_ini, QSettings::IniFormat);
-    if(configIniRead_videoInfo->value("/streams.stream.0/avg_frame_rate") != QVariant())
-    {
-        FPS_Division = configIniRead_videoInfo->value("/streams.stream.0/avg_frame_rate").toString().trimmed();
-    }
-    APNG_info_ini.remove();
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", sourceFileFullPath);
+    QString FPS_Division = doc.object().value("streams").toArray().isEmpty() ? QString() :
+                           doc.object().value("streams").toArray().at(0).toObject().value("avg_frame_rate").toString();
     //=======================
     int fps = 0;
-    if(FPS_Division!="")
+    if(!FPS_Division.isEmpty())
     {
         QStringList FPS_Nums = FPS_Division.split("/");
         if(FPS_Nums.size()==2)
@@ -405,39 +375,10 @@ bool MainWindow::APNG_isAnimatedPNG(int rowNum)
 {
     QString sourceFileFullPath = Table_model_image->item(rowNum,2)->text();
     //========================= Use ffprobe to read APNG info ======================
-    QProcess Get_APNGAvgFPS_process;
-    QString cmd_Get_APNGAvgFPS_process = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+sourceFileFullPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
-    QByteArray ffprobe_out;
-    runProcess(&Get_APNGAvgFPS_process, cmd_Get_APNGAvgFPS_process, &ffprobe_out);
-    //============= Save ffprobe output in ini format =============
-    QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
-    //================ Write ini to file ================
-    QFileInfo videoFileInfo(sourceFileFullPath);
-    QString Path_APNG_info_ini = "";
-    QString video_dir = file_getFolderPath(sourceFileFullPath);
-    int FileNo = 0;
-    do
-    {
-        FileNo++;
-        Path_APNG_info_ini = video_dir+"/"+file_getBaseName(sourceFileFullPath)+"_Info_"+QString::number(FileNo,10)+"_W2xEX.ini";
-    }
-    while(QFile::exists(Path_APNG_info_ini));
-    //=========
-    QFile APNG_info_ini(Path_APNG_info_ini);
-    APNG_info_ini.remove();
-    if (APNG_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) // QIODevice::ReadWrite allows read/write
-    {
-        QTextStream stream(&APNG_info_ini);
-        stream << ffprobe_output_str;
-    }
-    APNG_info_ini.close();
-    //================== Read parameters from ini =====================
-    bool isAPNG = false;
-    QSettings *configIniRead_videoInfo = new QSettings(Path_APNG_info_ini, QSettings::IniFormat);
-    if(configIniRead_videoInfo->value("/streams.stream.0/codec_name") != QVariant())
-    {
-        isAPNG = (configIniRead_videoInfo->value("/streams.stream.0/codec_name").toString().trimmed().toLower() == "apng");
-    }
-    APNG_info_ini.remove();
-    return isAPNG;
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", sourceFileFullPath);
+    QJsonArray streams = doc.object().value("streams").toArray();
+    if(streams.isEmpty())
+        return false;
+    QString codec = streams.at(0).toObject().value("codec_name").toString().trimmed().toLower();
+    return codec == "apng";
 }

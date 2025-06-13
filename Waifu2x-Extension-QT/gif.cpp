@@ -18,6 +18,7 @@
 */
 
 #include "mainwindow.h"
+#include "utils/ffprobe_helpers.h"
 #include "ui_mainwindow.h"
 /*
 根据行数从自定义分辨率列表移除gif文件
@@ -66,44 +67,12 @@ bool MainWindow::Gif_DoubleScaleRatioPrep(int RowNumber)
 */
 int MainWindow::Gif_getDuration(QString gifPath)
 {
-    //========================= 调用ffprobe读取GIF信息 ======================
-    QProcess Get_GifAvgFPS_process;
-    QString cmd = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+gifPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
-    QByteArray ffprobe_out;
-    runProcess(&Get_GifAvgFPS_process, cmd, &ffprobe_out);
-    //============= 保存ffprobe输出的ini格式文本 =============
-    QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
-    //================ 将ini写入文件保存 ================
-    QFileInfo videoFileInfo(gifPath);
-    QString Path_gif_info_ini = "";
-    QString video_dir = file_getFolderPath(gifPath);
-    int FileNo = 0;
-    do
-    {
-        FileNo++;
-        Path_gif_info_ini = video_dir+"/"+file_getBaseName(gifPath)+"_GifInfo_"+QString::number(FileNo,10)+"_W2xEX.ini";
-    }
-    while(QFile::exists(Path_gif_info_ini));
-    //=========
-    QFile gif_info_ini(Path_gif_info_ini);
-    gif_info_ini.remove();
-    if (gif_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
-    {
-        QTextStream stream(&gif_info_ini);
-        stream << ffprobe_output_str;
-    }
-    gif_info_ini.close();
-    //================== 读取ini获得参数 =====================
-    QString FPS_Division = "";
-    QSettings *configIniRead_videoInfo = new QSettings(Path_gif_info_ini, QSettings::IniFormat);
-    if(configIniRead_videoInfo->value("/streams.stream.0/avg_frame_rate") != QVariant())
-    {
-        FPS_Division = configIniRead_videoInfo->value("/streams.stream.0/avg_frame_rate").toString().trimmed();
-    }
-    gif_info_ini.remove();
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", gifPath);
+    QString FPS_Division = doc.object().value("streams").toArray().isEmpty() ? QString() :
+                           doc.object().value("streams").toArray().at(0).toObject().value("avg_frame_rate").toString();
     //=======================
     int Duration = 0;
-    if(FPS_Division!="")
+    if(!FPS_Division.isEmpty())
     {
         QStringList FPS_Nums = FPS_Division.split("/");
         if(FPS_Nums.size()==2)

@@ -18,6 +18,7 @@
 */
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "utils/ffprobe_helpers.h"
 /*
 Remove a video file from the custom resolution list by row number
 */
@@ -74,52 +75,17 @@ Determine whether the video is variable frame rate
 */
 bool MainWindow::video_isVFR(QString videoPath)
 {
-    //========================= Use ffprobe to read video information ======================
-    QProcess Get_VideoFPS_process;
-    QString cmd = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+videoPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
-    QByteArray ffprobe_out;
-    runProcess(&Get_VideoFPS_process, cmd, &ffprobe_out);
-    //============= Save ffprobe output as INI text =============
-    QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
-    //================ Save the INI file ================
-    QFileInfo videoFileInfo(videoPath);
-    QString Path_video_info_ini = "";
-    QString video_dir = file_getFolderPath(videoPath);
-    int FileNo = 0;
-    do
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", videoPath);
+    QJsonArray streams = doc.object().value("streams").toArray();
+    if(!streams.isEmpty())
     {
-        FileNo++;
-        Path_video_info_ini = video_dir+"/"+file_getBaseName(videoPath)+"_videoInfo_"+QString::number(FileNo,10)+"_Waifu2xEX.ini";
+        QJsonObject stream0 = streams.at(0).toObject();
+        QString avg = stream0.value("avg_frame_rate").toString();
+        QString r = stream0.value("r_frame_rate").toString();
+        if(!avg.isEmpty() && !r.isEmpty())
+            return (avg != r);
     }
-    while(QFile::exists(Path_video_info_ini));
-    //=========
-    QFile video_info_ini(Path_video_info_ini);
-    video_info_ini.remove();
-    if (video_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) // QIODevice::ReadWrite supports reading and writing
-    {
-        QTextStream stream(&video_info_ini);
-        stream << ffprobe_output_str;
-    }
-    video_info_ini.close();
-    //================== Read parameters from INI =====================
-    QString avg_frame_rate = "";
-    QString r_frame_rate = "";
-    QSettings *configIniRead_videoInfo = new QSettings(Path_video_info_ini, QSettings::IniFormat);
-    if(configIniRead_videoInfo->value("/streams.stream.0/avg_frame_rate") != QVariant() && configIniRead_videoInfo->value("/streams.stream.0/r_frame_rate") != QVariant())
-    {
-        avg_frame_rate = configIniRead_videoInfo->value("/streams.stream.0/avg_frame_rate").toString().trimmed();
-        r_frame_rate = configIniRead_videoInfo->value("/streams.stream.0/r_frame_rate").toString().trimmed();
-    }
-    video_info_ini.remove();
-    //=====
-    if(avg_frame_rate!=""&&r_frame_rate!="")
-    {
-        return (avg_frame_rate!=r_frame_rate);
-    }
-    else
-    {
-        return true;
-    }
+    return true;
 }
 /*
 Determine whether to skip based on resolution
@@ -164,53 +130,18 @@ Directly obtain the video resolution
 QMap<QString,int> MainWindow::video_get_Resolution(QString VideoFileFullPath)
 {
     emit Send_TextBrowser_NewMessage(tr("Get resolution of the video:[")+VideoFileFullPath+"]");
-    //========================= Use ffprobe to read video information ======================
-    QProcess Get_resolution_process;
-    QString cmd = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+VideoFileFullPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
-    QByteArray ffprobe_out;
-    runProcess(&Get_resolution_process, cmd, &ffprobe_out);
-    //============= Save ffprobe output as INI text =============
-    QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
-    //================ Save the INI file ================
-    QFileInfo videoFileInfo(VideoFileFullPath);
-    QString Path_video_info_ini = "";
-    QString video_dir = file_getFolderPath(VideoFileFullPath);
-    int FileNo = 0;
-    do
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", VideoFileFullPath);
+    QJsonArray streams = doc.object().value("streams").toArray();
+    if(!streams.isEmpty())
     {
-        FileNo++;
-        Path_video_info_ini = video_dir+"/"+file_getBaseName(VideoFileFullPath)+"_videoInfo_"+QString::number(FileNo,10)+"_Waifu2xEX.ini";
-    }
-    while(QFile::exists(Path_video_info_ini));
-    //=========
-    QFile video_info_ini(Path_video_info_ini);
-    video_info_ini.remove();
-    if (video_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) // QIODevice::ReadWrite supports reading and writing
-    {
-        QTextStream stream(&video_info_ini);
-        stream << ffprobe_output_str;
-    }
-    video_info_ini.close();
-    //================== Read parameters from INI =====================
-    QSettings *configIniRead_videoInfo = new QSettings(Path_video_info_ini, QSettings::IniFormat);
-    QString width_str = "";
-    QString height_str = "";
-    if(configIniRead_videoInfo->value("/streams.stream.0/width") != QVariant() && configIniRead_videoInfo->value("/streams.stream.0/height") != QVariant())
-    {
-        width_str = configIniRead_videoInfo->value("/streams.stream.0/width").toString().trimmed();
-        height_str = configIniRead_videoInfo->value("/streams.stream.0/height").toString().trimmed();
-    }
-    video_info_ini.remove();
-    //=======================
-    if(width_str!="" && height_str!="")
-    {
-        int width_int = width_str.toInt();
-        int height_int = height_str.toInt();
-        if(width_int>0 && height_int>0)
+        QJsonObject s = streams.at(0).toObject();
+        int width = s.value("width").toInt();
+        int height = s.value("height").toInt();
+        if(width>0 && height>0)
         {
             QMap<QString,int> res_map;
-            res_map["height"] = height_int;
-            res_map["width"] = width_int;
+            res_map["height"] = height;
+            res_map["width"] = width;
             return res_map;
         }
     }
@@ -584,49 +515,13 @@ QString MainWindow::video_To_CFRMp4(QString VideoPath)
 int MainWindow::video_get_duration(QString videoPath)
 {
     emit Send_TextBrowser_NewMessage(tr("Get duration of the video:[")+videoPath+"]");
-    //========================= 调用ffprobe读取视频信息 ======================
-    QProcess Get_Duration_process;
-    QString cmd = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+videoPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
-    QByteArray ffprobe_out;
-    runProcess(&Get_Duration_process, cmd, &ffprobe_out);
-    //============= Save ffprobe output as INI text =============
-    QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
-    //================ 将ini写入文件保存 ================
-    QFileInfo videoFileInfo(videoPath);
-    QString Path_video_info_ini = "";
-    QString video_dir = file_getFolderPath(videoPath);
-    int FileNo = 0;
-    do
-    {
-        FileNo++;
-        Path_video_info_ini = video_dir+"/"+file_getBaseName(videoPath)+"_videoInfo_"+QString::number(FileNo,10)+"_Waifu2xEX.ini";
-    }
-    while(QFile::exists(Path_video_info_ini));
-    //=========
-    QFile video_info_ini(Path_video_info_ini);
-    video_info_ini.remove();
-    if (video_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
-    {
-        QTextStream stream(&video_info_ini);
-        stream << ffprobe_output_str;
-    }
-    video_info_ini.close();
-    //================== 读取ini获得参数 =====================
-    QString Duration = "";
-    QSettings *configIniRead_videoInfo = new QSettings(Path_video_info_ini, QSettings::IniFormat);
-    if(configIniRead_videoInfo->value("/format/duration") != QVariant())
-    {
-        Duration = configIniRead_videoInfo->value("/format/duration").toString().trimmed();
-    }
-    video_info_ini.remove();
-    //=======================
-    if(Duration=="")
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", videoPath);
+    double Duration_double = doc.object().value("format").toObject().value("duration").toString().toDouble();
+    if(Duration_double <= 0)
     {
         emit Send_TextBrowser_NewMessage(tr("ERROR! Unable to get the duration of the [")+videoPath+tr("]."));
         return 0;
     }
-    //=======================
-    double Duration_double = Duration.toDouble();
     int Duration_int = (int)Duration_double;
     //=====================
     return Duration_int;
@@ -810,57 +705,15 @@ QString MainWindow::video_get_bitrate_AccordingToRes_FrameFolder(QString ScaledF
 QString MainWindow::video_get_bitrate(QString videoPath,bool isReturnFullCMD,bool isVidOnly)
 {
     emit Send_TextBrowser_NewMessage(tr("Get bitrate of the video:[")+videoPath+"]");
-    //========================= 调用ffprobe读取视频信息 ======================
-    QProcess Get_Bitrate_process;
-    QString cmd = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+videoPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
-    QByteArray ffprobe_out;
-    runProcess(&Get_Bitrate_process, cmd, &ffprobe_out);
-    //============= Save ffprobe output as INI text =============
-    QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
-    //================ 将ini写入文件保存 ================
-    //创建文件夹
-    QString video_info_dir = Current_Path+"/videoInfo";
-    if(!file_isDirExist(video_info_dir))
-    {
-        file_mkDir(video_info_dir);
-    }
-    //========================
-    QFileInfo videoFileInfo(videoPath);
-    QString Path_video_info_ini = "";
-    QString video_dir = file_getFolderPath(videoPath);
-    int FileNo = 0;
-    do
-    {
-        FileNo++;
-        Path_video_info_ini = video_dir+"/"+file_getBaseName(videoPath)+"_videoInfo_"+QString::number(FileNo,10)+"_Waifu2xEX.ini";
-    }
-    while(QFile::exists(Path_video_info_ini));
-    //=========
-    QFile video_info_ini(Path_video_info_ini);
-    video_info_ini.remove();
-    if (video_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
-    {
-        QTextStream stream(&video_info_ini);
-        stream << ffprobe_output_str;
-    }
-    video_info_ini.close();
-    //================== 读取ini获得参数 =====================
-    QSettings *configIniRead_videoInfo = new QSettings(Path_video_info_ini, QSettings::IniFormat);
-    QString BitRate = "";
-    QString BitRateCMD = "";
-    if(configIniRead_videoInfo->value("/streams.stream.0/bit_rate")!=QVariant())
-    {
-        BitRate = configIniRead_videoInfo->value("/streams.stream.0/bit_rate").toString().trimmed();
-        if(isReturnFullCMD==true)BitRateCMD = " -b:v "+BitRate+" ";
-    }
-    if(BitRate.toUInt() == 0 && isVidOnly == false)
-    {
-        if(configIniRead_videoInfo->value("/format/bit_rate")!=QVariant())
-        {
-            BitRate = configIniRead_videoInfo->value("/format/bit_rate").toString().trimmed();
-            if(isReturnFullCMD==true)BitRateCMD = " -b "+BitRate+" ";
-        }
-    }
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", videoPath);
+    QJsonObject root = doc.object();
+    QJsonObject stream0 = root.value("streams").toArray().isEmpty() ? QJsonObject() : root.value("streams").toArray().at(0).toObject();
+    QString BitRate = stream0.value("bit_rate").toString();
+    QString BitRateCMD;
+    if(BitRate.isEmpty() && !isVidOnly)
+        BitRate = root.value("format").toObject().value("bit_rate").toString();
+    if(isReturnFullCMD && !BitRate.isEmpty())
+        BitRateCMD = QString(" %1 %2 ").arg(isVidOnly ? "-b:v" : "-b").arg(BitRate);
     //=======================
     if(BitRate.toUInt() == 0)
     {
@@ -869,12 +722,10 @@ QString MainWindow::video_get_bitrate(QString videoPath,bool isReturnFullCMD,boo
     //=======================
     if(isReturnFullCMD==true && BitRate!="" && BitRateCMD!="")
     {
-        video_info_ini.remove();
         return BitRateCMD;
     }
     else
     {
-        video_info_ini.remove();
         return BitRate;
     }
 }
@@ -883,99 +734,27 @@ QString MainWindow::video_get_bitrate(QString videoPath,bool isReturnFullCMD,boo
 */
 QString MainWindow::video_get_fps(QString videoPath)
 {
-    //========================= 调用ffprobe读取视频信息 ======================
-    QProcess Get_VideoFPS_process;
-    QString cmd = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+videoPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
-    QByteArray ffprobe_out;
-    runProcess(&Get_VideoFPS_process, cmd, &ffprobe_out);
-    //============= Save ffprobe output as INI text =============
-    QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
-    //================ 将ini写入文件保存 ================
-    QFileInfo videoFileInfo(videoPath);
-    QString Path_video_info_ini = "";
-    QString video_dir = file_getFolderPath(videoPath);
-    int FileNo = 0;
-    do
-    {
-        FileNo++;
-        Path_video_info_ini = video_dir+"/"+file_getBaseName(videoPath)+"_videoInfo_"+QString::number(FileNo,10)+"_Waifu2xEX.ini";
-    }
-    while(QFile::exists(Path_video_info_ini));
-    //=========
-    QFile video_info_ini(Path_video_info_ini);
-    video_info_ini.remove();
-    if (video_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
-    {
-        QTextStream stream(&video_info_ini);
-        stream << ffprobe_output_str;
-    }
-    video_info_ini.close();
-    //================== 读取ini获得参数 =====================
-    QString FPS_Division = "";
-    QSettings *configIniRead_videoInfo = new QSettings(Path_video_info_ini, QSettings::IniFormat);
-    if(configIniRead_videoInfo->value("/streams.stream.0/avg_frame_rate") != QVariant())
-    {
-        FPS_Division = configIniRead_videoInfo->value("/streams.stream.0/avg_frame_rate").toString().trimmed();
-    }
-    video_info_ini.remove();
-    //=======================
-    if(FPS_Division=="")
-    {
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", videoPath);
+    QString fpsDiv = doc.object().value("streams").toArray().isEmpty() ? QString() :
+                     doc.object().value("streams").toArray().at(0).toObject().value("avg_frame_rate").toString();
+    if(fpsDiv.isEmpty())
         return "0.0";
-    }
-    //=======================
-    QStringList FPS_Nums = FPS_Division.split("/");
-    if(FPS_Nums.size()!=2)
-    {
+    QStringList nums = fpsDiv.split("/");
+    if(nums.size()!=2)
         return "0.0";
-    }
-    double FPS_Num_0 = FPS_Nums.at(0).toDouble();
-    double FPS_Num_1 = FPS_Nums.at(1).toDouble();
-    if(FPS_Num_0<=0||FPS_Num_1<=0)
-    {
+    double n0 = nums.at(0).toDouble();
+    double n1 = nums.at(1).toDouble();
+    if(n0<=0 || n1<=0)
         return "0.0";
-    }
-    return FPS_Division;
+    return fpsDiv;
 }
 
 int MainWindow::video_get_frameNum(QString videoPath)
 {
-    //========================= 调用ffprobe读取视频信息 ======================
-    QProcess Get_VideoFrameNumDigits_process;
-    QString cmd = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+videoPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
-    QByteArray ffprobe_out;
-    runProcess(&Get_VideoFrameNumDigits_process, cmd, &ffprobe_out);
-    //============= Save ffprobe output as INI text =============
-    QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
-    //================ 将ini写入文件保存 ================
-    QFileInfo videoFileInfo(videoPath);
-    QString Path_video_info_ini = "";
-    QString video_dir = file_getFolderPath(videoPath);
-    int FileNo = 0;
-    do
-    {
-        FileNo++;
-        Path_video_info_ini = video_dir+"/"+file_getBaseName(videoPath)+"_videoInfo_"+QString::number(FileNo,10)+"_Waifu2xEX.ini";
-    }
-    while(QFile::exists(Path_video_info_ini));
-    //=========
-    QFile video_info_ini(Path_video_info_ini);
-    video_info_ini.remove();
-    if (video_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
-    {
-        QTextStream stream(&video_info_ini);
-        stream << ffprobe_output_str;
-    }
-    video_info_ini.close();
-    //================== 读取ini获得参数 =====================
-    int FrameNum = 0;
-    QSettings *configIniRead_videoInfo = new QSettings(Path_video_info_ini, QSettings::IniFormat);
-    if(configIniRead_videoInfo->value("/streams.stream.0/nb_frames") != QVariant())
-    {
-        FrameNum = configIniRead_videoInfo->value("/streams.stream.0/nb_frames").toInt();
-    }
-    video_info_ini.remove();
-    if(FrameNum<1)
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", videoPath);
+    int FrameNum = doc.object().value("streams").toArray().isEmpty() ? 0 :
+                   doc.object().value("streams").toArray().at(0).toObject().value("nb_frames").toString().toInt();
+    if(FrameNum < 1)
     {
         emit Send_TextBrowser_NewMessage(tr("ERROR! Unable to read the number of frames of the video: [")+videoPath+"]");
         return 0;
