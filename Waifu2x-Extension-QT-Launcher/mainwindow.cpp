@@ -1,4 +1,4 @@
-﻿#include "mainwindow.h"
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -48,10 +48,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     qApp->setQuitOnLastWindowClosed(true);// do not keep running when no window exists
     qApp->closeAllWindows();
 }
-/*
-Check whether the directory is writable
-*/
-*/
+// Check whether the directory is writable
 bool MainWindow::file_isDirWritable(QString DirPath)
 {
     if(DirPath.right(1)=="/")

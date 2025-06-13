@@ -715,7 +715,9 @@ QString MainWindow::FrameInterpolation_ReadConfig(bool isUhdInput,int NumOfFrame
     {
         //Multiple graphics cards
         //GPU ID
-        QString GPU_IDs_str = ui->lineEdit_MultiGPU_IDs_VFI->text().trimmed().trimmed().replace("，",",").remove(" ").remove("　");
+        QString GPU_IDs_str = ui->lineEdit_MultiGPU_IDs_VFI->text().trimmed().trimmed()
+                .replace(QString(QChar(0xFF0C)), ",").remove(" ")
+                .remove(QString(QChar(0x3000)));
         if(GPU_IDs_str.right(1)==",")
         {
             GPU_IDs_str = GPU_IDs_str.left(GPU_IDs_str.length() - 1);
@@ -939,7 +941,8 @@ int MainWindow::FrameInterpolation_DetectGPU_finished()
 void MainWindow::on_lineEdit_MultiGPU_IDs_VFI_editingFinished()
 {
     QString TMP_str = ui->lineEdit_MultiGPU_IDs_VFI->text();
-    TMP_str = TMP_str.trimmed().replace("，",",").remove(" ").remove("　");
+    TMP_str = TMP_str.trimmed().replace(QString(QChar(0xFF0C)), ",")
+            .remove(" ").remove(QString(QChar(0x3000)));
     ui->lineEdit_MultiGPU_IDs_VFI->setText(TMP_str);
 }
 
@@ -1044,7 +1047,9 @@ void MainWindow::on_pushButton_Verify_MultiGPU_VFI_clicked()
 {
     QString VerRes = "";
     //======
-    QString GPU_IDs_str = ui->lineEdit_MultiGPU_IDs_VFI->text().trimmed().trimmed().replace("，",",").remove(" ").remove("　");
+    QString GPU_IDs_str = ui->lineEdit_MultiGPU_IDs_VFI->text().trimmed().trimmed()
+            .replace(QString(QChar(0xFF0C)), ",").remove(" ")
+            .remove(QString(QChar(0x3000)));
     if(GPU_IDs_str.right(1)==",")
     {
         GPU_IDs_str = GPU_IDs_str.left(GPU_IDs_str.length() - 1);

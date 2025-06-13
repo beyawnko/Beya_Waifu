@@ -69,7 +69,7 @@ To do:
 - Improve automatic engine setting adjustment
 - Avoid black frame confusion and transition confusion during frame interpolation (frame number after interpolation = N*2-1)
 - Automatically convert GIF to mp4
-- After SRMD and REALSR officially add cpu support, add [★ "-1" is CPU, others are GPUs ★] to the GPU ID tooltip
+- After SRMD and REALSR officially add cpu support, add [* "-1" is CPU, others are GPUs *] to the GPU ID tooltip
 - CRF parameter adjustment support
 - Automatic folder monitoring
 ---------------------------------------------------------------------------

@@ -92,7 +92,7 @@
         <source>You should enable this option when processing Ultra High Definition videos.
 
 The software will automatically enable UHD Mode when it detects input with
-resolution higher than 3840×2160.
+resolution higher than 3840x2160.
 
 Only works when using [rife-ncnn-vulkan] engine.</source>
         <translation type="unfinished"></translation>
@@ -140,7 +140,7 @@ of threads will be adjusted automatically.</source>
     </message>
     <message>
         <location filename="mainwindow.ui" line="159"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Please donate to support the developers, so we can bring further updates for this software, thank you! (｡･∀･)ﾉﾞ &lt;/p&gt;&lt;p align=&quot;center&quot;&gt;If you don&apos;t wanna see the Donate page anymore, you can &lt;span style=&quot; color:#ff0004;&quot;&gt;get the &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#ff0004;&quot;&gt;Premium&lt;/span&gt;&lt;span style=&quot; color:#ff0004;&quot;&gt; version by support me on Patreon.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Please donate to support the developers, so we can bring further updates for this software, thank you! (^_^)/ &lt;/p&gt;&lt;p align=&quot;center&quot;&gt;If you don&apos;t wanna see the Donate page anymore, you can &lt;span style=&quot; color:#ff0004;&quot;&gt;get the &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#ff0004;&quot;&gt;Premium&lt;/span&gt;&lt;span style=&quot; color:#ff0004;&quot;&gt; version by support me on Patreon.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -395,7 +395,7 @@ same time, you need to change [Image style] settings at [Home] tab.
 
 - More suitable for processing [2D Anime] image.
 
-- [ Speed:★★  Image Quality:★★★ ]</source>
+- [ Speed:**  Image Quality:*** ]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -409,7 +409,7 @@ same time, you need to change [Image style] settings at [Home] tab.
 
 - Only supports [2D Anime] image style.
 
-- [ Speed:★☆  Image Quality:★★☆ ]</source>
+- [ Speed:**  Image Quality:*** ]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -420,7 +420,7 @@ same time, you need to change [Image style] settings at [Home] tab.
 
 - More suitable for processing [3D Real-life] images.
 
-- [ Speed:★☆  Image Quality:★★★ ]</source>
+- [ Speed:**  Image Quality:*** ]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -441,7 +441,7 @@ same time, you need to change [Image style] settings at [Home] tab.
 engine when your PC is compatible with [GPU(or cuDNN) Process mode]
 is recommended.
 
-- [ Speed:★☆  Image Quality:★★★ ]</source>
+- [ Speed:**  Image Quality:*** ]</source>
         <oldsource>Waifu2x-Caffe:
 
 - Supports [2D Anime] and [3D Real-life] image style. But not at the
@@ -453,7 +453,7 @@ same time, you need to change [Image style] settings at [Home] tab.
 only using this engine when your PC is compatible with [GPU(or cuDNN) 
 Process mode]
 
-- [ Speed:★☆  Image Quality:★★★ ]</oldsource>
+- [ Speed:**  Image Quality:*** ]</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -476,7 +476,7 @@ Process mode]
 
 - Much more slower than other engines.
 
-- [ Speed:☆  Image Quality:★★★ ]</source>
+- [ Speed:*  Image Quality:*** ]</source>
         <oldsource>RealSR-NCNN-Vulkan:
 
 - Only support [3D Real-life] image style.
@@ -485,7 +485,7 @@ Process mode]
 
 - Much more slower then other engines.
 
-- [ Speed:☆  Image Quality:★★★ ]</oldsource>
+- [ Speed:*  Image Quality:*** ]</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -564,7 +564,7 @@ the number of threads must &gt;= the number of GPUs.</oldsource>
 enabling [GPU Mode] can greatly increase the processing speed. 
 (Please make sure your PC is compatible with [GPU Mode] first)
 
-- [ Speed:★★★  Image Quality:★ ]</source>
+- [ Speed:***  Image Quality:* ]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -581,7 +581,7 @@ utilize the capabilities of your PC.
     </message>
     <message>
         <location filename="textBrowser.cpp" line="52"/>
-        <source>Please donate to support the developers, so we can bring further updates for this software, thank you! (｡･∀･)ﾉﾞ</source>
+        <source>Please donate to support the developers, so we can bring further updates for this software, thank you! (^_^)/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -719,7 +719,7 @@ supports Multi-GPU*</oldsource>
     <message>
         <location filename="mainwindow.ui" line="4024"/>
         <source>Select the GPU to use when enabling the &quot;waifu2x-ncnn-vulkan&quot; engine.
-★ &quot;-1&quot; is CPU,others are GPUs ★</source>
+* &quot;-1&quot; is CPU,others are GPUs *</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1980,8 +1980,8 @@ the software is running.</source>
 2.Select a file in the file list.
 3.Click the Apply button to set the resolution.
 
-★Scale ratio will not be applied to files which
-already have custom resolution applied.★</source>
+*Scale ratio will not be applied to files which
+already have custom resolution applied.*</source>
         <oldsource>1.Set the height and width of the resolution.
 2.Select a file in the file list.
 3.Click the Apply button to set the resolution.</oldsource>
@@ -2041,13 +2041,13 @@ then the result video will be 120 fps.</source>
         <location filename="mainwindow.ui" line="3678"/>
         <location filename="mainwindow.ui" line="3805"/>
         <location filename="mainwindow.ui" line="3874"/>
-        <source>Waifu2x-NCNN-Vulkan [Speed:★★   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Converter   [Speed:★☆   Image quality:★★☆] [2D Anime]
-Anime4K             [Speed:★★★ Image quality:★☆  ] [2D Anime]
-SRMD-NCNN-Vulkan    [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Caffe       [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-RealSR-NCNN-Vulkan  [Speed:☆     Image quality:★★★] [3D Real-life]
-SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D Real-life]</source>
+        <source>Waifu2x-NCNN-Vulkan [Speed:**   Image quality:***] [2D Anime]&amp;[3D Real-life]
+Waifu2x-Converter   [Speed:**   Image quality:***] [2D Anime]
+Anime4K             [Speed:*** Image quality:**  ] [2D Anime]
+SRMD-NCNN-Vulkan    [Speed:**   Image quality:***] [2D Anime]&amp;[3D Real-life]
+Waifu2x-Caffe       [Speed:**   Image quality:***] [2D Anime]&amp;[3D Real-life]
+RealSR-NCNN-Vulkan  [Speed:*     Image quality:***] [3D Real-life]
+SRMD-CUDA           [Speed:*** Image quality:***] [2D Anime]&amp;[3D Real-life]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2070,9 +2070,9 @@ SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D
     </message>
     <message>
         <location filename="mainwindow.ui" line="7792"/>
-        <source>RIFE-NCNN-Vulkan [Speed:★★★ Image quality:★★☆] [2D Anime]&amp;[3D Real-life]
-CAIN-NCNN-Vulkan [Speed:★★★ Image quality:★★☆] [2D Anime]&amp;[3D Real-life]
-DAIN-NCNN-Vulkan [Speed:☆     Image quality:★★★] [2D Anime]&amp;[3D Real-life]</source>
+        <source>RIFE-NCNN-Vulkan [Speed:*** Image quality:***] [2D Anime]&amp;[3D Real-life]
+CAIN-NCNN-Vulkan [Speed:*** Image quality:***] [2D Anime]&amp;[3D Real-life]
+DAIN-NCNN-Vulkan [Speed:*     Image quality:***] [2D Anime]&amp;[3D Real-life]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2209,17 +2209,17 @@ the language for the language settings to fully take effect.</source>
         <location filename="mainwindow.ui" line="10920"/>
         <source>[FFmpeg, FFprobe, ImageMagick, Gifsicle, SoX], one of the Super-Resolution engines and one of the Frame Interpolation engines must be compatible with your computer, to make sure you can use all functions in this software.
 
-Waifu2x-NCNN-Vulkan [Speed:★★   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Converter   [Speed:★☆   Image quality:★★☆] [2D Anime]
-Anime4K             [Speed:★★★ Image quality:★☆  ] [2D Anime]
-SRMD-NCNN-Vulkan    [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Caffe       [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-RealSR-NCNN-Vulkan  [Speed:☆     Image quality:★★★] [3D Real-life]
-SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D Real-life]
+Waifu2x-NCNN-Vulkan [Speed:**   Image quality:***] [2D Anime]&amp;[3D Real-life]
+Waifu2x-Converter   [Speed:**   Image quality:***] [2D Anime]
+Anime4K             [Speed:*** Image quality:**  ] [2D Anime]
+SRMD-NCNN-Vulkan    [Speed:**   Image quality:***] [2D Anime]&amp;[3D Real-life]
+Waifu2x-Caffe       [Speed:**   Image quality:***] [2D Anime]&amp;[3D Real-life]
+RealSR-NCNN-Vulkan  [Speed:*     Image quality:***] [3D Real-life]
+SRMD-CUDA           [Speed:*** Image quality:***] [2D Anime]&amp;[3D Real-life]
 
-RIFE-NCNN-Vulkan [Speed:★★★ Image quality:★★☆] [2D Anime]&amp;[3D Real-life]
-CAIN-NCNN-Vulkan [Speed:★★★ Image quality:★★☆] [2D Anime]&amp;[3D Real-life]
-DAIN-NCNN-Vulkan [Speed:☆     Image quality:★★★] [2D Anime]&amp;[3D Real-life]</source>
+RIFE-NCNN-Vulkan [Speed:*** Image quality:***] [2D Anime]&amp;[3D Real-life]
+CAIN-NCNN-Vulkan [Speed:*** Image quality:***] [2D Anime]&amp;[3D Real-life]
+DAIN-NCNN-Vulkan [Speed:*     Image quality:***] [2D Anime]&amp;[3D Real-life]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
