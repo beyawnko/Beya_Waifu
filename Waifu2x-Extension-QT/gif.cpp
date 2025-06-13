@@ -21,7 +21,7 @@
 #include "utils/ffprobe_helpers.h"
 #include "ui_mainwindow.h"
 /*
-根据行数从自定义分辨率列表移除gif文件
+Remove gif file from custom resolution list by row number
 */
 void MainWindow::Gif_RemoveFromCustResList(int RowNumber)
 {
@@ -30,7 +30,7 @@ void MainWindow::Gif_RemoveFromCustResList(int RowNumber)
 }
 
 /*
-当gif没有自定义分辨率且此时放大倍率为double,则计算一个添加到自定义列表里
+When gif has no custom resolution and the current magnification is double, calculate one and add it to the custom list
 */
 bool MainWindow::Gif_DoubleScaleRatioPrep(int RowNumber)
 {
@@ -41,9 +41,9 @@ bool MainWindow::Gif_DoubleScaleRatioPrep(int RowNumber)
     }
     else
     {
-        //===================== 获取分辨率 =============================
+        //===================== Get resolution =============================
         QMap<QString,int> Map_OrgRes = Image_Gif_Read_Resolution(SourceFile_fullPath);
-        //========= 计算新的高度宽度 ==================
+        //========= Calculate new height and width ==================
         double ScaleRatio_double = ui->doubleSpinBox_ScaleRatio_gif->value();
         int Height_new = qRound(ScaleRatio_double * Map_OrgRes["height"]);
         int width_new = qRound(ScaleRatio_double * Map_OrgRes["width"]);
@@ -52,7 +52,7 @@ bool MainWindow::Gif_DoubleScaleRatioPrep(int RowNumber)
             emit Send_TextBrowser_NewMessage("Warning! Unable to read the resolution of ["+SourceFile_fullPath+"]. This file will only be scaled to "+QString::number((int)ScaleRatio_double,10)+"X.");
             return false;
         }
-        //======== 存入自定义分辨率列表中 ============
+        //======== Store in custom resolution list ============
         QMap<QString,QString> res_map;
         res_map["fullpath"] = SourceFile_fullPath;
         res_map["height"] = QString::number(Height_new,10);
@@ -63,7 +63,7 @@ bool MainWindow::Gif_DoubleScaleRatioPrep(int RowNumber)
     }
 }
 /*
-获取gif帧间隔时间
+Get gif frame interval time
 */
 int MainWindow::Gif_getDuration(QString gifPath)
 {
@@ -97,30 +97,30 @@ int MainWindow::Gif_getDuration(QString gifPath)
     return Duration;
 }
 /*
-获取gif帧数量的位数
+Get the number of digits of gif frame count
 */
 int MainWindow::Gif_getFrameDigits(QString gifPath)
 {
     QMovie movie(gifPath);
-    int FrameCount=1+(int)log10(movie.frameCount());//获取frame位数
+    int FrameCount=1+(int)log10(movie.frameCount());//Get number of frame digits
     return FrameCount;
 }
 /*
-拆分gif
+Split gif
 */
 void MainWindow::Gif_splitGif(QString gifPath,QString SplitFramesFolderPath)
 {
     emit Send_TextBrowser_NewMessage(tr("Start splitting GIF:[")+gifPath+"]");
     int FrameDigits = Gif_getFrameDigits(gifPath);
-    //删除并新建帧文件夹
+    //Delete and recreate frame folder
     file_DelDir(SplitFramesFolderPath);
     file_mkDir(SplitFramesFolderPath);
-    //开始用convert处理
+    //Start processing with convert
     QString program = Current_Path+"/convert_waifu2xEX.exe";
     QString cmd = "\"" + program + "\"" + " -coalesce " + "\"" + gifPath + "\"" + " " + "\"" + SplitFramesFolderPath + "/%0"+QString::number(FrameDigits,10)+"d.png\"";
     QProcess SplitGIF;
     runProcess(&SplitGIF, cmd);
-    if(file_isDirEmpty(SplitFramesFolderPath))//如果拆分失败,尝试win7兼容指令
+    if(file_isDirEmpty(SplitFramesFolderPath))//If splitting fails, try win7 compatible command
     {
         QString cmd = "\"" + program + "\"" + " -coalesce " + "\"" + gifPath + "\"" + " " + "\"" + SplitFramesFolderPath + "/%%0"+QString::number(FrameDigits,10)+"d.png\"";
         QProcess SplitGIF;
@@ -129,7 +129,7 @@ void MainWindow::Gif_splitGif(QString gifPath,QString SplitFramesFolderPath)
     emit Send_TextBrowser_NewMessage(tr("Finish splitting GIF:[")+gifPath+"]");
 }
 /*
-组装gif
+Assemble gif
 */
 void MainWindow::Gif_assembleGif(QString ResGifPath,QString ScaledFramesPath,int Duration,bool CustRes_isEnabled,int CustRes_height,int CustRes_width,bool isOverScaled,QString SourceGifFullPath)
 {
@@ -170,7 +170,7 @@ void MainWindow::Gif_assembleGif(QString ResGifPath,QString ScaledFramesPath,int
         QString cmd = "\"" + program + "\" "+resize_cmd+" -delay " + QString::number(Duration, 10) + " -loop 0 \"" + ScaledFramesPath + "/*png\" \""+ResGifPath+"\"";
         QProcess AssembleGIF;
         runProcess(&AssembleGIF, cmd);
-        //======= 纠正文件名称错误(当 结果gif文件路径内有 % 符号时) ======
+        //======= Correct file name error (when there is a % symbol in the result gif file path) ======
         if(QFile::exists(ResGifPath)==false)
         {
             QFileInfo fileinfo(ResGifPath);
@@ -190,7 +190,7 @@ void MainWindow::Gif_assembleGif(QString ResGifPath,QString ScaledFramesPath,int
         }
         AssembleGIF->kill();
     }
-    //自行调整图片大小再组装
+    //Adjust image size yourself and then assemble
     if(CustRes_isEnabled || isOverScaled)
     {
         int New_width=0;
@@ -212,7 +212,7 @@ void MainWindow::Gif_assembleGif(QString ResGifPath,QString ScaledFramesPath,int
     QString cmd = "\"" + program + "\" \"" + ScaledFramesPath + "/*png\" -delay " + QString::number(Duration, 10) + " -loop 0 \""+ResGifPath+"\"";
     QProcess AssembleGIF_1;
     runProcess(&AssembleGIF_1, cmd);
-    //======= 纠正文件名称错误(当 结果gif文件路径内有 % 符号时) ======
+    //======= Correct file name error (when there is a % symbol in the result gif file path) ======
     if(QFile::exists(ResGifPath)==false)
     {
         QFileInfo fileinfo(ResGifPath);
@@ -234,7 +234,7 @@ void MainWindow::Gif_assembleGif(QString ResGifPath,QString ScaledFramesPath,int
     return;
 }
 /*
-压缩gif
+Compress gif
 */
 QString MainWindow::Gif_compressGif(QString gifPath,QString gifPath_compressd)
 {
@@ -245,24 +245,24 @@ QString MainWindow::Gif_compressGif(QString gifPath,QString gifPath_compressd)
     QProcess CompressGIF;
     runProcess(&CompressGIF, cmd);
     //======
-    //判断是否生成压缩后的gif
+    //Determine if a compressed gif was generated
     if(QFile::exists(gifPath_compressd) == false)
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+gifPath+tr("]. Error: [Can't optimize gif.]"));
-        return gifPath;//返回源文件路径
+        return gifPath;//Return source file path
     }
     //======
-    //比较文件大小,判断压缩是否有效
+    //Compare file sizes to determine if compression is effective
     QFileInfo gifPath_QFileInfo(gifPath);
     QFileInfo gifPath_compressd_QFileInfo(gifPath_compressd);
     if(gifPath_compressd_QFileInfo.size() >= gifPath_QFileInfo.size())
     {
         emit Send_TextBrowser_NewMessage(tr("Failed to optimize gif [")+gifPath+tr("] to reduce storage usage, the optimized gif file will be deleted."));
         QFile::remove(gifPath_compressd);
-        return gifPath;//返回源文件路径
+        return gifPath;//Return source file path
     }
     //======
     QFile::remove(gifPath);
     emit Send_TextBrowser_NewMessage(tr("Finish optimizing GIF:[")+gifPath+"]");
-    return gifPath_compressd;//返回处理完成的文件路径
+    return gifPath_compressd;//Return the path of the processed file
 }

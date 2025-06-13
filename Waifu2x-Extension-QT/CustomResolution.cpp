@@ -49,9 +49,9 @@ int MainWindow::CustRes_SetCustRes()
         for(int i=0; i<row_count_image; i++)
         {
             QMap<QString,QString> res_map;
-            //读取文件信息
+            //Read file information
             QString SourceFile_fullPath = Table_model_image->item(i,2)->text();
-            CustRes_remove(SourceFile_fullPath);//移除原来的设定,防止重复
+            CustRes_remove(SourceFile_fullPath);//Remove original setting to prevent repetition
             res_map["fullpath"] = SourceFile_fullPath;
             res_map["height"] = CustRes_height_qStr;
             res_map["width"] = CustRes_width_qStr;
@@ -62,9 +62,9 @@ int MainWindow::CustRes_SetCustRes()
         for(int i=0; i<row_count_gif; i++)
         {
             QMap<QString,QString> res_map;
-            //读取文件信息
+            //Read file information
             QString SourceFile_fullPath = Table_model_gif->item(i,2)->text();
-            CustRes_remove(SourceFile_fullPath);//移除原来的设定,防止重复
+            CustRes_remove(SourceFile_fullPath);//Remove original setting to prevent repetition
             res_map["fullpath"] = SourceFile_fullPath;
             res_map["height"] = CustRes_height_qStr;
             res_map["width"] = CustRes_width_qStr;
@@ -72,14 +72,14 @@ int MainWindow::CustRes_SetCustRes()
             Table_gif_CustRes_rowNumInt_HeightQString_WidthQString(i,res_map["height"],res_map["width"]);
         }
         //========
-        if(row_count_video==0)//如果列表里没视频,直接return
+        if(row_count_video==0)//If there are no videos in the list, return directly
         {
             return 0;
         }
-        //读取自定义分辨率设定
+        //Read custom resolution settings
         int CustRes_width_video=CustRes_width_spinBoxIntValue;
         int CustRes_height_video=CustRes_height_spinBoxIntValue;
-        //判断自定义分辨率是否包含奇数
+        //Judge whether the custom resolution contains odd numbers
         if(CustRes_height_spinBoxIntValue%2!=0||CustRes_width_spinBoxIntValue%2!=0)
         {
             QMessageBox *MSG = new QMessageBox();
@@ -88,19 +88,19 @@ int MainWindow::CustRes_SetCustRes()
             MSG->setIcon(QMessageBox::Warning);
             MSG->setModal(false);
             MSG->show();
-            //自动校正分辨率
+            //Automatically correct resolution
             if(CustRes_height_video%2!=0)CustRes_height_video++;
             if(CustRes_width_video%2!=0)CustRes_width_video++;
         }
         QString CustRes_height_video_qStr = QString::number(CustRes_height_video,10);
         QString CustRes_width_video_qStr = QString::number(CustRes_width_video,10);
-        //开始apply自定义分辨率设定
+        //Start applying custom resolution settings
         for(int i=0; i<row_count_video; i++)
         {
             QMap<QString,QString> res_map;
-            //读取文件信息
+            //Read file information
             QString SourceFile_fullPath = Table_model_video->item(i,2)->text();
-            CustRes_remove(SourceFile_fullPath);//移除原来的设定,防止重复
+            CustRes_remove(SourceFile_fullPath);//Remove original setting to prevent repetition
             res_map["fullpath"] = SourceFile_fullPath;
             res_map["height"] = CustRes_height_video_qStr;
             res_map["width"] = CustRes_width_video_qStr;
@@ -109,7 +109,7 @@ int MainWindow::CustRes_SetCustRes()
         }
         return 0;
     }
-    //如果没有选中任何row,则直接return
+    //If nothing is selected, pop up a window and return
     if(curRow_image==-1&&curRow_video==-1&&curRow_gif==-1)
     {
         QMessageBox *CustRes_NoItem = new QMessageBox();
@@ -120,12 +120,12 @@ int MainWindow::CustRes_SetCustRes()
         CustRes_NoItem->show();
         return 0;
     }
-    if(curRow_image >= 0)//如果已选中图片
+    if(curRow_image >= 0)//If an image is selected
     {
         QMap<QString,QString> res_map;
-        //读取文件信息
+        //Read file information
         QString SourceFile_fullPath = Table_model_image->item(curRow_image,2)->text();
-        CustRes_remove(SourceFile_fullPath);//移除原来的设定,防止重复
+        CustRes_remove(SourceFile_fullPath);//Remove original setting to prevent repetition
         res_map["fullpath"] = SourceFile_fullPath;
         res_map["height"] = CustRes_height_qStr;
         res_map["width"] = CustRes_width_qStr;
@@ -136,9 +136,9 @@ int MainWindow::CustRes_SetCustRes()
     if(curRow_gif >= 0)
     {
         QMap<QString,QString> res_map;
-        //读取文件信息
+        //Read file information
         QString SourceFile_fullPath = Table_model_gif->item(curRow_gif,2)->text();
-        CustRes_remove(SourceFile_fullPath);//移除原来的设定,防止重复
+        CustRes_remove(SourceFile_fullPath);//Remove original setting to prevent repetition
         res_map["fullpath"] = SourceFile_fullPath;
         res_map["height"] = CustRes_height_qStr;
         res_map["width"] = CustRes_width_qStr;
@@ -151,7 +151,7 @@ int MainWindow::CustRes_SetCustRes()
         //读取自定义分辨率设定
         int CustRes_width_video=CustRes_width_spinBoxIntValue;
         int CustRes_height_video=CustRes_height_spinBoxIntValue;
-        //判断自定义分辨率是否包含奇数
+        //Judge whether the custom resolution contains odd numbers
         if(CustRes_height_spinBoxIntValue%2!=0||CustRes_width_spinBoxIntValue%2!=0)
         {
             QMessageBox *MSG = new QMessageBox();
@@ -160,15 +160,15 @@ int MainWindow::CustRes_SetCustRes()
             MSG->setIcon(QMessageBox::Warning);
             MSG->setModal(false);
             MSG->show();
-            //自动校正分辨率
+            //Automatically correct resolution
             if(CustRes_height_video%2!=0)CustRes_height_video++;
             if(CustRes_width_video%2!=0)CustRes_width_video++;
         }
         //====
         QMap<QString,QString> res_map;
-        //读取文件信息
+        //Read file information
         QString SourceFile_fullPath = Table_model_video->item(curRow_video,2)->text();
-        CustRes_remove(SourceFile_fullPath);//移除原来的设定,防止重复
+        CustRes_remove(SourceFile_fullPath);//Remove original setting to prevent repetition
         res_map["fullpath"] = SourceFile_fullPath;
         res_map["height"] = QString::number(CustRes_height_video,10);
         res_map["width"] = QString::number(CustRes_width_video,10);
@@ -201,22 +201,22 @@ int MainWindow::CustRes_CancelCustRes()
         //====
         for(int i=0; i<row_count_image; i++)
         {
-            CustRes_remove(Table_model_image->item(i,2)->text());//从自定义分辨率列表移除
-            Table_image_CustRes_Cancel_rowNumInt(i);//清空指定row的自定义分辨率
+            CustRes_remove(Table_model_image->item(i,2)->text());//Remove from custom resolution list
+            Table_image_CustRes_Cancel_rowNumInt(i);//Clear custom resolution for the specified row
         }
         for(int i=0; i<row_count_gif; i++)
         {
-            CustRes_remove(Table_model_gif->item(i,2)->text());//从自定义分辨率列表移除
-            Table_gif_CustRes_Cancel_rowNumInt(i);//清空指定row的自定义分辨率
+            CustRes_remove(Table_model_gif->item(i,2)->text());//Remove from custom resolution list
+            Table_gif_CustRes_Cancel_rowNumInt(i);//Clear custom resolution for the specified row
         }
         for(int i=0; i<row_count_video; i++)
         {
-            CustRes_remove(Table_model_video->item(i,2)->text());//从自定义分辨率列表移除
-            Table_video_CustRes_Cancel_rowNumInt(i);//清空指定row的自定义分辨率
+            CustRes_remove(Table_model_video->item(i,2)->text());//Remove from custom resolution list
+            Table_video_CustRes_Cancel_rowNumInt(i);//Clear custom resolution for the specified row
         }
         return 0;
     }
-    //如果没有任何选中的,则弹窗后return
+    //If nothing is selected, pop up a window and return
     if(curRow_image==-1&&curRow_video==-1&&curRow_gif==-1)
     {
         QMessageBox *MSG = new QMessageBox();
@@ -227,25 +227,25 @@ int MainWindow::CustRes_CancelCustRes()
         MSG->show();
         return 0;
     }
-    if(curRow_image >= 0)//如果已选中图片
+    if(curRow_image >= 0)//If an image is selected
     {
         QString SourceFile_fullPath = Table_model_image->item(curRow_image,2)->text();
-        CustRes_remove(SourceFile_fullPath);//从自定义分辨率列表移除
-        Table_image_CustRes_Cancel_rowNumInt(curRow_image);//清空指定row的自定义分辨率
+        CustRes_remove(SourceFile_fullPath);//Remove from custom resolution list
+        Table_image_CustRes_Cancel_rowNumInt(curRow_image);//Clear custom resolution for the specified row
         return 0;
     }
     if(curRow_gif >= 0)
     {
         QString SourceFile_fullPath = Table_model_gif->item(curRow_gif,2)->text();
-        CustRes_remove(SourceFile_fullPath);//从自定义分辨率列表移除
-        Table_gif_CustRes_Cancel_rowNumInt(curRow_gif);//清空指定row的自定义分辨率
+        CustRes_remove(SourceFile_fullPath);//Remove from custom resolution list
+        Table_gif_CustRes_Cancel_rowNumInt(curRow_gif);//Clear custom resolution for the specified row
         return 0;
     }
     if(curRow_video >= 0)
     {
         QString SourceFile_fullPath = Table_model_video->item(curRow_video,2)->text();
-        CustRes_remove(SourceFile_fullPath);//从自定义分辨率列表移除
-        Table_video_CustRes_Cancel_rowNumInt(curRow_video);//清空指定row的自定义分辨率
+        CustRes_remove(SourceFile_fullPath);//Remove from custom resolution list
+        Table_video_CustRes_Cancel_rowNumInt(curRow_video);//Clear custom resolution for the specified row
         return 0;
     }
     return 0;
@@ -297,33 +297,33 @@ int MainWindow::CustRes_CalNewScaleRatio(QString fullpath,int Height_new,int wid
     qimage_original.load(fullpath);
     int original_height = 0;
     int original_width = 0;
-    //===================== 判断文件类型,获取分辨率 =============================
-    //判断是否为图片或gif
+    //===================== Determine file type, get resolution =============================
+    //Determine if it is an image or gif
     QFileInfo fileinfo(fullpath);
     QString file_ext_lower = fileinfo.suffix();
     QString Ext_image_str = ui->Ext_image->text();
     QStringList nameFilters_image = Ext_image_str.split(":");
     if (nameFilters_image.contains(file_ext_lower) || file_ext_lower=="gif" || file_ext_lower=="apng")
     {
-        //是图片或动态图
+        //Is an image or animated image
         QMap<QString,int> res_map = Image_Gif_Read_Resolution(fullpath);
         original_height = res_map["height"];
         original_width = res_map["width"];
     }
-    else//不是图片&动态图就是视频了
+    else//If not an image & animated image, it's a video
     {
         QMap<QString,int> res_map = video_get_Resolution(fullpath);
         original_height = res_map["height"];
         original_width = res_map["width"];
     }
-    //获取失败
+    //Failed to get
     if(original_height<=0||original_width<=0)
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+fullpath+tr("] [Unable to get resolution.]"));
         return 0;
     }
-    //=====================分别计算高和宽的放大倍数=======================
-    //==== 高 ======
+    //=====================Separately calculate the magnification of height and width=======================
+    //==== Height ======
     int ScaleRatio_height;
     double ScaleRatio_height_double = (double)Height_new/(double)original_height;
     if((ScaleRatio_height_double-(int)ScaleRatio_height_double)>0)
@@ -334,7 +334,7 @@ int MainWindow::CustRes_CalNewScaleRatio(QString fullpath,int Height_new,int wid
     {
         ScaleRatio_height = (int)(ScaleRatio_height_double);
     }
-    //==== 宽 ======
+    //==== Width ======
     int ScaleRatio_width;
     double ScaleRatio_width_double = (double)width_new/(double)original_width;
     if((ScaleRatio_width_double-(int)ScaleRatio_width_double)>0)
@@ -345,7 +345,7 @@ int MainWindow::CustRes_CalNewScaleRatio(QString fullpath,int Height_new,int wid
     {
         ScaleRatio_width = (int)(ScaleRatio_width_double);
     }
-    //========================比较决定取哪个放大倍数值返回=====================
+    //========================Compare and decide which magnification value to return=====================
     if((ScaleRatio_height<=1)&&(ScaleRatio_width<=1))
     {
         return 1;
@@ -368,35 +368,35 @@ QMap<QString, QString> MainWindow::DoubleScaleRatio_Cal_NewScaleRatio_NewHW(QStr
     qimage_original.load(fullpath);
     int original_height = 0;
     int original_width = 0;
-    //===================== 判断文件类型,获取分辨率 =============================
+    //===================== Determine file type, get resolution =============================
     bool isVideo=false;
-    //判断是否为图片或gif
+    //Determine if it is an image or gif
     QFileInfo fileinfo(fullpath);
     QString file_ext_lower = fileinfo.suffix();
     QString Ext_image_str = ui->Ext_image->text();
     QStringList nameFilters_image = Ext_image_str.split(":");
     if (nameFilters_image.contains(file_ext_lower) || file_ext_lower=="gif" || file_ext_lower=="apng")
     {
-        //是图片或动态图
+        //Is an image or animated image
         QMap<QString,int> res_map = Image_Gif_Read_Resolution(fullpath);
         original_height = res_map["height"];
         original_width = res_map["width"];
     }
-    else//不是图片&动态图就是视频了
+    else//If not an image & animated image, it's a video
     {
         isVideo=true;
         QMap<QString,int> res_map = video_get_Resolution(fullpath);
         original_height = res_map["height"];
         original_width = res_map["width"];
     }
-    //获取失败
+    //Failed to get
     if(original_height<=0||original_width<=0)
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+fullpath+tr("] [Unable to get resolution.]"));
         Res_map.clear();
         return Res_map;
     }
-    //========= 计算新的高度宽度 ==================
+    //========= Calculate new height and width ==================
     int Height_new = ScaleRatio_double * original_height;
     int width_new = ScaleRatio_double * original_width;
     if(isVideo == true)
@@ -406,8 +406,8 @@ QMap<QString, QString> MainWindow::DoubleScaleRatio_Cal_NewScaleRatio_NewHW(QStr
     }
     Res_map["Height_new"] = QString::number(Height_new,10);
     Res_map["width_new"] = QString::number(width_new,10);
-    //=====================分别计算高和宽的放大倍数=======================
-    //==== 高 ======
+    //=====================Separately calculate the magnification of height and width=======================
+    //==== Height ======
     int ScaleRatio_height;
     double ScaleRatio_height_double = (double)Height_new/(double)original_height;
     if((ScaleRatio_height_double-(int)ScaleRatio_height_double)>0)
@@ -418,7 +418,7 @@ QMap<QString, QString> MainWindow::DoubleScaleRatio_Cal_NewScaleRatio_NewHW(QStr
     {
         ScaleRatio_height = (int)(ScaleRatio_height_double);
     }
-    //==== 宽 ======
+    //==== Width ======
     int ScaleRatio_width;
     double ScaleRatio_width_double = (double)width_new/(double)original_width;
     if((ScaleRatio_width_double-(int)ScaleRatio_width_double)>0)
@@ -429,7 +429,7 @@ QMap<QString, QString> MainWindow::DoubleScaleRatio_Cal_NewScaleRatio_NewHW(QStr
     {
         ScaleRatio_width = (int)(ScaleRatio_width_double);
     }
-    //========================比较决定取哪个放大倍数值返回=====================
+    //========================Compare and decide which magnification value to return=====================
     if((ScaleRatio_height<=1)&&(ScaleRatio_width<=1))
     {
         Res_map["ScaleRatio"] = QString::number(1,10);

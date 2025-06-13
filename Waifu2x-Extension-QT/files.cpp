@@ -25,16 +25,16 @@
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
-    //如果为文件，则支持拖放
+    //If it is a file, drag and drop is supported
     if (event->mimeData()->hasFormat("text/uri-list"))
         event->acceptProposedAction();
 }
 /*
-拖放文件event
+Drag and drop file event
 */
 void MainWindow::dropEvent(QDropEvent *event)
 {
-    //重置 是否有某种类型的新文件加入 的判断标志
+    //Reset the judgment flag of whether a new file of a certain type has been added
     AddNew_gif=false;
     AddNew_image=false;
     AddNew_video=false;
@@ -42,7 +42,7 @@ void MainWindow::dropEvent(QDropEvent *event)
     QList<QUrl> urls = event->mimeData()->urls();
     if(urls.isEmpty())
         return;
-    //================== 界面管制 ========================
+    //================== UI control ========================
     ui_tableViews_setUpdatesEnabled(false);
     //================
     ui->groupBox_Setting->setEnabled(0);
@@ -57,7 +57,7 @@ void MainWindow::dropEvent(QDropEvent *event)
     QtConcurrent::run(this, &MainWindow::Read_urls, urls);
 }
 /*
-读取urls
+Read urls
 */
 void MainWindow::Read_urls(QList<QUrl> urls)
 {
@@ -84,12 +84,12 @@ void MainWindow::Read_urls(QList<QUrl> urls)
     return;
 }
 /*
-读取urls
-善后
+Read urls
+Aftermath/Cleanup
 */
 void MainWindow::Read_urls_finfished()
 {
-    //================== 解除界面管制 ========================
+    //================== Release UI control ========================
     ui_tableViews_setUpdatesEnabled(true);
     //===
     ui->groupBox_Setting->setEnabled(1);
@@ -105,7 +105,7 @@ void MainWindow::Read_urls_finfished()
     Progressbar_CurrentVal = 0;
     progressbar_clear();
     //======================
-    //如果没有增加任何文件
+    //If no files were added
     if(AddNew_gif==false&&AddNew_image==false&&AddNew_video==false)
     {
         QMessageBox *MSG = new QMessageBox();
@@ -118,17 +118,17 @@ void MainWindow::Read_urls_finfished()
     }
     if(AddNew_image)
     {
-        ui->label_DropFile->setVisible(0);//隐藏文件投放label
+        ui->label_DropFile->setVisible(0);//Hide file drop label
         ui->tableView_image->setVisible(1);
     }
     if(AddNew_gif)
     {
-        ui->label_DropFile->setVisible(0);//隐藏文件投放label
+        ui->label_DropFile->setVisible(0);//Hide file drop label
         ui->tableView_gif->setVisible(1);
     }
     if(AddNew_video)
     {
-        ui->label_DropFile->setVisible(0);//隐藏文件投放label
+        ui->label_DropFile->setVisible(0);//Hide file drop label
         ui->tableView_video->setVisible(1);
     }
     //===================
@@ -151,7 +151,7 @@ void MainWindow::Read_urls_finfished()
 
 
 /*
-添加文件&文件夹
+Add files & folders
 */
 void MainWindow::Add_File_Folder(QString Full_Path)
 {
@@ -163,7 +163,7 @@ void MainWindow::Add_File_Folder(QString Full_Path)
     }
     else
     {
-        QStringList FileNameList = file_getFileNames_in_Folder_nofilter(Full_Path);//读取合法的文件名
+        QStringList FileNameList = file_getFileNames_in_Folder_nofilter(Full_Path);//Read legal file names
         QString Full_Path_File = "";
         if(!FileNameList.isEmpty())
         {
@@ -178,8 +178,8 @@ void MainWindow::Add_File_Folder(QString Full_Path)
     }
 }
 /*
-添加文件&文件夹
-扫描子文件夹
+Add files & folders
+Scan subfolders
 */
 void MainWindow::Add_File_Folder_IncludeSubFolder(QString Full_Path)
 {
@@ -191,7 +191,7 @@ void MainWindow::Add_File_Folder_IncludeSubFolder(QString Full_Path)
     }
     else
     {
-        QStringList FileNameList = getFileNames_IncludeSubFolder(Full_Path);//读取合法的文件名
+        QStringList FileNameList = getFileNames_IncludeSubFolder(Full_Path);//Read legal file names
         QString Full_Path_File = "";
         if(!FileNameList.isEmpty())
         {
@@ -215,7 +215,7 @@ void MainWindow::Add_File_Folder_IncludeSubFolder(QString Full_Path)
     }
 }
 /*
-读取文件夹下的文件名(包括子文件夹
+Read file names in folder (including subfolders
 */
 QStringList MainWindow::getFileNames_IncludeSubFolder(QString path)
 {
@@ -239,7 +239,7 @@ QStringList MainWindow::getFileNames_IncludeSubFolder(QString path)
     return files;
 }
 /*
-扫描文件夹下文件名列表(无过滤
+Scan file name list in folder (no filter
 */
 QStringList MainWindow::file_getFileNames_in_Folder_nofilter(QString path)
 {
@@ -264,13 +264,13 @@ QStringList MainWindow::file_getFileNames_in_Folder_nofilter(QString path)
 }
 
 /*
-向文件列表和table添加文件
+Add files to file list and table
 */
 int MainWindow::FileList_Add(QString fileName, QString SourceFile_fullPath)
 {
     QFileInfo fileinfo(SourceFile_fullPath);
     QString file_ext = fileinfo.suffix().toLower();
-    //============================  判断是否为图片 ===============================
+    //============================  Determine if it is an image ===============================
     QString Ext_image_str = ui->Ext_image->text().toLower();
     QStringList nameFilters_image = Ext_image_str.split(":");
     nameFilters_image.removeAll("gif");
@@ -295,7 +295,7 @@ int MainWindow::FileList_Add(QString fileName, QString SourceFile_fullPath)
         }
         return 0;
     }
-    //============================  判断是否为视频 ===============================
+    //============================  Determine if it is a video ===============================
     QString Ext_video_str = ui->Ext_video->text().toLower();
     QStringList nameFilters_video = Ext_video_str.split(":");
     nameFilters_video.removeAll("gif");
@@ -320,7 +320,7 @@ int MainWindow::FileList_Add(QString fileName, QString SourceFile_fullPath)
         }
         return 0;
     }
-    //============================  最后只能是gif & apng ===============================
+    //============================  Finally, it can only be gif & apng ===============================
     if(file_ext=="gif" || file_ext=="apng")
     {
         int rowNum = Table_gif_get_rowNum();
@@ -344,7 +344,7 @@ int MainWindow::FileList_Add(QString fileName, QString SourceFile_fullPath)
     return 0;
 }
 /*
-判断是否已经在文件列表内
+Determine if it is already in the file list
 */
 bool MainWindow::Deduplicate_filelist(QString SourceFile_fullPath)
 {
@@ -375,7 +375,7 @@ bool MainWindow::Deduplicate_filelist(QString SourceFile_fullPath)
     return false;
 }
 /*
-文件夹是否存在
+Does the folder exist
 */
 bool MainWindow::file_isDirExist(QString SourceFile_fullPath)
 {
@@ -383,7 +383,7 @@ bool MainWindow::file_isDirExist(QString SourceFile_fullPath)
     return dir.exists();
 }
 /*
-创建文件夹
+Create folder
 */
 void MainWindow::file_mkDir(QString SourceFile_fullPath)
 {
@@ -394,7 +394,7 @@ void MainWindow::file_mkDir(QString SourceFile_fullPath)
     }
 }
 /*
-文件夹是为空
+Is the folder empty
 */
 bool MainWindow::file_isDirEmpty(QString FolderPath)
 {
@@ -403,7 +403,7 @@ bool MainWindow::file_isDirEmpty(QString FolderPath)
 }
 
 /*
-删除文件夹
+Delete folder
 */
 bool MainWindow::file_DelDir(const QString &path)
 {
@@ -416,23 +416,23 @@ bool MainWindow::file_DelDir(const QString &path)
     {
         return true;
     }
-    dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot); //设置过滤
-    QFileInfoList fileList = dir.entryInfoList(); // 获取所有的文件信息
-    foreach (QFileInfo file, fileList)  //遍历文件信息
+    dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot); //Set filter
+    QFileInfoList fileList = dir.entryInfoList(); // Get all file information
+    foreach (QFileInfo file, fileList)  //Traverse file information
     {
-        if (file.isFile())  // 是文件，删除
+        if (file.isFile())  // Is a file, delete
         {
             file.dir().remove(file.fileName());
         }
-        else   // 递归删除
+        else   // Recursively delete
         {
             file_DelDir(file.absoluteFilePath());
         }
     }
-    return dir.rmpath(dir.absolutePath()); // 删除文件夹
+    return dir.rmpath(dir.absolutePath()); // Delete folder
 }
 /*
-重写的获取basename函数
+Overridden get basename function
 */
 QString MainWindow::file_getBaseName(QString path)
 {
@@ -452,7 +452,7 @@ QString MainWindow::file_getBaseName(QString path)
     return file_basename;
 }
 /*
-移动文件到回收站
+Move file to recycle bin
 */
 void MainWindow::file_MoveToTrash( QString file )
 {
@@ -477,7 +477,7 @@ void MainWindow::file_MoveToTrash( QString file )
 }
 
 /*
-获取文件夹路径(去除末尾的"/")
+Get folder path (remove trailing "/")
 */
 QString MainWindow::file_getFolderPath(QFileInfo fileInfo)
 {
@@ -489,7 +489,7 @@ QString MainWindow::file_getFolderPath(QFileInfo fileInfo)
     return folder_path;
 }
 /*
-检测文件夹是否可写入
+Check if folder is writable
 */
 bool MainWindow::file_isDirWritable(QString DirPath)
 {
@@ -500,7 +500,7 @@ bool MainWindow::file_isDirWritable(QString DirPath)
     QString TestTemp = DirPath+"/RWTest_W2xEX.tmp";
     QFile file_TestTemp(TestTemp);
     file_TestTemp.remove();
-    if (file_TestTemp.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
+    if (file_TestTemp.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite supports read and write
     {
         QTextStream stream(&file_TestTemp);
         stream << "W2xEX";
@@ -517,7 +517,7 @@ bool MainWindow::file_isDirWritable(QString DirPath)
     }
 }
 /*
-判断当前处理的文件所在的文件夹是否可以写入
+Determine if the folder where the currently processed file is located can be written
 */
 bool MainWindow::file_isFilesFolderWritable_row_image(int rowNum)
 {

@@ -286,7 +286,7 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     connect(this, SIGNAL(Send_CheckUpadte_NewUpdate(QString,QString)), this, SLOT(CheckUpadte_NewUpdate(QString,QString)));
     connect(this, SIGNAL(Send_SystemShutDown()), this, SLOT(SystemShutDown()));
     connect(this, SIGNAL(Send_Waifu2x_DumpProcessorList_converter_finished()), this, SLOT(Waifu2x_DumpProcessorList_converter_finished()));
-    connect(this, SIGNAL(Send_Read_urls_finfished()), this, SLOT(Read_urls_finfished()));
+    connect(this, SIGNAL(Send_Read_urls_finfished()), this, SLOT(Read_urls_finfished())); // Connect the signal to the correct original finishing slot
     connect(this, SIGNAL(Send_FinishedProcessing_DN()), this, SLOT(FinishedProcessing_DN()));
     connect(this, SIGNAL(Send_SRMD_DetectGPU_finished()), this, SLOT(SRMD_DetectGPU_finished()));
     connect(this, SIGNAL(Send_FrameInterpolation_DetectGPU_finished()), this, SLOT(FrameInterpolation_DetectGPU_finished()));
@@ -416,6 +416,73 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     this->activateWindow();
     this->setWindowState((this->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
     this->adjustSize();
+}
+
+void MainWindow::ProcessDroppedFilesAsync(QList<QUrl> urls)
+{
+    // Initialize progress bar variables (members of MainWindow)
+    Progressbar_MaxVal = 0;
+    Progressbar_CurrentVal = 0;
+
+    // Count total files for progress bar
+    Progressbar_MaxVal = urls.count(); // Simple count for now
+    // Emit signals to update UI from the main thread
+    QMetaObject::invokeMethod(this, "Send_PrograssBar_Range_min_max", Qt::QueuedConnection,
+                              Q_ARG(int, 0), Q_ARG(int, Progressbar_MaxVal));
+
+    QMetaObject::invokeMethod(this, [this](){
+        ui_tableViews_setUpdatesEnabled(false);
+    }, Qt::BlockingQueuedConnection);
+
+    AddNew_gif = false;
+    AddNew_image = false;
+    AddNew_video = false;
+
+    // The core loop:
+    foreach(QUrl url, urls)
+    {
+        if (waifu2x_STOP.load()) { // Check for stop requests (assuming waifu2x_STOP is an atomic bool or properly protected)
+             // Emit to main thread for UI updates
+             QMetaObject::invokeMethod(this, "Send_TextBrowser_NewMessage", Qt::QueuedConnection,
+                                       Q_ARG(QString, tr("File adding process was stopped.")));
+             break;
+        }
+
+        QString Input_path = url.toLocalFile().trimmed();
+        if(Input_path.isEmpty()) continue;
+
+        QFileInfo FileInfo_Input_path(Input_path);
+        if(FileInfo_Input_path.isDir())
+        {
+            bool scanSubFolders = false;
+            // Safely read UI state from main thread
+            QMetaObject::invokeMethod(this, [this, &scanSubFolders](){
+                scanSubFolders = ui->checkBox_ScanSubFolders->isChecked();
+            }, Qt::BlockingQueuedConnection);
+
+            if (scanSubFolders) {
+                Add_File_Folder_IncludeSubFolder(Input_path); // This function emits signals for UI updates
+            } else {
+                Add_File_Folder(Input_path); // Process only top-level directory contents
+            }
+        }
+        else // Is a file
+        {
+            Add_File_Folder(Input_path);
+        }
+        // Emit progress bar update on main thread
+        QMetaObject::invokeMethod(this, "Send_progressbar_Add", Qt::QueuedConnection);
+
+    } // end foreach
+
+    QMetaObject::invokeMethod(this, [this](){
+        ui_tableViews_setUpdatesEnabled(true);
+    }, Qt::BlockingQueuedConnection);
+
+    // After all files are processed by the loop:
+    // This signal should be connected to a slot that re-enables UI, sorts tables etc.
+    // (e.g. the existing ProcessDroppedFilesFinished or a modified Read_urls_finfished)
+    emit Send_Read_urls_finfished();
 }
 
 MainWindow::~MainWindow()
@@ -1247,6 +1314,26 @@ void MainWindow::Read_Input_paths_BrowserFile(QStringList Input_path_List)
     }
     emit Send_Read_urls_finfished();
 }
+
+
+void MainWindow::ProcessDroppedFilesFinished()
+{
+    // This function is a slot and runs in the main GUI thread.
+    // It's called when ProcessDroppedFilesAsync emits Send_Read_urls_finfished
+    this->setAcceptDrops(true);
+    // Resetting label_DropFile text and other UI updates are handled by Read_urls_finfished
+
+    ui->groupBox_Setting->setEnabled(true);
+    ui->groupBox_FileList->setEnabled(true);
+    ui->groupBox_InputExt->setEnabled(true);
+    ui->checkBox_ScanSubFolders->setEnabled(true);
+
+    // Call the original slot that handles final UI updates (table sorting, file count, start button state)
+    Read_urls_finfished();
+
+    emit Send_TextBrowser_NewMessage(tr("Finished processing dropped files."));
+}
+
 
 void MainWindow::on_pushButton_wiki_clicked()
 {
@@ -2434,7 +2521,7 @@ int MainWindow::Table_Save_Current_Table_Filelist(QString Table_FileList_ini)
     QSettings *configIniWrite = new QSettings(Table_FileList_ini, QSettings::IniFormat);
     configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8"));
     configIniWrite->setValue("/Warning/EN", "Do not modify this file! It may cause the program to crash! If problems occur after the modification, delete this file and restart the program.");
-    configIniWrite->setValue("/Warning/CN", tr("Please do not modify this file, otherwise it may cause the program to crash! If problems occur after modification, please delete this file and restart the program.")); // 请勿修改此文件，否则可能会导致程序崩溃！如果修改后出现问题，请删除此文件并重新启动程序。
+    configIniWrite->setValue("/Warning/CN", tr("Please do not modify this file, otherwise it may cause the program to crash! If problems occur after modification, please delete this file and restart the program.")); // Please do not modify this file, otherwise it may cause the program to crash! If problems occur after modification, please delete this file and restart the program.
 
     int rowCount_image = Table_model_image->rowCount();
     configIniWrite->setValue("/numOfimage", rowCount_image);
@@ -3182,6 +3269,12 @@ int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString Table_FileList_
 int MainWindow::Table_Save_Current_Table_Filelist_Finished(){emit Send_Table_Save_Current_Table_Filelist_Finished(); return 0;}
 bool MainWindow::SystemShutDown(){return false;}
 int MainWindow::Waifu2x_DumpProcessorList_converter_finished(){return 0;}
+void MainWindow::Read_urls(QList<QUrl> urls)
+{
+    qDebug() << "MainWindow::Read_urls called, dispatching to ProcessDroppedFilesAsync.";
+    // TODO: Add UI disabling logic here in a future subtask (e.g., setAcceptDrops(false), show "loading..." message)
+    QtConcurrent::run(this, &MainWindow::ProcessDroppedFilesAsync, urls);
+}
 void MainWindow::Read_urls_finfished(){}
 void MainWindow::SRMD_DetectGPU_finished(){}
 void MainWindow::video_write_VideoConfiguration(QString,int,int,bool,int,int,QString,bool,QString,QString,bool,int){}

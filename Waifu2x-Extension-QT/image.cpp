@@ -19,7 +19,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 /*
-多线程调整文件夹内图片大小
+Multi-threaded adjustment of image size in folder
 */
 void MainWindow::ImagesResize_Folder_MultiThread(int New_width,int New_height,QString ImagesFolderPath)
 {
@@ -75,8 +75,8 @@ void MainWindow::ResizeImage_MultiThread(int New_width,int New_height,QString Im
 }
 
 /*
-根据分辨率判断是否跳过
-true = 跳过
+Determine whether to skip based on resolution
+true = skip
 */
 bool MainWindow::Image_Gif_AutoSkip_CustRes(int rowNum,bool isGif)
 {
@@ -99,7 +99,7 @@ bool MainWindow::Image_Gif_AutoSkip_CustRes(int rowNum,bool isGif)
         QMap<QString,int> res_map = Image_Gif_Read_Resolution(SourceFile_fullPath);
         int original_height = res_map["height"];
         int original_width = res_map["width"];
-        if(original_height<=0||original_width<=0)//判断是否读取失败
+        if(original_height<=0||original_width<=0)//Judge whether reading failed
         {
             return false;
         }
@@ -119,7 +119,7 @@ bool MainWindow::Image_Gif_AutoSkip_CustRes(int rowNum,bool isGif)
     }
 }
 /*
-读取图片和GIF的分辨率
+Read the resolution of images and GIFs
 */
 QMap<QString,int> MainWindow::Image_Gif_Read_Resolution(QString SourceFileFullPath)
 {
@@ -165,8 +165,8 @@ QMap<QString,int> MainWindow::Image_Gif_Read_Resolution(QString SourceFileFullPa
     }
 }
 /*
-修改图片的 格式 与 图像质量
-返回修改完成后文件的路径
+Modify the format and image quality of the image
+Return the path of the file after modification is complete
 */
 QString MainWindow::SaveImageAs_FormatAndQuality(QString OriginalSourceImage_fullPath,QString ScaledImage_fullPath,bool isDenoiseLevelEnabled,int DenoiseLevel)
 {
@@ -175,7 +175,7 @@ QString MainWindow::SaveImageAs_FormatAndQuality(QString OriginalSourceImage_ful
     QString FinalFile_Folder = "";
     QString FinalFile_FullPath = "";
     int ImageQualityLevel = ui->spinBox_ImageQualityLevel->value();
-    //=========== 确定扩展名 ===================
+    //=========== Determine extension name ===================
     FinalFile_Ext = ui->comboBox_ImageSaveFormat->currentText();
     QImage QImage_OriginalSourceImage_fullPath(OriginalSourceImage_fullPath);
     if(QImage_OriginalSourceImage_fullPath.hasAlphaChannel()&&ui->checkBox_AutoDetectAlphaChannel->isChecked())
@@ -185,8 +185,8 @@ QString MainWindow::SaveImageAs_FormatAndQuality(QString OriginalSourceImage_ful
             FinalFile_Ext = "png";
         }
     }
-    //================ 判断是否要继续 ==================
-    //如果扩展名不变且画质拉满,则直接返回原图片路径
+    //================ Determine whether to continue ==================
+    //If the extension name remains unchanged and the image quality is maxed out, return the original image path directly
     QFileInfo ScaledImage_fullPath_fileinfo(ScaledImage_fullPath);
     if((FinalFile_Ext==ScaledImage_fullPath_fileinfo.suffix())&&(ImageQualityLevel==100))
     {
@@ -196,9 +196,9 @@ QString MainWindow::SaveImageAs_FormatAndQuality(QString OriginalSourceImage_ful
     QFileInfo OriginalSourceImage_fileinfo(OriginalSourceImage_fullPath);
     QString OriginalSourceImage_file_name = file_getBaseName(OriginalSourceImage_fullPath);
     QString OriginalSourceImage_file_ext = OriginalSourceImage_fileinfo.suffix();
-    //============ 确定文件夹 ==============
+    //============ Determine folder ==============
     FinalFile_Folder = file_getFolderPath(OriginalSourceImage_fileinfo);
-    //============== 确定文件名 ============
+    //============== Determine file name ============
     QString Compressed_str = "";
     if(ImageQualityLevel<100)
     {
@@ -226,7 +226,7 @@ QString MainWindow::SaveImageAs_FormatAndQuality(QString OriginalSourceImage_ful
     {
         FinalFile_FullName = OriginalSourceImage_file_name + "_waifu2x_"+QString("%1").arg(ui->doubleSpinBox_ScaleRatio_image->value())+"x"+DenoiseLevel_str+Compressed_str+OriginalExt_str+"."+FinalFile_Ext;
     }
-    //============ 组装完整路径 ==============
+    //============ Assemble full path ==============
     FinalFile_FullPath = FinalFile_Folder+"/"+FinalFile_FullName;
     //==========================
     QString program = Current_Path+"/convert_waifu2xEX.exe";
@@ -246,7 +246,7 @@ QString MainWindow::SaveImageAs_FormatAndQuality(QString OriginalSourceImage_ful
     return FinalFile_FullPath;
 }
 /*
-根据保存的格式判断是否要启用 质量等级 调整
+Determine whether to enable quality level adjustment based on the saved format
 */
 void MainWindow::on_comboBox_ImageSaveFormat_currentIndexChanged(int index)
 {

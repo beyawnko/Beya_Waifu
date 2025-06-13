@@ -161,8 +161,8 @@ int MainWindow::CheckUpadte_NewUpdate(QString update_str,QString Change_log)
         Msg.setIcon(QMessageBox::Information);
         if(ui->comboBox_language->currentIndex()==1) // Assuming index 1 is Chinese
         {
-            QAbstractButton *pYesBtn_Github = Msg.addButton(tr("Download from Github"), QMessageBox::YesRole); // 前往Github下载
-            QAbstractButton *pYesBtn_Gitee = Msg.addButton(tr("Download from Gitee"), QMessageBox::YesRole); // 前往码云下载
+            QAbstractButton *pYesBtn_Github = Msg.addButton(tr("Download from Github"), QMessageBox::YesRole); // Go to Github to download
+            QAbstractButton *pYesBtn_Gitee = Msg.addButton(tr("Download from Gitee"), QMessageBox::YesRole); // Go to Gitee to download
             Msg.addButton(QString(tr("NO")), QMessageBox::NoRole);
             Msg.exec();
             if (Msg.clickedButton() == pYesBtn_Github)QDesktopServices::openUrl(QUrl("https://github.com/AaronFeng753/Waifu2x-Extension-GUI/releases/"+update_str.trimmed()));

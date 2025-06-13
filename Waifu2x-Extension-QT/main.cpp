@@ -24,7 +24,7 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);//高分辨率屏幕支持
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);//High-resolution screen support
     QApplication a(argc,argv);
     QCommandLineParser parser;
     parser.setApplicationDescription("Waifu2x-Extension-GUI");
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     int overrideThreads = 0;
     if(parser.isSet(maxThreadsOpt))
         overrideThreads = parser.value(maxThreadsOpt).toInt();
-    a.setQuitOnLastWindowClosed(false);//隐藏无窗口时保持运行
+    a.setQuitOnLastWindowClosed(false);//Keep running when window is hidden
     MainWindow *w = new MainWindow(overrideThreads);
     w->show();
     return a.exec();
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 /*
 Change log:
 
-****************** 补全中文翻译 ***********************
+****************** Complete Chinese translation ***********************
 
 v3.41.02-beta:
 - Fix bug: Unable to assemble APNG when there are "%" in the path.
@@ -63,15 +63,15 @@ v3.31.21-beta:
 
 --------------------------------------------------------------------------
 To do:
-- APNG插件兼容性测试
-- 找一个性能更好的apng组装插件(试试ffmpeg)
-- 添加对"图片文件夹"的支持,一次处理一个文件夹.
-- 改进自动调整引擎设定
-- 插帧时避免黑帧混乱,避免转场混乱 (插帧后的帧编号 = N*2-1)
-- 自动将GIF转换为mp4
-- 在SRMD和REALSR正式加入cpu支持后, 在GPU ID tooltip上添加[★ "-1" is CPU,others are GPUs ★]
-- CRF参数调整支持
-- 自动监控文件夹
+- APNG plugin compatibility test
+- Find a better performing apng assembly plugin (try ffmpeg)
+- Add support for "image folders", process one folder at a time.
+- Improve automatic engine setting adjustment
+- Avoid black frame confusion and transition confusion during frame interpolation (frame number after interpolation = N*2-1)
+- Automatically convert GIF to mp4
+- After SRMD and REALSR officially add cpu support, add [★ "-1" is CPU, others are GPUs ★] to the GPU ID tooltip
+- CRF parameter adjustment support
+- Automatic folder monitoring
 ---------------------------------------------------------------------------
 Integrated component:
 - gifsicle version 1.92

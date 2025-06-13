@@ -20,7 +20,7 @@
 #include "ui_mainwindow.h"
 
 /*
-从网络下载文件到本地
+Download file from network to local
 */
 bool MainWindow::DownloadTo(QString OnlineLink,QString LocalPath)
 {
@@ -44,11 +44,11 @@ void MainWindow::on_checkBox_BanGitee_clicked()
 {
     if(ui->checkBox_BanGitee->isChecked() && isConnectivityTest_RawGithubusercontentCom_Running==false)
     {
-        QtConcurrent::run(this, &MainWindow::ConnectivityTest_RawGithubusercontentCom);//后台运行网络测试,判断是否可以链接raw.githubusercontent.com
+        QtConcurrent::run(this, &MainWindow::ConnectivityTest_RawGithubusercontentCom);//Run network test in the background to determine if raw.githubusercontent.com can be connected
     }
 }
 /*
-Github连通性测试
+Github Connectivity Test
 */
 void MainWindow::ConnectivityTest_RawGithubusercontentCom()
 {
@@ -75,7 +75,7 @@ void MainWindow::ConnectivityTest_RawGithubusercontentCom()
     QMutex_ConnectivityTest_RawGithubusercontentCom.unlock();
 }
 /*
-Github连通性测试--提示无法连接
+Github Connectivity Test - Prompt unable to connect
 */
 void MainWindow::Unable2Connect_RawGithubusercontentCom()
 {
