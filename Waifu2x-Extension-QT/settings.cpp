@@ -36,7 +36,7 @@ int MainWindow::Settings_Save()
     //==================== Save version identifier ==================================
     configIniWrite->setValue("/settings/VERSION", VERSION);
     //===== UI style settings =====
-    configIniWrite->setValue("/settings/DarkMode", 2); // 0=light,1=dark,2=auto
+    configIniWrite->setValue("/settings/DarkMode", 1); // 0=light,1=dark,2=auto
     //======= Save scale and denoise values  =================================
     configIniWrite->setValue("/settings/ImageScaleRatio", ui->doubleSpinBox_ScaleRatio_image->value());
     configIniWrite->setValue("/settings/GIFScaleRatio", ui->doubleSpinBox_ScaleRatio_gif->value());

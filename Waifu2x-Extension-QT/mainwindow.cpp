@@ -500,7 +500,7 @@ bool MainWindow::SystemPrefersDark() const
 
 void MainWindow::ApplyDarkStyle()
 {
-    int mode = Settings_Read_value("/settings/DarkMode", 2).toInt();
+    int mode = Settings_Read_value("/settings/DarkMode", 1).toInt();
     bool enable = false;
     if(mode == 1)
         enable = true;
