@@ -12,20 +12,36 @@ QFrame, QGroupBox {
 QPushButton {
     color: #eeeeee;
     background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #414141, stop:1 #2c2c2c);
-    border: 1px solid #555555;
+    border-top: 1px solid #5a5a5a;
+    border-left: 1px solid #555555;
+    border-right: 1px solid #4a4a4a;
+    border-bottom: 1px solid #454545;
     border-radius: 4px;
-    padding: 4px 6px;
+    padding: 5px 8px;
     /* subtle depth via shadow like padding */
 }
 QPushButton:hover {
-    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #515151, stop:1 #3b3b3b);
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #5a5a5a, stop:1 #454545);
+    border-top: 1px solid #6a6a6a;
+    border-left: 1px solid #656565;
+    border-right: 1px solid #5a5a5a;
+    border-bottom: 1px solid #555555;
 }
 QPushButton:pressed {
-    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c2c2c, stop:1 #3a3a3a);
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #252525, stop:1 #303030);
+    border-top: 1px solid #3a3a3a;
+    border-left: 1px solid #404040;
+    border-right: 1px solid #454545;
+    border-bottom: 1px solid #505050;
+    padding: 6px 7px 4px 9px;
 }
 QLineEdit, QTextEdit, QPlainTextEdit {
     background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3a3a3a, stop:1 #2d2d2d);
-    border: 1px solid #555555;
+    border-top: 1px solid #222222;
+    border-left: 1px solid #282828;
+    border-bottom: 1px solid #5a5a5a;
+    border-right: 1px solid #5a5a5a;
+    padding: 3px;
     color: #eeeeee;
     selection-background-color: #606060;
 }
@@ -38,10 +54,17 @@ QMenuBar, QMenu, QToolBar {
 QPushButton:disabled {
     background-color: #3b3b3b;
     color: #777777;
-    border-color: #4c4c4c;
+    border: 1px solid #4c4c4c; /* Ensure uniform border for flatter look */
+    padding: 5px 8px; /* Consistent padding with default state */
 }
 QPushButton:checked {
-    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3b3b3b, stop:1 #2a2a2a);
+    color: #eeeeee; /* Ensure text color consistency */
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #252525, stop:1 #303030); /* Same as pressed */
+    border-top: 1px solid #3a3a3a; /* Same as pressed */
+    border-left: 1px solid #404040; /* Same as pressed */
+    border-right: 1px solid #454545; /* Same as pressed */
+    border-bottom: 1px solid #505050; /* Same as pressed */
+    padding: 6px 7px 4px 9px; /* Same as pressed */
 }
 QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus {
     border: 1px solid #888888;
@@ -93,3 +116,118 @@ QCheckBox::indicator:checked, QRadioButton::indicator:checked {
     border: 1px solid #4c8ad9;
     background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #4c8ad9, stop:1 #3768a3);
 }
+
+/* QScrollBar Styles */
+QScrollBar:horizontal {
+    border: none; /* Remove default border */
+    background: none; /* Remove default background */
+    height: 17px; /* Includes groove and potential margin for handle overflow */
+    margin: 0px 0px 0px 0px;
+}
+
+QScrollBar::groove:horizontal {
+    border: 1px solid #222222;
+    background: #282828;
+    height: 15px; /* Height of the groove itself */
+    margin: 0px 18px 0px 18px; /* Space for arrow buttons */
+    border-radius: 7px;
+}
+
+QScrollBar::handle:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #4f4f4f, stop:1 #383838);
+    border: 1px solid #5a5a5a;
+    min-width: 20px;
+    border-radius: 7px;
+    margin: -1px 0px -1px 0px; /* Allows handle to slightly overlap groove for better feel */
+}
+
+QScrollBar::handle:horizontal:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #5f5f5f, stop:1 #484848);
+}
+
+QScrollBar::add-line:horizontal {
+    border: 1px solid #444444;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #414141, stop:1 #2c2c2c);
+    width: 16px;
+    border-radius: 4px;
+    subcontrol-origin: margin;
+    subcontrol-position: right;
+    margin-right: 0px; /* Align next to groove */
+}
+
+QScrollBar::sub-line:horizontal {
+    border: 1px solid #444444;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #414141, stop:1 #2c2c2c);
+    width: 16px;
+    border-radius: 4px;
+    subcontrol-origin: margin;
+    subcontrol-position: left;
+    margin-left: 0px; /* Align next to groove */
+}
+
+QScrollBar::add-line:horizontal:hover, QScrollBar::sub-line:horizontal:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #515151, stop:1 #3b3b3b);
+}
+
+QScrollBar::add-line:horizontal:pressed, QScrollBar::sub-line:horizontal:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c2c2c, stop:1 #3a3a3a);
+}
+
+/* Note: No specific QScrollBar::left-arrow or ::right-arrow if not using images */
+
+QScrollBar:vertical {
+    border: none;
+    background: none;
+    width: 17px; /* Includes groove and potential margin for handle overflow */
+    margin: 0px 0px 0px 0px;
+}
+
+QScrollBar::groove:vertical {
+    border: 1px solid #222222;
+    background: #282828;
+    width: 15px; /* Width of the groove itself */
+    margin: 18px 0px 18px 0px; /* Space for arrow buttons */
+    border-radius: 7px;
+}
+
+QScrollBar::handle:vertical {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #4f4f4f, stop:1 #383838);
+    border: 1px solid #5a5a5a;
+    min-height: 20px;
+    border-radius: 7px;
+    margin: 0px -1px 0px -1px; /* Allows handle to slightly overlap groove */
+}
+
+QScrollBar::handle:vertical:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #5f5f5f, stop:1 #484848);
+}
+
+QScrollBar::add-line:vertical {
+    border: 1px solid #444444;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #414141, stop:1 #2c2c2c);
+    height: 16px;
+    border-radius: 4px;
+    subcontrol-origin: margin;
+    subcontrol-position: bottom;
+    margin-bottom: 0px; /* Align below groove */
+}
+
+QScrollBar::sub-line:vertical {
+    border: 1px solid #444444;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #414141, stop:1 #2c2c2c);
+    height: 16px;
+    border-radius: 4px;
+    subcontrol-origin: margin;
+    subcontrol-position: top;
+    margin-top: 0px; /* Align above groove */
+}
+
+QScrollBar::add-line:vertical:hover, QScrollBar::sub-line:vertical:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #515151, stop:1 #3b3b3b);
+}
+
+QScrollBar::add-line:vertical:pressed, QScrollBar::sub-line:vertical:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c2c2c, stop:1 #3a3a3a);
+}
+
+/* Note: No specific QScrollBar::up-arrow or ::down-arrow if not using images */

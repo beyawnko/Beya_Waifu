@@ -142,13 +142,15 @@ QStringList MainWindow::RealESRGAN_NCNN_Vulkan_PrepareArguments(
 
 bool MainWindow::RealESRGAN_ProcessSingleFileIteratively(
     const QString &inputFile, const QString &outputFile, int targetOverallScale,
+    int originalWidth, int originalHeight, /* Added original dimensions */
     int modelNativeScale, /* Pass the native scale of the selected model */
     const QString &modelName, /* Pass the name for -n argument */
     int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob,
     bool ttaEnabled, const QString &outputFormat, int rowNumForStatusUpdate)
 {
     qDebug() << "RealESRGAN_ProcessSingleFileIteratively: Input" << inputFile << "Output" << outputFile
-             << "TargetOverallScale" << targetOverallScale << "ModelNativeScale" << modelNativeScale << "ModelName" << modelName;
+             << "TargetOverallScale" << targetOverallScale << "OrigSize:" << originalWidth << "x" << originalHeight
+             << "ModelNativeScale:" << modelNativeScale << "ModelName" << modelName;
 
     QDir tempDir;
     QString tempPathBase;
@@ -172,12 +174,23 @@ bool MainWindow::RealESRGAN_ProcessSingleFileIteratively(
 
     QString currentIterInputFile = inputFile;
     bool success = true;
+    QString lastPassOutputFile = inputFile; // Initialize with original input
 
     for (int pass = 0; pass < scaleSequence.size() && success && !Stopping; ++pass) {
-        bool isLast = (pass == scaleSequence.size() - 1) && (currentPipelineScale == targetOverallScale);
-        QString outPath = isLast ? outputFile : tempPathBase + QString::number(pass) + "." + outputFormat.toLower();
+        // Determine if this is the last AI pass based on sequence, not yet considering final resampling.
+        // The output of the last AI pass might be a temporary file.
+        bool isLastAiPass = (pass == scaleSequence.size() - 1);
+        // If it's the last AI pass AND no resampling will be needed AND temp files are used, then write to final `outputFile`.
+        // However, it's simpler to always write AI passes to temp files (or `outputFile` if only one pass and no resampling).
+        // Let's keep intermediate files in tempDir.
+        lastPassOutputFile = tempPathBase + QString::number(pass) + "." + outputFormat.toLower();
+        if (scaleSequence.size() == 1) { // Only one pass, could directly use outputFile if no resampling expected
+            // To simplify, always use temp for AI output, then resample/copy.
+            // This avoids complex conditions here.
+        }
 
-        QFileInfo outInfo(outPath);
+
+        QFileInfo outInfo(lastPassOutputFile);
         QDir outDir(outInfo.path());
         if (!outDir.exists() && !outDir.mkpath(".")) {
             qDebug() << "RealESRGAN ProcessSingle: Failed to create output directory for pass:" << outInfo.path();
@@ -208,34 +221,53 @@ bool MainWindow::RealESRGAN_ProcessSingleFileIteratively(
             break;
         }
 
-        if (!QFile::exists(outPath)) {
-            qDebug() << "RealESRGAN Pass" << pass+1 << "output missing:" << outPath;
+        if (!QFile::exists(lastPassOutputFile)) {
+            qDebug() << "RealESRGAN Pass" << pass+1 << "output missing:" << lastPassOutputFile;
             success = false;
             break;
         }
 
-        currentIterInputFile = outPath;
+        currentIterInputFile = lastPassOutputFile; // Output of this pass is input for the next, or the final AI output
     }
 
-    if (success && currentPipelineScale != targetOverallScale && !Stopping) {
-        if (currentPipelineScale > targetOverallScale) {
-            qDebug() << "RealESRGAN: Downscaling needed from" << currentPipelineScale << "x to" << targetOverallScale << "x for" << outputFile;
-            if (currentIterInputFile != outputFile) {
-                if (QFile::exists(outputFile)) QFile::remove(outputFile);
-                if (!QFile::copy(currentIterInputFile, outputFile)) {
-                    qDebug() << "RealESRGAN: Failed to copy for eventual downscaling."; success = false;
-                }
-            }
-            // Actual downscaling step is conceptually here. The main app would call a resizer.
-            // This function's responsibility ends with outputting the model-scaled image.
-            // ShowMessageBox("Information", tr("RealESRGAN: Output is at %1x, further downscaling to %2x is required (not automatically performed by this function).").arg(currentPipelineScale).arg(targetOverallScale), QMessageBox::Information);
-             emit Send_TextBrowser_NewMessage(tr("RealESRGAN: Output is at %1x, user requested %2x. Manual/post-process downscale may be needed.").arg(currentPipelineScale).arg(targetOverallScale));
+    if (success && !Stopping) {
+        QImage imageAfterAiPasses(currentIterInputFile); // Load the result of the last AI pass
+        if (imageAfterAiPasses.isNull()) {
+            qDebug() << "RealESRGAN: Failed to load image after AI passes from" << currentIterInputFile;
+            success = false;
+        } else {
+            int finalTargetWidth = qRound(static_cast<double>(originalWidth) * targetOverallScale);
+            int finalTargetHeight = qRound(static_cast<double>(originalHeight) * targetOverallScale);
 
-        } else { // currentPipelineScale < targetOverallScale (should not happen with current CalculateRealESRGANScaleSequence)
-             qDebug() << "RealESRGAN: Pipeline scale" << currentPipelineScale << "is less than target" << targetOverallScale << ". Logic error or unsupported scenario.";
-             success = false; // This is an unexpected state
+            if (imageAfterAiPasses.width() != finalTargetWidth || imageAfterAiPasses.height() != finalTargetHeight) {
+                qDebug() << "RealESRGAN: Resampling from" << imageAfterAiPasses.size()
+                         << "to target" << QSize(finalTargetWidth, finalTargetHeight) << "for final output" << outputFile;
+                QImage resampledImage = imageAfterAiPasses.scaled(finalTargetWidth, finalTargetHeight,
+                                                               this->CustRes_AspectRatioMode, // Use MainWindow's member
+                                                               Qt::SmoothTransformation);
+                if (!resampledImage.save(outputFile)) {
+                    qDebug() << "RealESRGAN: Failed to save resampled image to" << outputFile;
+                    success = false;
+                }
+            } else { // Dimensions are already correct
+                if (currentIterInputFile != outputFile) { // If last AI pass output to a temp file
+                    if (QFile::exists(outputFile)) QFile::remove(outputFile); // Ensure target is clean
+                    if (!QFile::copy(currentIterInputFile, outputFile)) {
+                        qDebug() << "RealESRGAN: Failed to copy final image from" << currentIterInputFile << "to" << outputFile;
+                        success = false;
+                    }
+                }
+                // If currentIterInputFile IS outputFile, it's already in place.
+            }
         }
     }
+    // The old message about manual downscaling is removed as this resampling step handles it.
+    // The `currentPipelineScale` vs `targetOverallScale` check might still be useful for logging/debugging.
+    if (currentPipelineScale != targetOverallScale && success && !Stopping) {
+         qDebug() << "RealESRGAN: AI pipeline scale was" << currentPipelineScale << "x, user requested " << targetOverallScale << "x. Resampling applied.";
+         // emit Send_TextBrowser_NewMessage(tr("RealESRGAN: AI output at %1x, resampled to user requested %2x.").arg(currentPipelineScale).arg(targetOverallScale));
+    }
+
 
     RealESRGAN_CleanupTempDir(tempDir);
     if (Stopping && success) { return false; }
@@ -257,32 +289,67 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_Missing
     QString inputFile = item_InFile->text();
     QString outputFile = item_OutFile->text();
 
-    AlphaInfo alphaInfo = PrepareAlpha(inputFile);
-    QString rgbInputPath = alphaInfo.rgbPath;
-    QString rgbOutputPath = alphaInfo.hasAlpha ? QDir(alphaInfo.tempDir).filePath("rgb_out.png") : outputFile;
+    AlphaInfo alphaInfo = PrepareAlpha(inputFile); // This might put RGB data in a temp file
+    QString rgbInputPath = alphaInfo.rgbPath; // This is the path to the RGB data (original or temp)
+    QString rgbOutputPath = alphaInfo.hasAlpha ? QDir(alphaInfo.tempDir).filePath("rgb_final_preswap.png") : outputFile; // Final RGB before potential alpha merge
+
+    QImage originalFullImage(inputFile); // Load original user-provided file for dimensions
+    int originalImgWidth = originalFullImage.width();
+    int originalImgHeight = originalFullImage.height();
+    originalFullImage = QImage(); // Release memory
+
+    if (originalImgWidth == 0 || originalImgHeight == 0) {
+        qDebug() << "RealESRGAN_Image: Failed to load original dimensions for" << inputFile;
+        item_Status->setText(tr("Error: Reading original dimensions failed"));
+        if(alphaInfo.hasAlpha) QDir(alphaInfo.tempDir).removeRecursively();
+        // ProcessNextFile(); // Or handle error state
+        return;
+    }
+
 
     RealESRGAN_NCNN_Vulkan_ReadSettings();
 
-    int uiTargetScale = ui->doubleSpinBox_ScaleRatio_image->value();
-    if (uiTargetScale <=0) uiTargetScale = m_realesrgan_ModelNativeScale;
+    // Use doubleSpinBox_ScaleRatio_image for target scale
+    double targetOverallScaleDouble = ui->doubleSpinBox_ScaleRatio_image->value();
+    if (targetOverallScaleDouble <= 0) targetOverallScaleDouble = 1.0; // Default to 1x if invalid
 
-    QString gpuConfigToUse = m_realesrgan_GPUID;
+    // RealESRGAN_ProcessSingleFileIteratively expects int for targetOverallScale.
+    // If targetOverallScaleDouble is not an integer, the resampling step is crucial.
+    // For the AI passes, we might pass a rounded or ceiling scale, or use modelNativeScale.
+    // Let's pass the double to ProcessSingleFileIteratively and let it handle rounding for AI passes if needed,
+    // but use the precise double for final resampling target.
+    // However, the function signature expects int targetOverallScale.
+    // For now, let's assume user wants integer scaling for AI part, and resampling handles the rest.
+    // Or, better, the targetOverallScale for ProcessSingleFileIteratively should be the final multiplier.
+    // The current ProcessSingleFileIteratively takes int targetOverallScale.
+    // Let's use the doubleSpinBox value directly for calculating final dimensions,
+    // and use an int (e.g. ceil or round) for the AI pass planning.
+    // The subtask asks for `targetOverallScale` to be passed. This should be the user's desired scale.
+    // Let's assume `ui->doubleSpinBox_ScaleRatio_image->value()` can be passed as `targetOverallScale`.
+    // The function signature change to `int targetOverallScale` is fine.
+
+    int integerTargetScaleForAiPasses = qCeil(targetOverallScaleDouble);
+    if (integerTargetScaleForAiPasses <= 0) integerTargetScaleForAiPasses = 1;
+
+
+    QString gpuConfigToUse = m_realesrgan_GPUID; // Single GPU ID string
     bool isMultiConfig = false;
     if (ui->checkBox_MultiGPU_RealESRGAN->isChecked()){
-        gpuConfigToUse = RealesrganNcnnVulkan_MultiGPU();
-        isMultiConfig = !gpuConfigToUse.startsWith("-g "); // A bit of a heuristic: if it's complex, it's multi
+        gpuConfigToUse = RealesrganNcnnVulkan_MultiGPU(); // Full multi-GPU job string
+        isMultiConfig = true; // Mark that it's a multi-GPU config string
     }
 
     // This function is called by Waifu2xMainThread which should wrap it in QtConcurrent::run
     bool success = RealESRGAN_ProcessSingleFileIteratively(
-        rgbInputPath, rgbOutputPath, uiTargetScale,
+        rgbInputPath, rgbOutputPath, targetOverallScaleDouble, // Pass the double scale for accurate final resampling
+        originalImgWidth, originalImgHeight, // Pass original dimensions
         m_realesrgan_ModelNativeScale, m_realesrgan_ModelName, m_realesrgan_TileSize,
         gpuConfigToUse, isMultiConfig, m_realesrgan_TTA,
-        ui->comboBox_OutFormat_Image->currentText(),
+        ui->comboBox_OutFormat_Image->currentText(), // Output format for intermediate files if any, and final if not resampled
         rowNum
     );
 
-    if (success && alphaInfo.hasAlpha && QFile::exists(rgbOutputPath)) {
+    if (success && alphaInfo.hasAlpha && QFile::exists(rgbOutputPath)) { // rgbOutputPath now contains the resampled image
         RestoreAlpha(alphaInfo, rgbOutputPath, outputFile);
     }
     else if (!success && alphaInfo.hasAlpha) {
@@ -300,6 +367,111 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_Missing
     }
     // ProcessNextFile(); // Managed by Waifu2xMainThread
 }
+
+
+// Processes a directory of images through RealESRGAN AI passes.
+// finalAIOutputDir will be updated to the path of the directory containing the last AI pass results.
+bool MainWindow::RealESRGAN_ProcessDirectoryIteratively(
+    const QString &initialInputDir, QString &finalAIOutputDir, // finalAIOutputDir is an out-parameter
+    int targetOverallScale, int modelNativeScale,
+    const QString &modelName, // Model name for -n argument
+    int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob,
+    bool ttaEnabled, const QString &outputFormat)
+{
+    qDebug() << "RealESRGAN_ProcessDirectoryIteratively: InputDir" << initialInputDir
+             << "TargetOverallScale" << targetOverallScale << "ModelNativeScale" << modelNativeScale;
+
+    QList<int> scaleSequence = CalculateRealESRGANScaleSequence(targetOverallScale, modelNativeScale);
+    if (scaleSequence.isEmpty()) {
+        qDebug() << "RealESRGAN_ProcessDirectoryIteratively: Empty scale sequence generated.";
+        Send_TextBrowser_NewMessage(tr("Error: Could not determine AI scaling passes for RealESRGAN."));
+        return false;
+    }
+    // If targetOverallScale is 1, sequence might be [1]. If modelNativeScale is also 1, it's a 1x pass.
+    // If targetOverallScale is 1 but modelNativeScale > 1, sequence might be [modelNativeScale],
+    // which means it will upscale then require downscale. The resampling step after this function handles it.
+
+    QString currentPassInputDir = initialInputDir;
+    // Create a unique main temporary directory for this entire operation
+    QString mainProcessingTempDir = QDir::tempPath() + "/W2XEX_RealESRGAN_DirIter_Main_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QDir mainTempD(mainProcessingTempDir);
+    if (!mainTempD.mkpath(".")) {
+        qDebug() << "RealESRGAN_ProcessDirectoryIteratively: Failed to create main temp directory " << mainProcessingTempDir;
+        return false;
+    }
+    QList<QString> tempPassOutputDirs; // To clean up intermediate pass outputs in case of error
+
+    bool success = true;
+    for (int i = 0; i < scaleSequence.size(); ++i) {
+        if (Stopping) { success = false; break; }
+
+        int currentPassScaleForExe = scaleSequence[i]; // This is modelNativeScale for each pass in the sequence
+        QString passOutputDir = QDir(mainProcessingTempDir).filePath(QString("pass_%1_out").arg(i));
+        QDir().mkpath(passOutputDir); // Ensure current pass output dir is created
+        tempPassOutputDirs.append(passOutputDir);
+
+        QStringList arguments = RealESRGAN_NCNN_Vulkan_PrepareArguments(
+            currentPassInputDir, passOutputDir, currentPassScaleForExe,
+            modelName, tileSize, gpuIdOrJobConfig, isMultiGPUJob,
+            ttaEnabled, outputFormat // For directory, outputFormat is for frames
+        );
+
+        emit Send_TextBrowser_NewMessage(tr("Starting RealESRGAN directory pass %1/%2 (Model Scale: %3x)...").arg(i + 1).arg(scaleSequence.size()).arg(currentPassScaleForExe));
+
+        QProcess process;
+        QString exePath = Current_Path + "/realesrgan-ncnn-vulkan-20220424-windows/realesrgan-ncnn-vulkan.exe";
+        qDebug() << "RealESRGAN_ProcessDirectoryIteratively Pass" << i + 1 << "Cmd:" << exePath << arguments.join(" ");
+
+        process.start(exePath, arguments);
+        if (!process.waitForStarted(10000)) {
+            qDebug() << "RealESRGAN_ProcessDirectoryIteratively: Process failed to start for pass" << i + 1;
+            success = false; break;
+        }
+        if (!process.waitForFinished(-1)) { // Wait indefinitely for finish
+            qDebug() << "RealESRGAN_ProcessDirectoryIteratively: Process timed out or crashed for pass" << i + 1;
+            success = false; break;
+        }
+        if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
+            qDebug() << "RealESRGAN_ProcessDirectoryIteratively: Pass" << i + 1 << "failed. ExitCode:" << process.exitCode() << "Error:" << process.errorString();
+            qDebug() << "STDERR:" << QString::fromLocal8Bit(process.readAllStandardError());
+            qDebug() << "STDOUT:" << QString::fromLocal8Bit(process.readAllStandardOutput());
+            success = false; break;
+        }
+
+        QDir checkOutDir(passOutputDir);
+        if (checkOutDir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot).isEmpty()) {
+             qDebug() << "RealESRGAN_ProcessDirectoryIteratively: Output directory for pass " << i+1 << " is empty: " << passOutputDir;
+             if (!QDir(currentPassInputDir).entryInfoList(QDir::Files | QDir::NoDotAndDotDot).isEmpty()){
+                success = false; break;
+             }
+        }
+
+        // Cleanup previous pass's output dir if it was a temporary one (i.e., not the initialInputDir)
+        if (i > 0) { // For pass 0, currentPassInputDir is initialInputDir
+             QDir prevPassDir(currentPassInputDir); // currentPassInputDir here is tempPassOutputDirs.at(i-1)
+             if(prevPassDir.exists()) prevPassDir.removeRecursively();
+        }
+        currentPassInputDir = passOutputDir; // Output of this pass is input for the next
+    }
+
+    if (success && !Stopping) {
+        finalAIOutputDir = currentPassInputDir; // This is the directory with the final AI pass results
+    } else {
+        // If failed or stopped, clean up ALL created temporary pass directories including currentPassInputDir if it's a temp
+        for (const QString &dirPath : tempPassOutputDirs) {
+            QDir d(dirPath);
+            if(d.exists()) d.removeRecursively();
+        }
+        // Also remove the main processing temp dir
+        if(mainTempD.exists()) mainTempD.removeRecursively();
+        finalAIOutputDir.clear();
+        return false;
+    }
+    // Caller is responsible for cleaning up mainProcessingTempDir eventually,
+    // AFTER it's done with finalAIOutputDir (which is inside mainProcessingTempDir).
+    return true;
+}
+
 
 void MainWindow::RealESRGAN_NCNN_Vulkan_GIF(int rowNum) {
     // Structure similar to RealCUGAN_NCNN_Vulkan_GIF
@@ -325,35 +497,119 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_GIF(int rowNum) {
     if (framesList.isEmpty()) { /* ... */ QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolder).removeRecursively(); return; }
 
     RealESRGAN_NCNN_Vulkan_ReadSettings();
-    RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(0);
+    RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(0); // Sets m_realesrgan_gpuJobConfig_temp
 
     int targetScale = ui->spinBox_scaleRatio_gif->value();
-    if (targetScale <= 0) targetScale = m_realesrgan_ModelNativeScale;
+    if (targetScale <= 0) targetScale = m_realesrgan_ModelNativeScale; // Fallback to model's native if UI is 0 or less
 
-    bool allOk = true;
-    CurrentFileProgress_Start(sourceFileInfo.fileName(), framesList.count());
-    for (int i = 0; i < framesList.count(); ++i) { /* ... frame processing loop from RealCUGAN GIF ... */
-        if (Stopping) { allOk = false; break; }
+    // --- Alpha Preparation ---
+    emit Send_TextBrowser_NewMessage(tr("Preparing GIF frames (RGB/Alpha separation)... (RealESRGAN)"));
+    QString rgbFramesTempDir = Current_Path + "/temp_W2xEX/" + baseName + "_RealESRGAN_GIF_rgb_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QString alphaBackupTempDir = Current_Path + "/temp_W2xEX/" + baseName + "_RealESRGAN_GIF_alpha_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QDir().mkpath(rgbFramesTempDir); QDir().mkpath(alphaBackupTempDir);
+    QMap<QString, AlphaInfo> frameAlphaInfosGIF;
+    bool prepSuccessGIF = true;
+    CurrentFileProgress_Start(sourceFileInfo.fileName() + tr(" (Prep Alpha)"), framesList.count());
+    for (const QString &frameFileName : framesList) {
+        if (Stopping) { prepSuccessGIF = false; break; }
         CurrentFileProgress_progressbar_Add();
-        emit Send_TextBrowser_NewMessage(tr("Processing GIF frame %1/%2 (RealESRGAN)").arg(i+1).arg(framesList.count()));
-        QString inputFrame = QDir(splitFramesFolder).filePath(framesList.at(i));
-        QString outputFrame = QDir(scaledFramesFolder).filePath(framesList.at(i));
-
-        AlphaInfo a = PrepareAlpha(inputFrame);
-        QString iterInput = a.rgbPath;
-        QString iterOutput = a.hasAlpha ? QDir(a.tempDir).filePath("rgb_out.png") : outputFrame;
-
-        if (!RealESRGAN_ProcessSingleFileIteratively(iterInput, iterOutput, targetScale, m_realesrgan_ModelNativeScale, m_realesrgan_ModelName, m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealESRGAN->isChecked(), m_realesrgan_TTA, QFileInfo(framesList.at(i)).suffix().isEmpty() ? "png" : QFileInfo(framesList.at(i)).suffix() )) {
-            if(a.hasAlpha) QDir(a.tempDir).removeRecursively();
-            allOk = false; break;
+        QString inputFramePath = QDir(splitFramesFolder).filePath(frameFileName);
+        AlphaInfo alphaInfo = PrepareAlpha(inputFramePath);
+        frameAlphaInfosGIF.insert(frameFileName, alphaInfo);
+        QString rgbFrameDestPath = QDir(rgbFramesTempDir).filePath(frameFileName);
+        if (alphaInfo.rgbPath != inputFramePath) { // rgbPath is a temp from PrepareAlpha
+            if (!QFile::copy(alphaInfo.rgbPath, rgbFrameDestPath)) { prepSuccessGIF = false; break; }
+            if (alphaInfo.tempDir.startsWith(QDir::tempPath())) QDir(alphaInfo.tempDir).removeRecursively();
+        } else { // No alpha, rgbPath is same as input
+            if (!QFile::copy(inputFramePath, rgbFrameDestPath)) { prepSuccessGIF = false; break; }
         }
-        if (a.hasAlpha) {
-            RestoreAlpha(a, iterOutput, outputFrame);
+        if (alphaInfo.hasAlpha) {
+            QString alphaBackupPath = QDir(alphaBackupTempDir).filePath(frameFileName);
+            if (!QFile::copy(alphaInfo.alphaPath, alphaBackupPath)) { prepSuccessGIF = false; break; }
         }
     }
     CurrentFileProgress_Stop();
-    /* ... rest of GIF assembly and cleanup ... */
-    if (allOk && !Stopping) { /* ... assemble ... */ Gif_assembleGif(resultFileFullPath, scaledFramesFolder, Gif_getDuration(sourceFileFullPath), false, 0, 0, false, sourceFileFullPath); /* ... update status ... */ }
+    if (!prepSuccessGIF || Stopping) {
+        item_Status->setText(Stopping ? tr("Stopped") : tr("Error preparing alpha"));
+        QDir(splitFramesFolder).removeRecursively(); QDir(rgbFramesTempDir).removeRecursively(); QDir(alphaBackupTempDir).removeRecursively(); QDir(scaledFramesFolder).removeRecursively();
+        return; // ProcessNextFile() will be called by the main thread manager if part of batch
+    }
+
+    // --- AI Processing on RGB frames directory ---
+    QString scaledRgbFramesAIDirGIF;
+    emit Send_TextBrowser_NewMessage(tr("Starting AI processing for GIF frames... (RealESRGAN)"));
+    bool aiProcessingSuccessGIF = RealESRGAN_ProcessDirectoryIteratively(
+        rgbFramesTempDir, scaledRgbFramesAIDirGIF, targetScale, m_realesrgan_ModelNativeScale, m_realesrgan_ModelName,
+        m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealESRGAN->isChecked(),
+        m_realesrgan_TTA, "png" // Output AI pass as PNG
+    );
+    QDir(rgbFramesTempDir).removeRecursively();
+
+    if (!aiProcessingSuccessGIF || Stopping) {
+        item_Status->setText(Stopping ? tr("Stopped") : tr("Error in AI processing"));
+        QDir(splitFramesFolder).removeRecursively(); QDir(alphaBackupTempDir).removeRecursively(); QDir(scaledRgbFramesAIDirGIF).removeRecursively(); QDir(scaledFramesFolder).removeRecursively();
+        return;
+    }
+
+    // --- Alpha Restoration Loop ---
+    emit Send_TextBrowser_NewMessage(tr("Restoring alpha to GIF frames... (RealESRGAN)"));
+    QString combinedFramesAIDirGIF = Current_Path + "/temp_W2xEX/" + baseName + "_RealESRGAN_GIF_combined_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QDir().mkpath(combinedFramesAIDirGIF);
+    bool restoreAlphaSuccessGIF = true;
+    CurrentFileProgress_Start(sourceFileInfo.fileName() + tr(" (Restore Alpha)"), framesList.count());
+    for (const QString &originalFrameFileName : framesList) {
+        if (Stopping) { restoreAlphaSuccessGIF = false; break; }
+        CurrentFileProgress_progressbar_Add();
+        QString scaledRgbPath = QDir(scaledRgbFramesAIDirGIF).filePath(originalFrameFileName);
+        QString combinedDestPath = QDir(combinedFramesAIDirGIF).filePath(originalFrameFileName);
+        AlphaInfo currentAlphaInfo = frameAlphaInfosGIF.value(originalFrameFileName);
+        if (currentAlphaInfo.hasAlpha) {
+            QString alphaBackupPath = QDir(alphaBackupTempDir).filePath(originalFrameFileName);
+            if (!QFile::exists(alphaBackupPath)) { QFile::copy(scaledRgbPath, combinedDestPath); continue; }
+            AlphaInfo tempRestore = {true, scaledRgbPath, alphaBackupPath, "", false};
+            if (!RestoreAlpha(tempRestore, scaledRgbPath, combinedDestPath, true, targetScale)) { restoreAlphaSuccessGIF = false; break; }
+        } else {
+            if (!QFile::copy(scaledRgbPath, combinedDestPath)) { restoreAlphaSuccessGIF = false; break; }
+        }
+    }
+    CurrentFileProgress_Stop();
+    QDir(scaledRgbFramesAIDirGIF).removeRecursively(); QDir(alphaBackupTempDir).removeRecursively();
+    if (!restoreAlphaSuccessGIF || Stopping) {
+        item_Status->setText(Stopping ? tr("Stopped") : tr("Error restoring alpha"));
+        QDir(splitFramesFolder).removeRecursively(); QDir(combinedFramesAIDirGIF).removeRecursively(); QDir(scaledFramesFolder).removeRecursively();
+        return;
+    }
+
+    // --- Resampling Loop ---
+    emit Send_TextBrowser_NewMessage(tr("Resampling final GIF frames... (RealESRGAN)"));
+    QSize originalGifSize;
+    if (!framesList.isEmpty()) { QImage ff(QDir(splitFramesFolder).filePath(framesList.first())); if(!ff.isNull()) originalGifSize = ff.size(); }
+    if(originalGifSize.isEmpty()){ item_Status->setText(tr("Error: Get GIF original size failed")); QDir(splitFramesFolder).removeRecursively(); QDir(combinedFramesAIDirGIF).removeRecursively(); QDir(scaledFramesFolder).removeRecursively(); return;}
+    int targetFrameWidth = qRound(static_cast<double>(originalGifSize.width()) * targetScale);
+    int targetFrameHeight = qRound(static_cast<double>(originalGifSize.height()) * targetScale);
+    QStringList combinedFramesForResample = file_getFileNames_in_Folder_nofilter(combinedFramesAIDirGIF);
+    bool resamplingSuccessGIF = true;
+    CurrentFileProgress_Start(sourceFileInfo.fileName() + tr(" (Resample Output)"), combinedFramesForResample.count());
+    for (const QString &frameName : combinedFramesForResample) {
+        if (Stopping) { resamplingSuccessGIF = false; break; }
+        CurrentFileProgress_progressbar_Add();
+        QString combinedPath = QDir(combinedFramesAIDirGIF).filePath(frameName);
+        QImage img(combinedPath); if (img.isNull()) { resamplingSuccessGIF = false; continue; }
+        QImage resampled = img.scaled(targetFrameWidth, targetFrameHeight, this->CustRes_AspectRatioMode, Qt::SmoothTransformation);
+        QString finalPath = QDir(scaledFramesFolder).filePath(frameName);
+        QFileInfo finalPathInfo(finalPath); if(!QDir(finalPathInfo.path()).exists()) QDir().mkpath(finalPathInfo.path());
+        if (!resampled.save(finalPath)) { resamplingSuccessGIF = false; break; }
+    }
+    CurrentFileProgress_Stop();
+    QDir(combinedFramesAIDirGIF).removeRecursively();
+    if (!resamplingSuccessGIF || Stopping) {
+        item_Status->setText(Stopping ? tr("Stopped") : tr("Error in final resampling"));
+        QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolder).removeRecursively();
+        return;
+    }
+
+    // --- GIF Assembly ---
+    if (!Stopping) { Gif_assembleGif(resultFileFullPath, scaledFramesFolder, Gif_getDuration(sourceFileFullPath), false, 0, 0, false, sourceFileFullPath); /* ... update status ... */ }
     else if (!Stopping) item_Status->setText(tr("Error: Frame processing failed")); else item_Status->setText(tr("Stopped"));
     QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolder).removeRecursively();
 }
@@ -369,34 +625,67 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int rowNum) {
     QString sourceFileFullPath = item_InFile->text();
     QString resultFileFullPath = item_OutFile->text();
     QFileInfo sourceFileInfo(sourceFileFullPath);
-    QString baseName = sourceFileInfo.completeBaseName();
+    QString baseName = sourceFileInfo.completeBaseName(); // Used for temp folder naming
     QString splitFramesFolder = Current_Path + "/temp_W2xEX/" + baseName + "_RealESRGAN_Vid_split_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
-    QString scaledFramesFolder = Current_Path + "/temp_W2xEX/" + baseName + "_RealESRGAN_Vid_scaled_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QString scaledFramesFolder = Current_Path + "/temp_W2xEX/" + baseName + "_RealESRGAN_Vid_scaled_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz"); // Final resampled frames
     QString audioPath = Current_Path + "/temp_W2xEX/" + baseName + "_RealESRGAN_Vid_audio.m4a";
     QDir().mkpath(splitFramesFolder); QDir().mkpath(scaledFramesFolder); QFile::remove(audioPath);
+
     emit Send_TextBrowser_NewMessage(tr("Extracting video frames & audio: %1 (RealESRGAN)").arg(sourceFileFullPath));
     video_video2images(sourceFileFullPath, splitFramesFolder, audioPath);
     QStringList framesList = file_getFileNames_in_Folder_nofilter(splitFramesFolder);
-    if (framesList.isEmpty()) { /* ... */ QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolder).removeRecursively(); QFile::remove(audioPath); return; }
+    if (framesList.isEmpty()) { /* ... error handling ... */ return; }
+
     RealESRGAN_NCNN_Vulkan_ReadSettings();
-    RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(0);
+    RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(0); // Sets m_realesrgan_gpuJobConfig_temp
     int targetScale = ui->spinBox_scaleRatio_video->value();
     if (targetScale <= 0) targetScale = m_realesrgan_ModelNativeScale;
-    bool allOk = true;
-    CurrentFileProgress_Start(sourceFileInfo.fileName(), framesList.count());
-    for (int i = 0; i < framesList.count(); ++i) { /* ... frame processing loop ... */
-        if (Stopping) { allOk = false; break; }
+
+    // --- AI Processing (Directory) ---
+    QString scaledFramesFolderAI; // Output from directory processing
+    emit Send_TextBrowser_NewMessage(tr("Starting AI processing for video frames... (RealESRGAN)"));
+    bool aiSuccess = RealESRGAN_ProcessDirectoryIteratively(
+        splitFramesFolder, scaledFramesFolderAI, targetScale, m_realesrgan_ModelNativeScale, m_realesrgan_ModelName,
+        m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealESRGAN->isChecked(),
+        m_realesrgan_TTA, "png" // Output AI pass as PNG for quality
+    );
+
+    if (!aiSuccess || Stopping) {
+        item_Status->setText(Stopping ? tr("Stopped") : tr("Error in AI processing"));
+        QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolderAI).removeRecursively(); QDir(scaledFramesFolder).removeRecursively(); QFile::remove(audioPath);
+        return; // ProcessNextFile handled by caller/thread manager
+    }
+
+    // --- Resampling Loop ---
+    emit Send_TextBrowser_NewMessage(tr("Resampling AI processed video frames... (RealESRGAN)"));
+    QSize originalVideoSize = video_get_Resolution(sourceFileFullPath);
+    if(originalVideoSize.isEmpty()){ item_Status->setText(tr("Error: Get original video size failed")); QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolderAI).removeRecursively(); QDir(scaledFramesFolder).removeRecursively(); QFile::remove(audioPath); return;}
+    int targetFrameWidth = qRound(static_cast<double>(originalVideoSize.width()) * targetScale);
+    int targetFrameHeight = qRound(static_cast<double>(originalVideoSize.height()) * targetScale);
+    QStringList aiFrames = file_getFileNames_in_Folder_nofilter(scaledFramesFolderAI);
+    bool resamplingOk = true;
+    CurrentFileProgress_Start(sourceFileInfo.fileName() + tr(" (Resampling)"), aiFrames.count());
+    for (const QString &frameName : aiFrames) {
+        if (Stopping) { resamplingOk = false; break; }
         CurrentFileProgress_progressbar_Add();
-        emit Send_TextBrowser_NewMessage(tr("Processing video frame %1/%2 (RealESRGAN)").arg(i+1).arg(framesList.count()));
-        QString inputFrame = QDir(splitFramesFolder).filePath(framesList.at(i));
-        QString outputFrame = QDir(scaledFramesFolder).filePath(framesList.at(i));
-        if (!RealESRGAN_ProcessSingleFileIteratively(inputFrame, outputFrame, targetScale, m_realesrgan_ModelNativeScale, m_realesrgan_ModelName, m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealESRGAN->isChecked(), m_realesrgan_TTA, QFileInfo(framesList.at(i)).suffix().isEmpty() ? "png" : QFileInfo(framesList.at(i)).suffix() )) {
-            allOk = false; break;
-        }
+        QString aiPath = QDir(scaledFramesFolderAI).filePath(frameName);
+        QImage img(aiPath); if(img.isNull()){ resamplingOk = false; continue;}
+        QImage resampled = img.scaled(targetFrameWidth, targetFrameHeight, this->CustRes_AspectRatioMode, Qt::SmoothTransformation);
+        QString finalPath = QDir(scaledFramesFolder).filePath(frameName); // Save to final assembly folder
+        QFileInfo finalPathInfo(finalPath); if(!QDir(finalPathInfo.path()).exists()) QDir().mkpath(finalPathInfo.path());
+        if(!resampled.save(finalPath)) { resamplingOk = false; break;}
     }
     CurrentFileProgress_Stop();
-    /* ... rest of video assembly and cleanup ... */
-    if (allOk && !Stopping) { /* ... assemble ... */ video_images2video(sourceFileFullPath, resultFileFullPath, scaledFramesFolder, audioPath, false, 0, 0, false); /* ... update status ... */ }
+    QDir(scaledFramesFolderAI).removeRecursively(); // Clean up intermediate AI frames
+
+    if(!resamplingOk || Stopping){
+        item_Status->setText(Stopping ? tr("Stopped") : tr("Error in resampling"));
+        QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolder).removeRecursively(); QFile::remove(audioPath);
+        return;
+    }
+
+    // --- Video Assembly ---
+    if (!Stopping) { /* ... assemble ... */ video_images2video(sourceFileFullPath, resultFileFullPath, scaledFramesFolder, audioPath, false, 0, 0, false); /* ... update status ... */ }
     else if (!Stopping) item_Status->setText(tr("Error: Frame processing failed")); else item_Status->setText(tr("Stopped"));
     QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolder).removeRecursively(); QFile::remove(audioPath);
 }
@@ -442,16 +731,123 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video_BySegment(int rowNum) {
         QProcess ffmpegFrameExtract; QStringList extractArgs;
         QString frameOutputPattern = QDir(splitFramesFolder).filePath("frame_%0"+QString::number(CalNumDigits(video_get_frameNum(sourceFileFullPath)))+"d.png");
         extractArgs << "-nostdin" << "-y" << "-ss" << QString::number(startTime) << "-i" << sourceFileFullPath << "-t" << QString::number(currentSegmentDuration) << "-vf" << "fps=" + video_get_fps(sourceFileFullPath) << frameOutputPattern;
+        emit Send_TextBrowser_NewMessage(tr("Extracting frames for segment %1/%2... (RealESRGAN)").arg(i+1).arg(numSegments));
         ffmpegFrameExtract.start(FFMPEG_EXE_PATH_Waifu2xEX, extractArgs);
-        if (!ffmpegFrameExtract.waitForStarted(5000) || !ffmpegFrameExtract.waitForFinished(-1) || ffmpegFrameExtract.exitCode() != 0) { overallSuccess = false; break; }
+        if (!ffmpegFrameExtract.waitForStarted(5000) || !ffmpegFrameExtract.waitForFinished(-1) || ffmpegFrameExtract.exitCode() != 0) {
+            qDebug() << "RealESRGAN VideoBySegment: Failed to extract frames for segment" << i+1;
+            overallSuccess = false; break;
+        }
         QStringList framesFileName_qStrList = file_getFileNames_in_Folder_nofilter(splitFramesFolder);
-        // ... loop frames ... call RealESRGAN_ProcessSingleFileIteratively ...
-        // ... assemble segment video (processedSegmentVideoPath) ...
-        // processedVideoSegmentsPaths.append(processedSegmentVideoPath);
-        // QDir(scaledFramesFolder).removeRecursively();
+        if (framesFileName_qStrList.isEmpty() && currentSegmentDuration > 0) { /* Allow empty if duration is 0 */
+             qDebug() << "RealESRGAN VideoBySegment: No frames extracted for segment" << i+1 << "though duration was" << currentSegmentDuration;
+             // Depending on strictness, this could be an error or just an empty segment.
+        }
+
+        // --- AI Processing for the current segment's frames ---
+        QString segmentScaledFramesFolderAI; // Output from directory processing
+        emit Send_TextBrowser_NewMessage(tr("Starting AI processing for segment %1/%2 frames... (RealESRGAN)").arg(i+1).arg(numSegments));
+        bool aiSegmentSuccess = RealESRGAN_ProcessDirectoryIteratively(
+            splitFramesFolder, segmentScaledFramesFolderAI, targetScale, m_realesrgan_ModelNativeScale, m_realesrgan_ModelName,
+            m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealESRGAN->isChecked(),
+            m_realesrgan_TTA, "png"
+        );
+
+        if (!aiSegmentSuccess || Stopping) {
+            qDebug() << "RealESRGAN VideoBySegment: AI processing failed or stopped for segment" << i+1;
+            overallSuccess = false; break;
+        }
+
+        // --- Resampling Loop for the current segment's AI processed frames ---
+        emit Send_TextBrowser_NewMessage(tr("Resampling AI frames for segment %1/%2... (RealESRGAN)").arg(i+1).arg(numSegments));
+        QSize originalVideoSizeSeg = video_get_Resolution(sourceFileFullPath);
+        if(originalVideoSizeSeg.isEmpty()){
+            qDebug() << "RealESRGAN VideoBySegment: Failed to get original video dimensions for resampling segment" << i+1;
+            overallSuccess = false; break;
+        }
+        int targetSegFrameWidth = qRound(static_cast<double>(originalVideoSizeSeg.width()) * targetScale);
+        int targetSegFrameHeight = qRound(static_cast<double>(originalVideoSizeSeg.height()) * targetScale);
+
+        QStringList aiSegmentFramesList = file_getFileNames_in_Folder_nofilter(segmentScaledFramesFolderAI);
+         if (aiSegmentFramesList.isEmpty() && !framesFileName_qStrList.isEmpty()) {
+             qDebug() << "RealESRGAN VideoBySegment: AI processed folder for segment " << i+1 << " is empty, but original frames existed.";
+             overallSuccess = false; break;
+        }
+
+        bool segResamplingSuccess = true;
+        CurrentFileProgress_Start(sourceFileInfo.fileName() + tr(" (Seg %1 Resample)").arg(i+1), aiSegmentFramesList.count());
+        for (const QString &aiFrameFileName : aiSegmentFramesList) {
+            if (Stopping) { segResamplingSuccess = false; break; }
+            CurrentFileProgress_progressbar_Add();
+            QString aiFramePath = QDir(segmentScaledFramesFolderAI).filePath(aiFrameFileName);
+            QImage aiImage(aiFramePath);
+            if (aiImage.isNull()) { segResamplingSuccess = false; continue; }
+            QImage resampledImage = aiImage.scaled(targetSegFrameWidth, targetSegFrameHeight, this->CustRes_AspectRatioMode, Qt::SmoothTransformation);
+            QString finalSegFramePath = QDir(scaledFramesFolder).filePath(aiFrameFileName); // scaledFramesFolder is segment_XXX_scaled
+            QFileInfo finalSegFrameInfo(finalSegFramePath);
+            QDir finalSegFrameDir(finalSegFrameInfo.path());
+            if(!finalSegFrameDir.exists()) finalSegFrameDir.mkpath(".");
+            if (!resampledImage.save(finalSegFramePath)) { segResamplingSuccess = false; break; }
+        }
+        CurrentFileProgress_Stop();
+        QDir(segmentScaledFramesFolderAI).removeRecursively(); // Clean up intermediate AI output for segment
+
+        if (!segResamplingSuccess || Stopping) {
+            qDebug() << "RealESRGAN VideoBySegment: Resampling failed or stopped for segment" << i+1;
+            overallSuccess = false; break;
+        }
+
+        // --- Assemble video segment ---
+        QString processedSegmentVideoPath = QDir(mainTempFolder).filePath(segmentName + "_processed.mp4");
+        emit Send_TextBrowser_NewMessage(tr("Assembling video segment %1/%2... (RealESRGAN)").arg(i + 1).arg(numSegments));
+        video_images2video(sourceFileFullPath, processedSegmentVideoPath, scaledFramesFolder, "", false, 0, 0, false);
+        if (!QFile::exists(processedSegmentVideoPath)) {
+            qDebug() << "RealESRGAN VideoBySegment: Failed to assemble video segment" << i+1;
+            overallSuccess = false; break;
+        }
+        processedVideoSegmentsPaths.append(processedSegmentVideoPath);
+        QDir(splitFramesFolder).removeRecursively(); // Clean up original split frames for the segment
+        // scaledFramesFolder (containing resampled frames) for the segment is kept until final concatenation
     }
-    if (overallSuccess && !Stopping) { /* ... concatenate segments, mux audio ... */ }
+
+    if (overallSuccess && !Stopping) {
+        // ... (concatenation and muxing logic remains the same) ...
+        emit Send_TextBrowser_NewMessage(tr("Concatenating processed video segments... (RealESRGAN)"));
+        QString concatFilePath = QDir(mainTempFolder).filePath("concat_list.txt");
+        QFile concatFile(concatFilePath);
+        if (concatFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream out(&concatFile);
+            for (const QString &segmentPath : processedVideoSegmentsPaths) {
+                out << "file '" << QDir::toNativeSeparators(segmentPath) << "'\n";
+            }
+            concatFile.close();
+        } else { overallSuccess = false; }
+
+        if(overallSuccess) {
+            QString concatenatedVideoPath = QDir(mainTempFolder).filePath(sourceFileNameNoExt + "_concat_noaudio.mp4");
+            QProcess ffmpegConcat;
+            QStringList concatArgs;
+            concatArgs << "-f" << "concat" << "-safe" << "0" << "-i" << concatFilePath << "-c" << "copy" << concatenatedVideoPath;
+            ffmpegConcat.start(FFMPEG_EXE_PATH_Waifu2xEX, concatArgs);
+            if (!ffmpegConcat.waitForStarted(5000) || !ffmpegConcat.waitForFinished(-1) || ffmpegConcat.exitCode() != 0) {
+                overallSuccess = false;
+            } else {
+                emit Send_TextBrowser_NewMessage(tr("Muxing final video with audio... (RealESRGAN)"));
+                QProcess ffmpegMux;
+                QStringList muxArgs;
+                muxArgs << "-i" << concatenatedVideoPath << "-i" << fullAudioPath << "-c:v" << "copy" << "-c:a" << "aac" << "-b:a" << ui->spinBox_bitrate_audio->text()+"k" << "-shortest" << finalResultFileFullPath;
+                ffmpegMux.start(FFMPEG_EXE_PATH_Waifu2xEX, muxArgs);
+                if (!ffmpegMux.waitForStarted(5000) || !ffmpegMux.waitForFinished(-1) || ffmpegMux.exitCode() != 0) {
+                    overallSuccess = false;
+                }
+            }
+        }
+    }
     /* ... final status update & cleanup ... */
+    // Cleanup scaledFramesFolder for each segment, which were kept for concatenation
+    for (int k=0; k<numSegments; ++k) {
+        QString segScaledPath = QDir(mainTempFolder).filePath(QString("segment_%1").arg(k, 3, 10, QChar('0')) + "_scaled");
+        QDir(segScaledPath).removeRecursively();
+    }
     QDir(mainTempFolder).removeRecursively();
 }
 
@@ -462,19 +858,113 @@ void MainWindow::APNG_RealESRGANCNNVulkan(QString splitFramesFolder, QString sca
     RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(0);
     int targetScale = ui->spinBox_Scale_RealESRGAN->value(); // Use RealESRGAN tab's scale or general image scale
     if (targetScale <= 0) targetScale = m_realesrgan_ModelNativeScale;
-    QDir outputDir(scaledFramesFolder);
-    if (!outputDir.exists() && !outputDir.mkpath(".")) { return; }
-    bool allOk = true;
-    for (const QString &frameFileName : framesFileName_qStrList) { /* ... frame processing loop from RealCUGAN APNG ... */
-        if (Stopping) { allOk = false; break; }
-        emit Send_TextBrowser_NewMessage(tr("Processing APNG frame: %1 (RealESRGAN)").arg(frameFileName));
+
+    // Ensure final output scaledFramesFolder exists (it's an output param for this func, APNG_Main creates it)
+    QDir finalOutputDirCheck(scaledFramesFolder);
+    if (!finalOutputDirCheck.exists() && !finalOutputDirCheck.mkpath(".")) {
+        qDebug() << "APNG_RealESRGAN: Failed to create final output directory:" << scaledFramesFolder;
+        return;
+    }
+
+    QString sourceFileNameNoExt = QFileInfo(sourceFileFullPath).completeBaseName();
+
+    // --- Alpha Preparation ---
+    emit Send_TextBrowser_NewMessage(tr("Preparing APNG frames (RGB/Alpha separation)... (RealESRGAN)"));
+    QString rgbFramesTempDirAPNG = Current_Path + "/temp_W2xEX/" + sourceFileNameNoExt + "_RES_APNG_rgb_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QString alphaBackupTempDirAPNG = Current_Path + "/temp_W2xEX/" + sourceFileNameNoExt + "_RES_APNG_alpha_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QDir().mkpath(rgbFramesTempDirAPNG); QDir().mkpath(alphaBackupTempDirAPNG);
+    QMap<QString, AlphaInfo> frameAlphaInfosAPNG;
+    bool prepSuccessAPNG = true;
+    qDebug() << "APNG_RealESRGAN: Starting alpha prep for" << framesFileName_qStrList.count() << "frames.";
+    for (const QString &frameFileName : framesFileName_qStrList) {
+        if (Stopping) { prepSuccessAPNG = false; break; }
         QString inputFramePath = QDir(splitFramesFolder).filePath(frameFileName);
-        QString outputFramePath = QDir(scaledFramesFolder).filePath(frameFileName);
-        if (!RealESRGAN_ProcessSingleFileIteratively(inputFramePath, outputFramePath, targetScale, m_realesrgan_ModelNativeScale, m_realesrgan_ModelName, m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealESRGAN->isChecked(), m_realesrgan_TTA, QFileInfo(frameFileName).suffix().isEmpty() ? "png" : QFileInfo(frameFileName).suffix() )) {
-            allOk = false; break;
+        AlphaInfo alphaInfo = PrepareAlpha(inputFramePath);
+        frameAlphaInfosAPNG.insert(frameFileName, alphaInfo);
+        QString rgbFrameDestPath = QDir(rgbFramesTempDirAPNG).filePath(frameFileName);
+        if (alphaInfo.rgbPath != inputFramePath) {
+            if (!QFile::copy(alphaInfo.rgbPath, rgbFrameDestPath)) { prepSuccessAPNG = false; break; }
+            if (alphaInfo.tempDir.startsWith(QDir::tempPath())) QDir(alphaInfo.tempDir).removeRecursively();
+        } else {
+            if (!QFile::copy(inputFramePath, rgbFrameDestPath)) { prepSuccessAPNG = false; break; }
+        }
+        if (alphaInfo.hasAlpha) {
+            QString alphaBackupPath = QDir(alphaBackupTempDirAPNG).filePath(frameFileName);
+            if (!QFile::copy(alphaInfo.alphaPath, alphaBackupPath)) { prepSuccessAPNG = false; break; }
         }
     }
-    /* ... log success/failure ... */
+    if (!prepSuccessAPNG || Stopping) {
+        qDebug() << "APNG_RealESRGAN: Error during alpha prep or stopped.";
+        QDir(rgbFramesTempDirAPNG).removeRecursively(); QDir(alphaBackupTempDirAPNG).removeRecursively();
+        return;
+    }
+
+    // --- AI Processing ---
+    QString scaledRgbFramesAIDirAPNG;
+    emit Send_TextBrowser_NewMessage(tr("Starting AI processing for APNG frames... (RealESRGAN)"));
+    bool aiProcessingSuccessAPNG = RealESRGAN_ProcessDirectoryIteratively(
+        rgbFramesTempDirAPNG, scaledRgbFramesAIDirAPNG, targetScale, m_realesrgan_ModelNativeScale, m_realesrgan_ModelName,
+        m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealESRGAN->isChecked(),
+        m_realesrgan_TTA, "png"
+    );
+    QDir(rgbFramesTempDirAPNG).removeRecursively();
+    if (!aiProcessingSuccessAPNG || Stopping) {
+        qDebug() << "APNG_RealESRGAN: Error during AI processing or stopped.";
+        QDir(alphaBackupTempDirAPNG).removeRecursively(); QDir(scaledRgbFramesAIDirAPNG).removeRecursively();
+        return;
+    }
+
+    // --- Alpha Restoration ---
+    emit Send_TextBrowser_NewMessage(tr("Restoring alpha to APNG frames... (RealESRGAN)"));
+    QString combinedFramesAIDirAPNG = Current_Path + "/temp_W2xEX/" + sourceFileNameNoExt + "_RES_APNG_combined_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QDir().mkpath(combinedFramesAIDirAPNG);
+    bool restoreAlphaSuccessAPNG = true;
+    for (const QString &originalFrameFileName : framesFileName_qStrList) {
+        if (Stopping) { restoreAlphaSuccessAPNG = false; break; }
+        QString scaledRgbPath = QDir(scaledRgbFramesAIDirAPNG).filePath(originalFrameFileName);
+        QString combinedDestPath = QDir(combinedFramesAIDirAPNG).filePath(originalFrameFileName);
+        AlphaInfo currentAlphaInfo = frameAlphaInfosAPNG.value(originalFrameFileName);
+        if (currentAlphaInfo.hasAlpha) {
+            QString alphaBackupPath = QDir(alphaBackupTempDirAPNG).filePath(originalFrameFileName);
+            if (!QFile::exists(alphaBackupPath)) { QFile::copy(scaledRgbPath, combinedDestPath); continue; }
+            AlphaInfo tempRestore = {true, scaledRgbPath, alphaBackupPath, "", false};
+            if (!RestoreAlpha(tempRestore, scaledRgbPath, combinedDestPath, true, targetScale)) { restoreAlphaSuccessAPNG = false; break; }
+        } else {
+            if (!QFile::copy(scaledRgbPath, combinedDestPath)) { restoreAlphaSuccessAPNG = false; break; }
+        }
+    }
+    QDir(scaledRgbFramesAIDirAPNG).removeRecursively(); QDir(alphaBackupTempDirAPNG).removeRecursively();
+    if (!restoreAlphaSuccessAPNG || Stopping) {
+        qDebug() << "APNG_RealESRGAN: Error during alpha restoration or stopped.";
+        QDir(combinedFramesAIDirAPNG).removeRecursively(); return;
+    }
+
+    // --- Resampling Loop ---
+    emit Send_TextBrowser_NewMessage(tr("Resampling final APNG frames... (RealESRGAN)"));
+    QSize originalApngSize;
+    if (!framesFileName_qStrList.isEmpty()) { QImage ff(QDir(splitFramesFolder).filePath(framesFileName_qStrList.first())); if(!ff.isNull()) originalApngSize = ff.size(); }
+    if(originalApngSize.isEmpty()){ qDebug() << "APNG_RealESRGAN: Failed to get original APNG dimensions."; QDir(combinedFramesAIDirAPNG).removeRecursively(); return; }
+    int targetFrameWidth = qRound(static_cast<double>(originalApngSize.width()) * targetScale);
+    int targetFrameHeight = qRound(static_cast<double>(originalApngSize.height()) * targetScale);
+    QStringList combinedFramesForResampleAPNG = file_getFileNames_in_Folder_nofilter(combinedFramesAIDirAPNG);
+    bool resamplingSuccessAPNG = true;
+    for (const QString &frameName : combinedFramesForResampleAPNG) {
+        if (Stopping) { resamplingSuccessAPNG = false; break; }
+        QString combinedPath = QDir(combinedFramesAIDirAPNG).filePath(frameName);
+        QImage img(combinedPath); if (img.isNull()) { resamplingSuccessAPNG = false; continue; }
+        QImage resampled = img.scaled(targetFrameWidth, targetFrameHeight, this->CustRes_AspectRatioMode, Qt::SmoothTransformation);
+        QString finalPath = QDir(scaledFramesFolder).filePath(frameName); // scaledFramesFolder is the function's final output dir
+        QFileInfo finalPathInfo(finalPath); if(!QDir(finalPathInfo.path()).exists()) QDir().mkpath(finalPathInfo.path());
+        if (!resampled.save(finalPath)) { resamplingSuccessAPNG = false; break; }
+    }
+    QDir(combinedFramesAIDirAPNG).removeRecursively();
+    if (!resamplingSuccessAPNG || Stopping) {
+        qDebug() << "APNG_RealESRGAN: Error during resampling or stopped."; return;
+    }
+
+    qDebug() << "APNG_RealESRGANCNNVulkan: All frame processing completed successfully.";
+    Send_TextBrowser_NewMessage(tr("All APNG frames processed and resampled (RealESRGAN)."));
+    // APNG_Main will use frames from scaledFramesFolder.
 }
 
 void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum) {
