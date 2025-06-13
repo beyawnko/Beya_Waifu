@@ -235,8 +235,8 @@ QString MainWindow::SaveImageAs_FormatAndQuality(QString OriginalSourceImage_ful
     QString saveCmd = "\""+program+"\" \""+ScaledImage_fullPath+"\" -quality "+QString::number(ImageQualityLevel,10)+" \""+FinalFile_FullPath+"\"";
     runProcess(&SaveImageAs_QProcess, saveCmd);
     //======
-    QFileInfo *FinalFile_FullPath_QFileInfo = new QFileInfo(FinalFile_FullPath);
-    if((QFile::exists(FinalFile_FullPath)==false) || (FinalFile_FullPath_QFileInfo->size()<1))
+    QFileInfo FinalFile_FullPath_QFileInfo(FinalFile_FullPath);
+    if((QFile::exists(FinalFile_FullPath)==false) || (FinalFile_FullPath_QFileInfo.size()<1))
     {
         QFile::remove(FinalFile_FullPath);
         emit Send_TextBrowser_NewMessage(tr("Error: Can\'t convert [")+ScaledImage_fullPath+tr("] to ")+FinalFile_Ext);
