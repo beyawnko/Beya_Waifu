@@ -1418,7 +1418,7 @@ void MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString sca
         // For now, just log. APNG_Main might have its own progress update mechanism.
         qDebug() << "Processing APNG frame" << frameCount << "/" << framesFileName_qStrList.size() << ":" << frameFileName;
         Send_TextBrowser_NewMessage(tr("Processing APNG frame %1/%2: %3 (RealCUGAN)").arg(frameCount).arg(framesFileName_qStrList.size()).arg(frameFileName));
-
+    }
 
     QString sourceFileNameNoExt = QFileInfo(sourceFileFullPath).completeBaseName(); // Used for temp folder naming
 

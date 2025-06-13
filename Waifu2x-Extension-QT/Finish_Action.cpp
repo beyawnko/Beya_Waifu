@@ -18,6 +18,7 @@
 */
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QTextStream>
 
 //====== Auto shutdown =========================================================
 /*
@@ -59,6 +60,8 @@ bool MainWindow::SystemShutDown()
     QFile file(AutoShutDown);
     file.remove();
     if (file.open(QIODevice::ReadWrite | QIODevice::Text)) // QIODevice::ReadWrite allows read/write
+    {
+        QTextStream stream(&file);
         stream << "Don't delete this file!!";
     }
     //================

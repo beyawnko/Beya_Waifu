@@ -63,6 +63,10 @@
 #include <atomic> // Added for std::atomic
 #include "topsupporterslist.h"
 
+#ifndef Q_DECLARE_METATYPE
+#define Q_DECLARE_METATYPE(Type)
+#endif
+
 typedef QList<QMap<QString, QString>> QList_QMap_QStrQStr;
 Q_DECLARE_METATYPE(QList_QMap_QStrQStr)
 
