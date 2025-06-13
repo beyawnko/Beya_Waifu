@@ -25,6 +25,7 @@
 #include <QFile>
 #include <QPalette>
 #include <QColor>
+#include <QApplication>
 
 MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     : QMainWindow(parent)
@@ -519,6 +520,13 @@ void MainWindow::ApplyDarkStyle()
     else
     {
         qApp->setStyleSheet("");
+    }
+
+    for(QWidget *w : QApplication::allWidgets())
+    {
+        w->style()->unpolish(w);
+        w->style()->polish(w);
+        w->update();
     }
 }
 
