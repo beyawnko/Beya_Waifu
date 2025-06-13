@@ -98,3 +98,21 @@ Below is the start-up screen of the optional launcher:
 - Refer to the [Real-CUGAN](https://github.com/bilibili/ailab/tree/main/Real-CUGAN)
   and [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) documentation for
   detailed usage and model descriptions.
+
+## Tests
+
+The repository includes Pytest cases which exercise the RealCUGAN and RealESRGAN
+binaries on small sample images. Running the suite requires the `pytest` Python
+package and an internet connection. The tests automatically download the Linux
+releases of both upscalers if the executables are not present and place them in
+`tests/bin/`.
+
+To execute the tests from the repository root simply run:
+
+```bash
+pytest
+```
+
+The sample images used for testing are located under
+`realcugan-ncnn-vulkan SRC/images/` and in the
+`realesrgan-ncnn-vulkan-20220424-windows` folder.
