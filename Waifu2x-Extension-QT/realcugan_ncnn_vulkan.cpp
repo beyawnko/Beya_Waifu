@@ -564,20 +564,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingA
 
         QString multiGpuArgs = "";
         if (ui->checkBox_MultiGPU_RealCUGAN->isChecked()) {
-            // This needs to be properly implemented based on how RealCUGAN handles multi-GPU for single image.
-            // For now, let's assume RealcuganNcnnVulkan_MultiGPU() returns the correct string like "-g 0,1 -j 1,1"
-            // This part is complex as it depends on the specific CLI of realcugan.
-            // The placeholder RealcuganNcnnVulkan_MultiGPU just returns "Not implemented".
-            // For now, we will assume single GPU for iterative to simplify, or use the main selected GPU if multi checked.
-            // multiGpuArgs = RealcuganNcnnVulkan_MultiGPU_GetArgsForPass(); // Needs a proper function
-            // If RealcuganNcnnVulkan_MultiGPU() is meant to return a string like "-g 0,1 -j 2,2", use it.
-            // For now, let's use a simplified version or the primary GPU if multi-GPU is checked.
-            // This is a placeholder for proper multi-GPU argument construction.
-             multiGpuArgs = RealcuganNcnnVulkan_MultiGPU(); // Use RealCUGAN's own multi-GPU string constructor
-                                                                  // This needs to be RealCUGAN specific.
-                                                                  // For now, let's assume it means primary GPU with its threads
-                                                                  // if the specific RealcuganNcnnVulkan_MultiGPU() is not ready.
-                                                                  // Or, it might be simpler: just one GPU per image pass.
+            multiGpuArgs = RealcuganNcnnVulkan_MultiGPU();
         }
 
 
@@ -879,59 +866,19 @@ void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum)
 
     Realcugan_NCNN_Vulkan_ReadSettings(); // Load common settings like model, denoise, TTA, tile size into member vars
 
-    // Specific for batch processing (frames):
-    // GPU ID and Job Threads string construction:
+    // Specific for batch processing (frames): GPU/Job configuration string
     QString gpuJobConfig;
     if (ui->checkBox_MultiGPU_RealCUGAN->isChecked() && !GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
-        QStringList gpuIDs;
-        QStringList jobThreadsPerGPU; // Assuming RealCUGAN takes per-GPU processing threads for -j with multi-GPU
-
-        // Determine which GPUs to use based on ThreadNum (for splitting work across multiple MainWindow instances/threads)
-        // This logic is complex and depends on how ThreadNum relates to GPU distribution.
-        // For simplicity, let's assume ThreadNum assigns a subset of available MultiGPUs or a specific one.
-        // A common pattern: distribute GPUs among ThreadNum instances.
-        // If ThreadNum is 0, use GPUIDs_List_MultiGPU_RealCUGAN[0], if 1, use [1], etc., wrapping around.
-
-        if (GPUIDs_List_MultiGPU_RealCUGAN.count() > 0) { // Ensure there are GPUs in the list
-            // Simple case: use one GPU from the list per ThreadNum instance, cycling through
-            // int gpuIndexInList = ThreadNum % GPUIDs_List_MultiGPU_RealCUGAN.count();
-            // QMap<QString, QString> selectedGpu = GPUIDs_List_MultiGPU_RealCUGAN.at(gpuIndexInList);
-            // gpuIDs.append(selectedGpu.value("ID"));
-            // jobThreadsPerGPU.append(selectedGpu.value("Threads", "2")); // Default proc threads
-
-            // More common for batch: use ALL selected multi-GPUs for one processing job on a frame folder
-            for(const auto& gpu : GPUIDs_List_MultiGPU_RealCUGAN) {
-                gpuIDs.append(gpu.value("ID"));
-                jobThreadsPerGPU.append(gpu.value("Threads", "2")); // Default proc threads if not set
-            }
-        }
-
-
-        if (!gpuIDs.isEmpty()) {
-            gpuJobConfig = "-g " + gpuIDs.join(",");
-            // The -j format needs to be confirmed for realcugan with multi-GPU.
-            // If it's just proc threads per GPU:
-            gpuJobConfig += " -j " + jobThreadsPerGPU.join(",");
-            // If it's load:proc:save per GPU, it's more complex:
-            // QStringList fullJobStrings;
-            // for(const QString& procThread : jobThreadsPerGPU) {
-            //    fullJobStrings.append(QString("1:%1:1").arg(procThread)); // Assuming 1 load/save thread
-            // }
-            // gpuJobConfig += " -j " + fullJobStrings.join(",");
-        } else { // Fallback if list was empty despite checkbox
-            gpuJobConfig = "-g " + m_realcugan_GPUID.split(" ")[0]; // Use single selected GPU
-            // No -j needed usually for single GPU proc threads with realcugan
-        }
-
-    } else { // Single GPU mode
+        gpuJobConfig = RealcuganNcnnVulkan_MultiGPU();
+    } else {
         gpuJobConfig = "-g " + m_realcugan_GPUID.split(" ")[0];
     }
 
-    // Store these potentially complex args in member variables if PrepareArguments is to be reused,
-    // or pass them directly. For now, let's assume m_realcugan_gpuJobConfig exists or is passed.
-    m_realcugan_gpuJobConfig_temp = gpuJobConfig; // Store temporarily
+    // Store the resulting argument fragment for later use when launching the process
+    m_realcugan_gpuJobConfig_temp = gpuJobConfig;
 
-    qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF for ThreadNum" << ThreadNum << "GPU/Job Config:" << gpuJobConfig;
+    qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF for ThreadNum" << ThreadNum
+             << "GPU/Job Config:" << gpuJobConfig;
     // The actual arguments for QProcess will be assembled by a function like PrepareArguments,
     // which would take inputFile (folder), outputFile (folder), scale, and these GPU settings.
 }
@@ -1326,27 +1273,18 @@ void MainWindow::Realcugan_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::Process
 }
 
 
-QString MainWindow::RealcuganNcnnVulkan_MultiGPU() // TODO: This needs to return the actual command string part for -g and -j
+QString MainWindow::RealcuganNcnnVulkan_MultiGPU()
 {
-    // This function should construct the multi-GPU argument string, e.g., "-g 0,1 -j 2,2"
-    // Based on GPUIDs_List_MultiGPU_RealCUGAN and their assigned threads.
-    // This function should construct the multi-GPU argument string, e.g., "-g 0,1 -j 2,2"
-    // Based on GPUIDs_List_MultiGPU_RealCUGAN and their assigned threads for a *single image process*.
-    // For batch frame processing, ReadSettings_Video_GIF handles argument construction.
+    // Construct the multi-GPU argument string using GPUIDs_List_MultiGPU_RealCUGAN
+    // Example result: "-g 0,1 -j 2,2"
 
     if (!ui->checkBox_MultiGPU_RealCUGAN->isChecked() || GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
         // Not in multi-GPU mode or no GPUs configured, return single GPU string from main settings
         return "-g " + m_realcugan_GPUID.split(" ")[0];
     }
 
-    // For single image processing with multi-GPU checked, RealCUGAN might not support distributing one image over multiple GPUs.
-    // Typically, multi-GPU mode for these tools means processing multiple files (or frames) in parallel, each on a different GPU.
-    // If the intention is to cycle through GPUs for single images, that logic is in the main processing loop.
-    // This function, if called for a single image context with multi-GPU enabled, should probably
-    // return the settings for *one* of the selected GPUs (e.g., the first one, or based on some counter).
-    // However, the current iterative scaling logic uses m_realcugan_GPUID and m_realcugan_multiGpuJobArgs.
-    // The `Realcugan_NCNN_Vulkan_PrepareArguments` function takes `isMultiGPU` and `multiGpuJobArgs`.
-    // This function should provide that `multiGpuJobArgs` string.
+    // For single-image calls this returns the combined settings for all selected GPUs
+    // which matches how batch frame processing uses the result.
 
     QStringList gpuIDs;
     QStringList jobThreadsPerGPU;
