@@ -62,7 +62,8 @@ SOURCES += \
 
 HEADERS += \
     mainwindow.h \
-    topsupporterslist.h
+    topsupporterslist.h \
+    utils/ffprobe_helpers.h
 
 FORMS += \
     mainwindow.ui \
