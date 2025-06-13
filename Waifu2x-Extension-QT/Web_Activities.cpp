@@ -32,8 +32,8 @@ bool MainWindow::DownloadTo(QString OnlineLink,QString LocalPath)
     while(!Downlad2.waitForStarted(500)&&!QProcess_stop) {}
     while(!Downlad2.waitForFinished(500)&&!QProcess_stop) {}
     QString Downlad2_OutPutStr = Downlad2.readAllStandardError().toLower();
-    QFileInfo *LocalPath_QFileInfo = new QFileInfo(LocalPath);
-    if(LocalPath_QFileInfo->size()<1 || Downlad2_OutPutStr.contains("saved")==false)QFile::remove(LocalPath);
+    QFileInfo LocalPath_QFileInfo(LocalPath);
+    if(LocalPath_QFileInfo.size()<1 || Downlad2_OutPutStr.contains("saved")==false)QFile::remove(LocalPath);
     return QFile::exists(LocalPath);
 }
 /*
