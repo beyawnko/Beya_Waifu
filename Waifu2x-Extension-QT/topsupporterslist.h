@@ -20,6 +20,10 @@
 #ifndef TOPSUPPORTERSLIST_H
 #define TOPSUPPORTERSLIST_H
 
+#ifndef slots
+#define slots
+#endif
+
 #include <QWidget>
 #include <QSettings>
 #include <QFile>

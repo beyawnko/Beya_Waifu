@@ -3145,10 +3145,10 @@ bool MainWindow::Deduplicate_filelist(QString){ return false;}
 void MainWindow::TextBrowser_StartMes(){}
 void MainWindow::Init_ActionsMenu_checkBox_ReplaceOriginalFile(){}
 void MainWindow::Init_ActionsMenu_checkBox_DelOriginal(){}
-void MainWindow::Settings_Read_Apply(){}
-void MainWindow::CheckUpadte_Auto(){}
-void MainWindow::Donate_DownloadOnlineQRCode(){}
-void MainWindow::SystemShutDown_isAutoShutDown(){}
+int MainWindow::Settings_Read_Apply(){ return 0; }
+int MainWindow::CheckUpadte_Auto(){ return 0; }
+int MainWindow::Donate_DownloadOnlineQRCode(){ return 0; }
+int MainWindow::SystemShutDown_isAutoShutDown(){ return 0; }
 void MainWindow::Tip_FirstTimeStart(){}
 void MainWindow::file_mkDir(QString){}
 bool MainWindow::file_isDirWritable(QString){return true;}
@@ -3158,7 +3158,7 @@ void MainWindow::Init_ActionsMenu_FilesList(){}
 void MainWindow::Init_ActionsMenu_pushButton_RemoveItem(){}
 void MainWindow::Realcugan_NCNN_Vulkan_PreLoad_Settings(){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_PreLoad_Settings(){}
-void MainWindow::Table_FileCount_reload(){}
+int MainWindow::Table_FileCount_reload(){ return 0; }
 void MainWindow::progressbar_clear(){}
 void MainWindow::CustRes_remove(QString){}
 void MainWindow::on_pushButton_Start_clicked(){}
@@ -3256,11 +3256,11 @@ void MainWindow::Table_video_ChangeStatus_rowNumInt_statusQString(int,QString){}
 void MainWindow::Waifu2x_Finished(){}
 void MainWindow::Waifu2x_Finished_manual(){}
 void MainWindow::TextBrowser_NewMessage(QString){}
-void MainWindow::Waifu2x_Compatibility_Test_finished(){}
-void MainWindow::Waifu2x_DetectGPU_finished(){}
-void MainWindow::Realsr_ncnn_vulkan_DetectGPU_finished(){}
-void MainWindow::FrameInterpolation_DetectGPU_finished(){}
-void MainWindow::CheckUpadte_NewUpdate(QString,QString){}
+int MainWindow::Waifu2x_Compatibility_Test_finished(){ return 0; }
+int MainWindow::Waifu2x_DetectGPU_finished(){ return 0; }
+int MainWindow::Realsr_ncnn_vulkan_DetectGPU_finished(){ return 0; }
+int MainWindow::FrameInterpolation_DetectGPU_finished(){ return 0; }
+int MainWindow::CheckUpadte_NewUpdate(QString,QString){ return 0; }
 void MainWindow::FinishedProcessing_DN(){}
 void MainWindow::Table_image_CustRes_rowNumInt_HeightQString_WidthQString(int,QString,QString){}
 void MainWindow::Table_gif_CustRes_rowNumInt_HeightQString_WidthQString(int,QString,QString){}
@@ -3334,9 +3334,9 @@ void MainWindow::on_checkBox_isCompatible_RealESRGAN_NCNN_Vulkan_clicked(){}
 // int MainWindow::video_get_duration(QString videoPath){ FileMetadataCache m = getOrFetchMetadata(videoPath); return m.isValid ? static_cast<int>(m.duration) : 0; } // Removed
 // bool MainWindow::video_isVFR(QString videoPath){ FileMetadataCache m = getOrFetchMetadata(videoPath); return m.isValid && m.isVFR; } // Removed
 // QMap<QString,int> MainWindow::video_get_Resolution(QString VideoFileFullPath){ FileMetadataCache m = getOrFetchMetadata(VideoFileFullPath); QMap<QString,int> r; if(m.isValid){r.insert("width",m.width); r.insert("height",m.height);} else {r.insert("width",0); r.insert("height",0);} return r;} // Removed
-void MainWindow::CustRes_CancelCustRes(){}
+int MainWindow::CustRes_CancelCustRes(){ return 0; }
 int MainWindow::Waifu2x(){ return 0;}
-void MainWindow::Waifu2xMainThread(){}
+int MainWindow::Waifu2xMainThread(){ return 0; }
 int MainWindow::Waifu2x_NCNN_Vulkan_Image(int,bool){return 0;}
 int MainWindow::Waifu2x_NCNN_Vulkan_GIF(int){return 0;}
 int MainWindow::Waifu2x_NCNN_Vulkan_Video(int){return 0;}
