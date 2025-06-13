@@ -1143,14 +1143,18 @@ void MainWindow::on_pushButton_ReadFileList_clicked()
 void MainWindow::on_Ext_image_editingFinished()
 {
     QString ext_image_str = ui->Ext_image->text();
-    ext_image_str = ext_image_str.trimmed().replace("：",":").remove(" ").remove("　").replace(":gif:",":");
+    ext_image_str = ext_image_str.trimmed()
+            .replace(QString(QChar(0xFF1A)), ":").remove(" ")
+            .remove(QString(QChar(0x3000))).replace(":gif:", ":");
     ui->Ext_image->setText(ext_image_str);
 }
 
 void MainWindow::on_Ext_video_editingFinished()
 {
     QString ext_video_str = ui->Ext_video->text();
-    ext_video_str = ext_video_str.trimmed().replace("：",":").remove(" ").remove("　").replace(":gif:",":");
+    ext_video_str = ext_video_str.trimmed()
+            .replace(QString(QChar(0xFF1A)), ":").remove(" ")
+            .remove(QString(QChar(0x3000))).replace(":gif:", ":");
     ui->Ext_video->setText(ext_video_str);
 }
 

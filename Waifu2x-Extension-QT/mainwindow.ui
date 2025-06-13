@@ -156,7 +156,7 @@ height:35
             </font>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Please donate to support the developers, so we can bring further updates for this software, thank you! (｡･∀･)ﾉﾞ &lt;/p&gt;&lt;p align=&quot;center&quot;&gt;If you don't wanna see the Donate page anymore, you can &lt;span style=&quot; color:#ff0004;&quot;&gt;get the &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#ff0004;&quot;&gt;Premium&lt;/span&gt;&lt;span style=&quot; color:#ff0004;&quot;&gt; version by support me on Patreon.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Please donate to support the developers, so we can bring further updates for this software, thank you! (^_^) &lt;/p&gt;&lt;p align=&quot;center&quot;&gt;If you don't wanna see the Donate page anymore, you can &lt;span style=&quot; color:#ff0004;&quot;&gt;get the &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#ff0004;&quot;&gt;Premium&lt;/span&gt;&lt;span style=&quot; color:#ff0004;&quot;&gt; version by support me on Patreon.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -1932,8 +1932,8 @@ padding:10px;
 2.Select a file in the file list.
 3.Click the Apply button to set the resolution.
 
-★Scale ratio will not be applied to files which
-already have custom resolution applied.★</string>
+*Scale ratio will not be applied to files which
+already have custom resolution applied.*</string>
                       </property>
                       <property name="styleSheet">
                        <string notr="true">QPushButton{
@@ -4183,7 +4183,7 @@ same time, you need to change [Image style] settings at [Home] tab.
 
 - More suitable for processing [2D Anime] image.
 
-- [ Speed:★★  Image Quality:★★★ ]</string>
+- [ Speed:**  Image Quality:*** ]</string>
                </attribute>
                <layout class="QGridLayout" name="gridLayout_53">
                 <property name="leftMargin">
@@ -4238,7 +4238,7 @@ same time, you need to change [Image style] settings at [Home] tab.
                     </property>
                     <property name="toolTip">
                      <string>Select the GPU to use when enabling the &quot;waifu2x-ncnn-vulkan&quot; engine.
-★ &quot;-1&quot; is CPU,others are GPUs ★</string>
+* &quot;-1&quot; is CPU,others are GPUs *</string>
                     </property>
                     <property name="currentText">
                      <string notr="true">auto</string>
@@ -4811,7 +4811,7 @@ but the effect may not be obvious. It is not recommended to enable it.
 
 - Only supports [2D Anime] image style.
 
-- [ Speed:★☆  Image Quality:★★☆ ]</string>
+- [ Speed:**  Image Quality:*** ]</string>
                </attribute>
                <layout class="QGridLayout" name="gridLayout_54">
                 <property name="leftMargin">
@@ -5340,7 +5340,7 @@ padding:10px;
 enabling [GPU Mode] can greatly increase the processing speed. 
 (Please make sure your PC is compatible with [GPU Mode] first)
 
-- [ Speed:★★★  Image Quality:★ ]</string>
+- [ Speed:***  Image Quality:* ]</string>
                </attribute>
                <layout class="QGridLayout" name="gridLayout_62">
                 <property name="leftMargin">
@@ -6203,7 +6203,7 @@ utilize the capabilities of your PC.
 
 - More suitable for processing [3D Real-life] images.
 
-- [ Speed:★☆  Image Quality:★★★ ]</string>
+- [ Speed:**  Image Quality:*** ]</string>
                </attribute>
                <layout class="QGridLayout" name="gridLayout_55">
                 <property name="leftMargin">
@@ -6681,7 +6681,7 @@ same time, you need to change [Image style] settings at [Home] tab.
 engine when your PC is compatible with [GPU(or cuDNN) Process mode]
 is recommended.
 
-- [ Speed:★☆  Image Quality:★★★ ]</string>
+- [ Speed:**  Image Quality:*** ]</string>
                </attribute>
                <layout class="QGridLayout" name="gridLayout_30">
                 <item row="4" column="0">
