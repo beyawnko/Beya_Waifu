@@ -875,13 +875,12 @@ int MainWindow::FrameInterpolation_DetectGPU()
     while(true)
     {
         QFile::remove(OutputPath);
-        QProcess *Waifu2x = new QProcess();
+        QProcess Waifu2x;
         QString gpu_str = " -g "+QString::number(GPU_ID,10)+" ";
         QString cmd = "\"" + FrameInterpolation_ProgramPath + "\"" + " -0 " + "\"" + InputPath + "\"" + " -1 " + "\"" + InputPath_1 + "\" -o " + "\"" + OutputPath + "\"" + " -j 1:1:1 " + gpu_str + " -m \""+FrameInterpolation_ModelPath+"\"" + TileSize_qstr;
-        Waifu2x->start(cmd);
-        while(!Waifu2x->waitForStarted(100)&&!QProcess_stop) {}
-        while(!Waifu2x->waitForFinished(100)&&!QProcess_stop) {}
-        if(QFile::exists(OutputPath) && (Waifu2x->readAllStandardError().toLower().contains("failed")||Waifu2x->readAllStandardOutput().toLower().contains("failed"))==false)
+        QByteArray stdOut, stdErr;
+        runProcess(&Waifu2x, cmd, &stdOut, &stdErr);
+        if(QFile::exists(OutputPath) && (!QString::fromUtf8(stdErr).toLower().contains("failed") && !QString::fromUtf8(stdOut).toLower().contains("failed")))
         {
             Available_GPUID_FrameInterpolation.append(QString::number(GPU_ID,10));
             GPU_ID++;
