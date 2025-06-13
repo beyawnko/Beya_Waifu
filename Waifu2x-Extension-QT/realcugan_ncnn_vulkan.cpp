@@ -1120,65 +1120,26 @@ void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum)
 
     QString gpuJobConfig;
     if (ui->checkBox_MultiGPU_RealCUGAN->isChecked()) {
-        if (GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
-            qDebug() << "Realcugan_ReadSettings_Video_GIF: Multi-GPU enabled but list is empty, falling back to single GPU config.";
-            // Fallback to the primary selected GPU ID if the multi-GPU list is empty
-            QString singleGpuId = m_realcugan_GPUID.split(":")[0]; // Get ID part, e.g., "-1"
-            if (singleGpuId == "-1") { // Single CPU selected in primary dropdown
-                 // Get threads for CPU from a new member variable if we want to support specific threads in this fallback
-                 // For now, assuming default threads for CPU by realcugan-ncnn-vulkan if -j is not provided for single -g -1
-                 // Or, construct a -j based on a default/CPU specific setting if available.
-                 // Let's assume 2 threads for CPU proc if not specified elsewhere for this fallback
-                 // This is a simplification. Ideally, there'd be a UI setting for "single CPU threads".
-                 // For now, we'll use a fixed 1:2:1 for CPU in this specific fallback.
-                 // A better fallback might be to just pass -g -1 and let the tool decide threads.
-                 // Let's go with just -g -1 for fallback for now.
-                 gpuJobConfig = QString("-g -1");
-            } else {
-                 gpuJobConfig = "-g " + singleGpuId;
-            }
-        } else {
-            QStringList gpuIDs_str_list;
-            QStringList jobParams_str_list; // Will store "load:proc:save"
+        // Multi-GPU mode. Build "-g id0,id1 -j 1:t0:1,1:t1:1" using the list widget
+        if (!GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
+            QStringList gpuIDs;
+            QStringList jobParams;
             for (const auto &gpuMap : GPUIDs_List_MultiGPU_RealCUGAN) {
-                QString currentGpuId = gpuMap.value("ID");
-                gpuIDs_str_list.append(currentGpuId);
-                QString procThreads = gpuMap.value("Threads", "1"); // Default proc threads to 1
-
-                if (currentGpuId == "-1") { // CPU
-                    jobParams_str_list.append(QString("1:%1:1").arg(procThreads)); // Load:CPUThreads:Save
-                } else { // GPU
-                    // For GPUs, realcugan-ncnn-vulkan uses format like proc:proc:proc for threads with -j
-                    // The spec was "1:N:1". Assuming this applies to GPUs as well for consistency.
-                    jobParams_str_list.append(QString("1:%1:1").arg(procThreads));
-                }
+                gpuIDs.append(gpuMap.value("ID"));
+                QString threads = gpuMap.value("Threads", "1");
+                jobParams.append(QString("1:%1:1").arg(threads));
             }
-            if (!gpuIDs_str_list.isEmpty()) {
-                gpuJobConfig = QString("-g %1 -j %2").arg(gpuIDs_str_list.join(","), jobParams_str_list.join(","));
-            } else {
-                // This case should ideally not be reached if GPUIDs_List_MultiGPU_RealCUGAN was not empty.
-                // Fallback to primary selected GPU.
-                QString singleGpuId = m_realcugan_GPUID.split(":")[0];
-                 if (singleGpuId == "-1") { gpuJobConfig = QString("-g -1"); }
-                 else { gpuJobConfig = "-g " + singleGpuId;}
-            }
+            gpuJobConfig = QString("-g %1 -j %2").arg(gpuIDs.join(","), jobParams.join(","));
+        } else {
+            // Checkbox checked but list empty – fall back to the single selected device
+            QString fallbackId = m_realcugan_GPUID.split(":").first();
+            gpuJobConfig = (fallbackId == "-1") ? QString("-g -1")
+                                                 : QString("-g %1").arg(fallbackId);
         }
-    } else { // Single GPU mode (MultiGPU checkbox not checked)
-        QString singleGpuId = m_realcugan_GPUID.split(":")[0];
-        if (singleGpuId == "-1") { // CPU selected in single GPU mode
-            // Here we might want to use a specific thread count for CPU.
-            // Let's assume a default of 2 threads for CPU processing, 1 for load/save, if not specified otherwise.
-            // This assumes realcugan-ncnn-vulkan uses -j for single CPU mode too.
-            // E.g., realcugan-ncnn-vulkan ... -g -1 -j 1:2:1
-            // For now, to match the subtask's focus on multi-GPU, we only pass -g -1.
-            // If threads are needed, m_realcugan_threads_for_single_cpu should be read from UI.
-            gpuJobConfig = QString("-g -1");
-            // If you have a UI element like ui->spinBox_Threads_RealCUGAN for single CPU threads:
-            // int cpu_threads = ui->spinBox_Threads_RealCUGAN->value(); // Assuming this exists
-            // gpuJobConfig = QString("-g -1 -j 1:%1:1").arg(cpu_threads);
-        } else { // GPU selected in single GPU mode
-            gpuJobConfig = "-g " + singleGpuId;
-        }
+    } else {
+        // Single GPU/CPU mode
+        QString id = m_realcugan_GPUID.split(":").first();
+        gpuJobConfig = (id == "-1") ? QString("-g -1") : QString("-g %1").arg(id);
     }
 
     // Save for later command construction
