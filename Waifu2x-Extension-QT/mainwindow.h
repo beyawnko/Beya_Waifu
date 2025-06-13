@@ -283,6 +283,15 @@ public:
     bool Imgae_hasAlphaChannel(int rowNum);
     QString Imgae_PreProcess(QString ImagePath,bool ReProcess_AlphaChannel);
     QString SaveImageAs_FormatAndQuality(QString OriginalSourceImage_fullPath,QString ScaledImage_fullPath,bool isDenoiseLevelEnabled,int DenoiseLevel);
+    struct AlphaInfo {
+        bool hasAlpha = false;
+        bool is16Bit = false;
+        QString rgbPath;
+        QString alphaPath;
+        QString tempDir;
+    };
+    AlphaInfo PrepareAlpha(const QString &inputImagePath);
+    void RestoreAlpha(const AlphaInfo &info, const QString &processedRgbPath, const QString &finalOutputPath);
     //================================================================
     int Waifu2x_Compatibility_Test();//引擎兼容性检测
     //初始化 -兼容性测试进度条

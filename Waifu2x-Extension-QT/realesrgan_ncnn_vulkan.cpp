@@ -257,24 +257,9 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_Missing
     QString inputFile = item_InFile->text();
     QString outputFile = item_OutFile->text();
 
-    // --- handle alpha channel by splitting it before processing ---
-    // QImage supports PNG and WebP input so the split works for both formats
-    QTemporaryDir alphaTempDir;
-    QString alphaFilePath;
-    QString rgbInputPath = inputFile;
-    QString rgbOutputPath = outputFile;
-    QImage alphaImage;
-    QImage sourceImage(inputFile);
-    bool hasAlpha = sourceImage.hasAlphaChannel();
-    if (hasAlpha && alphaTempDir.isValid()) {
-        alphaImage = sourceImage.alphaChannel();
-        QImage rgbImage = sourceImage.convertToFormat(QImage::Format_RGB888);
-        rgbInputPath = alphaTempDir.filePath("rgb_in.png");
-        rgbOutputPath = alphaTempDir.filePath("rgb_out.png");
-        alphaFilePath = alphaTempDir.filePath("alpha.png");
-        rgbImage.save(rgbInputPath);
-        alphaImage.save(alphaFilePath);
-    }
+    AlphaInfo alphaInfo = PrepareAlpha(inputFile);
+    QString rgbInputPath = alphaInfo.rgbPath;
+    QString rgbOutputPath = alphaInfo.hasAlpha ? QDir(alphaInfo.tempDir).filePath("rgb_out.png") : outputFile;
 
     RealESRGAN_NCNN_Vulkan_ReadSettings();
 
@@ -297,12 +282,11 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_Missing
         rowNum
     );
 
-    if (success && hasAlpha && QFile::exists(rgbOutputPath)) {
-        QImage processedImage(rgbOutputPath);
-        processedImage = processedImage.convertToFormat(QImage::Format_ARGB32);
-        // Reattach the saved alpha so transparency is kept for PNG/WebP outputs
-        processedImage.setAlphaChannel(alphaImage);
-        processedImage.save(outputFile);
+    if (success && alphaInfo.hasAlpha && QFile::exists(rgbOutputPath)) {
+        RestoreAlpha(alphaInfo, rgbOutputPath, outputFile);
+    }
+    else if (!success && alphaInfo.hasAlpha) {
+        QDir(alphaInfo.tempDir).removeRecursively();
     }
 
     if (success && !Stopping) {
@@ -354,8 +338,17 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_GIF(int rowNum) {
         emit Send_TextBrowser_NewMessage(tr("Processing GIF frame %1/%2 (RealESRGAN)").arg(i+1).arg(framesList.count()));
         QString inputFrame = QDir(splitFramesFolder).filePath(framesList.at(i));
         QString outputFrame = QDir(scaledFramesFolder).filePath(framesList.at(i));
-        if (!RealESRGAN_ProcessSingleFileIteratively(inputFrame, outputFrame, targetScale, m_realesrgan_ModelNativeScale, m_realesrgan_ModelName, m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealESRGAN->isChecked(), m_realesrgan_TTA, QFileInfo(framesList.at(i)).suffix().isEmpty() ? "png" : QFileInfo(framesList.at(i)).suffix() )) {
+
+        AlphaInfo a = PrepareAlpha(inputFrame);
+        QString iterInput = a.rgbPath;
+        QString iterOutput = a.hasAlpha ? QDir(a.tempDir).filePath("rgb_out.png") : outputFrame;
+
+        if (!RealESRGAN_ProcessSingleFileIteratively(iterInput, iterOutput, targetScale, m_realesrgan_ModelNativeScale, m_realesrgan_ModelName, m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealESRGAN->isChecked(), m_realesrgan_TTA, QFileInfo(framesList.at(i)).suffix().isEmpty() ? "png" : QFileInfo(framesList.at(i)).suffix() )) {
+            if(a.hasAlpha) QDir(a.tempDir).removeRecursively();
             allOk = false; break;
+        }
+        if (a.hasAlpha) {
+            RestoreAlpha(a, iterOutput, outputFrame);
         }
     }
     CurrentFileProgress_Stop();

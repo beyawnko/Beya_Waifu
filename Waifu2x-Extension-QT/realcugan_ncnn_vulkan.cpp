@@ -496,22 +496,11 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingA
     QDir tempDir(QDir::tempPath() + "/Waifu2xEX_RealCUGAN_Temp/");
     if (!tempDir.exists()) tempDir.mkpath(".");
 
-    // --- split alpha channel if present ---
-    // QImage can load formats like PNG or WebP, so this works across them
-    bool hasAlpha = false;
-    QString rgbInputFile = originalInFile;
-    QString finalRgbOutput = tempPathBase + "final_rgb." + finalOutFileInfo.suffix().toLower();
-    QString alphaPath = tempPathBase + "alpha.png";
-    QImage alphaImage;
-    QImage srcImg(originalInFile);
-    if (srcImg.hasAlphaChannel()) {
-        hasAlpha = true;
-        alphaImage = srcImg.alphaChannel();
-        QImage rgb = srcImg.convertToFormat(QImage::Format_RGB888);
-        rgbInputFile = tempPathBase + "input_rgb.png";
-        rgb.save(rgbInputFile);
-        alphaImage.save(alphaPath);
-    }
+    AlphaInfo alphaInfo = PrepareAlpha(originalInFile);
+    QString rgbInputFile = alphaInfo.rgbPath;
+    QString finalRgbOutput = alphaInfo.hasAlpha ? tempPathBase + "final_rgb." + finalOutFileInfo.suffix().toLower() : finalOutFile;
+    bool hasAlpha = alphaInfo.hasAlpha;
+    QString alphaPath = alphaInfo.alphaPath;
 
     // Clean up old temp files for this specific base name pattern
     QDirIterator dirIt(tempDir.path(), QStringList() << finalOutFileInfo.completeBaseName() + "_pass_*", QDir::Files);
@@ -595,6 +584,8 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingA
     firstProcess->setProperty("finalRGBFile", hasAlpha ? finalRgbOutput : finalOutFile);
     firstProcess->setProperty("alphaFile", alphaPath);
     firstProcess->setProperty("hasAlpha", hasAlpha);
+    firstProcess->setProperty("alphaTempDir", alphaInfo.tempDir);
+    firstProcess->setProperty("alphaIs16", alphaInfo.is16Bit);
     firstProcess->setProperty("tempPathBase", tempPathBase); // For cleanup
     firstProcess->setProperty("originalInFile", originalInFile);
 
@@ -751,19 +742,14 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished() {
         QString finalRGBFile = process->property("finalRGBFile").toString();
         QString alphaFile = process->property("alphaFile").toString();
         bool hasAlphaFlag = process->property("hasAlpha").toBool();
+        QString alphaTempDir = process->property("alphaTempDir").toString();
+        bool alphaIs16 = process->property("alphaIs16").toBool();
         qDebug() << "RealCUGAN: All passes completed successfully for" << finalRGBFile;
         Realcugan_NCNN_Vulkan_CleanupTempFiles(process->property("tempPathBase").toString(), processQueue->size()-1, true /* keepFinal */, finalRGBFile);
 
         if (hasAlphaFlag && QFile::exists(finalRGBFile)) {
-            QImage rgb(finalRGBFile);
-            QImage alpha(alphaFile);
-            rgb = rgb.convertToFormat(QImage::Format_ARGB32);
-            // Recompose the processed RGB data with the saved alpha channel.
-            // QImage preserves transparency for PNG and WebP outputs.
-            rgb.setAlphaChannel(alpha);
-            rgb.save(finalOutFile);
-            QFile::remove(finalRGBFile);
-            QFile::remove(alphaFile);
+            AlphaInfo a; a.hasAlpha = true; a.rgbPath = finalRGBFile; a.alphaPath = alphaFile; a.tempDir = alphaTempDir; a.is16Bit = alphaIs16;
+            RestoreAlpha(a, finalRGBFile, finalOutFile);
         } else if (finalRGBFile != finalOutFile && QFile::exists(finalRGBFile)) {
             QFile::remove(finalOutFile);
             QFile::rename(finalRGBFile, finalOutFile);
@@ -1186,8 +1172,12 @@ void MainWindow::Realcugan_NCNN_Vulkan_GIF(int rowNum)
         QString inputFramePath = QDir(splitFramesFolder).filePath(frameFileName);
         QString outputFramePath = QDir(scaledFramesFolder).filePath(frameFileName);
 
+        AlphaInfo a = PrepareAlpha(inputFramePath);
+        QString iterInput = a.rgbPath;
+        QString iterOutput = a.hasAlpha ? QDir(a.tempDir).filePath("rgb_out.png") : outputFramePath;
+
         bool success = Realcugan_ProcessSingleFileIteratively(
-            inputFramePath, outputFramePath, targetScale,
+            iterInput, iterOutput, targetScale,
             m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
             m_realcugan_gpuJobConfig_temp,
             ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
@@ -1195,7 +1185,13 @@ void MainWindow::Realcugan_NCNN_Vulkan_GIF(int rowNum)
             QFileInfo(frameFileName).suffix().isEmpty() ? "png" : QFileInfo(frameFileName).suffix() // Default to png if suffix is missing
         );
 
+        if(success && a.hasAlpha) {
+            RestoreAlpha(a, iterOutput, outputFramePath);
+        }
+
         if (!success) {
+            if(a.hasAlpha)
+                QDir(a.tempDir).removeRecursively();
             allFramesProcessedSuccessfully = false;
             qDebug() << "RealCUGAN GIF: Failed to process frame" << frameFileName;
             emit Send_TextBrowser_NewMessage(tr("Error processing GIF frame: %1 (RealCUGAN)").arg(frameFileName));
