@@ -261,7 +261,7 @@ void MainWindow::on_comboBox_ImageSaveFormat_currentIndexChanged(int index)
     }
 }
 /*
-判断图片是否含有透明通道
+Check whether the image contains an alpha channel
 */
 bool MainWindow::Imgae_hasAlphaChannel(int rowNum)
 {
@@ -271,7 +271,7 @@ bool MainWindow::Imgae_hasAlphaChannel(int rowNum)
     return QImage_SourceFile_fullPath.hasAlphaChannel();
 }
 /*
-预处理图片
+Pre-process image before upscale
 */
 QString MainWindow::Imgae_PreProcess(QString ImagePath,bool ReProcess_AlphaChannel)
 {
@@ -283,18 +283,18 @@ QString MainWindow::Imgae_PreProcess(QString ImagePath,bool ReProcess_AlphaChann
     QFileInfo fileinfo_ImagePath(ImagePath);
     QString file_ext_ImagePath = fileinfo_ImagePath.suffix();
     QImage QImage_ImagePath(ImagePath);
-    //预处理带有Alpha的图片
+    // Always preprocess alpha images when the option is enabled
     if(ui->checkBox_AlwaysPreProcessAlphaPNG->isChecked()==true)
     {
         ReProcess_AlphaChannel = true;
     }
     if(ReProcess_AlphaChannel==true && QImage_ImagePath.hasAlphaChannel()==true)
     {
-        //有alpha则开始转换
+        // Alpha detected, convert through WebP then back to PNG
         QString file_name = file_getBaseName(ImagePath);
         QString file_Folder = file_getFolderPath(fileinfo_ImagePath);
-        QString OutPut_Path_WebpCache = file_Folder + "/" + file_name + "_W2xEX_temp.webp";//输出的webp缓存的完整路径
-        QString OutPut_Path_FinalPNG = file_Folder + "/" + file_name + "_W2xEX_PPAC.png";//输出的png图片的完整路径
+        QString OutPut_Path_WebpCache = file_Folder + "/" + file_name + "_W2xEX_temp.webp"; // full path of temporary WebP
+        QString OutPut_Path_FinalPNG = file_Folder + "/" + file_name + "_W2xEX_PPAC.png";  // full path of converted PNG
         //======
         QString program = Current_Path+"/convert_waifu2xEX.exe";
         QFile::remove(OutPut_Path_FinalPNG);
@@ -306,7 +306,7 @@ QString MainWindow::Imgae_PreProcess(QString ImagePath,bool ReProcess_AlphaChann
             emit Send_TextBrowser_NewMessage(tr("Error: Can\'t convert [")+ImagePath+tr("] to Webp. The pre-process will be skipped and try to process the original image directly."));
             return ImagePath;
         }
-        //再转换回PNG
+        // Convert the cached WebP back into PNG
         QString cmd2 = "\""+program+"\" \""+OutPut_Path_WebpCache+"\" -quality 100 \""+OutPut_Path_FinalPNG+"\"";
         runProcess(&Convert2PNG, cmd2);
         QFile::remove(OutPut_Path_WebpCache);
@@ -319,13 +319,13 @@ QString MainWindow::Imgae_PreProcess(QString ImagePath,bool ReProcess_AlphaChann
         //======
         return OutPut_Path_FinalPNG;
     }
-    //判断是否已经是PNG
+    // If preprocessing is disabled or already PNG, skip conversion
     if(ui->checkBox_PreProcessImage->isChecked()==false)return ImagePath;
     if(file_ext_ImagePath.trimmed().toLower()=="png")return ImagePath;
-    //不是PNG则开始转换
+    // Otherwise convert the original image to PNG
     QString file_name = file_getBaseName(ImagePath);
     QString file_Folder = file_getFolderPath(fileinfo_ImagePath);
-    QString OutPut_Path = file_Folder + "/" + file_name + "_W2xEX_"+file_ext_ImagePath+".png";//输出的png图片的完整路径
+    QString OutPut_Path = file_Folder + "/" + file_name + "_W2xEX_"+file_ext_ImagePath+".png"; // full path of converted PNG
     //======
     QString program = Current_Path+"/convert_waifu2xEX.exe";
     QFile::remove(OutPut_Path);
