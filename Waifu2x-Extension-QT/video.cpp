@@ -1012,9 +1012,8 @@ void MainWindow::video_video2images(QString VideoPath,QString FrameFolderPath,QS
     //============== 尝试在Win7下可能兼容的指令 ================================
     if(file_isDirEmpty(FrameFolderPath))
     {
-        video_splitFrame.start("\""+ffmpeg_path+"\" -y"+fps_video_cmd+"-i \""+VideoPath+"\" "+fps_video_cmd+" \""+FrameFolderPath.replace("%","%%")+"/%%0"+QString::number(FrameNumDigits,10)+"d.png\"");
-        video_splitFrame.waitForStarted();
-        video_splitFrame.waitForFinished(-1);
+        splitCmd = "\""+ffmpeg_path+"\" -y"+fps_video_cmd+"-i \""+VideoPath+"\" "+fps_video_cmd+" \""+FrameFolderPath.replace("%","%%")+"/%%0"+QString::number(FrameNumDigits,10)+"d.png\"";
+        runProcess(&video_splitFrame, splitCmd);
     }
     video_get_audio(VideoPath,AudioPath);//拆分音频
     //======== 插帧 =========
