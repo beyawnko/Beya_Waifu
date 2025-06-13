@@ -845,20 +845,23 @@ void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum)
     Realcugan_NCNN_Vulkan_ReadSettings();
 
     QString gpuJobConfig;
-    if (ui->checkBox_MultiGPU_RealCUGAN->isChecked() && !GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
-        QStringList gpuIDs;
-        QStringList jobThreads;
-
-        for (const auto &gpuMap : GPUIDs_List_MultiGPU_RealCUGAN) {
-            gpuIDs.append(gpuMap.value("ID"));
-            jobThreads.append(gpuMap.value("Threads", "1"));
-        }
-
-        if (!gpuIDs.isEmpty()) {
-            gpuJobConfig = "-g " + gpuIDs.join(",");
-            gpuJobConfig += " -j " + jobThreads.join(",");
-        } else {
+    if (ui->checkBox_MultiGPU_RealCUGAN->isChecked()) {
+        if (GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
+            qDebug() << "Realcugan_ReadSettings_Video_GIF: Multi-GPU enabled but list is empty";
             gpuJobConfig = "-g " + m_realcugan_GPUID.split(" ")[0];
+        } else {
+            QStringList gpuIDs;
+            QStringList jobThreadsPerGPU;
+            for (const auto &gpuMap : GPUIDs_List_MultiGPU_RealCUGAN) {
+                gpuIDs.append(gpuMap.value("ID"));
+                QString procThreads = gpuMap.value("Threads", "1");
+                jobThreadsPerGPU.append(QString("1:%1:1").arg(procThreads));
+            }
+            if (!gpuIDs.isEmpty()) {
+                gpuJobConfig = QString("-g %1 -j %2").arg(gpuIDs.join(","), jobThreadsPerGPU.join(","));
+            } else {
+                gpuJobConfig = "-g " + m_realcugan_GPUID.split(" ")[0];
+            }
         }
     } else {
         gpuJobConfig = "-g " + m_realcugan_GPUID.split(" ")[0];
