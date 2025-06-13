@@ -28,11 +28,10 @@ void MainWindow::RUN_Concurrent()
 {
     QThread::sleep(3);
     //========
-    QProcess Get_tasklist;
-    Get_tasklist.start("tasklist");
-    while(!Get_tasklist.waitForStarted(200)) {}
-    while(!Get_tasklist.waitForFinished(200)) {}
-    if(Get_tasklist.readAllStandardOutput().contains("Waifu2x-Extension-GUI.exe")==true)
+    QProcess get_tasklist;
+    QByteArray taskOutput;
+    runProcess(&get_tasklist, "tasklist", &taskOutput);
+    if(taskOutput.contains("Waifu2x-Extension-GUI.exe"))
     {
         emit Send_Duplicate();
         QThread::sleep(5);
@@ -93,4 +92,29 @@ void MainWindow::RUN_SLOT()
     ShellExecuteW(NULL, QString("open").toStdWString().c_str(), QString(Current_Path+"/Waifu2x-Extension-GUI.exe").toStdWString().c_str(), NULL, NULL, 1);
     this->close();
     return;
+}
+
+bool MainWindow::runProcess(QProcess *process, const QString &cmd,
+                            QByteArray *stdOut, QByteArray *stdErr)
+{
+    QEventLoop loop;
+    if(stdOut) stdOut->clear();
+    if(stdErr) stdErr->clear();
+
+    if(stdOut)
+        QObject::connect(process, &QProcess::readyReadStandardOutput,
+                         [&](){ stdOut->append(process->readAllStandardOutput()); });
+    if(stdErr)
+        QObject::connect(process, &QProcess::readyReadStandardError,
+                         [&](){ stdErr->append(process->readAllStandardError()); });
+
+    QObject::connect(process, qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
+                     &loop, &QEventLoop::quit);
+    QObject::connect(process, &QProcess::errorOccurred,
+                     &loop, &QEventLoop::quit);
+
+    process->start(cmd);
+    loop.exec();
+
+    return process->exitStatus() == QProcess::NormalExit && process->exitCode() == 0;
 }

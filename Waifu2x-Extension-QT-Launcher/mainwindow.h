@@ -11,6 +11,7 @@
 #include <QCloseEvent>
 #include <QApplication>
 #include <QtConcurrent>
+#include <QEventLoop>
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -40,5 +41,8 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
+    bool runProcess(QProcess *process, const QString &cmd,
+                    QByteArray *stdOut = nullptr,
+                    QByteArray *stdErr = nullptr);
 };
 #endif // MAINWINDOW_H
