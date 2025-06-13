@@ -100,13 +100,17 @@ QStringList MainWindow::Realcugan_NCNN_Vulkan_PrepareArguments(
               << "-m" << Current_Path + "/realcugan-ncnn-vulkan Win/" + modelName; // Model subfolder
 
     if (isMultiGPU) {
-        arguments << multiGpuJobArgs.split(" "); // Expects format like "-g 0,1 -j 2,2"
+        arguments << multiGpuJobArgs.split(" "); // Expects format like "-g 0,-1 -j 1:1:1,1:2:1"
     } else {
-        arguments << "-g" << gpuId.split(" ")[0]; // Single GPU ID
-        // Single GPU threads are usually handled by the exe itself, or a global -j for all selected gpus.
-        // The provided command example uses -j for job_threads with multi-GPU.
-        // For single GPU, realcugan-ncnn-vulkan typically doesn't need a -j for thread count per GPU.
-        // If it does, this needs to be added. For now, assume not for single GPU.
+        QString actualGpuId = gpuId.split(":")[0]; // Correctly extract ID, e.g., "-1" from "-1: CPU"
+        arguments << "-g" << actualGpuId;
+        // For single CPU mode, if actualGpuId is -1, realcugan might need a -j for threads.
+        // realcugan-ncnn-vulkan -i in.png -o out.png -g -1 -j 1:4:1 (example for 4 threads on CPU)
+        // This requires knowing the threads for single CPU mode.
+        // For now, let's assume m_realcugan_jobStringForSingleCpu exists and is set in ReadSettings if CPU is selected.
+        // However, the subtask doesn't explicitly ask to modify single CPU thread handling here beyond ID.
+        // Let's assume for now that if -g -1 is passed, it uses a default number of threads or all cores.
+        // If specific thread count for single CPU non-multi mode is needed, ReadSettings and this part need more.
     }
 
     if (ttaEnabled) {
@@ -248,32 +252,75 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
             // For now, let's continue if it's empty, the segment video will be empty.
         }
 
-        // --- Frame Processing Loop for the CURRENT SEGMENT's frames ---
-        bool segmentFramesProcessedSuccessfully = true;
-        CurrentFileProgress_Start(sourceFileInfo.fileName() + QString(" (Seg %1)").arg(i+1), framesFileName_qStrList.count());
-        for (const QString &frameFileName : framesFileName_qStrList) {
-            if (Stopping) { segmentFramesProcessedSuccessfully = false; overallSuccess = false; break; }
+        // --- AI Processing for the CURRENT SEGMENT's frames (Directory Call) ---
+        QString segmentScaledFramesFolderAI = QDir(mainTempFolder).filePath(segmentName + "_scaled_AI");
+        // Realcugan_ProcessDirectoryIteratively will update segmentScaledFramesFolderAI to the actual output path
 
-            Send_TextBrowser_NewMessage(tr("Segment %1/%2, Processing frame: %3 (RealCUGAN)").arg(i+1).arg(numSegments).arg(frameFileName));
+        emit Send_TextBrowser_NewMessage(tr("Starting AI processing for segment %1/%2 frames...").arg(i+1).arg(numSegments));
+        bool aiSegmentSuccess = Realcugan_ProcessDirectoryIteratively(
+            splitFramesFolder, segmentScaledFramesFolderAI, targetScale,
+            m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
+            m_realcugan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
+            m_realcugan_TTA, ui->comboBox_OutFormat_Image->currentText().toLower()
+        );
+
+        if (!aiSegmentSuccess || Stopping) {
+            qDebug() << "RealCUGAN VideoBySegment: AI processing failed or stopped for segment" << i+1;
+            overallSuccess = false; break;
+        }
+
+        // --- Resampling Loop for the CURRENT SEGMENT's AI processed frames ---
+        emit Send_TextBrowser_NewMessage(tr("Resampling AI processed frames for segment %1/%2...").arg(i+1).arg(numSegments));
+        QSize originalVideoSizeSeg = video_get_Resolution(sourceFileFullPath); // Get original full video dimensions
+        if(originalVideoSizeSeg.isEmpty()){
+            qDebug() << "RealCUGAN VideoBySegment: Failed to get original video dimensions for resampling segment" << i+1;
+            overallSuccess = false; break;
+        }
+        int targetSegFrameWidth = qRound(static_cast<double>(originalVideoSizeSeg.width()) * targetScale);
+        int targetSegFrameHeight = qRound(static_cast<double>(originalVideoSizeSeg.height()) * targetScale);
+
+        QStringList aiSegmentFramesList = file_getFileNames_in_Folder_nofilter(segmentScaledFramesFolderAI);
+        if (aiSegmentFramesList.isEmpty() && !framesFileName_qStrList.isEmpty()) {
+             qDebug() << "RealCUGAN VideoBySegment: AI processed folder for segment " << i+1 << " is empty, but original frames existed.";
+             overallSuccess = false; break;
+        }
+
+        bool segResamplingSuccess = true;
+        CurrentFileProgress_Start(sourceFileInfo.fileName() + tr(" (Seg %1 Resample)").arg(i+1), aiSegmentFramesList.count());
+        for (const QString &aiFrameFileName : aiSegmentFramesList) {
+            if (Stopping) { segResamplingSuccess = false; overallSuccess = false; break; }
             CurrentFileProgress_progressbar_Add();
 
+            QString aiFramePath = QDir(segmentScaledFramesFolderAI).filePath(aiFrameFileName);
+            QImage aiImage(aiFramePath);
+            if (aiImage.isNull()) {
+                qDebug() << "RealCUGAN VideoBySegment: Failed to load AI frame for resampling:" << aiFramePath;
+                segResamplingSuccess = false; continue; // Or break
+            }
 
-            QString inputFramePath = QDir(splitFramesFolder).filePath(frameFileName);
-            QString outputFramePath = QDir(scaledFramesFolder).filePath(frameFileName);
+            QImage resampledImage = aiImage.scaled(targetSegFrameWidth, targetSegFrameHeight, this->CustRes_AspectRatioMode, Qt::SmoothTransformation);
+            // Save to the final scaledFramesFolder for this segment (e.g., segment_000_scaled/frame_001.png)
+            QString finalSegFramePath = QDir(scaledFramesFolder).filePath(aiFrameFileName);
 
-            bool success = Realcugan_ProcessSingleFileIteratively(
-                inputFramePath, outputFramePath, targetScale,
-                m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
-                m_realcugan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
-                m_realcugan_TTA, QFileInfo(frameFileName).suffix().isEmpty() ? "png" : QFileInfo(frameFileName).suffix()
-            );
-            if (!success) { segmentFramesProcessedSuccessfully = false; overallSuccess = false; break; }
+            QFileInfo finalSegFrameInfo(finalSegFramePath); // Ensure directory exists
+            QDir finalSegFrameDir(finalSegFrameInfo.path());
+            if(!finalSegFrameDir.exists()) finalSegFrameDir.mkpath(".");
+
+            if (!resampledImage.save(finalSegFramePath)) {
+                qDebug() << "RealCUGAN VideoBySegment: Failed to save resampled frame:" << finalSegFramePath;
+                segResamplingSuccess = false; break;
+            }
         }
         CurrentFileProgress_Stop();
-        if (!segmentFramesProcessedSuccessfully || Stopping) { overallSuccess = false; break; }
+        QDir(segmentScaledFramesFolderAI).removeRecursively(); // Clean up intermediate AI output for the segment
+
+        if (!segResamplingSuccess || Stopping) {
+            qDebug() << "RealCUGAN VideoBySegment: Resampling failed or stopped for segment" << i+1;
+            overallSuccess = false; break;
+        }
+        // At this point, `scaledFramesFolder` (e.g., segment_000_scaled) contains the resampled frames for the current segment.
 
         // 2. Reassemble processed frames of the segment into a video segment (without audio)
-        // The video_images2video function needs to be able to create a video from frames without an audio track,
         // or accept a "" audio path. Or a segment-specific audio path.
         // For simplicity, we'll create video segments without audio first, then concatenate, then add full audio.
         emit Send_TextBrowser_NewMessage(tr("Assembling video segment %1/%2... (RealCUGAN)").arg(i + 1).arg(numSegments));
@@ -402,49 +449,96 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
 
     // 3. Read general RealCUGAN settings & prepare for batch GPU processing
     Realcugan_NCNN_Vulkan_ReadSettings();
-    Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(0); // Using ThreadNum=0 for now, suitable for single video task
+    Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(0); // Sets m_realcugan_gpuJobConfig_temp
 
-    // 4. Determine Target Scale (Assuming Video uses video scale settings)
-    int targetScale = ui->spinBox_scaleRatio_video->value(); // Or ui->spinBox_Scale_RealCUGAN
+    // 4. Determine Target Scale
+    int targetScale = ui->spinBox_scaleRatio_video->value();
     if (targetScale <= 0) targetScale = 1;
 
-    bool allFramesProcessedSuccessfully = true;
-    int frameCount = 0;
-    CurrentFileProgress_Start(sourceFileInfo.fileName(),framesFileName_qStrList.count());
+    // --- AI Processing using Directory-level calls ---
+    QString scaledFramesFolderAI = Current_Path + "/temp_W2xEX/" + sourceFileNameNoExt + "_RC_Vid_scaled_AI_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    // Note: Realcugan_ProcessDirectoryIteratively will create scaledFramesFolderAI if successful.
+    // It takes scaledFramesFolderAI by reference and updates it to the actual final AI output path.
 
-    for (const QString &frameFileName : framesFileName_qStrList) {
-        if (Stopping == true) {
-            allFramesProcessedSuccessfully = false;
-            qDebug() << "RealCUGAN Video: Processing stopped.";
-            break;
-        }
-        frameCount++;
-        emit Send_TextBrowser_NewMessage(tr("Processing video frame %1/%2: %3 (RealCUGAN)").arg(frameCount).arg(framesFileName_qStrList.size()).arg(frameFileName));
+    emit Send_TextBrowser_NewMessage(tr("Starting AI processing for video frames... (RealCUGAN)"));
+    bool aiProcessingSuccess = Realcugan_ProcessDirectoryIteratively(
+        splitFramesFolder, scaledFramesFolderAI, targetScale, // scaledFramesFolderAI is out-param
+        m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
+        m_realcugan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
+        m_realcugan_TTA, ui->comboBox_OutFormat_Image->currentText().toLower()
+    );
+
+    if (!aiProcessingSuccess || Stopping) {
+        item_Status->setText(Stopping ? tr("Stopped") : tr("Error in AI processing"));
+        QDir(splitFramesFolder).removeRecursively();
+        QDir(scaledFramesFolderAI).removeRecursively(); // Cleanup AI output dir
+        QDir(scaledFramesFolder).removeRecursively();   // Ensure final scaled folder is also cleared
+        QFile::remove(audioPath);
+        ProcessNextFile();
+        return;
+    }
+    emit Send_TextBrowser_NewMessage(tr("AI processing finished, starting resampling... (RealCUGAN Video)"));
+
+    // --- Resampling Loop ---
+    QSize originalVideoSize = video_get_Resolution(sourceFileFullPath);
+    if(originalVideoSize.isEmpty()){
+        qDebug() << "RealCUGAN Video: Failed to get original video dimensions for resampling.";
+        item_Status->setText(tr("Error: Get original video size failed"));
+        QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolderAI).removeRecursively(); QDir(scaledFramesFolder).removeRecursively(); QFile::remove(audioPath);
+        ProcessNextFile(); return;
+    }
+    int targetFrameWidth = qRound(static_cast<double>(originalVideoSize.width()) * targetScale);
+    int targetFrameHeight = qRound(static_cast<double>(originalVideoSize.height()) * targetScale);
+
+    QStringList aiFramesList = file_getFileNames_in_Folder_nofilter(scaledFramesFolderAI);
+    if (aiFramesList.isEmpty() && !framesFileName_qStrList.isEmpty()) { // If input had frames but AI output is empty
+        qDebug() << "RealCUGAN Video: AI processed folder is empty, but original frames existed.";
+        item_Status->setText(tr("Error: AI processing yielded no frames."));
+        QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolderAI).removeRecursively(); QDir(scaledFramesFolder).removeRecursively(); QFile::remove(audioPath);
+        ProcessNextFile(); return;
+    }
+
+
+    bool resamplingSuccess = true;
+    CurrentFileProgress_Start(sourceFileInfo.fileName() + tr(" (Resampling)"), aiFramesList.count());
+
+    for (const QString &aiFrameFileName : aiFramesList) {
+        if (Stopping) { resamplingSuccess = false; break; }
         CurrentFileProgress_progressbar_Add();
+        emit Send_TextBrowser_NewMessage(tr("Resampling frame %1/%2 (RealCUGAN Video)").arg(CurrentFileProgress_Value()).arg(aiFramesList.size()));
 
-        QString inputFramePath = QDir(splitFramesFolder).filePath(frameFileName);
-        QString outputFramePath = QDir(scaledFramesFolder).filePath(frameFileName);
 
-        bool success = Realcugan_ProcessSingleFileIteratively(
-            inputFramePath, outputFramePath, targetScale,
-            m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
-            m_realcugan_gpuJobConfig_temp,
-            ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
-            m_realcugan_TTA,
-            QFileInfo(frameFileName).suffix().isEmpty() ? "png" : QFileInfo(frameFileName).suffix()
-        );
+        QString aiFramePath = QDir(scaledFramesFolderAI).filePath(aiFrameFileName);
+        QImage aiImage(aiFramePath);
+        if (aiImage.isNull()) {
+            qDebug() << "RealCUGAN Video: Failed to load AI processed frame for resampling:" << aiFramePath;
+            // Skip this frame or error out? For now, skip and mark error.
+            resamplingSuccess = false; continue;
+        }
 
-        if (!success) {
-            allFramesProcessedSuccessfully = false;
-            qDebug() << "RealCUGAN Video: Failed to process frame" << frameFileName;
-            emit Send_TextBrowser_NewMessage(tr("Error processing video frame: %1 (RealCUGAN)").arg(frameFileName));
-            break;
+        QImage resampledImage = aiImage.scaled(targetFrameWidth, targetFrameHeight, this->CustRes_AspectRatioMode, Qt::SmoothTransformation);
+        QString finalFramePath = QDir(scaledFramesFolder).filePath(aiFrameFileName); // Save to final scaled folder (used for assembly)
+
+        QFileInfo finalFrameInfo(finalFramePath); // Ensure directory exists
+        QDir finalFrameDir(finalFrameInfo.path());
+        if(!finalFrameDir.exists()) finalFrameDir.mkpath(".");
+
+        if (!resampledImage.save(finalFramePath)) {
+            qDebug() << "RealCUGAN Video: Failed to save resampled frame:" << finalFramePath;
+            resamplingSuccess = false; break;
         }
     }
     CurrentFileProgress_Stop();
+    QDir(scaledFramesFolderAI).removeRecursively(); // Clean up intermediate AI output folder
+
+    if (!resamplingSuccess || Stopping) {
+        item_Status->setText(Stopping ? tr("Stopped") : tr("Error in resampling"));
+        QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolder).removeRecursively(); QFile::remove(audioPath);
+        ProcessNextFile(); return;
+    }
 
     // 5. Assemble processed frames back into a video
-    if (allFramesProcessedSuccessfully && !Stopping) {
+    if (!Stopping) { // Previous checks handle success flags
         emit Send_TextBrowser_NewMessage(tr("Assembling processed video frames: %1 (RealCUGAN)").arg(resultFileFullPath));
         // video_images2video parameters: (QString VideoPath,QString video_mp4_scaled_fullpath,QString ScaledFrameFolderPath,QString AudioPath,bool CustRes_isEnabled,int CustRes_height,int CustRes_width,bool isOverScaled)
         // Assuming no custom resolution for video for now.
@@ -472,6 +566,118 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
 
     ProcessNextFile(); // Process next file in the main queue
 }
+
+
+// Processes a directory of images through RealCUGAN AI passes.
+// finalAIOutputDir will be updated to the path of the directory containing the last AI pass results.
+bool MainWindow::Realcugan_ProcessDirectoryIteratively(
+    const QString &initialInputDir, QString &finalAIOutputDir, // finalAIOutputDir is an out-parameter
+    int targetOverallScale,
+    const QString &modelName, int denoiseLevel, int tileSize,
+    const QString &gpuIdOrJobConfig, bool isMultiGPUJob,
+    bool ttaEnabled, const QString &outputFormat)
+{
+    qDebug() << "Realcugan_ProcessDirectoryIteratively: InputDir" << initialInputDir
+             << "TargetOverallScale" << targetOverallScale;
+
+    QList<int> scaleSequence = CalculateRealCUGANScaleSequence(targetOverallScale);
+    if (scaleSequence.isEmpty() || (targetOverallScale > 1 && scaleSequence.first() == targetOverallScale && scaleSequence.first() > 4) ) {
+        qDebug() << "Realcugan_ProcessDirectoryIteratively: Invalid or unsupported scale sequence for target" << targetOverallScale;
+        // This indicates CalculateRealCUGANScaleSequence couldn't break it down (e.g. 5x, 7x)
+        // The resampling step after this function will handle achieving the exact target.
+        // For AI processing, if we can't form a sequence, we might do a 1x pass (denoise only) or skip AI.
+        // For now, let's try to proceed if a sequence (even if just [1]) is returned.
+        // The original error for _ProcessSingleFileIteratively was more stringent.
+        // Here, we rely on the caller to decide if the resulting AI scale is adequate before resampling.
+        // If scaleSequence is truly problematic (e.g. empty for target > 1), error out.
+        if (scaleSequence.isEmpty() && targetOverallScale > 1) {
+             Send_TextBrowser_NewMessage(tr("Error: Could not determine AI scaling passes for RealCUGAN."));
+             return false;
+        }
+        if (scaleSequence.isEmpty()) scaleSequence.append(1); // Ensure at least one pass if target is 1x
+    }
+
+    QString currentPassInputDir = initialInputDir;
+    QString mainProcessingTempDir = QDir::tempPath() + "/W2XEX_RC_DirIter_Main_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QDir(mainProcessingTempDir).mkpath(".");
+    QList<QString> tempPassOutputDirs; // To clean up intermediate pass outputs
+
+    bool success = true;
+    for (int i = 0; i < scaleSequence.size(); ++i) {
+        if (Stopping) { success = false; break; }
+
+        int currentPassScale = scaleSequence[i];
+        QString passOutputDir = QDir(mainProcessingTempDir).filePath(QString("pass_%1_out").arg(i));
+        QDir().mkpath(passOutputDir);
+        tempPassOutputDirs.append(passOutputDir);
+
+        QStringList arguments = Realcugan_NCNN_Vulkan_PrepareArguments(
+            currentPassInputDir, passOutputDir, currentPassScale,
+            modelName, denoiseLevel, tileSize,
+            gpuIdOrJobConfig, ttaEnabled, outputFormat, // For directory, outputFormat is for frames
+            isMultiGPUJob, gpuIdOrJobConfig
+        );
+
+        emit Send_TextBrowser_NewMessage(tr("Starting RealCUGAN directory pass %1/%2 (Scale: %3x)...").arg(i + 1).arg(scaleSequence.size()).arg(currentPassScale));
+
+        QProcess process;
+        QString exePath = QDir::currentPath() + "/realcugan-ncnn-vulkan Win/realcugan-ncnn-vulkan.exe";
+        qDebug() << "Realcugan_ProcessDirectoryIteratively Pass" << i + 1 << "Cmd:" << exePath << arguments.join(" ");
+
+        process.start(exePath, arguments);
+        if (!process.waitForStarted(10000)) {
+            qDebug() << "Realcugan_ProcessDirectoryIteratively: Process failed to start for pass" << i + 1;
+            success = false; break;
+        }
+        if (!process.waitForFinished(-1)) {
+            qDebug() << "Realcugan_ProcessDirectoryIteratively: Process timed out or crashed for pass" << i + 1;
+            success = false; break;
+        }
+        if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
+            qDebug() << "Realcugan_ProcessDirectoryIteratively: Pass" << i + 1 << "failed. ExitCode:" << process.exitCode() << "Error:" << process.errorString();
+            qDebug() << "STDERR:" << QString::fromLocal8Bit(process.readAllStandardError());
+            qDebug() << "STDOUT:" << QString::fromLocal8Bit(process.readAllStandardOutput());
+            success = false; break;
+        }
+
+        // Check if output directory has content (basic check)
+        QDir checkOutDir(passOutputDir);
+        if (checkOutDir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot).isEmpty()) {
+             qDebug() << "Realcugan_ProcessDirectoryIteratively: Output directory for pass " << i+1 << " is empty: " << passOutputDir;
+             // This might not be an error if input also had no processable files, but worth logging.
+             // If inputDir had files, this is an error.
+             if (!QDir(currentPassInputDir).entryInfoList(QDir::Files | QDir::NoDotAndDotDot).isEmpty()){
+                success = false; break;
+             }
+        }
+
+
+        // If not the initial input directory, delete previous pass's output dir
+        if (i > 0 && currentPassInputDir != initialInputDir) { // currentPassInputDir would be tempPassOutputDirs.at(i-1)
+            QDir prevPassDir(currentPassInputDir);
+            prevPassDir.removeRecursively();
+        }
+        currentPassInputDir = passOutputDir; // Output of this pass is input for the next
+    }
+
+    if (success && !Stopping) {
+        finalAIOutputDir = currentPassInputDir; // This is the directory with the final AI pass results
+    } else {
+        // If failed or stopped, clean up all created temporary pass directories
+        for (const QString &dirPath : tempPassOutputDirs) {
+            QDir d(dirPath);
+            d.removeRecursively();
+        }
+        QDir(mainProcessingTempDir).rmdir("."); // Try to remove the main temp folder if empty
+        finalAIOutputDir.clear(); // Ensure it's not pointing to a deleted/incomplete dir
+        return false;
+    }
+
+    // Do NOT delete mainProcessingTempDir here if successful, as finalAIOutputDir is inside it.
+    // The caller will use finalAIOutputDir and then should be responsible for its cleanup (or its parent).
+    return true;
+}
+
 
 
 void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingAlphaChannel)
@@ -587,7 +793,13 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingA
     firstProcess->setProperty("alphaTempDir", alphaInfo.tempDir);
     firstProcess->setProperty("alphaIs16", alphaInfo.is16Bit);
     firstProcess->setProperty("tempPathBase", tempPathBase); // For cleanup
-    firstProcess->setProperty("originalInFile", originalInFile);
+    firstProcess->setProperty("originalInFile", originalInFile); // Store original full input path
+
+    QImage tempOriginalFullImage(originalInFile);
+    firstProcess->setProperty("originalWidth", tempOriginalFullImage.width());
+    firstProcess->setProperty("originalHeight", tempOriginalFullImage.height());
+    firstProcess->setProperty("targetScale", targetScale); // Store the overall target scale for resampling
+    tempOriginalFullImage = QImage(); // Release image data
 
 
     connect(firstProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(Realcugan_NCNN_Vulkan_Iterative_finished()));
@@ -738,21 +950,70 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished() {
         StartNextRealCUGANPass(process); // Start next pass with the same QProcess object
     } else {
         // All passes successfully completed
-        if(item_Status) item_Status->setText(tr("Finished"));
-        QString finalRGBFile = process->property("finalRGBFile").toString();
+        QString finalRGBFile = process->property("finalRGBFile").toString(); // Output of last AI pass
         QString alphaFile = process->property("alphaFile").toString();
         bool hasAlphaFlag = process->property("hasAlpha").toBool();
         QString alphaTempDir = process->property("alphaTempDir").toString();
         bool alphaIs16 = process->property("alphaIs16").toBool();
-        qDebug() << "RealCUGAN: All passes completed successfully for" << finalRGBFile;
+
+        int originalWidth = process->property("originalWidth").toInt();
+        int originalHeight = process->property("originalHeight").toInt();
+        int overallTargetScale = process->property("targetScale").toInt();
+
+        qDebug() << "RealCUGAN: All AI passes completed successfully. Last AI output at:" << finalRGBFile;
         Realcugan_NCNN_Vulkan_CleanupTempFiles(process->property("tempPathBase").toString(), processQueue->size()-1, true /* keepFinal */, finalRGBFile);
 
-        if (hasAlphaFlag && QFile::exists(finalRGBFile)) {
-            AlphaInfo a; a.hasAlpha = true; a.rgbPath = finalRGBFile; a.alphaPath = alphaFile; a.tempDir = alphaTempDir; a.is16Bit = alphaIs16;
-            RestoreAlpha(a, finalRGBFile, finalOutFile);
-        } else if (finalRGBFile != finalOutFile && QFile::exists(finalRGBFile)) {
-            QFile::remove(finalOutFile);
-            QFile::rename(finalRGBFile, finalOutFile);
+        bool finalPostProcessingSuccess = true;
+        if (QFile::exists(finalRGBFile)) {
+            QImage imageAfterAiPasses(finalRGBFile);
+            if (imageAfterAiPasses.isNull()) {
+                qDebug() << "RealCUGAN_Iterative_finished: Failed to load image from finalRGBFile:" << finalRGBFile;
+                finalPostProcessingSuccess = false;
+            } else {
+                int finalTargetWidth = qRound(static_cast<double>(originalWidth) * overallTargetScale);
+                int finalTargetHeight = qRound(static_cast<double>(originalHeight) * overallTargetScale);
+
+                if (imageAfterAiPasses.width() != finalTargetWidth || imageAfterAiPasses.height() != finalTargetHeight) {
+                    qDebug() << "RealCUGAN_Iterative_finished: Resampling AI output from" << imageAfterAiPasses.size()
+                             << "to final target" << QSize(finalTargetWidth, finalTargetHeight);
+                    QImage resampledImage = imageAfterAiPasses.scaled(finalTargetWidth, finalTargetHeight,
+                                                                   this->CustRes_AspectRatioMode, // MainWindow member
+                                                                   Qt::SmoothTransformation);
+                    if (!resampledImage.save(finalRGBFile)) { // Overwrite finalRGBFile with resampled version
+                        qDebug() << "RealCUGAN_Iterative_finished: Failed to save resampled image to" << finalRGBFile;
+                        finalPostProcessingSuccess = false;
+                    }
+                }
+                // If dimensions already match, finalRGBFile is already correct.
+            }
+        } else {
+            qDebug() << "RealCUGAN_Iterative_finished: finalRGBFile does not exist after AI passes:" << finalRGBFile;
+            finalPostProcessingSuccess = false;
+        }
+
+        if (finalPostProcessingSuccess) {
+            if (hasAlphaFlag && QFile::exists(finalRGBFile)) {
+                AlphaInfo a; a.hasAlpha = true; a.rgbPath = finalRGBFile; a.alphaPath = alphaFile; a.tempDir = alphaTempDir; a.is16Bit = alphaIs16;
+                RestoreAlpha(a, finalRGBFile, finalOutFile); // finalOutFile is the true final destination
+            } else if (!hasAlphaFlag && finalRGBFile != finalOutFile && QFile::exists(finalRGBFile)) {
+                // If no alpha, and finalRGBFile (which is now correctly resampled) is not the final output path, rename.
+                if (QFile::exists(finalOutFile)) QFile::remove(finalOutFile);
+                QFile::rename(finalRGBFile, finalOutFile);
+            } else if (!hasAlphaFlag && finalRGBFile == finalOutFile) {
+                // No alpha, and finalRGBFile is already the final output path and correctly resampled. Nothing to do.
+            } else if (!QFile::exists(finalRGBFile)){ // Should have been caught by finalPostProcessingSuccess = false
+                 qDebug() << "RealCUGAN_Iterative_finished: Error, finalRGBFile" << finalRGBFile << "does not exist before alpha/rename.";
+                 finalPostProcessingSuccess = false; // Redundant, but for clarity
+            }
+
+            if (finalPostProcessingSuccess) {
+                 if(item_Status) item_Status->setText(tr("Finished"));
+                 LoadScaledImageToLabel(finalOutFile, ui->label_Preview_Main); // Load final image
+            } else {
+                 if(item_Status) item_Status->setText(tr("Error in final saving step"));
+            }
+        } else { // finalPostProcessingSuccess is false
+            if(item_Status) item_Status->setText(tr("Error in resampling/loading AI output"));
         }
 
         ProcList_RealCUGAN.removeAll(process);
@@ -847,24 +1108,64 @@ void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum)
     QString gpuJobConfig;
     if (ui->checkBox_MultiGPU_RealCUGAN->isChecked()) {
         if (GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
-            qDebug() << "Realcugan_ReadSettings_Video_GIF: Multi-GPU enabled but list is empty";
-            gpuJobConfig = "-g " + m_realcugan_GPUID.split(" ")[0];
-        } else {
-            QStringList gpuIDs;
-            QStringList jobThreadsPerGPU;
-            for (const auto &gpuMap : GPUIDs_List_MultiGPU_RealCUGAN) {
-                gpuIDs.append(gpuMap.value("ID"));
-                QString procThreads = gpuMap.value("Threads", "1");
-                jobThreadsPerGPU.append(QString("1:%1:1").arg(procThreads));
-            }
-            if (!gpuIDs.isEmpty()) {
-                gpuJobConfig = QString("-g %1 -j %2").arg(gpuIDs.join(","), jobThreadsPerGPU.join(","));
+            qDebug() << "Realcugan_ReadSettings_Video_GIF: Multi-GPU enabled but list is empty, falling back to single GPU config.";
+            // Fallback to the primary selected GPU ID if the multi-GPU list is empty
+            QString singleGpuId = m_realcugan_GPUID.split(":")[0]; // Get ID part, e.g., "-1"
+            if (singleGpuId == "-1") { // Single CPU selected in primary dropdown
+                 // Get threads for CPU from a new member variable if we want to support specific threads in this fallback
+                 // For now, assuming default threads for CPU by realcugan-ncnn-vulkan if -j is not provided for single -g -1
+                 // Or, construct a -j based on a default/CPU specific setting if available.
+                 // Let's assume 2 threads for CPU proc if not specified elsewhere for this fallback
+                 // This is a simplification. Ideally, there'd be a UI setting for "single CPU threads".
+                 // For now, we'll use a fixed 1:2:1 for CPU in this specific fallback.
+                 // A better fallback might be to just pass -g -1 and let the tool decide threads.
+                 // Let's go with just -g -1 for fallback for now.
+                 gpuJobConfig = QString("-g -1");
             } else {
-                gpuJobConfig = "-g " + m_realcugan_GPUID.split(" ")[0];
+                 gpuJobConfig = "-g " + singleGpuId;
+            }
+        } else {
+            QStringList gpuIDs_str_list;
+            QStringList jobParams_str_list; // Will store "load:proc:save"
+            for (const auto &gpuMap : GPUIDs_List_MultiGPU_RealCUGAN) {
+                QString currentGpuId = gpuMap.value("ID");
+                gpuIDs_str_list.append(currentGpuId);
+                QString procThreads = gpuMap.value("Threads", "1"); // Default proc threads to 1
+
+                if (currentGpuId == "-1") { // CPU
+                    jobParams_str_list.append(QString("1:%1:1").arg(procThreads)); // Load:CPUThreads:Save
+                } else { // GPU
+                    // For GPUs, realcugan-ncnn-vulkan uses format like proc:proc:proc for threads with -j
+                    // The spec was "1:N:1". Assuming this applies to GPUs as well for consistency.
+                    jobParams_str_list.append(QString("1:%1:1").arg(procThreads));
+                }
+            }
+            if (!gpuIDs_str_list.isEmpty()) {
+                gpuJobConfig = QString("-g %1 -j %2").arg(gpuIDs_str_list.join(","), jobParams_str_list.join(","));
+            } else {
+                // This case should ideally not be reached if GPUIDs_List_MultiGPU_RealCUGAN was not empty.
+                // Fallback to primary selected GPU.
+                QString singleGpuId = m_realcugan_GPUID.split(":")[0];
+                 if (singleGpuId == "-1") { gpuJobConfig = QString("-g -1"); }
+                 else { gpuJobConfig = "-g " + singleGpuId;}
             }
         }
-    } else {
-        gpuJobConfig = "-g " + m_realcugan_GPUID.split(" ")[0];
+    } else { // Single GPU mode (MultiGPU checkbox not checked)
+        QString singleGpuId = m_realcugan_GPUID.split(":")[0];
+        if (singleGpuId == "-1") { // CPU selected in single GPU mode
+            // Here we might want to use a specific thread count for CPU.
+            // Let's assume a default of 2 threads for CPU processing, 1 for load/save, if not specified otherwise.
+            // This assumes realcugan-ncnn-vulkan uses -j for single CPU mode too.
+            // E.g., realcugan-ncnn-vulkan ... -g -1 -j 1:2:1
+            // For now, to match the subtask's focus on multi-GPU, we only pass -g -1.
+            // If threads are needed, m_realcugan_threads_for_single_cpu should be read from UI.
+            gpuJobConfig = QString("-g -1");
+            // If you have a UI element like ui->spinBox_Threads_RealCUGAN for single CPU threads:
+            // int cpu_threads = ui->spinBox_Threads_RealCUGAN->value(); // Assuming this exists
+            // gpuJobConfig = QString("-g -1 -j 1:%1:1").arg(cpu_threads);
+        } else { // GPU selected in single GPU mode
+            gpuJobConfig = "-g " + singleGpuId;
+        }
     }
 
     // Save for later command construction
@@ -878,11 +1179,13 @@ void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum)
 // Blocking helper function to process a single file (image or frame) through RealCUGAN with iterative scaling
 bool MainWindow::Realcugan_ProcessSingleFileIteratively(
     const QString &inputFile, const QString &outputFile, int targetScale,
+    int originalWidth, int originalHeight, /* Added original dimensions */
     const QString &modelName, int denoiseLevel, int tileSize,
     const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat,
     int rowNumForStatusUpdate) // Optional: for status updates if called directly for an image row
 {
-    qDebug() << "Realcugan_ProcessSingleFileIteratively: Input" << inputFile << "Output" << outputFile << "TargetScale" << targetScale;
+    qDebug() << "Realcugan_ProcessSingleFileIteratively: Input" << inputFile << "Output" << outputFile
+             << "TargetScale" << targetScale << "OrigSize:" << originalWidth << "x" << originalHeight;
 
     QFileInfo finalOutFileInfo(outputFile);
     // Use a unique subfolder within temp based on the original input file's name to avoid collisions if this helper is called in parallel.
@@ -900,42 +1203,35 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
 
 
     QList<int> scaleSequence = CalculateRealCUGANScaleSequence(targetScale);
-    int calculatedTotalScale = 1;
-    for(int s : scaleSequence) calculatedTotalScale *= s;
+    int calculatedTotalScaleByAiPasses = 1;
+    for(int s : scaleSequence) calculatedTotalScaleByAiPasses *= s;
 
-    if (scaleSequence.isEmpty() || (calculatedTotalScale != targetScale && targetScale > 1 && calculatedTotalScale > 1) ) {
-        bool isSingleUnsupportedScale = (scaleSequence.size() == 1 && scaleSequence.first() == targetScale && targetScale > 4);
-        if(targetScale > 1 && (scaleSequence.isEmpty() || isSingleUnsupportedScale)) {
-             qDebug() << "RealCUGAN ProcessSingle: Unsupported scale" << targetScale;
-             if (rowNumForStatusUpdate != -1) UpdateTableWidget_Status(rowNumForStatusUpdate, tr("Error: Unsupported scale"), "ERROR");
-             tempDir.removeRecursively();
-             return false;
-        }
-        if (targetScale > 1 && calculatedTotalScale != targetScale) {
-            qDebug() << "RealCUGAN ProcessSingle: Scale sequence product" << calculatedTotalScale << "!= target" << targetScale;
-            if (rowNumForStatusUpdate != -1) UpdateTableWidget_Status(rowNumForStatusUpdate, tr("Error: Scale sequence error"), "ERROR");
-            tempDir.removeRecursively();
-            return false;
-        }
+    // Check if AI passes can achieve a scale, even if not the final targetScale.
+    // The main check for unsupported scale (e.g. 5x, 7x directly) is in CalculateRealCUGANScaleSequence.
+    // If CalculateRealCUGANScaleSequence decided it's impossible (e.g. returns sequence=[5] for target=5),
+    // this error should be caught before calling ProcessSingleFileIteratively, typically in _Image method.
+    // Here, we check if the sequence is empty or if the product is 1 when target > 1 (meaning no effective AI scaling).
+    if (scaleSequence.isEmpty() || (targetScale > 1 && calculatedTotalScaleByAiPasses == 1 && scaleSequence.first() == 1)) {
+        qDebug() << "RealCUGAN ProcessSingle: AI scale sequence issue. Target:" << targetScale
+                 << "Sequence:" << scaleSequence << "Calculated AI scale:" << calculatedTotalScaleByAiPasses;
+        if (rowNumForStatusUpdate != -1) UpdateTableWidget_Status(rowNumForStatusUpdate, tr("Error: AI Scale sequence error"), "ERROR");
+        tempDir.removeRecursively();
+        return false;
     }
+    // The case where calculatedTotalScaleByAiPasses != targetScale is now handled by the final resampling step.
 
     QString currentIterInputFile = inputFile;
+    QString lastAiPassOutputFile = inputFile; // Will hold the output of the very last AI pass
     bool success = true;
 
     for (int i = 0; i < scaleSequence.size(); ++i) {
         if (Stopping) { success = false; break; }
 
         int currentPassScale = scaleSequence[i];
-        QString currentIterOutputFile;
-        bool isLastPass = (i == scaleSequence.size() - 1);
+        // AI pass outputs always go to a temporary file within tempDir to avoid issues with outputFile path
+        lastAiPassOutputFile = tempPathBase + QString::number(i) + "." + outputFormat.toLower();
 
-        if (isLastPass) {
-            currentIterOutputFile = outputFile; // Final pass outputs to the target file
-        } else {
-            currentIterOutputFile = tempPathBase + QString::number(i) + "." + outputFormat.toLower();
-        }
-
-        // Ensure output directory for intermediate or final file exists
+        // Ensure output directory for intermediate file exists (should be tempDir)
         QFileInfo currentIterOutInfo(currentIterOutputFile);
         QDir outputDirForPass(currentIterOutInfo.path());
         if (!outputDirForPass.exists()) {
@@ -987,38 +1283,67 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
             qDebug() << "RealCUGAN ProcessSingle: Pass" << i+1 << "failed. ExitCode:" << process.exitCode();
             success = false; break;
         }
-        if (!QFile::exists(currentIterOutputFile)) {
-            qDebug() << "RealCUGAN ProcessSingle: Output file for pass" << i+1 << "not found:" << currentIterOutputFile;
+        if (!QFile::exists(lastAiPassOutputFile)) {
+            qDebug() << "RealCUGAN ProcessSingle: Output file for pass" << i+1 << "not found:" << lastAiPassOutputFile;
             success = false; break;
         }
+        currentIterInputFile = lastAiPassOutputFile; // Output of this pass is input for the next
+    }
 
-        if (!isLastPass) { // If not the last pass, the output becomes input for next
-            currentIterInputFile = currentIterOutputFile;
+    if (success && !Stopping) {
+        QImage imageAfterAiPasses(lastAiPassOutputFile); // Load the result of the last AI pass
+        if (imageAfterAiPasses.isNull()) {
+            qDebug() << "RealCUGAN: Failed to load image after AI passes from" << lastAiPassOutputFile;
+            success = false;
+        } else {
+            int finalTargetWidth = qRound(static_cast<double>(originalWidth) * targetScale);
+            int finalTargetHeight = qRound(static_cast<double>(originalHeight) * targetScale);
+
+            if (imageAfterAiPasses.width() != finalTargetWidth || imageAfterAiPasses.height() != finalTargetHeight) {
+                qDebug() << "RealCUGAN: Resampling AI output from" << imageAfterAiPasses.size()
+                         << "to final target" << QSize(finalTargetWidth, finalTargetHeight) << "for output file" << outputFile;
+                QImage resampledImage = imageAfterAiPasses.scaled(finalTargetWidth, finalTargetHeight,
+                                                               this->CustRes_AspectRatioMode,
+                                                               Qt::SmoothTransformation);
+                if (!resampledImage.save(outputFile)) {
+                    qDebug() << "RealCUGAN: Failed to save resampled image to" << outputFile;
+                    success = false;
+                }
+            } else { // Dimensions are already correct after AI passes
+                if (lastAiPassOutputFile != outputFile) { // If AI output was a temp file
+                    if (QFile::exists(outputFile)) QFile::remove(outputFile);
+                    if (!QFile::copy(lastAiPassOutputFile, outputFile)) {
+                        qDebug() << "RealCUGAN: Failed to copy final image from" << lastAiPassOutputFile << "to" << outputFile;
+                        success = false;
+                    }
+                }
+                // If lastAiPassOutputFile IS outputFile, it's already in place.
+            }
         }
     }
 
-    // Cleanup intermediate files (all files in tempDir except the final output if it landed there by mistake)
+    // Cleanup all temporary files created by AI passes
     if (tempDir.exists()) {
         QDirIterator it(tempDir.path(), QDir::Files);
         while(it.hasNext()){
-            QString filePath = it.next();
-            if (filePath != outputFile) { // Don't delete the final output if it was written to temp for some reason
-                QFile::remove(filePath);
-                qDebug() << "RealCUGAN ProcessSingle: Deleted temp file" << filePath;
+            QString tempFilePath = it.next();
+            // Only delete if it's not the final intended outputFile (e.g. if outputFile was inside tempDir AND no resampling happened)
+            if (tempFilePath != outputFile) {
+                 QFile::remove(tempFilePath);
+                 qDebug() << "RealCUGAN ProcessSingle: Deleted temp AI pass file" << tempFilePath;
             }
         }
         tempDir.rmdir("."); // Remove the specific temp subfolder if empty
-        // Attempt to remove the parent W2XEX_RC_Iter if it's empty (might not be if other processes use it)
         QDir parentTempDir(QDir::tempPath() + "/W2XEX_RC_Iter");
-        parentTempDir.rmdir(QFileInfo(tempSubFolder).fileName()); // remove specific subfolder
+        parentTempDir.rmdir(QFileInfo(tempSubFolder).fileName());
     }
 
-    if (Stopping && success) { // If processing was stopped externally but current ops seemed to succeed
-        qDebug() << "RealCUGAN ProcessSingle: Processing stopped externally.";
-        return false; // Indicate overall failure due to stop
+    if (Stopping && success) { // If processing was stopped externally even if current ops seemed to succeed
+        qDebug() << "RealCUGAN ProcessSingle: Processing stopped externally, but current operations were successful until stop.";
+        return false; // Indicate overall failure due to stop signal
     }
     if (!success && rowNumForStatusUpdate != -1) {
-        UpdateTableWidget_Status(rowNumForStatusUpdate, tr("Error during processing"), "ERROR");
+        UpdateTableWidget_Status(rowNumForStatusUpdate, tr("Error during RealCUGAN processing"), "ERROR");
     }
 
 
@@ -1041,13 +1366,10 @@ void MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString sca
     // This sets m_realcugan_gpuJobConfig_temp based on multi-GPU UI settings.
     Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(0);
 
-    // 3. Determine Target Scale (Assuming APNG uses the general image scale setting for now)
-    // This needs to be confirmed: does APNG have its own scale UI or use image/gif/video scale?
-    // Let's assume it uses the main image scale setting from ui->spinBox_Scale_RealCUGAN for now.
-    int targetScale = ui->spinBox_Scale_RealCUGAN->value();
-    if (targetScale <= 0) targetScale = 1; // Ensure scale is at least 1x
+    int targetScale = ui->spinBox_Scale_RealCUGAN->value(); // Use the general RealCUGAN scale
+    if (targetScale <= 0) targetScale = 1;
 
-    // Ensure scaledFramesFolder exists
+    // Ensure final output scaledFramesFolder exists (it's an output param for this func, but APNG_Main creates it)
     QDir outputDir(scaledFramesFolder);
     if (!outputDir.exists()) {
         if (!outputDir.mkpath(".")) {
@@ -1073,36 +1395,131 @@ void MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString sca
         Send_TextBrowser_NewMessage(tr("Processing APNG frame %1/%2: %3 (RealCUGAN)").arg(frameCount).arg(framesFileName_qStrList.size()).arg(frameFileName));
 
 
+    QString sourceFileNameNoExt = QFileInfo(sourceFileFullPath).completeBaseName(); // Used for temp folder naming
+
+    // --- Alpha Preparation and RGB frame extraction ---
+    emit Send_TextBrowser_NewMessage(tr("Preparing APNG frames (RGB/Alpha separation)... (RealCUGAN)"));
+    QString rgbFramesTempDir = Current_Path + "/temp_W2xEX/" + sourceFileNameNoExt + "_RC_APNG_rgb_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QString alphaBackupTempDir = Current_Path + "/temp_W2xEX/" + sourceFileNameNoExt + "_RC_APNG_alpha_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QDir().mkpath(rgbFramesTempDir);
+    QDir().mkpath(alphaBackupTempDir);
+    QMap<QString, AlphaInfo> frameAlphaInfosAPNG;
+
+    bool prepSuccessAPNG = true;
+    // Progress reporting for this part can be tricky as APNG_Main might have its own. For now, console logs.
+    qDebug() << "APNG_Realcugan: Starting alpha prep loop for" << framesFileName_qStrList.count() << "frames.";
+    for (const QString &frameFileName : framesFileName_qStrList) {
+        if (Stopping) { prepSuccessAPNG = false; break; }
         QString inputFramePath = QDir(splitFramesFolder).filePath(frameFileName);
-        QString outputFramePath = QDir(scaledFramesFolder).filePath(frameFileName); // Preserve original filename
+        AlphaInfo alphaInfo = PrepareAlpha(inputFramePath);
+        frameAlphaInfosAPNG.insert(frameFileName, alphaInfo);
 
-        bool success = Realcugan_ProcessSingleFileIteratively(
-            inputFramePath, outputFramePath, targetScale,
-            m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
-            m_realcugan_gpuJobConfig_temp, // GPU/Job config string from _ReadSettings_Video_GIF
-            ui->checkBox_MultiGPU_RealCUGAN->isChecked(), // isMultiGPUJob flag
-            m_realcugan_TTA,
-            QFileInfo(frameFileName).suffix() // Use original frame's suffix for output format, or default to png
-        );
-
-        if (!success) {
-            allFramesProcessedSuccessfully = false;
-            qDebug() << "APNG_RealcuganNCNNVulkan: Failed to process frame" << frameFileName;
-            Send_TextBrowser_NewMessage(tr("Error processing APNG frame: %1 (RealCUGAN)").arg(frameFileName));
-            // Decide on error strategy: stop here or try next frame?
-            // For now, let's stop and report failure. APNG_Main will see not all frames are there.
-            break;
+        QString rgbFrameDestPath = QDir(rgbFramesTempDir).filePath(frameFileName);
+        if (alphaInfo.rgbPath != inputFramePath) {
+            if (!QFile::copy(alphaInfo.rgbPath, rgbFrameDestPath)) { prepSuccessAPNG = false; break; }
+            if (alphaInfo.tempDir.startsWith(QDir::tempPath())) QDir(alphaInfo.tempDir).removeRecursively();
+        } else {
+            if (!QFile::copy(inputFramePath, rgbFrameDestPath)) { prepSuccessAPNG = false; break; }
+        }
+        if (alphaInfo.hasAlpha) {
+            QString alphaBackupPath = QDir(alphaBackupTempDir).filePath(frameFileName);
+            if (!QFile::copy(alphaInfo.alphaPath, alphaBackupPath)) { prepSuccessAPNG = false; break; }
         }
     }
-
-    if (allFramesProcessedSuccessfully && !Stopping) {
-        qDebug() << "APNG_RealcuganNCNNVulkan: All frames processed successfully.";
-        Send_TextBrowser_NewMessage(tr("All APNG frames processed successfully (RealCUGAN)."));
-    } else if (!Stopping) {
-        qDebug() << "APNG_RealcuganNCNNVulkan: Finished processing frames, but some errors occurred.";
-        Send_TextBrowser_NewMessage(tr("Finished APNG frames processing with errors (RealCUGAN)."));
+    if (!prepSuccessAPNG || Stopping) {
+        qDebug() << "APNG_Realcugan: Error during alpha prep or stopped.";
+        QDir(rgbFramesTempDir).removeRecursively(); QDir(alphaBackupTempDir).removeRecursively();
+        // APNG_Main needs to know this failed. Maybe by checking if scaledFramesFolder is empty.
+        return;
     }
-    // APNG_Main will handle the reassembly and final signaling.
+
+    // --- AI Processing on RGB frames directory ---
+    QString scaledRgbFramesAIDirAPNG;
+    emit Send_TextBrowser_NewMessage(tr("Starting AI processing for APNG frames... (RealCUGAN)"));
+    bool aiProcessingSuccessAPNG = Realcugan_ProcessDirectoryIteratively(
+        rgbFramesTempDir, scaledRgbFramesAIDirAPNG, targetScale,
+        m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
+        m_realcugan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
+        m_realcugan_TTA, "png"
+    );
+    QDir(rgbFramesTempDir).removeRecursively();
+
+    if (!aiProcessingSuccessAPNG || Stopping) {
+        qDebug() << "APNG_Realcugan: Error during AI processing or stopped.";
+        QDir(alphaBackupTempDir).removeRecursively(); QDir(scaledRgbFramesAIDirAPNG).removeRecursively();
+        return;
+    }
+
+    // --- Alpha Restoration Loop ---
+    emit Send_TextBrowser_NewMessage(tr("Restoring alpha to APNG frames... (RealCUGAN)"));
+    QString combinedFramesAIDirAPNG = Current_Path + "/temp_W2xEX/" + sourceFileNameNoExt + "_RC_APNG_combined_AI_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QDir().mkpath(combinedFramesAIDirAPNG);
+    bool restoreAlphaSuccessAPNG = true;
+    qDebug() << "APNG_Realcugan: Starting alpha restore loop.";
+    for (const QString &originalFrameFileName : framesFileName_qStrList) {
+        if (Stopping) { restoreAlphaSuccessAPNG = false; break; }
+        QString scaledRgbFramePath = QDir(scaledRgbFramesAIDirAPNG).filePath(originalFrameFileName);
+        QString finalCombinedFramePath = QDir(combinedFramesAIDirAPNG).filePath(originalFrameFileName);
+        AlphaInfo currentFrameAlphaInfo = frameAlphaInfosAPNG.value(originalFrameFileName);
+
+        if (currentFrameAlphaInfo.hasAlpha) {
+            QString backedUpAlphaPath = QDir(alphaBackupTempDir).filePath(originalFrameFileName);
+            if (!QFile::exists(backedUpAlphaPath)) { QFile::copy(scaledRgbFramePath, finalCombinedFramePath); continue;}
+            AlphaInfo tempRestoreInfo = {true, scaledRgbFramePath, backedUpAlphaPath, "", false}; // is16bit not critical here
+            if (!RestoreAlpha(tempRestoreInfo, scaledRgbFramePath, finalCombinedFramePath, true, targetScale)) {
+                restoreAlphaSuccessAPNG = false; break;
+            }
+        } else {
+            if (!QFile::copy(scaledRgbFramePath, finalCombinedFramePath)) { restoreAlphaSuccessAPNG = false; break; }
+        }
+    }
+    QDir(scaledRgbFramesAIDirAPNG).removeRecursively();
+    QDir(alphaBackupTempDir).removeRecursively();
+
+    if (!restoreAlphaSuccessAPNG || Stopping) {
+        qDebug() << "APNG_Realcugan: Error during alpha restoration or stopped.";
+        QDir(combinedFramesAIDirAPNG).removeRecursively();
+        return;
+    }
+
+    // --- Resampling Loop for combined frames ---
+    emit Send_TextBrowser_NewMessage(tr("Resampling final APNG frames... (RealCUGAN)"));
+    QSize originalApngSize;
+    if (!framesFileName_qStrList.isEmpty()) {
+        QImage firstFrame(QDir(splitFramesFolder).filePath(framesFileName_qStrList.first()));
+        if(!firstFrame.isNull()) originalApngSize = firstFrame.size();
+    }
+    if(originalApngSize.isEmpty()){
+        qDebug() << "APNG_Realcugan: Failed to get original APNG dimensions for resampling.";
+        QDir(combinedFramesAIDirAPNG).removeRecursively(); return;
+    }
+    int targetFrameWidth = qRound(static_cast<double>(originalApngSize.width()) * targetScale);
+    int targetFrameHeight = qRound(static_cast<double>(originalApngSize.height()) * targetScale);
+
+    QStringList combinedFramesListAPNG = file_getFileNames_in_Folder_nofilter(combinedFramesAIDirAPNG);
+    bool resamplingSuccessAPNG = true;
+    qDebug() << "APNG_Realcugan: Starting resampling loop.";
+    for (const QString &combinedFrameFileName : combinedFramesListAPNG) {
+        if (Stopping) { resamplingSuccessAPNG = false; break; }
+        QString combinedFramePath = QDir(combinedFramesAIDirAPNG).filePath(combinedFrameFileName);
+        QImage combinedImage(combinedFramePath);
+        if (combinedImage.isNull()) { resamplingSuccessAPNG = false; continue; }
+
+        QImage resampledImage = combinedImage.scaled(targetFrameWidth, targetFrameHeight, this->CustRes_AspectRatioMode, Qt::SmoothTransformation);
+        QString finalFramePath = QDir(scaledFramesFolder).filePath(combinedFrameFileName); // scaledFramesFolder is the function's output dir
+        if (!resampledImage.save(finalFramePath)) { resamplingSuccessAPNG = false; break; }
+    }
+    QDir(combinedFramesAIDirAPNG).removeRecursively();
+
+    if (!resamplingSuccessAPNG || Stopping) {
+        qDebug() << "APNG_Realcugan: Error during resampling or stopped.";
+        // scaledFramesFolder might have partial files, APNG_Main should handle this.
+        return;
+    }
+
+    qDebug() << "APNG_RealcuganNCNNVulkan: All frame processing stages (AI, Alpha, Resample) completed successfully.";
+    Send_TextBrowser_NewMessage(tr("All APNG frames processed and resampled (RealCUGAN)."));
+    // APNG_Main will now use the frames in `scaledFramesFolder` for assembly.
 }
 
 
@@ -1148,63 +1565,183 @@ void MainWindow::Realcugan_NCNN_Vulkan_GIF(int rowNum)
 
     emit Send_TextBrowser_NewMessage(tr("Processing GIF frames with RealCUGAN..."));
 
-    // 3. Read general RealCUGAN settings & prepare for batch GPU processing
+    // 3. Read general RealCUGAN settings
     Realcugan_NCNN_Vulkan_ReadSettings();
-    Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(0); // Using ThreadNum=0 for now
+    Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(0); // Sets m_realcugan_gpuJobConfig_temp
 
-    // 4. Determine Target Scale (Assuming GIF uses GIF scale settings)
-    int targetScale = ui->spinBox_scaleRatio_gif->value(); // Or ui->spinBox_Scale_RealCUGAN if RealCUGAN has its own scale under its tab
+    // 4. Determine Target Scale
+    int targetScale = ui->spinBox_scaleRatio_gif->value();
     if (targetScale <= 0) targetScale = 1;
 
-    bool allFramesProcessedSuccessfully = true;
-    int frameCount = 0;
+    // --- Alpha Preparation and RGB frame extraction ---
+    emit Send_TextBrowser_NewMessage(tr("Preparing GIF frames (RGB/Alpha separation)... (RealCUGAN)"));
+    QString rgbFramesTempDir = Current_Path + "/temp_W2xEX/" + sourceFileNameNoExt + "_RC_GIF_rgb_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QString alphaBackupTempDir = Current_Path + "/temp_W2xEX/" + sourceFileNameNoExt + "_RC_GIF_alpha_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QDir().mkpath(rgbFramesTempDir);
+    QDir().mkpath(alphaBackupTempDir);
+    QMap<QString, AlphaInfo> frameAlphaInfos; // Store alpha info per original frame name
 
-    CurrentFileProgress_Start(sourceFileInfo.fileName(),framesFileName_qStrList.count());
-
+    bool prepSuccess = true;
+    CurrentFileProgress_Start(sourceFileInfo.fileName() + tr(" (Prep Alpha)"), framesFileName_qStrList.count());
     for (const QString &frameFileName : framesFileName_qStrList) {
-        if (Stopping == true) {
-            allFramesProcessedSuccessfully = false;
-            qDebug() << "RealCUGAN GIF: Processing stopped.";
-            break;
-        }
-        frameCount++;
-        emit Send_TextBrowser_NewMessage(tr("Processing GIF frame %1/%2: %3 (RealCUGAN)").arg(frameCount).arg(framesFileName_qStrList.size()).arg(frameFileName));
+        if (Stopping) { prepSuccess = false; break; }
         CurrentFileProgress_progressbar_Add();
-
-
         QString inputFramePath = QDir(splitFramesFolder).filePath(frameFileName);
-        QString outputFramePath = QDir(scaledFramesFolder).filePath(frameFileName);
+        AlphaInfo alphaInfo = PrepareAlpha(inputFramePath); // PrepareAlpha handles if it's already RGB
+        frameAlphaInfos.insert(frameFileName, alphaInfo);
 
-        AlphaInfo a = PrepareAlpha(inputFramePath);
-        QString iterInput = a.rgbPath;
-        QString iterOutput = a.hasAlpha ? QDir(a.tempDir).filePath("rgb_out.png") : outputFramePath;
-
-        bool success = Realcugan_ProcessSingleFileIteratively(
-            iterInput, iterOutput, targetScale,
-            m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
-            m_realcugan_gpuJobConfig_temp,
-            ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
-            m_realcugan_TTA,
-            QFileInfo(frameFileName).suffix().isEmpty() ? "png" : QFileInfo(frameFileName).suffix() // Default to png if suffix is missing
-        );
-
-        if(success && a.hasAlpha) {
-            RestoreAlpha(a, iterOutput, outputFramePath);
+        QString rgbFrameDestPath = QDir(rgbFramesTempDir).filePath(frameFileName);
+        // PrepareAlpha might output to its own temp dir (alphaInfo.rgbPath) or use input directly if no alpha
+        if (alphaInfo.rgbPath != inputFramePath) { // If rgbPath is a temp file from PrepareAlpha
+            if (!QFile::copy(alphaInfo.rgbPath, rgbFrameDestPath)) {
+                qDebug() << "RealCUGAN GIF: Failed to copy RGB temp frame" << alphaInfo.rgbPath << "to" << rgbFrameDestPath;
+                prepSuccess = false; break;
+            }
+             if (alphaInfo.tempDir.startsWith(QDir::tempPath())) QDir(alphaInfo.tempDir).removeRecursively(); // Clean up PrepareAlpha's specific temp
+        } else { // No alpha, rgbPath is same as inputFramePath
+            if (!QFile::copy(inputFramePath, rgbFrameDestPath)) {
+                 qDebug() << "RealCUGAN GIF: Failed to copy RGB frame" << inputFramePath << "to" << rgbFrameDestPath;
+                 prepSuccess = false; break;
+            }
         }
-
-        if (!success) {
-            if(a.hasAlpha)
-                QDir(a.tempDir).removeRecursively();
-            allFramesProcessedSuccessfully = false;
-            qDebug() << "RealCUGAN GIF: Failed to process frame" << frameFileName;
-            emit Send_TextBrowser_NewMessage(tr("Error processing GIF frame: %1 (RealCUGAN)").arg(frameFileName));
-            break;
+        if (alphaInfo.hasAlpha) { // Backup the separated alpha channel
+            QString alphaBackupPath = QDir(alphaBackupTempDir).filePath(frameFileName); // Use same name for easy mapping
+            if (!QFile::copy(alphaInfo.alphaPath, alphaBackupPath)) {
+                qDebug() << "RealCUGAN GIF: Failed to copy alpha backup" << alphaInfo.alphaPath << "to" << alphaBackupPath;
+                prepSuccess = false; break;
+            }
         }
     }
     CurrentFileProgress_Stop();
+    if (!prepSuccess || Stopping) {
+        item_Status->setText(Stopping ? tr("Stopped") : tr("Error preparing alpha"));
+        QDir(splitFramesFolder).removeRecursively(); QDir(rgbFramesTempDir).removeRecursively(); QDir(alphaBackupTempDir).removeRecursively(); QDir(scaledFramesFolder).removeRecursively();
+        ProcessNextFile(); return;
+    }
+
+    // --- AI Processing on RGB frames directory ---
+    QString scaledRgbFramesAIDir; // This will be set by Realcugan_ProcessDirectoryIteratively
+    emit Send_TextBrowser_NewMessage(tr("Starting AI processing for GIF frames... (RealCUGAN)"));
+    bool aiProcessingSuccess = Realcugan_ProcessDirectoryIteratively(
+        rgbFramesTempDir, scaledRgbFramesAIDir, targetScale,
+        m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
+        m_realcugan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
+        m_realcugan_TTA, "png" // AI process needs a defined format, png is good for quality
+    );
+    QDir(rgbFramesTempDir).removeRecursively(); // Cleaned up after AI processing input
+
+    if (!aiProcessingSuccess || Stopping) {
+        item_Status->setText(Stopping ? tr("Stopped") : tr("Error in AI processing"));
+        QDir(splitFramesFolder).removeRecursively(); QDir(alphaBackupTempDir).removeRecursively(); QDir(scaledRgbFramesAIDir).removeRecursively(); QDir(scaledFramesFolder).removeRecursively();
+        ProcessNextFile(); return;
+    }
+
+    // --- Alpha Restoration Loop ---
+    emit Send_TextBrowser_NewMessage(tr("Restoring alpha channel to AI processed frames... (RealCUGAN GIF)"));
+    QString combinedFramesAIDir = Current_Path + "/temp_W2xEX/" + sourceFileNameNoExt + "_RC_GIF_combined_AI_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
+    QDir().mkpath(combinedFramesAIDir);
+    bool restoreAlphaSuccess = true;
+    CurrentFileProgress_Start(sourceFileInfo.fileName() + tr(" (Restore Alpha)"), framesFileName_qStrList.count()); // Using original frame list for count
+
+    for (const QString &originalFrameFileName : framesFileName_qStrList) { // Iterate based on original frame names
+        if (Stopping) { restoreAlphaSuccess = false; break; }
+        CurrentFileProgress_progressbar_Add();
+
+        QString scaledRgbFramePath = QDir(scaledRgbFramesAIDir).filePath(originalFrameFileName); // Assumes AI output dir preserves names
+        QString finalCombinedFramePath = QDir(combinedFramesAIDir).filePath(originalFrameFileName);
+        AlphaInfo currentFrameAlphaInfo = frameAlphaInfos.value(originalFrameFileName);
+
+        if (currentFrameAlphaInfo.hasAlpha) {
+            QString backedUpAlphaPath = QDir(alphaBackupTempDir).filePath(originalFrameFileName);
+            if (!QFile::exists(backedUpAlphaPath)) {
+                 qDebug() << "RealCUGAN GIF: Missing alpha backup for" << originalFrameFileName;
+                 // Copy scaled RGB as is, or error? For now, copy RGB.
+                 if(!QFile::copy(scaledRgbFramePath, finalCombinedFramePath)) {restoreAlphaSuccess = false; break;}
+                 continue;
+            }
+            // Create a temporary AlphaInfo for RestoreAlpha, pointing to the scaled RGB and its original alpha backup
+            AlphaInfo tempRestoreInfo;
+            tempRestoreInfo.hasAlpha = true;
+            tempRestoreInfo.rgbPath = scaledRgbFramePath; // Input for RestoreAlpha's RGB
+            tempRestoreInfo.alphaPath = backedUpAlphaPath; // Input for RestoreAlpha's Alpha
+            // tempRestoreInfo.tempDir does not need to be a valid path here as RestoreAlpha uses rgbPath's dir for its own temp if needed.
+            // However, RestoreAlpha expects to be able to create a temp file relative to rgbPath. Ensure scaledRgbFramePath's dir is writable. (It is, it's our temp dir).
+
+            if (!RestoreAlpha(tempRestoreInfo, scaledRgbFramePath, finalCombinedFramePath, true /* use passed alpha for scaling*/, targetScale /* pass target scale for alpha */ )) {
+                 qDebug() << "RealCUGAN GIF: RestoreAlpha failed for" << originalFrameFileName;
+                 restoreAlphaSuccess = false; break;
+            }
+        } else { // No alpha for this frame
+            if (!QFile::copy(scaledRgbFramePath, finalCombinedFramePath)) {
+                qDebug() << "RealCUGAN GIF: Failed to copy non-alpha frame" << scaledRgbFramePath;
+                restoreAlphaSuccess = false; break;
+            }
+        }
+    }
+    CurrentFileProgress_Stop();
+    QDir(scaledRgbFramesAIDir).removeRecursively();
+    QDir(alphaBackupTempDir).removeRecursively();
+
+    if (!restoreAlphaSuccess || Stopping) {
+        item_Status->setText(Stopping ? tr("Stopped") : tr("Error restoring alpha"));
+        QDir(splitFramesFolder).removeRecursively(); QDir(combinedFramesAIDir).removeRecursively(); QDir(scaledFramesFolder).removeRecursively();
+        ProcessNextFile(); return;
+    }
+
+    // --- Resampling Loop for combined frames ---
+    emit Send_TextBrowser_NewMessage(tr("Resampling final frames... (RealCUGAN GIF)"));
+    QSize originalGifSize;
+    if (!framesFileName_qStrList.isEmpty()) {
+        QImage firstFrame(QDir(splitFramesFolder).filePath(framesFileName_qStrList.first()));
+        if(!firstFrame.isNull()) originalGifSize = firstFrame.size();
+    }
+    if(originalGifSize.isEmpty()){
+        qDebug() << "RealCUGAN GIF: Failed to get original GIF dimensions for resampling.";
+        item_Status->setText(tr("Error: Get GIF original size failed"));
+        QDir(splitFramesFolder).removeRecursively(); QDir(combinedFramesAIDir).removeRecursively(); QDir(scaledFramesFolder).removeRecursively();
+        ProcessNextFile(); return;
+    }
+    int targetFrameWidth = qRound(static_cast<double>(originalGifSize.width()) * targetScale);
+    int targetFrameHeight = qRound(static_cast<double>(originalGifSize.height()) * targetScale);
+
+    QStringList combinedFramesList = file_getFileNames_in_Folder_nofilter(combinedFramesAIDir);
+    bool resamplingSuccess = true;
+    CurrentFileProgress_Start(sourceFileInfo.fileName() + tr(" (Resample Output)"), combinedFramesList.count());
+
+    for (const QString &combinedFrameFileName : combinedFramesList) {
+        if (Stopping) { resamplingSuccess = false; break; }
+        CurrentFileProgress_progressbar_Add();
+
+        QString combinedFramePath = QDir(combinedFramesAIDir).filePath(combinedFrameFileName);
+        QImage combinedImage(combinedFramePath);
+        if (combinedImage.isNull()) {
+            qDebug() << "RealCUGAN GIF: Failed to load combined frame for resampling:" << combinedFramePath;
+            resamplingSuccess = false; continue;
+        }
+
+        QImage resampledImage = combinedImage.scaled(targetFrameWidth, targetFrameHeight, this->CustRes_AspectRatioMode, Qt::SmoothTransformation);
+        QString finalFramePath = QDir(scaledFramesFolder).filePath(combinedFrameFileName); // Save to final assembly folder
+
+        QFileInfo finalFrameInfo(finalFramePath);
+        QDir finalFrameDir(finalFrameInfo.path());
+        if(!finalFrameDir.exists()) finalFrameDir.mkpath(".");
+
+        if (!resampledImage.save(finalFramePath)) {
+            qDebug() << "RealCUGAN GIF: Failed to save resampled frame:" << finalFramePath;
+            resamplingSuccess = false; break;
+        }
+    }
+    CurrentFileProgress_Stop();
+    QDir(combinedFramesAIDir).removeRecursively();
+
+    if (!resamplingSuccess || Stopping) {
+        item_Status->setText(Stopping ? tr("Stopped") : tr("Error in final resampling"));
+        QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolder).removeRecursively();
+        ProcessNextFile(); return;
+    }
 
     // 5. Assemble processed frames back into a GIF
-    if (allFramesProcessedSuccessfully && !Stopping) {
+    if (!Stopping) {
         emit Send_TextBrowser_NewMessage(tr("Assembling processed GIF frames: %1 (RealCUGAN)").arg(resultFileFullPath));
         int duration = Gif_getDuration(sourceFileFullPath); // Get original GIF's frame duration
         // Gif_assembleGif parameters: (QString ResGifPath,QString ScaledFramesPath,int Duration,bool CustRes_isEnabled,int CustRes_height,int CustRes_width,bool isOverScaled,QString SourceGifFullPath)
@@ -1284,60 +1821,71 @@ QString MainWindow::RealcuganNcnnVulkan_MultiGPU()
         return "-g " + m_realcugan_GPUID.split(" ")[0];
     }
 
-    // For single-image calls this returns the combined settings for all selected GPUs
-    // which matches how batch frame processing uses the result.
+    // For single-image calls this returns the combined settings for all selected GPUs.
+    // This function is also used by Realcugan_NCNN_Vulkan_PrepareArguments for single image multi-GPU.
 
-    QStringList gpuIDs;
-    QStringList jobThreadsPerGPU;
-
-    // Assuming for a single image, if multi-GPU is selected, we might just use the *first* configured multi-GPU.
-    // Or, if RealCUGAN can actually use multiple GPUs for one image (unlikely for this type of tool), this needs to be specific.
-    // Let's assume it will use the list of GPUs for parallel processing of frames (handled by _ReadSettings_Video_GIF)
-    // and for single images, it might imply using *one specific GPU from the list* or the tool might pick.
-    // For now, this function will construct the string as if all listed GPUs are for one task,
-    // which is how _ReadSettings_Video_GIF will use it.
-    // This might need refinement based on how RealCUGAN handles -g and -j for single files vs folders.
+    QStringList gpuIDs_str_list;
+    QStringList jobParams_str_list; // Stores "load:proc:save"
 
     for (const auto& gpuMap : GPUIDs_List_MultiGPU_RealCUGAN) {
-        gpuIDs.append(gpuMap.value("ID"));
-        // RealCUGAN's -j with -g usually means processing threads per GPU.
-        jobThreadsPerGPU.append(gpuMap.value("Threads", "2")); // Default processing threads
+        QString currentGpuId = gpuMap.value("ID");
+        gpuIDs_str_list.append(currentGpuId);
+        QString procThreads = gpuMap.value("Threads", "1"); // Default proc threads to 1
+
+        if (currentGpuId == "-1") { // CPU
+            jobParams_str_list.append(QString("1:%1:1").arg(procThreads));
+        } else { // GPU
+            // Assuming the same "load:proc:save" format for GPUs if user specifies threads.
+            // realcugan-ncnn-vulkan might default GPU threads if not specified or if -j is not for GPUs.
+            // Based on subtask point 4, this format is expected.
+            jobParams_str_list.append(QString("1:%1:1").arg(procThreads));
+        }
     }
 
-    if (gpuIDs.isEmpty()) { // Should not happen if checkbox is checked and list is populated
-        return "-g " + m_realcugan_GPUID.split(" ")[0]; // Fallback
+    if (gpuIDs_str_list.isEmpty()) { // Should not happen if checkbox is checked and list is populated
+        // Fallback to the primary selected GPU ID
+        QString singleGpuId = m_realcugan_GPUID.split(":")[0];
+        if (singleGpuId == "-1") { return QString("-g -1"); } // Potentially add -j here too if needed for single CPU
+        else { return QString("-g ") + singleGpuId; }
     }
 
-    // Format: -g G0,G1,... -j J0,J1,...
-    // This is the most common format for ncnn tools that support distributing work over multiple GPUs.
-    return QString("-g %1 -j %2").arg(gpuIDs.join(","), jobThreadsPerGPU.join(","));
+    // Format: -g G0,G1,... -j L0:P0:S0,L1:P1:S1,...
+    return QString("-g %1 -j %2").arg(gpuIDs_str_list.join(","), jobParams_str_list.join(","));
 }
 
 void MainWindow::AddGPU_MultiGPU_RealcuganNcnnVulkan(QString GPUID_Name)
 {
     if (GPUID_Name.isEmpty() || GPUID_Name.contains("No available")) return;
 
-    QString selectedGPU_ID = GPUID_Name.split(":").first();
-    QString selectedGPU_Name = GPUID_Name.mid(GPUID_Name.indexOf(":") + 1).trimmed();
+    QString selectedGPU_ID_str;
+    QString selectedGPU_Name_str;
     int threads = ui->spinBox_Threads_MultiGPU_RealCUGAN->value();
 
+    if (GPUID_Name == "-1: CPU" || GPUID_Name == tr("-1: CPU")) {
+        selectedGPU_ID_str = "-1";
+        selectedGPU_Name_str = "CPU";
+    } else {
+        selectedGPU_ID_str = GPUID_Name.split(":").first();
+        selectedGPU_Name_str = GPUID_Name.mid(GPUID_Name.indexOf(":") + 1).trimmed();
+    }
+
     for (const auto& map : GPUIDs_List_MultiGPU_RealCUGAN) {
-        if (map.value("ID") == selectedGPU_ID) {
+        if (map.value("ID") == selectedGPU_ID_str) {
             ShowMessageBox("Info", "This GPU has already been added for RealCUGAN.", QMessageBox::Information);
             return;
         }
     }
 
     QMap<QString, QString> newGPU;
-    newGPU.insert("ID", selectedGPU_ID);
-    newGPU.insert("Name", selectedGPU_Name);
+    newGPU.insert("ID", selectedGPU_ID_str);
+    newGPU.insert("Name", selectedGPU_Name_str);
     newGPU.insert("Threads", QString::number(threads));
     GPUIDs_List_MultiGPU_RealCUGAN.append(newGPU);
 
     QListWidgetItem *newItem = new QListWidgetItem();
-    newItem->setText(QString("ID: %1, Name: %2, Threads: %3").arg(selectedGPU_ID, selectedGPU_Name, QString::number(threads)));
+    newItem->setText(QString("ID: %1, Name: %2, Threads: %3").arg(selectedGPU_ID_str, selectedGPU_Name_str, QString::number(threads)));
     ui->listWidget_GPUList_MultiGPU_RealCUGAN->addItem(newItem);
-    qDebug() << "Added GPU for RealCUGAN Multi-GPU:" << selectedGPU_ID << "Threads:" << threads;
+    qDebug() << "Added Device for RealCUGAN Multi-Processing:" << selectedGPU_ID_str << "Name:" << selectedGPU_Name_str << "Threads:" << threads;
 }
 
 
@@ -1404,6 +1952,8 @@ void MainWindow::Realcugan_ncnn_vulkan_DetectGPU_finished(int exitCode, QProcess
         QRegularExpression gpuRegex3("gpu\\s+(\\d+)\\s*:\\s*(.+)"); // Format: "gpu 0: NVIDIA..."
 
         Available_GPUID_RealCUGAN.clear();
+        // Add CPU option first
+        Available_GPUID_RealCUGAN.prepend(tr("-1: CPU"));
 
         QStringList lines = combinedOutput.split('\n', Qt::SkipEmptyParts);
         for (const QString &line : lines) {
@@ -1414,35 +1964,47 @@ void MainWindow::Realcugan_ncnn_vulkan_DetectGPU_finished(int exitCode, QProcess
             if (match.hasMatch()) {
                 QString gpuID = match.captured(1).trimmed();
                 QString gpuName = match.captured(2).trimmed();
-                Available_GPUID_RealCUGAN.append(QString("%1: %2").arg(gpuID, gpuName));
+                // Avoid adding CPU again if it's somehow in the exe output with ID -1
+                if (gpuID != "-1") {
+                    Available_GPUID_RealCUGAN.append(QString("%1: %2").arg(gpuID, gpuName));
+                }
             }
         }
 
-        if (Available_GPUID_RealCUGAN.isEmpty()) {
-            // Fallback if regex fails or output is different
-            if (combinedOutput.contains("NVIDIA") || combinedOutput.contains("AMD") || combinedOutput.contains("Intel")) {
-                 Available_GPUID_RealCUGAN.append(tr("0: Default GPU (Auto-detected)"));
-                 QMessageBox::information(this, tr("GPU Detection"), tr("Could not parse GPU list accurately for RealCUGAN, offering a default. Output:\n%1").arg(combinedOutput));
+        // If only CPU is in the list (because no GPUs were parsed), that's fine.
+        if (Available_GPUID_RealCUGAN.size() == 1 && Available_GPUID_RealCUGAN.first().startsWith("-1:")) { // Only CPU present
+            if (combinedOutput.contains("NVIDIA") || combinedOutput.contains("AMD") || combinedOutput.contains("Intel") || combinedOutput.contains("Vulkan Device")) {
+                 // Output indicates GPUs might be there, but parsing failed.
+                 QMessageBox::information(this, tr("GPU Detection"), tr("Could not parse GPU list accurately for RealCUGAN. Only CPU option is available based on current parsing. Check RealCUGAN output if GPUs are expected:\n%1").arg(combinedOutput));
             } else {
-                Available_GPUID_RealCUGAN.append(tr("0: Default GPU (Not detected)"));
-                QMessageBox::warning(this, tr("GPU Detection"), tr("No GPUs detected or output format not recognized for RealCUGAN.\nOutput:\n%1").arg(combinedOutput));
+                 // No clear indication of GPUs in the output, so only CPU is fine.
+                 qDebug() << "RealCUGAN GPU Detection: No specific GPUs detected by parsing, CPU option available.";
             }
+        } else if (Available_GPUID_RealCUGAN.size() <= 1) { // Still only CPU or empty after trying to parse
+             Available_GPUID_RealCUGAN.clear(); // Clear to ensure clean state
+             Available_GPUID_RealCUGAN.prepend(tr("-1: CPU")); // Add CPU
+             Available_GPUID_RealCUGAN.append(tr("0: Default GPU (Auto-detect failed or no Vulkan GPUs)")); // Add a fallback default
+             QMessageBox::warning(this, tr("GPU Detection"), tr("No GPUs detected or output format not recognized for RealCUGAN. Offering CPU and a default GPU option.\nOutput:\n%1").arg(combinedOutput));
         }
+
 
         ui->comboBox_GPUID_RealCUGAN->clear();
         ui->comboBox_GPUID_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
         ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->clear();
         ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
 
-        QMessageBox::information(this, tr("GPU Detection Successful"), tr("Detected GPUs for RealCUGAN have been populated. Please verify the selection."));
+        QMessageBox::information(this, tr("Device Detection"), tr("Detected devices for RealCUGAN (including CPU) have been populated. Please verify the selection."));
 
     } else {
-        QMessageBox::warning(this, tr("GPU Detection Failed"), tr("realcugan-ncnn-vulkan.exe process failed or returned an error for GPU detection.\nExit Code: %1\nOutput:\n%2\nError Output:\n%3").arg(exitCode).arg(output).arg(errorOutput));
-        // Add a default option to allow usage even if detection fails
+        QMessageBox::warning(this, tr("Device Detection Failed"), tr("realcugan-ncnn-vulkan.exe process failed or returned an error for device detection.\nExit Code: %1\nOutput:\n%2\nError Output:\n%3").arg(exitCode).arg(output).arg(errorOutput));
+        // Add CPU and a default option to allow usage even if detection fails
         ui->comboBox_GPUID_RealCUGAN->clear();
-        ui->comboBox_GPUID_RealCUGAN->addItem("0: Default GPU (Detection Failed)");
+        Available_GPUID_RealCUGAN.clear();
+        Available_GPUID_RealCUGAN.append(tr("-1: CPU"));
+        Available_GPUID_RealCUGAN.append("0: Default GPU (Detection Failed)");
+        ui->comboBox_GPUID_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
         ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->clear();
-        ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->addItem("0: Default GPU (Detection Failed)");
+        ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
     }
     // ui->pushButton_DetectGPU_RealCUGAN->setEnabled(true); // Re-enable button
     process->deleteLater();
