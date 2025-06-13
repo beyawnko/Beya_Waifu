@@ -21,9 +21,13 @@
 #include "ui_mainwindow.h"
 
 /*
-托盘图标的实现参考了来自简书的文章:
-<<Qt5 程序系统托盘>>--小Q_wang
+Implementation of the tray icon follows guidance from the Jianshu article
+"Qt5 程序系统托盘" by 小Q_wang:
 https://www.jianshu.com/p/a000044f1f4a
+
+The tutorial explains how to use QSystemTrayIcon to show the application's
+icon in the system tray, handle single and double click events to hide or
+restore the main window, and provide a context menu.
 */
 
 /*
