@@ -45,6 +45,24 @@ QList<int> MainWindow::CalculateRealESRGANScaleSequence(int targetScale, int mod
     return sequence;
 }
 
+bool MainWindow::RealESRGAN_SetupTempDir(const QString &inputFile, const QString &outputFile, QDir &tempDir, QString &tempPathBase) {
+    QFileInfo outInfo(outputFile);
+    QString tempSubFolder = QDir::tempPath() + "/W2XEX_RealESRGAN_Iter/" + QFileInfo(inputFile).completeBaseName() + "_" + QString::number(QRandomGenerator::global()->generate());
+    tempDir = QDir(tempSubFolder);
+    if (!tempDir.mkpath(".")) {
+        qDebug() << "RealESRGAN: Failed to create temporary directory:" << tempSubFolder;
+        return false;
+    }
+    tempPathBase = tempDir.filePath(outInfo.completeBaseName() + "_pass_");
+    return true;
+}
+
+void MainWindow::RealESRGAN_CleanupTempDir(const QDir &tempDir) {
+    if (tempDir.exists()) {
+        tempDir.removeRecursively();
+    }
+}
+
 // --- RealESRGAN Core Processing Functions ---
 
 void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings() {
@@ -132,15 +150,13 @@ bool MainWindow::RealESRGAN_ProcessSingleFileIteratively(
     qDebug() << "RealESRGAN_ProcessSingleFileIteratively: Input" << inputFile << "Output" << outputFile
              << "TargetOverallScale" << targetOverallScale << "ModelNativeScale" << modelNativeScale << "ModelName" << modelName;
 
-    QFileInfo finalOutFileInfo(outputFile);
-    QString tempSubFolder = QDir::tempPath() + "/W2XEX_RealESRGAN_Iter/" + QFileInfo(inputFile).completeBaseName() + "_" + QString::number(QRandomGenerator::global()->generate());
-    QDir tempDir(tempSubFolder);
-    if (!tempDir.mkpath(".")) {
-        qDebug() << "RealESRGAN: Failed to create temporary directory:" << tempSubFolder;
-        if (rowNumForStatusUpdate != -1) UpdateTableWidget_Status(rowNumForStatusUpdate, tr("Error: Temp dir failed"), "ERROR");
+    QDir tempDir;
+    QString tempPathBase;
+    if (!RealESRGAN_SetupTempDir(inputFile, outputFile, tempDir, tempPathBase)) {
+        if (rowNumForStatusUpdate != -1)
+            UpdateTableWidget_Status(rowNumForStatusUpdate, tr("Error: Temp dir failed"), "ERROR");
         return false;
     }
-    QString tempPathBase = tempDir.filePath(finalOutFileInfo.completeBaseName() + "_pass_");
 
     QList<int> scaleSequence = CalculateRealESRGANScaleSequence(targetOverallScale, modelNativeScale);
 
@@ -157,64 +173,48 @@ bool MainWindow::RealESRGAN_ProcessSingleFileIteratively(
     QString currentIterInputFile = inputFile;
     bool success = true;
 
-    for (int i = 0; i < scaleSequence.size(); ++i) {
-        if (Stopping) { success = false; break; }
+    for (int pass = 0; pass < scaleSequence.size() && success && !Stopping; ++pass) {
+        bool isLast = (pass == scaleSequence.size() - 1) && (currentPipelineScale == targetOverallScale);
+        QString outPath = isLast ? outputFile : tempPathBase + QString::number(pass) + "." + outputFormat.toLower();
 
-        int scaleForThisPassExe = scaleSequence[i]; // This is the model's native scale, used for -s
-        QString currentIterOutputFile;
-        bool isLastModelPass = (i == scaleSequence.size() - 1);
-
-        if (isLastModelPass && currentPipelineScale == targetOverallScale) {
-            currentIterOutputFile = outputFile;
-        } else {
-            currentIterOutputFile = tempPathBase + QString::number(i) + "." + outputFormat.toLower();
+        QFileInfo outInfo(outPath);
+        QDir outDir(outInfo.path());
+        if (!outDir.exists() && !outDir.mkpath(".")) {
+            qDebug() << "RealESRGAN ProcessSingle: Failed to create output directory for pass:" << outInfo.path();
+            success = false;
+            break;
         }
 
-        QFileInfo currentIterOutInfo(currentIterOutputFile);
-        QDir outputDirForPass(currentIterOutInfo.path());
-        if (!outputDirForPass.exists() && !outputDirForPass.mkpath(".")) {
-             qDebug() << "RealESRGAN ProcessSingle: Failed to create output directory for pass:" << currentIterOutInfo.path();
-             success = false; break;
-        }
-
-        QStringList arguments = RealESRGAN_NCNN_Vulkan_PrepareArguments(
-            currentIterInputFile, currentIterOutputFile, scaleForThisPassExe,
+        QStringList args = RealESRGAN_NCNN_Vulkan_PrepareArguments(
+            currentIterInputFile, outPath, scaleSequence[pass],
             modelName, tileSize, gpuIdOrJobConfig, isMultiGPUJob, ttaEnabled, outputFormat
         );
 
         if (rowNumForStatusUpdate != -1) {
-             UpdateTableWidget_Status(rowNumForStatusUpdate, tr("Processing (Pass %1/%2)").arg(i + 1).arg(scaleSequence.size()), "INFO");
+            UpdateTableWidget_Status(rowNumForStatusUpdate,
+                                     tr("Processing (Pass %1/%2)").arg(pass + 1).arg(scaleSequence.size()),
+                                     "INFO");
         }
 
-        QProcess process;
+        QProcess proc;
         QString exePath = Current_Path + "/realesrgan-ncnn-vulkan-20220424-windows/realesrgan-ncnn-vulkan.exe";
+        qDebug() << "RealESRGAN Pass" << pass+1 << "Cmd:" << exePath << args.join(" ");
+        proc.start(exePath, args);
 
-        qDebug() << "RealESRGAN ProcessSingle Pass" << i+1 << "Cmd:" << exePath << arguments.join(" ");
-        process.start(exePath, arguments);
-
-        if (!process.waitForStarted(10000)) {
-            qDebug() << "RealESRGAN ProcessSingle: Process failed to start for pass" << i+1 << process.errorString();
-            success = false; break;
-        }
-        if (!process.waitForFinished(-1)) {
-            qDebug() << "RealESRGAN ProcessSingle: Process timed out or crashed for pass" << i+1 << process.errorString();
-            success = false; break;
+        if (!proc.waitForStarted(10000) || !proc.waitForFinished(-1) ||
+            proc.exitStatus() != QProcess::NormalExit || proc.exitCode() != 0) {
+            qDebug() << "RealESRGAN Pass" << pass+1 << "failed." << proc.errorString();
+            success = false;
+            break;
         }
 
-        QByteArray stdOut = process.readAllStandardOutput();
-        QByteArray stdErr = process.readAllStandardError();
-        if (!stdOut.isEmpty()) qDebug() << "RealESRGAN Pass" << i+1 << "STDOUT:" << QString::fromLocal8Bit(stdOut);
-        if (!stdErr.isEmpty()) qDebug() << "RealESRGAN Pass" << i+1 << "STDERR:" << QString::fromLocal8Bit(stdErr);
+        if (!QFile::exists(outPath)) {
+            qDebug() << "RealESRGAN Pass" << pass+1 << "output missing:" << outPath;
+            success = false;
+            break;
+        }
 
-        if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
-            qDebug() << "RealESRGAN ProcessSingle: Pass" << i+1 << "failed. ExitCode:" << process.exitCode() << "Error:" << process.errorString();
-            success = false; break;
-        }
-        if (!QFile::exists(currentIterOutputFile)) {
-            qDebug() << "RealESRGAN ProcessSingle: Output file for pass" << i+1 << "not found:" << currentIterOutputFile;
-            success = false; break;
-        }
-        currentIterInputFile = currentIterOutputFile;
+        currentIterInputFile = outPath;
     }
 
     if (success && currentPipelineScale != targetOverallScale && !Stopping) {
@@ -237,7 +237,7 @@ bool MainWindow::RealESRGAN_ProcessSingleFileIteratively(
         }
     }
 
-    if (tempDir.exists()) { /* ... cleanup ... */ tempDir.removeRecursively(); }
+    RealESRGAN_CleanupTempDir(tempDir);
     if (Stopping && success) { return false; }
     if (!success && rowNumForStatusUpdate != -1) UpdateTableWidget_Status(rowNumForStatusUpdate, tr("Error during processing"), "ERROR");
     return success;
