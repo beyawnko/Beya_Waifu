@@ -376,17 +376,13 @@ void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString V
         CMD = "\""+ffmpeg_path+"\" -y -f concat -safe 0 "+fps_video_cmd+" -i \""+Path_FFMpegFileList+"\""+bitrate_video_cmd+encoder_video_cmd+fps_video_cmd+Extra_command+"\""+video_mp4_scaled_fullpath+"\"";
     }
     QProcess AssembleVideo;
-    AssembleVideo.start(CMD);
-    while(!AssembleVideo.waitForStarted(100)&&!QProcess_stop) {}
-    while(!AssembleVideo.waitForFinished(100)&&!QProcess_stop)
+    bool ok = runProcess(&AssembleVideo, CMD);
+    if(waifu2x_STOP || !ok)
     {
-        if(waifu2x_STOP)
-        {
-            AssembleVideo.close();
-            QFile::remove(video_mp4_scaled_fullpath);
-            QFile::remove(Path_FFMpegFileList);
-            return;
-        }
+        AssembleVideo.close();
+        QFile::remove(video_mp4_scaled_fullpath);
+        QFile::remove(Path_FFMpegFileList);
+        return;
     }
     //检查是否发生错误
     if(QFile::exists(video_mp4_scaled_fullpath)==false)//检查是否成功生成视频
@@ -653,13 +649,9 @@ QString MainWindow::video_AudioDenoise(QString OriginalAudioPath)
     double DenoiseLevel = ui->doubleSpinBox_AudioDenoiseLevel->value();
     //================
     QProcess vid;
-    vid.start("\""+program+"\" \""+OriginalAudioPath+"\" -n noiseprof \""+DenoiseProfile+"\"");
-    while(!vid.waitForStarted(100)&&!QProcess_stop) {}
-    while(!vid.waitForFinished(100)&&!QProcess_stop) {}
+    runProcess(&vid, "\""+program+"\" \""+OriginalAudioPath+"\" -n noiseprof \""+DenoiseProfile+"\"");
     //================
-    vid.start("\""+program+"\" \""+OriginalAudioPath+"\" \""+DenoisedAudio+"\" noisered \""+DenoiseProfile+"\" "+QString("%1").arg(DenoiseLevel));
-    while(!vid.waitForStarted(100)&&!QProcess_stop) {}
-    while(!vid.waitForFinished(100)&&!QProcess_stop) {}
+    runProcess(&vid, "\""+program+"\" \""+OriginalAudioPath+"\" \""+DenoisedAudio+"\" noisered \""+DenoiseProfile+"\" "+QString("%1").arg(DenoiseLevel));
     //================
     if(QFile::exists(DenoisedAudio))
     {
@@ -892,13 +884,12 @@ QString MainWindow::video_get_bitrate(QString videoPath,bool isReturnFullCMD,boo
 QString MainWindow::video_get_fps(QString videoPath)
 {
     //========================= 调用ffprobe读取视频信息 ======================
-    QProcess *Get_VideoFPS_process = new QProcess();
+    QProcess Get_VideoFPS_process;
     QString cmd = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+videoPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
-    Get_VideoFPS_process->start(cmd);
-    while(!Get_VideoFPS_process->waitForStarted(100)&&!QProcess_stop) {}
-    while(!Get_VideoFPS_process->waitForFinished(100)&&!QProcess_stop) {}
+    QByteArray ffprobe_out;
+    runProcess(&Get_VideoFPS_process, cmd, &ffprobe_out);
     //============= Save ffprobe output as INI text =============
-    QString ffprobe_output_str = Get_VideoFPS_process->readAllStandardOutput();
+    QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
     //================ 将ini写入文件保存 ================
     QFileInfo videoFileInfo(videoPath);
     QString Path_video_info_ini = "";
@@ -950,13 +941,12 @@ QString MainWindow::video_get_fps(QString videoPath)
 int MainWindow::video_get_frameNum(QString videoPath)
 {
     //========================= 调用ffprobe读取视频信息 ======================
-    QProcess *Get_VideoFrameNumDigits_process = new QProcess();
+    QProcess Get_VideoFrameNumDigits_process;
     QString cmd = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+videoPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
-    Get_VideoFrameNumDigits_process->start(cmd);
-    while(!Get_VideoFrameNumDigits_process->waitForStarted(100)&&!QProcess_stop) {}
-    while(!Get_VideoFrameNumDigits_process->waitForFinished(100)&&!QProcess_stop) {}
+    QByteArray ffprobe_out;
+    runProcess(&Get_VideoFrameNumDigits_process, cmd, &ffprobe_out);
     //============= Save ffprobe output as INI text =============
-    QString ffprobe_output_str = Get_VideoFrameNumDigits_process->readAllStandardOutput();
+    QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
     //================ 将ini写入文件保存 ================
     QFileInfo videoFileInfo(videoPath);
     QString Path_video_info_ini = "";
@@ -1017,15 +1007,14 @@ void MainWindow::video_video2images(QString VideoPath,QString FrameFolderPath,QS
     QFile::remove(isPreVFIDone_MarkFilePath(VideoPath));
     //=====================
     QProcess video_splitFrame;
-    video_splitFrame.start("\""+ffmpeg_path+"\" -y"+fps_video_cmd+"-i \""+VideoPath+"\" "+fps_video_cmd+" \""+FrameFolderPath.replace("%","%%")+"/%0"+QString::number(FrameNumDigits,10)+"d.png\"");
-    while(!video_splitFrame.waitForStarted(100)&&!QProcess_stop) {}
-    while(!video_splitFrame.waitForFinished(100)&&!QProcess_stop) {}
+    QString splitCmd = "\""+ffmpeg_path+"\" -y"+fps_video_cmd+"-i \""+VideoPath+"\" "+fps_video_cmd+" \""+FrameFolderPath.replace("%","%%")+"/%0"+QString::number(FrameNumDigits,10)+"d.png\"";
+    runProcess(&video_splitFrame, splitCmd);
     //============== 尝试在Win7下可能兼容的指令 ================================
     if(file_isDirEmpty(FrameFolderPath))
     {
         video_splitFrame.start("\""+ffmpeg_path+"\" -y"+fps_video_cmd+"-i \""+VideoPath+"\" "+fps_video_cmd+" \""+FrameFolderPath.replace("%","%%")+"/%%0"+QString::number(FrameNumDigits,10)+"d.png\"");
-        while(!video_splitFrame.waitForStarted(100)&&!QProcess_stop) {}
-        while(!video_splitFrame.waitForFinished(100)&&!QProcess_stop) {}
+        video_splitFrame.waitForStarted();
+        video_splitFrame.waitForFinished(-1);
     }
     video_get_audio(VideoPath,AudioPath);//拆分音频
     //======== 插帧 =========
