@@ -50,3 +50,51 @@ of detected CPU cores. You can override this via the command line:
 Waifu2x-Extension-GUI --max-threads 8
 ```
 or by editing `settings.ini` and setting `MaxThreadCount`.
+
+## RealCUGAN and RealESRGAN
+
+Both upscalers rely on the ncnn Vulkan backend and run without a Python or CUDA
+environment. They accept **JPG**, **PNG** and **WEBP** images and can be used
+inside the GUI or from the command line for batch processing. Video files are
+handled by extracting frames with FFmpeg and merging them after upscaling.
+
+### Downloading binaries and models
+
+The GUI expects the RealCUGAN and RealESRGAN executables with their `models`
+folders to reside next to the application. Portable archives for all platforms
+are available on the official release pages:
+
+- [realcugan-ncnn-vulkan releases](https://github.com/nihui/realcugan-ncnn-vulkan/releases)
+- [realesrgan-ncnn-vulkan releases](https://github.com/xinntao/Real-ESRGAN/releases)
+
+Download and extract the archive for your operating system, then copy the
+contents so that `realcugan-ncnn-vulkan` and `realesrgan-ncnn-vulkan` can be
+found in the same directory as `Waifu2x-Extension-GUI`.
+
+### Command line examples
+
+RealCUGAN can denoise and upscale anime imagery, while RealESRGAN offers models
+for general photos as well as anime. Typical invocations are:
+
+```bash
+# RealCUGAN 2x with light noise reduction
+realcugan-ncnn-vulkan -i input.jpg -o output.png -n 1 -s 2
+
+# RealESRGAN using the x4plus model
+realesrgan-ncnn-vulkan -i input.jpg -o output.png -n realesrgan-x4plus -s 4
+```
+
+### Screenshot
+
+Below is the start-up screen of the optional launcher:
+
+![GUI screenshot](Waifu2x-Extension-QT-Launcher/TitleImage.png)
+
+### Troubleshooting
+
+- Ensure your GPU drivers are up to date if Vulkan initialization fails.
+- Lower the `tile-size` option when running out of GPU memory.
+- Verify the `models` folders are present beside the executables.
+- Refer to the [Real-CUGAN](https://github.com/bilibili/ailab/tree/main/Real-CUGAN)
+  and [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) documentation for
+  detailed usage and model descriptions.
