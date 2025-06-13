@@ -826,43 +826,6 @@ void MainWindow::Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString &tempPathB
 }
 
 
-void MainWindow::Realcugan_NCNN_Vulkan_GIF(int rowNum)
-{
-    if (Stopping == true) return;
-    // TODO: Implement GIF processing using iterative scaling for frames
-    // 1. Split GIF into frames (e.g., using ImageMagick or ffmpeg) into a temporary folder.
-    // 2. For each frame (or batch process the folder):
-    //    Call a modified Realcugan_NCNN_Vulkan_Image like function that works on a single image file
-    //    and uses iterative scaling. This might involve creating a helper:
-    //    `ProcessSingleImageWithRealCUGAN(QString inputFile, QString outputFile, int targetScale)`
-    // 3. Assemble processed frames back into a GIF.
-    // 4. Update status.
-    QTableWidgetItem *item_Status = ui->tableWidget_Files->item(rowNum, 5);
-    if(item_Status) item_Status->setText(tr("Not yet implemented"));
-    qDebug() << "Realcugan_NCNN_Vulkan_GIF called for row" << rowNum << " - Not yet implemented";
-}
-
-void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
-{
-    if (Stopping == true) return;
-    // TODO: Implement Video processing using iterative scaling for frames
-    // Similar to GIF: extract frames, process with iterative scaling, reassemble.
-    // Handle audio.
-    QTableWidgetItem *item_Status = ui->tableWidget_Files->item(rowNum, 5);
-    if(item_Status) item_Status->setText(tr("Not yet implemented"));
-    qDebug() << "Realcugan_NCNN_Vulkan_Video called for row" << rowNum << " - Not yet implemented";
-}
-
-void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
-{
-    if (Stopping == true) return;
-    QTableWidgetItem *item_Status = ui->tableWidget_Files->item(rowNum, 5);
-    if(item_Status) item_Status->setText(tr("Not yet implemented"));
-    qDebug() << "Realcugan_NCNN_Vulkan_Video_BySegment called for row" << rowNum << " - Not yet implemented";
-}
-
-// Member variables to store settings (should be declared in mainwindow.h)
-// QString m_realcugan_Model;
 // int m_realcugan_DenoiseLevel;
 // int m_realcugan_TileSize;
 // bool m_realcugan_TTA;
