@@ -1379,4 +1379,3 @@ private:
 };
 #endif // MAINWINDOW_H
 
-[end of Waifu2x-Extension-QT/mainwindow.h]

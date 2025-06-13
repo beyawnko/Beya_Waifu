@@ -305,4 +305,3 @@ bool MainWindow::APNG_isAnimatedPNG(int rowNum)
     return metadata.isValid && metadata.isAnimated && metadata.fileFormat == "apng";
 }
 
-[end of Waifu2x-Extension-QT/AnimatedPNG.cpp]
