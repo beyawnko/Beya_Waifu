@@ -70,7 +70,7 @@ int MainWindow::Donate_DownloadOnlineQRCode()
     {
         emit Send_TextBrowser_NewMessage(tr("Unable to download QR Code image from Github."));
     }
-    //==================== Download files from Gitee (码云) ========================
+    //==================== Download files from Gitee (Code Cloud) ========================
     if(isGiteeBanned==false)
     {
         emit Send_TextBrowser_NewMessage(tr("Starting to download QR Code image(for [Donate] tab) from Gitee."));

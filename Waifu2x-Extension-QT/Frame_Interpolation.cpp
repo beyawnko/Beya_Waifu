@@ -20,7 +20,7 @@
 #include "ui_mainwindow.h"
 #include <QEventLoop>
 /*
-对视频进行仅插帧(分段)
+Interpolate frames only (segment video)
 */
 int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
 {
@@ -43,9 +43,9 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
     QString SourceFile_Suffix = SourceFile_fullPath_fileinfo.suffix();
     QString SourceFile_FolderPath = file_getFolderPath(SourceFile_fullPath_fileinfo);
     //===================================================================
-    //生成mp4
+    //Generate mp4
     QString video_mp4_fullpath=video_To_CFRMp4(SourceFile_fullPath);
-    if(!QFile::exists(video_mp4_fullpath))//检查是否成功生成mp4
+    if(!QFile::exists(video_mp4_fullpath))//Check whether mp4 was generated successfully
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Cannot convert video format to mp4.]"));
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
@@ -332,8 +332,8 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
     return 0;
 }
 /*
-视频补帧
-直接处理视频
+Video frame interpolation
+Process video directly
 */
 int MainWindow::FrameInterpolation_Video(int rowNum)
 {
@@ -442,7 +442,7 @@ int MainWindow::FrameInterpolation_Video(int rowNum)
 
 
 /*
-视频补帧
+Video frame interpolation
 */
 bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
 {
@@ -611,7 +611,7 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
                     file_DelDir(OutputPath_Curr);
                 }
             }
-            //========= 检测是否成功,是否需要重试 ============
+            //========= Check success and decide whether to retry ============
             if(FrameInterpolation_QProcess_failed==false && (file_getFileNames_in_Folder_nofilter(SourcePath_Curr).size() * MultiFPS_Init == file_getFileNames_in_Folder_nofilter(OutputPath_Curr).size()))
             {
                 isThisRoundSucceed = true;
@@ -813,9 +813,9 @@ QString MainWindow::FrameInterpolation_ReadConfig(bool isUhdInput,int NumOfFrame
 }
 
 /*
-================================================================================
-                    REFI NCNN VULKAN 检测可用GPU
-=================================================================================
+==============================================================================
+                    REFI NCNN VULKAN Detect available GPU
+==============================================================================
 */
 
 void MainWindow::on_pushButton_DetectGPU_VFI_clicked()

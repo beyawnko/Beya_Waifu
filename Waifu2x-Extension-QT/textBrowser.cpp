@@ -20,7 +20,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 /*
-在文本框内输出一条新消息
+Output a new message in the text box
 */
 void MainWindow::TextBrowser_NewMessage(QString message)
 {
@@ -30,8 +30,8 @@ void MainWindow::TextBrowser_NewMessage(QString message)
     ui->textBrowser->moveCursor(QTextCursor::End);
 }
 /*
-输出文本框的欢迎消息
-启动时显示
+Output the welcome message in the text box
+Displayed on startup
 */
 void MainWindow::TextBrowser_StartMes()
 {

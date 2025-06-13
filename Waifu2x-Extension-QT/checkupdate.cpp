@@ -99,7 +99,7 @@ int MainWindow::CheckUpadte_Auto()
     {
         emit Send_TextBrowser_NewMessage(tr("Unable to download update information from Github."));
     }
-    //============= Download update information from Gitee (码云) ==============
+    //============= Download update information from Gitee (Code Cloud) ==============
     if(isGiteeBanned==false)
     {
         emit Send_TextBrowser_NewMessage(tr("Starting to download update information(for auto-check update) from Gitee."));
