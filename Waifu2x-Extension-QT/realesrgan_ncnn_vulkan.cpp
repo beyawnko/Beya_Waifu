@@ -1289,4 +1289,3 @@ void MainWindow::on_pushButton_ShowMultiGPUSettings_RealESRGAN_clicked()
 // on_pushButton_RemoveGPU_MultiGPU_RealESRGAN_clicked()
 // on_pushButton_ClearGPU_MultiGPU_RealESRGAN_clicked()
 
-[end of Waifu2x-Extension-QT/realesrgan_ncnn_vulkan.cpp]

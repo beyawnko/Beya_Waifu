@@ -3388,4 +3388,3 @@ int MainWindow::SRMD_CUDA_Video(int){return 0;}
 int MainWindow::SRMD_CUDA_Video_BySegment(int){return 0;}
 // ... (The rest of the functions from the original file) ...
 
-[end of Waifu2x-Extension-QT/mainwindow.cpp]

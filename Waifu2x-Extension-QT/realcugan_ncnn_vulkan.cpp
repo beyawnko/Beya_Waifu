@@ -2215,4 +2215,3 @@ void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked()
 // Further UI interaction logic (enabling/disabling options based on model, etc.)
 // would go into mainwindow.cpp or be connected to slots implemented here if more complex.
 
-[end of Waifu2x-Extension-QT/realcugan_ncnn_vulkan.cpp]
