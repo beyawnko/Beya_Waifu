@@ -22,7 +22,7 @@
 
 /*
 Implementation of the tray icon follows guidance from the Jianshu article
-"Qt5 程序系统托盘" by 小Q_wang:
+"Qt5 application system tray" by XiaoQ_wang:
 https://www.jianshu.com/p/a000044f1f4a
 
 The tutorial explains how to use QSystemTrayIcon to show the application's
@@ -31,16 +31,16 @@ restore the main window, and provide a context menu.
 */
 
 /*
-初始化托盘图标
+Initialize the tray icon
 */
 void MainWindow::Init_SystemTrayIcon()
 {
-    //初始化图标
+    // Initialize the icon
     systemTray->setIcon(*MainIcon_QIcon);
     systemTray->setToolTip(tr("Waifu2x-Extension-GUI\nRight-click to show the menu."));
-    //初始化点击动作
+    // Initialize click actions
     connect(systemTray,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason)),Qt::UniqueConnection);
-    //初始化菜单动作
+    // Initialize menu actions
     minimumAct_SystemTrayIcon->setText(tr("Hide"));
     minimumAct_SystemTrayIcon->setToolTip(tr("Use the middle mouse button to click the\ntaskbar icon to quickly hide the window."));
     minimumAct_SystemTrayIcon->setIcon(QIcon(":/new/prefix1/icon/Minimize.png"));
@@ -89,7 +89,7 @@ void MainWindow::Init_SystemTrayIcon()
     connect(Pause_SystemTrayIcon, SIGNAL(triggered()), this, SLOT(on_pushButton_Stop_clicked()),Qt::UniqueConnection);
     connect(Start_SystemTrayIcon, SIGNAL(triggered()), this, SLOT(on_pushButton_Start_clicked()),Qt::UniqueConnection);
     connect(TopSupportersList_SystemTrayIcon, SIGNAL(triggered()), this, SLOT(on_pushButton_SupportersList_clicked()),Qt::UniqueConnection);
-    //初始化菜单选项
+    // Initialize menu items
     pContextMenu->setToolTipsVisible(1);
     pContextMenu->setToolTipDuration(-1);
     pContextMenu->addAction(minimumAct_SystemTrayIcon);
@@ -109,30 +109,30 @@ void MainWindow::Init_SystemTrayIcon()
     pContextMenu->addSeparator();
     pContextMenu->addAction(quitAct_SystemTrayIcon);
     systemTray->setContextMenu(pContextMenu);
-    //显示托盘图标
+    // Show the tray icon
     systemTray->show();
 }
 /*
-托盘图标点击动作
+Tray icon click behavior
 */
 void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason)
 {
     switch(reason)
     {
         case QSystemTrayIcon::Trigger:
-            //单击托盘图标,正常大小显示(如果之前是全屏,那么会变回正常窗口)
+            // Single click restores the window (if maximized it returns to normal)
             this->showNormal();
             this->activateWindow();
             this->setWindowState((this->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
             break;
         case QSystemTrayIcon::DoubleClick:
-            //双击托盘图标,全屏显示
+            // Double click maximizes the window
             this->showMaximized();
             this->activateWindow();
             this->setWindowState((this->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
             break;
         case QSystemTrayIcon::MiddleClick:
-            //鼠标中键点击托盘图标,隱藏窗口
+            // Middle click hides the window
             this->hide();
             break;
         default:
@@ -140,8 +140,8 @@ void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason reaso
     }
 }
 /*
-启用后台模式
-(把所有线程数量改到 1 来减少后台资源占用)
+Enable background mode
+(set all thread counts to 1 to reduce resource usage)
 */
 void MainWindow::EnableBackgroundMode_SystemTray()
 {
@@ -152,7 +152,7 @@ void MainWindow::EnableBackgroundMode_SystemTray()
     pContextMenu->hide();
 }
 /*
-托盘消息
+Tray notification
 */
 void MainWindow::SystemTray_NewMessage(QString message)
 {
