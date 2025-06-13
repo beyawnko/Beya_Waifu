@@ -2891,8 +2891,15 @@ bool MainWindow::runProcess(QProcess *process, const QString &cmd,
     stopTimer.setInterval(200);
     connect(&stopTimer, &QTimer::timeout, [&](){
         if(QProcess_stop && process->state() != QProcess::NotRunning){
-            process->kill();
-            loop.quit();
+            stopTimer.stop();
+            process->terminate();
+            bool finished = process->waitForFinished(1500);
+            if(!finished && process->state() != QProcess::NotRunning){
+                process->kill();
+                process->waitForFinished();
+            }
+            if(loop.isRunning())
+                loop.quit();
         }
     });
 
