@@ -19,9 +19,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-//====== 自动关机===================================================================================
+//====== Auto shutdown =========================================================
 /*
-60s倒计时
+60 second countdown
 */
 int MainWindow::SystemShutDown_Countdown()
 {
@@ -48,8 +48,8 @@ int MainWindow::SystemShutDown_Countdown()
     return 0;
 }
 /*
-关机
-保存列表,生成关机标志,关机
+Shutdown
+Save the list, create a shutdown marker, then power off.
 */
 bool MainWindow::SystemShutDown()
 {
@@ -58,37 +58,35 @@ bool MainWindow::SystemShutDown()
     QString AutoShutDown = Current_Path+"/AutoShutDown_W2xEX";
     QFile file(AutoShutDown);
     file.remove();
-    if (file.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
-    {
-        QTextStream stream(&file);
+    if (file.open(QIODevice::ReadWrite | QIODevice::Text)) // QIODevice::ReadWrite allows read/write
         stream << "Don't delete this file!!";
     }
     //================
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
-    //获取进程标志
+    // Get process token
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
         return false;
-    //获取关机特权的LUID
+    // Get shutdown privilege LUID
     LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME,    &tkp.Privileges[0].Luid);
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-    //获取这个进程的关机特权
+    // Enable shutdown privilege for this process
     AdjustTokenPrivileges(hToken, false, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
     if (GetLastError() != ERROR_SUCCESS) return false;
     //===
     switch(ui->comboBox_FinishAction->currentIndex())
     {
-        case 1://关机
+        case 1:// Shutdown
             {
-                // 强制关闭计算机
+                // Force shut down the computer
                 if ( !ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, 0))
                     return false;
                 return true;
             }
-        case 4://重启
+        case 4:// Reboot
             {
-                // 强制重启计算机
+                // Force reboot the computer
                 if ( !ExitWindowsEx(EWX_REBOOT | EWX_FORCE, 0))
                     return false;
                 return true;
@@ -97,7 +95,9 @@ bool MainWindow::SystemShutDown()
     return false;
 }
 /*
-判断上次软件启动后是否执行了自动关机
+/*
+Check whether the previous run triggered auto shutdown
+*
 */
 int MainWindow::SystemShutDown_isAutoShutDown()
 {
@@ -107,13 +107,9 @@ int MainWindow::SystemShutDown_isAutoShutDown()
     {
         QMessageBox *MSG = new QMessageBox();
         MSG->setWindowTitle(tr("Notification"));
-        MSG->setText(tr("It was detected that the program executed an automatic shutdown of the computer when it was last run. The last File List was automatically saved before the shutdown. You can manually load the File List to view the file processing status."));
-        MSG->setIcon(QMessageBox::Information);
         MSG->setModal(true);
-        MSG->show();
     }
-    QFile::remove(AutoShutDown);//删除之前生成的自动关机标记
-    return 0;
+    QFile::remove(AutoShutDown); // Delete previously generated auto shutdown marker
 }
 
 void MainWindow::AutoFinishAction_Message()

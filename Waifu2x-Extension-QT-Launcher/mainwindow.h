@@ -26,7 +26,7 @@ class MainWindow : public QMainWindow
 public:
     void RUN_Concurrent();
     void closeEvent( QCloseEvent * event );
-    QString Current_Path = qApp->applicationDirPath();//当前路径
+    QString Current_Path = qApp->applicationDirPath();// current application path
     bool file_isDirWritable(QString DirPath);
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
