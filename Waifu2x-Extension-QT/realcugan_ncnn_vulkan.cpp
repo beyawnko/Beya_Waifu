@@ -497,6 +497,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingA
     if (!tempDir.exists()) tempDir.mkpath(".");
 
     // --- split alpha channel if present ---
+    // QImage can load formats like PNG or WebP, so this works across them
     bool hasAlpha = false;
     QString rgbInputFile = originalInFile;
     QString finalRgbOutput = tempPathBase + "final_rgb." + finalOutFileInfo.suffix().toLower();
@@ -757,6 +758,8 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished() {
             QImage rgb(finalRGBFile);
             QImage alpha(alphaFile);
             rgb = rgb.convertToFormat(QImage::Format_ARGB32);
+            // Recompose the processed RGB data with the saved alpha channel.
+            // QImage preserves transparency for PNG and WebP outputs.
             rgb.setAlphaChannel(alpha);
             rgb.save(finalOutFile);
             QFile::remove(finalRGBFile);

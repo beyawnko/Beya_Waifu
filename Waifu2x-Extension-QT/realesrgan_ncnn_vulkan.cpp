@@ -258,6 +258,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_Missing
     QString outputFile = item_OutFile->text();
 
     // --- handle alpha channel by splitting it before processing ---
+    // QImage supports PNG and WebP input so the split works for both formats
     QTemporaryDir alphaTempDir;
     QString alphaFilePath;
     QString rgbInputPath = inputFile;
@@ -299,6 +300,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_Missing
     if (success && hasAlpha && QFile::exists(rgbOutputPath)) {
         QImage processedImage(rgbOutputPath);
         processedImage = processedImage.convertToFormat(QImage::Format_ARGB32);
+        // Reattach the saved alpha so transparency is kept for PNG/WebP outputs
         processedImage.setAlphaChannel(alphaImage);
         processedImage.save(outputFile);
     }
