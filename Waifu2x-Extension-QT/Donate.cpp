@@ -26,7 +26,7 @@ int MainWindow::Donate_DownloadOnlineQRCode()
 {
     bool isGiteeBanned = ui->checkBox_BanGitee->isChecked();
     //============================
-    //     更新支持者列表
+    //     Update supporter list
     //============================
     QString Github_TopSupporterList_online = "https://raw.githubusercontent.com/AaronFeng753/Waifu2x-Extension-GUI/master/.github/TopSupportersList_W2xEX.ini";
     QString Gitee_TopSupporterList_online = "https://gitee.com/aaronfeng0711/Waifu2x-Extension-GUI/raw/master/.github/TopSupportersList_W2xEX.ini";
@@ -48,17 +48,17 @@ int MainWindow::Donate_DownloadOnlineQRCode()
         emit Send_TextBrowser_NewMessage(tr("Successfully updated Top Supporters List."));
     }
     //============================
-    //     更新二维码图片
+    //     Update QR code image
     //============================
     QString Github_OnlineQRCode_online = "https://raw.githubusercontent.com/AaronFeng753/Waifu2x-Extension-GUI/master/.github/Online_Donate_QRCode.jpg";
     QString Gitee_OnlineQRCode_online = "https://gitee.com/aaronfeng0711/Waifu2x-Extension-GUI/raw/master/.github/Online_Donate_QRCode.jpg";
     //=
     QString Github_OnlineQRCode_local = Current_Path+"/Online_Donate_QRCode_Github.jpg";
     QString Gitee_OnlineQRCode_local = Current_Path+"/Online_Donate_QRCode_Gitee.jpg";
-    //==================== 从Github下载文件 ========================
+    //==================== Download files from Github ========================
     emit Send_TextBrowser_NewMessage(tr("Starting to download QR Code image(for [Donate] tab) from Github."));
     DownloadTo(Github_OnlineQRCode_online,Github_OnlineQRCode_local);
-    //========= 检查github的文件是否下载成功 =================
+    //========= Check if github files were downloaded successfully =================
     QFileInfo Github_OnlineQRCode_QFileInfo(Github_OnlineQRCode_local);
     if(QFile::exists(Github_OnlineQRCode_local)&&(Github_OnlineQRCode_QFileInfo.size()>100000))
     {
@@ -70,12 +70,12 @@ int MainWindow::Donate_DownloadOnlineQRCode()
     {
         emit Send_TextBrowser_NewMessage(tr("Unable to download QR Code image from Github."));
     }
-    //==================== 从码云下载文件 ========================
+    //==================== Download files from Gitee (码云) ========================
     if(isGiteeBanned==false)
     {
         emit Send_TextBrowser_NewMessage(tr("Starting to download QR Code image(for [Donate] tab) from Gitee."));
         DownloadTo(Gitee_OnlineQRCode_online,Gitee_OnlineQRCode_local);
-        //========= 检查gitee的文件是否下载成功 =================
+        //========= Check if gitee files were downloaded successfully =================
         QFileInfo Gitee_OnlineQRCode_QFileInfo(Gitee_OnlineQRCode_local);
         if(QFile::exists(Gitee_OnlineQRCode_local)&&(Gitee_OnlineQRCode_QFileInfo.size()>100000))
         {
@@ -88,7 +88,7 @@ int MainWindow::Donate_DownloadOnlineQRCode()
             emit Send_TextBrowser_NewMessage(tr("Unable to download QR Code image from Gitee."));
         }
     }
-    emit Send_Donate_ReplaceQRCode("");//下载失败,直接跳转
+    emit Send_Donate_ReplaceQRCode("");//Download failed, jump directly
     return 0;
 }
 

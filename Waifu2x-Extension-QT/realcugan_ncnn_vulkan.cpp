@@ -629,10 +629,23 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
             qDebug() << "Realcugan_ProcessDirectoryIteratively: Process failed to start for pass" << i + 1;
             success = false; break;
         }
-        if (!process.waitForFinished(-1)) {
-            qDebug() << "Realcugan_ProcessDirectoryIteratively: Process timed out or crashed for pass" << i + 1;
-            success = false; break;
+
+        while (process.state() != QProcess::NotRunning) {
+            if (Stopping) { // Use the global/member stopping flag
+                process.terminate();
+                if (!process.waitForFinished(1500)) {
+                    process.kill();
+                    process.waitForFinished();
+                }
+                success = false;
+                break;
+            }
+            if (process.waitForFinished(100)) { // Check every 100ms
+                break;
+            }
         }
+        if (!success) break; // If stopped or failed in loop, break outer
+
         if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
             qDebug() << "Realcugan_ProcessDirectoryIteratively: Pass" << i + 1 << "failed. ExitCode:" << process.exitCode() << "Error:" << process.errorString();
             qDebug() << "STDERR:" << QString::fromLocal8Bit(process.readAllStandardError());
@@ -1269,10 +1282,22 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
             qDebug() << "RealCUGAN ProcessSingle: Process failed to start for pass" << i+1;
             success = false; break;
         }
-        if (!process.waitForFinished(-1)) { // No timeout for finish, let it run
-            qDebug() << "RealCUGAN ProcessSingle: Process timed out or crashed for pass" << i+1;
-            success = false; break;
+
+        while (process.state() != QProcess::NotRunning) {
+            if (Stopping) { // Use the global/member stopping flag
+                process.terminate();
+                if (!process.waitForFinished(1500)) {
+                    process.kill();
+                    process.waitForFinished();
+                }
+                success = false;
+                break;
+            }
+            if (process.waitForFinished(100)) { // Check every 100ms
+                break;
+            }
         }
+        if (!success) break; // If stopped or failed in loop, break outer
 
         QByteArray stdOut = process.readAllStandardOutput();
         QByteArray stdErr = process.readAllStandardError();
@@ -2094,7 +2119,7 @@ void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked()
 // on_comboBox_Model_RealCUGAN_currentIndexChanged(int index);
 // on_pushButton_TileSize_Add_RealCUGAN_clicked();
 // on_pushButton_TileSize_Minus_RealCUGAN_clicked();
-// on_checkBox_MultiGPU_RealCUGAN_clicked(); // If different from stateChanged
+// on_checkBox_MultiGPU_RealCUGAN_clicked(); // If it has separate logic from stateChanged
 // on_comboBox_GPUIDs_MultiGPU_RealCUGAN_currentIndexChanged(int index);
 // on_checkBox_isEnable_CurrentGPU_MultiGPU_RealCUGAN_clicked();
 // on_spinBox_TileSize_CurrentGPU_MultiGPU_RealCUGAN_valueChanged(int arg1);
@@ -2189,3 +2214,5 @@ void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked()
 // The provided file focuses on the engine logic.
 // Further UI interaction logic (enabling/disabling options based on model, etc.)
 // would go into mainwindow.cpp or be connected to slots implemented here if more complex.
+
+[end of Waifu2x-Extension-QT/realcugan_ncnn_vulkan.cpp]

@@ -199,9 +199,10 @@ bool MainWindow::RealESRGAN_ProcessSingleFileIteratively(
         }
 
         QStringList args = RealESRGAN_NCNN_Vulkan_PrepareArguments(
-            currentIterInputFile, outPath, scaleSequence[pass],
+            currentIterInputFile, lastPassOutputFile, scaleSequence[pass], // Use lastPassOutputFile for the current pass's output
             modelName, tileSize, gpuIdOrJobConfig, isMultiGPUJob, ttaEnabled, outputFormat
         );
+
 
         if (rowNumForStatusUpdate != -1) {
             UpdateTableWidget_Status(rowNumForStatusUpdate,
@@ -214,20 +215,43 @@ bool MainWindow::RealESRGAN_ProcessSingleFileIteratively(
         qDebug() << "RealESRGAN Pass" << pass+1 << "Cmd:" << exePath << args.join(" ");
         proc.start(exePath, args);
 
-        if (!proc.waitForStarted(10000) || !proc.waitForFinished(-1) ||
-            proc.exitStatus() != QProcess::NormalExit || proc.exitCode() != 0) {
-            qDebug() << "RealESRGAN Pass" << pass+1 << "failed." << proc.errorString();
+        if (!proc.waitForStarted(10000)) {
+            qDebug() << "RealESRGAN Pass" << pass+1 << "failed to start." << proc.errorString();
             success = false;
             break;
         }
 
+        while (proc.state() != QProcess::NotRunning) {
+            if (Stopping) {
+                proc.terminate();
+                if (!proc.waitForFinished(1500)) {
+                    proc.kill();
+                    proc.waitForFinished();
+                }
+                success = false;
+                break;
+            }
+            if (proc.waitForFinished(100)) {
+                break;
+            }
+        }
+        if (!success) break;
+
+
+        QByteArray stdOut = proc.readAllStandardOutput();
+        QByteArray stdErr = proc.readAllStandardError();
+        if (!stdOut.isEmpty()) qDebug() << "RealESRGAN ProcessSingle Pass" << pass+1 << "STDOUT:" << QString::fromLocal8Bit(stdOut);
+        if (!stdErr.isEmpty()) qDebug() << "RealESRGAN ProcessSingle Pass" << pass+1 << "STDERR:" << QString::fromLocal8Bit(stdErr);
+
+        if (proc.exitStatus() != QProcess::NormalExit || proc.exitCode() != 0) {
+            qDebug() << "RealESRGAN ProcessSingle: Pass" << pass+1 << "failed. ExitCode:" << proc.exitCode();
+            success = false; break;
+        }
         if (!QFile::exists(lastPassOutputFile)) {
-            qDebug() << "RealESRGAN Pass" << pass+1 << "output missing:" << lastPassOutputFile;
-            success = false;
-            break;
+            qDebug() << "RealESRGAN ProcessSingle: Output file for pass" << pass+1 << "not found:" << lastPassOutputFile;
+            success = false; break;
         }
-
-        currentIterInputFile = lastPassOutputFile; // Output of this pass is input for the next, or the final AI output
+        currentIterInputFile = lastPassOutputFile; // Output of this pass is input for the next
     }
 
     if (success && !Stopping) {
@@ -427,10 +451,23 @@ bool MainWindow::RealESRGAN_ProcessDirectoryIteratively(
             qDebug() << "RealESRGAN_ProcessDirectoryIteratively: Process failed to start for pass" << i + 1;
             success = false; break;
         }
-        if (!process.waitForFinished(-1)) { // Wait indefinitely for finish
-            qDebug() << "RealESRGAN_ProcessDirectoryIteratively: Process timed out or crashed for pass" << i + 1;
-            success = false; break;
+
+        while (process.state() != QProcess::NotRunning) {
+            if (Stopping) { // Use the global/member stopping flag
+                process.terminate();
+                if (!process.waitForFinished(1500)) {
+                    process.kill();
+                    process.waitForFinished();
+                }
+                success = false;
+                break;
+            }
+            if (process.waitForFinished(100)) { // Check every 100ms
+                break;
+            }
         }
+        if (!success) break; // If stopped or failed in loop, break outer
+
         if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
             qDebug() << "RealESRGAN_ProcessDirectoryIteratively: Pass" << i + 1 << "failed. ExitCode:" << process.exitCode() << "Error:" << process.errorString();
             qDebug() << "STDERR:" << QString::fromLocal8Bit(process.readAllStandardError());
@@ -494,7 +531,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_GIF(int rowNum) {
     emit Send_TextBrowser_NewMessage(tr("Splitting GIF: %1 (RealESRGAN)").arg(sourceFileFullPath));
     Gif_splitGif(sourceFileFullPath, splitFramesFolder);
     QStringList framesList = file_getFileNames_in_Folder_nofilter(splitFramesFolder);
-    if (framesList.isEmpty()) { /* ... */ QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolder).removeRecursively(); return; }
+    if (framesList.isEmpty()) { /* ... error handling ... */ QDir(splitFramesFolder).removeRecursively(); QDir(scaledFramesFolder).removeRecursively(); return; }
 
     RealESRGAN_NCNN_Vulkan_ReadSettings();
     RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(0); // Sets m_realesrgan_gpuJobConfig_temp
@@ -544,7 +581,6 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_GIF(int rowNum) {
         m_realesrgan_TTA, "png" // Output AI pass as PNG
     );
     QDir(rgbFramesTempDir).removeRecursively();
-
     if (!aiProcessingSuccessGIF || Stopping) {
         item_Status->setText(Stopping ? tr("Stopped") : tr("Error in AI processing"));
         QDir(splitFramesFolder).removeRecursively(); QDir(alphaBackupTempDir).removeRecursively(); QDir(scaledRgbFramesAIDirGIF).removeRecursively(); QDir(scaledFramesFolder).removeRecursively();
@@ -1033,7 +1069,7 @@ void MainWindow::AddGPU_MultiGPU_RealesrganNcnnVulkan(QString GPUID_Name) {
 
 
     GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.append(newGPU);
-    ui->listWidget_GPUList_MultiGPU_RealESRGAN->addItem(QString("ID: %1, Name: %2, Threads: %3, Tile: %4 (Enabled)")
+    ui->listWidget_GPUList_MultiGPU_RealESRGAN->addItem(QString("ID: %1, Name: %2, Threads: %3, Tile: %4 (%5)")
                                                      .arg(id, name, QString::number(threads), newGPU.value("TileSize")));
 }
 
@@ -1252,3 +1288,5 @@ void MainWindow::on_pushButton_ShowMultiGPUSettings_RealESRGAN_clicked()
 // on_pushButton_AddGPU_MultiGPU_RealESRGAN_clicked()
 // on_pushButton_RemoveGPU_MultiGPU_RealESRGAN_clicked()
 // on_pushButton_ClearGPU_MultiGPU_RealESRGAN_clicked()
+
+[end of Waifu2x-Extension-QT/realesrgan_ncnn_vulkan.cpp]

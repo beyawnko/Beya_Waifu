@@ -911,6 +911,10 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
                 resize_cmd =" -vf scale=-2:"+QString::number(CustRes_height,10)+" ";
             }
         }
+        if(!resize_cmd.isEmpty())
+        {
+            resize_cmd.append("-sws_flags lanczos ");
+        }
     }
     QString ffmpeg_path = Current_Path+"/ffmpeg_waifu2xEX.exe";
     int FrameNumDigits = video_get_frameNumDigits(VideoPath);

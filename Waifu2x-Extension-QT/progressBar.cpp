@@ -20,7 +20,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 /*
-设定进度条最小值与最大值
+Set the minimum and maximum value of the progress bar
 */
 void MainWindow::progressbar_setRange_min_max(int min, int max)
 {
@@ -29,7 +29,7 @@ void MainWindow::progressbar_setRange_min_max(int min, int max)
     ui->label_progressBar_filenum->setText("0/"+QString::number(max,10));
 }
 /*
-将进度条直接充满
+Fill the progress bar directly
 */
 void MainWindow::progressbar_SetToMax(int maxval)
 {
@@ -37,7 +37,7 @@ void MainWindow::progressbar_SetToMax(int maxval)
     ui->label_progressBar_filenum->setText(QString::number(maxval,10)+"/"+QString::number(maxval,10));
 }
 /*
-进度条 进度+1
+Progress bar progress +1
 */
 void MainWindow::progressbar_Add()
 {
@@ -48,7 +48,7 @@ void MainWindow::progressbar_Add()
     ui->label_progressBar_filenum->setText(QString::number(Progressbar_CurrentVal,10)+"/"+QString::number(Progressbar_MaxVal,10));
 }
 /*
-清空进度条
+Clear progress bar
 */
 void MainWindow::progressbar_clear()
 {

@@ -24,10 +24,10 @@
 */
 int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
 {
-    //============================= 读取设置 ================================
+    //============================= Read settings ================================
     bool DelOriginal = (ui->checkBox_DelOriginal->isChecked()||ui->checkBox_ReplaceOriginalFile->isChecked());
     int SegmentDuration = ui->spinBox_SegmentDuration->value();
-    //========================= 拆解map得到参数 =============================
+    //========================= Disassemble map to get parameters =============================
     emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Processing");
     QString SourceFile_fullPath = Table_model_video->item(rowNum,2)->text();
     if(!QFile::exists(SourceFile_fullPath))
@@ -50,30 +50,30 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Cannot convert video format to mp4.]"));
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
         emit Send_progressbar_Add();
-        return 0;//如果启用stop位,则直接return
+        return 0;//If stop bit is enabled, return directly
     }
     //=================
-    QString AudioPath = SourceFile_FolderPath+"/Audio_"+SourceFile_BaseName+"_"+SourceFile_Suffix+"_W2xEX.wav";//音频
-    QString SplitFramesFolderPath = SourceFile_FolderPath+"/"+SourceFile_BaseName+"_"+SourceFile_Suffix+"_SplitFrames_W2xEX";//拆分后存储frame的文件夹
+    QString AudioPath = SourceFile_FolderPath+"/Audio_"+SourceFile_BaseName+"_"+SourceFile_Suffix+"_W2xEX.wav";//Audio
+    QString SplitFramesFolderPath = SourceFile_FolderPath+"/"+SourceFile_BaseName+"_"+SourceFile_Suffix+"_SplitFrames_W2xEX";//Folder to store frames after splitting
     //=================
-    QString VideoClipsFolderPath = "";//存储视频片段的文件夹(完整路径)
+    QString VideoClipsFolderPath = "";//Folder to store video clips (full path)
     QString DateStr = "";
     do
     {
         DateStr = video_getClipsFolderNo();
-        VideoClipsFolderPath = SourceFile_FolderPath+"/"+DateStr+"_VideoClipsWaifu2xEX";//存储视频片段的文件夹(完整路径)
+        VideoClipsFolderPath = SourceFile_FolderPath+"/"+DateStr+"_VideoClipsWaifu2xEX";//Folder to store video clips (full path)
     }
     while(file_isDirExist(VideoClipsFolderPath));
-    QString VideoClipsFolderName = DateStr+"_VideoClipsWaifu2xEX";//存储视频片段的文件夹(名称)
+    QString VideoClipsFolderName = DateStr+"_VideoClipsWaifu2xEX";//Folder to store video clips (name)
     //==========================
-    //   检测之前的视频配置文件
+    //   Check previous video configuration file
     //==========================
     QString VideoConfiguration_fullPath = SourceFile_FolderPath+"/VideoConfiguration_"+SourceFile_BaseName+"_"+SourceFile_Suffix+"_Waifu2xEX_VFI.ini";
     if(QFile::exists(VideoConfiguration_fullPath))
     {
         QSettings *configIniRead = new QSettings(VideoConfiguration_fullPath, QSettings::IniFormat);
         configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
-        //============ 修正文件夹名称 =============
+        //============ Correct folder name =============
         QString VideoClipsFolderPath_old = configIniRead->value("/VideoConfiguration/VideoClipsFolderPath").toString();
         QString VideoClipsFolderName_old = configIniRead->value("/VideoConfiguration/VideoClipsFolderName").toString();
         file_mkDir(VideoClipsFolderPath_old);
@@ -98,7 +98,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
         emit Send_video_write_VideoConfiguration(VideoConfiguration_fullPath,0,0,false,0,0,"",true,VideoClipsFolderPath,VideoClipsFolderName,true,ui->spinBox_MultipleOfFPS_VFI->value());
     }
     //=======================
-    //   检测缓存是否存在
+    //   Check if cache exists
     //=======================
     if(file_isDirExist(SplitFramesFolderPath))
     {
@@ -114,20 +114,20 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
         emit Send_video_write_VideoConfiguration(VideoConfiguration_fullPath,0,0,false,0,0,"",true,VideoClipsFolderPath,VideoClipsFolderName,true,ui->spinBox_MultipleOfFPS_VFI->value());
     }
     /*====================================
-                  提取音频
+                  Extract audio
     ======================================*/
     if(!QFile::exists(AudioPath))
     {
         video_get_audio(video_mp4_fullpath,AudioPath);
     }
-    //================================== 开始分段处理视频 =================================================
-    int StartTime = 0;//起始时间(秒)
+    //================================== Start processing video in segments =================================================
+    int StartTime = 0;//Start time (seconds)
     int VideoDuration = video_get_duration(video_mp4_fullpath);
     bool isSplitComplete = false;
     bool isScaleComplete = false;
     /*
     ============================================
-                  开始之前先读取进度
+                  Read progress before starting
     ============================================
     */
     int OLD_SegmentDuration=-1;
@@ -137,7 +137,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
     {
         QSettings *configIniRead = new QSettings(VideoConfiguration_fullPath, QSettings::IniFormat);
         configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
-        //=================== 加载进度 =========================
+        //=================== Load progress =========================
         StartTime = configIniRead->value("/Progress/StartTime").toInt();
         isSplitComplete = configIniRead->value("/Progress/isSplitComplete").toBool();
         isScaleComplete = configIniRead->value("/Progress/isScaleComplete").toBool();
@@ -149,7 +149,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
         read_OLD_SegmentDuration = true;
     }
     /*
-    加载进度条
+    Load progress bar
     */
     int SegmentDuration_tmp_progressbar = 0;
     if(read_OLD_SegmentDuration)
@@ -170,7 +170,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
     }
     /*
     ============================================
-                    正式开始处理
+                    Officially start processing
     ============================================
     */
     int SegmentDuration_tmp=0;
@@ -178,7 +178,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
     while(VideoDuration>StartTime)
     {
         /*==========================
-                计算视频片段时间
+                Calculate video clip time
         ==========================*/
         TimeLeft_tmp = VideoDuration-StartTime;
         if((TimeLeft_tmp)>=SegmentDuration)
@@ -195,7 +195,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
             read_OLD_SegmentDuration=false;
         }
         /*==========================
-                 拆分视频片段
+                 Split video clip
         ==========================*/
         if(isSplitComplete==false)
         {
@@ -211,30 +211,30 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
             video_video2images_ProcessBySegment(video_mp4_fullpath,SplitFramesFolderPath,StartTime,SegmentDuration_tmp);
         }
         /*==========================
-               处理视频片段的帧
+               Process frames of video clip
         ==========================*/
         if(isScaleComplete==false)
         {
-            //============================== 扫描获取文件名 ===============================
+            //============================== Scan to get file name ===============================
             QStringList Frame_fileName_list = file_getFileNames_in_Folder_nofilter(SplitFramesFolderPath);
             if(isSplitComplete==false)
             {
-                if(Frame_fileName_list.isEmpty())//检查是否成功拆分为帧
+                if(Frame_fileName_list.isEmpty())//Check if successfully split into frames
                 {
                     emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Unable to split video into pictures.]"));
                     emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
                     emit Send_progressbar_Add();
-                    return 0;//如果启用stop位,则直接return
+                    return 0;//If stop bit is enabled, return directly
                 }
             }
             /*
-            记录进度
-            帧拆分成功
+            Record progress
+            Frame splitting successful
             */
             emit Send_video_write_Progress_ProcessBySegment(VideoConfiguration_fullPath,StartTime,true,true,SegmentDuration_tmp,LastVideoClipNo);
         }
         /*==========================
-            组装视频片段(由帧到视频)
+            Assemble video clip (from frames to video)
         ==========================*/
         if(!file_isDirExist(VideoClipsFolderPath))
         {
@@ -243,20 +243,20 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
         int VideoClipNo = LastVideoClipNo+1;
         QString video_mp4_scaled_clip_fullpath = VideoClipsFolderPath+"/"+QString::number(VideoClipNo,10)+".mp4";
         video_images2video(video_mp4_fullpath,video_mp4_scaled_clip_fullpath,SplitFramesFolderPath,"",false,1,1,false);
-        if(!QFile::exists(video_mp4_scaled_clip_fullpath))//检查是否成功成功生成视频
+        if(!QFile::exists(video_mp4_scaled_clip_fullpath))//Check if video was successfully generated
         {
             if(waifu2x_STOP)
             {
                 emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted");
-                return 0;//如果启用stop位,则直接return
+                return 0;//If stop bit is enabled, return directly
             }
             emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Unable to assemble pictures into videos.]"));
             emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
             emit Send_progressbar_Add();
-            return 0;//如果启用stop位,则直接return
+            return 0;//If stop bit is enabled, return directly
         }
         /*==========================
-        处理完当前片段,时间后移,记录起始时间
+        After processing the current segment, move the time back and record the start time
         ==========================*/
         if(ui->checkBox_ShowInterPro->isChecked())
         {
@@ -270,25 +270,25 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
     }
     emit Send_CurrentFileProgress_Stop();
     //======================================================
-    //                    组装(片段到成片)
+    //                    Assemble (segment to finished film)
     //======================================================
     QString video_mp4_scaled_fullpath = "";
     video_mp4_scaled_fullpath = SourceFile_FolderPath+"/"+SourceFile_BaseName+"_W2xEX_VFI_"+SourceFile_Suffix+".mp4";
     QFile::remove(video_mp4_scaled_fullpath);
     video_AssembleVideoClips(VideoClipsFolderPath,VideoClipsFolderName,video_mp4_scaled_fullpath,AudioPath);
-    if(QFile::exists(video_mp4_scaled_fullpath)==false)//检查是否成功生成视频
+    if(QFile::exists(video_mp4_scaled_fullpath)==false)//Check if video was successfully generated
     {
         if(waifu2x_STOP)
         {
             emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted");
-            return 0;//如果启用stop位,则直接return
+            return 0;//If stop bit is enabled, return directly
         }
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Unable to assemble video clips.]"));
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
         emit Send_progressbar_Add();
-        return 0;//如果启用stop位,则直接return
+        return 0;//If stop bit is enabled, return directly
     }
-    //============================== 删除缓存文件 ====================================================
+    //============================== Delete cache files ====================================================
     if(ui->checkBox_KeepVideoCache->isChecked()==false)
     {
         QFile::remove(VideoConfiguration_fullPath);
@@ -301,7 +301,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
     {
         DelOriginal=false;
     }
-    //============================= 删除原文件 &  & 更新table status ============================
+    //============================= Delete original file & update table status ============================
     if(DelOriginal)
     {
         if(ReplaceOriginalFile(SourceFile_fullPath,video_mp4_scaled_fullpath)==false)
@@ -321,12 +321,12 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
     {
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Finished");
     }
-    //========== 移动到输出路径 =========
+    //========== Move to output path =========
     if(ui->checkBox_OutPath_isEnabled->isChecked())
     {
         MoveFileToOutputPath(video_mp4_scaled_fullpath,SourceFile_fullPath);
     }
-    //============================ 更新进度条 =================================
+    //============================ Update progress bar =================================
     emit Send_progressbar_Add();
     //=========
     return 0;
@@ -337,9 +337,9 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
 */
 int MainWindow::FrameInterpolation_Video(int rowNum)
 {
-    //============================= 读取设置 ================================
+    //============================= Read settings ================================
     bool DelOriginal = (ui->checkBox_DelOriginal->isChecked()||ui->checkBox_ReplaceOriginalFile->isChecked());
-    //========================= 拆解map得到参数 =============================
+    //========================= Disassemble map to get parameters =============================
     emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Processing");
     QString SourceFile_fullPath = Table_model_video->item(rowNum,2)->text();
     if(!QFile::exists(SourceFile_fullPath))
@@ -355,50 +355,50 @@ int MainWindow::FrameInterpolation_Video(int rowNum)
     QString file_ext = fileinfo.suffix();
     QString file_path = file_getFolderPath(fileinfo);
     //===================================================================
-    //生成mp4
+    //Generate mp4
     QString video_mp4_fullpath=video_To_CFRMp4(SourceFile_fullPath);
-    if(!QFile::exists(video_mp4_fullpath))//检查是否成功生成mp4
+    if(!QFile::exists(video_mp4_fullpath))//Check if mp4 was successfully generated
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Cannot convert video format to mp4.]"));
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
         emit Send_progressbar_Add();
-        return 0;//如果启用stop位,则直接return
+        return 0;//If stop bit is enabled, return directly
     }
-    QString AudioPath = file_path+"/Audio_"+file_name+"_"+file_ext+"_W2xEX.wav";//音频
-    QString SplitFramesFolderPath = file_path+"/"+file_name+"_"+file_ext+"_SplitFrames_W2xEX";//拆分后存储frame的文件夹
+    QString AudioPath = file_path+"/Audio_"+file_name+"_"+file_ext+"_W2xEX.wav";//Audio
+    QString SplitFramesFolderPath = file_path+"/"+file_name+"_"+file_ext+"_SplitFrames_W2xEX";//Folder to store frames after splitting
     //==========================================
-    //                   拆分(正常)
+    //                   Split (normal)
     //==========================================
     file_DelDir(SplitFramesFolderPath);
     file_mkDir(SplitFramesFolderPath);
     QFile::remove(AudioPath);
     video_video2images(video_mp4_fullpath,SplitFramesFolderPath,AudioPath);
-    //============================== 扫描获取文件名 ===============================
+    //============================== Scan to get file name ===============================
     QStringList Frame_fileName_list = file_getFileNames_in_Folder_nofilter(SplitFramesFolderPath);
-    if(Frame_fileName_list.isEmpty())//检查是否成功拆分为帧
+    if(Frame_fileName_list.isEmpty())//Check if successfully split into frames
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Unable to split video into pictures.]"));
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
         emit Send_progressbar_Add();
-        return 0;//如果启用stop位,则直接return
+        return 0;//If stop bit is enabled, return directly
     }
-    //======================================== 组装 ======================================================
+    //======================================== Assemble ======================================================
     QString video_mp4_scaled_fullpath = "";
     video_mp4_scaled_fullpath = file_path+"/"+file_name+"_W2xEX_VFI_"+file_ext+".mp4";
     video_images2video(video_mp4_fullpath,video_mp4_scaled_fullpath,SplitFramesFolderPath,AudioPath,false,1,1,false);
-    if(QFile::exists(video_mp4_scaled_fullpath)==false)//检查是否成功成功生成视频
+    if(QFile::exists(video_mp4_scaled_fullpath)==false)//Check if video was successfully generated
     {
         if(waifu2x_STOP)
         {
             emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted");
-            return 0;//如果启用stop位,则直接return
+            return 0;//If stop bit is enabled, return directly
         }
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Unable to assemble pictures into videos.]"));
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
         emit Send_progressbar_Add();
-        return 0;//如果启用stop位,则直接return
+        return 0;//If stop bit is enabled, return directly
     }
-    //============================== 删除缓存文件 ====================================================
+    //============================== Delete cache files ====================================================
     if(ui->checkBox_KeepVideoCache->isChecked()==false)
     {
         file_DelDir(SplitFramesFolderPath);
@@ -409,7 +409,7 @@ int MainWindow::FrameInterpolation_Video(int rowNum)
     {
         DelOriginal=false;
     }
-    //============================= 删除原文件 &  & 更新table status ============================
+    //============================= Delete original file & update table status ============================
     if(DelOriginal)
     {
         if(ReplaceOriginalFile(SourceFile_fullPath,video_mp4_scaled_fullpath)==false)
@@ -429,14 +429,14 @@ int MainWindow::FrameInterpolation_Video(int rowNum)
     {
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Finished");
     }
-    //========== 移动到输出路径 =========
+    //========== Move to output path =========
     if(ui->checkBox_OutPath_isEnabled->isChecked())
     {
         MoveFileToOutputPath(video_mp4_scaled_fullpath,SourceFile_fullPath);
     }
-    //============================ 更新进度条 =================================
+    //============================ Update progress bar =================================
     emit Send_progressbar_Add();
-    //===========================  ==============================
+    //=========================== Separator ==============================
     return 0;
 }
 
@@ -457,13 +457,13 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
     if(file_isDirExist(SourcePath)==false)return false;
     //=======
     emit Send_TextBrowser_NewMessage(tr("Starting to interpolate frames in:[")+SourcePath+"]");
-    //==== 检测是否启用了自动调整线程数量,若启用则强制设定重试次数大于6 ====
+    //==== Check if automatic thread count adjustment is enabled, if so, force retry count to be greater than 6 ====
     int retry_add = 0;
     if(ui->checkBox_AutoAdjustNumOfThreads_VFI->isChecked()==true && ui->spinBox_retry->value()<6 && ui->checkBox_MultiThread_VFI->isChecked())
     {
         retry_add = 6-ui->spinBox_retry->value();
     }
-    //==== 检查是否正在使用rife,若使用则检测是否需要启用uhd模式 ====
+    //==== Check if rife is being used, if so, check if uhd mode needs to be enabled ====
     bool isUhdInput=false;
     if(ui->comboBox_Engine_VFI->currentIndex()==0 && ui->checkBox_UHD_VFI->isChecked()==false)
     {
@@ -481,7 +481,7 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
                 res_map = Image_Gif_Read_Resolution(SourcePath+"/"+ImgName_tmp);
                 original_height = res_map["height"];
                 original_width = res_map["width"];
-                if(original_height>0 && original_width>0)//判断是否读取失败
+                if(original_height>0 && original_width>0)//Judge whether reading failed
                 {
                     isUhdInput = ((original_height*original_width)>=8294400);
                     break;
@@ -524,7 +524,7 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
     int MultiFPS_MAX = ui->spinBox_MultipleOfFPS_VFI->value();
     int MultiFPS_Init = 2;
     if(ui->comboBox_Engine_VFI->currentIndex()==2)MultiFPS_Init=MultiFPS_MAX;
-    //初始化进度讯息
+    //Initialize progress message
     bool is_progressBar_CurrentFile_available = false;
     if(ui->checkBox_ShowInterPro->isChecked()==true && ui->progressBar_CurrentFile->isVisible()==false)
     {
@@ -644,7 +644,7 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
                 emit Send_TextBrowser_NewMessage(tr("Finish interpolating frames in:[")+SourcePath+"]");
                 if(is_progressBar_CurrentFile_available)
                 {
-                    emit Send_CurrentFileProgress_Stop();//停止当前文件进度条
+                    emit Send_CurrentFileProgress_Stop();//Stop current file progress bar
                 }
                 return true;
             }
@@ -659,7 +659,7 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
             //=======
             if(is_progressBar_CurrentFile_available)
             {
-                emit Send_CurrentFileProgress_Stop();//停止当前文件进度条
+                emit Send_CurrentFileProgress_Stop();//Stop current file progress bar
             }
             //========
             return false;
@@ -669,7 +669,7 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
     emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames in:[")+SourcePath+"]");
     if(is_progressBar_CurrentFile_available)
     {
-        emit Send_CurrentFileProgress_Stop();//停止当前文件进度条
+        emit Send_CurrentFileProgress_Stop();//Stop current file progress bar
     }
     //=======
     return false;
@@ -691,7 +691,7 @@ QString MainWindow::FrameInterpolation_ReadConfig(bool isUhdInput,int NumOfFrame
             VFI_Config.append("-u ");
         }
     }
-    //GPU & 多线程
+    //GPU & Multithreading
     int NumOfThreads_VFI = 1;
     if(isSuccessiveFailuresDetected_VFI==false)
     {
@@ -699,21 +699,21 @@ QString MainWindow::FrameInterpolation_ReadConfig(bool isUhdInput,int NumOfFrame
     }
     if(ui->checkBox_MultiGPU_VFI->isChecked()==false)
     {
-        //单显卡
+        //Single graphics card
         //GPU ID
         if(ui->comboBox_GPUID_VFI->currentText().trimmed().toLower()!="auto")
         {
             VFI_Config.append("-g "+ui->comboBox_GPUID_VFI->currentText().trimmed()+" ");
         }
-        //线程数量
+        //Number of threads
         QString jobs_num_str = QString("%1").arg(NumOfThreads_VFI);
         VFI_Config.append(QString("-j "+jobs_num_str+":"+jobs_num_str+":"+jobs_num_str+" "));
-        //块大小(Dain)单显卡
+        //Block size (Dain) single graphics card
         if(ui->comboBox_Engine_VFI->currentIndex()==2)VFI_Config.append("-t "+QString("%1").arg(ui->spinBox_TileSize_VFI->value())+" ");
     }
     else
     {
-        //多显卡
+        //Multiple graphics cards
         //GPU ID
         QString GPU_IDs_str = ui->lineEdit_MultiGPU_IDs_VFI->text().trimmed().trimmed().replace("，",",").remove(" ").remove("　");
         if(GPU_IDs_str.right(1)==",")
@@ -727,7 +727,7 @@ QString MainWindow::FrameInterpolation_ReadConfig(bool isUhdInput,int NumOfFrame
         {
             QString jobs_num_str = QString("%1").arg(NumOfThreads_VFI);
             VFI_Config.append(QString("-j "+jobs_num_str+":"+jobs_num_str+":"+jobs_num_str+" "));
-            //块大小(Dain)单显卡
+            //Block size (Dain) single graphics card
             if(ui->comboBox_Engine_VFI->currentIndex()==2)VFI_Config.append("-t "+QString("%1").arg(ui->spinBox_TileSize_VFI->value())+" ");
         }
         else
@@ -746,7 +746,7 @@ QString MainWindow::FrameInterpolation_ReadConfig(bool isUhdInput,int NumOfFrame
                 }
             }
             VFI_Config.append("-g "+GPU_IDs_str+" ");
-            //线程数量
+            //Number of threads
             int NumOfThreads_AVG = NumOfThreads_VFI / GPU_IDs_StrList.size();
             if(NumOfThreads_AVG<1)NumOfThreads_AVG=1;
             int NumOfThreads_Total = NumOfThreads_AVG * GPU_IDs_StrList.size();
@@ -768,7 +768,7 @@ QString MainWindow::FrameInterpolation_ReadConfig(bool isUhdInput,int NumOfFrame
             }
             //===
             VFI_Config.append(QString("-j "+NumOfThreads_Total_str+":"+Jobs_Str+":"+NumOfThreads_Total_str+" "));
-            //块大小(Dain)多显卡
+            //Block size (Dain) multiple graphics cards
             if(ui->comboBox_Engine_VFI->currentIndex()==2)
             {
                 QString TileSizes_Str = "";
@@ -787,7 +787,7 @@ QString MainWindow::FrameInterpolation_ReadConfig(bool isUhdInput,int NumOfFrame
             }
         }
     }
-    //模型
+    //Model
     switch (ui->comboBox_Engine_VFI->currentIndex())
     {
         case 0://rife
@@ -803,7 +803,7 @@ QString MainWindow::FrameInterpolation_ReadConfig(bool isUhdInput,int NumOfFrame
         case 2://dain
             {
                 VFI_Config.append("-m \""+Current_Path+"/dain-ncnn-vulkan/best\" ");
-                //顺便把帧数倍率塞进去
+                //Stuff the frame rate multiplier in by the way
                 VFI_Config.append("-n "+QString("%1").arg(NumOfFrames)+" ");
                 break;
             }

@@ -20,7 +20,7 @@
 #include "ui_mainwindow.h"
 
 /*
-手动检查更新:直接打开release页面
+Manually check for updates: directly open the release page
 */
 void MainWindow::on_pushButton_CheckUpdate_clicked()
 {
@@ -31,8 +31,8 @@ void MainWindow::on_pushButton_CheckUpdate_clicked()
     QDesktopServices::openUrl(QUrl("https://github.com/AaronFeng753/Waifu2x-Extension-GUI/releases"));
 }
 /*
-自动检查更新:
-启动软件时以单独线程运行,检测更新,如有则弹窗
+Automatic update check:
+When the software starts, it runs in a separate thread to detect updates. If there is an update, a pop-up window will be displayed.
 */
 int MainWindow::CheckUpadte_Auto()
 {
@@ -61,10 +61,10 @@ int MainWindow::CheckUpadte_Auto()
     //============================
     QString Github_UpdateInfo_local = Current_Path+"/Update_Info_Github.ini";
     QString Gitee_UpdateInfo_local = Current_Path+"/Update_Info_Gitee.ini";
-    //============= 从Github下载更新信息 ==============
+    //============= Download update information from Github ==============
     emit Send_TextBrowser_NewMessage(tr("Starting to download update information(for auto-check update) from Github."));
     DownloadTo(Github_UpdateInfo_online,Github_UpdateInfo_local);
-    //========= 检查github的文件是否下载成功 =================
+    //========= Check if the github file was downloaded successfully =================
     if(QFile::exists(Github_UpdateInfo_local))
     {
         emit Send_TextBrowser_NewMessage(tr("Successfully downloaded update information from Github."));
@@ -99,12 +99,12 @@ int MainWindow::CheckUpadte_Auto()
     {
         emit Send_TextBrowser_NewMessage(tr("Unable to download update information from Github."));
     }
-    //============= 从码云下载更新信息 ==============
+    //============= Download update information from Gitee (码云) ==============
     if(isGiteeBanned==false)
     {
         emit Send_TextBrowser_NewMessage(tr("Starting to download update information(for auto-check update) from Gitee."));
         DownloadTo(Gitee_UpdateInfo_online,Gitee_UpdateInfo_local);
-        //========= 检查gitee的文件是否下载成功 =================
+        //========= Check if the gitee file was downloaded successfully =================
         if(QFile::exists(Gitee_UpdateInfo_local))
         {
             emit Send_TextBrowser_NewMessage(tr("Successfully downloaded update information from Gitee."));
@@ -149,7 +149,7 @@ int MainWindow::CheckUpadte_Auto()
     return 0;
 }
 /*
-自动更新弹窗
+Automatic update pop-up window
 */
 int MainWindow::CheckUpadte_NewUpdate(QString update_str,QString Change_log)
 {
@@ -159,10 +159,10 @@ int MainWindow::CheckUpadte_NewUpdate(QString update_str,QString Change_log)
     {
         QMessageBox Msg(QMessageBox::Question, QString(tr("New ")+UpdateType+tr(" update available!")), QString(tr("New version: %1\n\nBrief change log:\n%2\n\nDo you wanna update now???")).arg(update_str).arg(Change_log));
         Msg.setIcon(QMessageBox::Information);
-        if(ui->comboBox_language->currentIndex()==1)
+        if(ui->comboBox_language->currentIndex()==1) // Assuming index 1 is Chinese
         {
-            QAbstractButton *pYesBtn_Github = Msg.addButton(QString("前往Github下载"), QMessageBox::YesRole);
-            QAbstractButton *pYesBtn_Gitee = Msg.addButton(QString("前往码云下载"), QMessageBox::YesRole);
+            QAbstractButton *pYesBtn_Github = Msg.addButton(tr("Download from Github"), QMessageBox::YesRole); // Go to Github to download
+            QAbstractButton *pYesBtn_Gitee = Msg.addButton(tr("Download from Gitee"), QMessageBox::YesRole); // Go to Gitee to download
             Msg.addButton(QString(tr("NO")), QMessageBox::NoRole);
             Msg.exec();
             if (Msg.clickedButton() == pYesBtn_Github)QDesktopServices::openUrl(QUrl("https://github.com/AaronFeng753/Waifu2x-Extension-GUI/releases/"+update_str.trimmed()));
