@@ -19,11 +19,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 /*
-处理apng的主函数
+Main function for processing APNG files
 */
 void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
 {
-    //开始处理
+    // Start processing
     bool isNeedRemoveFromCustResList = false;
     QString sourceFileFullPath="";
     if(isFromImageList==false)
@@ -38,14 +38,14 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
         emit Send_TextBrowser_NewMessage("It is detected that this PNG is actually an APNG(Animated PNG), so it will be processed as an APNG. ["+sourceFileFullPath+"]");
     }
     //===============================
-    //检查是否需要自动添加到自定义分辨率列表
+    // Check if we should auto add to the custom resolution list
     double double_ScaleRatio_gif = ui->doubleSpinBox_ScaleRatio_gif->value();
-    //如果没自定义分辨率且放大倍率带小数
+    // If no custom resolution and scale ratio is fractional
     if((CustRes_isContained(sourceFileFullPath) == false) && (double_ScaleRatio_gif != qRound(double_ScaleRatio_gif)))
     {
-        //===================== 获取分辨率 =============================
+        //===================== Get resolution =============================
         QMap<QString,int> Map_OrgRes = Image_Gif_Read_Resolution(sourceFileFullPath);
-        //========= 计算新的高度宽度 ==================
+        //========= Calculate new height and width ==================
         double ScaleRatio_double = ui->doubleSpinBox_ScaleRatio_gif->value();
         int Height_new = qRound(ScaleRatio_double * Map_OrgRes["height"]);
         int width_new = qRound(ScaleRatio_double * Map_OrgRes["width"]);
@@ -53,7 +53,7 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
         {
             emit Send_TextBrowser_NewMessage("Warning! Unable to read the resolution of ["+sourceFileFullPath+"]. This file will only be scaled to "+QString::number((int)ScaleRatio_double,10)+"X.");
         }
-        //======== 存入自定义分辨率列表中 ============
+        //======== Store into custom resolution list ============
         QMap<QString,QString> res_map;
         res_map["fullpath"] = sourceFileFullPath;
         res_map["height"] = QString::number(Height_new,10);
@@ -62,12 +62,12 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
         isNeedRemoveFromCustResList = true;
     }
     //======================
-    //读取源文件信息
+    // Read source file info
     QFileInfo fileinfo_sourceFileFullPath(sourceFileFullPath);
     QString sourceFileFullPath_baseName = file_getBaseName(sourceFileFullPath);
     QString sourceFileFullPath_fileExt = fileinfo_sourceFileFullPath.suffix();
     QString sourceFileFullPath_folderPath = file_getFolderPath(fileinfo_sourceFileFullPath);
-    //生成各种路径
+    // Generate various paths
     QString splitFramesFolder = sourceFileFullPath_folderPath+"/"+sourceFileFullPath_baseName+"_"+sourceFileFullPath_fileExt+"_splitFramesFolder_W2xEX";
     QString scaledFramesFolder = sourceFileFullPath_folderPath+"/"+sourceFileFullPath_baseName+"_"+sourceFileFullPath_fileExt+"_scaledFramesFolder_W2xEX";
     QString resultFileFullPath="";
@@ -81,9 +81,9 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
         resultFileFullPath = sourceFileFullPath_folderPath+"/"+sourceFileFullPath_baseName+"_"+QString("%1").arg(ui->doubleSpinBox_ScaleRatio_gif->value())+"x_"+QString("%1").arg(ui->spinBox_DenoiseLevel_gif->value())+"n_W2xEX"+"."+sourceFileFullPath_fileExt;
     }
     //=======================
-    //开始拆分
+    // Start splitting
     APNG_Split2Frames(sourceFileFullPath,splitFramesFolder);
-    //是否暂停了
+    // Was the process paused?
     if(waifu2x_STOP)
     {
         if(isFromImageList)
@@ -99,10 +99,10 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
         if(isNeedRemoveFromCustResList)CustRes_remove(sourceFileFullPath);
         return;
     }
-    //检测是否拆分成功
-    //获取拆分后的文件列表
+    // Check whether splitting succeeded
+    // Get the list of split frame files
     QStringList framesFileName_qStrList = file_getFileNames_in_Folder_nofilter(splitFramesFolder);
-    if(framesFileName_qStrList.isEmpty())//检查是否成功拆分gif
+    if(framesFileName_qStrList.isEmpty())//Check if GIF was split successfully
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+sourceFileFullPath+tr("]. Error: [Can't split GIF into frames.]"));
         if(isFromImageList)
@@ -120,7 +120,7 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
         return;
     }
     //=======================
-    //开始放大&组装
+    // Start scaling & assembling
     bool isSuccessfullyScaled = false;
     int engineIndex = ui->comboBox_Engine_GIF->currentIndex(); // Use engine from GIF tab for APNG
     switch(engineIndex)
@@ -172,12 +172,12 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
             }
     }
     //============
-    //删除缓存
+    // Delete cache
     file_DelDir(splitFramesFolder);
     file_DelDir(scaledFramesFolder);
     if(isNeedRemoveFromCustResList)CustRes_remove(sourceFileFullPath);
     //============
-    //放大过程中失败 or 暂停
+    // Failure or pause during scaling
     if(waifu2x_STOP)
     {
         if(isFromImageList)
@@ -203,7 +203,7 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
         emit Send_progressbar_Add();
         return;
     }
-    //检查是否成功生成结果文件
+    // Check whether result file exists
     if(QFile::exists(resultFileFullPath)==false)
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+sourceFileFullPath+tr("]. Error: [Unable to assemble APNG.]"));
@@ -219,7 +219,7 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
         return;
     }
     //===================
-    //删除原文件 更新table
+    // Delete original file and update table
     if(ui->checkBox_DelOriginal->isChecked()||ui->checkBox_ReplaceOriginalFile->isChecked())
     {
         if(ReplaceOriginalFile(sourceFileFullPath,resultFileFullPath)==false)
@@ -253,18 +253,18 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
             emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Finished");
         }
     }
-    //移动到输出路径
+    // Move to output path
     if(ui->checkBox_OutPath_isEnabled->isChecked())
     {
         MoveFileToOutputPath(resultFileFullPath,sourceFileFullPath);
     }
-    //更新进度条
+    // Update progress bar
     emit Send_progressbar_Add();
     //=====
     return;
 }
 /*
-拆分apng
+Split APNG into frames
 */
 void MainWindow::APNG_Split2Frames(QString sourceFileFullPath,QString splitFramesFolder)
 {
@@ -298,12 +298,12 @@ void MainWindow::APNG_Split2Frames(QString sourceFileFullPath,QString splitFrame
     return;
 }
 /*
-组装apng
+Assemble frames into an APNG
 */
 void MainWindow::APNG_Frames2APNG(QString sourceFileFullPath,QString scaledFramesFolder,QString resultFileFullPath,bool isOverScaled)
 {
     emit Send_TextBrowser_NewMessage(tr("Start assembling APNG:[")+sourceFileFullPath+"]");
-    //自行调整图片大小
+    // Manually resize frames if needed
     bool CustRes_isEnabled = CustRes_isContained(sourceFileFullPath);
     if(CustRes_isEnabled || isOverScaled)
     {
@@ -324,14 +324,14 @@ void MainWindow::APNG_Frames2APNG(QString sourceFileFullPath,QString scaledFrame
         }
         ImagesResize_Folder_MultiThread(New_width,New_height,scaledFramesFolder);
     }
-    //========================= 调用ffprobe读取APNG信息 ======================
+    //========================= Use ffprobe to read APNG info ======================
     QProcess Get_APNGAvgFPS_process;
     QString cmd_Get_APNGAvgFPS_process = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+sourceFileFullPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
     QByteArray ffprobe_out;
     runProcess(&Get_APNGAvgFPS_process, cmd_Get_APNGAvgFPS_process, &ffprobe_out);
-    //============= 保存ffprobe输出的ini格式文本 =============
+    //============= Save ffprobe output in ini format =============
     QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
-    //================ 将ini写入文件保存 ================
+    //================ Write ini to file ================
     QFileInfo videoFileInfo(sourceFileFullPath);
     QString Path_APNG_info_ini = "";
     QString video_dir = file_getFolderPath(sourceFileFullPath);
@@ -345,13 +345,13 @@ void MainWindow::APNG_Frames2APNG(QString sourceFileFullPath,QString scaledFrame
     //=========
     QFile APNG_info_ini(Path_APNG_info_ini);
     APNG_info_ini.remove();
-    if (APNG_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
+    if (APNG_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) // QIODevice::ReadWrite allows read/write
     {
         QTextStream stream(&APNG_info_ini);
         stream << ffprobe_output_str;
     }
     APNG_info_ini.close();
-    //================== 读取ini获得参数 =====================
+    //================== Read parameters from ini =====================
     QString FPS_Division = "";
     QSettings *configIniRead_videoInfo = new QSettings(Path_APNG_info_ini, QSettings::IniFormat);
     if(configIniRead_videoInfo->value("/streams.stream.0/avg_frame_rate") != QVariant())
@@ -382,7 +382,7 @@ void MainWindow::APNG_Frames2APNG(QString sourceFileFullPath,QString scaledFrame
         return;
     }
     //========================
-    //删除已经存在的result文件
+    // Delete existing result file
     QFile::remove(resultFileFullPath);
     //========================
     QString program = Current_Path+"/apngasm_waifu2xEX.exe";
@@ -399,19 +399,19 @@ void MainWindow::APNG_Frames2APNG(QString sourceFileFullPath,QString scaledFrame
     emit Send_TextBrowser_NewMessage(tr("Finish assembling APNG:[")+sourceFileFullPath+"]");
 }
 /*
-识别是否是apng
+Detect whether a PNG file is animated
 */
 bool MainWindow::APNG_isAnimatedPNG(int rowNum)
 {
     QString sourceFileFullPath = Table_model_image->item(rowNum,2)->text();
-    //========================= 调用ffprobe读取APNG信息 ======================
+    //========================= Use ffprobe to read APNG info ======================
     QProcess Get_APNGAvgFPS_process;
     QString cmd_Get_APNGAvgFPS_process = "\""+Current_Path+"/ffprobe_waifu2xEX.exe\" -i \""+sourceFileFullPath+"\" -select_streams v -show_streams -v quiet -print_format ini -show_format";
     QByteArray ffprobe_out;
     runProcess(&Get_APNGAvgFPS_process, cmd_Get_APNGAvgFPS_process, &ffprobe_out);
-    //============= 保存ffprobe输出的ini格式文本 =============
+    //============= Save ffprobe output in ini format =============
     QString ffprobe_output_str = QString::fromUtf8(ffprobe_out);
-    //================ 将ini写入文件保存 ================
+    //================ Write ini to file ================
     QFileInfo videoFileInfo(sourceFileFullPath);
     QString Path_APNG_info_ini = "";
     QString video_dir = file_getFolderPath(sourceFileFullPath);
@@ -425,13 +425,13 @@ bool MainWindow::APNG_isAnimatedPNG(int rowNum)
     //=========
     QFile APNG_info_ini(Path_APNG_info_ini);
     APNG_info_ini.remove();
-    if (APNG_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
+    if (APNG_info_ini.open(QIODevice::ReadWrite | QIODevice::Text)) // QIODevice::ReadWrite allows read/write
     {
         QTextStream stream(&APNG_info_ini);
         stream << ffprobe_output_str;
     }
     APNG_info_ini.close();
-    //================== 读取ini获得参数 =====================
+    //================== Read parameters from ini =====================
     bool isAPNG = false;
     QSettings *configIniRead_videoInfo = new QSettings(Path_APNG_info_ini, QSettings::IniFormat);
     if(configIniRead_videoInfo->value("/streams.stream.0/codec_name") != QVariant())

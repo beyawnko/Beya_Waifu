@@ -46,12 +46,12 @@ void MainWindow::RUN_Concurrent()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     this->hide();
-    qApp->setQuitOnLastWindowClosed(true);//無窗口時不再保持運行
+    qApp->setQuitOnLastWindowClosed(true);// do not keep running when no window exists
     qApp->closeAllWindows();
 }
-
 /*
-检测文件夹是否可写入
+Check whether the directory is writable
+*/
 */
 bool MainWindow::file_isDirWritable(QString DirPath)
 {
@@ -62,7 +62,7 @@ bool MainWindow::file_isDirWritable(QString DirPath)
     QString TestTemp = DirPath+"/RWTest_W2xEXLauncher.tmp";
     QFile file_TestTemp(TestTemp);
     file_TestTemp.remove();
-    if (file_TestTemp.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
+    if (file_TestTemp.open(QIODevice::ReadWrite | QIODevice::Text)) // QIODevice::ReadWrite allows read/write
     {
         QTextStream stream(&file_TestTemp);
         stream << "W2xEX";
