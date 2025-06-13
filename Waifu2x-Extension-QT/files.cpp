@@ -19,6 +19,9 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QEventLoop>
+#include <QFileSystemWatcher>
+#include <QTimer>
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -217,24 +220,23 @@ void MainWindow::Add_File_Folder_IncludeSubFolder(QString Full_Path)
 QStringList MainWindow::getFileNames_IncludeSubFolder(QString path)
 {
     QDir dir(path);
-    QStringList files_old;
-    QStringList files_new;
-    while(true)
-    {
-        files_new = dir.entryList(QDir::Dirs | QDir::Files | QDir::Writable, QDir::Name);
-        if(files_new!=files_old)
-        {
-            files_old = files_new;
-            Delay_msec_sleep(100);
-        }
-        else
-        {
-            break;
-        }
-    }
-    files_new.removeAll("..");
-    files_new.removeAll(".");
-    return files_new;
+    QStringList files = dir.entryList(QDir::Dirs | QDir::Files | QDir::Writable, QDir::Name);
+    QFileSystemWatcher watcher;
+    watcher.addPath(path);
+    QEventLoop loop;
+    QTimer timer;
+    timer.setSingleShot(true);
+    timer.setInterval(100);
+    QObject::connect(&watcher, &QFileSystemWatcher::directoryChanged, [&](){
+        files = dir.entryList(QDir::Dirs | QDir::Files | QDir::Writable, QDir::Name);
+        timer.start();
+    });
+    QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    timer.start();
+    loop.exec();
+    files.removeAll("..");
+    files.removeAll(".");
+    return files;
 }
 /*
 扫描文件夹下文件名列表(无过滤
@@ -242,24 +244,23 @@ QStringList MainWindow::getFileNames_IncludeSubFolder(QString path)
 QStringList MainWindow::file_getFileNames_in_Folder_nofilter(QString path)
 {
     QDir dir(path);
-    QStringList files_old;
-    QStringList files_new;
-    while(true)
-    {
-        files_new = dir.entryList(QDir::Files | QDir::Writable, QDir::Name);
-        if(files_new!=files_old)
-        {
-            files_old = files_new;
-            Delay_msec_sleep(100);
-        }
-        else
-        {
-            break;
-        }
-    }
-    files_new.removeAll("..");
-    files_new.removeAll(".");
-    return files_new;
+    QStringList files = dir.entryList(QDir::Files | QDir::Writable, QDir::Name);
+    QFileSystemWatcher watcher;
+    watcher.addPath(path);
+    QEventLoop loop;
+    QTimer timer;
+    timer.setSingleShot(true);
+    timer.setInterval(100);
+    QObject::connect(&watcher, &QFileSystemWatcher::directoryChanged, [&](){
+        files = dir.entryList(QDir::Files | QDir::Writable, QDir::Name);
+        timer.start();
+    });
+    QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    timer.start();
+    loop.exec();
+    files.removeAll("..");
+    files.removeAll(".");
+    return files;
 }
 
 /*
