@@ -20,7 +20,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 /*
-初始化tableview
+Initialize table view
 */
 void MainWindow::Init_Table()
 {
@@ -47,15 +47,15 @@ void MainWindow::Init_Table()
     Table_model_video->setHeaderData(3, Qt::Horizontal, tr("Custom resolution(Width x Height)"));
     ui->tableView_video->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
     ui->tableView_video->setModel(Table_model_video);
-    //将横向表头设置为可见
+    //Set horizontal header visible
     ui->tableView_video->horizontalHeader()->setVisible(1);
     ui->tableView_gif->horizontalHeader()->setVisible(1);
     ui->tableView_image->horizontalHeader()->setVisible(1);
     //=============================================
-    emit Send_Table_EnableSorting(1);//启用文件列表的排序功能
+    emit Send_Table_EnableSorting(1);//Enable sorting for file lists
 }
 /*
-重载Tableview下的文件数量统计
+Refresh file count under TableView
 */
 int MainWindow::Table_FileCount_reload()
 {
@@ -64,26 +64,26 @@ int MainWindow::Table_FileCount_reload()
     long int filecount_video=Table_model_video->rowCount();
     long int filecount_total=filecount_image+filecount_gif+filecount_video;
     //====================
-    // 列表内有文件
+    // Files exist in the list
     //====================
     if(filecount_total>0)
     {
         //===========
-        //显示文件数量
+        //Show file count
         //===========
         ui->label_FileCount->setVisible(1);
         ui->label_FileCount->setText(QString(tr("File count: %1")).arg(filecount_total));
         ui->label_FileCount->setToolTip(QString(tr("Image: %1\nAnimated Image: %2\nVideo: %3")).arg(filecount_image).arg(filecount_gif).arg(filecount_video));
         //=================
-        //启用控制按钮
+        //Enable control buttons
         //=================
         ui->pushButton_ClearList->setEnabled(1);
         ui->pushButton_RemoveItem->setEnabled(1);
         //===============================================
-        //根据每个列表内文件数量逐个判断是否显示这个列表
+        //Show or hide each list based on its file count
         //===============================================
         int TableView_VisibleCount = 0;
-        ui->label_DropFile->setVisible(0);//隐藏文件投放label
+        ui->label_DropFile->setVisible(0);//Hide drop file label
         if(filecount_image>0)
         {
             ui->tableView_image->setVisible(1);
@@ -120,24 +120,24 @@ int MainWindow::Table_FileCount_reload()
             ui->tableView_video->setVisible(0);
         }
         //========================
-        ui->pushButton_ResizeFilesListSplitter->setEnabled(TableView_VisibleCount>1);//当可见的文件列表数量大于1时启用重置文件列表比例按钮
+        ui->pushButton_ResizeFilesListSplitter->setEnabled(TableView_VisibleCount>1);//Enable reset splitter when more than one list is visible
         //========================
-        ui->pushButton_SaveFileList->setEnabled(1);//列表内有文件时自动启用保存文件列表的按钮
+        ui->pushButton_SaveFileList->setEnabled(1);//Enable save list button when files exist
     }
     //====================
-    // 列表内无文件
+    // No files in the list
     //====================
     else
     {
-        ui->label_FileCount->setVisible(0);//隐藏文件数量label
+        ui->label_FileCount->setVisible(0);//Hide file count label
         //===================
-        // 禁用文件列表控制按钮
+        // Disable file list control buttons
         //===================
         ui->pushButton_ClearList->setEnabled(0);
         ui->pushButton_RemoveItem->setEnabled(0);
         ui->pushButton_ResizeFilesListSplitter->setEnabled(0);
         //====================
-        //隐藏文件列表,取消选中
+        //Hide file lists and clear selection
         //====================
         ui->label_DropFile->setVisible(1);
         curRow_image = -1;
@@ -150,12 +150,12 @@ int MainWindow::Table_FileCount_reload()
         ui->tableView_video->clearSelection();
         ui->tableView_video->setVisible(0);
         //========================
-        ui->pushButton_SaveFileList->setEnabled(0);//列表内没有文件时自动禁用保存文件列表的按钮
+        ui->pushButton_SaveFileList->setEnabled(0);//Disable save list button when no files exist
     }
     return 0;
 }
 //============================
-// 插入文件
+// Insert files
 //============================
 void MainWindow::Table_image_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath)
 {
@@ -398,7 +398,7 @@ int MainWindow::Table_video_get_rowNum()
     return rowNum;
 }
 /*
-从table读取状态和完整路径
+Read status and full path from table
 [fullpath]=status;
 */
 QMap<QString, QString> MainWindow::Table_Read_status_fullpath(QStandardItemModel *Table_model)
@@ -419,15 +419,15 @@ QMap<QString, QString> MainWindow::Table_Read_status_fullpath(QStandardItemModel
     return Map_fullPath_status;
 }
 
-//保存当前文件列表
+//Save current file list
 int MainWindow::Table_Save_Current_Table_Filelist(QString Table_FileList_ini)
 {
     QFile::remove(Table_FileList_ini);
     //=================
     QSettings *configIniWrite = new QSettings(Table_FileList_ini, QSettings::IniFormat);
-    //================= 添加警告 =========================
+    //================= Add warning =========================
     configIniWrite->setValue("/Warning/EN", "Do not modify this file! It may cause the program to crash! If problems occur after the modification, delete this file and restart the program.");
-    //================= 存储table_image =========================
+    //================= Store table_image =========================
     configIniWrite->setValue("/table_image/rowCount", Table_model_image->rowCount());
     for(int i=0; i<Table_model_image->rowCount(); i++)
     {
@@ -462,7 +462,7 @@ int MainWindow::Table_Save_Current_Table_Filelist(QString Table_FileList_ini)
             }
         }
     }
-    //================= 存储table_gif =========================
+    //================= Store table_gif =========================
     configIniWrite->setValue("/table_gif/rowCount", Table_model_gif->rowCount());
     for(int i=0; i<Table_model_gif->rowCount(); i++)
     {
@@ -497,7 +497,7 @@ int MainWindow::Table_Save_Current_Table_Filelist(QString Table_FileList_ini)
             }
         }
     }
-    //================= 存储table_video =========================
+    //================= Store table_video =========================
     configIniWrite->setValue("/table_video/rowCount", Table_model_video->rowCount());
     for(int i=0; i<Table_model_video->rowCount(); i++)
     {
@@ -546,15 +546,15 @@ void MainWindow::on_pushButton_SaveFileList_clicked()
         MSG->show();
         return;
     }
-    //====================== 选择保存位置 ==========================
-    //生成默认保存文件的文件夹
+    //====================== Select save location ==========================
+    //Create default folder for saved files
     file_mkDir(Current_Path+"/FilesList_W2xEX");
-    //保存文件弹窗
+    //Save file dialog
     QString FilesListFullPath = QFileDialog::getSaveFileName(this, tr("Save files list @Waifu2x-Extension-GUI"),
                                 Current_Path+"/FilesList_W2xEX/FilesList_W2xEX_"+QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss")+".ini",
                                 "*.ini");
     if(FilesListFullPath.trimmed()=="")return;
-    //判断文件夹是否存在以及是否可写入
+    //Check if folder exists and is writable
     QFileInfo FilesListFullPath_fileinfo(FilesListFullPath);
     QString FilesListFullPath_FolderPath = file_getFolderPath(FilesListFullPath_fileinfo);
     if(file_isDirExist(FilesListFullPath_FolderPath)==false || file_isDirWritable(FilesListFullPath_FolderPath)==false)
@@ -567,9 +567,9 @@ void MainWindow::on_pushButton_SaveFileList_clicked()
         MSG->show();
         return;
     }
-    //======================= 开始保存 ========================
-    this->setAcceptDrops(0);//禁止drop file
-    pushButton_Start_setEnabled_self(0);//禁用start button
+    //======================= Start saving ========================
+    this->setAcceptDrops(0);//Disable drop file
+    pushButton_Start_setEnabled_self(0);//Disable start button
     ui->pushButton_ClearList->setEnabled(0);
     ui->pushButton_RemoveItem->setEnabled(0);
     ui->pushButton_CustRes_cancel->setEnabled(0);
@@ -594,7 +594,7 @@ int MainWindow::Table_Save_Current_Table_Filelist_Finished()
 {
     if(Waifu2xMain.isRunning()==false)
     {
-        this->setAcceptDrops(1);//启用drop file
+        this->setAcceptDrops(1);//Enable drop file
         ui->pushButton_ClearList->setEnabled(1);
         ui->pushButton_RemoveItem->setEnabled(1);
         ui->pushButton_ReadFileList->setEnabled(1);
@@ -602,7 +602,7 @@ int MainWindow::Table_Save_Current_Table_Filelist_Finished()
     }
     ui->pushButton_CustRes_cancel->setEnabled(1);
     ui->pushButton_CustRes_apply->setEnabled(1);
-    pushButton_Start_setEnabled_self(1);//启用start button
+    pushButton_Start_setEnabled_self(1);//Enable start button
     ui->pushButton_SaveFileList->setEnabled(1);
     emit Send_TextBrowser_NewMessage(tr("File list saved successfully!"));
     //===
@@ -633,7 +633,7 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
     Progressbar_MaxVal = rowCount_image + rowCount_gif + rowCount_video;
     Progressbar_CurrentVal = 0;
     emit Send_PrograssBar_Range_min_max(0, Progressbar_MaxVal);
-    //========= 加载image ========
+    //========= Load image ========
     for(int i=0; i<rowCount_image; i++)
     {
         //===========
@@ -670,7 +670,7 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
         emit Send_progressbar_Add();
         //Delay_msec_sleep(100);
     }
-    //========= 加载gif ========
+    //========= Load gif ========
     for(int i=0; i<rowCount_gif; i++)
     {
         //===========
@@ -707,7 +707,7 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
         emit Send_progressbar_Add();
         //Delay_msec_sleep(100);
     }
-    //========= 加载video ========
+    //========= Load video ========
     for(int i=0; i<rowCount_video; i++)
     {
         //===========
@@ -773,21 +773,21 @@ int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString Table_FileList_
     int rowCount_image = configIniRead->value("/table_image/rowCount").toInt();
     if(rowCount_image>0)
     {
-        ui->label_DropFile->setVisible(0);//隐藏文件投放label
+        ui->label_DropFile->setVisible(0);//Hide drop file label
         ui->tableView_image->setVisible(1);
     }
     //========= gif ========
     int rowCount_gif = configIniRead->value("/table_gif/rowCount").toInt();
     if(rowCount_gif>0)
     {
-        ui->label_DropFile->setVisible(0);//隐藏文件投放label
+        ui->label_DropFile->setVisible(0);//Hide drop file label
         ui->tableView_gif->setVisible(1);
     }
     //========= video ========
     int rowCount_video = configIniRead->value("/table_video/rowCount").toInt();
     if(rowCount_video>0)
     {
-        ui->label_DropFile->setVisible(0);//隐藏文件投放label
+        ui->label_DropFile->setVisible(0);//Hide drop file label
         ui->tableView_video->setVisible(1);
     }
     //====================
@@ -860,7 +860,7 @@ void MainWindow::on_tableView_video_pressed(const QModelIndex &index)
     ui->tableView_gif->clearSelection();
 }
 /*
-启用 or 禁用 三个文件列表的排序功能
+Enable or disable sorting for the three file lists
 */
 void MainWindow::Table_EnableSorting(bool EnableSorting)
 {
@@ -873,7 +873,7 @@ void MainWindow::Table_EnableSorting(bool EnableSorting)
     ui->tableView_video->setSortingEnabled(EnableSorting);
 }
 /*
-启用/禁用 文件列表table的UI更新
+Enable/disable file list table UI updates
 */
 void MainWindow::ui_tableViews_setUpdatesEnabled(bool isEnabled)
 {

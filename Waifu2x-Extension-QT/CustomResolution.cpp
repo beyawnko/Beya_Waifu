@@ -20,7 +20,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 /*
-Apply自定义分辨率
+Apply custom resolution
 */
 int MainWindow::CustRes_SetCustRes()
 {
@@ -148,7 +148,7 @@ int MainWindow::CustRes_SetCustRes()
     }
     if(curRow_video >= 0)
     {
-        //读取自定义分辨率设定
+        //Read custom resolution settings
         int CustRes_width_video=CustRes_width_spinBoxIntValue;
         int CustRes_height_video=CustRes_height_spinBoxIntValue;
         //Judge whether the custom resolution contains odd numbers
@@ -179,7 +179,7 @@ int MainWindow::CustRes_SetCustRes()
     return 0;
 }
 /*
-取消 自定义分辨率设定
+Cancel custom resolution settings
 */
 int MainWindow::CustRes_CancelCustRes()
 {

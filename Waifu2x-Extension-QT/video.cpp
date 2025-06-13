@@ -226,7 +226,7 @@ void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString V
     //=========
     QFile FFMpegFileList(Path_FFMpegFileList);
     FFMpegFileList.remove();
-    if (FFMpegFileList.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
+    if (FFMpegFileList.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite supports read and write
     {
         QTextStream stream(&FFMpegFileList);
         stream << FFMpegFileList_QString;
@@ -234,11 +234,11 @@ void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString V
     FFMpegFileList.close();
     //========
     /*
-    组装视频
+    Assemble video
     */
     QString ffmpeg_path = Current_Path+"/ffmpeg_waifu2xEX.exe";
     bool Del_DenoisedAudio = false;
-    //=============== 音频降噪 ========================
+    //=============== Audio denoise ========================
     if((ui->checkBox_AudioDenoise->isChecked())&&QFile::exists(AudioPath))
     {
         QString AudioPath_tmp = video_AudioDenoise(AudioPath);
@@ -248,7 +248,7 @@ void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString V
             Del_DenoisedAudio = true;
         }
     }
-    //================= 获取比特率 =================
+    //================= Get bitrate =================
     QString bitrate_video_cmd="";
     if(ui->spinBox_bitrate_vid->value()>0 && ui->groupBox_video_settings->isChecked())
     {
@@ -267,13 +267,13 @@ void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString V
             if(BitRate!=0)bitrate_video_cmd = " -b:v "+QString::number(BitRate,10)+"k ";
         }
     }
-    //================= 读取视频编码器设定 ==============
+    //================= Read video encoder settings ==============
     QString encoder_video_cmd="";
     if(ui->groupBox_video_settings->isChecked() && ui->lineEdit_encoder_vid->text().trimmed()!="")
     {
-        encoder_video_cmd = " -c:v "+ui->lineEdit_encoder_vid->text().trimmed()+" ";//图像编码器
+        encoder_video_cmd = " -c:v "+ui->lineEdit_encoder_vid->text().trimmed()+" ";//Video encoder
     }
-    //=============== 读取音频编码设定 ====================
+    //=============== Read audio encoder settings ====================
     QString encoder_audio_cmd="";
     QString bitrate_audio_cmd="";
     if(ui->groupBox_video_settings->isChecked())
@@ -287,16 +287,16 @@ void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString V
     QString Extra_command = "";
     if(ui->groupBox_video_settings->isChecked() && ui->lineEdit_ExCommand_output->text().trimmed()!="")
     {
-        Extra_command = " "+ui->lineEdit_ExCommand_output->text().trimmed()+" ";//附加指令
+        Extra_command = " "+ui->lineEdit_ExCommand_output->text().trimmed()+" ";//Extra command
     }
-    //================ 获取fps =====================
+    //================ Get fps =====================
     QString fps_video_cmd=" ";
     QString fps = video_get_fps(Mp4Clip_forReadInfo).trimmed();
     if(fps != "0.0")
     {
         fps_video_cmd = " -r "+fps+" ";
     }
-    //================= 开始处理 =============================
+    //================= Start processing =============================
     QString CMD = "";
     if(QFile::exists(AudioPath))
     {
@@ -315,27 +315,27 @@ void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString V
         QFile::remove(Path_FFMpegFileList);
         return;
     }
-    //检查是否发生错误
-    if(QFile::exists(video_mp4_scaled_fullpath)==false)//检查是否成功生成视频
+    //Check for errors
+    if(QFile::exists(video_mp4_scaled_fullpath)==false)//Check whether video was generated successfully
     {
         MultiLine_ErrorOutput_QMutex.lock();
         emit Send_TextBrowser_NewMessage(tr("Error output for FFmpeg when processing:[")+video_mp4_scaled_fullpath+"]");
         emit Send_TextBrowser_NewMessage("\n--------------------------------------");
-        //标准输出
+        //Standard output
         emit Send_TextBrowser_NewMessage(AssembleVideo.readAllStandardOutput());
-        //错误输出
+        //Error output
         emit Send_TextBrowser_NewMessage(AssembleVideo.readAllStandardError());
         emit Send_TextBrowser_NewMessage("\n--------------------------------------");
         MultiLine_ErrorOutput_QMutex.unlock();
     }
-    QFile::remove(Path_FFMpegFileList);//删除文件列表
+    QFile::remove(Path_FFMpegFileList);//Delete file list
     //===================
     if(Del_DenoisedAudio)QFile::remove(AudioPath);
     //==============================
     emit Send_TextBrowser_NewMessage(tr("Finish assembling video with clips:[")+video_mp4_scaled_fullpath+"]");
 }
 /*
-将视频拆分到帧(分段的)
+Split video into frames (by segment)
 */
 void MainWindow::video_video2images_ProcessBySegment(QString VideoPath,QString FrameFolderPath,int StartTime,int SegmentDuration)
 {
@@ -343,7 +343,7 @@ void MainWindow::video_video2images_ProcessBySegment(QString VideoPath,QString F
     //=================
     QString ffmpeg_path = Current_Path+"/ffmpeg_waifu2xEX.exe";
     QString video_mp4_fullpath = VideoPath;
-    //================ 获取fps =====================
+    //================ Get fps =====================
     QString fps_video_cmd=" ";
     QString fps = video_get_fps(video_mp4_fullpath).trimmed();
     if(fps != "0.0")
@@ -358,20 +358,20 @@ void MainWindow::video_video2images_ProcessBySegment(QString VideoPath,QString F
     QProcess video_splitFrame;
     QString splitCmd = "\""+ffmpeg_path+"\" -y"+fps_video_cmd+"-i \""+video_mp4_fullpath+"\" -ss "+QString::number(StartTime,10)+" -t "+QString::number(SegmentDuration,10)+fps_video_cmd+" \""+FrameFolderPath.replace("%","%%")+"/%0"+QString::number(FrameNumDigits,10)+"d.png\"";
     runProcess(&video_splitFrame, splitCmd);
-    //============== 尝试在Win7下可能兼容的指令 ================================
+    //============== Attempt commands that might work on Win7 ================================
     if(file_isDirEmpty(FrameFolderPath))
     {
         splitCmd = "\""+ffmpeg_path+"\" -y"+fps_video_cmd+"-i \""+video_mp4_fullpath+"\" -ss "+QString::number(StartTime,10)+" -t "+QString::number(SegmentDuration,10)+fps_video_cmd+" \""+FrameFolderPath.replace("%","%%")+"/%%0"+QString::number(FrameNumDigits,10)+"d.png\"";
         runProcess(&video_splitFrame, splitCmd);
     }
-    //======== 插帧 =========
+    //======== Frame interpolation =========
     QFileInfo vfinfo(VideoPath);
     QString video_dir = file_getFolderPath(vfinfo);
     QString video_filename = file_getBaseName(VideoPath);
     QString VFI_FolderPath_tmp = video_dir+"/"+video_filename+"_PreVFI_W2xEX";
-    if(ui->checkBox_VfiAfterScale_VFI->isChecked()==false && ui->groupBox_FrameInterpolation->isChecked()==true && ui->checkBox_FrameInterpolationOnly_Video->isChecked()==false) //如果启用了插帧
+    if(ui->checkBox_VfiAfterScale_VFI->isChecked()==false && ui->groupBox_FrameInterpolation->isChecked()==true && ui->checkBox_FrameInterpolationOnly_Video->isChecked()==false) //If frame interpolation is enabled
     {
-        //如果检测到完整的已经插帧的帧缓存
+        //If complete interpolated frame cache is detected
         if(file_isDirExist(VFI_FolderPath_tmp) && (file_getFileNames_in_Folder_nofilter(FrameFolderPath).size() * ui->spinBox_MultipleOfFPS_VFI->value() == file_getFileNames_in_Folder_nofilter(VFI_FolderPath_tmp).size()))
         {
             file_DelDir(FrameFolderPath);
@@ -383,7 +383,7 @@ void MainWindow::video_video2images_ProcessBySegment(QString VideoPath,QString F
         {
             if(FrameInterpolation(FrameFolderPath,VFI_FolderPath_tmp)==true)
             {
-                //如果插帧成功
+                //If frame interpolation succeeds
                 file_DelDir(FrameFolderPath);
                 QDir VFI_FolderPath_tmp_qdir(VFI_FolderPath_tmp);
                 VFI_FolderPath_tmp_qdir.rename(VFI_FolderPath_tmp,FrameFolderPath);
@@ -405,7 +405,7 @@ void MainWindow::video_video2images_ProcessBySegment(QString VideoPath,QString F
 }
 
 /*
-提取视频的音频
+Extract audio from video
 */
 void MainWindow::video_get_audio(QString VideoPath,QString AudioPath)
 {
@@ -426,7 +426,7 @@ void MainWindow::video_get_audio(QString VideoPath,QString AudioPath)
     }
 }
 /*
-将视频转换为mp4
+Convert video to mp4
 */
 QString MainWindow::video_To_CFRMp4(QString VideoPath)
 {
@@ -510,7 +510,7 @@ QString MainWindow::video_To_CFRMp4(QString VideoPath)
     return "null";
 }
 //===============
-//获取时长(秒)
+//Get duration (seconds)
 //===============
 int MainWindow::video_get_duration(QString videoPath)
 {
@@ -527,7 +527,7 @@ int MainWindow::video_get_duration(QString videoPath)
     return Duration_int;
 }
 /*
-音频降噪
+Audio denoise
 */
 QString MainWindow::video_AudioDenoise(QString OriginalAudioPath)
 {
@@ -561,13 +561,13 @@ QString MainWindow::video_AudioDenoise(QString OriginalAudioPath)
     }
 }
 /*
-保存进度
+Save progress
 */
 void MainWindow::video_write_Progress_ProcessBySegment(QString VideoConfiguration_fullPath,int StartTime,bool isSplitComplete,bool isScaleComplete,int OLDSegmentDuration,int LastVideoClipNo)
 {
     QSettings *configIniWrite = new QSettings(VideoConfiguration_fullPath, QSettings::IniFormat);
     configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8"));
-    //==================== 存储进度 ==================================
+    //==================== Store progress ==================================
     configIniWrite->setValue("/Progress/StartTime", StartTime);
     configIniWrite->setValue("/Progress/isSplitComplete", isSplitComplete);
     configIniWrite->setValue("/Progress/isScaleComplete", isScaleComplete);
@@ -575,15 +575,15 @@ void MainWindow::video_write_Progress_ProcessBySegment(QString VideoConfiguratio
     configIniWrite->setValue("/Progress/LastVideoClipNo", LastVideoClipNo);
 }
 /*
-保存视频配置
+Save video configuration
 */
 void MainWindow::video_write_VideoConfiguration(QString VideoConfiguration_fullPath,int ScaleRatio,int DenoiseLevel,bool CustRes_isEnabled,int CustRes_height,int CustRes_width,QString EngineName,bool isProcessBySegment,QString VideoClipsFolderPath,QString VideoClipsFolderName,bool isVideoFrameInterpolationEnabled,int MultipleOfFPS)
 {
     QSettings *configIniWrite = new QSettings(VideoConfiguration_fullPath, QSettings::IniFormat);
     configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8"));
-    //================= 添加警告 =========================
+    //================= Add warning =========================
     configIniWrite->setValue("/Warning/EN", "Do not modify this file! It may cause the program to crash! If problems occur after the modification, delete this file and restart the program.");
-    //==================== 存储视频信息 ==================================
+    //==================== Store video information ==================================
     configIniWrite->setValue("/VideoConfiguration/ScaleRatio", ScaleRatio);
     configIniWrite->setValue("/VideoConfiguration/DenoiseLevel", DenoiseLevel);
     configIniWrite->setValue("/VideoConfiguration/CustRes_isEnabled", CustRes_isEnabled);
@@ -595,7 +595,7 @@ void MainWindow::video_write_VideoConfiguration(QString VideoConfiguration_fullP
     configIniWrite->setValue("/VideoConfiguration/VideoClipsFolderName", VideoClipsFolderName);
     configIniWrite->setValue("/VideoConfiguration/isVideoFrameInterpolationEnabled", isVideoFrameInterpolationEnabled);
     configIniWrite->setValue("/VideoConfiguration/MultipleOfFPS", MultipleOfFPS);
-    //==================== 存储进度 ==================================
+    //==================== Store progress ==================================
     configIniWrite->setValue("/Progress/StartTime", 0);
     configIniWrite->setValue("/Progress/isSplitComplete", false);
     configIniWrite->setValue("/Progress/isScaleComplete", false);
@@ -604,8 +604,8 @@ void MainWindow::video_write_VideoConfiguration(QString VideoConfiguration_fullP
 }
 
 /*
-直接读取视频 分辨率 然后用 自有算法 计算其应该有的比特率
-单位为k
+Directly read video resolution and calculate ideal bitrate with a custom algorithm
+Unit is k
 */
 int MainWindow::video_UseRes2CalculateBitrate(QString VideoFileFullPath)
 {
@@ -700,7 +700,7 @@ QString MainWindow::video_get_bitrate_AccordingToRes_FrameFolder(QString ScaledF
     }
 }
 /*
-获取视频比特率
+Get video bitrate
 */
 QString MainWindow::video_get_bitrate(QString videoPath,bool isReturnFullCMD,bool isVidOnly)
 {
@@ -730,7 +730,7 @@ QString MainWindow::video_get_bitrate(QString videoPath,bool isReturnFullCMD,boo
     }
 }
 /*
-获取视频FPS
+Get video FPS
 */
 QString MainWindow::video_get_fps(QString videoPath)
 {
@@ -773,7 +773,7 @@ void MainWindow::video_video2images(QString VideoPath,QString FrameFolderPath,QS
     emit Send_TextBrowser_NewMessage(tr("Start splitting video: [")+VideoPath+"]");
     //=================
     QString ffmpeg_path = Current_Path+"/ffmpeg_waifu2xEX.exe";
-    //================ 获取fps =====================
+    //================ Get fps =====================
     QString fps_video_cmd=" ";
     QString fps = video_get_fps(VideoPath).trimmed();
     if(fps != "0.0")
@@ -788,21 +788,21 @@ void MainWindow::video_video2images(QString VideoPath,QString FrameFolderPath,QS
     QProcess video_splitFrame;
     QString splitCmd = "\""+ffmpeg_path+"\" -y"+fps_video_cmd+"-i \""+VideoPath+"\" "+fps_video_cmd+" \""+FrameFolderPath.replace("%","%%")+"/%0"+QString::number(FrameNumDigits,10)+"d.png\"";
     runProcess(&video_splitFrame, splitCmd);
-    //============== 尝试在Win7下可能兼容的指令 ================================
+    //============== Attempt commands that might work on Win7 ================================
     if(file_isDirEmpty(FrameFolderPath))
     {
         splitCmd = "\""+ffmpeg_path+"\" -y"+fps_video_cmd+"-i \""+VideoPath+"\" "+fps_video_cmd+" \""+FrameFolderPath.replace("%","%%")+"/%%0"+QString::number(FrameNumDigits,10)+"d.png\"";
         runProcess(&video_splitFrame, splitCmd);
     }
-    video_get_audio(VideoPath,AudioPath);//拆分音频
-    //======== 插帧 =========
+    video_get_audio(VideoPath,AudioPath);//Extract audio
+    //======== Frame interpolation =========
     QFileInfo vfinfo(VideoPath);
     QString video_dir = file_getFolderPath(vfinfo);
     QString video_filename = file_getBaseName(VideoPath);
     QString VFI_FolderPath_tmp = video_dir+"/"+video_filename+"_PreVFI_W2xEX";
-    if(ui->checkBox_VfiAfterScale_VFI->isChecked()==false && ui->groupBox_FrameInterpolation->isChecked()==true && ui->checkBox_FrameInterpolationOnly_Video->isChecked()==false) //如果启用了插帧
+    if(ui->checkBox_VfiAfterScale_VFI->isChecked()==false && ui->groupBox_FrameInterpolation->isChecked()==true && ui->checkBox_FrameInterpolationOnly_Video->isChecked()==false) //If frame interpolation is enabled
     {
-        //如果检测到完整的已经插帧的帧缓存
+        //If complete interpolated frame cache is detected
         if(file_isDirExist(VFI_FolderPath_tmp) && (file_getFileNames_in_Folder_nofilter(FrameFolderPath).size() * ui->spinBox_MultipleOfFPS_VFI->value() == file_getFileNames_in_Folder_nofilter(VFI_FolderPath_tmp).size()))
         {
             file_DelDir(FrameFolderPath);
@@ -814,7 +814,7 @@ void MainWindow::video_video2images(QString VideoPath,QString FrameFolderPath,QS
         {
             if(FrameInterpolation(FrameFolderPath,VFI_FolderPath_tmp)==true)
             {
-                //如果插帧成功
+                //If frame interpolation succeeds
                 file_DelDir(FrameFolderPath);
                 QDir VFI_FolderPath_tmp_qdir(VFI_FolderPath_tmp);
                 VFI_FolderPath_tmp_qdir.rename(VFI_FolderPath_tmp,FrameFolderPath);
@@ -823,7 +823,7 @@ void MainWindow::video_video2images(QString VideoPath,QString FrameFolderPath,QS
             }
             else
             {
-                //如果插帧失败且启用了仅插帧模式
+                //If interpolation fails and frame-interpolation-only mode is enabled
                 if(ui->checkBox_FrameInterpolationOnly_Video->isChecked()==true)
                 {
                     file_DelDir(FrameFolderPath);
@@ -832,7 +832,7 @@ void MainWindow::video_video2images(QString VideoPath,QString FrameFolderPath,QS
                     if(waifu2x_STOP==false)emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames of video:[")+VideoPath+"]");
                     return;
                 }
-                //如果插帧失败但是已经超分辨率
+                //If interpolation fails but upscaling already done
                 else
                 {
                     file_DelDir(VFI_FolderPath_tmp);
@@ -860,7 +860,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
         QString BitRate = video_get_bitrate_AccordingToRes_FrameFolder(ScaledFrameFolderPath,VideoPath);
         if(BitRate!="")bitrate_video_cmd=" -b:v "+BitRate+"k ";
     }
-    //================ 自定义分辨率 ======================
+    //================ Custom resolution ======================
     QString resize_cmd ="";
     if(CustRes_isEnabled || isOverScaled)
     {
@@ -870,7 +870,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
             int scaleratio_orginal = ui->doubleSpinBox_ScaleRatio_video->value();
             resize_cmd =" -vf scale="+QString::number(res_map["width"]*scaleratio_orginal,10)+":"+QString::number(res_map["height"]*scaleratio_orginal,10)+" ";
         }
-        //============= 如果没有自定义视频参数, 则根据自定义分辨率再计算一次比特率 ==========
+        //============= If no custom video parameters, recalculate bitrate based on custom resolution ==========
         if(ui->groupBox_video_settings->isChecked()==false || (ui->spinBox_bitrate_vid->value()<1))
         {
             int small_res =0;
@@ -923,16 +923,16 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
     QString video_dir = file_getFolderPath(vfinfo);
     QString video_filename = file_getBaseName(VideoPath);
     QString video_ext = vfinfo.suffix();
-    //=========== 获取fps ===========
+    //=========== Get fps ===========
     QString fps = video_get_fps(VideoPath).trimmed();
     if(fps == "0.0")
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+VideoPath+tr("]. Error: [Unable to get video frame rate.]"));
         return 0;
     }
-    //=============== 补帧 ===============
+    //=============== Frame interpolation ===============
     QString VFI_FolderPath_tmp = video_dir+"/"+video_filename+"_PostVFI_W2xEX";
-    //如果启用了插帧
+    //If frame interpolation is enabled
     if(ui->groupBox_FrameInterpolation->isChecked()==true)
     {
         bool isPreVFIDone = QFile::exists(isPreVFIDone_MarkFilePath(VideoPath));
@@ -962,7 +962,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
         }
         else
         {
-            //如果检测到完整的已经插帧的帧缓存
+            //If complete interpolated frame cache is detected
             if(file_isDirExist(VFI_FolderPath_tmp) && (file_getFileNames_in_Folder_nofilter(ScaledFrameFolderPath).size() * ui->spinBox_MultipleOfFPS_VFI->value() == file_getFileNames_in_Folder_nofilter(VFI_FolderPath_tmp).size()))
             {
                 FrameNumDigits = CalNumDigits((file_getFileNames_in_Folder_nofilter(VFI_FolderPath_tmp).size()));
@@ -972,7 +972,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
             }
             else
             {
-                //如果插帧成功
+                //If frame interpolation succeeds
                 if(FrameInterpolation(ScaledFrameFolderPath,VFI_FolderPath_tmp)==true)
                 {
                     FrameNumDigits = CalNumDigits((file_getFileNames_in_Folder_nofilter(VFI_FolderPath_tmp).size()));
@@ -982,14 +982,14 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
                 }
                 else
                 {
-                    //如果插帧失败且启用了分段处理或仅插帧模式
+                    //If interpolation fails and segmented processing or frame-interpolation-only mode is enabled
                     if(ui->checkBox_ProcessVideoBySegment->isChecked()==true || ui->checkBox_FrameInterpolationOnly_Video->isChecked()==true)
                     {
                         file_DelDir(VFI_FolderPath_tmp);
                         if(waifu2x_STOP==false)emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames of video:[")+VideoPath+"]");
                         return 0;
                     }
-                    //如果插帧失败但是已经超分辨率且没分段
+                    //If interpolation fails but upscaling was done and not segmented
                     else
                     {
                         file_DelDir(VFI_FolderPath_tmp);
@@ -999,7 +999,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
             }
         }
     }
-    //=============== 音频降噪 ========================
+    //=============== Audio denoise ========================
     if((ui->checkBox_AudioDenoise->isChecked())&&QFile::exists(AudioPath))
     {
         QString AudioPath_tmp = video_AudioDenoise(AudioPath);
@@ -1009,7 +1009,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
             Del_DenoisedAudio = true;
         }
     }
-    //================= 开始处理 =============================
+    //================= Start processing =============================
     emit Send_TextBrowser_NewMessage(tr("Start assembling video:[")+VideoPath+"]");
     //======
     QString CMD = "";
@@ -1022,7 +1022,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
         CMD = "\""+ffmpeg_path+"\" -y -f image2 -framerate "+fps+" -r "+fps+" -i \""+ScaledFrameFolderPath.replace("%","%%")+"/%0"+QString::number(FrameNumDigits,10)+"d.png\" -r "+fps+bitrate_video_cmd+resize_cmd+video_ReadSettings_OutputVid(AudioPath)+" -r "+fps+" \""+video_mp4_scaled_fullpath+"\"";
     }
     QProcess images2video;
-    QFile::remove(video_mp4_scaled_fullpath);//删除旧文件
+    QFile::remove(video_mp4_scaled_fullpath);//Delete old file
     runProcess(&images2video, CMD);
     if(waifu2x_STOP)
     {
@@ -1032,7 +1032,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
         if(Del_DenoisedAudio)QFile::remove(AudioPath);
         return 0;
     }
-    //============== 尝试在Win7下可能兼容的指令 ================================
+    //============== Attempt commands that might work on Win7 ================================
     if(QFile::exists(video_mp4_scaled_fullpath)==false)
     {
         if(QFile::exists(AudioPath))
@@ -1071,19 +1071,19 @@ QString MainWindow::video_ReadSettings_OutputVid(QString AudioPath)
     {
         if(ui->lineEdit_encoder_vid->text().trimmed()!="")
         {
-            OutputVideoSettings.append("-c:v "+ui->lineEdit_encoder_vid->text().trimmed()+" ");//图像编码器
+            OutputVideoSettings.append("-c:v "+ui->lineEdit_encoder_vid->text().trimmed()+" ");//Video encoder
         }
         //========
         if(QFile::exists(AudioPath))
         {
             if(ui->lineEdit_encoder_audio->text().trimmed()!="")
             {
-                OutputVideoSettings.append("-c:a "+ui->lineEdit_encoder_audio->text().trimmed()+" ");//音频编码器
+                OutputVideoSettings.append("-c:a "+ui->lineEdit_encoder_audio->text().trimmed()+" ");//Audio encoder
             }
             //=========
             if(ui->spinBox_bitrate_audio->value()>0)
             {
-                OutputVideoSettings.append("-b:a "+QString::number(ui->spinBox_bitrate_audio->value(),10)+"k ");//音频比特率
+                OutputVideoSettings.append("-b:a "+QString::number(ui->spinBox_bitrate_audio->value(),10)+"k ");//Audio bitrate
             }
         }
         //=========
@@ -1098,7 +1098,7 @@ QString MainWindow::video_ReadSettings_OutputVid(QString AudioPath)
         //===========
         if(ui->lineEdit_ExCommand_output->text().trimmed()!="")
         {
-            OutputVideoSettings.append(ui->lineEdit_ExCommand_output->text().trimmed()+" ");//附加指令
+            OutputVideoSettings.append(ui->lineEdit_ExCommand_output->text().trimmed()+" ");//Extra command
         }
     }
     //=========

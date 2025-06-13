@@ -612,7 +612,7 @@ bool MainWindow::file_generateMarkFile(QString FileFullPath,QString Msg)
 {
     QFile file(FileFullPath);
     file.remove();
-    if (file.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite支持读写
+    if (file.open(QIODevice::ReadWrite | QIODevice::Text)) //QIODevice::ReadWrite supports read and write
     {
         QTextStream stream(&file);
         if(Msg.trimmed() == "")

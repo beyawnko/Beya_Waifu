@@ -38,7 +38,7 @@ bool MainWindow::DownloadTo(QString OnlineLink,QString LocalPath)
     return QFile::exists(LocalPath);
 }
 /*
-判断与github的链接状态以告知用户是否可以禁用gitee
+Check the connection to GitHub to inform the user if Gitee can be disabled
 */
 void MainWindow::on_checkBox_BanGitee_clicked()
 {

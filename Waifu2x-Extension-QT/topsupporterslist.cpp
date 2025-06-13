@@ -31,7 +31,7 @@ TopSupportersList::TopSupportersList(QWidget *parent) :
     ui->textBrowser_SupportersNameList->setText(tr("Failed to update \"Top Supporters List\", following list might be out dated.\n\n")+
             "DiabloTVHD | Teh Pron | PorcelainShrine");
     //=================
-    QString Current_Path = qApp->applicationDirPath();//当前路径
+    QString Current_Path = qApp->applicationDirPath();//Current path
     QString TopSupportersList_ini_path = Current_Path+"/TopSupportersList_W2xEX.ini";
     if(QFile::exists(TopSupportersList_ini_path) == true)
     {
