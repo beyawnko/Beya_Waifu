@@ -854,36 +854,35 @@ void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings()
 void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum)
 {
     Q_UNUSED(ThreadNum);
-    // TODO: Implement settings reading for Video/GIF, especially for multi-GPU job distribution.
-    // This would be similar to SrmdNcnnVulkan_ReadSettings_Video_GIF
-    // For now, it can call the general ReadSettings or have its own logic.
-    // Realcugan_NCNN_Vulkan_ReadSettings(); // Basic fallback
-    // This function needs to construct arguments suitable for processing a folder of frames,
-    // especially for multi-GPU. It should be similar to SrmdNcnnVulkan_ReadSettings_Video_GIF.
 
-    // For RealCUGAN, the typical command for folder processing is:
-    // realcugan-ncnn-vulkan.exe -i input_frames_folder -o output_frames_folder -s scale -n denoise_level -m model_path -g gpu_id_list -j job_config -f output_format -t tile_size -x (tta)
-    // The job_config (-j) for realcugan-ncnn-vulkan is usually like "load_threads:proc_threads:save_threads" per GPU,
-    // or a global thread count if simpler. Example: "-g 0,1 -j 1:2:1,1:2:1" (1 load, 2 proc, 1 save for GPU0; same for GPU1)
-    // Or more commonly, it might be just a list of proc_threads per GPU like "-g 0,1 -j 2,2"
+    // Load generic settings (model, denoise level, etc.)
+    Realcugan_NCNN_Vulkan_ReadSettings();
 
-    Realcugan_NCNN_Vulkan_ReadSettings(); // Load common settings like model, denoise, TTA, tile size into member vars
-
-    // Specific for batch processing (frames): GPU/Job configuration string
     QString gpuJobConfig;
     if (ui->checkBox_MultiGPU_RealCUGAN->isChecked() && !GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
-        gpuJobConfig = RealcuganNcnnVulkan_MultiGPU();
+        QStringList gpuIDs;
+        QStringList jobThreads;
+
+        for (const auto &gpuMap : GPUIDs_List_MultiGPU_RealCUGAN) {
+            gpuIDs.append(gpuMap.value("ID"));
+            jobThreads.append(gpuMap.value("Threads", "1"));
+        }
+
+        if (!gpuIDs.isEmpty()) {
+            gpuJobConfig = "-g " + gpuIDs.join(",");
+            gpuJobConfig += " -j " + jobThreads.join(",");
+        } else {
+            gpuJobConfig = "-g " + m_realcugan_GPUID.split(" ")[0];
+        }
     } else {
         gpuJobConfig = "-g " + m_realcugan_GPUID.split(" ")[0];
     }
 
-    // Store the resulting argument fragment for later use when launching the process
+    // Save for later command construction
     m_realcugan_gpuJobConfig_temp = gpuJobConfig;
 
     qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF for ThreadNum" << ThreadNum
              << "GPU/Job Config:" << gpuJobConfig;
-    // The actual arguments for QProcess will be assembled by a function like PrepareArguments,
-    // which would take inputFile (folder), outputFile (folder), scale, and these GPU settings.
 }
 
 
