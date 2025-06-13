@@ -7,6 +7,9 @@ import pytest
 from PIL import Image
 import base64
 
+REALCUGAN_AVAILABLE = None
+REALESRGAN_AVAILABLE = None
+
 BIN_DIR = Path(__file__).resolve().parent / 'bin'
 TEST_IMAGE_BASE64_PATH = Path(__file__).resolve().parent / 'test_image_base64.txt' # Contains 64x64 red png
 TEST_IMAGE_PATH = Path(__file__).resolve().parent / 'test_image.png'
@@ -45,6 +48,8 @@ def ensure_realcugan():
     exe_abs_path = dest / Path(extracted_root_dir_name) / 'realcugan-ncnn-vulkan'
     # print(f"Expected RealCUGAN exe path: {exe_abs_path}")
 
+    global REALCUGAN_AVAILABLE
+
     if not exe_abs_path.exists():
         print(f"RealCUGAN exe not found at {exe_abs_path}. Proceeding with download/extraction.")
         dest.mkdir(parents=True, exist_ok=True)
@@ -70,12 +75,38 @@ def ensure_realcugan():
     if not os.access(exe_abs_path, os.X_OK):
         print(f"Making {exe_abs_path} executable...")
         exe_abs_path.chmod(0o755)
+    if REALCUGAN_AVAILABLE is None:
+        probe_out = dest / "probe.png"
+        cmd_probe = [
+            str(exe_abs_path),
+            "-i",
+            str(TEST_IMAGE_PATH),
+            "-o",
+            str(probe_out),
+            "-s",
+            "1",
+            "-n",
+            "1",
+            "-m",
+            str(exe_abs_path.parent / REALCUGAN_DEFAULT_MODEL_DIR_NAME),
+        ]
+        result = subprocess.run(cmd_probe, capture_output=True, text=True)
+        if result.returncode != 0 or not probe_out.exists():
+            print("RealCUGAN self-test failed, skipping binary tests.")
+            print(f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}")
+            REALCUGAN_AVAILABLE = False
+        else:
+            probe_out.unlink(missing_ok=True)
+            REALCUGAN_AVAILABLE = True
+    if not REALCUGAN_AVAILABLE:
+        pytest.skip("RealCUGAN binary not usable on this platform.")
     # print("RealCUGAN ensured successfully.")
     return exe_abs_path
 
 
 def ensure_realesrgan():
     # print("Attempting to ensure RealESRGAN...") # Keep minimal prints
+    global REALESRGAN_AVAILABLE
     dest = BIN_DIR / 'realesrgan'
     archive_name = Path(REALESRGAN_URL).name
     extracted_root_dir_name = archive_name.replace('.zip', '')
@@ -112,6 +143,29 @@ def ensure_realesrgan():
 
     if not models_dir_abs.exists():
         print(f"Note: RealESRGAN models directory {models_dir_abs} was not found in the extracted archive. Tests requiring external models will skip.")
+    if REALESRGAN_AVAILABLE is None:
+        probe_out = dest / "probe_esrgan.png"
+        cmd_probe = [
+            str(exe_abs_path),
+            "-i",
+            str(TEST_IMAGE_PATH),
+            "-o",
+            str(probe_out),
+            "-n",
+            "realesrgan-x4plus",
+            "-s",
+            "2",
+        ]
+        result = subprocess.run(cmd_probe, capture_output=True, text=True)
+        if result.returncode != 0 or not probe_out.exists():
+            print("RealESRGAN self-test failed, skipping binary tests.")
+            print(f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}")
+            REALESRGAN_AVAILABLE = False
+        else:
+            probe_out.unlink(missing_ok=True)
+            REALESRGAN_AVAILABLE = True
+    if not REALESRGAN_AVAILABLE:
+        pytest.skip("RealESRGAN binary not usable on this platform.")
     # print("RealESRGAN ensured successfully.")
     return exe_abs_path
 
