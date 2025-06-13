@@ -1,23 +1,35 @@
 QWidget {
-    background-color: #2d2d2d;
+    /* slightly layered background */
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #303030, stop:1 #262626);
     color: #dddddd;
 }
+
+QFrame, QGroupBox {
+    border: 1px solid #444444;
+    border-radius: 4px;
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #333333, stop:1 #292929);
+}
 QPushButton {
-    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3c3c3c, stop:1 #2d2d2d);
+    color: #eeeeee;
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #414141, stop:1 #2c2c2c);
     border: 1px solid #555555;
     border-radius: 4px;
-    padding: 4px;
+    padding: 4px 6px;
+    /* subtle depth via shadow like padding */
 }
 QPushButton:hover {
-    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #4d4d4d, stop:1 #3c3c3c);
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #515151, stop:1 #3b3b3b);
 }
 QPushButton:pressed {
-    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2d2d2d, stop:1 #3c3c3c);
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c2c2c, stop:1 #3a3a3a);
 }
 QLineEdit, QTextEdit, QPlainTextEdit {
-    background-color: #3c3c3c;
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3a3a3a, stop:1 #2d2d2d);
+    border: 1px solid #555555;
+    color: #eeeeee;
     selection-background-color: #606060;
 }
 QMenuBar, QMenu, QToolBar {
-    background-color: #2d2d2d;
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #303030, stop:1 #262626);
+    border-bottom: 1px solid #444444;
 }
