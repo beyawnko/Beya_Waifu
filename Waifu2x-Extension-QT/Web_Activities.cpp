@@ -28,12 +28,14 @@ bool MainWindow::DownloadTo(QString OnlineLink,QString LocalPath)
     QString user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36";
     QString program = Current_Path+"/wget_waifu2xEX.exe";
     QProcess Downlad2;
-    Downlad2.start("\""+program+"\" --user-agent=\""+user_agent+"\" -O \""+LocalPath+"\" \""+OnlineLink+"\" --timeout=15");
-    while(!Downlad2.waitForStarted(500)&&!QProcess_stop) {}
-    while(!Downlad2.waitForFinished(500)&&!QProcess_stop) {}
-    QString Downlad2_OutPutStr = Downlad2.readAllStandardError().toLower();
-    QFileInfo *LocalPath_QFileInfo = new QFileInfo(LocalPath);
-    if(LocalPath_QFileInfo->size()<1 || Downlad2_OutPutStr.contains("saved")==false)QFile::remove(LocalPath);
+    QString cmd = QString("\"%1\" --user-agent=\"%2\" -O \"%3\" \"%4\" --timeout=15")
+                     .arg(program, user_agent, LocalPath, OnlineLink);
+    QByteArray stdErr;
+    runProcess(&Downlad2, cmd, nullptr, &stdErr);
+    QString Downlad2_OutPutStr = QString::fromUtf8(stdErr).toLower();
+    QFileInfo localInfo(LocalPath);
+    if(localInfo.size()<1 || Downlad2_OutPutStr.contains("saved")==false)
+        QFile::remove(LocalPath);
     return QFile::exists(LocalPath);
 }
 /*
