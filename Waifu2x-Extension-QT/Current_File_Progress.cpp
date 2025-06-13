@@ -21,7 +21,7 @@
 #include "ui_mainwindow.h"
 
 /*
-开始处理当前文件
+Start processing the current file
 */
 void MainWindow::CurrentFileProgress_Start(QString FileName,int FrameNum)
 {
@@ -47,7 +47,7 @@ void MainWindow::CurrentFileProgress_Start(QString FileName,int FrameNum)
     return;
 }
 /*
-停止处理当前文件
+Stop processing the current file
 */
 void MainWindow::CurrentFileProgress_Stop()
 {
@@ -56,7 +56,7 @@ void MainWindow::CurrentFileProgress_Stop()
     return;
 }
 /*
-进度条 进度+1
+Progress bar +1
 */
 void MainWindow::CurrentFileProgress_progressbar_Add()
 {
@@ -66,7 +66,7 @@ void MainWindow::CurrentFileProgress_progressbar_Add()
     ui->label_FrameProgress_CurrentFile->setText(QString::number(TaskNumFinished_CurrentFile,10)+"/"+QString::number(TaskNumTotal_CurrentFile,10));
 }
 /*
-进度条 进度+片段時長
+Progress bar + segment duration
 */
 void MainWindow::CurrentFileProgress_progressbar_Add_SegmentDuration(int SegmentDuration)
 {
@@ -76,7 +76,7 @@ void MainWindow::CurrentFileProgress_progressbar_Add_SegmentDuration(int Segment
     ui->label_FrameProgress_CurrentFile->setText(QString::number(TaskNumFinished_CurrentFile,10)+"/"+QString::number(TaskNumTotal_CurrentFile,10));
 }
 /*
-进度条 进度+片段時長
+Progress bar + segment duration
 */
 void MainWindow::CurrentFileProgress_progressbar_SetFinishedValue(int FinishedValue)
 {
@@ -86,7 +86,7 @@ void MainWindow::CurrentFileProgress_progressbar_SetFinishedValue(int FinishedVa
     ui->label_FrameProgress_CurrentFile->setText(QString::number(TaskNumFinished_CurrentFile,10)+"/"+QString::number(TaskNumTotal_CurrentFile,10));
 }
 /*
-监视文件夹内文件数量
+Monitor the number of files in the folder
 */
 void MainWindow::CurrentFileProgress_WatchFolderFileNum(QString FolderPath)
 {
@@ -102,7 +102,7 @@ void MainWindow::CurrentFileProgress_WatchFolderFileNum(QString FolderPath)
     while(true);
 }
 /*
-监视文件夹内文件数量
+Monitor the number of files in the folder
 */
 void MainWindow::CurrentFileProgress_WatchFolderFileNum_Textbrower(QString SourceFile_fullPath,QString FolderPath,int TotalFileNum)
 {

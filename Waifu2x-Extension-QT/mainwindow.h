@@ -79,23 +79,23 @@ public:
     explicit MainWindow(int maxThreadsOverride = 0, QWidget *parent = nullptr);
     void changeEvent(QEvent *e);
     //=======================
-    QString VERSION = "v3.41.02-beta";//软件版本号
+    QString VERSION = "v3.41.02-beta"; // Software version
     bool isBetaVer = true;
     QString LastStableVer = "v3.31.13";
     QString LastBetaVer = "v3.41.02-beta";
     //=======================
-    QTranslator * translator;//界面翻译
+    QTranslator * translator; // UI translator
     QIcon *MainIcon_QIcon = new QIcon(":/new/prefix1/icon/icon_main.png");
     TopSupportersList *TopSupportersList_widget;
     //=======
-    QString Current_Path = qApp->applicationDirPath();//当前路径
+    QString Current_Path = qApp->applicationDirPath(); // Current path
     int globalMaxThreadCount = 0; // maximum threads for global pool
     //=======
     void Set_Font_fixed();
     bool SystemPrefersDark() const;
     void ApplyDarkStyle();
-    //=================================  File 文件 =================================
-    void dragEnterEvent(QDragEnterEvent *event);//拖放文件event
+    //=================================  File handling =================================
+    void dragEnterEvent(QDragEnterEvent *event); // Drag-and-drop event
     void dropEvent(QDropEvent *event);
     void Read_urls(QList<QUrl> urls);
     void Read_Input_paths_BrowserFile(QStringList Input_path_List);
