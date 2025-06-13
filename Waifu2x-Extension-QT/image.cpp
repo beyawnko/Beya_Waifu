@@ -290,33 +290,23 @@ QString MainWindow::Imgae_PreProcess(QString ImagePath,bool ReProcess_AlphaChann
     }
     if(ReProcess_AlphaChannel==true && QImage_ImagePath.hasAlphaChannel()==true)
     {
-        // Alpha detected, convert through WebP then back to PNG
+        if(file_ext_ImagePath.trimmed().toLower()=="png" || QImage_ImagePath.depth()>32)
+            return ImagePath;
         QString file_name = file_getBaseName(ImagePath);
         QString file_Folder = file_getFolderPath(fileinfo_ImagePath);
-        QString OutPut_Path_WebpCache = file_Folder + "/" + file_name + "_W2xEX_temp.webp"; // full path of temporary WebP
-        QString OutPut_Path_FinalPNG = file_Folder + "/" + file_name + "_W2xEX_PPAC.png";  // full path of converted PNG
-        //======
-        QString program = Current_Path+"/convert_waifu2xEX.exe";
-        QFile::remove(OutPut_Path_FinalPNG);
-        QProcess Convert2PNG;
-        QString cmd1 = "\""+program+"\" \""+ImagePath+"\" -quality 99 \""+OutPut_Path_WebpCache+"\"";
-        runProcess(&Convert2PNG, cmd1);
-        if(QFile::exists(OutPut_Path_WebpCache)==false)
-        {
-            emit Send_TextBrowser_NewMessage(tr("Error: Can\'t convert [")+ImagePath+tr("] to Webp. The pre-process will be skipped and try to process the original image directly."));
-            return ImagePath;
-        }
-        // Convert the cached WebP back into PNG
-        QString cmd2 = "\""+program+"\" \""+OutPut_Path_WebpCache+"\" -quality 100 \""+OutPut_Path_FinalPNG+"\"";
-        runProcess(&Convert2PNG, cmd2);
-        QFile::remove(OutPut_Path_WebpCache);
-        //======
+        QString OutPut_Path_FinalPNG = file_Folder + "/" + file_name + "_W2xEX_PAC.png";
+        QByteArray pngData;
+        QBuffer buffer(&pngData);
+        buffer.open(QIODevice::WriteOnly);
+        QImage_ImagePath.save(&buffer, "PNG", 100);
+        buffer.close();
+        QImage outImg = QImage::fromData(pngData, "PNG");
+        outImg.save(OutPut_Path_FinalPNG);
         if(QFile::exists(OutPut_Path_FinalPNG)==false)
         {
-            emit Send_TextBrowser_NewMessage(tr("Error: Can\'t convert [")+OutPut_Path_WebpCache+tr("] back to PNG. The pre-process will be skipped and try to process the original image directly."));
+            emit Send_TextBrowser_NewMessage(tr("Error: Can\'t convert [")+ImagePath+tr("] to PNG. The pre-process will be skipped and try to process the original image directly."));
             return ImagePath;
         }
-        //======
         return OutPut_Path_FinalPNG;
     }
     // If preprocessing is disabled or already PNG, skip conversion
@@ -360,13 +350,22 @@ MainWindow::AlphaInfo MainWindow::PrepareAlpha(const QString &inputImagePath)
         info.rgbPath = QDir(info.tempDir).filePath("rgb.png");
         info.alphaPath = QDir(info.tempDir).filePath("alpha.png");
 
+        QByteArray rgbData;
+        QBuffer rgbBuf(&rgbData);
+        rgbBuf.open(QIODevice::WriteOnly);
         QImage rgb = info.is16Bit ? src.convertToFormat(QImage::Format_RGBX64) : src.convertToFormat(QImage::Format_RGB888);
+        rgb.save(&rgbBuf, "PNG");
+        rgbBuf.close();
+        QImage::fromData(rgbData, "PNG").save(info.rgbPath);
         QImage alpha = src.alphaChannel();
         if(info.is16Bit)
             alpha = alpha.convertToFormat(QImage::Format_Grayscale16);
-
-        rgb.save(info.rgbPath);
-        alpha.save(info.alphaPath);
+        QByteArray alphaData;
+        QBuffer alphaBuf(&alphaData);
+        alphaBuf.open(QIODevice::WriteOnly);
+        alpha.save(&alphaBuf, "PNG");
+        alphaBuf.close();
+        QImage::fromData(alphaData, "PNG").save(info.alphaPath);
     }
 
     return info;
@@ -398,7 +397,12 @@ void MainWindow::RestoreAlpha(const AlphaInfo &info, const QString &processedRgb
     }
 
     rgb.setAlphaChannel(alpha);
-    rgb.save(finalOutputPath);
+    QByteArray outData;
+    QBuffer outBuf(&outData);
+    outBuf.open(QIODevice::WriteOnly);
+    rgb.save(&outBuf, "PNG");
+    outBuf.close();
+    QImage::fromData(outData, "PNG").save(finalOutputPath);
 
     QFile::remove(processedRgbPath);
     QFile::remove(info.alphaPath);
