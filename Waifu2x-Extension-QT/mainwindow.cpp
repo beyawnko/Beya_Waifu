@@ -2095,11 +2095,9 @@ Call nircmd to turn off the display
 */
 void MainWindow::TurnOffScreen()
 {
-    QProcess *OffScreen = new QProcess();
-    OffScreen->start("\""+Current_Path+"/nircmd-x64/nircmd.exe\" monitor off");
-    OffScreen->waitForStarted(5000);
-    OffScreen->waitForFinished(5000);
-    OffScreen->kill();
+    QProcess OffScreen;
+    runProcess(&OffScreen,
+               "\"" + Current_Path + "/nircmd-x64/nircmd.exe\" monitor off");
     return;
 }
 /*
