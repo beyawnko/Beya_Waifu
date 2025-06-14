@@ -172,8 +172,8 @@ pytest
 ```
 
 The sample images used for testing are located under
-`realcugan-ncnn-vulkan SRC/images/` and in the
-`realesrgan-ncnn-vulkan-20220424-windows` folder.
+`realcugan-ncnn-vulkan/images/` and in the
+`realesrgan-ncnn-vulkan/windows` folder.
 
 ## Static Analysis
 [![cppcheck](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/cppcheck.yml/badge.svg)](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/cppcheck.yml)

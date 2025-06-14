@@ -126,7 +126,7 @@ QStringList MainWindow::RealESRGAN_NCNN_Vulkan_PrepareArguments(
     bool ttaEnabled, const QString &outputFormat)
 {
     QStringList arguments;
-    // EXE Path is: Current_Path + "/realesrgan-ncnn-vulkan-20220424-windows/realesrgan-ncnn-vulkan.exe"
+    // EXE Path is: Current_Path + "/realesrgan-ncnn-vulkan/windows/realesrgan-ncnn-vulkan.exe"
     // Models path is relative to EXE: "./models"
     // Command: {EXE_PATH} -i {INPUT} -o {OUTPUT} -s {SCALE_FOR_EXE} -n {MODEL_NAME_FOR_EXE} -t {TILE_SIZE} -g {GPU_ID_PART} [-j {JOB_THREADS}] {TTA_FLAG} -f {FORMAT}
 
