@@ -1,6 +1,6 @@
-# Waifu2x-Extension-GUI
+# Beya_Waifu
 
-Waifu2x-Extension-GUI is a Qt based graphical interface for upscaling and denoising images or
+Beya_Waifu is a Qt based graphical interface for upscaling and denoising images or
 videos. The project integrates the RealCUGAN and RealESRGAN upscalers and presents them in a
 single GUI.
 
@@ -37,7 +37,7 @@ qmake Waifu2x-Extension-QT-Launcher.pro
 make
 ```
 
-After compilation run `Waifu2x-Extension-GUI` (or the launcher) from its build
+After compilation run `Beya_Waifu` (or the launcher) from its build
 folder. Place the realcugan-ncnn-vulkan and realesrgan-ncnn-vulkan executables in
 the same directory so the GUI can invoke them.
 
@@ -47,7 +47,7 @@ By default the application limits its internal thread pool to twice the number
 of detected CPU cores. You can override this via the command line:
 
 ```bash
-Waifu2x-Extension-GUI --max-threads 8
+Beya_Waifu --max-threads 8
 ```
 or by editing `settings.ini` and setting `MaxThreadCount`.
 
@@ -69,7 +69,7 @@ are available on the official release pages:
 
 Download and extract the archive for your operating system, then copy the
 contents so that `realcugan-ncnn-vulkan` and `realesrgan-ncnn-vulkan` can be
-found in the same directory as `Waifu2x-Extension-GUI`.
+found in the same directory as `Beya_Waifu`.
 
 ### Command line examples
 
@@ -96,7 +96,7 @@ operation fails with an error.
 
 Below is the start-up screen of the optional launcher:
 
-![GUI screenshot](Waifu2x-Extension-QT-Launcher/TitleImage.png)
+![GUI screenshot](Waifu2x-Extension-QT-Launcher/NuTitleImageDark.png)
 
 ### Troubleshooting
 

@@ -16,9 +16,9 @@
     <height>400</height>
    </size>
   </property>
-  <property name="windowTitle">
-   <string>Top Supporters @Waifu2x-Extension-GUI</string>
-  </property>
+   <property name="windowTitle">
+    <string>Top Supporters @Beya_Waifu</string>
+   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="3">
     <widget class="QTextBrowser" name="textBrowser_SupportersNameList">

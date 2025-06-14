@@ -65,9 +65,9 @@
     </property>
     <item row="0" column="0">
      <widget class="QLabel" name="label">
-      <property name="styleSheet">
-       <string notr="true">image: url(:/new/prefix1/TitleImage.png);</string>
-      </property>
+        <property name="styleSheet">
+         <string notr="true">image: url(:/new/prefix1/NuTitleImageDark.png);</string>
+        </property>
       <property name="text">
        <string/>
       </property>

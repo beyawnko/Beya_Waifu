@@ -31,7 +31,7 @@ void MainWindow::RUN_Concurrent()
     QProcess get_tasklist;
     QByteArray taskOutput;
     runProcess(&get_tasklist, "tasklist", &taskOutput);
-    if(taskOutput.contains("Waifu2x-Extension-GUI.exe"))
+    if(taskOutput.contains("Beya_Waifu.exe"))
     {
         emit Send_Duplicate();
         QThread::sleep(5);
@@ -82,11 +82,11 @@ void MainWindow::RUN_SLOT()
     {
         ui->label_status->setText("Please grant administrator rights to\n"
                                   "ensure the normal operation of the software.");
-        ShellExecuteW(NULL, QString("runas").toStdWString().c_str(), QString(Current_Path+"/Waifu2x-Extension-GUI.exe").toStdWString().c_str(), QString(Current_Path+"/Waifu2x-Extension-GUI.exe").toStdWString().c_str(), NULL, 1);
+        ShellExecuteW(NULL, QString("runas").toStdWString().c_str(), QString(Current_Path+"/Beya_Waifu.exe").toStdWString().c_str(), QString(Current_Path+"/Beya_Waifu.exe").toStdWString().c_str(), NULL, 1);
         this->close();
         return;
     }
-    ShellExecuteW(NULL, QString("open").toStdWString().c_str(), QString(Current_Path+"/Waifu2x-Extension-GUI.exe").toStdWString().c_str(), NULL, NULL, 1);
+    ShellExecuteW(NULL, QString("open").toStdWString().c_str(), QString(Current_Path+"/Beya_Waifu.exe").toStdWString().c_str(), NULL, NULL, 1);
     this->close();
     return;
 }

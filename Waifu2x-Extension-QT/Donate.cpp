@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    My Github homepage: https://github.com/AaronFeng753
+    My Github homepage: https://github.com/beyawnko
 */
 
 #include "mainwindow.h"
@@ -28,8 +28,8 @@ int MainWindow::Donate_DownloadOnlineQRCode()
     //============================
     //     Update supporter list
     //============================
-    QString Github_TopSupporterList_online = "https://raw.githubusercontent.com/AaronFeng753/Waifu2x-Extension-GUI/master/.github/TopSupportersList_W2xEX.ini";
-    QString Gitee_TopSupporterList_online = "https://gitee.com/aaronfeng0711/Waifu2x-Extension-GUI/raw/master/.github/TopSupportersList_W2xEX.ini";
+    QString Github_TopSupporterList_online = "https://raw.githubusercontent.com/beyawnko/Beya_Waifu/master/.github/TopSupportersList_W2xEX.ini";
+    QString Gitee_TopSupporterList_online = "https://gitee.com/beyawnko/Beya_Waifu/raw/master/.github/TopSupportersList_W2xEX.ini";
     QString TopSupporterList_local = Current_Path+"/TopSupportersList_W2xEX.ini";
     QFile::remove(TopSupporterList_local);
     //===
@@ -50,8 +50,8 @@ int MainWindow::Donate_DownloadOnlineQRCode()
     //============================
     //     Update QR code image
     //============================
-    QString Github_OnlineQRCode_online = "https://raw.githubusercontent.com/AaronFeng753/Waifu2x-Extension-GUI/master/.github/Online_Donate_QRCode.jpg";
-    QString Gitee_OnlineQRCode_online = "https://gitee.com/aaronfeng0711/Waifu2x-Extension-GUI/raw/master/.github/Online_Donate_QRCode.jpg";
+    QString Github_OnlineQRCode_online = "https://raw.githubusercontent.com/beyawnko/Beya_Waifu/master/.github/Online_Donate_QRCode.jpg";
+    QString Gitee_OnlineQRCode_online = "https://gitee.com/beyawnko/Beya_Waifu/raw/master/.github/Online_Donate_QRCode.jpg";
     //=
     QString Github_OnlineQRCode_local = Current_Path+"/Online_Donate_QRCode_Github.jpg";
     QString Gitee_OnlineQRCode_local = Current_Path+"/Online_Donate_QRCode_Gitee.jpg";
@@ -104,7 +104,7 @@ void MainWindow::Donate_ReplaceQRCode(QString QRCodePath)
 
 void MainWindow::FinishedProcessing_DN()
 {
-    QMessageBox Msg(QMessageBox::Question, QString(tr("Notification")+" @Waifu2x-Extension-GUI"), QString(tr("Please donate to support the developers, so we can bring further updates for this software, thank you!\n\n"
+    QMessageBox Msg(QMessageBox::Question, QString(tr("Notification")+" @Beya_Waifu"), QString(tr("Please donate to support the developers, so we can bring further updates for this software, thank you!\n\n"
                     "If you don't wanna see this notification anymore, you can get the Premium version by support me on Patreon.")));
     Msg.setIcon(QMessageBox::Information);
     QAbstractButton *pYesBtn = Msg.addButton(QString(" "+tr("Get Premium version")+" "), QMessageBox::YesRole);

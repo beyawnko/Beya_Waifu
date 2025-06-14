@@ -35,6 +35,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     pic.qrc
 
-TARGET = Waifu2x-Extension-GUI-Launcher
+TARGET = Beya_Waifu-Launcher
 
 RC_ICONS =icon/icon.ico

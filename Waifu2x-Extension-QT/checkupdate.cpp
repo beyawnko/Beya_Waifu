@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    My Github homepage: https://github.com/AaronFeng753
+    My Github homepage: https://github.com/beyawnko
 */
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -26,9 +26,9 @@ void MainWindow::on_pushButton_CheckUpdate_clicked()
 {
     if(ui->comboBox_language->currentIndex()==1)
     {
-        QDesktopServices::openUrl(QUrl("https://gitee.com/aaronfeng0711/Waifu2x-Extension-GUI/releases"));
+        QDesktopServices::openUrl(QUrl("https://gitee.com/beyawnko/Beya_Waifu/releases"));
     }
-    QDesktopServices::openUrl(QUrl("https://github.com/AaronFeng753/Waifu2x-Extension-GUI/releases"));
+    QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/releases"));
 }
 /*
 Automatic update check:
@@ -47,13 +47,13 @@ int MainWindow::CheckUpadte_Auto()
     {
         case 0:
             Current_Ver=LastStableVer;
-            Github_UpdateInfo_online = "https://raw.githubusercontent.com/AaronFeng753/Waifu2x-Extension-GUI/master/.github/Update_Info.ini";
-            Gitee_UpdateInfo_online = "https://gitee.com/aaronfeng0711/Waifu2x-Extension-GUI/raw/master/.github/Update_Info.ini";
+            Github_UpdateInfo_online = "https://raw.githubusercontent.com/beyawnko/Beya_Waifu/master/.github/Update_Info.ini";
+            Gitee_UpdateInfo_online = "https://gitee.com/beyawnko/Beya_Waifu/raw/master/.github/Update_Info.ini";
             break;
         case 1:
             Current_Ver=LastBetaVer;
-            Github_UpdateInfo_online = "https://raw.githubusercontent.com/AaronFeng753/Waifu2x-Extension-GUI/master/.github/Update_Info_Beta.ini";
-            Gitee_UpdateInfo_online = "https://gitee.com/aaronfeng0711/Waifu2x-Extension-GUI/raw/master/.github/Update_Info_Beta.ini";
+            Github_UpdateInfo_online = "https://raw.githubusercontent.com/beyawnko/Beya_Waifu/master/.github/Update_Info_Beta.ini";
+            Gitee_UpdateInfo_online = "https://gitee.com/beyawnko/Beya_Waifu/raw/master/.github/Update_Info_Beta.ini";
             break;
         default:
             break;
@@ -165,8 +165,8 @@ int MainWindow::CheckUpadte_NewUpdate(QString update_str,QString Change_log)
             QAbstractButton *pYesBtn_Gitee = Msg.addButton(tr("Download from Gitee"), QMessageBox::YesRole); // Go to Gitee to download
             Msg.addButton(QString(tr("NO")), QMessageBox::NoRole);
             Msg.exec();
-            if (Msg.clickedButton() == pYesBtn_Github)QDesktopServices::openUrl(QUrl("https://github.com/AaronFeng753/Waifu2x-Extension-GUI/releases/"+update_str.trimmed()));
-            if (Msg.clickedButton() == pYesBtn_Gitee)QDesktopServices::openUrl(QUrl("https://gitee.com/aaronfeng0711/Waifu2x-Extension-GUI/releases/"+update_str.trimmed()));
+            if (Msg.clickedButton() == pYesBtn_Github)QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/releases/"+update_str.trimmed()));
+            if (Msg.clickedButton() == pYesBtn_Gitee)QDesktopServices::openUrl(QUrl("https://gitee.com/beyawnko/Beya_Waifu/releases/"+update_str.trimmed()));
             return 0;
         }
         else
@@ -174,7 +174,7 @@ int MainWindow::CheckUpadte_NewUpdate(QString update_str,QString Change_log)
             QAbstractButton *pYesBtn = Msg.addButton(QString(tr("YES")), QMessageBox::YesRole);
             Msg.addButton(QString(tr("NO")), QMessageBox::NoRole);
             Msg.exec();
-            if (Msg.clickedButton() == pYesBtn)QDesktopServices::openUrl(QUrl("https://github.com/AaronFeng753/Waifu2x-Extension-GUI/releases/"+update_str.trimmed()));
+            if (Msg.clickedButton() == pYesBtn)QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/releases/"+update_str.trimmed()));
             return 0;
         }
     }

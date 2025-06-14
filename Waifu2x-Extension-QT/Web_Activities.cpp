@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    My Github homepage: https://github.com/AaronFeng753
+    My Github homepage: https://github.com/beyawnko
 */
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -55,7 +55,7 @@ void MainWindow::ConnectivityTest_RawGithubusercontentCom()
     QMutex_ConnectivityTest_RawGithubusercontentCom.lock();
     isConnectivityTest_RawGithubusercontentCom_Running=true;
     //===
-    QString OnlineAddress="https://raw.githubusercontent.com/AaronFeng753/Waifu2x-Extension-GUI/master/.github/ConnectivityTest_githubusercontent.txt";
+    QString OnlineAddress="https://raw.githubusercontent.com/beyawnko/Beya_Waifu/master/.github/ConnectivityTest_githubusercontent.txt";
     QString LocalAddress=Current_Path+"/ConnectivityTest_Waifu2xEX.txt";
     QFile::remove(LocalAddress);
     //===

@@ -31,9 +31,9 @@
   <property name="focusPolicy">
    <enum>Qt::StrongFocus</enum>
   </property>
-  <property name="windowTitle">
-   <string notr="true">Waifu2x-Extension-GUI by Aaron Feng</string>
-  </property>
+   <property name="windowTitle">
+    <string notr="true">Beya_Waifu by beyawnko</string>
+   </property>
   <property name="windowIcon">
    <iconset resource="icon.qrc">
     <normaloff>:/new/prefix1/icon/icon_main.png</normaloff>:/new/prefix1/icon/icon_main.png</iconset>

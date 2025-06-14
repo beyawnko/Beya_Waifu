@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    My Github homepage: https://github.com/AaronFeng753
+    My Github homepage: https://github.com/beyawnko
 */
 
 #include "mainwindow.h"
@@ -503,7 +503,7 @@ void MainWindow::on_pushButton_SaveFileList_clicked()
     //Create default folder for saved files
     file_mkDir(Current_Path+"/FilesList_W2xEX");
     //Save file dialog
-    QString FilesListFullPath = QFileDialog::getSaveFileName(this, tr("Save files list @Waifu2x-Extension-GUI"),
+    QString FilesListFullPath = QFileDialog::getSaveFileName(this, tr("Save files list @Beya_Waifu"),
                                 Current_Path+"/FilesList_W2xEX/FilesList_W2xEX_"+QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss")+".ini",
                                 "*.ini");
     if(FilesListFullPath.trimmed()=="")return;

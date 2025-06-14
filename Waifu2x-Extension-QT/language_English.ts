@@ -1090,7 +1090,7 @@ path] or [Delete original files] is enabled*
     </message>
     <message>
         <location filename="mainwindow.ui" line="9728"/>
-        <source>Open Waifu2x-Extension-GUI online wiki.</source>
+        <source>Open Beya_Waifu online wiki.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2296,7 +2296,7 @@ Video: %3</source>
     </message>
     <message>
         <location filename="table.cpp" line="553"/>
-        <source>Save files list @Waifu2x-Extension-GUI</source>
+        <source>Save files list @Beya_Waifu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3111,7 +3111,7 @@ Anime4k GPUs List(user configuration):</oldsource>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="159"/>
-        <source>Do you really wanna exit Waifu2x-Extension-GUI ?</source>
+        <source>Do you really wanna exit Beya_Waifu ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3243,7 +3243,7 @@ Please wait</source>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="874"/>
-        <source>Select saved files list @Waifu2x-Extension-GUI</source>
+        <source>Select saved files list @Beya_Waifu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3488,7 +3488,7 @@ Restart the software to take effect.</source>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1042"/>
-        <source>Select files @Waifu2x-Extension-GUI</source>
+        <source>Select files @Beya_Waifu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4254,7 +4254,7 @@ If it is still not compatible, please uninstall and reinstall the graphics drive
     </message>
     <message>
         <location filename="SystemTrayIcon.cpp" line="36"/>
-        <source>Waifu2x-Extension-GUI
+        <source>Beya_Waifu
 Right-click to show the menu.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4340,7 +4340,7 @@ display the window, double-click to maximize the window.</source>
     <message>
         <location filename="topsupporterslist.ui" line="20"/>
         <location filename="topsupporterslist.cpp" line="29"/>
-        <source>Top Supporters @Waifu2x-Extension-GUI</source>
+        <source>Top Supporters @Beya_Waifu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

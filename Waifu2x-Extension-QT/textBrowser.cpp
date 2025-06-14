@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    My Github homepage: https://github.com/AaronFeng753
+    My Github homepage: https://github.com/beyawnko
 */
 
 #include "mainwindow.h"
@@ -45,10 +45,10 @@ void MainWindow::TextBrowser_StartMes()
         CurrentVerState=tr("[Stable]");
     }
     //====
-    ui->textBrowser->append("Waifu2x-Extension-GUI by Aaron Feng");
+    ui->textBrowser->append("Beya_Waifu by beyawnko");
     ui->textBrowser->append(tr("Version:")+" "+VERSION+" "+CurrentVerState);
-    ui->textBrowser->append("Github: https://github.com/AaronFeng753/Waifu2x-Extension-GUI");
-    if(ui->comboBox_language->currentIndex()==1)ui->textBrowser->append("Gitee: https://gitee.com/aaronfeng0711/Waifu2x-Extension-GUI");
+    ui->textBrowser->append("Github: https://github.com/beyawnko/Beya_Waifu");
+    if(ui->comboBox_language->currentIndex()==1)ui->textBrowser->append("Gitee: https://gitee.com/beyawnko/Beya_Waifu");
     ui->textBrowser->append(tr("Please donate to support the developers, so we can bring further updates for this software, thank you! (^_^)/"));
     ui->textBrowser->moveCursor(QTextCursor::End);
 }
