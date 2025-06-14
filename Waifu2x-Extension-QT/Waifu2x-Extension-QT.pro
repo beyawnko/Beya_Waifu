@@ -63,7 +63,9 @@ SOURCES += \
     VideoProcessor.cpp \
     FileManager.cpp \
     ProcessRunner.cpp \
-    LiquidGlassWidget.cpp
+    LiquidGlassWidget.cpp \
+    GpuManager.cpp \
+    UiController.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -72,6 +74,8 @@ HEADERS += \
     utils/ffprobe_helpers.h
     FileManager.h \
     ProcessRunner.h \
+    GpuManager.h \
+    UiController.h \
 
 FORMS += \
     mainwindow.ui \

@@ -23,6 +23,8 @@
 #include "VideoProcessor.h"
 #include "FileManager.h"
 #include "ProcessRunner.h"
+#include "GpuManager.h"
+#include "UiController.h"
 #include <QEventLoop>
 #include <QTimer>
 #include <QSettings>
@@ -317,8 +319,11 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     FileProgressStopTimer = new QTimer();
     FileProgressStopTimer_Text = new QTimer();
     Settings_Read_Apply();
-    Set_Font_fixed();
-    ApplyDarkStyle();
+    uiController.setFontFixed(ui->checkBox_isCustFontEnable,
+                              ui->fontComboBox_CustFont,
+                              ui->spinBox_GlobalFontSize);
+    uiController.applyDarkStyle(Settings_Read_value("/settings/DarkMode", 1).toInt());
+    gpuManager.detectGPUs();
     QtConcurrent::run(this, &MainWindow::DeleteErrorLog_Waifu2xCaffe);
     QtConcurrent::run(this, &MainWindow::Del_TempBatFile);
     AutoUpdate = QtConcurrent::run(this, &MainWindow::CheckUpadte_Auto);
@@ -695,56 +700,19 @@ QString MainWindow::Seconds2hms(long unsigned int seconds)
 
 void MainWindow::Set_Font_fixed()
 {
-    QFont font;
-    if(ui->checkBox_isCustFontEnable->isChecked())
-    {
-        font = ui->fontComboBox_CustFont->currentFont();
-        font.setPixelSize(ui->spinBox_GlobalFontSize->value());
-    }
-    else
-    {
-        font = qApp->font();
-        font.setPixelSize(15);
-    }
-    qApp->setFont(font);
+    uiController.setFontFixed(ui->checkBox_isCustFontEnable,
+                              ui->fontComboBox_CustFont,
+                              ui->spinBox_GlobalFontSize);
 }
 
 bool MainWindow::SystemPrefersDark() const
 {
-#ifdef Q_OS_WIN
-    QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", QSettings::NativeFormat);
-    return settings.value("AppsUseLightTheme", 1).toInt() == 0;
-#else
-    QColor bg = qApp->palette().color(QPalette::Window);
-    return bg.lightness() < 128;
-#endif
+    return uiController.systemPrefersDark();
 }
 
 void MainWindow::ApplyDarkStyle()
 {
-    int mode = Settings_Read_value("/settings/DarkMode", 1).toInt();
-    bool enable = false;
-    if(mode == 1)
-        enable = true;
-    else if(mode == 2)
-        enable = SystemPrefersDark();
-    if(enable)
-    {
-        QFile f(":/style/styles/dark.qss");
-        if(f.open(QIODevice::ReadOnly))
-            qApp->setStyleSheet(QString::fromUtf8(f.readAll()));
-    }
-    else
-    {
-        qApp->setStyleSheet("");
-    }
-
-    for(QWidget *w : QApplication::allWidgets())
-    {
-        w->style()->unpolish(w);
-        w->style()->polish(w);
-        w->update();
-    }
+    uiController.applyDarkStyle(Settings_Read_value("/settings/DarkMode", 1).toInt());
 }
 
 void MainWindow::on_pushButton_ClearList_clicked()
@@ -2120,16 +2088,7 @@ void MainWindow::on_checkBox_isCustFontEnable_stateChanged(int arg1)
 }
 void MainWindow::OutputSettingsArea_setEnabled(bool isEnabled)
 {
-    ui->scrollArea_outputPathSettings->setEnabled(isEnabled);
-    ui->lineEdit_outputPath->setClearButtonEnabled(isEnabled);
-    if(isEnabled==true)
-    {
-        ui->lineEdit_outputPath->setFocusPolicy(Qt::StrongFocus);
-    }
-    else
-    {
-        ui->lineEdit_outputPath->setFocusPolicy(Qt::NoFocus);
-    }
+    uiController.outputSettingsAreaSetEnabled(ui, isEnabled);
 }
 bool MainWindow::eventFilter(QObject *target, QEvent *event)
 {
@@ -3270,6 +3229,12 @@ void MainWindow::Waifu2x_Finished(){}
 void MainWindow::Waifu2x_Finished_manual(){}
 void MainWindow::TextBrowser_NewMessage(QString){}
 int MainWindow::Waifu2x_Compatibility_Test_finished(){ return 0; }
+int MainWindow::Waifu2x_DetectGPU()
+{
+    gpuManager.detectGPUs();
+    emit Send_Waifu2x_DetectGPU_finished();
+    return 0;
+}
 int MainWindow::Waifu2x_DetectGPU_finished(){ return 0; }
 int MainWindow::Realsr_ncnn_vulkan_DetectGPU_finished(){ return 0; }
 int MainWindow::FrameInterpolation_DetectGPU_finished(){ return 0; }

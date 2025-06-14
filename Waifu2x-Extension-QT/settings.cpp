@@ -19,6 +19,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "UiController.h"
 
 /*
 Save settings
@@ -306,7 +307,9 @@ int MainWindow::Settings_Read_Apply()
     ui->spinBox_GlobalFontSize->setValue(Settings_Read_value("/settings/GlobalFontSize").toInt());
     ui->fontComboBox_CustFont->setCurrentFont(Settings_Read_value("/settings/CustFont").value<QFont>());
     ui->checkBox_isCustFontEnable->setChecked(Settings_Read_value("/settings/CustFont_isEnabled").toBool());
-    Set_Font_fixed();
+    uiController.setFontFixed(ui->checkBox_isCustFontEnable,
+                              ui->fontComboBox_CustFont,
+                              ui->spinBox_GlobalFontSize);
     //=======  Load scale and denoise values  ======
     ui->doubleSpinBox_ScaleRatio_image->setValue(Settings_Read_value("/settings/ImageScaleRatio").toDouble());
     ui->doubleSpinBox_ScaleRatio_gif->setValue(Settings_Read_value("/settings/GIFScaleRatio").toDouble());
