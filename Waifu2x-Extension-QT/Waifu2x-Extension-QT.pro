@@ -60,11 +60,13 @@ SOURCES += \
     textBrowser.cpp \
     topsupporterslist.cpp \
     video.cpp \
-    VideoProcessor.cpp
+    VideoProcessor.cpp \
+    LiquidGlassWidget.cpp
 
 HEADERS += \
     mainwindow.h \
     topsupporterslist.h \
+    LiquidGlassWidget.h \
     utils/ffprobe_helpers.h
 
 FORMS += \
