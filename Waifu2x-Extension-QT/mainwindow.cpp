@@ -3093,10 +3093,7 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
     // QMap<QString,int> HW_map = video_get_Resolution(SourcePath);
     // int original_width = HW_map.value("width");
     // int original_height = HW_map.value("height");
-    // Becomes:
-    int original_width = metadata.width;
-    int original_height = metadata.height;
-    long long totalFrames = metadata.frameCount; // Use frameCount from metadata
+    // Becomes metadata.width/height usage once the implementation is restored.
 
     // ... (rest of the original function, adapting to use metadata fields) ...
     return true; // Placeholder
