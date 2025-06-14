@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    My Github homepage: https://github.com/AaronFeng753
+    My Github homepage: https://github.com/beyawnko
 */
 
 #include "mainwindow.h"
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);//High-resolution screen support
     QApplication a(argc,argv);
     QCommandLineParser parser;
-    parser.setApplicationDescription("Waifu2x-Extension-GUI");
+    parser.setApplicationDescription("Beya_Waifu");
     parser.addHelpOption();
     QCommandLineOption maxThreadsOpt(QStringLiteral("max-threads"),
                                      QStringLiteral("Override global thread limit"),

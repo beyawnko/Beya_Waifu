@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    My Github homepage: https://github.com/AaronFeng753
+    My Github homepage: https://github.com/beyawnko
 */
 
 #include "mainwindow.h"
@@ -233,7 +233,7 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     ui->spinBox_ThreadNum_gif_internal->setMaximum(globalMaxThreadCount);
     ui->spinBox_ThreadNum_video_internal->setMaximum(globalMaxThreadCount);
     if(ui->spinBox_NumOfThreads_VFI) ui->spinBox_NumOfThreads_VFI->setMaximum(globalMaxThreadCount);
-    this->setWindowTitle("Waifu2x-Extension-GUI "+VERSION+" by Aaron Feng");
+    this->setWindowTitle("Beya_Waifu "+VERSION+" by beyawnko");
     translator = new QTranslator(this);
     ui->tabWidget->setCurrentIndex(1);
     ui->tabWidget->tabBar()->setTabTextColor(0,Qt::red);
@@ -496,7 +496,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     if(ui->checkBox_PromptWhenExit->isChecked())
     {
-        QMessageBox Msg(QMessageBox::Question, QString(tr("Notification")), QString(tr("Do you really wanna exit Waifu2x-Extension-GUI ?")));
+        QMessageBox Msg(QMessageBox::Question, QString(tr("Notification")), QString(tr("Do you really wanna exit Beya_Waifu ?")));
         Msg.setIcon(QMessageBox::Question);
         QAbstractButton *pYesBtn = Msg.addButton(QString(tr("YES")), QMessageBox::YesRole);
         QAbstractButton *pNoBtn = Msg.addButton(QString(tr("NO")), QMessageBox::NoRole);
@@ -524,7 +524,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         QProcess_stop = true;
         emit TextBrowser_NewMessage(tr("Trying to stop, please wait..."));
         QMessageBox *MSG_2 = new QMessageBox();
-        MSG_2->setWindowTitle(tr("Notification")+" @Waifu2x-Extension-GUI");
+        MSG_2->setWindowTitle(tr("Notification")+" @Beya_Waifu");
         MSG_2->setText(tr("Waiting for the files processing thread to pause"));
         MSG_2->setIcon(QMessageBox::Information);
         MSG_2->setModal(true);
@@ -535,7 +535,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     else
     {
         QMessageBox *MSG_2 = new QMessageBox();
-        MSG_2->setWindowTitle(tr("Notification")+" @Waifu2x-Extension-GUI");
+        MSG_2->setWindowTitle(tr("Notification")+" @Beya_Waifu");
         MSG_2->setText(tr("Closing...\n\nPlease wait"));
         MSG_2->setIcon(QMessageBox::Information);
         MSG_2->setModal(true);
@@ -582,7 +582,7 @@ int MainWindow::Force_close()
                  <<"apngdis_waifu2xEX.exe"<<"apngasm_waifu2xEX.exe"<<"RealCUGAN-ncnn-Vulkan_waifu2xEX.exe"<<"RealESRGAN-ncnn-Vulkan_waifu2xEX.exe";
     KILL_TASK_QStringList(TaskNameList,true);
     QProcess Close;
-    Close.start("taskkill /f /t /fi \"imagename eq Waifu2x-Extension-GUI.exe\"");
+    Close.start("taskkill /f /t /fi \"imagename eq Beya_Waifu.exe\"");
     Close.waitForStarted(10000);
     Close.waitForFinished(10000);
     return 0;
@@ -896,19 +896,19 @@ void MainWindow::Play_NFSound()
 
 void MainWindow::on_pushButton_Report_clicked()
 {
-    QDesktopServices::openUrl(QUrl("https://github.com/AaronFeng753/Waifu2x-Extension-GUI/issues/new"));
+    QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/issues/new"));
 }
 
 void MainWindow::on_pushButton_ReadMe_clicked()
 {
     if(ui->comboBox_language->currentIndex()==1)
     {
-        QDesktopServices::openUrl(QUrl("https://github.com/AaronFeng753/Waifu2x-Extension-GUI/"));
-        QDesktopServices::openUrl(QUrl("https://gitee.com/aaronfeng0711/Waifu2x-Extension-GUI/"));
+        QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/"));
+        QDesktopServices::openUrl(QUrl("https://gitee.com/beyawnko/Beya_Waifu/"));
     }
     else
     {
-        QDesktopServices::openUrl(QUrl("https://github.com/AaronFeng753/Waifu2x-Extension-GUI/"));
+        QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/"));
     }
 }
 
@@ -1109,7 +1109,7 @@ void MainWindow::on_comboBox_language_currentIndexChanged(int index)
 void MainWindow::on_pushButton_ReadFileList_clicked()
 {
     file_mkDir(Current_Path+"/FilesList_W2xEX");
-    QString Table_FileList_ini = QFileDialog::getOpenFileName(this, tr("Select saved files list @Waifu2x-Extension-GUI"), Current_Path+"/FilesList_W2xEX", "*.ini");
+    QString Table_FileList_ini = QFileDialog::getOpenFileName(this, tr("Select saved files list @Beya_Waifu"), Current_Path+"/FilesList_W2xEX", "*.ini");
     if(Table_FileList_ini=="")return;
     if(QFile::exists(Table_FileList_ini))
     {
@@ -1169,12 +1169,12 @@ void MainWindow::on_pushButton_about_clicked()
 {
     QMessageBox *MSG = new QMessageBox();
     MSG->setWindowTitle(tr("About"));
-    QString line1 = "Waifu2x-Extension-GUI\n\n";
+    QString line1 = "Beya_Waifu\n\n";
     QString line2 = VERSION+"\n\n";
-    QString line3 = "Github: https://github.com/AaronFeng753/Waifu2x-Extension-GUI\n\n";
-    QString line4 = "Waifu2x-Extension-GUI is licensed under the\n";
+    QString line3 = "Github: https://github.com/beyawnko/Beya_Waifu\n\n";
+    QString line4 = "Beya_Waifu is licensed under the\n";
     QString line5 = "GNU Affero General Public License v3.0\n\n";
-    QString line6 = "Copyright (C) 2021 Aaron Feng. All rights reserved.\n\n";
+    QString line6 = "Copyright (C) 2025 beyawnko. All rights reserved.\n\n";
     QString line7 = "The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.\n\n";
     QString line8 = "Icons made by : Freepik & Icongeek26 & Roundicons From Flaticon(https://www.flaticon.com/)";
     MSG->setText(line1+line2+line3+line4+line5+line6+line7+line8);
@@ -1274,7 +1274,7 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
         BrowserStartPath = configIniRead->value("/Path").toString();
         if(!QFile::exists(BrowserStartPath))BrowserStartPath = "";
     }
-    QStringList Input_path_List = QFileDialog::getOpenFileNames(this, tr("Select files @Waifu2x-Extension-GUI"), BrowserStartPath,  tr("All file(")+nameFilters_QString+")");
+    QStringList Input_path_List = QFileDialog::getOpenFileNames(this, tr("Select files @Beya_Waifu"), BrowserStartPath,  tr("All file(")+nameFilters_QString+")");
     if(Input_path_List.isEmpty())
     {
         return;
@@ -1340,9 +1340,9 @@ void MainWindow::on_pushButton_wiki_clicked()
 {
     if(ui->comboBox_language->currentIndex()==1)
     {
-        QDesktopServices::openUrl(QUrl("https://gitee.com/aaronfeng0711/Waifu2x-Extension-GUI/wikis"));
+        QDesktopServices::openUrl(QUrl("https://gitee.com/beyawnko/Beya_Waifu/wikis"));
     }
-    QDesktopServices::openUrl(QUrl("https://github.com/AaronFeng753/Waifu2x-Extension-GUI/wiki"));
+    QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/wiki"));
 }
 
 void MainWindow::on_pushButton_HideTextBro_clicked()

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    My Github homepage: https://github.com/AaronFeng753
+    My Github homepage: https://github.com/beyawnko
 */
 
 #include "topsupporterslist.h"
@@ -26,7 +26,7 @@ TopSupportersList::TopSupportersList(QWidget *parent) :
 {
     ui->setupUi(this);
     //=================
-    this->setWindowTitle(tr("Top Supporters @Waifu2x-Extension-GUI"));
+    this->setWindowTitle(tr("Top Supporters @Beya_Waifu"));
     this->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
     ui->textBrowser_SupportersNameList->setText(tr("Failed to update \"Top Supporters List\", following list might be out dated.\n\n")+
             "DiabloTVHD | Teh Pron | PorcelainShrine");
