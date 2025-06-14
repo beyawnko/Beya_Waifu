@@ -53,13 +53,13 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
             emit Send_progressbar_Add();
             return;
         }
-        int original_width = metadata.width;
-        int original_height = metadata.height;
+        int origWidth = metadata.width;
+        int origHeight = metadata.height;
 
-        int Height_new = qRound(double_ScaleRatio_gif * original_height);
-        int width_new = qRound(double_ScaleRatio_gif * original_width);
+        int newHeight = qRound(double_ScaleRatio_gif * origHeight);
+        int newWidth = qRound(double_ScaleRatio_gif * origWidth);
 
-        if(Height_new<1 || width_new<1)
+        if(newHeight<1 || newWidth<1)
         {
             emit Send_TextBrowser_NewMessage("Warning! Invalid new dimensions calculated for ["+sourceFileFullPath+"]. This file will only be scaled to "+QString::number((int)double_ScaleRatio_gif,10)+"X.");
              // If fractional scaling cannot determine original size, it's an error for this path.
@@ -69,11 +69,11 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
             return;
         }
 
-        QMap<QString,QString> res_map;
-        res_map["fullpath"] = sourceFileFullPath;
-        res_map["height"] = QString::number(Height_new,10);
-        res_map["width"] = QString::number(width_new,10);
-        Custom_resolution_list.append(res_map);
+        QMap<QString,QString> resMap;
+        resMap["fullpath"] = sourceFileFullPath;
+        resMap["height"] = QString::number(newHeight,10);
+        resMap["width"] = QString::number(newWidth,10);
+        Custom_resolution_list.append(resMap);
         isNeedRemoveFromCustResList = true;
     }
     //======================
