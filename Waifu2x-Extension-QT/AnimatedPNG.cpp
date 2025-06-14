@@ -22,6 +22,12 @@
 
 /*
 Main function for processing APNG files
+
+NOTE:
+The statements like `emit Send_TextBrowser_NewMessage(...)` call Qt signals
+defined on MainWindow. When preprocessed, `emit` expands to nothing which can
+confuse static analyzers such as cppcheck and lead to false shadowFunction
+warnings. These identifiers are not local variables.
 */
 void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
 {
