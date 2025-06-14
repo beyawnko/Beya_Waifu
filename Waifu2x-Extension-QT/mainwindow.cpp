@@ -3301,7 +3301,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardOutput(){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardError(){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError){}
 
-void MainWindow::Realcugan_NCNN_Vulkan_Image(int, bool){}
+void MainWindow::Realcugan_NCNN_Vulkan_Image(int, bool, bool){}
 void MainWindow::Realcugan_NCNN_Vulkan_GIF(int){}
 void MainWindow::Realcugan_NCNN_Vulkan_Video(int){}
 void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int){}
@@ -3323,7 +3323,7 @@ QStringList MainWindow::Realcugan_NCNN_Vulkan_PrepareArguments(const QString &in
 }
 void MainWindow::StartNextRealCUGANPass(QProcess*){}
 void MainWindow::Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString&, int, bool, const QString&){}
-bool MainWindow::Realcugan_ProcessSingleFileIteratively(const QString&, const QString&, int, const QString&, int, int, const QString&, bool, bool, const QString&, int){ return false; }
+bool MainWindow::Realcugan_ProcessSingleFileIteratively(const QString&, const QString&, int, const QString&, int, int, const QString&, bool, bool, const QString&, bool, int){ return false; }
 void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int, bool){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_GIF(int){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int){}

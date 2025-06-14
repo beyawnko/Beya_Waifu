@@ -31,6 +31,8 @@ public:
     void preLoadSettings();
     void readSettings();
     void readSettingsVideoGif(int threadNum);
+    QString executablePath(bool experimental) const;
+    QString modelPath(const QString &modelName, bool experimental) const;
     QStringList prepareArguments(const QString &inputFile,
                                  const QString &outputFile,
                                  int currentPassScale,
@@ -41,7 +43,8 @@ public:
                                  bool ttaEnabled,
                                  const QString &outputFormat,
                                  bool isMultiGPU,
-                                 const QString &multiGpuJobArgs);
+                                 const QString &multiGpuJobArgs,
+                                 bool experimental);
 
 private:
     MainWindow *m_mainWindow;

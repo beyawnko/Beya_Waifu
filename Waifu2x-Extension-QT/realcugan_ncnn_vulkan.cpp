@@ -118,14 +118,16 @@ QStringList MainWindow::Realcugan_NCNN_Vulkan_PrepareArguments(
     const QString &inputFile, const QString &outputFile, int currentPassScale,
     const QString &modelName, int denoiseLevel, int tileSize,
     const QString &gpuId, bool ttaEnabled, const QString &outputFormat,
-    bool isMultiGPU, const QString &multiGpuJobArgs)
+    bool isMultiGPU, const QString &multiGpuJobArgs,
+    bool experimental)
 {
     return realCuganProcessor->prepareArguments(inputFile, outputFile,
                                                 currentPassScale, modelName,
                                                 denoiseLevel, tileSize,
                                                 gpuId, ttaEnabled,
                                                 outputFormat, isMultiGPU,
-                                                multiGpuJobArgs);
+                                                multiGpuJobArgs,
+                                                experimental);
 }
 
 
@@ -273,7 +275,8 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
             splitFramesFolder, segmentScaledFramesFolderAI, targetScale,
             m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
             m_realcugan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
-            m_realcugan_TTA, ui->comboBox_OutFormat_Image->currentText().toLower()
+            m_realcugan_TTA, ui->comboBox_OutFormat_Image->currentText().toLower(),
+            ui->comboBox_Engine_Video->currentIndex() == 2
         );
 
         if (!aiSegmentSuccess || Stopping) {
@@ -483,7 +486,8 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
         splitFramesFolder, scaledFramesFolderAI, targetScale, // scaledFramesFolderAI is out-param
         m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
         m_realcugan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
-        m_realcugan_TTA, ui->comboBox_OutFormat_Image->currentText().toLower()
+        m_realcugan_TTA, ui->comboBox_OutFormat_Image->currentText().toLower(),
+        ui->comboBox_Engine_Video->currentIndex() == 2
     );
 
     if (!aiProcessingSuccess || Stopping) {
@@ -593,7 +597,8 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
     int targetOverallScale,
     const QString &modelName, int denoiseLevel, int tileSize,
     const QString &gpuIdOrJobConfig, bool isMultiGPUJob,
-    bool ttaEnabled, const QString &outputFormat)
+    bool ttaEnabled, const QString &outputFormat,
+    bool experimental)
 {
     qDebug() << "Realcugan_ProcessDirectoryIteratively: InputDir" << initialInputDir
              << "TargetOverallScale" << targetOverallScale;
@@ -633,13 +638,14 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
             currentPassInputDir, passOutputDir, currentPassScale,
             modelName, denoiseLevel, tileSize,
             gpuIdOrJobConfig, ttaEnabled, outputFormat, // For directory, outputFormat is for frames
-            isMultiGPUJob, gpuIdOrJobConfig
+            isMultiGPUJob, gpuIdOrJobConfig,
+            experimental
         );
 
         emit Send_TextBrowser_NewMessage(tr("Starting RealCUGAN directory pass %1/%2 (Scale: %3x)...").arg(i + 1).arg(scaleSequence.size()).arg(currentPassScale));
 
         QProcess process;
-        QString exePath = QDir::currentPath() + "/realcugan-ncnn-vulkan Win/realcugan-ncnn-vulkan.exe";
+        QString exePath = realCuganProcessor->executablePath(experimental);
         qDebug() << "Realcugan_ProcessDirectoryIteratively Pass" << i + 1 << "Cmd:" << exePath << arguments.join(" ");
 
         process.start(exePath, arguments);
@@ -724,7 +730,7 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
 
 
 
-void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingAlphaChannel)
+void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool experimental, bool ReProcess_MissingAlphaChannel)
 {
     Q_UNUSED(ReProcess_MissingAlphaChannel);
     if (Stopping == true) return;
@@ -812,7 +818,8 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingA
             currentInputFile, currentOutputFile, currentPassScale,
             m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
             m_realcugan_GPUID, m_realcugan_TTA, ui->comboBox_OutFormat_Image->currentText(),
-            ui->checkBox_MultiGPU_RealCUGAN->isChecked(), multiGpuArgs /* Pass constructed multi-GPU args */
+            ui->checkBox_MultiGPU_RealCUGAN->isChecked(), multiGpuArgs /* Pass constructed multi-GPU args */,
+            ui->comboBox_Engine_Image->currentIndex() == 2
         );
 
         processQueue->append(qMakePair(currentOutputFile, arguments));
@@ -843,6 +850,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingA
     firstProcess->setProperty("originalWidth", tempOriginalFullImage.width());
     firstProcess->setProperty("originalHeight", tempOriginalFullImage.height());
     firstProcess->setProperty("targetScale", targetScale); // Store the overall target scale for resampling
+    firstProcess->setProperty("experimental", ui->comboBox_Engine_Image->currentIndex() == 2);
     tempOriginalFullImage = QImage(); // Release image data
 
 
@@ -903,8 +911,8 @@ void MainWindow::StartNextRealCUGANPass(QProcess *process) {
     }
 
 
-    QString Current_Path = QDir::currentPath();
-    QString EXE_PATH = Current_Path + "/realcugan-ncnn-vulkan Win/realcugan-ncnn-vulkan.exe";
+    QString EXE_PATH = realCuganProcessor->executablePath(
+                process->property("experimental").toBool());
     QFileInfo exeInfo(EXE_PATH);
     if (!exeInfo.exists() || !exeInfo.isExecutable()) {
         if(item_Status) item_Status->setText(tr("Error: realcugan-ncnn-vulkan.exe not found"));
@@ -1155,6 +1163,7 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
     int originalWidth, int originalHeight, /* Added original dimensions */
     const QString &modelName, int denoiseLevel, int tileSize,
     const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat,
+    bool experimental,
     int rowNumForStatusUpdate) // Optional: for status updates if called directly for an image row
 {
     qDebug() << "Realcugan_ProcessSingleFileIteratively: Input" << inputFile << "Output" << outputFile
@@ -1221,7 +1230,8 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
             modelName, denoiseLevel, tileSize,
             gpuIdOrJobConfig, // This is gpuId for single, or full job string for multi
             ttaEnabled, outputFormat,
-            isMultiGPUJob, gpuIdOrJobConfig // Pass full string if multi, single GPU ID otherwise
+            isMultiGPUJob, gpuIdOrJobConfig, // Pass full string if multi, single GPU ID otherwise
+            experimental
         );
         // Note: PrepareArguments needs to correctly interpret gpuIdOrJobConfig based on isMultiGPUJob.
         // If isMultiGPUJob is true, gpuIdOrJobConfig is the full "-g X -j Y" string.
@@ -1234,7 +1244,7 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
         }
 
         QProcess process; // Synchronous process for this helper
-        QString exePath = QDir::currentPath() + "/realcugan-ncnn-vulkan Win/realcugan-ncnn-vulkan.exe";
+        QString exePath = realCuganProcessor->executablePath(experimental);
 
         qDebug() << "RealCUGAN ProcessSingle Pass" << i+1 << "Cmd:" << exePath << arguments;
         process.start(exePath, arguments);
@@ -1439,7 +1449,8 @@ void MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString sca
         rgbFramesTempDir, scaledRgbFramesAIDirAPNG, targetScale,
         m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
         m_realcugan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
-        m_realcugan_TTA, "png"
+        m_realcugan_TTA, "png",
+        ui->comboBox_Engine_GIF->currentIndex() == 2
     );
     QDir(rgbFramesTempDir).removeRecursively();
 
@@ -1625,7 +1636,8 @@ void MainWindow::Realcugan_NCNN_Vulkan_GIF(int rowNum)
         rgbFramesTempDir, scaledRgbFramesAIDir, targetScale,
         m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
         m_realcugan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
-        m_realcugan_TTA, "png" // AI process needs a defined format, png is good for quality
+        m_realcugan_TTA, "png",
+        ui->comboBox_Engine_GIF->currentIndex() == 2
     );
     QDir(rgbFramesTempDir).removeRecursively(); // Cleaned up after AI processing input
 
@@ -1774,8 +1786,7 @@ void MainWindow::Realcugan_ncnn_vulkan_DetectGPU()
 {
     if (Stopping == true) return;
 
-    QString Current_Path = QDir::currentPath();
-    QString EXE_PATH = Current_Path + "/realcugan-ncnn-vulkan Win/realcugan-ncnn-vulkan.exe";
+    QString EXE_PATH = realCuganProcessor->executablePath(false);
     QFileInfo exeInfo(EXE_PATH);
     if (!exeInfo.exists() || !exeInfo.isExecutable()) {
         QMessageBox::critical(this, tr("Error"), tr("realcugan-ncnn-vulkan.exe not found at %1").arg(EXE_PATH));
