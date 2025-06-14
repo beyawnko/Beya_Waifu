@@ -1,5 +1,7 @@
 #pragma once
-
+/*
+Copyright (C) 2025  beyawnko
+*/
 #include <QProcess>
 #include <QJsonDocument>
 #include <QJsonObject>

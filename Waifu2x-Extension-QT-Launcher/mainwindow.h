@@ -1,5 +1,7 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
+/*
+Copyright (C) 2025  beyawnko
+*/
 
 #include <QMainWindow>
 #include <QFile>
@@ -45,4 +47,3 @@ private:
                     QByteArray *stdOut = nullptr,
                     QByteArray *stdErr = nullptr);
 };
-#endif // MAINWINDOW_H
