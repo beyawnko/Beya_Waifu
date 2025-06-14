@@ -362,7 +362,7 @@ public:
     GpuManager gpuManager;
     UiController uiController;
 
-    void Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingAlphaChannel);
+    void Realcugan_NCNN_Vulkan_Image(int rowNum, bool experimental, bool ReProcess_MissingAlphaChannel);
     void Realcugan_NCNN_Vulkan_GIF(int rowNum);
     void Realcugan_NCNN_Vulkan_Video(int rowNum);
     void Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum);
@@ -373,10 +373,10 @@ public:
     QString RealcuganNcnnVulkan_MultiGPU(); // Modified to return QString for command arguments
     void AddGPU_MultiGPU_RealcuganNcnnVulkan(QString GPUID);
     void Realcugan_NCNN_Vulkan_PreLoad_Settings();
-    QStringList Realcugan_NCNN_Vulkan_PrepareArguments(const QString &inputFile, const QString &outputFile, int currentPassScale, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuId, bool ttaEnabled, const QString &outputFormat, bool isMultiGPU, const QString &multiGpuJobArgs);
+    QStringList Realcugan_NCNN_Vulkan_PrepareArguments(const QString &inputFile, const QString &outputFile, int currentPassScale, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuId, bool ttaEnabled, const QString &outputFormat, bool isMultiGPU, const QString &multiGpuJobArgs, bool experimental);
     void StartNextRealCUGANPass(QProcess *process);
     void Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString &tempPathBase, int maxPassIndex, bool keepFinal = false, const QString& finalFile = "");
-    bool Realcugan_ProcessSingleFileIteratively(const QString &inputFile, const QString &outputFile, int targetScale, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat, int rowNumForStatusUpdate = -1);
+    bool Realcugan_ProcessSingleFileIteratively(const QString &inputFile, const QString &outputFile, int targetScale, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat, bool experimental, int rowNumForStatusUpdate = -1);
 
 
     //RealESRGAN-ncnn-Vulkan UI Pointers

@@ -93,7 +93,8 @@ QStringList RealCuganProcessor::prepareArguments(const QString &inputFile,
                                                  bool ttaEnabled,
                                                  const QString &outputFormat,
                                                  bool isMultiGPU,
-                                                 const QString &multiGpuJobArgs)
+                                                 const QString &multiGpuJobArgs,
+                                                 bool experimental)
 {
     QString Current_Path = QDir::currentPath();
     QStringList arguments;
@@ -102,7 +103,7 @@ QStringList RealCuganProcessor::prepareArguments(const QString &inputFile,
               << "-s" << QString::number(currentPassScale)
               << "-n" << QString::number(denoiseLevel)
               << "-t" << QString::number(tileSize)
-              << "-m" << Current_Path + "/realcugan-ncnn-vulkan Win/" + modelName;
+              << "-m" << modelPath(modelName, experimental);
     if (isMultiGPU) {
         arguments << multiGpuJobArgs.split(" ");
     } else {
@@ -114,5 +115,21 @@ QStringList RealCuganProcessor::prepareArguments(const QString &inputFile,
     }
     arguments << "-f" << outputFormat.toLower();
     return arguments;
+}
+
+QString RealCuganProcessor::executablePath(bool experimental) const
+{
+    QString base = QDir::currentPath();
+    QString folder = experimental ? "realcugan-ncnn-vulkan Exp" :
+                                    "realcugan-ncnn-vulkan Win";
+    return base + "/" + folder + "/realcugan-ncnn-vulkan.exe";
+}
+
+QString RealCuganProcessor::modelPath(const QString &modelName, bool experimental) const
+{
+    QString base = QDir::currentPath();
+    QString folder = experimental ? "realcugan-ncnn-vulkan Exp" :
+                                    "realcugan-ncnn-vulkan Win";
+    return base + "/" + folder + "/" + modelName;
 }
 
