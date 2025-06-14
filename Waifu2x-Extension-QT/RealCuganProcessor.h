@@ -18,6 +18,7 @@
 
 #include <QObject>
 #include <QStringList>
+#include "RealcuganJobManager.h"
 
 class MainWindow;
 
@@ -44,5 +45,6 @@ public:
 
 private:
     MainWindow *m_mainWindow;
+    RealcuganJobManager m_jobManager;
 };
 

@@ -61,6 +61,8 @@ SOURCES += \
     topsupporterslist.cpp \
     video.cpp \
     VideoProcessor.cpp \
+    RealcuganJobManager.cpp \
+    RealesrganJobManager.cpp \
     FileManager.cpp \
     ProcessRunner.cpp \
     LiquidGlassWidget.cpp \
@@ -76,6 +78,9 @@ HEADERS += \
     ProcessRunner.h \
     GpuManager.h \
     UiController.h \
+    VideoProcessor.h \
+    RealcuganJobManager.h \
+    RealesrganJobManager.h \
 
 FORMS += \
     mainwindow.ui \
