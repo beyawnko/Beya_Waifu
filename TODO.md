@@ -9,7 +9,7 @@ All TODO comments across the repository are already written in English. They are
   - Line 41: Replace with appropriate checks for the whole series (e.g. quick build, coding style checks).
 - **Waifu2x-Extension-QT/realcugan_ncnn_vulkan.cpp**
   - Line 857: Implement settings reading for Video/GIF, especially for multi-GPU job distribution.
-- **realcugan-ncnn-vulkan SRC/src/stb_image.h**
+ - **realcugan-ncnn-vulkan/src/stb_image.h**
   - Line 1216: Move `stbi__convert_format` to here.
   - Line 1242: Move `stbi__convert_format16` to here.
   - Line 1243: Special case RGB-to-Y (and RGBA-to-YA) for 8-bit-to-16-bit case to keep more precision.

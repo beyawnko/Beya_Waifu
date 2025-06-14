@@ -2144,7 +2144,7 @@ void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked()
 // The current implementation uses -g for single GPU. Multi-GPU needs its own logic.
 
 // The -m (model) argument is constructed as:
-// Current_Path + "/realcugan-ncnn-vulkan Win/" + ui->comboBox_Model_RealCUGAN->currentText()
+// Current_Path + "/realcugan-ncnn-vulkan/windows/" + ui->comboBox_Model_RealCUGAN->currentText()
 // This implies models are in subdirectories like "models-se", "models-pro", etc.
 // This seems correct based on typical ncnn model structures.
 // Example: "models-se" or "models-nose" or "models-pro"

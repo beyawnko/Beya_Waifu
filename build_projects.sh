@@ -18,11 +18,11 @@ popd >/dev/null
 if [[ "$(uname -s)" == MSYS_* || "$(uname -s)" == CYGWIN_* ]]; then
     echo "Windows environment detected. Handling upscaler binaries..."
 
-    RESRGAN_SRC_DIR="Real-ESRGAN-ncnn-vulkan-master"
-    RCUGAN_SRC_DIR="realcugan-ncnn-vulkan SRC"
+    RESRGAN_SRC_DIR="realesrgan-ncnn-vulkan"
+    RCUGAN_SRC_DIR="realcugan-ncnn-vulkan"
 
-    RESRGAN_PREBUILT_DIR="realesrgan-ncnn-vulkan-20220424-windows"
-    RCUGAN_PREBUILT_DIR="realcugan-ncnn-vulkan Win"
+    RESRGAN_PREBUILT_DIR="realesrgan-ncnn-vulkan/windows"
+    RCUGAN_PREBUILT_DIR="realcugan-ncnn-vulkan/windows"
 
     TARGET_QT_DIR="Waifu2x-Extension-QT"
     TARGET_LAUNCHER_DIR="Waifu2x-Extension-QT-Launcher"
