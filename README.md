@@ -145,4 +145,7 @@ Run cppcheck from the repository root:
 ./tools/run_cppcheck.sh
 ```
 
+The helper script automatically applies the arguments listed in
+`tools/cppcheck.cfg`. This file defines the Qt keywords (`slots`,
+`signals`, `Q_OBJECT`, …) so that cppcheck does not warn about them.
 The results are written to `cppcheck.log`. A GitHub Actions workflow runs cppcheck on each push and pull request.
