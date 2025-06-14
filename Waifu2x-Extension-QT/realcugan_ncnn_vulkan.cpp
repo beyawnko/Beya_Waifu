@@ -620,6 +620,8 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
         process.start(exePath, arguments);
         if (!process.waitForStarted(10000)) {
             qDebug() << "Realcugan_ProcessDirectoryIteratively: Process failed to start for pass" << i + 1;
+            emit Send_TextBrowser_NewMessage(
+                tr("RealCUGAN failed to start for directory pass %1").arg(i + 1));
             success = false; break;
         }
 
@@ -641,8 +643,12 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
 
         if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
             qDebug() << "Realcugan_ProcessDirectoryIteratively: Pass" << i + 1 << "failed. ExitCode:" << process.exitCode() << "Error:" << process.errorString();
-            qDebug() << "STDERR:" << QString::fromLocal8Bit(process.readAllStandardError());
-            qDebug() << "STDOUT:" << QString::fromLocal8Bit(process.readAllStandardOutput());
+            QByteArray errOut = process.readAllStandardError();
+            emit Send_TextBrowser_NewMessage(
+                tr("RealCUGAN directory pass %1 failed with exit code %2\n%3")
+                    .arg(i + 1)
+                    .arg(process.exitCode())
+                    .arg(QString::fromLocal8Bit(errOut)));
             success = false; break;
         }
 
@@ -653,6 +659,8 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
              // This might not be an error if input also had no processable files, but worth logging.
              // If inputDir had files, this is an error.
              if (!QDir(currentPassInputDir).entryInfoList(QDir::Files | QDir::NoDotAndDotDot).isEmpty()){
+                emit Send_TextBrowser_NewMessage(
+                    tr("RealCUGAN directory pass %1 produced no output").arg(i + 1));
                 success = false; break;
              }
         }
@@ -847,8 +855,11 @@ void MainWindow::StartNextRealCUGANPass(QProcess *process) {
     // Ensure input for current pass (output of previous, or original file) exists
     QString inputFileForThisPass = arguments.at(arguments.indexOf("-i") + 1);
     if (!QFile::exists(inputFileForThisPass)) {
-        qDebug() << "RealCUGAN Error: Input file for pass" << currentPassIndex << "does not exist:" << inputFileForThisPass;
+        qDebug() << "RealCUGAN Error: Input file for pass" << currentPassIndex
+                 << "does not exist:" << inputFileForThisPass;
         if(item_Status) item_Status->setText(tr("Error: Temp file missing"));
+        emit Send_TextBrowser_NewMessage(
+            tr("RealCUGAN pass %1 failed: missing temp file").arg(currentPassIndex + 1));
         Realcugan_NCNN_Vulkan_CleanupTempFiles(process->property("tempPathBase").toString(), processQueue->size()-1);
         delete processQueue;
         process->deleteLater();
@@ -867,6 +878,7 @@ void MainWindow::StartNextRealCUGANPass(QProcess *process) {
     QFileInfo exeInfo(EXE_PATH);
     if (!exeInfo.exists() || !exeInfo.isExecutable()) {
         if(item_Status) item_Status->setText(tr("Error: realcugan-ncnn-vulkan.exe not found"));
+        emit Send_TextBrowser_NewMessage(tr("realcugan-ncnn-vulkan.exe not found"));
         Realcugan_NCNN_Vulkan_CleanupTempFiles(process->property("tempPathBase").toString(), processQueue->size()-1);
         delete processQueue;
         process->deleteLater();
@@ -892,7 +904,10 @@ void MainWindow::StartNextRealCUGANPass(QProcess *process) {
     process->start(EXE_PATH, arguments);
     if (!process->waitForStarted(10000)) { // Increased timeout for safety
         qDebug() << "RealCUGAN process failed to start or timed out starting for pass" << currentPassIndex;
-        if (item_Status) item_Status->setText(tr("Error: Process start failed (Pass %1)").arg(currentPassIndex + 1));
+        if (item_Status)
+            item_Status->setText(tr("Error: Process start failed (Pass %1)").arg(currentPassIndex + 1));
+        emit Send_TextBrowser_NewMessage(
+            tr("RealCUGAN failed to start for pass %1").arg(currentPassIndex + 1));
 
         Realcugan_NCNN_Vulkan_CleanupTempFiles(process->property("tempPathBase").toString(), processQueue->size()-1);
         ProcList_RealCUGAN.removeAll(process);
@@ -923,8 +938,14 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished() {
 
 
     if (process->exitStatus() != QProcess::NormalExit || process->exitCode() != 0) {
-        qDebug() << "RealCUGAN Error: Pass" << currentPassIndex << "failed. ExitCode:" << process->exitCode() << "ExitStatus:" << process->exitStatus();
+        qDebug() << "RealCUGAN Error: Pass" << currentPassIndex << "failed. ExitCode:" << process->exitCode()
+                 << "ExitStatus:" << process->exitStatus();
         if(item_Status) item_Status->setText(tr("Error (Pass %1)").arg(currentPassIndex + 1));
+        emit Send_TextBrowser_NewMessage(
+            tr("RealCUGAN pass %1 failed with exit code %2\n%3")
+                .arg(currentPassIndex + 1)
+                .arg(process->exitCode())
+                .arg(QString::fromLocal8Bit(stdErr)));
         Realcugan_NCNN_Vulkan_CleanupTempFiles(process->property("tempPathBase").toString(), processQueue->size()-1);
         ProcList_RealCUGAN.removeAll(process);
         delete processQueue;
@@ -936,8 +957,12 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished() {
     // Check if output file of current pass exists
     QString currentPassOutputFile = processQueue->at(currentPassIndex).first;
     if (!QFile::exists(currentPassOutputFile)) {
-        qDebug() << "RealCUGAN Error: Output file for pass" << currentPassIndex << "not found:" << currentPassOutputFile;
-        if(item_Status) item_Status->setText(tr("Error: Temp file missing (Pass %1)").arg(currentPassIndex + 1));
+        qDebug() << "RealCUGAN Error: Output file for pass" << currentPassIndex
+                 << "not found:" << currentPassOutputFile;
+        if(item_Status)
+            item_Status->setText(tr("Error: Temp file missing (Pass %1)").arg(currentPassIndex + 1));
+        emit Send_TextBrowser_NewMessage(
+            tr("RealCUGAN pass %1 produced no output").arg(currentPassIndex + 1));
         Realcugan_NCNN_Vulkan_CleanupTempFiles(process->property("tempPathBase").toString(), processQueue->size()-1);
         ProcList_RealCUGAN.removeAll(process);
         delete processQueue;
@@ -1042,6 +1067,10 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::Process
 
     qDebug() << "RealCUGAN process errorOccurred during pass" << currentPassIndex << ":" << error << process->errorString();
     if(item_Status) item_Status->setText(tr("Error (Process Error Pass %1)").arg(currentPassIndex + 1));
+    emit Send_TextBrowser_NewMessage(
+        tr("RealCUGAN process error on pass %1: %2")
+            .arg(currentPassIndex + 1)
+            .arg(process->errorString()));
 
     Realcugan_NCNN_Vulkan_CleanupTempFiles(process->property("tempPathBase").toString(), processQueue->size()-1);
     ProcList_RealCUGAN.removeAll(process);
@@ -1106,6 +1135,7 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
     if (!tempDir.mkpath(".")) {
         qDebug() << "Failed to create temporary directory:" << tempSubFolder;
         if (rowNumForStatusUpdate != -1) UpdateTableWidget_Status(rowNumForStatusUpdate, tr("Error: Temp dir failed"), "ERROR");
+        emit Send_TextBrowser_NewMessage(tr("Failed to create temp directory for RealCUGAN."));
         return false;
     }
 
@@ -1177,6 +1207,8 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
 
         if (!process.waitForStarted(10000)) {
             qDebug() << "RealCUGAN ProcessSingle: Process failed to start for pass" << i+1;
+            emit Send_TextBrowser_NewMessage(
+                tr("RealCUGAN failed to start for pass %1").arg(i + 1));
             success = false; break;
         }
 
@@ -1203,10 +1235,17 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
 
         if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
             qDebug() << "RealCUGAN ProcessSingle: Pass" << i+1 << "failed. ExitCode:" << process.exitCode();
+            emit Send_TextBrowser_NewMessage(
+                tr("RealCUGAN pass %1 failed with exit code %2\n%3")
+                    .arg(i + 1)
+                    .arg(process.exitCode())
+                    .arg(QString::fromLocal8Bit(stdErr)));
             success = false; break;
         }
         if (!QFile::exists(lastAiPassOutputFile)) {
             qDebug() << "RealCUGAN ProcessSingle: Output file for pass" << i+1 << "not found:" << lastAiPassOutputFile;
+            emit Send_TextBrowser_NewMessage(
+                tr("RealCUGAN pass %1 produced no output").arg(i + 1));
             success = false; break;
         }
         currentIterInputFile = lastAiPassOutputFile; // Output of this pass is input for the next
