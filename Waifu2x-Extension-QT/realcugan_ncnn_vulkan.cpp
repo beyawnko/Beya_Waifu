@@ -591,7 +591,7 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
         // Here, we rely on the caller to decide if the resulting AI scale is adequate before resampling.
         // If scaleSequence is truly problematic (e.g. empty for target > 1), error out.
         if (scaleSequence.isEmpty() && targetOverallScale > 1) {
-             Send_TextBrowser_NewMessage(tr("Error: Could not determine AI scaling passes for RealCUGAN."));
+             emit Send_TextBrowser_NewMessage(tr("Error: Could not determine AI scaling passes for RealCUGAN."));
              return false;
         }
         if (scaleSequence.isEmpty()) scaleSequence.append(1); // Ensure at least one pass if target is 1x
@@ -1378,7 +1378,7 @@ void MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString sca
         // Update progress for APNG_Main (e.g. by emitting a signal or through shared variables if this runs in a thread)
         // For now, just log. APNG_Main might have its own progress update mechanism.
         qDebug() << "Processing APNG frame" << frameCount << "/" << framesFileName_qStrList.size() << ":" << frameFileName;
-        Send_TextBrowser_NewMessage(tr("Processing APNG frame %1/%2: %3 (RealCUGAN)").arg(frameCount).arg(framesFileName_qStrList.size()).arg(frameFileName));
+        emit Send_TextBrowser_NewMessage(tr("Processing APNG frame %1/%2: %3 (RealCUGAN)").arg(frameCount).arg(framesFileName_qStrList.size()).arg(frameFileName));
     }
 
     QString sourceFileNameNoExt = QFileInfo(sourceFileFullPath).completeBaseName(); // Used for temp folder naming
@@ -1504,7 +1504,7 @@ void MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString sca
     }
 
     qDebug() << "APNG_RealcuganNCNNVulkan: All frame processing stages (AI, Alpha, Resample) completed successfully.";
-    Send_TextBrowser_NewMessage(tr("All APNG frames processed and resampled (RealCUGAN)."));
+    emit Send_TextBrowser_NewMessage(tr("All APNG frames processed and resampled (RealCUGAN)."));
     // APNG_Main will now use the frames in `scaledFramesFolder` for assembly.
 }
 

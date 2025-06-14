@@ -754,7 +754,7 @@ int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString Table_FileList_
     QScrollBar *video_ScrBar = ui->tableView_video->horizontalScrollBar();
     video_ScrBar->setValue(0);
     //============
-    Send_TextBrowser_NewMessage(tr("File list update is complete!"));
+    emit Send_TextBrowser_NewMessage(tr("File list update is complete!"));
     //====
     progressbar_SetToMax(Progressbar_MaxVal);
     Progressbar_MaxVal = 0;
@@ -762,7 +762,7 @@ int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString Table_FileList_
     //====
     if(rowCount_image<=0&&rowCount_video<=0&&rowCount_gif<=0)
     {
-        Send_TextBrowser_NewMessage(tr("The file list saved last time is empty."));
+        emit Send_TextBrowser_NewMessage(tr("The file list saved last time is empty."));
         progressbar_clear();
     }
     //==

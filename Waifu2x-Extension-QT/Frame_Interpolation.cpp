@@ -489,7 +489,8 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
             }
         }
     }
-    if(isUhdInput==true)Send_TextBrowser_NewMessage(tr("UHD input detected, UHD Mode is automatically enabled."));
+    if(isUhdInput==true)
+        emit Send_TextBrowser_NewMessage(tr("UHD input detected, UHD Mode is automatically enabled."));
     //====================
     int FileNum_MAX = file_getFileNames_in_Folder_nofilter(SourcePath).size() * ui->spinBox_MultipleOfFPS_VFI->value();
     int FileNum_New = 0;
@@ -900,7 +901,7 @@ int MainWindow::FrameInterpolation_DetectGPU()
     emit Send_TextBrowser_NewMessage(tr("Detection is complete!"));
     if(Available_GPUID_FrameInterpolation.isEmpty())
     {
-        Send_TextBrowser_NewMessage(tr("No available GPU ID detected!"));
+        emit Send_TextBrowser_NewMessage(tr("No available GPU ID detected!"));
     }
     emit Send_FrameInterpolation_DetectGPU_finished();
     return 0;
