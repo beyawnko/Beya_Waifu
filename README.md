@@ -132,11 +132,11 @@ The sample images used for testing are located under
 
 ## Static Analysis [![cppcheck](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/cppcheck.yml/badge.svg)](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/cppcheck.yml)
 
-Static analysis can be performed with [cppcheck](https://cppcheck.sourceforge.io/). The helper script expects the Qt development headers to be present. On Debian-based distributions install them with:
+Static analysis can be performed with [cppcheck](https://cppcheck.sourceforge.io/). The helper script expects the Qt development headers, `cppcheck` itself and `pkg-config` to be present. On Debian-based distributions install them with:
 
 ```bash
 sudo apt-get update
-sudo apt-get install qtbase5-dev
+sudo apt-get install qtbase5-dev cppcheck pkg-config
 ```
 
 Run cppcheck from the repository root:
