@@ -129,3 +129,20 @@ pytest
 The sample images used for testing are located under
 `realcugan-ncnn-vulkan SRC/images/` and in the
 `realesrgan-ncnn-vulkan-20220424-windows` folder.
+
+## Static Analysis
+
+Static analysis can be performed with [cppcheck](https://cppcheck.sourceforge.io/). The helper script expects the Qt development headers to be present. On Debian-based distributions install them with:
+
+```bash
+sudo apt-get update
+sudo apt-get install qtbase5-dev
+```
+
+Run cppcheck from the repository root:
+
+```bash
+./tools/run_cppcheck.sh
+```
+
+The results are written to `cppcheck.log`.
