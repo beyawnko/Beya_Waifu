@@ -21,6 +21,8 @@
 #include "ui_mainwindow.h"
 #include "RealCuganProcessor.h"
 #include "VideoProcessor.h"
+#include "FileManager.h"
+#include "ProcessRunner.h"
 #include <QEventLoop>
 #include <QTimer>
 #include <QSettings>
@@ -3422,3 +3424,9 @@ int MainWindow::SRMD_CUDA_Video(int){return 0;}
 int MainWindow::SRMD_CUDA_Video_BySegment(int){return 0;}
 // ... (The rest of the functions from the original file) ...
 
+
+bool MainWindow::runProcess(QProcess *process, const QString &cmd,
+                            QByteArray *stdOut, QByteArray *stdErr)
+{
+    return processRunner.run(process, cmd, stdOut, stdErr);
+}
