@@ -130,7 +130,7 @@ The sample images used for testing are located under
 `realcugan-ncnn-vulkan SRC/images/` and in the
 `realesrgan-ncnn-vulkan-20220424-windows` folder.
 
-## Static Analysis
+## Static Analysis [![cppcheck](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/cppcheck.yml/badge.svg)](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/cppcheck.yml)
 
 Static analysis can be performed with [cppcheck](https://cppcheck.sourceforge.io/). The helper script expects the Qt development headers to be present. On Debian-based distributions install them with:
 
@@ -145,4 +145,4 @@ Run cppcheck from the repository root:
 ./tools/run_cppcheck.sh
 ```
 
-The results are written to `cppcheck.log`.
+The results are written to `cppcheck.log`. A GitHub Actions workflow runs cppcheck on each push and pull request.
