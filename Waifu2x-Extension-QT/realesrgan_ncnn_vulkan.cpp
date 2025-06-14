@@ -14,6 +14,20 @@
 
 // --- RealESRGAN Specific Helper Functions ---
 
+// Utility to warn when an external process fails
+static bool warnProcessFailure(QWidget *parent, QProcess &proc,
+                               const QString &context)
+{
+    if (proc.exitStatus() != QProcess::NormalExit || proc.exitCode() != 0) {
+        QString msg = QObject::tr("%1 failed with exit code %2")
+                          .arg(context)
+                          .arg(proc.exitCode());
+        QMessageBox::warning(parent, QObject::tr("Process Failure"), msg);
+        return false;
+    }
+    return true;
+}
+
 // CalculateRealESRGANScaleSequence: Determines how many times to apply a model
 // based on its native scale to reach or exceed the targetScale.
 // It aims to get scale >= targetScale using the fewest model applications.
@@ -217,6 +231,8 @@ bool MainWindow::RealESRGAN_ProcessSingleFileIteratively(
 
         if (!proc.waitForStarted(10000)) {
             qDebug() << "RealESRGAN Pass" << pass+1 << "failed to start." << proc.errorString();
+            QMessageBox::warning(this, tr("Process Failure"),
+                                 tr("RealESRGAN failed to start for pass %1").arg(pass + 1));
             success = false;
             break;
         }
@@ -243,9 +259,10 @@ bool MainWindow::RealESRGAN_ProcessSingleFileIteratively(
         if (!stdOut.isEmpty()) qDebug() << "RealESRGAN ProcessSingle Pass" << pass+1 << "STDOUT:" << QString::fromLocal8Bit(stdOut);
         if (!stdErr.isEmpty()) qDebug() << "RealESRGAN ProcessSingle Pass" << pass+1 << "STDERR:" << QString::fromLocal8Bit(stdErr);
 
-        if (proc.exitStatus() != QProcess::NormalExit || proc.exitCode() != 0) {
+        if (!warnProcessFailure(this, proc, tr("RealESRGAN pass %1").arg(pass + 1))) {
             qDebug() << "RealESRGAN ProcessSingle: Pass" << pass+1 << "failed. ExitCode:" << proc.exitCode();
-            success = false; break;
+            success = false;
+            break;
         }
         if (!QFile::exists(lastPassOutputFile)) {
             qDebug() << "RealESRGAN ProcessSingle: Output file for pass" << pass+1 << "not found:" << lastPassOutputFile;
@@ -449,7 +466,10 @@ bool MainWindow::RealESRGAN_ProcessDirectoryIteratively(
         process.start(exePath, arguments);
         if (!process.waitForStarted(10000)) {
             qDebug() << "RealESRGAN_ProcessDirectoryIteratively: Process failed to start for pass" << i + 1;
-            success = false; break;
+            QMessageBox::warning(this, tr("Process Failure"),
+                                 tr("RealESRGAN failed to start for directory pass %1").arg(i + 1));
+            success = false;
+            break;
         }
 
         while (process.state() != QProcess::NotRunning) {
@@ -468,11 +488,13 @@ bool MainWindow::RealESRGAN_ProcessDirectoryIteratively(
         }
         if (!success) break; // If stopped or failed in loop, break outer
 
-        if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
+        if (!warnProcessFailure(this, process,
+                                tr("RealESRGAN directory pass %1").arg(i + 1))) {
             qDebug() << "RealESRGAN_ProcessDirectoryIteratively: Pass" << i + 1 << "failed. ExitCode:" << process.exitCode() << "Error:" << process.errorString();
             qDebug() << "STDERR:" << QString::fromLocal8Bit(process.readAllStandardError());
             qDebug() << "STDOUT:" << QString::fromLocal8Bit(process.readAllStandardOutput());
-            success = false; break;
+            success = false;
+            break;
         }
 
         QDir checkOutDir(passOutputDir);
@@ -769,9 +791,13 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video_BySegment(int rowNum) {
         extractArgs << "-nostdin" << "-y" << "-ss" << QString::number(startTime) << "-i" << sourceFileFullPath << "-t" << QString::number(currentSegmentDuration) << "-vf" << "fps=" + video_get_fps(sourceFileFullPath) << frameOutputPattern;
         emit Send_TextBrowser_NewMessage(tr("Extracting frames for segment %1/%2... (RealESRGAN)").arg(i+1).arg(numSegments));
         ffmpegFrameExtract.start(FFMPEG_EXE_PATH_Waifu2xEX, extractArgs);
-        if (!ffmpegFrameExtract.waitForStarted(5000) || !ffmpegFrameExtract.waitForFinished(-1) || ffmpegFrameExtract.exitCode() != 0) {
+        if (!ffmpegFrameExtract.waitForStarted(5000) ||
+            !ffmpegFrameExtract.waitForFinished(-1) ||
+            !warnProcessFailure(this, ffmpegFrameExtract,
+                                tr("FFmpeg frame extraction for segment %1").arg(i + 1))) {
             qDebug() << "RealESRGAN VideoBySegment: Failed to extract frames for segment" << i+1;
-            overallSuccess = false; break;
+            overallSuccess = false;
+            break;
         }
         QStringList framesFileName_qStrList = file_getFileNames_in_Folder_nofilter(splitFramesFolder);
         if (framesFileName_qStrList.isEmpty() && currentSegmentDuration > 0) { /* Allow empty if duration is 0 */
@@ -864,7 +890,9 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video_BySegment(int rowNum) {
             QStringList concatArgs;
             concatArgs << "-f" << "concat" << "-safe" << "0" << "-i" << concatFilePath << "-c" << "copy" << concatenatedVideoPath;
             ffmpegConcat.start(FFMPEG_EXE_PATH_Waifu2xEX, concatArgs);
-            if (!ffmpegConcat.waitForStarted(5000) || !ffmpegConcat.waitForFinished(-1) || ffmpegConcat.exitCode() != 0) {
+            if (!ffmpegConcat.waitForStarted(5000) ||
+                !ffmpegConcat.waitForFinished(-1) ||
+                !warnProcessFailure(this, ffmpegConcat, tr("FFmpeg concat"))) {
                 overallSuccess = false;
             } else {
                 emit Send_TextBrowser_NewMessage(tr("Muxing final video with audio... (RealESRGAN)"));
@@ -872,7 +900,9 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video_BySegment(int rowNum) {
                 QStringList muxArgs;
                 muxArgs << "-i" << concatenatedVideoPath << "-i" << fullAudioPath << "-c:v" << "copy" << "-c:a" << "aac" << "-b:a" << ui->spinBox_bitrate_audio->text()+"k" << "-shortest" << finalResultFileFullPath;
                 ffmpegMux.start(FFMPEG_EXE_PATH_Waifu2xEX, muxArgs);
-                if (!ffmpegMux.waitForStarted(5000) || !ffmpegMux.waitForFinished(-1) || ffmpegMux.exitCode() != 0) {
+                if (!ffmpegMux.waitForStarted(5000) ||
+                    !ffmpegMux.waitForFinished(-1) ||
+                    !warnProcessFailure(this, ffmpegMux, tr("FFmpeg mux"))) {
                     overallSuccess = false;
                 }
             }

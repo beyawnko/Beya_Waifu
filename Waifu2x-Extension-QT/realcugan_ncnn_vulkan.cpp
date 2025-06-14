@@ -28,6 +28,20 @@
 #include <QRegularExpression>
 #include <QDirIterator>
 
+// Utility to warn when an external process fails
+static bool warnProcessFailure(QWidget *parent, QProcess &proc,
+                               const QString &context)
+{
+    if (proc.exitStatus() != QProcess::NormalExit || proc.exitCode() != 0) {
+        QString msg = QObject::tr("%1 failed with exit code %2")
+                          .arg(context)
+                          .arg(proc.exitCode());
+        QMessageBox::warning(parent, QObject::tr("Process Failure"), msg);
+        return false;
+    }
+    return true;
+}
+
 
 // Helper function to calculate scaling sequence for RealCUGAN
 static QList<int> CalculateRealCUGANScaleSequence(int targetScale) {
@@ -232,9 +246,14 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
         emit Send_TextBrowser_NewMessage(tr("Extracting frames for segment %1/%2...").arg(i+1).arg(numSegments));
         qDebug() << "FFMPEG frame extract for segment CMD:" << FFMPEG_EXE_PATH_Waifu2xEX << extractArgs;
         ffmpegFrameExtract.start(FFMPEG_EXE_PATH_Waifu2xEX, extractArgs);
-        if (!ffmpegFrameExtract.waitForStarted(5000) || !ffmpegFrameExtract.waitForFinished(-1) || ffmpegFrameExtract.exitCode() != 0) {
-            qDebug() << "RealCUGAN VideoBySegment: Failed to extract frames for segment" << i+1 << ". StdErr:" << QString::fromLocal8Bit(ffmpegFrameExtract.readAllStandardError());
-            overallSuccess = false; break;
+        if (!ffmpegFrameExtract.waitForStarted(5000) ||
+            !ffmpegFrameExtract.waitForFinished(-1) ||
+            !warnProcessFailure(this, ffmpegFrameExtract,
+                                tr("FFmpeg frame extraction for segment %1").arg(i + 1))) {
+            qDebug() << "RealCUGAN VideoBySegment: Failed to extract frames for segment" << i+1
+                     << ". StdErr:" << QString::fromLocal8Bit(ffmpegFrameExtract.readAllStandardError());
+            overallSuccess = false;
+            break;
         }
 
         QStringList framesFileName_qStrList = file_getFileNames_in_Folder_nofilter(splitFramesFolder);
@@ -354,8 +373,11 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
             concatArgs << "-f" << "concat" << "-safe" << "0" << "-i" << concatFilePath << "-c" << "copy" << concatenatedVideoPath;
             ffmpegConcat.start(FFMPEG_EXE_PATH_Waifu2xEX, concatArgs); // Assuming FFMPEG_EXE_PATH_Waifu2xEX is defined
 
-            if (!ffmpegConcat.waitForStarted(5000) || !ffmpegConcat.waitForFinished(-1) || ffmpegConcat.exitCode() != 0) {
-                qDebug() << "RealCUGAN VideoBySegment: Failed to concatenate video segments. StdErr:" << QString::fromLocal8Bit(ffmpegConcat.readAllStandardError());
+            if (!ffmpegConcat.waitForStarted(5000) ||
+                !ffmpegConcat.waitForFinished(-1) ||
+                !warnProcessFailure(this, ffmpegConcat, tr("FFmpeg concat"))) {
+                qDebug() << "RealCUGAN VideoBySegment: Failed to concatenate video segments. StdErr:"
+                         << QString::fromLocal8Bit(ffmpegConcat.readAllStandardError());
                 overallSuccess = false;
             } else {
                  // Add the full audio track back
@@ -365,8 +387,11 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
                 muxArgs << "-i" << concatenatedVideoPath << "-i" << fullAudioPath << "-c:v" << "copy" << "-c:a" << "aac" << "-b:a" << ui->spinBox_bitrate_audio->text()+"k" << "-shortest" << finalResultFileFullPath;
                 // Might need to use video_ReadSettings_OutputVid for more complex muxing if available
                 ffmpegMux.start(FFMPEG_EXE_PATH_Waifu2xEX, muxArgs);
-                if (!ffmpegMux.waitForStarted(5000) || !ffmpegMux.waitForFinished(-1) || ffmpegMux.exitCode() != 0) {
-                    qDebug() << "RealCUGAN VideoBySegment: Failed to mux final video. StdErr:" << QString::fromLocal8Bit(ffmpegMux.readAllStandardError());
+                if (!ffmpegMux.waitForStarted(5000) ||
+                    !ffmpegMux.waitForFinished(-1) ||
+                    !warnProcessFailure(this, ffmpegMux, tr("FFmpeg mux"))) {
+                    qDebug() << "RealCUGAN VideoBySegment: Failed to mux final video. StdErr:"
+                             << QString::fromLocal8Bit(ffmpegMux.readAllStandardError());
                     overallSuccess = false;
                 }
             }
@@ -620,9 +645,12 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
         process.start(exePath, arguments);
         if (!process.waitForStarted(10000)) {
             qDebug() << "Realcugan_ProcessDirectoryIteratively: Process failed to start for pass" << i + 1;
+            QMessageBox::warning(this, tr("Process Failure"),
+                                 tr("RealCUGAN failed to start for directory pass %1").arg(i + 1));
             emit Send_TextBrowser_NewMessage(
                 tr("RealCUGAN failed to start for directory pass %1").arg(i + 1));
-            success = false; break;
+            success = false;
+            break;
         }
 
         while (process.state() != QProcess::NotRunning) {
@@ -641,7 +669,8 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
         }
         if (!success) break; // If stopped or failed in loop, break outer
 
-        if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
+        if (!warnProcessFailure(this, process,
+                                tr("RealCUGAN directory pass %1").arg(i + 1))) {
             qDebug() << "Realcugan_ProcessDirectoryIteratively: Pass" << i + 1 << "failed. ExitCode:" << process.exitCode() << "Error:" << process.errorString();
             QByteArray errOut = process.readAllStandardError();
             emit Send_TextBrowser_NewMessage(
@@ -649,7 +678,8 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
                     .arg(i + 1)
                     .arg(process.exitCode())
                     .arg(QString::fromLocal8Bit(errOut)));
-            success = false; break;
+            success = false;
+            break;
         }
 
         // Check if output directory has content (basic check)
@@ -1071,6 +1101,10 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::Process
         tr("RealCUGAN process error on pass %1: %2")
             .arg(currentPassIndex + 1)
             .arg(process->errorString()));
+    QMessageBox::warning(this, tr("Process Failure"),
+                         tr("RealCUGAN process error on pass %1: %2")
+                             .arg(currentPassIndex + 1)
+                             .arg(process->errorString()));
 
     Realcugan_NCNN_Vulkan_CleanupTempFiles(process->property("tempPathBase").toString(), processQueue->size()-1);
     ProcList_RealCUGAN.removeAll(process);
@@ -1207,9 +1241,12 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
 
         if (!process.waitForStarted(10000)) {
             qDebug() << "RealCUGAN ProcessSingle: Process failed to start for pass" << i+1;
+            QMessageBox::warning(this, tr("Process Failure"),
+                                 tr("RealCUGAN failed to start for pass %1").arg(i + 1));
             emit Send_TextBrowser_NewMessage(
                 tr("RealCUGAN failed to start for pass %1").arg(i + 1));
-            success = false; break;
+            success = false;
+            break;
         }
 
         while (process.state() != QProcess::NotRunning) {
@@ -1233,14 +1270,15 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
         if (!stdOut.isEmpty()) qDebug() << "RealCUGAN ProcessSingle Pass" << i+1 << "STDOUT:" << QString::fromLocal8Bit(stdOut);
         if (!stdErr.isEmpty()) qDebug() << "RealCUGAN ProcessSingle Pass" << i+1 << "STDERR:" << QString::fromLocal8Bit(stdErr);
 
-        if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
+        if (!warnProcessFailure(this, process, tr("RealCUGAN pass %1").arg(i + 1))) {
             qDebug() << "RealCUGAN ProcessSingle: Pass" << i+1 << "failed. ExitCode:" << process.exitCode();
             emit Send_TextBrowser_NewMessage(
                 tr("RealCUGAN pass %1 failed with exit code %2\n%3")
                     .arg(i + 1)
                     .arg(process.exitCode())
                     .arg(QString::fromLocal8Bit(stdErr)));
-            success = false; break;
+            success = false;
+            break;
         }
         if (!QFile::exists(lastAiPassOutputFile)) {
             qDebug() << "RealCUGAN ProcessSingle: Output file for pass" << i+1 << "not found:" << lastAiPassOutputFile;
