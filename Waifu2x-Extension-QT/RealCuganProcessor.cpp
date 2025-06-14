@@ -18,6 +18,7 @@
 #include "RealCuganProcessor.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QCoreApplication> // Added for applicationDirPath
 #include <QDir>
 #include <QSettings>
 #include <QListWidgetItem>
@@ -126,17 +127,19 @@ QStringList RealCuganProcessor::prepareArguments(const QString &inputFile,
 
 QString RealCuganProcessor::executablePath(bool experimental) const
 {
-    QString base = QDir::currentPath();
-    QString folder = experimental ? "realcugan-ncnn-vulkan Exp" :
-                                    "realcugan-ncnn-vulkan Win";
-    return base + "/" + folder + "/realcugan-ncnn-vulkan.exe";
+    // experimental flag is no longer used to determine path structure here,
+    // as executables are expected to be directly in applicationDirPath.
+    // If different executables are needed for experimental, they should have distinct names.
+    Q_UNUSED(experimental);
+    return QCoreApplication::applicationDirPath() + "/realcugan-ncnn-vulkan.exe";
 }
 
 QString RealCuganProcessor::modelPath(const QString &modelName, bool experimental) const
 {
-    QString base = QDir::currentPath();
-    QString folder = experimental ? "realcugan-ncnn-vulkan Exp" :
-                                    "realcugan-ncnn-vulkan Win";
-    return base + "/" + folder + "/" + modelName;
+    // experimental flag is no longer used to determine path structure here.
+    // Models are expected to be in subdirectories relative to the application path.
+    // e.g. appDir/models-se, appDir/models-pro
+    Q_UNUSED(experimental);
+    return QCoreApplication::applicationDirPath() + "/" + modelName;
 }
 
