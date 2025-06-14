@@ -671,10 +671,10 @@ int MainWindow::Settings_Read_Apply()
     on_checkBox_ShowInterPro_stateChanged(0);
     //====
     on_comboBox_version_Waifu2xNCNNVulkan_currentIndexChanged(0);
-    on_comboBox_Engine_GIF_currentIndexChanged(0);
+    on_comboBox_Engine_GIF_currentIndexChanged(ui->comboBox_Engine_GIF->currentIndex());
     isShowAnime4kWarning=false;
-    on_comboBox_Engine_Image_currentIndexChanged(0);
-    on_comboBox_Engine_Video_currentIndexChanged(0);
+    on_comboBox_Engine_Image_currentIndexChanged(ui->comboBox_Engine_Image->currentIndex());
+    on_comboBox_Engine_Video_currentIndexChanged(ui->comboBox_Engine_Video->currentIndex());
     on_comboBox_ImageStyle_currentIndexChanged(0);
     on_comboBox_model_vulkan_currentIndexChanged(0);
     ui->spinBox_DenoiseLevel_image->setValue(Settings_Read_value("/settings/ImageDenoiseLevel").toInt());
