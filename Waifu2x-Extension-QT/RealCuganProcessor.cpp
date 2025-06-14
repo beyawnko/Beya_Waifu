@@ -22,6 +22,7 @@
 #include <QSettings>
 #include <QListWidgetItem>
 #include <QDebug>
+#include <QTextCodec>
 
 RealCuganProcessor::RealCuganProcessor(MainWindow *parent)
     : QObject(parent), m_mainWindow(parent)
@@ -45,6 +46,12 @@ void RealCuganProcessor::preLoadSettings()
         m_mainWindow->ui->listWidget_GPUList_MultiGPU_RealCUGAN->addItem(newItem);
     }
     settings.endGroup();
+
+    QSettings iniSettings(QDir::currentPath() + "/settings.ini", QSettings::IniFormat);
+    iniSettings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    m_mainWindow->ui->comboBox_Engine_Image->setCurrentIndex(iniSettings.value("/settings/ImageEngine", 0).toInt());
+    m_mainWindow->ui->comboBox_Engine_GIF->setCurrentIndex(iniSettings.value("/settings/GIFEngine", 0).toInt());
+    m_mainWindow->ui->comboBox_Engine_Video->setCurrentIndex(iniSettings.value("/settings/VideoEngine", 0).toInt());
     readSettings();
     qDebug() << "Realcugan_NCNN_Vulkan_PreLoad_Settings completed.";
 }
