@@ -1065,49 +1065,14 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
 
 QString MainWindow::video_ReadSettings_OutputVid(QString AudioPath)
 {
-    QString OutputVideoSettings= " ";
-    //====
-    if(ui->groupBox_video_settings->isChecked())
-    {
-        if(ui->lineEdit_encoder_vid->text().trimmed()!="")
-        {
-            OutputVideoSettings.append("-c:v "+ui->lineEdit_encoder_vid->text().trimmed()+" ");//Video encoder
-        }
-        //========
-        if(QFile::exists(AudioPath))
-        {
-            if(ui->lineEdit_encoder_audio->text().trimmed()!="")
-            {
-                OutputVideoSettings.append("-c:a "+ui->lineEdit_encoder_audio->text().trimmed()+" ");//Audio encoder
-            }
-            //=========
-            if(ui->spinBox_bitrate_audio->value()>0)
-            {
-                OutputVideoSettings.append("-b:a "+QString::number(ui->spinBox_bitrate_audio->value(),10)+"k ");//Audio bitrate
-            }
-        }
-        //=========
-        if(ui->lineEdit_pixformat->text().trimmed()!="")
-        {
-            OutputVideoSettings.append("-pix_fmt "+ui->lineEdit_pixformat->text().trimmed()+" ");//pixel format
-        }
-        else
-        {
-            OutputVideoSettings.append("-pix_fmt yuv420p ");//pixel format
-        }
-        //===========
-        if(ui->lineEdit_ExCommand_output->text().trimmed()!="")
-        {
-            OutputVideoSettings.append(ui->lineEdit_ExCommand_output->text().trimmed()+" ");//Extra command
-        }
-    }
-    //=========
-    else
-    {
-        OutputVideoSettings.append("-pix_fmt yuv420p ");//pixel format
-    }
-    //=======
-    return OutputVideoSettings;
+    return videoProcessor->buildOutputArguments(
+                AudioPath,
+                ui->groupBox_video_settings->isChecked(),
+                ui->lineEdit_encoder_vid->text(),
+                ui->lineEdit_encoder_audio->text(),
+                ui->spinBox_bitrate_audio->value(),
+                ui->lineEdit_pixformat->text(),
+                ui->lineEdit_ExCommand_output->text());
 }
 
 void MainWindow::DelVfiDir(QString VideoPath)

@@ -73,26 +73,11 @@ void RealCuganProcessor::readSettingsVideoGif(int ThreadNum)
 {
     Q_UNUSED(ThreadNum);
     readSettings();
-    QString gpuJobConfig;
-    if (m_mainWindow->ui->checkBox_MultiGPU_RealCUGAN->isChecked()) {
-        if (!m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
-            QStringList gpuIDs;
-            QStringList jobParams;
-            for (const auto &gpuMap : m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN) {
-                gpuIDs.append(gpuMap.value("ID"));
-                QString threads = gpuMap.value("Threads", "1");
-                jobParams.append(QString("1:%1:1").arg(threads));
-            }
-            gpuJobConfig = QString("-g %1 -j %2").arg(gpuIDs.join(","), jobParams.join(","));
-        } else {
-            QString fallbackId = m_mainWindow->m_realcugan_GPUID.split(":").first();
-            gpuJobConfig = (fallbackId == "-1") ? QString("-g -1")
-                                                 : QString("-g %1").arg(fallbackId);
-        }
-    } else {
-        QString id = m_mainWindow->m_realcugan_GPUID.split(":").first();
-        gpuJobConfig = (id == "-1") ? QString("-g -1") : QString("-g %1").arg(id);
-    }
+    QString fallbackId = m_mainWindow->m_realcugan_GPUID.split(":").first();
+    QString gpuJobConfig = m_jobManager.buildGpuJobString(
+                m_mainWindow->ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
+                m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN,
+                fallbackId);
     m_mainWindow->m_realcugan_gpuJobConfig_temp = gpuJobConfig;
     qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF for ThreadNum" << ThreadNum
              << "GPU/Job Config:" << gpuJobConfig;
