@@ -30,6 +30,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <algorithm>
 
 // ========================= Metadata Cache Implementation =========================
 FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
@@ -50,13 +51,9 @@ FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
     QStringList imageExts = ui->Ext_image->text().split(":", Qt::SkipEmptyParts);
     QStringList videoExts = ui->Ext_video->text().split(":", Qt::SkipEmptyParts);
 
-    bool isVideo = false;
-    for (const QString &ext : videoExts) {
-        if (suffix == ext.trimmed().toLower()) {
-            isVideo = true;
-            break;
-        }
-    }
+    bool isVideo = std::any_of(videoExts.cbegin(), videoExts.cend(), [&](const QString &ext){
+        return suffix == ext.trimmed().toLower();
+    });
 
     bool isPotentiallyAnimatedImage = (suffix == "gif" || suffix == "apng");
 
@@ -2818,13 +2815,9 @@ void MainWindow::Add_File_Folder(QString Input_path)
     QStringList imageExts = ui->Ext_image->text().split(":", Qt::SkipEmptyParts);
     QStringList videoExts = ui->Ext_video->text().split(":", Qt::SkipEmptyParts);
 
-    bool isVideo = false;
-    for (const QString &ext : videoExts) {
-        if (suffix == ext.trimmed().toLower()) {
-            isVideo = true;
-            break;
-        }
-    }
+    bool isVideo = std::any_of(videoExts.cbegin(), videoExts.cend(), [&](const QString &ext){
+        return suffix == ext.trimmed().toLower();
+    });
 
     if (isVideo) {
         if(Deduplicate_filelist(Input_path)) return;
@@ -2833,13 +2826,9 @@ void MainWindow::Add_File_Folder(QString Input_path)
         if(Deduplicate_filelist(Input_path)) return;
         Table_gif_insert_fileName_fullPath(fileName, Input_path);
     } else {
-        bool isImage = false;
-        for (const QString &ext : imageExts) {
-            if (suffix == ext.trimmed().toLower()) {
-                isImage = true;
-                break;
-            }
-        }
+        bool isImage = std::any_of(imageExts.cbegin(), imageExts.cend(), [&](const QString &ext){
+            return suffix == ext.trimmed().toLower();
+        });
         if (isImage) {
             if(Deduplicate_filelist(Input_path)) return;
             Table_image_insert_fileName_fullPath(fileName, Input_path);
