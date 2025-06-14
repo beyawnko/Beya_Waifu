@@ -64,6 +64,8 @@ Copyright (C) 2025  beyawnko
 #include "topsupporterslist.h"
 #include "FileManager.h"
 #include "ProcessRunner.h"
+#include "GpuManager.h"
+#include "UiController.h"
 
 #ifndef Q_DECLARE_METATYPE
 #define Q_DECLARE_METATYPE(Type)
@@ -285,7 +287,6 @@ public:
     QMutex mutex_SubThreadNumRunning;// mutex guarding internal thread count
 
     int Waifu2x_DetectGPU();// detect available GPUs (Vulkan)
-    QStringList Available_GPUID;// available GPU ID list
 
     int Waifu2x_DumpProcessorList_converter();
     int Core_num = 0;
@@ -360,6 +361,8 @@ public:
     VideoProcessor *videoProcessor;
     FileManager fileManager;
     ProcessRunner processRunner;
+    GpuManager gpuManager;
+    UiController uiController;
 
     void Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingAlphaChannel);
     void Realcugan_NCNN_Vulkan_GIF(int rowNum);
