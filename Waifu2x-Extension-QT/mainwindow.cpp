@@ -19,6 +19,8 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "RealCuganProcessor.h"
+#include "VideoProcessor.h"
 #include <QEventLoop>
 #include <QTimer>
 #include <QSettings>
@@ -219,6 +221,8 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    realCuganProcessor = new RealCuganProcessor(this);
+    videoProcessor = new VideoProcessor(this);
     qRegisterMetaTypeStreamOperators<QList_QMap_QStrQStr >("QList_QMap_QStrQStr");
     qRegisterMetaType<FileMetadataCache>("FileMetadataCache");
     globalMaxThreadCount = Settings_Read_value("/settings/MaxThreadCount", 0).toInt();
@@ -3146,7 +3150,10 @@ void MainWindow::Init_SystemTrayIcon(){}
 void MainWindow::Init_ActionsMenu_lineEdit_outputPath(){}
 void MainWindow::Init_ActionsMenu_FilesList(){}
 void MainWindow::Init_ActionsMenu_pushButton_RemoveItem(){}
-void MainWindow::Realcugan_NCNN_Vulkan_PreLoad_Settings(){}
+void MainWindow::Realcugan_NCNN_Vulkan_PreLoad_Settings()
+{
+    realCuganProcessor->preLoadSettings();
+}
 void MainWindow::RealESRGAN_NCNN_Vulkan_PreLoad_Settings(){}
 int MainWindow::Table_FileCount_reload(){ return 0; }
 void MainWindow::progressbar_clear(){}
@@ -3311,19 +3318,31 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_finished(int,QProcess::ExitSta
 void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardOutput(){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardError(){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError){}
-void MainWindow::Realcugan_NCNN_Vulkan_PreLoad_Settings(){}
+void MainWindow::Realcugan_NCNN_Vulkan_PreLoad_Settings()
+{
+    realCuganProcessor->preLoadSettings();
+}
 void MainWindow::RealESRGAN_NCNN_Vulkan_PreLoad_Settings(){}
 void MainWindow::Realcugan_NCNN_Vulkan_Image(int, bool){}
 void MainWindow::Realcugan_NCNN_Vulkan_GIF(int){}
 void MainWindow::Realcugan_NCNN_Vulkan_Video(int){}
 void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int){}
-void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings(){}
-void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int){}
+void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings()
+{
+    realCuganProcessor->readSettings();
+}
+void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum)
+{
+    realCuganProcessor->readSettingsVideoGif(ThreadNum);
+}
 void MainWindow::APNG_RealcuganNCNNVulkan(QString, QString, QString, QStringList, QString){}
 void MainWindow::Realcugan_ncnn_vulkan_DetectGPU(){}
 QString MainWindow::RealcuganNcnnVulkan_MultiGPU(){ return ""; }
 void MainWindow::AddGPU_MultiGPU_RealcuganNcnnVulkan(QString){}
-QStringList MainWindow::Realcugan_NCNN_Vulkan_PrepareArguments(const QString&, const QString&, int, const QString&, int, int, const QString&, bool, const QString&, bool, const QString&){ return QStringList(); }
+QStringList MainWindow::Realcugan_NCNN_Vulkan_PrepareArguments(const QString &inFile, const QString &outFile, int scale, const QString &model, int denoise, int tile, const QString &gpuId, bool tta, const QString &fmt, bool multi, const QString &job)
+{
+    return realCuganProcessor->prepareArguments(inFile, outFile, scale, model, denoise, tile, gpuId, tta, fmt, multi, job);
+}
 void MainWindow::StartNextRealCUGANPass(QProcess*){}
 void MainWindow::Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString&, int, bool, const QString&){}
 bool MainWindow::Realcugan_ProcessSingleFileIteratively(const QString&, const QString&, int, const QString&, int, int, const QString&, bool, bool, const QString&, int){ return false; }
