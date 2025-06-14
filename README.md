@@ -166,6 +166,14 @@ To execute the tests from the repository root simply run:
 pytest
 ```
 
+When running the tests without a display server, set the Qt platform to
+"offscreen" so PySide6 does not attempt to load the native GUI libraries:
+
+```bash
+export QT_QPA_PLATFORM=offscreen
+pytest
+```
+
 The sample images used for testing are located under
 `realcugan-ncnn-vulkan SRC/images/` and in the
 `realesrgan-ncnn-vulkan-20220424-windows` folder.
