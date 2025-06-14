@@ -1,5 +1,6 @@
+#pragma once
 /*
-    Copyright (C) 2021  Aaron Feng
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -16,9 +17,6 @@
 
     My Github homepage: https://github.com/AaronFeng753
 */
-
-#ifndef TOPSUPPORTERSLIST_H
-#define TOPSUPPORTERSLIST_H
 
 #ifndef slots
 #define slots
@@ -50,4 +48,3 @@ private:
     Ui::TopSupportersList *ui;
 };
 
-#endif // TOPSUPPORTERSLIST_H

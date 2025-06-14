@@ -1,3 +1,4 @@
+#pragma once
 /*
 Copyright (C) 2025  beyawnko
 
@@ -16,9 +17,6 @@ Copyright (C) 2025  beyawnko
 
     My Github homepage: https://github.com/AaronFeng753
 */
-
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QDragEnterEvent>
@@ -1392,5 +1390,4 @@ private slots: // Ensure ProcessDroppedFilesFinished is declared as a slot
 private:
     Ui::MainWindow *ui;
 };
-#endif // MAINWINDOW_H
 
