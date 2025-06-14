@@ -1,10 +1,10 @@
-#ifndef FFPARSE_HELPERS_H
-#define FFPARSE_HELPERS_H
+#pragma once
 
 #include <QProcess>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
+#include <QDebug>
 
 // Utility function to run ffprobe and return parsed JSON output.
 // ffprobePath should point to the ffprobe executable.
@@ -16,6 +16,14 @@ inline QJsonDocument parseFfprobeJson(const QString &ffprobePath, const QString 
                      .arg(ffprobePath, mediaPath);
     proc.start(cmd);
     proc.waitForFinished(-1);
+
+    // Improved error handling: verify process exit status and log failures before parsing.
+    if (proc.exitCode() != 0 || proc.exitStatus() != QProcess::NormalExit) {
+        qWarning() << "ffprobe failed with exit code" << proc.exitCode()
+                   << "and status" << proc.exitStatus();
+        return QJsonDocument();
+    }
+
     QByteArray output = proc.readAllStandardOutput();
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(output, &err);
@@ -23,5 +31,3 @@ inline QJsonDocument parseFfprobeJson(const QString &ffprobePath, const QString 
         return QJsonDocument();
     return doc;
 }
-
-#endif // FFPARSE_HELPERS_H
