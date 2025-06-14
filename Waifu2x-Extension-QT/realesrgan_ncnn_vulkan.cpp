@@ -408,7 +408,7 @@ bool MainWindow::RealESRGAN_ProcessDirectoryIteratively(
     QList<int> scaleSequence = CalculateRealESRGANScaleSequence(targetOverallScale, modelNativeScale);
     if (scaleSequence.isEmpty()) {
         qDebug() << "RealESRGAN_ProcessDirectoryIteratively: Empty scale sequence generated.";
-        Send_TextBrowser_NewMessage(tr("Error: Could not determine AI scaling passes for RealESRGAN."));
+        emit Send_TextBrowser_NewMessage(tr("Error: Could not determine AI scaling passes for RealESRGAN."));
         return false;
     }
     // If targetOverallScale is 1, sequence might be [1]. If modelNativeScale is also 1, it's a 1x pass.
@@ -999,7 +999,7 @@ void MainWindow::APNG_RealESRGANCNNVulkan(QString splitFramesFolder, QString sca
     }
 
     qDebug() << "APNG_RealESRGANCNNVulkan: All frame processing completed successfully.";
-    Send_TextBrowser_NewMessage(tr("All APNG frames processed and resampled (RealESRGAN)."));
+    emit Send_TextBrowser_NewMessage(tr("All APNG frames processed and resampled (RealESRGAN)."));
     // APNG_Main will use frames from scaledFramesFolder.
 }
 

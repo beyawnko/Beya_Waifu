@@ -1122,7 +1122,7 @@ void MainWindow::on_pushButton_ReadFileList_clicked()
         ui->pushButton_SaveFileList->setEnabled(0);
         ui->pushButton_BrowserFile->setEnabled(0);
         on_pushButton_ClearList_clicked();
-        Send_TextBrowser_NewMessage(tr("Please wait while reading the file."));
+        emit Send_TextBrowser_NewMessage(tr("Please wait while reading the file."));
         ui->label_DropFile->setText(tr("Loading list, please wait."));
         QtConcurrent::run(this, &MainWindow::Table_Read_Saved_Table_Filelist,Table_FileList_ini);
     }
