@@ -808,7 +808,13 @@ STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const 
 
 #define stbiw__sbpush(a, v)      (stbiw__sbmaybegrow(a,1), (a)[stbiw__sbn(a)++] = (v))
 #define stbiw__sbcount(a)        ((a) ? stbiw__sbn(a) : 0)
-#define stbiw__sbfree(a)         ((a) ? STBIW_FREE(stbiw__sbraw(a)),0 : 0)
+#define stbiw__sbfree(a)         \
+   do {                          \
+      if (a) {                   \
+         STBIW_FREE(stbiw__sbraw(a)); \
+         (a) = NULL;             \
+      }                          \
+   } while (0)
 
 static void *stbiw__sbgrowf(void **arr, int increment, int itemsize)
 {
@@ -965,7 +971,7 @@ STBIWDEF unsigned char * stbi_zlib_compress(unsigned char *data, int data_len, i
       stbiw__zlib_add(0,1);
 
    for (i=0; i < stbiw__ZHASH; ++i)
-      (void) stbiw__sbfree(hash_table[i]);
+      stbiw__sbfree(hash_table[i]);
    STBIW_FREE(hash_table);
 
    {
