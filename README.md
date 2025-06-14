@@ -143,13 +143,16 @@ Below is the start-up screen of the optional launcher:
 
 ## Tests
 
-The repository includes Pytest cases which exercise the RealCUGAN and RealESRGAN
-binaries on small sample images. Running the suite requires the `pytest` Python
-package and an internet connection. Install the test dependencies using:
+The repository includes Pytest cases which exercise the RealCUGAN and RealESRGAN binaries
+on small sample images. Running the suite requires the `pytest` Python package and an internet connection.
+
+Before executing `pytest` make sure the Python dependencies are installed:
 
 ```bash
 pip install -r requirements.txt
 ```
+
+This file provides both `PySide6` and `Pillow`, which are required by the tests.
 
 The tests automatically download the Linux releases of both upscalers if the executables
 are not present and place them in `tests/bin/`.
