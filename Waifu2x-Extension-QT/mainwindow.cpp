@@ -3276,10 +3276,35 @@ int MainWindow::Waifu2x_DumpProcessorList_converter_finished(){return 0;}
 void MainWindow::Read_urls(QList<QUrl> urls)
 {
     qDebug() << "MainWindow::Read_urls called, dispatching to ProcessDroppedFilesAsync.";
-    // TODO: Add UI disabling logic here in a future subtask (e.g., setAcceptDrops(false), show "loading..." message)
+    // Disable drag and drop and give the user feedback while we
+    // process the dropped files on a worker thread.  This mirrors
+    // the behaviour used when adding files through the "Browse" button
+    // so the UI remains consistent.
+    ui_tableViews_setUpdatesEnabled(false);
+    ui->groupBox_Setting->setEnabled(false);
+    ui->groupBox_FileList->setEnabled(false);
+    ui->groupBox_InputExt->setEnabled(false);
+    ui->checkBox_ScanSubFolders->setEnabled(false);
+    pushButton_Start_setEnabled_self(0);
+    this->setAcceptDrops(false);
+    ui->label_DropFile->setText(tr("Adding files, please wait."));
+    emit Send_TextBrowser_NewMessage(tr("Adding files, please wait."));
+
     QtConcurrent::run(this, &MainWindow::ProcessDroppedFilesAsync, urls);
 }
-void MainWindow::Read_urls_finfished(){}
+void MainWindow::Read_urls_finfished()
+{
+    // Re-enable UI elements that were disabled while processing the drop.
+    ui_tableViews_setUpdatesEnabled(true);
+    ui->groupBox_Setting->setEnabled(true);
+    ui->groupBox_FileList->setEnabled(true);
+    ui->groupBox_InputExt->setEnabled(true);
+    ui->checkBox_ScanSubFolders->setEnabled(true);
+    pushButton_Start_setEnabled_self(1);
+    this->setAcceptDrops(true);
+    ui->label_DropFile->setText(tr("Drag and drop files or folders here\n(Image, GIF and Video)"));
+    emit Send_TextBrowser_NewMessage(tr("Add file complete."));
+}
 void MainWindow::SRMD_DetectGPU_finished(){}
 void MainWindow::video_write_VideoConfiguration(QString,int,int,bool,int,int,QString,bool,QString,QString,bool,int){}
 int MainWindow::Settings_Save(){return 0;}
