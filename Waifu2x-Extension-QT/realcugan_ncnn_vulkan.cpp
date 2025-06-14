@@ -853,6 +853,9 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool experimental, bool
     firstProcess->setProperty("experimental", ui->comboBox_Engine_Image->currentIndex() == 2);
     tempOriginalFullImage = QImage(); // Release image data
 
+    // Load per-job Video/GIF GPU settings so each queued item uses the
+    // correct multi GPU configuration when processing frames.
+    Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(rowNum);
 
     connect(firstProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(Realcugan_NCNN_Vulkan_Iterative_finished()));
     connect(firstProcess, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError)));

@@ -21,11 +21,22 @@ def build_gpu_job_config(multi_gpu_enabled, gpu_list, fallback_gpu_id):
             # fallback to single selection
             if fallback_gpu_id == "-1":
                 return "-g -1"
-            return f"-g {fallback_gpu_id}"
+        return f"-g {fallback_gpu_id}"
     else:
         if fallback_gpu_id == "-1":
             return "-g -1"
         return f"-g {fallback_gpu_id}"
+
+
+def prepare_arguments(is_multi_gpu, job_args, gpu_id):
+    """Replicate RealCuganProcessor::prepareArguments GPU logic."""
+    base = ["-i", "in.png", "-o", "out.png", "-s", "2", "-n", "1", "-t", "128", "-m", "models"]
+    if is_multi_gpu:
+        base += job_args.split(" ")
+    else:
+        base += ["-g", gpu_id.split(":")[0]]
+    base += ["-f", "png"]
+    return base
 
 @pytest.mark.parametrize("gpu_list,expected", [
     ([{'ID': '0', 'Threads': '2'}, {'ID': '1', 'Threads': '2'}], "-g 0,1 -j 1:2:1,1:2:1"),
@@ -43,3 +54,14 @@ def test_single_gpu():
 
 def test_single_cpu():
     assert build_gpu_job_config(False, [], '-1') == "-g -1"
+
+
+def test_prepare_multi_gpu_arguments():
+    job = "-g 0,1 -j 1:2:1,1:2:1"
+    args = prepare_arguments(True, job, '0')
+    assert args[-6:] == ['-g', '0,1', '-j', '1:2:1,1:2:1', '-f', 'png']
+
+
+def test_prepare_single_gpu_arguments():
+    args = prepare_arguments(False, '', '3: GPU')
+    assert args[-4:] == ['-g', '3', '-f', 'png']
