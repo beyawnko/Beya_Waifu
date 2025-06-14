@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -326,9 +326,9 @@ int MainWindow::Settings_Read_Apply()
     QThreadPool::globalInstance()->setMaxThreadCount(globalMaxThreadCount);
     //================ Load engine settings ================================
     isShowAnime4kWarning=false;
-    ui->comboBox_Engine_Image->setCurrentIndex(Settings_Read_value("/settings/ImageEngine").toInt());
-    ui->comboBox_Engine_GIF->setCurrentIndex(Settings_Read_value("/settings/GIFEngine").toInt());
-    ui->comboBox_Engine_Video->setCurrentIndex(Settings_Read_value("/settings/VideoEngine").toInt());
+    ui->comboBox_Engine_Image->setCurrentIndex(Settings_Read_value("/settings/ImageEngine", 0).toInt());
+    ui->comboBox_Engine_GIF->setCurrentIndex(Settings_Read_value("/settings/GIFEngine", 0).toInt());
+    ui->comboBox_Engine_Video->setCurrentIndex(Settings_Read_value("/settings/VideoEngine", 0).toInt());
     ui->comboBox_ImageStyle->setCurrentIndex(Settings_Read_value("/settings/ImageStyle").toInt());
     ui->comboBox_model_vulkan->setCurrentIndex(Settings_Read_value("/settings/ModelVulkan").toInt());
     ui->spinBox_TileSize->setValue(Settings_Read_value("/settings/TileSize").toInt());
