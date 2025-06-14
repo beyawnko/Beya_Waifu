@@ -4002,6 +4002,11 @@ process at the same time.</string>
                       <string notr="true">RealESRGAN-ncnn-Vulkan</string>
                      </property>
                     </item>
+                    <item>
+                     <property name="text">
+                      <string notr="true">RealCUGAN-ncnn-Vulkan (Experimental)</string>
+                     </property>
+                    </item>
                    </widget>
                   </item>
                   <item row="0" column="0">
@@ -4098,6 +4103,11 @@ process at the same time.</string>
                       <string notr="true">RealESRGAN-ncnn-Vulkan</string>
                      </property>
                     </item>
+                    <item>
+                     <property name="text">
+                      <string notr="true">RealCUGAN-ncnn-Vulkan (Experimental)</string>
+                     </property>
+                    </item>
                    </widget>
                   </item>
                   <item row="0" column="2">
@@ -4134,6 +4144,11 @@ process at the same time.</string>
                     <item>
                      <property name="text">
                       <string notr="true">RealESRGAN-ncnn-Vulkan</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string notr="true">RealCUGAN-ncnn-Vulkan (Experimental)</string>
                      </property>
                     </item>
                    </widget>
