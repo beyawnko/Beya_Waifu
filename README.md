@@ -27,21 +27,15 @@ Ensure your GPU drivers support Vulkan since both engines rely on it.
 
 ## Build and Run
 
-```bash
-# build the main GUI
-cd Waifu2x-Extension-QT
-qmake Waifu2x-Extension-QT.pro
-make
+Invoke the provided script to compile both projects and copy the included upscaler binaries:
 
-# optional launcher
-cd ../Waifu2x-Extension-QT-Launcher
-qmake Waifu2x-Extension-QT-Launcher.pro
-make
+```bash
+./build_projects.sh
 ```
 
-After compilation run `Beya_Waifu` (or the launcher) from its build
-folder. Place the realcugan-ncnn-vulkan and realesrgan-ncnn-vulkan executables in
-the same directory so the GUI can invoke them.
+The script calls `qmake` and `make`, builds the `liquidglass_frag` shader and attempts to copy any
+`realcugan-ncnn-vulkan` and `realesrgan-ncnn-vulkan` executables found in the repository beside the
+application. After compilation run `Beya_Waifu` (or the launcher) from `Waifu2x-Extension-QT`.
 
 ### Thread control
 
