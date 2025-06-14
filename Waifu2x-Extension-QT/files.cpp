@@ -243,24 +243,7 @@ Scan file name list in folder (no filter
 */
 QStringList MainWindow::file_getFileNames_in_Folder_nofilter(QString path)
 {
-    QDir dir(path);
-    QStringList files = dir.entryList(QDir::Files | QDir::Writable, QDir::Name);
-    QFileSystemWatcher watcher;
-    watcher.addPath(path);
-    QEventLoop loop;
-    QTimer timer;
-    timer.setSingleShot(true);
-    timer.setInterval(100);
-    QObject::connect(&watcher, &QFileSystemWatcher::directoryChanged, [&](){
-        files = dir.entryList(QDir::Files | QDir::Writable, QDir::Name);
-        timer.start();
-    });
-    QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-    timer.start();
-    loop.exec();
-    files.removeAll("..");
-    files.removeAll(".");
-    return files;
+    return fileManager.getFileNamesNoFilter(path);
 }
 
 /*

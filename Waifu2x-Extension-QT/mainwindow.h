@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -62,6 +62,8 @@
 #include <QFileSystemWatcher>
 #include <atomic> // Added for std::atomic
 #include "topsupporterslist.h"
+#include "FileManager.h"
+#include "ProcessRunner.h"
 
 #ifndef Q_DECLARE_METATYPE
 #define Q_DECLARE_METATYPE(Type)
@@ -142,7 +144,6 @@ public:
     QString file_getBaseName(QString path);//get basename
     void file_MoveToTrash( QString file );//move file to recycle bin
     void MoveFileToOutputPath(QString Orginal,QString SourceFilePath);//move file to output path
-    QMutex MoveFile_QMutex;
     QString file_getFolderPath(QFileInfo fileInfo);//get folder path (without trailing slash)
     bool file_isDirWritable(QString DirPath);//check whether folder is writable
     //check whether the folder of the current row is writable
@@ -357,6 +358,8 @@ public:
     QString m_realcugan_gpuJobConfig_temp; // Temporary storage for complex GPU job config string for batch processing
     RealCuganProcessor *realCuganProcessor;
     VideoProcessor *videoProcessor;
+    FileManager fileManager;
+    ProcessRunner processRunner;
 
     void Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingAlphaChannel);
     void Realcugan_NCNN_Vulkan_GIF(int rowNum);

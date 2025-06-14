@@ -61,6 +61,8 @@ SOURCES += \
     topsupporterslist.cpp \
     video.cpp \
     VideoProcessor.cpp \
+    FileManager.cpp \
+    ProcessRunner.cpp \
     LiquidGlassWidget.cpp
 
 HEADERS += \
@@ -68,6 +70,8 @@ HEADERS += \
     topsupporterslist.h \
     LiquidGlassWidget.h \
     utils/ffprobe_helpers.h
+    FileManager.h \
+    ProcessRunner.h \
 
 FORMS += \
     mainwindow.ui \
