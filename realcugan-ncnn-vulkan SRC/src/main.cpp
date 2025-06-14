@@ -119,6 +119,7 @@ static void print_usage()
 class Task
 {
 public:
+    Task() : id(0), webp(0), scale(1) {}
     int id;
     int webp;
     int scale;
