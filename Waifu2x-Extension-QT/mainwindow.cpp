@@ -898,7 +898,7 @@ void MainWindow::on_pushButton_ReadMe_clicked()
 
 void MainWindow::on_comboBox_Engine_Image_currentIndexChanged(int index)
 {
-    if(index == 0)
+    if(index == 0 || index == 2)
     {
         ui->spinBox_DenoiseLevel_image->setRange(-1,3);
         ui->spinBox_DenoiseLevel_image->setValue(-1);
@@ -919,7 +919,7 @@ void MainWindow::on_comboBox_Engine_Image_currentIndexChanged(int index)
 
 void MainWindow::on_comboBox_Engine_GIF_currentIndexChanged(int index)
 {
-    if(index == 0)
+    if(index == 0 || index == 2)
     {
         ui->spinBox_DenoiseLevel_gif->setRange(-1,3);
         ui->spinBox_DenoiseLevel_gif->setValue(-1);
@@ -940,7 +940,7 @@ void MainWindow::on_comboBox_Engine_GIF_currentIndexChanged(int index)
 
 void MainWindow::on_comboBox_Engine_Video_currentIndexChanged(int index)
 {
-    if(index == 0)
+    if(index == 0 || index == 2)
     {
         ui->spinBox_DenoiseLevel_video->setRange(-1,3);
         ui->spinBox_DenoiseLevel_video->setValue(-1);
@@ -1371,7 +1371,9 @@ void MainWindow::on_comboBox_model_vulkan_currentIndexChanged(int index)
         ui->comboBox_ImageStyle->setEnabled(1);
         ui->label_ImageStyle_W2xNCNNVulkan->setVisible(1);
         ui->comboBox_ImageStyle->setVisible(1);
-        if(ui->comboBox_Engine_Image->currentIndex()!=0&&ui->comboBox_Engine_GIF->currentIndex()!=0&&ui->comboBox_Engine_Video->currentIndex()!=0)
+        if(ui->comboBox_Engine_Image->currentIndex()!=0 && ui->comboBox_Engine_Image->currentIndex()!=2 &&
+           ui->comboBox_Engine_GIF->currentIndex()!=0 && ui->comboBox_Engine_GIF->currentIndex()!=2 &&
+           ui->comboBox_Engine_Video->currentIndex()!=0 && ui->comboBox_Engine_Video->currentIndex()!=2)
         {
             ui->comboBox_ImageStyle->setEnabled(0);
             ui->label_ImageStyle_W2xNCNNVulkan->setVisible(0);
