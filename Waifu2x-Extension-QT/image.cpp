@@ -119,52 +119,6 @@ bool MainWindow::Image_Gif_AutoSkip_CustRes(int rowNum,bool isGif)
     }
 }
 /*
-Read the resolution of images and GIFs
-*/
-QMap<QString,int> MainWindow::Image_Gif_Read_Resolution(QString SourceFileFullPath)
-{
-    QString program = Current_Path+"/identify_waifu2xEX.exe";
-    QProcess QProcess_Read_Resolution;
-    QByteArray read_out;
-    runProcess(&QProcess_Read_Resolution,
-               "\""+program+"\" -format \"%w:%h;success;\" \""+SourceFileFullPath+"\"",
-               &read_out);
-    QString QProcess_Read_Resolution_OutputStr = QString::fromUtf8(read_out).trimmed();
-    if(QProcess_Read_Resolution_OutputStr.contains("success"))
-    {
-        QStringList Res_strList = QProcess_Read_Resolution_OutputStr.split(";").at(0).split(":");
-        int width = Res_strList.at(0).toInt();
-        int height = Res_strList.at(1).toInt();
-        if(height>0 && width>0)
-        {
-            QMap<QString,int> res_map;
-            res_map["height"] = height;
-            res_map["width"] = width;
-            return res_map;
-        }
-    }
-    //==============================
-    QImage qimage_GifFileFullPath;
-    qimage_GifFileFullPath.load(SourceFileFullPath);
-    int original_height = qimage_GifFileFullPath.height();
-    int original_width = qimage_GifFileFullPath.width();
-    if(original_height<=0||original_width<=0)
-    {
-        emit Send_TextBrowser_NewMessage(tr("ERROR! Unable to read the resolution of the GIF. [")+SourceFileFullPath+"]");
-        QMap<QString,int> empty;
-        empty["height"] = 0;
-        empty["width"] = 0;
-        return empty;
-    }
-    else
-    {
-        QMap<QString,int> res_map;
-        res_map["height"] = original_height;
-        res_map["width"] = original_width;
-        return res_map;
-    }
-}
-/*
 Modify the format and image quality of the image
 Return the path of the file after modification is complete
 */
