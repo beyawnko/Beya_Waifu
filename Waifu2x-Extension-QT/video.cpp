@@ -1043,11 +1043,11 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
         {
             CMD = "\""+ffmpeg_path+"\" -y -f image2 -framerate "+fps+" -r "+fps+" -i \""+ScaledFrameFolderPath.replace("%","%%")+"/%%0"+QString::number(FrameNumDigits,10)+"d.png\" -r "+fps+bitrate_video_cmd+resize_cmd+video_ReadSettings_OutputVid(AudioPath)+" -r "+fps+" \""+video_mp4_scaled_fullpath+"\"";
         }
-        QProcess images2video;
-        runProcess(&images2video, CMD);
+        QProcess images2video_retry;
+        runProcess(&images2video_retry, CMD);
         if(waifu2x_STOP)
         {
-            images2video.close();
+            images2video_retry.close();
             QFile::remove(video_mp4_scaled_fullpath);
             file_DelDir(VFI_FolderPath_tmp);
             if(Del_DenoisedAudio)QFile::remove(AudioPath);
