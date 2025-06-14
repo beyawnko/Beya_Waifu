@@ -59,7 +59,6 @@ FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
 
     if (isVideo) {
         metadata.isAnimated = false;
-        metadata.isValid = true;
         QProcess ffprobeProcess;
         QString ffprobePath = Current_Path + "/ffmpeg/ffprobe_waifu2xEX.exe";
         QStringList args;
@@ -109,6 +108,7 @@ FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
                         break;
                     }
                 }
+                metadata.isValid = true;
             } else {
                 qDebug() << "Failed to parse ffprobe JSON output for" << filePath << ":" << stdOut << stdErr;
                 metadata.isValid = false;
