@@ -11,6 +11,7 @@ single GUI.
 - Multi-GPU configuration and compatibility tests
 - System tray integration and drag & drop of files
 - Preserves transparency by splitting the alpha channel and recombining after upscaling
+- Optional Liquid Glass shader providing a translucent glass effect
 
 RealCUGAN and RealESRGAN are currently the only supported upscaling engines.
 
@@ -20,6 +21,7 @@ RealCUGAN and RealESRGAN are currently the only supported upscaling engines.
 - **C++11** compatible compiler
 - **FFmpeg** for handling video input/output
 - Included **RealCUGAN** and **RealESRGAN** executables built with ncnn Vulkan
+- Qt6 shadertools package providing the `qsb` tool for the Liquid Glass shader
 
 Ensure your GPU drivers support Vulkan since both engines rely on it.
 
@@ -49,16 +51,44 @@ of detected CPU cores. You can override this via the command line:
 ```bash
 Beya_Waifu --max-threads 8
 ```
-or by editing `settings.ini` and setting `MaxThreadCount`.
 
-### LiquidGlass demo
+## Liquid Glass
 
-A minimal QML example using the liquid glass shader lives under `examples`.
-Start it with the Qt `qml` runtime:
+The application ships with an experimental Liquid Glass shader that creates a
+refractive glass sphere from the scene behind it. Building this effect requires
+the `qsb` tool provided by Qt 6. The `Waifu2x-Extension-QT.pro` file runs `qsb`
+automatically and writes `shaders/liquidglass.frag.qsb`. Ensure the tool is
+available in `PATH` when invoking `qmake`.
+
+### Demo
+
+Run a minimal example from the `examples` folder with the Qt `qml` runtime:
 
 ```bash
 cd examples
 qml LiquidGlassDemo.qml
+```
+
+### QML usage
+
+```qml
+import QtQuick
+import "../Waifu2x-Extension-QT/qml" as Effects
+
+Effects.LiquidGlass {
+    anchors.fill: parent
+    sourceItem: background
+}
+```
+
+### C++ usage
+
+```cpp
+#include "LiquidGlassWidget.h"
+
+auto *glass = new LiquidGlassWidget(this);
+glass->setBackground(QImage("background.jpg"));
+glass->setRefractionScale(1.33f);
 ```
 
 ## RealCUGAN and RealESRGAN
