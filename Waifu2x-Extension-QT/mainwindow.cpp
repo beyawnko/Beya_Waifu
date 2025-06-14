@@ -3118,7 +3118,6 @@ int MainWindow::Settings_Read_Apply(){ return 0; }
 int MainWindow::CheckUpadte_Auto(){ return 0; }
 int MainWindow::Donate_DownloadOnlineQRCode(){ return 0; }
 int MainWindow::SystemShutDown_isAutoShutDown(){ return 0; }
-void MainWindow::Tip_FirstTimeStart(){}
 void MainWindow::file_mkDir(QString){}
 bool MainWindow::file_isDirWritable(QString){return true;}
 void MainWindow::Init_SystemTrayIcon(){}
@@ -3299,11 +3298,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_finished(int,QProcess::ExitSta
 void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardOutput(){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardError(){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError){}
-void MainWindow::Realcugan_NCNN_Vulkan_PreLoad_Settings()
-{
-    realCuganProcessor->preLoadSettings();
-}
-void MainWindow::RealESRGAN_NCNN_Vulkan_PreLoad_Settings(){}
+
 void MainWindow::Realcugan_NCNN_Vulkan_Image(int, bool){}
 void MainWindow::Realcugan_NCNN_Vulkan_GIF(int){}
 void MainWindow::Realcugan_NCNN_Vulkan_Video(int){}
