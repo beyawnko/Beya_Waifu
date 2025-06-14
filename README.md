@@ -51,6 +51,16 @@ Beya_Waifu --max-threads 8
 ```
 or by editing `settings.ini` and setting `MaxThreadCount`.
 
+### LiquidGlass demo
+
+A minimal QML example using the liquid glass shader lives under `examples`.
+Start it with the Qt `qml` runtime:
+
+```bash
+cd examples
+qml LiquidGlassDemo.qml
+```
+
 ## RealCUGAN and RealESRGAN
 
 Both upscalers rely on the ncnn Vulkan backend and run without a Python or CUDA
