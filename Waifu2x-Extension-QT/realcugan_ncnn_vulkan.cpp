@@ -1,5 +1,22 @@
+/*
+    Copyright (C) 2025  beyawnko
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "RealCuganProcessor.h"
 
 #include <QFileDialog>
 #include <QFileInfo>
@@ -89,36 +106,12 @@ QStringList MainWindow::Realcugan_NCNN_Vulkan_PrepareArguments(
     const QString &gpuId, bool ttaEnabled, const QString &outputFormat,
     bool isMultiGPU, const QString &multiGpuJobArgs)
 {
-    QString Current_Path = QDir::currentPath();
-    QStringList arguments;
-
-    arguments << "-i" << inputFile
-              << "-o" << outputFile
-              << "-s" << QString::number(currentPassScale)
-              << "-n" << QString::number(denoiseLevel) // Denoise level
-              << "-t" << QString::number(tileSize)
-              << "-m" << Current_Path + "/realcugan-ncnn-vulkan Win/" + modelName; // Model subfolder
-
-    if (isMultiGPU) {
-        arguments << multiGpuJobArgs.split(" "); // Expects format like "-g 0,-1 -j 1:1:1,1:2:1"
-    } else {
-        QString actualGpuId = gpuId.split(":")[0]; // Correctly extract ID, e.g., "-1" from "-1: CPU"
-        arguments << "-g" << actualGpuId;
-        // For single CPU mode, if actualGpuId is -1, realcugan might need a -j for threads.
-        // realcugan-ncnn-vulkan -i in.png -o out.png -g -1 -j 1:4:1 (example for 4 threads on CPU)
-        // This requires knowing the threads for single CPU mode.
-        // For now, let's assume m_realcugan_jobStringForSingleCpu exists and is set in ReadSettings if CPU is selected.
-        // However, the subtask doesn't explicitly ask to modify single CPU thread handling here beyond ID.
-        // Let's assume for now that if -g -1 is passed, it uses a default number of threads or all cores.
-        // If specific thread count for single CPU non-multi mode is needed, ReadSettings and this part need more.
-    }
-
-    if (ttaEnabled) {
-        arguments << "-x";
-    }
-    arguments << "-f" << outputFormat.toLower();
-
-    return arguments;
+    return realCuganProcessor->prepareArguments(inputFile, outputFile,
+                                                currentPassScale, modelName,
+                                                denoiseLevel, tileSize,
+                                                gpuId, ttaEnabled,
+                                                outputFormat, isMultiGPU,
+                                                multiGpuJobArgs);
 }
 
 
@@ -1084,69 +1077,12 @@ void MainWindow::Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString &tempPathB
 
 void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings()
 {
-    // This function should populate member variables from UI settings
-    // These member variables will then be used by Realcugan_NCNN_Vulkan_PrepareArguments
-    m_realcugan_Model = ui->comboBox_Model_RealCUGAN->currentText();
-    m_realcugan_DenoiseLevel = ui->spinBox_DenoiseLevel_RealCUGAN->value(); // Assuming this is the correct spinbox for denoise
-    m_realcugan_TileSize = ui->spinBox_TileSize_RealCUGAN->value();
-    m_realcugan_TTA = ui->checkBox_TTA_RealCUGAN->isChecked();
-
-    if (ui->checkBox_MultiGPU_RealCUGAN->isChecked()) {
-        // For multi-GPU, GPU ID might be handled differently (e.g., a list or special format)
-        // For now, let's assume RealcuganNcnnVulkan_MultiGPU() or a similar function provides the necessary string for -g or -j
-        // This part needs to align with how PrepareArguments handles multiGPUJobArgs
-        // For simplicity in this pass, we might just use the primary selected GPU if multi-GPU is checked but not fully configured for iterative image.
-        // Or, m_realcugan_GPUID could store the complex job string.
-        // This section needs careful implementation based on the multi-GPU strategy.
-        // For now, let Realcugan_NCNN_Vulkan_PrepareArguments handle the logic based on isMultiGPU flag
-        m_realcugan_GPUID = ui->comboBox_GPUID_RealCUGAN->currentText(); // Fallback or primary for now
-    } else {
-        m_realcugan_GPUID = ui->comboBox_GPUID_RealCUGAN->currentText();
-    }
-
-    qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings: Model:" << m_realcugan_Model
-             << "Denoise:" << m_realcugan_DenoiseLevel
-             << "Tile:" << m_realcugan_TileSize
-             << "TTA:" << m_realcugan_TTA
-             << "GPUID:" << m_realcugan_GPUID;
+    realCuganProcessor->readSettings();
 }
 
 void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum)
 {
-    Q_UNUSED(ThreadNum);
-
-    // Load generic settings (model, denoise level, etc.)
-    Realcugan_NCNN_Vulkan_ReadSettings();
-
-    QString gpuJobConfig;
-    if (ui->checkBox_MultiGPU_RealCUGAN->isChecked()) {
-        // Multi-GPU mode. Build "-g id0,id1 -j 1:t0:1,1:t1:1" using the list widget
-        if (!GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
-            QStringList gpuIDs;
-            QStringList jobParams;
-            for (const auto &gpuMap : GPUIDs_List_MultiGPU_RealCUGAN) {
-                gpuIDs.append(gpuMap.value("ID"));
-                QString threads = gpuMap.value("Threads", "1");
-                jobParams.append(QString("1:%1:1").arg(threads));
-            }
-            gpuJobConfig = QString("-g %1 -j %2").arg(gpuIDs.join(","), jobParams.join(","));
-        } else {
-            // Checkbox checked but list empty – fall back to the single selected device
-            QString fallbackId = m_realcugan_GPUID.split(":").first();
-            gpuJobConfig = (fallbackId == "-1") ? QString("-g -1")
-                                                 : QString("-g %1").arg(fallbackId);
-        }
-    } else {
-        // Single GPU/CPU mode
-        QString id = m_realcugan_GPUID.split(":").first();
-        gpuJobConfig = (id == "-1") ? QString("-g -1") : QString("-g %1").arg(id);
-    }
-
-    // Save for later command construction
-    m_realcugan_gpuJobConfig_temp = gpuJobConfig;
-
-    qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF for ThreadNum" << ThreadNum
-             << "GPU/Job Config:" << gpuJobConfig;
+    realCuganProcessor->readSettingsVideoGif(ThreadNum);
 }
 
 
@@ -1877,29 +1813,7 @@ void MainWindow::AddGPU_MultiGPU_RealcuganNcnnVulkan(QString GPUID_Name)
 
 void MainWindow::Realcugan_NCNN_Vulkan_PreLoad_Settings()
 {
-    // Preload settings from QSettings and apply to UI if needed.
-    // Also, could populate model combobox if models are found dynamically (not current approach).
-    QSettings settings("Waifu2x-Extension-QT", "Waifu2x-Extension-QT");
-    settings.beginGroup("RealCUGAN_NCNN_Vulkan");
-    ui->comboBox_Model_RealCUGAN->setCurrentText(settings.value("Model", "models-se").toString());
-    ui->spinBox_DenoiseLevel_RealCUGAN->setValue(settings.value("DenoiseLevel", -1).toInt());
-    ui->spinBox_TileSize_RealCUGAN->setValue(settings.value("TileSize", 0).toInt());
-    ui->checkBox_TTA_RealCUGAN->setChecked(settings.value("TTA", false).toBool());
-    ui->comboBox_GPUID_RealCUGAN->setCurrentText(settings.value("GPUID", "0: Default GPU 0").toString()); // Default must match detected format
-    ui->checkBox_MultiGPU_RealCUGAN->setChecked(settings.value("MultiGPUEnabled", false).toBool());
-    // Load multi-GPU list from settings
-    GPUIDs_List_MultiGPU_RealCUGAN = settings.value("MultiGPU_List").value<QList_QMap_QStrQStr>();
-    ui->listWidget_GPUList_MultiGPU_RealCUGAN->clear();
-    for(const auto& gpuMap : GPUIDs_List_MultiGPU_RealCUGAN) {
-        QListWidgetItem *newItem = new QListWidgetItem();
-        newItem->setText(QString("ID: %1, Name: %2, Threads: %3").arg(gpuMap.value("ID"), gpuMap.value("Name"), gpuMap.value("Threads")));
-        ui->listWidget_GPUList_MultiGPU_RealCUGAN->addItem(newItem);
-    }
-    settings.endGroup();
-
-    // Call ReadSettings to load these into member variables for processing logic
-    Realcugan_NCNN_Vulkan_ReadSettings();
-    qDebug() << "Realcugan_NCNN_Vulkan_PreLoad_Settings completed.";
+    realCuganProcessor->preLoadSettings();
 }
 
 // Slots for process signals (These are now for the iterative process wrapper)

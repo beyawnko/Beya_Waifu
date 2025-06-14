@@ -94,6 +94,9 @@ namespace Ui
 }
 QT_END_NAMESPACE
 
+class RealCuganProcessor;
+class VideoProcessor;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -352,6 +355,8 @@ public:
     bool m_realcugan_TTA;
     QString m_realcugan_GPUID; // Stores single GPU ID or potentially base for multi-GPU config
     QString m_realcugan_gpuJobConfig_temp; // Temporary storage for complex GPU job config string for batch processing
+    RealCuganProcessor *realCuganProcessor;
+    VideoProcessor *videoProcessor;
 
     void Realcugan_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingAlphaChannel);
     void Realcugan_NCNN_Vulkan_GIF(int rowNum);

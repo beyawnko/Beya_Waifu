@@ -53,12 +53,14 @@ SOURCES += \
     mainwindow.cpp \
     progressBar.cpp \
     realcugan_ncnn_vulkan.cpp \
+    RealCuganProcessor.cpp \
     realesrgan_ncnn_vulkan.cpp \
     settings.cpp \
     table.cpp \
     textBrowser.cpp \
     topsupporterslist.cpp \
-    video.cpp 
+    video.cpp \
+    VideoProcessor.cpp
 
 HEADERS += \
     mainwindow.h \
