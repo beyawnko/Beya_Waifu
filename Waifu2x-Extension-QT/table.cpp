@@ -155,55 +155,8 @@ int MainWindow::Table_FileCount_reload()
     return 0;
 }
 //============================
-// Insert files
+// Insert files (implemented in mainwindow.cpp)
 //============================
-void MainWindow::Table_image_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath)
-{
-    mutex_Table_insert.lock();
-    //=========
-    int rowNum = Table_model_image->rowCount();
-    Table_model_image->setItem(rowNum, 0, new QStandardItem(fileName));
-    Table_model_image->setItem(rowNum, 1, new QStandardItem(""));
-    Table_model_image->setItem(rowNum, 2, new QStandardItem(SourceFile_fullPath));
-    Table_model_image->setItem(rowNum, 3, new QStandardItem(""));
-    mutex_Table_insert_finished.lock();
-    Table_insert_finished=true;
-    mutex_Table_insert_finished.unlock();
-    //========
-    mutex_Table_insert.unlock();
-}
-
-void MainWindow::Table_gif_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath)
-{
-    mutex_Table_insert.lock();
-    //=========
-    int rowNum = Table_model_gif->rowCount();
-    Table_model_gif->setItem(rowNum, 0, new QStandardItem(fileName));
-    Table_model_gif->setItem(rowNum, 1, new QStandardItem(""));
-    Table_model_gif->setItem(rowNum, 2, new QStandardItem(SourceFile_fullPath));
-    Table_model_gif->setItem(rowNum, 3, new QStandardItem(""));
-    mutex_Table_insert_finished.lock();
-    Table_insert_finished=true;
-    mutex_Table_insert_finished.unlock();
-    //========
-    mutex_Table_insert.unlock();
-}
-
-void MainWindow::Table_video_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath)
-{
-    mutex_Table_insert.lock();
-    //=========
-    int rowNum = Table_model_video->rowCount();
-    Table_model_video->setItem(rowNum, 0, new QStandardItem(fileName));
-    Table_model_video->setItem(rowNum, 1, new QStandardItem(""));
-    Table_model_video->setItem(rowNum, 2, new QStandardItem(SourceFile_fullPath));
-    Table_model_video->setItem(rowNum, 3, new QStandardItem(""));
-    mutex_Table_insert_finished.lock();
-    Table_insert_finished=true;
-    mutex_Table_insert_finished.unlock();
-    //========
-    mutex_Table_insert.unlock();
-}
 
 void MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status)
 {
