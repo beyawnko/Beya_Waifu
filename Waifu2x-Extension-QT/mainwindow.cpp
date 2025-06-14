@@ -73,7 +73,9 @@ FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
              << filePath;
 
         QByteArray stdOut, stdErr;
-        if (runProcess(&ffprobeProcess, "\"" + ffprobePath + "\" " + args.join(" "), &stdOut, &stdErr)) {
+        bool ffprobeOk =
+            runProcess(&ffprobeProcess, "\"" + ffprobePath + "\" " + args.join(" "), &stdOut, &stdErr);
+        if (ffprobeOk) {
             QJsonDocument jsonDoc = QJsonDocument::fromJson(stdOut);
             if (!jsonDoc.isNull() && jsonDoc.isObject()) {
                 QJsonObject jsonObj = jsonDoc.object();
@@ -115,10 +117,16 @@ FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
                 metadata.isValid = true;
             } else {
                 qDebug() << "Failed to parse ffprobe JSON output for" << filePath << ":" << stdOut << stdErr;
+                emit Send_TextBrowser_NewMessage(tr("ffprobe failed to parse output for %1").arg(filePath));
                 metadata.isValid = false;
             }
         } else {
             qDebug() << "ffprobe execution failed for" << filePath << ":" << ffprobeProcess.errorString() << stdErr;
+            emit Send_TextBrowser_NewMessage(
+                tr("ffprobe error for %1: exit code %2\n%3")
+                    .arg(filePath)
+                    .arg(ffprobeProcess.exitCode())
+                    .arg(QString::fromLocal8Bit(stdErr)));
             metadata.isValid = false;
         }
     } else if (isPotentiallyAnimatedImage) {
@@ -3045,9 +3053,15 @@ QString MainWindow::video_get_bitrate(QString videoPath,bool isReturnFullCMD,boo
     QString cmd = "\""+ ffprobePath +"\" "+args.join(" ");
     if(isReturnFullCMD) return cmd;
 
-    QByteArray stdOut;
-    runProcess(&ffprobe, cmd, &stdOut);
-    return QString(stdOut).trimmed();
+    QByteArray stdOut, stdErr;
+    if (runProcess(&ffprobe, cmd, &stdOut, &stdErr)) {
+        return QString(stdOut).trimmed();
+    }
+    emit Send_TextBrowser_NewMessage(
+        tr("ffprobe failed getting bitrate for %1: %2")
+            .arg(videoPath)
+            .arg(QString::fromLocal8Bit(stdErr)));
+    return QString();
 }
 
 int MainWindow::video_UseRes2CalculateBitrate(QString VideoFileFullPath)
