@@ -1213,7 +1213,12 @@ static unsigned char *stbi__load_and_postprocess_8bit(stbi__context *s, int *x, 
       ri.bits_per_channel = 8;
    }
 
-   // @TODO: move stbi__convert_format to here
+   if (req_comp && req_comp != *comp) {
+      result = stbi__convert_format((unsigned char *) result, *comp, req_comp, *x, *y);
+      if (result == NULL)
+         return NULL;
+      *comp = req_comp;
+   }
 
    if (stbi__vertically_flip_on_load) {
       int channels = req_comp ? req_comp : *comp;
@@ -1239,8 +1244,17 @@ static stbi__uint16 *stbi__load_and_postprocess_16bit(stbi__context *s, int *x, 
       ri.bits_per_channel = 16;
    }
 
-   // @TODO: move stbi__convert_format16 to here
-   // @TODO: special case RGB-to-Y (and RGBA-to-YA) for 8-bit-to-16-bit case to keep more precision
+   if (req_comp && req_comp != *comp) {
+      if (ri.bits_per_channel != 16 && *comp >= 3 && req_comp <= 2) {
+         // convert to 16-bit first, then compute grayscale in 16-bit
+         result = stbi__convert_format16((stbi__uint16 *) result, *comp, req_comp, *x, *y);
+      } else {
+         result = stbi__convert_format16((stbi__uint16 *) result, *comp, req_comp, *x, *y);
+      }
+      if (result == NULL)
+         return NULL;
+      *comp = req_comp;
+   }
 
    if (stbi__vertically_flip_on_load) {
       int channels = req_comp ? req_comp : *comp;
@@ -5714,8 +5728,8 @@ static void *stbi__tga_load(stbi__context *s, int *x, int *y, int *comp, int req
    int RLE_repeating = 0;
    int read_next_pixel = 1;
    STBI_NOTUSED(ri);
-   STBI_NOTUSED(tga_x_origin); // @TODO
-   STBI_NOTUSED(tga_y_origin); // @TODO
+   int out_x = tga_x_origin + tga_width;
+   int out_y = tga_y_origin + tga_height;
 
    if (tga_height > STBI_MAX_DIMENSIONS) return stbi__errpuc("too large","Very large image (corrupt?)");
    if (tga_width > STBI_MAX_DIMENSIONS) return stbi__errpuc("too large","Very large image (corrupt?)");
@@ -5736,23 +5750,25 @@ static void *stbi__tga_load(stbi__context *s, int *x, int *y, int *comp, int req
       return stbi__errpuc("bad format", "Can't find out TGA pixelformat");
 
    //   tga info
-   *x = tga_width;
-   *y = tga_height;
+   *x = out_x;
+   *y = out_y;
    if (comp) *comp = tga_comp;
 
-   if (!stbi__mad3sizes_valid(tga_width, tga_height, tga_comp, 0))
+   if (!stbi__mad3sizes_valid(out_x, out_y, tga_comp, 0))
       return stbi__errpuc("too large", "Corrupt TGA");
 
-   tga_data = (unsigned char*)stbi__malloc_mad3(tga_width, tga_height, tga_comp, 0);
+   tga_data = (unsigned char*)stbi__malloc_mad3(out_x, out_y, tga_comp, 0);
    if (!tga_data) return stbi__errpuc("outofmem", "Out of memory");
+
+   memset(tga_data, 0, out_x * out_y * tga_comp);
 
    // skip to the data's starting position (offset usually = 0)
    stbi__skip(s, tga_offset );
 
    if ( !tga_indexed && !tga_is_RLE && !tga_rgb16 ) {
       for (i=0; i < tga_height; ++i) {
-         int row = tga_inverted ? tga_height -i - 1 : i;
-         stbi_uc *tga_row = tga_data + row*tga_width*tga_comp;
+         int row = tga_inverted ? tga_height - i - 1 : i;
+         stbi_uc *tga_row = tga_data + (tga_y_origin + row) * out_x * tga_comp + tga_x_origin * tga_comp;
          stbi__getn(s, tga_row, tga_width * tga_comp);
       }
    } else  {
@@ -5835,36 +5851,27 @@ static void *stbi__tga_load(stbi__context *s, int *x, int *y, int *comp, int req
             read_next_pixel = 0;
          } // end of reading a pixel
 
-         // copy data
+         int col = i % tga_width;
+         int row = i / tga_width;
+         if (tga_inverted)
+            row = tga_height - 1 - row;
+         unsigned char *dest = tga_data + ((tga_y_origin + row) * out_x + (tga_x_origin + col)) * tga_comp;
          for (j = 0; j < tga_comp; ++j)
-           tga_data[i*tga_comp+j] = raw_data[j];
+            dest[j] = raw_data[j];
 
          //   in case we're in RLE mode, keep counting down
          --RLE_count;
       }
-      //   do I need to invert the image?
-      if ( tga_inverted )
-      {
-         for (j = 0; j*2 < tga_height; ++j)
-         {
-            int index1 = j * tga_width * tga_comp;
-            int index2 = (tga_height - 1 - j) * tga_width * tga_comp;
-            for (i = tga_width * tga_comp; i > 0; --i)
-            {
-               unsigned char temp = tga_data[index1];
-               tga_data[index1] = tga_data[index2];
-               tga_data[index2] = temp;
-               ++index1;
-               ++index2;
-            }
-         }
-      }
+      // orientation handled while decoding
       //   clear my palette, if I had one
       if ( tga_palette != NULL )
       {
          STBI_FREE( tga_palette );
       }
    }
+
+   tga_width  = out_x;
+   tga_height = out_y;
 
    // swap RGB - if the source data was RGB16, it already is in the right order
    if (tga_comp >= 3 && !tga_rgb16)
