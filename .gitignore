@@ -1,1 +1,4 @@
 tests/bin/
+# Downloaded binary archives for integration tests
+*realcugan-ncnn-vulkan*.zip
+*realesrgan-ncnn-vulkan*.zip

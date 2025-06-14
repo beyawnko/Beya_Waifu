@@ -17,6 +17,14 @@ TEST_IMAGE_PATH = Path(__file__).resolve().parent / 'test_image.png'
 REALCUGAN_URL = 'https://github.com/nihui/realcugan-ncnn-vulkan/releases/download/20220728/realcugan-ncnn-vulkan-20220728-ubuntu.zip'
 REALESRGAN_URL = 'https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan/releases/download/v0.2.0/realesrgan-ncnn-vulkan-v0.2.0-ubuntu.zip'
 
+
+def download_archive(url: str, dest: Path):
+    """Download *url* to *dest* if the file does not already exist."""
+    if not dest.exists():
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        print(f"Downloading {url} to {dest}...")
+        urllib.request.urlretrieve(url, dest)
+
 def setup_test_image():
     if TEST_IMAGE_BASE64_PATH.exists():
         with open(TEST_IMAGE_BASE64_PATH, 'r') as f_b64, open(TEST_IMAGE_PATH, 'wb') as f_img:
@@ -52,13 +60,8 @@ def ensure_realcugan():
 
     if not exe_abs_path.exists():
         print(f"RealCUGAN exe not found at {exe_abs_path}. Proceeding with download/extraction.")
-        dest.mkdir(parents=True, exist_ok=True)
         archive_abs_path = dest / archive_name
-
-        if not archive_abs_path.exists():
-            print(f"Downloading RealCUGAN from {REALCUGAN_URL} to {archive_abs_path}...")
-            urllib.request.urlretrieve(REALCUGAN_URL, archive_abs_path)
-
+        download_archive(REALCUGAN_URL, archive_abs_path)
         if archive_abs_path.exists():
             print(f"Extracting {archive_abs_path} to {dest} (RealCUGAN)...")
             try:
@@ -118,12 +121,8 @@ def ensure_realesrgan():
 
     if not exe_abs_path.exists():
         print(f"RealESRGAN exe not found at {exe_abs_path}. Proceeding with download/extraction.")
-        dest.mkdir(parents=True, exist_ok=True)
         archive_abs_path = dest / archive_name
-        if not archive_abs_path.exists():
-            print(f"Downloading RealESRGAN from {REALESRGAN_URL} to {archive_abs_path}...")
-            urllib.request.urlretrieve(REALESRGAN_URL, archive_abs_path)
-
+        download_archive(REALESRGAN_URL, archive_abs_path)
         if archive_abs_path.exists():
             print(f"Extracting {archive_abs_path} to {dest} (RealESRGAN)...")
             try:
