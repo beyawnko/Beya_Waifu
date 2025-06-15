@@ -21,3 +21,37 @@ jobs:
           cat cppcheck.log
       - name: Run tests
         run: pytest
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          modules: 'qtbase qtshadertools'
+      - name: Install build tools
+        run: |
+          choco install make cmake -y
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Build projects
+        shell: bash
+        run: |
+          ./build_projects.sh > build.log 2>&1
+      - name: Run tests
+        shell: bash
+        run: |
+          pytest > pytest.log 2>&1
+      - name: Upload test logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-test-logs
+          path: |
+            build.log
+            pytest.log
