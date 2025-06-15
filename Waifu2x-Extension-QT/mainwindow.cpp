@@ -2000,7 +2000,9 @@ void MainWindow::ExecuteCMD_batFile(QString cmd_str,bool requestAdmin)
     OpenFile_cmdFile.close();
     if(requestAdmin)
     {
+#ifdef Q_OS_WIN
         ShellExecuteW(NULL, QString("runas").toStdWString().c_str(), QString(Bat_path).toStdWString().c_str(), QString(Bat_path).toStdWString().c_str(), NULL, 1);
+#endif
     }
     else
     {

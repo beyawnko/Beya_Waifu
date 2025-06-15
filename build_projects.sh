@@ -27,8 +27,12 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         echo "Handling Real-ESRGAN for Windows..."
         if [ -f "$RESRGAN_PREBUILT_DIR/realesrgan-ncnn-vulkan.exe" ]; then
             echo "Found prebuilt Real-ESRGAN executable. Copying..."
-            cp "$RESRGAN_PREBUILT_DIR/realesrgan-ncnn-vulkan.exe" "$TARGET_APP_DIR/"
-            cp "$RESRGAN_PREBUILT_DIR/realesrgan-ncnn-vulkan.exe" "$TARGET_LAUNCHER_DIR/"
+            cp "$RESRGAN_PREBUILT_DIR/realesrgan-ncnn-vulkan.exe" "$TARGET_APP_DIR/realesrgan.exe"
+            cp "$RESRGAN_PREBUILT_DIR/realesrgan-ncnn-vulkan.exe" "$TARGET_LAUNCHER_DIR/realesrgan.exe"
+        elif [ -f "$RESRGAN_PREBUILT_DIR/realesrgan.exe" ]; then
+            echo "Found prebuilt Real-ESRGAN executable. Copying..."
+            cp "$RESRGAN_PREBUILT_DIR/realesrgan.exe" "$TARGET_APP_DIR/realesrgan.exe"
+            cp "$RESRGAN_PREBUILT_DIR/realesrgan.exe" "$TARGET_LAUNCHER_DIR/realesrgan.exe"
             # Copy known DLLs, be specific if possible, otherwise copy all from prebuilt dir
             find "$RESRGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_APP_DIR/" \;
             find "$RESRGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_LAUNCHER_DIR/" \;
@@ -38,10 +42,11 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
             mkdir -p "$TARGET_APP_DIR/models"
             if [ -d "$RESRGAN_PREBUILT_DIR/models" ]; then
                 cp -R "$RESRGAN_PREBUILT_DIR/models/"* "$TARGET_APP_DIR/models/"
-            else
+            elif [ -d "$RESRGAN_SRC_DIR/models" ]; then
                 echo "Warning: Prebuilt Real-ESRGAN models directory not found at $RESRGAN_PREBUILT_DIR/models. Trying source models."
-                # If prebuilt models aren't found, try copying from the source submodule.
                 cp -R "$RESRGAN_SRC_DIR/models/"* "$TARGET_APP_DIR/models/"
+            else
+                echo "Warning: No Real-ESRGAN models found. Skipping model copy."
             fi
         else
             # Fallback: Build Real-ESRGAN from source if prebuilt not found.
@@ -52,8 +57,8 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
             make -j$(nproc) || { echo "Real-ESRGAN make failed."; popd >/dev/null; exit 1; }
 
             # Copy built executable (CMake should place it in build_windows/src or build_windows)
-            cp src/realesrgan-ncnn-vulkan.exe "$TARGET_APP_DIR/" 2>/dev/null || cp realesrgan-ncnn-vulkan.exe "$TARGET_APP_DIR/" 2>/dev/null || { echo "Failed to find/copy built realesrgan.exe"; popd >/dev/null; exit 1; }
-            cp src/realesrgan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/" 2>/dev/null || cp realesrgan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/" 2>/dev/null # Also to launcher
+            cp src/realesrgan-ncnn-vulkan.exe "$TARGET_APP_DIR/realesrgan.exe" 2>/dev/null || cp realesrgan-ncnn-vulkan.exe "$TARGET_APP_DIR/realesrgan.exe" 2>/dev/null || { echo "Failed to find/copy built realesrgan.exe"; popd >/dev/null; exit 1; }
+            cp src/realesrgan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/realesrgan.exe" 2>/dev/null || cp realesrgan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/realesrgan.exe" 2>/dev/null # Also to launcher
 
             # Copy any DLLs found in the build directory (e.g., if statically linked CRT is not used)
             find . -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_APP_DIR/" \;
@@ -72,10 +77,14 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         RCUGAN_MODEL_SUBDIRS="models-se models-pro models-nose"
         if [ -f "$RCUGAN_PREBUILT_DIR/realcugan-ncnn-vulkan.exe" ]; then
             echo "Found prebuilt Real-CUGAN executable. Copying..."
-            cp "$RCUGAN_PREBUILT_DIR/realcugan-ncnn-vulkan.exe" "$TARGET_APP_DIR/"
-            cp "$RCUGAN_PREBUILT_DIR/realcugan-ncnn-vulkan.exe" "$TARGET_LAUNCHER_DIR/"
-            find "$RCUGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_APP_DIR/" \;
-            find "$RCUGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_LAUNCHER_DIR/" \;
+            cp "$RCUGAN_PREBUILT_DIR/realcugan-ncnn-vulkan.exe" "$TARGET_APP_DIR/realcugan.exe"
+            cp "$RCUGAN_PREBUILT_DIR/realcugan-ncnn-vulkan.exe" "$TARGET_LAUNCHER_DIR/realcugan.exe"
+        elif [ -f "$RCUGAN_PREBUILT_DIR/realcugan.exe" ]; then
+            echo "Found prebuilt Real-CUGAN executable. Copying..."
+            cp "$RCUGAN_PREBUILT_DIR/realcugan.exe" "$TARGET_APP_DIR/realcugan.exe"
+            cp "$RCUGAN_PREBUILT_DIR/realcugan.exe" "$TARGET_LAUNCHER_DIR/realcugan.exe"
+        find "$RCUGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_APP_DIR/" \;
+        find "$RCUGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_LAUNCHER_DIR/" \;
 
             # Copy Real-CUGAN models from prebuilt directory.
             echo "Copying Real-CUGAN models from Windows prebuilt..."
@@ -85,9 +94,12 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
                     cp -R "$RCUGAN_PREBUILT_DIR/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
                 else
                     echo "Warning: Prebuilt Real-CUGAN model directory $RCUGAN_PREBUILT_DIR/$model_subdir not found. Trying source."
-                    # Fallback to source models if prebuilt sub-directory is missing.
                     mkdir -p "$TARGET_APP_DIR/$model_subdir"
-                    cp -R "$RCUGAN_SRC_DIR/models/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
+                    if [ -d "$RCUGAN_SRC_DIR/models/$model_subdir" ]; then
+                        cp -R "$RCUGAN_SRC_DIR/models/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
+                    else
+                        echo "Warning: No source models for Real-CUGAN subdir $model_subdir found."
+                    fi
                 fi
             done
         else
@@ -98,8 +110,8 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
             cmake -G "MSYS Makefiles" .. || { echo "Real-CUGAN CMake failed."; popd >/dev/null; exit 1; }
             make -j$(nproc) || { echo "Real-CUGAN make failed."; popd >/dev/null; exit 1; }
 
-            cp src/realcugan-ncnn-vulkan.exe "$TARGET_APP_DIR/" 2>/dev/null || cp realcugan-ncnn-vulkan.exe "$TARGET_APP_DIR/" 2>/dev/null || { echo "Failed to find/copy built realcugan.exe"; popd >/dev/null; exit 1; }
-            cp src/realcugan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/" 2>/dev/null || cp realcugan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/" 2>/dev/null
+            cp src/realcugan-ncnn-vulkan.exe "$TARGET_APP_DIR/realcugan.exe" 2>/dev/null || cp realcugan-ncnn-vulkan.exe "$TARGET_APP_DIR/realcugan.exe" 2>/dev/null || { echo "Failed to find/copy built realcugan.exe"; popd >/dev/null; exit 1; }
+            cp src/realcugan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/realcugan.exe" 2>/dev/null || cp realcugan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/realcugan.exe" 2>/dev/null
 
             find . -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_APP_DIR/" \;
             find . -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_LAUNCHER_DIR/" \;
@@ -109,7 +121,11 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
             echo "Copying Real-CUGAN models from source for Windows build..."
             for model_subdir in $RCUGAN_MODEL_SUBDIRS; do
                 mkdir -p "$TARGET_APP_DIR/$model_subdir"
-                cp -R "$RCUGAN_SRC_DIR/models/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
+                if [ -d "$RCUGAN_SRC_DIR/models/$model_subdir" ]; then
+                    cp -R "$RCUGAN_SRC_DIR/models/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
+                else
+                    echo "Warning: No source models for Real-CUGAN subdir $model_subdir found during build."
+                fi
             done
         fi
         ;;

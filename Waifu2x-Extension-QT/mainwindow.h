@@ -33,7 +33,9 @@ Copyright (C) 2025  beyawnko
 #include <QImageWriter>
 #include <QFile>
 #include <QVariant>
+#ifdef Q_OS_WIN
 #include <windows.h>
+#endif
 #include <QTime>
 #include <QMediaPlayer>
 #include <QDesktopServices>
