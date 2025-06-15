@@ -250,7 +250,7 @@ function Build-Project {
     }
 
     $currentDir = (Get-Location).Path
-    $msysDir = ($currentDir -replace '\\', '/')
+    $msysDir = (($currentDir -replace '^([A-Za-z]):', '/$1') -replace '\\', '/')
     
     # Define paths to the necessary bin directories for the build environment
     $mingwBinPath = 'C:\tools\msys64\mingw64\bin'
