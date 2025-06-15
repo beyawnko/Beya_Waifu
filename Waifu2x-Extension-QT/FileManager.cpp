@@ -1,4 +1,7 @@
 /*
+    FileManager.cpp - utilities for handling filesystem operations
+    across platforms using Qt.
+
     Copyright (C) 2025  beyawnko
 */
 #include "FileManager.h"
@@ -7,8 +10,10 @@
 #include <QDesktopServices>
 #include <QProcess>
 #include <QUrl>
-#include <windows.h>
-#include <shellapi.h>
+#ifdef Q_OS_WIN
+#   include <windows.h>
+#   include <shellapi.h>
+#endif
 
 bool FileManager::isDirExist(const QString &path)
 {
@@ -100,6 +105,7 @@ QString FileManager::getBaseName(const QString &path)
 
 void FileManager::moveToTrash(const QString &file)
 {
+#ifdef Q_OS_WIN
     QFileInfo fileinfo(file);
     if (!fileinfo.exists())
         return;
@@ -114,6 +120,9 @@ void FileManager::moveToTrash(const QString &file)
     fileop.pFrom = from;
     fileop.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
     SHFileOperation(&fileop);
+#else
+    Q_UNUSED(file);
+#endif
 }
 
 QString FileManager::getFolderPath(const QFileInfo &fileInfo)
@@ -151,8 +160,15 @@ bool FileManager::openFolder(const QString &folderPath)
     if (isDirExist(folderPath))
     {
         QString path = folderPath;
+#ifdef Q_OS_WIN
         path.replace('/', "\\");
         QProcess::execute("explorer \"" + path + "\"");
+#else
+        if (!QDesktopServices::openUrl(QUrl::fromLocalFile(path)))
+        {
+            QProcess::execute("xdg-open", QStringList() << path);
+        }
+#endif
         return true;
     }
     return false;
@@ -168,10 +184,17 @@ bool FileManager::openFile(const QString &filePath)
 {
     if (QFile::exists(filePath))
     {
+#ifdef Q_OS_WIN
         if (!QDesktopServices::openUrl(QUrl("file:" + QUrl::toPercentEncoding(filePath), QUrl::TolerantMode)))
         {
             QProcess::execute("start \"\" \"" + filePath.replace('%', "%%") + "\"");
         }
+#else
+        if (!QDesktopServices::openUrl(QUrl::fromLocalFile(filePath)))
+        {
+            QProcess::execute("xdg-open", QStringList() << filePath);
+        }
+#endif
         return true;
     }
     return false;
