@@ -28,3 +28,6 @@ Waifu2x-Extension-QT-Launcher/qrc_*.cpp
 Waifu2x-Extension-QT-Launcher/ui_*.h
 Waifu2x-Extension-QT-Launcher/*.o
 Waifu2x-Extension-QT-Launcher/Waifu2x-Extension-QT-Launcher
+
+__pycache__/
+*.pyc

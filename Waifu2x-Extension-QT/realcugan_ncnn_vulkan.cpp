@@ -44,7 +44,9 @@ static bool warnProcessFailure(QWidget *parent, QProcess &proc,
         QString msg = QObject::tr("%1 failed with exit code %2")
                           .arg(context)
                           .arg(proc.exitCode());
-        QMessageBox::warning(parent, QObject::tr("Process Failure"), msg);
+        QMetaObject::invokeMethod(parent, [parent, msg]() {
+            QMessageBox::warning(parent, QObject::tr("Process Failure"), msg);
+        }, Qt::QueuedConnection);
         return false;
     }
     return true;
