@@ -188,7 +188,7 @@ void MainWindow::Gif_assembleGif(QString ResGifPath,QString ScaledFramesPath,int
             emit Send_TextBrowser_NewMessage(tr("Finish assembling GIF:[")+ResGifPath+"]");
             return;
         }
-        AssembleGIF->kill();
+        AssembleGIF.kill();
     }
     //Adjust image size yourself and then assemble
     if(CustRes_isEnabled || isOverScaled)

@@ -44,7 +44,7 @@ void MainWindow::on_checkBox_BanGitee_clicked()
 {
     if(ui->checkBox_BanGitee->isChecked() && isConnectivityTest_RawGithubusercontentCom_Running==false)
     {
-        QtConcurrent::run(this, &MainWindow::ConnectivityTest_RawGithubusercontentCom);//Run network test in the background to determine if raw.githubusercontent.com can be connected
+        QtConcurrent::run([this]() { this->ConnectivityTest_RawGithubusercontentCom(); });//Run network test in the background to determine if raw.githubusercontent.com can be connected
     }
 }
 /*

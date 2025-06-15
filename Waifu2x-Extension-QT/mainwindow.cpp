@@ -37,6 +37,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <algorithm>
+#include <QDebug> // Added for placeholder qDebug messages
 
 // ========================= Metadata Cache Implementation =========================
 FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
@@ -724,7 +725,9 @@ bool MainWindow::SystemPrefersDark() const
 
 void MainWindow::ApplyDarkStyle()
 {
-    uiController.applyDarkStyle(Settings_Read_value("/settings/DarkMode", 1).toInt());
+    QVariant darkModeSetting = Settings_Read_value("/settings/DarkMode");
+    // Ensure !isNull check for variants that might be default-constructed by QSettings if key not found
+    uiController.applyDarkStyle(darkModeSetting.isValid() && !darkModeSetting.isNull() ? darkModeSetting.toInt() : 1);
 }
 
 void MainWindow::on_pushButton_ClearList_clicked()
@@ -878,10 +881,10 @@ void MainWindow::Play_NFSound()
             player->deleteLater();
         }
     });
-    connect(player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error),
-            [=](QMediaPlayer::Error error){
-        Q_UNUSED(error);
-        qDebug() << "Error playing notification sound:" << player->errorString();
+    connect(player, &QMediaPlayer::errorOccurred,
+            [=](QMediaPlayer::Error errorEnum, const QString &errorString){
+        Q_UNUSED(errorEnum);
+        qDebug() << "Error playing notification sound:" << errorString << player->errorString();
         player->deleteLater();
     });
     player->setSource(QUrl::fromLocalFile(NFSound));
@@ -3334,7 +3337,14 @@ void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum)
 {
     realCuganProcessor->readSettingsVideoGif(ThreadNum);
 }
-void MainWindow::APNG_RealcuganNCNNVulkan(QString, QString, QString, QStringList, QString){}
+bool MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath)
+{
+    // Placeholder implementation - actual logic needed
+    Q_UNUSED(splitFramesFolder); Q_UNUSED(scaledFramesFolder); Q_UNUSED(sourceFileFullPath);
+    Q_UNUSED(framesFileName_qStrList); Q_UNUSED(resultFileFullPath);
+    qDebug() << "APNG_RealcuganNCNNVulkan called but not fully implemented.";
+    return false; // Placeholder
+}
 void MainWindow::Realcugan_ncnn_vulkan_DetectGPU(){}
 QString MainWindow::RealcuganNcnnVulkan_MultiGPU(){ return ""; }
 void MainWindow::AddGPU_MultiGPU_RealcuganNcnnVulkan(QString){}
@@ -3351,7 +3361,14 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_Video_BySegment(int){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings(){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int){}
-void MainWindow::APNG_RealESRGANNCNNVulkan(QString, QString, QString, QStringList, QString){}
+bool MainWindow::APNG_RealESRGANNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath)
+{
+    // Placeholder implementation - actual logic needed
+    Q_UNUSED(splitFramesFolder); Q_UNUSED(scaledFramesFolder); Q_UNUSED(sourceFileFullPath);
+    Q_UNUSED(framesFileName_qStrList); Q_UNUSED(resultFileFullPath);
+    qDebug() << "APNG_RealESRGANNCNNVulkan called but not fully implemented.";
+    return false; // Placeholder
+}
 void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU(){}
 QString MainWindow::RealesrganNcnnVulkan_MultiGPU(){ return ""; }
 void MainWindow::AddGPU_MultiGPU_RealesrganNcnnVulkan(QString){}

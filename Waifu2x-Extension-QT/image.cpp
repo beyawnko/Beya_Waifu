@@ -44,7 +44,7 @@ void MainWindow::ImagesResize_Folder_MultiThread(int New_width,int New_height,QS
         RunningNumOfThreads_ImagesResize_Folder_MultiThread++;
         QMutex_ResizeImage_MultiThread.unlock();
         //====
-        QtConcurrent::run(this,&MainWindow::ResizeImage_MultiThread,New_width,New_height,OutPut_Path);
+        QtConcurrent::run([this, New_width, New_height, OutPut_Path]() { this->ResizeImage_MultiThread(New_width, New_height, OutPut_Path); });
         while(RunningNumOfThreads_ImagesResize_Folder_MultiThread>=TotalNumOfThreads_ImagesResize_Folder_MultiThread)
         {
             Delay_msec_sleep(300);
@@ -239,9 +239,9 @@ MainWindow::AlphaInfo MainWindow::PrepareAlpha(const QString &inputImagePath)
         rgb.save(&rgbBuf, "PNG");
         rgbBuf.close();
         QImage::fromData(rgbData, "PNG").save(info.rgbPath);
-        QImage alpha = src.alphaChannel();
+        QImage alpha = src.convertToFormat(QImage::Format_Alpha8); // Qt6 replacement
         if(info.is16Bit)
-            alpha = alpha.convertToFormat(QImage::Format_Grayscale16);
+            alpha = alpha.convertToFormat(QImage::Format_Grayscale16); // This will upscale 8-bit alpha to 16-bit grayscale
         QByteArray alphaData;
         QBuffer alphaBuf(&alphaData);
         alphaBuf.open(QIODevice::WriteOnly);

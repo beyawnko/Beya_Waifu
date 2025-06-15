@@ -18,6 +18,7 @@
 #include "ui_mainwindow.h"
 #include "RealCuganProcessor.h"
 
+#include <QTableWidgetItem> // Added for QTableWidgetItem
 #include <QCoreApplication> // Added for safety, though RealCuganProcessor handles paths
 #include <QFileDialog>
 #include <QFileInfo>

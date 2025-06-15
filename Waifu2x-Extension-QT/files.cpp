@@ -54,7 +54,7 @@ void MainWindow::dropEvent(QDropEvent *event)
     ui->label_DropFile->setText(tr("Adding files, please wait."));
     emit Send_TextBrowser_NewMessage(tr("Adding files, please wait."));
     //===================================================
-    QtConcurrent::run(this, &MainWindow::Read_urls, urls);
+    QtConcurrent::run([this, urls]() { this->Read_urls(urls); });
 }
 /*
 Read urls
@@ -439,6 +439,7 @@ Move file to recycle bin
 */
 void MainWindow::file_MoveToTrash( QString file )
 {
+#ifdef Q_OS_WIN
     QFileInfo fileinfo( file );
     if( !fileinfo.exists() )
         return;
@@ -455,8 +456,22 @@ void MainWindow::file_MoveToTrash( QString file )
     int rv = SHFileOperation( &fileop );
     if( 0 != rv )
     {
+        // SHFileOperation failed, could log an error or try another method
+        // For now, just returning, but ideally, indicate failure.
+        qWarning() << "SHFileOperation failed for" << file << "Error code:" << rv;
+        // Fallback or alternative: QFile::remove(file);
+        // However, that doesn't move to trash.
         return;
     }
+#else
+    // Use Qt's cross-platform way to move to trash for non-Windows
+    if (!QFile::moveToTrash(file)) {
+        qWarning() << "QFile::moveToTrash failed for" << file << "- attempting direct removal.";
+        // Fallback: If moveToTrash fails or is not supported for some reason,
+        // you might just remove the file directly, though this isn't "trash".
+        // QFile::remove(file);
+    }
+#endif
 }
 
 /*
