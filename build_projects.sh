@@ -2,124 +2,183 @@
 # Copyright (C) 2025  beyawnko
 set -e
 
-# Build Waifu2x-Extension-QT
-pushd Waifu2x-Extension-QT >/dev/null
-qmake Waifu2x-Extension-QT.pro
-make liquidglass_frag
-make
-popd >/dev/null
+RESRGAN_SRC_DIR="realesrgan-ncnn-vulkan"
+RCUGAN_SRC_DIR="realcugan-ncnn-vulkan"
+# TARGET_APP_DIR specifies the directory where the main application (Beya_Waifu)
+# and the upscaler executables will be placed. This is typically the Waifu2x-Extension-QT folder itself.
+TARGET_APP_DIR="Waifu2x-Extension-QT" # This is where Beya_Waifu and upscalers go
+# Ensure TARGET_APP_DIR exists. qmake might also create it later, but good practice to ensure.
+mkdir -p "$TARGET_APP_DIR"
 
-# Build optional launcher
-pushd Waifu2x-Extension-QT-Launcher >/dev/null
-qmake Waifu2x-Extension-QT-Launcher.pro
-make
-popd >/dev/null
-
-# Handle Upscaler Binaries (Prebuilt or CMake Build) for Windows
-# Supported shells: MSYS2, Cygwin, and Git Bash (MINGW)
+# OS detection logic: Determines the operating system to tailor build and file handling.
+# $(uname -s) gets the kernel name, tr converts to lowercase for case-insensitive matching.
 case $(uname -s | tr '[:upper:]' '[:lower:]') in
     msys*|cygwin*|mingw*)
+        # Windows specific environment (MSYS, Cygwin, MinGW)
         echo "Windows environment detected. Handling upscaler binaries..."
+        RESRGAN_PREBUILT_DIR="realesrgan-ncnn-vulkan/windows"
+        RCUGAN_PREBUILT_DIR="realcugan-ncnn-vulkan/windows"
+        TARGET_LAUNCHER_DIR="Waifu2x-Extension-QT-Launcher" # Launcher directory, kept for Windows builds
+        mkdir -p "$TARGET_LAUNCHER_DIR"
 
-    RESRGAN_SRC_DIR="realesrgan-ncnn-vulkan"
-    RCUGAN_SRC_DIR="realcugan-ncnn-vulkan"
+        # --- Real-ESRGAN (Windows) ---
+        # For Windows, the script prefers using prebuilt upscaler binaries if available.
+        # If prebuilt binaries are not found, it falls back to building from source using CMake.
+        echo "Handling Real-ESRGAN for Windows..."
+        if [ -f "$RESRGAN_PREBUILT_DIR/realesrgan-ncnn-vulkan.exe" ]; then
+            echo "Found prebuilt Real-ESRGAN executable. Copying..."
+            cp "$RESRGAN_PREBUILT_DIR/realesrgan-ncnn-vulkan.exe" "$TARGET_APP_DIR/"
+            cp "$RESRGAN_PREBUILT_DIR/realesrgan-ncnn-vulkan.exe" "$TARGET_LAUNCHER_DIR/"
+            # Copy known DLLs, be specific if possible, otherwise copy all from prebuilt dir
+            find "$RESRGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_APP_DIR/" \;
+            find "$RESRGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_LAUNCHER_DIR/" \;
 
-    RESRGAN_PREBUILT_DIR="realesrgan-ncnn-vulkan/windows"
-    RCUGAN_PREBUILT_DIR="realcugan-ncnn-vulkan/windows"
-
-    TARGET_QT_DIR="Waifu2x-Extension-QT"
-    TARGET_LAUNCHER_DIR="Waifu2x-Extension-QT-Launcher"
-
-    # Ensure target directories exist
-    mkdir -p "$TARGET_QT_DIR"
-    mkdir -p "$TARGET_LAUNCHER_DIR"
-
-    # --- Real-ESRGAN ---
-    echo "Handling Real-ESRGAN..."
-    if [ -d "$RESRGAN_PREBUILT_DIR" ]; then
-        echo "Found prebuilt Real-ESRGAN directory: $RESRGAN_PREBUILT_DIR"
-        echo "Copying .exe files from $RESRGAN_PREBUILT_DIR to $TARGET_QT_DIR/"
-        find "$RESRGAN_PREBUILT_DIR" -name "*.exe" -type f -print -exec cp {} "$TARGET_QT_DIR/" \; 2>/dev/null || true
-        echo "Copying .exe files from $RESRGAN_PREBUILT_DIR to $TARGET_LAUNCHER_DIR/"
-        find "$RESRGAN_PREBUILT_DIR" -name "*.exe" -type f -print -exec cp {} "$TARGET_LAUNCHER_DIR/" \; 2>/dev/null || true
-        echo "Copying .dll files from $RESRGAN_PREBUILT_DIR to $TARGET_QT_DIR/"
-        find "$RESRGAN_PREBUILT_DIR" -name "*.dll" -type f -print -exec cp {} "$TARGET_QT_DIR/" \; 2>/dev/null || true
-        echo "Copying .dll files from $RESRGAN_PREBUILT_DIR to $TARGET_LAUNCHER_DIR/"
-        find "$RESRGAN_PREBUILT_DIR" -name "*.dll" -type f -print -exec cp {} "$TARGET_LAUNCHER_DIR/" \; 2>/dev/null || true
-    else
-        echo "Prebuilt Real-ESRGAN not found at $RESRGAN_PREBUILT_DIR. Attempting CMake build..."
-        if [ -d "$RESRGAN_SRC_DIR" ]; then
-            echo "Found Real-ESRGAN source directory: $RESRGAN_SRC_DIR"
-            mkdir -p "$RESRGAN_SRC_DIR/build"
-            pushd "$RESRGAN_SRC_DIR/build" >/dev/null
-            echo "Running CMake for Real-ESRGAN..."
-            cmake -G "MSYS Makefiles" .. || { echo "Real-ESRGAN CMake failed. Exiting."; popd >/dev/null; exit 1; }
-            echo "Running make for Real-ESRGAN..."
-            make || { echo "Real-ESRGAN make failed. Exiting."; popd >/dev/null; exit 1; }
-            popd >/dev/null
-            echo "Real-ESRGAN build successful."
-
-            echo "Copying built Real-ESRGAN .exe files to $TARGET_QT_DIR/"
-            find "$RESRGAN_SRC_DIR/build" -name "*.exe" -type f -print -exec cp {} "$TARGET_QT_DIR/" \; 2>/dev/null || true
-            find "$RESRGAN_SRC_DIR/build/src" -name "*.exe" -type f -print -exec cp {} "$TARGET_QT_DIR/" \; 2>/dev/null || true # Common output location
-            echo "Copying built Real-ESRGAN .exe files to $TARGET_LAUNCHER_DIR/"
-            find "$RESRGAN_SRC_DIR/build" -name "*.exe" -type f -print -exec cp {} "$TARGET_LAUNCHER_DIR/" \; 2>/dev/null || true
-            find "$RESRGAN_SRC_DIR/build/src" -name "*.exe" -type f -print -exec cp {} "$TARGET_LAUNCHER_DIR/" \; 2>/dev/null || true
-            echo "Copying built Real-ESRGAN .dll files to $TARGET_QT_DIR/"
-            find "$RESRGAN_SRC_DIR/build" -name "*.dll" -type f -print -exec cp {} "$TARGET_QT_DIR/" \; 2>/dev/null || true
-            find "$RESRGAN_SRC_DIR/build/src" -name "*.dll" -type f -print -exec cp {} "$TARGET_QT_DIR/" \; 2>/dev/null || true
-            echo "Copying built Real-ESRGAN .dll files to $TARGET_LAUNCHER_DIR/"
-            find "$RESRGAN_SRC_DIR/build" -name "*.dll" -type f -print -exec cp {} "$TARGET_LAUNCHER_DIR/" \; 2>/dev/null || true
-            find "$RESRGAN_SRC_DIR/build/src" -name "*.dll" -type f -print -exec cp {} "$TARGET_LAUNCHER_DIR/" \; 2>/dev/null || true
+            # Models are copied from the prebuilt directory if available.
+            echo "Copying Real-ESRGAN models from Windows prebuilt..."
+            mkdir -p "$TARGET_APP_DIR/models"
+            if [ -d "$RESRGAN_PREBUILT_DIR/models" ]; then
+                cp -R "$RESRGAN_PREBUILT_DIR/models/"* "$TARGET_APP_DIR/models/"
+            else
+                echo "Warning: Prebuilt Real-ESRGAN models directory not found at $RESRGAN_PREBUILT_DIR/models. Trying source models."
+                # If prebuilt models aren't found, try copying from the source submodule.
+                cp -R "$RESRGAN_SRC_DIR/models/"* "$TARGET_APP_DIR/models/"
+            fi
         else
-            echo "Real-ESRGAN source directory $RESRGAN_SRC_DIR not found. Cannot build. Exiting."
-            exit 1
-        fi
-    fi
+            # Fallback: Build Real-ESRGAN from source if prebuilt not found.
+            echo "Prebuilt Real-ESRGAN not found. Attempting CMake build..."
+            pushd "$RESRGAN_SRC_DIR" >/dev/null
+            mkdir -p build_windows && cd build_windows
+            cmake -G "MSYS Makefiles" .. || { echo "Real-ESRGAN CMake failed."; popd >/dev/null; exit 1; }
+            make -j$(nproc) || { echo "Real-ESRGAN make failed."; popd >/dev/null; exit 1; }
 
-    # --- Real-CUGAN ---
-    echo "Handling Real-CUGAN..."
-    if [ -d "$RCUGAN_PREBUILT_DIR" ]; then
-        echo "Found prebuilt Real-CUGAN directory: $RCUGAN_PREBUILT_DIR"
-        echo "Copying .exe files from $RCUGAN_PREBUILT_DIR to $TARGET_QT_DIR/"
-        find "$RCUGAN_PREBUILT_DIR" -name "*.exe" -type f -print -exec cp {} "$TARGET_QT_DIR/" \; 2>/dev/null || true
-        echo "Copying .exe files from $RCUGAN_PREBUILT_DIR to $TARGET_LAUNCHER_DIR/"
-        find "$RCUGAN_PREBUILT_DIR" -name "*.exe" -type f -print -exec cp {} "$TARGET_LAUNCHER_DIR/" \; 2>/dev/null || true
-        echo "Copying .dll files from $RCUGAN_PREBUILT_DIR to $TARGET_QT_DIR/"
-        find "$RCUGAN_PREBUILT_DIR" -name "*.dll" -type f -print -exec cp {} "$TARGET_QT_DIR/" \; 2>/dev/null || true
-        echo "Copying .dll files from $RCUGAN_PREBUILT_DIR to $TARGET_LAUNCHER_DIR/"
-        find "$RCUGAN_PREBUILT_DIR" -name "*.dll" -type f -print -exec cp {} "$TARGET_LAUNCHER_DIR/" \; 2>/dev/null || true
-    else
-        echo "Prebuilt Real-CUGAN not found at $RCUGAN_PREBUILT_DIR. Attempting CMake build..."
-        if [ -d "$RCUGAN_SRC_DIR" ]; then
-            echo "Found Real-CUGAN source directory: $RCUGAN_SRC_DIR"
-            mkdir -p "$RCUGAN_SRC_DIR/build"
-            pushd "$RCUGAN_SRC_DIR/build" >/dev/null
-            echo "Running CMake for Real-CUGAN..."
-            cmake -G "MSYS Makefiles" .. || { echo "Real-CUGAN CMake failed. Exiting."; popd >/dev/null; exit 1; }
-            echo "Running make for Real-CUGAN..."
-            make || { echo "Real-CUGAN make failed. Exiting."; popd >/dev/null; exit 1; }
+            # Copy built executable (CMake should place it in build_windows/src or build_windows)
+            cp src/realesrgan-ncnn-vulkan.exe "$TARGET_APP_DIR/" 2>/dev/null || cp realesrgan-ncnn-vulkan.exe "$TARGET_APP_DIR/" 2>/dev/null || { echo "Failed to find/copy built realesrgan.exe"; popd >/dev/null; exit 1; }
+            cp src/realesrgan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/" 2>/dev/null || cp realesrgan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/" 2>/dev/null # Also to launcher
+
+            # Copy any DLLs found in the build directory (e.g., if statically linked CRT is not used)
+            find . -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_APP_DIR/" \;
+            find . -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_LAUNCHER_DIR/" \;
             popd >/dev/null
-            echo "Real-CUGAN build successful."
 
-            echo "Copying built Real-CUGAN .exe files to $TARGET_QT_DIR/"
-            find "$RCUGAN_SRC_DIR/build" -name "*.exe" -type f -print -exec cp {} "$TARGET_QT_DIR/" \; 2>/dev/null || true
-            find "$RCUGAN_SRC_DIR/build/src" -name "*.exe" -type f -print -exec cp {} "$TARGET_QT_DIR/" \; 2>/dev/null || true
-            echo "Copying built Real-CUGAN .exe files to $TARGET_LAUNCHER_DIR/"
-            find "$RCUGAN_SRC_DIR/build" -name "*.exe" -type f -print -exec cp {} "$TARGET_LAUNCHER_DIR/" \; 2>/dev/null || true
-            find "$RCUGAN_SRC_DIR/build/src" -name "*.exe" -type f -print -exec cp {} "$TARGET_LAUNCHER_DIR/" \; 2>/dev/null || true
-            echo "Copying built Real-CUGAN .dll files to $TARGET_QT_DIR/"
-            find "$RCUGAN_SRC_DIR/build" -name "*.dll" -type f -print -exec cp {} "$TARGET_QT_DIR/" \; 2>/dev/null || true
-            find "$RCUGAN_SRC_DIR/build/src" -name "*.dll" -type f -print -exec cp {} "$TARGET_QT_DIR/" \; 2>/dev/null || true
-            echo "Copying built Real-CUGAN .dll files to $TARGET_LAUNCHER_DIR/"
-            find "$RCUGAN_SRC_DIR/build" -name "*.dll" -type f -print -exec cp {} "$TARGET_LAUNCHER_DIR/" \; 2>/dev/null || true
-            find "$RCUGAN_SRC_DIR/build/src" -name "*.dll" -type f -print -exec cp {} "$TARGET_LAUNCHER_DIR/" \; 2>/dev/null || true
-        else
-            echo "Real-CUGAN source directory $RCUGAN_SRC_DIR not found. Cannot build. Exiting."
-            exit 1
+            # Models are copied from the source submodule directory after a source build.
+            echo "Copying Real-ESRGAN models from source for Windows build..."
+            mkdir -p "$TARGET_APP_DIR/models"
+            cp -R "$RESRGAN_SRC_DIR/models/"* "$TARGET_APP_DIR/models/"
         fi
-    fi
-    ;;
+
+        # --- Real-CUGAN (Windows) ---
+        # Similar logic for Real-CUGAN: Prefer prebuilt, fallback to source build.
+        echo "Handling Real-CUGAN for Windows..."
+        RCUGAN_MODEL_SUBDIRS="models-se models-pro models-nose"
+        if [ -f "$RCUGAN_PREBUILT_DIR/realcugan-ncnn-vulkan.exe" ]; then
+            echo "Found prebuilt Real-CUGAN executable. Copying..."
+            cp "$RCUGAN_PREBUILT_DIR/realcugan-ncnn-vulkan.exe" "$TARGET_APP_DIR/"
+            cp "$RCUGAN_PREBUILT_DIR/realcugan-ncnn-vulkan.exe" "$TARGET_LAUNCHER_DIR/"
+            find "$RCUGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_APP_DIR/" \;
+            find "$RCUGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_LAUNCHER_DIR/" \;
+
+            # Copy Real-CUGAN models from prebuilt directory.
+            echo "Copying Real-CUGAN models from Windows prebuilt..."
+            for model_subdir in $RCUGAN_MODEL_SUBDIRS; do
+                if [ -d "$RCUGAN_PREBUILT_DIR/$model_subdir" ]; then
+                    mkdir -p "$TARGET_APP_DIR/$model_subdir"
+                    cp -R "$RCUGAN_PREBUILT_DIR/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
+                else
+                    echo "Warning: Prebuilt Real-CUGAN model directory $RCUGAN_PREBUILT_DIR/$model_subdir not found. Trying source."
+                    # Fallback to source models if prebuilt sub-directory is missing.
+                    mkdir -p "$TARGET_APP_DIR/$model_subdir"
+                    cp -R "$RCUGAN_SRC_DIR/models/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
+                fi
+            done
+        else
+            # Fallback: Build Real-CUGAN from source.
+            echo "Prebuilt Real-CUGAN not found. Attempting CMake build..."
+            pushd "$RCUGAN_SRC_DIR" >/dev/null
+            mkdir -p build_windows && cd build_windows
+            cmake -G "MSYS Makefiles" .. || { echo "Real-CUGAN CMake failed."; popd >/dev/null; exit 1; }
+            make -j$(nproc) || { echo "Real-CUGAN make failed."; popd >/dev/null; exit 1; }
+
+            cp src/realcugan-ncnn-vulkan.exe "$TARGET_APP_DIR/" 2>/dev/null || cp realcugan-ncnn-vulkan.exe "$TARGET_APP_DIR/" 2>/dev/null || { echo "Failed to find/copy built realcugan.exe"; popd >/dev/null; exit 1; }
+            cp src/realcugan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/" 2>/dev/null || cp realcugan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/" 2>/dev/null
+
+            find . -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_APP_DIR/" \;
+            find . -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_LAUNCHER_DIR/" \;
+            popd >/dev/null
+
+            # Copy Real-CUGAN models from source submodule after building.
+            echo "Copying Real-CUGAN models from source for Windows build..."
+            for model_subdir in $RCUGAN_MODEL_SUBDIRS; do
+                mkdir -p "$TARGET_APP_DIR/$model_subdir"
+                cp -R "$RCUGAN_SRC_DIR/models/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
+            done
+        fi
+        ;;
+
+    linux*)
+        # Linux specific environment
+        echo "Linux environment detected. Building upscalers from source..."
+
+        # --- Real-ESRGAN (Linux) ---
+        # On Linux, upscalers are built from their source submodules using CMake.
+        echo "Building Real-ESRGAN for Linux..."
+        pushd "$RESRGAN_SRC_DIR" >/dev/null
+        mkdir -p build_linux && cd build_linux
+        cmake .. || { echo "Real-ESRGAN CMake failed."; popd >/dev/null; exit 1; }
+        make -j$(nproc) || { echo "Real-ESRGAN make failed."; popd >/dev/null; exit 1; }
+        # CMake on Linux usually places executables in build_linux/src or build_linux directly
+        cp src/realesrgan-ncnn-vulkan "$TARGET_APP_DIR/" 2>/dev/null || cp realesrgan-ncnn-vulkan "$TARGET_APP_DIR/" 2>/dev/null || { echo "Failed to find/copy built realesrgan-ncnn-vulkan"; popd >/dev/null; exit 1; }
+        popd >/dev/null
+
+        # Models for Linux are copied from the source submodule.
+        echo "Copying Real-ESRGAN models for Linux..."
+        mkdir -p "$TARGET_APP_DIR/models"
+        cp -R "$RESRGAN_SRC_DIR/models/"* "$TARGET_APP_DIR/models/"
+
+        # --- Real-CUGAN (Linux) ---
+        # Real-CUGAN is also built from source on Linux.
+        echo "Building Real-CUGAN for Linux..."
+        RCUGAN_MODEL_SUBDIRS="models-se models-pro models-nose"
+        pushd "$RCUGAN_SRC_DIR" >/dev/null
+        mkdir -p build_linux && cd build_linux
+        cmake .. || { echo "Real-CUGAN CMake failed."; popd >/dev/null; exit 1; }
+        make -j$(nproc) || { echo "Real-CUGAN make failed."; popd >/dev/null; exit 1; }
+        cp src/realcugan-ncnn-vulkan "$TARGET_APP_DIR/" 2>/dev/null || cp realcugan-ncnn-vulkan "$TARGET_APP_DIR/" 2>/dev/null || { echo "Failed to find/copy built realcugan-ncnn-vulkan"; popd >/dev/null; exit 1; }
+        popd >/dev/null
+
+        # Models for Real-CUGAN on Linux are copied from the source submodule.
+        echo "Copying Real-CUGAN models for Linux..."
+        for model_subdir in $RCUGAN_MODEL_SUBDIRS; do
+            mkdir -p "$TARGET_APP_DIR/$model_subdir"
+            cp -R "$RCUGAN_SRC_DIR/models/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
+        done
+        ;;
+
+    *)
+        # Fallback for unsupported operating systems.
+        echo "Unsupported OS: $(uname -s). Skipping upscaler build."
+        # Optionally exit 1 if upscalers are mandatory for the application to function.
+        ;;
 esac
+
+# --- Qt Application Builds ---
+# After preparing the upscaler engines, the main Qt application and the launcher are built.
+
+# Build the main Waifu2x-Extension-QT application.
+echo "Building Waifu2x-Extension-QT..."
+pushd "$TARGET_APP_DIR" >/dev/null # Change to the application directory where the .pro file is located.
+qmake Waifu2x-Extension-QT.pro || { echo "qmake for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
+# 'make liquidglass_frag' is a specific build step for a component of the UI.
+make liquidglass_frag || { echo "make liquidglass_frag for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
+# General make command for the application, using multiple cores.
+make -j$(nproc) || { echo "make for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
+popd >/dev/null
+
+# Build the Waifu2x-Extension-QT-Launcher application.
+echo "Building Waifu2x-Extension-QT-Launcher..."
+pushd Waifu2x-Extension-QT-Launcher >/dev/null # Change to the launcher's directory.
+qmake Waifu2x-Extension-QT-Launcher.pro || { echo "qmake for Launcher failed."; popd >/dev/null; exit 1; }
+# General make command for the launcher, using multiple cores.
+make -j$(nproc) || { echo "make for Launcher failed."; popd >/dev/null; exit 1; }
+popd >/dev/null
 
 echo "Build complete."

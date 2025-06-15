@@ -21,6 +21,7 @@
 #include <QCoreApplication> // Added for applicationDirPath
 #include <QDir>
 #include <QSettings>
+#include <QtGlobal>
 #include <QListWidgetItem>
 #include <QDebug>
 #include <QTextCodec>
@@ -131,7 +132,11 @@ QString RealCuganProcessor::executablePath(bool experimental) const
     // as executables are expected to be directly in applicationDirPath.
     // If different executables are needed for experimental, they should have distinct names.
     Q_UNUSED(experimental);
-    return QCoreApplication::applicationDirPath() + "/realcugan-ncnn-vulkan.exe";
+    #ifdef Q_OS_WIN
+        return QCoreApplication::applicationDirPath() + "/realcugan-ncnn-vulkan.exe";
+    #else
+        return QCoreApplication::applicationDirPath() + "/realcugan-ncnn-vulkan";
+    #endif
 }
 
 QString RealCuganProcessor::modelPath(const QString &modelName, bool experimental) const
