@@ -250,15 +250,15 @@ function Build-Project {
     }
 
     $currentDir = (Get-Location).Path
-    $msysDir = (($currentDir -replace '^([A-Za-z]):', '/$1') -replace '\\', '/')
+    $msysDir = (($currentDir -replace '^([A-Za-z]):', {"/$($matches[1].ToLower())"}) -replace '\\', '/')
     
     # Define paths to the necessary bin directories for the build environment
     $mingwBinPath = 'C:\tools\msys64\mingw64\bin'
     $msysBinPath = 'C:\tools\msys64\usr\bin'
 
     # Convert paths to a format bash understands
-    $msysMingwPath = (($mingwBinPath -replace '^([A-Za-z]):', '/$1') -replace '\\', '/')
-    $msysUsrBinPath = (($msysBinPath -replace '^([A-Za-z]):', '/$1') -replace '\\', '/')
+    $msysMingwPath = (($mingwBinPath -replace '^([A-Za-z]):', {"/$($matches[1].ToLower())"}) -replace '\\', '/')
+    $msysUsrBinPath = (($msysBinPath -replace '^([A-Za-z]):', {"/$($matches[1].ToLower())"}) -replace '\\', '/')
 
     # Build the path components
     $pathComponents = @(
@@ -266,7 +266,7 @@ function Build-Project {
         $msysUsrBinPath
     )
     if (-not [string]::IsNullOrEmpty($script:QtBinPath)) {
-        $msysQtPath = (($script:QtBinPath -replace '^([A-Za-z]):', '/$1') -replace '\\', '/')
+        $msysQtPath = (($script:QtBinPath -replace '^([A-Za-z]):', {"/$($matches[1].ToLower())"}) -replace '\\', '/')
         $pathComponents += $msysQtPath
     }
 
