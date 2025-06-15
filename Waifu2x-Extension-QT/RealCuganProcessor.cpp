@@ -24,7 +24,7 @@
 #include <QtGlobal>
 #include <QListWidgetItem>
 #include <QDebug>
-#include <QTextCodec>
+#include <QtCore5Compat/QTextCodec>
 
 RealCuganProcessor::RealCuganProcessor(MainWindow *parent)
     : QObject(parent), m_mainWindow(parent)

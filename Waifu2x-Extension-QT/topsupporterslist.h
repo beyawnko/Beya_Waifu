@@ -25,7 +25,7 @@
 #include <QWidget>
 #include <QSettings>
 #include <QFile>
-#include <QTextCodec>
+#include <QtCore5Compat/QTextCodec>
 #include <QDesktopServices>
 
 namespace Ui
