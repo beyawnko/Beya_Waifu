@@ -118,6 +118,7 @@ function Find-Msys2Bash {
 
 # --- Environment Setup Functions ---
 
+# Ensures Chocolatey is installed.
 function Ensure-Chocolatey {
     $MyInvocation.MyCommand.Name | Write-Host -ForegroundColor Cyan
 
@@ -157,6 +158,7 @@ function Ensure-Chocolatey {
     Write-Host "Chocolatey installed successfully and PATH updated for this session."
 }
 
+# Installs a Chocolatey package if missing.
 function Ensure-ChocoPackage {
     param(
         [string]$PackageName
@@ -173,6 +175,7 @@ function Ensure-ChocoPackage {
     Invoke-Process 'choco' @('install', '-y', $PackageName)
 }
 
+# Updates MSYS2 and installs toolchain packages.
 function Install-MSYS2Packages {
     param(
         [string]$Msys2BashPath
@@ -188,6 +191,7 @@ function Install-MSYS2Packages {
     Invoke-Process -FilePath $Msys2BashPath -ArgumentList $pacmanArgs
 }
 
+# Installs Qt via aqtinstall and sets QtBinPath.
 function Ensure-QMake {
     $MyInvocation.MyCommand.Name | Write-Host -ForegroundColor Cyan
 
@@ -198,20 +202,17 @@ function Ensure-QMake {
     Invoke-Process 'python' @('-m', 'pip', 'install', '--upgrade', 'pip')
     Invoke-Process 'python' @('-m', 'pip', 'install', 'aqtinstall')
 
-    # Add local bin to PATH for aqt
-    $localBinPath = "$env:HOME/.local/bin"
-    # $env:PATH = "$localBinPath;$env:PATH" # Using full path for aqt instead
-
     if (-not (Test-Path $QtDir)) {
         New-Item -ItemType Directory -Path $QtDir | Out-Null
     }
 
     $qtModules = @('qtmultimedia', 'qtshadertools')
     $qtInstallArgs = @(
+        '-m', 'aqt',
         'install-qt', 'windows', 'desktop', $QtVersion, 'win64_mingw',
         '-O', $QtDir, '-m'
     ) + $qtModules
-    Invoke-Process "$env:HOME/.local/bin/aqt" $qtInstallArgs
+    Invoke-Process 'python' $qtInstallArgs
 
     $script:QtBinPath = Join-Path -Path $QtDir -ChildPath "$QtVersion\mingw_64\bin"
     if (-not (Test-Path $script:QtBinPath)) {
@@ -228,12 +229,14 @@ function Ensure-QMake {
 
 # --- Build Steps ---
 
+# Updates Git submodules to the current revision.
 function Update-Submodules {
     $MyInvocation.MyCommand.Name | Write-Host -ForegroundColor Cyan
     Write-Host "Updating Git submodules..."
     Invoke-Process 'git' @('submodule', 'update', '--init', '--recursive')
 }
 
+# Runs the main build script inside the MSYS2 environment.
 function Build-Project {
     param(
         [string]$Msys2BashPath
