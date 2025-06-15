@@ -392,54 +392,43 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
         connect(comboBox_Model_RealCUGAN, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_comboBox_Model_RealCUGAN_currentIndexChanged);
     // End of RealCUGAN UI Initialization
 
-    // Initialize RealESRGAN UI Pointers (copied from existing code, ensure these are members of MainWindow if not already ui->)
-    comboBox_Model_RealESRGAN = findChild<QComboBox*>("comboBox_Model_RealESRGAN");
-    comboBox_GPUID_RealESRGAN = findChild<QComboBox*>("comboBox_GPUID_RealESRGAN");
-    ui->pushButton_DetectGPU_RealESRGAN = findChild<QPushButton*>("pushButton_DetectGPU_RealESRGAN");
-    ui->spinBox_TileSize_RealESRGAN = findChild<QSpinBox*>("spinBox_TileSize_RealESRGAN");
-    ui->pushButton_TileSize_Add_RealESRGAN = findChild<QPushButton*>("pushButton_TileSize_Add_RealESRGAN");
-    ui->pushButton_TileSize_Minus_RealESRGAN = findChild<QPushButton*>("pushButton_TileSize_Minus_RealESRGAN");
-    ui->checkBox_TTA_RealESRGAN = findChild<QCheckBox*>("checkBox_TTA_RealESRGAN");
-    ui->checkBox_MultiGPU_RealESRGAN = findChild<QCheckBox*>("checkBox_MultiGPU_RealESRGAN");
-    ui->groupBox_GPUSettings_MultiGPU_RealESRGAN = findChild<QGroupBox*>("groupBox_GPUSettings_MultiGPU_RealESRGAN");
-    ui->comboBox_GPUIDs_MultiGPU_RealESRGAN = findChild<QComboBox*>("comboBox_GPUIDs_MultiGPU_RealESRGAN");
-    ui->listWidget_GPUList_MultiGPU_RealESRGAN = findChild<QListWidget*>("listWidget_GPUList_MultiGPU_RealESRGAN");
-    ui->pushButton_AddGPU_MultiGPU_RealESRGAN = findChild<QPushButton*>("pushButton_AddGPU_MultiGPU_RealESRGAN");
-    ui->pushButton_RemoveGPU_MultiGPU_RealESRGAN = findChild<QPushButton*>("pushButton_RemoveGPU_MultiGPU_RealESRGAN");
-    ui->pushButton_ClearGPU_MultiGPU_RealESRGAN = findChild<QPushButton*>("pushButton_ClearGPU_MultiGPU_RealESRGAN");
-    ui->spinBox_Threads_MultiGPU_RealESRGAN = findChild<QSpinBox*>("spinBox_Threads_MultiGPU_RealESRGAN");
-    ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN = findChild<QCheckBox*>("checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN");
-    ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN = findChild<QSpinBox*>("spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN");
-    ui->pushButton_ShowMultiGPUSettings_RealESRGAN = findChild<QPushButton*>("pushButton_ShowMultiGPUSettings_RealESRGAN");
+    // Initialize Realsr-ncnn-vulkan UI pointers based on actual widget IDs
+    comboBox_Model_RealsrNCNNVulkan = findChild<QComboBox*>("comboBox_Model_RealsrNCNNVulkan");
+    comboBox_GPUID_RealsrNCNNVulkan = findChild<QComboBox*>("comboBox_GPUID_RealsrNCNNVulkan");
+    pushButton_DetectGPU_RealsrNCNNVulkan = findChild<QPushButton*>("pushButton_DetectGPU_RealsrNCNNVulkan");
+    spinBox_TileSize_RealsrNCNNVulkan = findChild<QSpinBox*>("spinBox_TileSize_RealsrNCNNVulkan");
+    pushButton_Add_TileSize_RealsrNCNNVulkan = findChild<QPushButton*>("pushButton_Add_TileSize_RealsrNCNNVulkan");
+    pushButton_Minus_TileSize_RealsrNCNNVulkan = findChild<QPushButton*>("pushButton_Minus_TileSize_RealsrNCNNVulkan");
+    checkBox_TTA_RealsrNCNNVulkan = findChild<QCheckBox*>("checkBox_TTA_RealsrNCNNVulkan");
+    checkBox_MultiGPU_RealsrNcnnVulkan = findChild<QCheckBox*>("checkBox_MultiGPU_RealsrNcnnVulkan");
+    groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan = findChild<QGroupBox*>("groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan");
+    comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan = findChild<QComboBox*>("comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan");
+    pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan = findChild<QPushButton*>("pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan");
+    checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan = findChild<QCheckBox*>("checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan");
+    spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan = findChild<QSpinBox*>("spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan");
     ProcList_RealESRGAN.clear();
     GPU_ID_RealesrganNcnnVulkan_MultiGPU_CycleCounter = 0;
     isCompatible_RealESRGAN_NCNN_Vulkan = false;
     GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.clear();
     RealESRGAN_NCNN_Vulkan_PreLoad_Settings();
-    if(ui->pushButton_DetectGPU_RealESRGAN)
-        connect(ui->pushButton_DetectGPU_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_DetectGPU_RealESRGAN_clicked);
-    if(ui->comboBox_Model_RealESRGAN)
-        connect(ui->comboBox_Model_RealESRGAN, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_comboBox_Model_RealESRGAN_currentIndexChanged);
-    if(ui->pushButton_TileSize_Add_RealESRGAN)
-        connect(ui->pushButton_TileSize_Add_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_TileSize_Add_RealESRGAN_clicked);
-    if(ui->pushButton_TileSize_Minus_RealESRGAN)
-        connect(ui->pushButton_TileSize_Minus_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_TileSize_Minus_RealESRGAN_clicked);
-    if(ui->checkBox_MultiGPU_RealESRGAN)
-        connect(ui->checkBox_MultiGPU_RealESRGAN, &QCheckBox::stateChanged, this, &MainWindow::on_checkBox_MultiGPU_RealESRGAN_stateChanged);
-    if(ui->comboBox_GPUIDs_MultiGPU_RealESRGAN)
-        connect(ui->comboBox_GPUIDs_MultiGPU_RealESRGAN, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_comboBox_GPUIDs_MultiGPU_RealESRGAN_currentIndexChanged);
-    if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN)
-        connect(ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN, &QCheckBox::clicked, this, &MainWindow::on_checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN_clicked);
-    if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN)
-        connect(ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN_valueChanged);
-    if(ui->pushButton_ShowMultiGPUSettings_RealESRGAN)
-        connect(ui->pushButton_ShowMultiGPUSettings_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_ShowMultiGPUSettings_RealESRGAN_clicked);
-    if(ui->pushButton_AddGPU_MultiGPU_RealESRGAN)
-        connect(ui->pushButton_AddGPU_MultiGPU_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_AddGPU_MultiGPU_RealESRGAN_clicked);
-    if(ui->pushButton_RemoveGPU_MultiGPU_RealESRGAN)
-        connect(ui->pushButton_RemoveGPU_MultiGPU_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealESRGAN_clicked);
-    if(ui->pushButton_ClearGPU_MultiGPU_RealESRGAN)
-        connect(ui->pushButton_ClearGPU_MultiGPU_RealESRGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_ClearGPU_MultiGPU_RealESRGAN_clicked);
+    if(pushButton_DetectGPU_RealsrNCNNVulkan)
+        connect(pushButton_DetectGPU_RealsrNCNNVulkan, &QPushButton::clicked, this, &MainWindow::on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked);
+    if(comboBox_Model_RealsrNCNNVulkan)
+        connect(comboBox_Model_RealsrNCNNVulkan, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_comboBox_Model_RealsrNCNNVulkan_currentIndexChanged);
+    if(pushButton_Add_TileSize_RealsrNCNNVulkan)
+        connect(pushButton_Add_TileSize_RealsrNCNNVulkan, &QPushButton::clicked, this, &MainWindow::on_pushButton_Add_TileSize_RealsrNCNNVulkan_clicked);
+    if(pushButton_Minus_TileSize_RealsrNCNNVulkan)
+        connect(pushButton_Minus_TileSize_RealsrNCNNVulkan, &QPushButton::clicked, this, &MainWindow::on_pushButton_Minus_TileSize_RealsrNCNNVulkan_clicked);
+    if(checkBox_MultiGPU_RealsrNcnnVulkan)
+        connect(checkBox_MultiGPU_RealsrNcnnVulkan, &QCheckBox::stateChanged, this, &MainWindow::on_checkBox_MultiGPU_RealsrNcnnVulkan_stateChanged);
+    if(comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan)
+        connect(comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan_currentIndexChanged);
+    if(checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan)
+        connect(checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan, &QCheckBox::clicked, this, &MainWindow::on_checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan_clicked);
+    if(spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan)
+        connect(spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan_valueChanged);
+    if(pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan)
+        connect(pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan, &QPushButton::clicked, this, &MainWindow::on_pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan_clicked);
 
     this->showNormal();
     this->activateWindow();
@@ -2343,9 +2332,9 @@ void MainWindow::PreLoad_Engines_Settings()
     if(Realcugan_NCNN_Vulkan_PreLoad_Settings_Str != "") Realcugan_NCNN_Vulkan_PreLoad_Settings_Str = tr("RealCUGAN-ncnn-Vulkan Preload Failed:") + "\n" + Realcugan_NCNN_Vulkan_PreLoad_Settings_Str;
 
     Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    if (ui->comboBox_Model_RealESRGAN && ui->comboBox_GPUID_RealESRGAN) {
-        if(ui->comboBox_Model_RealESRGAN->count() <= 0) Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealESRGAN model list is empty.") + "\n";
-        if(ui->comboBox_GPUID_RealESRGAN->count() <= 0) Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealESRGAN GPU list is empty.") + "\n";
+    if (comboBox_Model_RealsrNCNNVulkan && comboBox_GPUID_RealsrNCNNVulkan) {
+        if(comboBox_Model_RealsrNCNNVulkan->count() <= 0) Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealESRGAN model list is empty.") + "\n";
+        if(comboBox_GPUID_RealsrNCNNVulkan->count() <= 0) Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealESRGAN GPU list is empty.") + "\n";
     } else {
         Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealESRGAN UI elements not found.") + "\n";
     }

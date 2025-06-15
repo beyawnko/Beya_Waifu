@@ -82,7 +82,7 @@ void MainWindow::RealESRGAN_CleanupTempDir(const QDir &tempDir) {
 // --- RealESRGAN Core Processing Functions ---
 
 void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings() {
-    QString modelComboText = ui->comboBox_Model_RealESRGAN->currentText();
+    QString modelComboText = ui->comboBox_Model_RealsrNCNNVulkan->currentText();
     // -n {MODEL_NAME} -s {SCALE}
     // Example models: "realesrgan-x4plus", "realesrgan-x4plus-anime", "realesr-animevideov3-x2"
     // For "realesr-animevideov3-x2", MODEL_NAME is "realesr-animevideov3", SCALE is 2.
@@ -109,9 +109,9 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings() {
         qWarning() << "RealESRGAN_ReadSettings: Unknown model text" << modelComboText << ", defaulting to realesrgan-x4plus.";
     }
 
-    m_realesrgan_TileSize = ui->spinBox_TileSize_RealESRGAN->value();
-    m_realesrgan_TTA = ui->checkBox_TTA_RealESRGAN->isChecked();
-    m_realesrgan_GPUID = ui->comboBox_GPUID_RealESRGAN->currentText(); // Full "ID: Name" string
+    m_realesrgan_TileSize = ui->spinBox_TileSize_RealsrNCNNVulkan->value();
+    m_realesrgan_TTA = ui->checkBox_TTA_RealsrNCNNVulkan->isChecked();
+    m_realesrgan_GPUID = ui->comboBox_GPUID_RealsrNCNNVulkan->currentText(); // Full "ID: Name" string
 
     qDebug() << "RealESRGAN Settings Read: ModelName:" << m_realesrgan_ModelName
              << "ModelNativeScale:" << m_realesrgan_ModelNativeScale
@@ -381,7 +381,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_Missing
 
     QString gpuConfigToUse = m_realesrgan_GPUID; // Single GPU ID string
     bool isMultiConfig = false;
-    if (ui->checkBox_MultiGPU_RealESRGAN->isChecked()){
+    if (ui->checkBox_MultiGPU_RealsrNcnnVulkan->isChecked()){
         gpuConfigToUse = RealesrganNcnnVulkan_MultiGPU(); // Full multi-GPU job string
         isMultiConfig = true; // Mark that it's a multi-GPU config string
     }
@@ -609,7 +609,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_GIF(int rowNum) {
     emit Send_TextBrowser_NewMessage(tr("Starting AI processing for GIF frames... (RealESRGAN)"));
     bool aiProcessingSuccessGIF = RealESRGAN_ProcessDirectoryIteratively(
         rgbFramesTempDir, scaledRgbFramesAIDirGIF, targetScale, m_realesrgan_ModelNativeScale, m_realesrgan_ModelName,
-        m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealESRGAN->isChecked(),
+        m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealsrNcnnVulkan->isChecked(),
         m_realesrgan_TTA, "png" // Output AI pass as PNG
     );
     QDir(rgbFramesTempDir).removeRecursively();
@@ -714,7 +714,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int rowNum) {
     emit Send_TextBrowser_NewMessage(tr("Starting AI processing for video frames... (RealESRGAN)"));
     bool aiSuccess = RealESRGAN_ProcessDirectoryIteratively(
         splitFramesFolder, scaledFramesFolderAI, targetScale, m_realesrgan_ModelNativeScale, m_realesrgan_ModelName,
-        m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealESRGAN->isChecked(),
+        m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealsrNcnnVulkan->isChecked(),
         m_realesrgan_TTA, "png" // Output AI pass as PNG for quality
     );
 
@@ -820,7 +820,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video_BySegment(int rowNum) {
         emit Send_TextBrowser_NewMessage(tr("Starting AI processing for segment %1/%2 frames... (RealESRGAN)").arg(i+1).arg(numSegments));
         bool aiSegmentSuccess = RealESRGAN_ProcessDirectoryIteratively(
             splitFramesFolder, segmentScaledFramesFolderAI, targetScale, m_realesrgan_ModelNativeScale, m_realesrgan_ModelName,
-            m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealESRGAN->isChecked(),
+            m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealsrNcnnVulkan->isChecked(),
             m_realesrgan_TTA, "png"
         );
 
@@ -980,7 +980,7 @@ void MainWindow::APNG_RealESRGANCNNVulkan(QString splitFramesFolder, QString sca
     emit Send_TextBrowser_NewMessage(tr("Starting AI processing for APNG frames... (RealESRGAN)"));
     bool aiProcessingSuccessAPNG = RealESRGAN_ProcessDirectoryIteratively(
         rgbFramesTempDirAPNG, scaledRgbFramesAIDirAPNG, targetScale, m_realesrgan_ModelNativeScale, m_realesrgan_ModelName,
-        m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealESRGAN->isChecked(),
+        m_realesrgan_TileSize, m_realesrgan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealsrNcnnVulkan->isChecked(),
         m_realesrgan_TTA, "png"
     );
     QDir(rgbFramesTempDirAPNG).removeRecursively();
@@ -1048,7 +1048,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum) {
     RealESRGAN_NCNN_Vulkan_ReadSettings();
 
     QString gpuJobConfig;
-    if (ui->checkBox_MultiGPU_RealESRGAN->isChecked() && !GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.isEmpty()) {
+    if (ui->checkBox_MultiGPU_RealsrNcnnVulkan->isChecked() && !GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.isEmpty()) {
         QStringList gpuIDs, jobThreadsPerGPU;
         for(const auto& gpu : GPUIDs_List_MultiGPU_RealesrganNcnnVulkan) {
             if(gpu.value("isEnabled", "true") == "true") { // Check if GPU is enabled in the list
@@ -1074,7 +1074,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum) {
 }
 
 QString MainWindow::RealesrganNcnnVulkan_MultiGPU() {
-    if (!ui->checkBox_MultiGPU_RealESRGAN->isChecked() || GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.isEmpty()) {
+    if (!ui->checkBox_MultiGPU_RealsrNcnnVulkan->isChecked() || GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.isEmpty()) {
         return "-g " + m_realesrgan_GPUID.split(" ")[0];
     }
     QStringList gpuIDs, jobThreads;
@@ -1105,49 +1105,43 @@ void MainWindow::AddGPU_MultiGPU_RealesrganNcnnVulkan(QString GPUID_Name) {
     newGPU.insert("Threads", QString::number(threads)); // This "Threads" will be used as "proc" in "load:proc:save"
     newGPU.insert("isEnabled", "true"); // Default to enabled
     // Tile size per GPU is not standard for RealESRGAN, usually global. Storing it if UI supports it.
-    newGPU.insert("TileSize", QString::number(ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN->value()));
+    newGPU.insert("TileSize", QString::number(ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan->value()));
 
 
     GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.append(newGPU);
-    ui->listWidget_GPUList_MultiGPU_RealESRGAN->addItem(QString("ID: %1, Name: %2, Threads: %3, Tile: %4 (%5)")
-                                                     .arg(id, name, QString::number(threads), newGPU.value("TileSize")));
+    // listWidget removed from UI; keep data only
 }
 
 void MainWindow::RealESRGAN_NCNN_Vulkan_PreLoad_Settings() {
     QSettings settings(Current_Path + "/settings.ini", QSettings::IniFormat); // Use global settings file
     // settings.setIniCodec(QTextCodec::codecForName("UTF-8")); // Removed for Qt6
     settings.beginGroup("RealESRGAN_NCNN_Vulkan");
-    ui->comboBox_Model_RealESRGAN->setCurrentText(settings.value("Model", "realesrgan-x4plus").toString());
-    ui->spinBox_TileSize_RealESRGAN->setValue(settings.value("TileSize", 0).toInt());
-    ui->checkBox_TTA_RealESRGAN->setChecked(settings.value("TTA", false).toBool());
+    ui->comboBox_Model_RealsrNCNNVulkan->setCurrentText(settings.value("Model", "realesrgan-x4plus").toString());
+    ui->spinBox_TileSize_RealsrNCNNVulkan->setValue(settings.value("TileSize", 0).toInt());
+    ui->checkBox_TTA_RealsrNCNNVulkan->setChecked(settings.value("TTA", false).toBool());
 
     // Load Available GPUs first, then set current text for single GPU
     Available_GPUID_RealESRGAN_ncnn_vulkan = settings.value("AvailableGPUs").toStringList();
     if (!Available_GPUID_RealESRGAN_ncnn_vulkan.isEmpty()) {
-        ui->comboBox_GPUID_RealESRGAN->clear();
-        ui->comboBox_GPUID_RealESRGAN->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
-        ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->clear();
-        ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
+        ui->comboBox_GPUID_RealsrNCNNVulkan->clear();
+        ui->comboBox_GPUID_RealsrNCNNVulkan->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
+        ui->comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->clear();
+        ui->comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
     }
-    ui->comboBox_GPUID_RealESRGAN->setCurrentText(settings.value("GPUID", "0: Default GPU 0").toString());
+    ui->comboBox_GPUID_RealsrNCNNVulkan->setCurrentText(settings.value("GPUID", "0: Default GPU 0").toString());
 
-    ui->checkBox_MultiGPU_RealESRGAN->setChecked(settings.value("MultiGPUEnabled", false).toBool());
+    ui->checkBox_MultiGPU_RealsrNcnnVulkan->setChecked(settings.value("MultiGPUEnabled", false).toBool());
     GPUIDs_List_MultiGPU_RealesrganNcnnVulkan = settings.value("MultiGPU_List").value<QList_QMap_QStrQStr>();
-    ui->listWidget_GPUList_MultiGPU_RealESRGAN->clear();
-    for(const auto& gpuMap : GPUIDs_List_MultiGPU_RealesrganNcnnVulkan) {
-        QString status = gpuMap.value("isEnabled", "true") == "true" ? "Enabled" : "Disabled";
-        ui->listWidget_GPUList_MultiGPU_RealESRGAN->addItem(QString("ID: %1, Name: %2, Threads: %3, Tile: %4 (%5)")
-            .arg(gpuMap.value("ID"), gpuMap.value("Name"), gpuMap.value("Threads"), gpuMap.value("TileSize"), status));
-    }
+    // listWidget removed from UI
     settings.endGroup();
     RealESRGAN_NCNN_Vulkan_ReadSettings();
-    on_checkBox_MultiGPU_RealESRGAN_stateChanged(ui->checkBox_MultiGPU_RealESRGAN->isChecked() ? Qt::Checked : Qt::Unchecked); // Update UI state
+    on_checkBox_MultiGPU_RealsrNcnnVulkan_stateChanged(ui->checkBox_MultiGPU_RealsrNcnnVulkan->isChecked() ? Qt::Checked : Qt::Unchecked); // Update UI state
 }
 
 void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU() {
     Available_GPUID_RealESRGAN_ncnn_vulkan.clear();
-    ui->comboBox_GPUID_RealESRGAN->clear();
-    ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->clear();
+    ui->comboBox_GPUID_RealsrNCNNVulkan->clear();
+    ui->comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->clear();
 
     QProcess *process = new QProcess(this);
     process->setObjectName("RealESRGAN_DetectGPU");
@@ -1165,7 +1159,7 @@ void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU() {
         process->deleteLater(); return;
     }
     process->start(exePath, QStringList());
-    ui->pushButton_DetectGPU_RealESRGAN->setEnabled(false);
+    ui->pushButton_DetectGPU_RealsrNCNNVulkan->setEnabled(false);
 }
 
 void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU_finished(int exitCode, QProcess::ExitStatus exitStatus) {
@@ -1196,8 +1190,8 @@ void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU_finished(int exitCode, QProces
         QMessageBox::information(this, tr("GPU Detection"), tr("RealESRGAN GPUs detected."));
     }
 
-    ui->comboBox_GPUID_RealESRGAN->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
-    ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
+    ui->comboBox_GPUID_RealsrNCNNVulkan->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
+    ui->comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
 
     QSettings settings(Current_Path + "/settings.ini", QSettings::IniFormat);
     // settings.setIniCodec(QTextCodec::codecForName("UTF-8")); // Removed for Qt6
@@ -1205,7 +1199,7 @@ void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU_finished(int exitCode, QProces
     settings.setValue("AvailableGPUs", Available_GPUID_RealESRGAN_ncnn_vulkan);
     settings.endGroup();
 
-    ui->pushButton_DetectGPU_RealESRGAN->setEnabled(true);
+    ui->pushButton_DetectGPU_RealsrNCNNVulkan->setEnabled(true);
     process->deleteLater();
     emit Send_Realesrgan_ncnn_vulkan_DetectGPU_finished();
 }
@@ -1216,10 +1210,10 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::Proces
     if (!process) return;
     qDebug() << "RealESRGAN DetectGPU error:" << process->errorString();
     QMessageBox::critical(this, tr("GPU Detection Error"), tr("RealESRGAN GPU detection process failed: %1").arg(process->errorString()));
-    ui->pushButton_DetectGPU_RealESRGAN->setEnabled(true);
+    ui->pushButton_DetectGPU_RealsrNCNNVulkan->setEnabled(true);
     Available_GPUID_RealESRGAN_ncnn_vulkan.append("0: Error (Detection failed)");
-    ui->comboBox_GPUID_RealESRGAN->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
-    ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
+    ui->comboBox_GPUID_RealsrNCNNVulkan->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
+    ui->comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
     process->deleteLater();
 }
 
@@ -1230,88 +1224,76 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_errorOccurred(QProcess::ProcessError err
 
 
 // --- UI Interaction Slots for RealESRGAN (Copied from existing file, ensure they are connected) ---
-void MainWindow::on_pushButton_DetectGPU_RealESRGAN_clicked()
+void MainWindow::on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked()
 {
-    qDebug() << "on_pushButton_DetectGPU_RealESRGAN_clicked";
+    qDebug() << "on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked";
     RealESRGAN_ncnn_vulkan_DetectGPU();
 }
 
-void MainWindow::on_comboBox_Model_RealESRGAN_currentIndexChanged(int index)
+void MainWindow::on_comboBox_Model_RealsrNCNNVulkan_currentIndexChanged(int index)
 {
     Q_UNUSED(index);
-    qDebug() << "RealESRGAN model changed to:" << ui->comboBox_Model_RealESRGAN->currentText();
+    qDebug() << "RealESRGAN model changed to:" << ui->comboBox_Model_RealsrNCNNVulkan->currentText();
     RealESRGAN_NCNN_Vulkan_ReadSettings(); // Update member vars like m_realesrgan_ModelNativeScale
 }
 
-void MainWindow::on_pushButton_TileSize_Add_RealESRGAN_clicked()
+void MainWindow::on_pushButton_Add_TileSize_RealsrNCNNVulkan_clicked()
 {
-    if(!ui->spinBox_TileSize_RealESRGAN) return;
-    ui->spinBox_TileSize_RealESRGAN->setValue(AddTileSize_NCNNVulkan_Converter(ui->spinBox_TileSize_RealESRGAN->value()));
+    if(!ui->spinBox_TileSize_RealsrNCNNVulkan) return;
+    ui->spinBox_TileSize_RealsrNCNNVulkan->setValue(AddTileSize_NCNNVulkan_Converter(ui->spinBox_TileSize_RealsrNCNNVulkan->value()));
 }
 
-void MainWindow::on_pushButton_TileSize_Minus_RealESRGAN_clicked()
+void MainWindow::on_pushButton_Minus_TileSize_RealsrNCNNVulkan_clicked()
 {
-    if(!ui->spinBox_TileSize_RealESRGAN) return;
-    ui->spinBox_TileSize_RealESRGAN->setValue(MinusTileSize_NCNNVulkan_Converter(ui->spinBox_TileSize_RealESRGAN->value()));
+    if(!ui->spinBox_TileSize_RealsrNCNNVulkan) return;
+    ui->spinBox_TileSize_RealsrNCNNVulkan->setValue(MinusTileSize_NCNNVulkan_Converter(ui->spinBox_TileSize_RealsrNCNNVulkan->value()));
 }
 
-void MainWindow::on_checkBox_MultiGPU_RealESRGAN_stateChanged(int state)
+void MainWindow::on_checkBox_MultiGPU_RealsrNcnnVulkan_stateChanged(int state)
 {
     bool enabled = (state == Qt::Checked);
-    ui->groupBox_GPUSettings_MultiGPU_RealESRGAN->setEnabled(enabled);
-    ui->comboBox_GPUID_RealESRGAN->setDisabled(enabled);
+    ui->groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan->setEnabled(enabled);
+    ui->comboBox_GPUID_RealsrNCNNVulkan->setDisabled(enabled);
     qDebug() << "RealESRGAN Multi-GPU" << (enabled ? "enabled" : "disabled");
 }
 
-void MainWindow::on_comboBox_GPUIDs_MultiGPU_RealESRGAN_currentIndexChanged(int index)
+void MainWindow::on_comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan_currentIndexChanged(int index)
 {
-    if(index < 0 || index >= GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.size() || !ui->checkBox_MultiGPU_RealESRGAN->isChecked())
+    if(index < 0 || index >= GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.size() || !ui->checkBox_MultiGPU_RealsrNcnnVulkan->isChecked())
     {
-        ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN->setChecked(false);
-        ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN->setValue(0); // Default or disable
+        ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setChecked(false);
+        ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setValue(0); // Default or disable
         return;
     }
     QMap<QString,QString> CurrentGPU_info = GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.at(index);
-    ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN->setChecked(CurrentGPU_info.value("isEnabled", "true") == "true");
-    ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN->setValue(CurrentGPU_info.value("TileSize", "0").toInt());
+    ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setChecked(CurrentGPU_info.value("isEnabled", "true") == "true");
+    ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setValue(CurrentGPU_info.value("TileSize", "0").toInt());
 }
 
-void MainWindow::on_checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN_clicked()
+void MainWindow::on_checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan_clicked()
 {
-    int currentIndex = ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->currentIndex();
+    int currentIndex = ui->comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->currentIndex();
     if(currentIndex < 0 || currentIndex >= GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.size()) return;
 
     MultiGPU_QMutex_RealesrganNcnnVulkan.lock();
-    GPUIDs_List_MultiGPU_RealesrganNcnnVulkan[currentIndex]["isEnabled"] = ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN->isChecked() ? "true" : "false";
+    GPUIDs_List_MultiGPU_RealesrganNcnnVulkan[currentIndex]["isEnabled"] = ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan->isChecked() ? "true" : "false";
     MultiGPU_QMutex_RealesrganNcnnVulkan.unlock();
     // Update listWidget display
-    QListWidgetItem* item = ui->listWidget_GPUList_MultiGPU_RealESRGAN->item(currentIndex); // Assuming direct mapping
-    if(item) {
-        QMap<QString,QString> gpuInfo = GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.at(currentIndex);
-        QString status = gpuInfo.value("isEnabled", "true") == "true" ? "Enabled" : "Disabled";
-        item->setText(QString("ID: %1, Name: %2, Threads: %3, Tile: %4 (%5)")
-            .arg(gpuInfo.value("ID"), gpuInfo.value("Name"), gpuInfo.value("Threads"), gpuInfo.value("TileSize"), status));
-    }
+    // listWidget removed from UI; skip item update
 }
 
-void MainWindow::on_spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN_valueChanged(int arg1)
+void MainWindow::on_spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan_valueChanged(int arg1)
 {
-    int currentIndex = ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->currentIndex();
+    int currentIndex = ui->comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->currentIndex();
     if(currentIndex < 0 || currentIndex >= GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.size()) return;
 
     MultiGPU_QMutex_RealesrganNcnnVulkan.lock();
     GPUIDs_List_MultiGPU_RealesrganNcnnVulkan[currentIndex]["TileSize"] = QString::number(arg1);
     MultiGPU_QMutex_RealesrganNcnnVulkan.unlock();
-     QListWidgetItem* item = ui->listWidget_GPUList_MultiGPU_RealESRGAN->item(currentIndex);
-    if(item) {
-        QMap<QString,QString> gpuInfo = GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.at(currentIndex);
-        QString status = gpuInfo.value("isEnabled", "true") == "true" ? "Enabled" : "Disabled";
-        item->setText(QString("ID: %1, Name: %2, Threads: %3, Tile: %4 (%5)")
-            .arg(gpuInfo.value("ID"), gpuInfo.value("Name"), gpuInfo.value("Threads"), gpuInfo.value("TileSize"), status));
-    }
+    // listWidget removed from UI; skip item update
 }
 
-void MainWindow::on_pushButton_ShowMultiGPUSettings_RealESRGAN_clicked()
+void MainWindow::on_pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan_clicked()
 {
     QString Settings_str = "RealESRGAN Multi-GPU Config:\n";
     MultiGPU_QMutex_RealesrganNcnnVulkan.lock();
