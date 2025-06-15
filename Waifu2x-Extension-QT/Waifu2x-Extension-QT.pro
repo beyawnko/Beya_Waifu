@@ -17,7 +17,7 @@
 
 QT       += core gui
 QT       += concurrent
-QT       += multimedia
+QT       += multimedia opengl openglwidgets core5compat
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
