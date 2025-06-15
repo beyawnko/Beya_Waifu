@@ -78,6 +78,12 @@ function Convert-PathToMsys {
         $drive = $matches[1].ToLower()
         return "/$drive" + ($Path.Substring(2) -replace '\\', '/')
     }
+
+    if ($Path -match '^\\(?!\\)') {
+        $drive = (Get-Location).Drive.Name.TrimEnd(':').ToLower()
+        return "/$drive" + ($Path -replace '\\', '/')
+    }
+
     return ($Path -replace '\\', '/')
 }
 
