@@ -4,7 +4,9 @@
 void MainWindow::on_pushButton_compatibilityTest_clicked()
 {
     ui->pushButton_compatibilityTest->setEnabled(false);
-    QtConcurrent::run([this]() { this->Simple_Compatibility_Test(); });
+    compatibilityTestFuture = QtConcurrent::run([this]() {
+        this->Simple_Compatibility_Test();
+    });
 }
 
 int MainWindow::Simple_Compatibility_Test()
@@ -15,4 +17,12 @@ int MainWindow::Simple_Compatibility_Test()
     isCompatible_RealESRGAN_NCNN_Vulkan = QFile::exists(realesrganExe);
     emit Send_Waifu2x_Compatibility_Test_finished();
     return 0;
+}
+
+void MainWindow::waitForCompatibilityTest()
+{
+    if (compatibilityTestFuture.isRunning())
+    {
+        compatibilityTestFuture.waitForFinished();
+    }
 }
