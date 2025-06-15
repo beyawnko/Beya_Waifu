@@ -1,4 +1,5 @@
 <#
+Copyright (C) 2025  beyawnko
 .SYNOPSIS
     A build script to set up a development environment and build a project.
     It ensures all necessary dependencies like Chocolatey, MSYS2, and Qt (with all required modules) are installed.
@@ -65,6 +66,18 @@ function Invoke-Process {
         # Using ${} around the variable name prevents parsing errors when it's followed by punctuation like a colon.
         throw "Command failed with exit code ${LASTEXITCODE}: '$($commandPath.Source)' $ArgumentList"
     }
+}
+
+# Converts a Windows path to an MSYS2-compatible path.
+function Convert-PathToMsys {
+    param(
+        [string]$Path
+    )
+
+    if ($Path -match '^([A-Za-z]):') {
+        $drive = $matches[1].ToLower()
+    }
+    return "/$drive" + ($Path.Substring(2) -replace '\\', '/')
 }
 
 # Finds the MSYS2 bash executable.
@@ -236,7 +249,7 @@ function Build-Project {
     }
 
     $currentDir = (Get-Location).Path
-    $msysDir = (($currentDir -replace '^([A-Za-z]):', '/$1') -replace '\\', '/')
+    $msysDir = Convert-PathToMsys $currentDir
 
     # Explicitly update submodules within realesrgan-ncnn-vulkan
     Write-Host "Ensuring nested submodules are updated in realesrgan-ncnn-vulkan..."
@@ -250,8 +263,8 @@ function Build-Project {
     $msysBinPath = 'C:\tools\msys64\usr\bin'
 
     # Convert paths to a format bash understands
-    $msysMingwPath = (($mingwBinPath -replace '^([A-Za-z]):', '/$1') -replace '\\', '/')
-    $msysUsrBinPath = (($msysBinPath -replace '^([A-Za-z]):', '/$1') -replace '\\', '/')
+    $msysMingwPath = Convert-PathToMsys $mingwBinPath
+    $msysUsrBinPath = Convert-PathToMsys $msysBinPath
 
     # Build the path components
     $pathComponents = @(
@@ -259,7 +272,7 @@ function Build-Project {
         $msysUsrBinPath
     )
     if (-not [string]::IsNullOrEmpty($script:QtBinPath)) {
-        $msysQtPath = (($script:QtBinPath -replace '^([A-Za-z]):', '/$1') -replace '\\', '/')
+        $msysQtPath = Convert-PathToMsys $script:QtBinPath
         $pathComponents += $msysQtPath
     }
 
