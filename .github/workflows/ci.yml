@@ -47,11 +47,12 @@ jobs:
       - name: Run tests
         shell: bash
         run: |
-          pytest > pytest.log 2>&1
+          pytest --junitxml tests/windows-test.xml > tests/windows-test.log 2>&1
       - name: Upload test logs
         uses: actions/upload-artifact@v4
         with:
           name: windows-test-logs
           path: |
             build.log
-            pytest.log
+            tests/windows-test.log
+            tests/windows-test.xml

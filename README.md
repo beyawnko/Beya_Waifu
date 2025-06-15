@@ -204,6 +204,10 @@ The sample images used for testing are located under
 `realcugan-ncnn-vulkan/images/` and in the
 `realesrgan-ncnn-vulkan/windows` folder.
 
+During CI the Windows workflow captures the pytest output into
+`tests/windows-test.log` and uploads it as the **windows-test-logs** artifact.
+The log can be downloaded from the workflow run's "Artifacts" section.
+
 ## Static Analysis
 [![cppcheck](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/cppcheck.yml/badge.svg)](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/cppcheck.yml)
 
