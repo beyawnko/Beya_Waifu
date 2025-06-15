@@ -18,7 +18,7 @@ def run_build(tmp_path: Path, uname_output: str, make_cmd: str = 'make') -> None
     (tmp_path / 'realcugan-ncnn-vulkan' / 'windows' / 'realcugan.dll').write_text('')
     bin_dir = tmp_path / 'bin'
     bin_dir.mkdir()
-    for name in ('qmake', make_cmd, 'cmake'):
+    for name in ('qmake', make_cmd, 'cmake', 'qsb'):
         f = bin_dir / name
         f.write_text('#!/bin/sh\nexit 0\n')
         f.chmod(0o755)
