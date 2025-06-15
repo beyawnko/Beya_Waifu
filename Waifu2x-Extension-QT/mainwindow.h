@@ -49,7 +49,7 @@ Copyright (C) 2025  beyawnko
 #include <QScreen>
 #include <QCloseEvent>
 #include <QFileDialog>
-#include <QTextCodec>
+#include <QtCore5Compat/QTextCodec>
 #include <math.h>
 #include <QMutex>
 #include <QSystemTrayIcon>
