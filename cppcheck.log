@@ -1,0 +1,42 @@
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h:45:0: warning: Include file: <type_traits> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#  include <type_traits>
+^
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h:46:0: warning: Include file: <cstddef> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#  include <cstddef>
+^
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h:47:0: warning: Include file: <utility> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#  include <utility>
+^
+/usr/include/features-time64.h:20:0: warning: Include file: <bits/wordsize.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <bits/wordsize.h>
+^
+/usr/include/features-time64.h:21:0: warning: Include file: <bits/timesize.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <bits/timesize.h>
+^
+/usr/include/features.h:502:0: warning: Include file: <sys/cdefs.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#  include <sys/cdefs.h>
+^
+/usr/include/features.h:526:0: warning: Include file: <gnu/stubs.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <gnu/stubs.h>
+^
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h:51:0: warning: Include file: <stddef.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#  include <stddef.h>
+^
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qsystemdetection.h:87:0: warning: Include file: <TargetConditionals.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#  include <TargetConditionals.h>
+^
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qsystemdetection.h:220:0: warning: Include file: <Availability.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#  include <Availability.h>
+^
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qsystemdetection.h:221:0: warning: Include file: <AvailabilityMacros.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#  include <AvailabilityMacros.h>
+^
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qcompilerdetection.h:1023:0: warning: Include file: <utility> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+# include <utility>
+^
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h:142:0: warning: Include file: <algorithm> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <algorithm>
+^
+/usr/include/x86_64-linux-gnu/qt5/QtCore/qflags.h:45:0: warning: Include file: <initializer_list> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <initializer_list>
+^

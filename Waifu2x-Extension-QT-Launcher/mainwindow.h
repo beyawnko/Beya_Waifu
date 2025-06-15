@@ -7,8 +7,10 @@ Copyright (C) 2025  beyawnko
 #include <QFile>
 #include <QTextStream>
 #include <QProcess>
+#ifdef Q_OS_WIN
 #include <windows.h>
 #include <shellapi.h>
+#endif
 #include <QThread>
 #include <QCloseEvent>
 #include <QApplication>

@@ -2,3 +2,29 @@ tests/bin/
 # Downloaded binary archives for integration tests
 *realcugan-ncnn-vulkan*.zip
 *realesrgan-ncnn-vulkan*.zip
+
+# Upscaler submodule build directories
+realesrgan-ncnn-vulkan/build_linux/
+realcugan-ncnn-vulkan/build_linux/
+
+# Waifu2x-Extension-QT build outputs
+Waifu2x-Extension-QT/Makefile
+Waifu2x-Extension-QT/.qmake.stash
+Waifu2x-Extension-QT/moc_*.cpp
+Waifu2x-Extension-QT/moc_*.h
+Waifu2x-Extension-QT/qrc_*.cpp
+Waifu2x-Extension-QT/ui_*.h
+Waifu2x-Extension-QT/*.o
+Waifu2x-Extension-QT/Beya_Waifu
+Waifu2x-Extension-QT/shaders/*.qsb
+Waifu2x-Extension-QT/shaders/
+
+# Waifu2x-Extension-QT-Launcher build outputs
+Waifu2x-Extension-QT-Launcher/Makefile
+Waifu2x-Extension-QT-Launcher/.qmake.stash
+Waifu2x-Extension-QT-Launcher/moc_*.cpp
+Waifu2x-Extension-QT-Launcher/moc_*.h
+Waifu2x-Extension-QT-Launcher/qrc_*.cpp
+Waifu2x-Extension-QT-Launcher/ui_*.h
+Waifu2x-Extension-QT-Launcher/*.o
+Waifu2x-Extension-QT-Launcher/Waifu2x-Extension-QT-Launcher
