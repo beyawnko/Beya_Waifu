@@ -979,7 +979,7 @@ private:
     void ShellMessageBox(const QString &title, const QString &text, QMessageBox::Icon icon);
 
     Ui::MainWindow *ui;
-    // Missing public member functions (if any, Waifu2x() and Check_PreLoad_Settings() were in error log)
+
 public:
     int Waifu2x(); // Declaration based on mainwindow.cpp error
     bool Check_PreLoad_Settings(); // Declaration based on mainwindow.cpp error
