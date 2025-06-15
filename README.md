@@ -25,6 +25,26 @@ RealCUGAN and RealESRGAN are currently the only supported upscaling engines.
 
 Ensure your GPU drivers support Vulkan since both engines rely on it.
 
+### Quick Build (Linux & Windows)
+
+1.  Install **Qt 5.15** or **Qt 6.5** with the Widgets, Multimedia, OpenGL and
+    Qt5Compat modules. A C++11 compiler is required (GCC 7+ on Linux or the
+    MSYS2 MinGW-w64 toolchain on Windows).
+2.  Clone the repository and its submodules:
+    ```bash
+    git clone --recursive https://github.com/beyawnko/Beya_Waifu.git
+    cd Beya_Waifu
+    ```
+3.  Build all components with the helper script:
+    ```bash
+    ./build_projects.sh
+    ```
+4.  After building, install the Python requirements and run the unit tests:
+    ```bash
+    pip install -r requirements.txt
+    pytest
+    ```
+
 ## Building from Source
 
 This project can be built on Linux and Windows. The `build_projects.sh` script in the root directory is designed to automate the building of the main application, the launcher, and the required upscaler engines (RealCUGAN and RealESRGAN).
