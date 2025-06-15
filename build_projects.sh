@@ -23,7 +23,13 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         echo "Windows environment detected. Handling upscaler binaries..."
 
         # Attempt to add Vulkan SDK to PATH for glslc
-        VULKAN_SDK_BIN_PATH="/c/VulkanSDK/$(ls /c/VulkanSDK/)/Bin" # Adjust if Vulkan SDK version directory varies
+        VULKAN_SDK_BIN_PATH=""
+        for d in /c/VulkanSDK/*; do
+            if [ -d "$d/Bin" ]; then
+                VULKAN_SDK_BIN_PATH="$d/Bin"
+                break
+            fi
+        done
         if [ -d "$VULKAN_SDK_BIN_PATH" ] && [ -f "$VULKAN_SDK_BIN_PATH/glslc.exe" ]; then
             echo "Found glslc in Vulkan SDK at $VULKAN_SDK_BIN_PATH. Adding to PATH."
             export PATH="$VULKAN_SDK_BIN_PATH:$PATH"

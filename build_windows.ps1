@@ -76,8 +76,9 @@ function Convert-PathToMsys {
 
     if ($Path -match '^([A-Za-z]):') {
         $drive = $matches[1].ToLower()
+        return "/$drive" + ($Path.Substring(2) -replace '\\', '/')
     }
-    return "/$drive" + ($Path.Substring(2) -replace '\\', '/')
+    return ($Path -replace '\\', '/')
 }
 
 # Finds the MSYS2 bash executable.
