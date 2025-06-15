@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright (C) 2025  beyawnko
 set -e
 
 # Build Waifu2x-Extension-QT
@@ -15,8 +16,10 @@ make
 popd >/dev/null
 
 # Handle Upscaler Binaries (Prebuilt or CMake Build) for Windows
-if [[ "$(uname -s)" == MSYS_* || "$(uname -s)" == CYGWIN_* ]]; then
-    echo "Windows environment detected. Handling upscaler binaries..."
+# Supported shells: MSYS2, Cygwin, and Git Bash (MINGW)
+case $(uname -s | tr '[:upper:]' '[:lower:]') in
+    msys*|cygwin*|mingw*)
+        echo "Windows environment detected. Handling upscaler binaries..."
 
     RESRGAN_SRC_DIR="realesrgan-ncnn-vulkan"
     RCUGAN_SRC_DIR="realcugan-ncnn-vulkan"
@@ -116,6 +119,7 @@ if [[ "$(uname -s)" == MSYS_* || "$(uname -s)" == CYGWIN_* ]]; then
             exit 1
         fi
     fi
-fi
+    ;;
+esac
 
 echo "Build complete."
