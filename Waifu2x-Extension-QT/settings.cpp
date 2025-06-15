@@ -114,12 +114,12 @@ int MainWindow::Settings_Save()
     if(ui->checkBox_MultiGPU_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_MultiGPU_Enabled", ui->checkBox_MultiGPU_RealCUGAN->isChecked());
     configIniWrite->setValue("/settings/RealCUGAN_GPUJobConfig_MultiGPU", QVariant::fromValue(m_realcugan_gpuJobConfig_temp));
     //== RealESRGAN
-    if(ui->comboBox_Model_RealESRGAN) configIniWrite->setValue("/settings/RealESRGAN_ModelName", ui->comboBox_Model_RealESRGAN->currentText()); // Save model name string
-    if(ui->spinBox_TileSize_RealESRGAN) configIniWrite->setValue("/settings/RealESRGAN_TileSize", ui->spinBox_TileSize_RealESRGAN->value());
-    if(ui->checkBox_TTA_RealESRGAN) configIniWrite->setValue("/settings/RealESRGAN_TTA", ui->checkBox_TTA_RealESRGAN->isChecked());
-    if(ui->comboBox_GPUID_RealESRGAN) configIniWrite->setValue("/settings/RealESRGAN_GPUID", ui->comboBox_GPUID_RealESRGAN->currentIndex());
+    if(ui->comboBox_Model_RealsrNCNNVulkan) configIniWrite->setValue("/settings/RealESRGAN_ModelName", ui->comboBox_Model_RealsrNCNNVulkan->currentText()); // Save model name string
+    if(ui->spinBox_TileSize_RealsrNCNNVulkan) configIniWrite->setValue("/settings/RealESRGAN_TileSize", ui->spinBox_TileSize_RealsrNCNNVulkan->value());
+    if(ui->checkBox_TTA_RealsrNCNNVulkan) configIniWrite->setValue("/settings/RealESRGAN_TTA", ui->checkBox_TTA_RealsrNCNNVulkan->isChecked());
+    if(ui->comboBox_GPUID_RealsrNCNNVulkan) configIniWrite->setValue("/settings/RealESRGAN_GPUID", ui->comboBox_GPUID_RealsrNCNNVulkan->currentIndex());
     configIniWrite->setValue("/settings/RealESRGAN_Available_GPUID", Available_GPUID_RealESRGAN_ncnn_vulkan);
-    if(ui->checkBox_MultiGPU_RealESRGAN) configIniWrite->setValue("/settings/RealESRGAN_MultiGPU_Enabled", ui->checkBox_MultiGPU_RealESRGAN->isChecked());
+    if(ui->checkBox_MultiGPU_RealsrNcnnVulkan) configIniWrite->setValue("/settings/RealESRGAN_MultiGPU_Enabled", ui->checkBox_MultiGPU_RealsrNcnnVulkan->isChecked());
     configIniWrite->setValue("/settings/RealESRGAN_GPUJobConfig_MultiGPU", QVariant::fromValue(m_realesrgan_gpuJobConfig_temp));
     //================== Save file extensions =================================
     configIniWrite->setValue("/settings/ImageEXT", ui->Ext_image->text());
@@ -455,40 +455,21 @@ int MainWindow::Settings_Read_Apply()
     }
 
     // RealESRGAN Settings
-    if(ui->comboBox_Model_RealESRGAN) {
+    if(ui->comboBox_Model_RealsrNCNNVulkan) {
         QString modelName = Settings_Read_value("/settings/RealESRGAN_ModelName").toString();
-        int modelIndex = ui->comboBox_Model_RealESRGAN->findText(modelName);
-        if (modelIndex != -1) ui->comboBox_Model_RealESRGAN->setCurrentIndex(modelIndex);
+        int modelIndex = ui->comboBox_Model_RealsrNCNNVulkan->findText(modelName);
+        if (modelIndex != -1) ui->comboBox_Model_RealsrNCNNVulkan->setCurrentIndex(modelIndex);
     }
-    if(ui->spinBox_TileSize_RealESRGAN) ui->spinBox_TileSize_RealESRGAN->setValue(Settings_Read_value("/settings/RealESRGAN_TileSize").toInt());
-    if(ui->checkBox_TTA_RealESRGAN) ui->checkBox_TTA_RealESRGAN->setChecked(Settings_Read_value("/settings/RealESRGAN_TTA").toBool());
+    if(ui->spinBox_TileSize_RealsrNCNNVulkan) ui->spinBox_TileSize_RealsrNCNNVulkan->setValue(Settings_Read_value("/settings/RealESRGAN_TileSize").toInt());
+    if(ui->checkBox_TTA_RealsrNCNNVulkan) ui->checkBox_TTA_RealsrNCNNVulkan->setChecked(Settings_Read_value("/settings/RealESRGAN_TTA").toBool());
     Available_GPUID_RealESRGAN_ncnn_vulkan = Settings_Read_value("/settings/RealESRGAN_Available_GPUID").toStringList();
     // RealESRGAN_ncnn_vulkan_DetectGPU_finished(); // Populates GPU lists - Called by MainWindow after process
-    if(ui->comboBox_GPUID_RealESRGAN) ui->comboBox_GPUID_RealESRGAN->setCurrentIndex(Settings_Read_value("/settings/RealESRGAN_GPUID").toInt());
-    if(ui->checkBox_MultiGPU_RealESRGAN) ui->checkBox_MultiGPU_RealESRGAN->setChecked(Settings_Read_value("/settings/RealESRGAN_MultiGPU_Enabled").toBool());
+    if(ui->comboBox_GPUID_RealsrNCNNVulkan) ui->comboBox_GPUID_RealsrNCNNVulkan->setCurrentIndex(Settings_Read_value("/settings/RealESRGAN_GPUID").toInt());
+    if(ui->checkBox_MultiGPU_RealsrNcnnVulkan) ui->checkBox_MultiGPU_RealsrNcnnVulkan->setChecked(Settings_Read_value("/settings/RealESRGAN_MultiGPU_Enabled").toBool());
     m_realesrgan_gpuJobConfig_temp = Settings_Read_value("/settings/RealESRGAN_GPUJobConfig_MultiGPU").value<QList<QMap<QString, QString>>>();
-    if (ui->checkBox_MultiGPU_RealESRGAN && ui->checkBox_MultiGPU_RealESRGAN->isChecked()) {
-        if (ui->listWidget_GPUList_MultiGPU_RealESRGAN) {
-            ui->listWidget_GPUList_MultiGPU_RealESRGAN->clear();
-            for (const auto& job : m_realesrgan_gpuJobConfig_temp) {
-                QString gpuDesc = job.value("gpuid") + ": (Threads: " + job.value("threads","1") + ", Tile: " + job.value("tilesize","0") + ")";
-                QString fullDesc = "";
-                for(const QString& desc : Available_GPUID_RealESRGAN_ncnn_vulkan){
-                    if(desc.startsWith(job.value("gpuid") + ":")){
-                        fullDesc = desc;
-                        break;
-                    }
-                }
-                if (fullDesc.isEmpty()) fullDesc = job.value("gpuid");
-
-                QListWidgetItem *newItem = new QListWidgetItem(fullDesc + QString(" (T:%1, Tile:%2)").arg(job.value("threads","1")).arg(job.value("tilesize","0")));
-                newItem->setData(Qt::UserRole, job.value("gpuid"));
-                newItem->setData(Qt::UserRole + 1, job.value("threads","1").toInt());
-                newItem->setData(Qt::UserRole + 2, job.value("tilesize","0").toInt());
-                ui->listWidget_GPUList_MultiGPU_RealESRGAN->addItem(newItem);
-            }
-        }
-        RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay(); // Update the display label
+    if (ui->checkBox_MultiGPU_RealsrNcnnVulkan && ui->checkBox_MultiGPU_RealsrNcnnVulkan->isChecked()) {
+        // listWidget removed from UI; only load config data
+        RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
     }
 
 

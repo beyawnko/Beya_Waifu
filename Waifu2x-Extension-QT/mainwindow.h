@@ -434,20 +434,20 @@ public:
     QPushButton *pushButton_TileSize_Add_RealCUGAN;    // For connect in constructor
     QPushButton *pushButton_TileSize_Minus_RealCUGAN;  // For connect in constructor
 
-    //RealESRGAN-ncnn-Vulkan UI Pointers
-    QComboBox *comboBox_Model_RealESRGAN;
-    QComboBox *comboBox_GPUID_RealESRGAN;
-    QPushButton *pushButton_DetectGPU_RealESRGAN;
-    QSpinBox *spinBox_TileSize_RealESRGAN;
-    QPushButton *pushButton_TileSize_Add_RealESRGAN;
-    QPushButton *pushButton_TileSize_Minus_RealESRGAN;
-    QCheckBox *checkBox_TTA_RealESRGAN;
-    QCheckBox *checkBox_MultiGPU_RealESRGAN;
-    QGroupBox *groupBox_GPUSettings_MultiGPU_RealESRGAN;
-    QComboBox *comboBox_GPUIDs_MultiGPU_RealESRGAN;
-    QCheckBox *checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN;
-    QSpinBox *spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN;
-    QPushButton *pushButton_ShowMultiGPUSettings_RealESRGAN;
+    //Realsr-ncnn-Vulkan UI Pointers
+    QComboBox *comboBox_Model_RealsrNCNNVulkan;
+    QComboBox *comboBox_GPUID_RealsrNCNNVulkan;
+    QPushButton *pushButton_DetectGPU_RealsrNCNNVulkan;
+    QSpinBox *spinBox_TileSize_RealsrNCNNVulkan;
+    QPushButton *pushButton_Add_TileSize_RealsrNCNNVulkan;
+    QPushButton *pushButton_Minus_TileSize_RealsrNCNNVulkan;
+    QCheckBox *checkBox_TTA_RealsrNCNNVulkan;
+    QCheckBox *checkBox_MultiGPU_RealsrNcnnVulkan;
+    QGroupBox *groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan;
+    QComboBox *comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan;
+    QCheckBox *checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan;
+    QSpinBox *spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan;
+    QPushButton *pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan;
     // RealESRGAN Member variables for settings
     QString m_realesrgan_ModelName; // e.g., "realesrgan-x4plus"
     int m_realesrgan_ModelNativeScale; // e.g., 4
