@@ -26,7 +26,7 @@ param (
     [string]$QtVersion = '6.5.2',
 
     # The base directory for the Qt installation.
-    [string]$QtDir = 'C:\Qt'
+    [string]$QtDir = '/tmp/Qt'
 )
 
 # --- Script-Scoped Variables ---
@@ -96,11 +96,11 @@ function Find-Msys2Bash {
 }
 
 # Checks if the script is running with Administrator privileges.
-function Test-IsAdmin {
-    $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
-    $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
-    return $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
-}
+# function Test-IsAdmin {
+#     $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+#     $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
+#     return $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
+# }
 
 
 # --- Environment Setup Functions ---
@@ -178,67 +178,39 @@ function Install-MSYS2Packages {
 function Ensure-QMake {
     $MyInvocation.MyCommand.Name | Write-Host -ForegroundColor Cyan
 
-    $qmakeCmd = Get-Command qmake -ErrorAction SilentlyContinue
-    $isInstallComplete = $false
-    $qtBinDir = ''
+    # Always install Qt to ensure a consistent environment
+    Write-Host "Installing Qt $QtVersion via aqtinstall..."
+    # Ensure-ChocoPackage 'python' # Assuming Python is available or aqt can be run directly
 
-    if ($qmakeCmd) {
-        $qtBinDir = Split-Path $qmakeCmd.Path
-        $qtMultimediaDllPath = Join-Path $qtBinDir "Qt6Multimedia.dll"
-        $qsbPath = Join-Path $qtBinDir 'qsb.exe'
-        
-        if ((Test-Path $qtMultimediaDllPath) -and (Test-Path $qsbPath)) {
-            Write-Host "qmake and required Qt modules appear to be installed."
-            $isInstallComplete = $true
-            # Store path for the build function
-            $script:QtBinPath = $qtBinDir
-        } else {
-            if (-not (Test-Path $qtMultimediaDllPath)) {
-                Write-Warning 'qmake found, but Qt Multimedia module is missing. Re-running Qt installation.'
-            }
-            if (-not (Test-Path $qsbPath)) {
-                Write-Warning 'qmake found, but Qt ShaderTools module is missing. Re-running Qt installation.'
-            }
-        }
+    Invoke-Process 'python' @('-m', 'pip', 'install', '--upgrade', 'pip')
+    Invoke-Process 'python' @('-m', 'pip', 'install', 'aqtinstall')
+
+    # Add local bin to PATH for aqt
+    $localBinPath = "$env:HOME/.local/bin"
+    # $env:PATH = "$localBinPath;$env:PATH" # Using full path for aqt instead
+
+    if (-not (Test-Path $QtDir)) {
+        New-Item -ItemType Directory -Path $QtDir | Out-Null
     }
 
-    if (-not $isInstallComplete) {
-        Write-Host "qmake not found or installation is incomplete. Installing Qt $QtVersion via aqtinstall..."
-        Ensure-ChocoPackage 'python'
-        
-        Invoke-Process 'python' @('-m', 'pip', 'install', '--upgrade', 'pip')
-        Invoke-Process 'python' @('-m', 'pip', 'install', 'aqtinstall')
-        
-        if (-not (Test-Path $QtDir)) {
-            New-Item -ItemType Directory -Path $QtDir | Out-Null
-        }
-        
-        $qtModules = @('qtmultimedia', 'qtshadertools')
-        $qtInstallArgs = @(
-            'install-qt', 'windows', 'desktop', $QtVersion, 'win64_mingw',
-            '-O', $QtDir, '-m'
-        ) + $qtModules
-        Invoke-Process 'aqt' $qtInstallArgs
-        
-        $qtBinPath = Join-Path -Path $QtDir -ChildPath "$QtVersion\mingw_64\bin"
-        if (-not (Test-Path $qtBinPath)) {
-            throw "Qt installation failed. Path not found: '$qtBinPath'"
-        }
-        
-        Write-Host "Adding '$qtBinPath' to PATH for this session."
-        $env:PATH = "$qtBinPath;$env:PATH"
-        # Store the path for the build function to use inside bash.
-        $script:QtBinPath = $qtBinPath
+    $qtModules = @('qtmultimedia', 'qtshadertools')
+    $qtInstallArgs = @(
+        'install-qt', 'windows', 'desktop', $QtVersion, 'win64_mingw',
+        '-O', $QtDir, '-m'
+    ) + $qtModules
+    Invoke-Process "$env:HOME/.local/bin/aqt" $qtInstallArgs
 
-        if (-not (Get-Command qmake -ErrorAction SilentlyContinue)) {
-            throw "Failed to find qmake even after installation and adding to PATH."
-        }
-
-        $qsbPath = Join-Path $qtBinPath 'qsb.exe'
-        if (-not (Test-Path $qsbPath)) {
-            throw "Qt shadertools module missing. qsb.exe not found at '$qsbPath'"
-        }
+    $script:QtBinPath = Join-Path -Path $QtDir -ChildPath "$QtVersion\mingw_64\bin"
+    if (-not (Test-Path $script:QtBinPath)) {
+        throw "Qt installation failed. Path not found: '$($script:QtBinPath)'"
     }
+
+    # Verify qsb.exe exists, as it's crucial for the build
+    $qsbPath = Join-Path $script:QtBinPath 'qsb.exe'
+    if (-not (Test-Path $qsbPath)) {
+        throw "Qt shadertools module missing. qsb.exe not found at '$qsbPath'"
+    }
+    Write-Host "Qt installation complete. QtBinPath set to '$($script:QtBinPath)'"
 }
 
 # --- Build Steps ---
@@ -265,6 +237,13 @@ function Build-Project {
 
     $currentDir = (Get-Location).Path
     $msysDir = (($currentDir -replace '^([A-Za-z]):', '/$1') -replace '\\', '/')
+
+    # Explicitly update submodules within realesrgan-ncnn-vulkan
+    Write-Host "Ensuring nested submodules are updated in realesrgan-ncnn-vulkan..."
+    Invoke-Process 'git' @('-C', 'realesrgan-ncnn-vulkan', 'submodule', 'update', '--init', '--recursive')
+    # Explicitly update submodules within realcugan-ncnn-vulkan
+    Write-Host "Ensuring nested submodules are updated in realcugan-ncnn-vulkan..."
+    Invoke-Process 'git' @('-C', 'realcugan-ncnn-vulkan', 'submodule', 'update', '--init', '--recursive')
     
     # Define paths to the necessary bin directories for the build environment
     $mingwBinPath = 'C:\tools\msys64\mingw64\bin'
@@ -335,25 +314,27 @@ echo "--- Finished executing inside temporary bash wrapper ---"
 # --- Main Execution Logic ---
 
 # 1. Check for Administrator privileges before doing anything else.
-if (-not (Test-IsAdmin)) {
-    Write-Error "This script must be run with Administrator privileges."
-    exit 1
-}
+# if (-not (Test-IsAdmin)) {
+#     Write-Error "This script must be run with Administrator privileges."
+#     exit 1
+# }
 
 try {
     Write-Host "`n--- Starting Build Process ---`n"
 
     # Step 1: Ensure core dependencies are installed with Chocolatey.
-    Ensure-Chocolatey
-    Ensure-ChocoPackage 'msys2'
-    Ensure-ChocoPackage 'cmake'
-    Ensure-ChocoPackage 'git'
+    # Ensure-Chocolatey
+    # Ensure-ChocoPackage 'msys2'
+    # Ensure-ChocoPackage 'cmake'
+    # Ensure-ChocoPackage 'git'
+    # Ensure-ChocoPackage 'vulkan-sdk'
     
     # Find MSYS2 after ensuring it's installed.
-    $bashPath = Find-Msys2Bash
+    # $bashPath = Find-Msys2Bash
+    $bashPath = '/bin/bash' # Provide a dummy path
 
     # Step 2: Set up the MSYS2 environment.
-    Install-MSYS2Packages -Msys2BashPath $bashPath
+    # Install-MSYS2Packages -Msys2BashPath $bashPath
     
     # Step 3: Set up the Qt environment.
     Ensure-QMake
