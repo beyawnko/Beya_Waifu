@@ -275,7 +275,7 @@ function Build-Project {
 
     # Construct the final command string using the -f format operator.
     # This is the most robust way to prevent PowerShell from expanding '$PATH' prematurely.
-    $finalCommandString = 'export PATH={0}:$PATH && cd "{1}" && {2}' -f $pathPrefix, $msysDir, $buildScriptName
+    $finalCommandString = 'export PATH={0}:$PATH && cd ''{1}'' && {2}' -f $pathPrefix, $msysDir, $buildScriptName
     
     Invoke-Process -FilePath $Msys2BashPath -ArgumentList @('-lc', $finalCommandString)
 }
