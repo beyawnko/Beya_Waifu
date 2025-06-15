@@ -59,7 +59,7 @@ RealCUGAN::RealCUGAN(int gpuid, bool _tta_mode, int num_threads)
 {
     vkdev = gpuid == -1 ? 0 : ncnn::get_gpu_device(gpuid);
 
-    net.opt.num_threads = num_threads;
+    opt.num_threads = num_threads;
 
     realcugan_preproc = 0;
     realcugan_postproc = 0;
@@ -78,13 +78,13 @@ RealCUGAN::~RealCUGAN()
         delete realcugan_postproc;
     }
 
-    bicubic_2x->destroy_pipeline(net.opt);
+    bicubic_2x->destroy_pipeline(opt);
     delete bicubic_2x;
 
-    bicubic_3x->destroy_pipeline(net.opt);
+    bicubic_3x->destroy_pipeline(opt);
     delete bicubic_3x;
 
-    bicubic_4x->destroy_pipeline(net.opt);
+    bicubic_4x->destroy_pipeline(opt);
     delete bicubic_4x;
 }
 
@@ -94,11 +94,11 @@ int RealCUGAN::load(const std::wstring& parampath, const std::wstring& modelpath
 int RealCUGAN::load(const std::string& parampath, const std::string& modelpath)
 #endif
 {
-    net.opt.use_vulkan_compute = vkdev ? true : false;
-    net.opt.use_fp16_packed = true;
-    net.opt.use_fp16_storage = vkdev ? true : false;
-    net.opt.use_fp16_arithmetic = false;
-    net.opt.use_int8_storage = true;
+    opt.use_vulkan_compute = vkdev ? true : false;
+    opt.use_fp16_packed = true;
+    opt.use_fp16_storage = vkdev ? true : false;
+    opt.use_fp16_arithmetic = false;
+    opt.use_int8_storage = true;
 
     net.set_vulkan_device(vkdev);
 
@@ -148,9 +148,9 @@ int RealCUGAN::load(const std::string& parampath, const std::string& modelpath)
                 if (spirv.empty())
                 {
                     if (tta_mode)
-                        compile_spirv_module(realcugan_preproc_tta_comp_data, sizeof(realcugan_preproc_tta_comp_data), net.opt, spirv);
+                        compile_spirv_module(realcugan_preproc_tta_comp_data, sizeof(realcugan_preproc_tta_comp_data), opt, spirv);
                     else
-                        compile_spirv_module(realcugan_preproc_comp_data, sizeof(realcugan_preproc_comp_data), net.opt, spirv);
+                        compile_spirv_module(realcugan_preproc_comp_data, sizeof(realcugan_preproc_comp_data), opt, spirv);
                 }
             }
 
@@ -167,9 +167,9 @@ int RealCUGAN::load(const std::string& parampath, const std::string& modelpath)
                 if (spirv.empty())
                 {
                     if (tta_mode)
-                        compile_spirv_module(realcugan_postproc_tta_comp_data, sizeof(realcugan_postproc_tta_comp_data), net.opt, spirv);
+                        compile_spirv_module(realcugan_postproc_tta_comp_data, sizeof(realcugan_postproc_tta_comp_data), opt, spirv);
                     else
-                        compile_spirv_module(realcugan_postproc_comp_data, sizeof(realcugan_postproc_comp_data), net.opt, spirv);
+                        compile_spirv_module(realcugan_postproc_comp_data, sizeof(realcugan_postproc_comp_data), opt, spirv);
                 }
             }
 
@@ -186,9 +186,9 @@ int RealCUGAN::load(const std::string& parampath, const std::string& modelpath)
                 if (spirv.empty())
                 {
                     if (tta_mode)
-                        compile_spirv_module(realcugan_4x_postproc_tta_comp_data, sizeof(realcugan_4x_postproc_tta_comp_data), net.opt, spirv);
+                        compile_spirv_module(realcugan_4x_postproc_tta_comp_data, sizeof(realcugan_4x_postproc_tta_comp_data), opt, spirv);
                     else
-                        compile_spirv_module(realcugan_4x_postproc_comp_data, sizeof(realcugan_4x_postproc_comp_data), net.opt, spirv);
+                        compile_spirv_module(realcugan_4x_postproc_comp_data, sizeof(realcugan_4x_postproc_comp_data), opt, spirv);
                 }
             }
 
@@ -209,7 +209,7 @@ int RealCUGAN::load(const std::string& parampath, const std::string& modelpath)
         pd.set(2, 2.f);
         bicubic_2x->load_param(pd);
 
-        bicubic_2x->create_pipeline(net.opt);
+        bicubic_2x->create_pipeline(opt);
     }
     {
         bicubic_3x = ncnn::create_layer("Interp");
@@ -221,7 +221,7 @@ int RealCUGAN::load(const std::string& parampath, const std::string& modelpath)
         pd.set(2, 3.f);
         bicubic_3x->load_param(pd);
 
-        bicubic_3x->create_pipeline(net.opt);
+        bicubic_3x->create_pipeline(opt);
     }
     {
         bicubic_4x = ncnn::create_layer("Interp");
@@ -233,7 +233,7 @@ int RealCUGAN::load(const std::string& parampath, const std::string& modelpath)
         pd.set(2, 4.f);
         bicubic_4x->load_param(pd);
 
-        bicubic_4x->create_pipeline(net.opt);
+        bicubic_4x->create_pipeline(opt);
     }
 
     return 0;
@@ -286,7 +286,7 @@ int RealCUGAN::process(const ncnn::Mat& inimage, ncnn::Mat& outimage) const
     ncnn::VkAllocator* blob_vkallocator = vkdev->acquire_blob_allocator();
     ncnn::VkAllocator* staging_vkallocator = vkdev->acquire_staging_allocator();
 
-    ncnn::Option opt = net.opt;
+    ncnn::Option opt = opt;
     opt.blob_vkallocator = blob_vkallocator;
     opt.workspace_vkallocator = blob_vkallocator;
     opt.staging_vkallocator = staging_vkallocator;
@@ -763,7 +763,7 @@ int RealCUGAN::process_cpu(const ncnn::Mat& inimage, ncnn::Mat& outimage) const
     const int TILE_SIZE_X = tilesize;
     const int TILE_SIZE_Y = tilesize;
 
-    ncnn::Option opt = net.opt;
+    ncnn::Option opt = opt;
 
     // each tile 400x400
     const int xtiles = (w + TILE_SIZE_X - 1) / TILE_SIZE_X;
@@ -861,7 +861,7 @@ int RealCUGAN::process_cpu(const ncnn::Mat& inimage, ncnn::Mat& outimage) const
                     int pad_right = std::max(std::min((xi + 1) * TILE_SIZE_X + prepadding_right - w, prepadding_right), 0);
 
                     ncnn::Mat in_tile_padded;
-                    ncnn::copy_make_border(in_tile[0], in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, net.opt);
+                    ncnn::copy_make_border(in_tile[0], in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, opt);
                     in_tile[0] = in_tile_padded;
                 }
 
@@ -1059,7 +1059,7 @@ int RealCUGAN::process_cpu(const ncnn::Mat& inimage, ncnn::Mat& outimage) const
                     int pad_right = std::max(std::min((xi + 1) * TILE_SIZE_X + prepadding_right - w, prepadding_right), 0);
 
                     ncnn::Mat in_tile_padded;
-                    ncnn::copy_make_border(in_tile, in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, net.opt);
+                    ncnn::copy_make_border(in_tile, in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, opt);
                     in_tile = in_tile_padded;
                 }
 
@@ -1169,7 +1169,7 @@ int RealCUGAN::process_se(const ncnn::Mat& inimage, ncnn::Mat& outimage) const
     ncnn::VkAllocator* blob_vkallocator = vkdev->acquire_blob_allocator();
     ncnn::VkAllocator* staging_vkallocator = vkdev->acquire_staging_allocator();
 
-    ncnn::Option opt = net.opt;
+    ncnn::Option opt = opt;
     opt.blob_vkallocator = blob_vkallocator;
     opt.workspace_vkallocator = blob_vkallocator;
     opt.staging_vkallocator = staging_vkallocator;
@@ -1220,7 +1220,7 @@ int RealCUGAN::process_se_rough(const ncnn::Mat& inimage, ncnn::Mat& outimage) c
     ncnn::VkAllocator* blob_vkallocator = vkdev->acquire_blob_allocator();
     ncnn::VkAllocator* staging_vkallocator = vkdev->acquire_staging_allocator();
 
-    ncnn::Option opt = net.opt;
+    ncnn::Option opt = opt;
     opt.blob_vkallocator = blob_vkallocator;
     opt.workspace_vkallocator = blob_vkallocator;
     opt.staging_vkallocator = staging_vkallocator;
@@ -1250,7 +1250,7 @@ int RealCUGAN::process_se_very_rough(const ncnn::Mat& inimage, ncnn::Mat& outima
     ncnn::VkAllocator* blob_vkallocator = vkdev->acquire_blob_allocator();
     ncnn::VkAllocator* staging_vkallocator = vkdev->acquire_staging_allocator();
 
-    ncnn::Option opt = net.opt;
+    ncnn::Option opt = opt;
     opt.blob_vkallocator = blob_vkallocator;
     opt.workspace_vkallocator = blob_vkallocator;
     opt.staging_vkallocator = staging_vkallocator;
@@ -2700,7 +2700,7 @@ int RealCUGAN::process_cpu_se_stage0(const ncnn::Mat& inimage, const std::vector
     const int TILE_SIZE_X = tilesize;
     const int TILE_SIZE_Y = tilesize;
 
-    ncnn::Option opt = net.opt;
+    ncnn::Option opt = opt;
 
     // each tile 400x400
     const int xtiles = (w + TILE_SIZE_X - 1) / TILE_SIZE_X;
@@ -2798,7 +2798,7 @@ int RealCUGAN::process_cpu_se_stage0(const ncnn::Mat& inimage, const std::vector
                     int pad_right = std::max(std::min((xi + 1) * TILE_SIZE_X + prepadding_right - w, prepadding_right), 0);
 
                     ncnn::Mat in_tile_padded;
-                    ncnn::copy_make_border(in_tile[0], in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, net.opt);
+                    ncnn::copy_make_border(in_tile[0], in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, opt);
                     in_tile[0] = in_tile_padded;
                 }
 
@@ -2908,7 +2908,7 @@ int RealCUGAN::process_cpu_se_stage0(const ncnn::Mat& inimage, const std::vector
                     int pad_right = std::max(std::min((xi + 1) * TILE_SIZE_X + prepadding_right - w, prepadding_right), 0);
 
                     ncnn::Mat in_tile_padded;
-                    ncnn::copy_make_border(in_tile, in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, net.opt);
+                    ncnn::copy_make_border(in_tile, in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, opt);
                     in_tile = in_tile_padded;
                 }
 
@@ -2950,7 +2950,7 @@ int RealCUGAN::process_cpu_se_stage2(const ncnn::Mat& inimage, const std::vector
     const int TILE_SIZE_X = tilesize;
     const int TILE_SIZE_Y = tilesize;
 
-    ncnn::Option opt = net.opt;
+    ncnn::Option opt = opt;
 
     // each tile 400x400
     const int xtiles = (w + TILE_SIZE_X - 1) / TILE_SIZE_X;
@@ -3048,7 +3048,7 @@ int RealCUGAN::process_cpu_se_stage2(const ncnn::Mat& inimage, const std::vector
                     int pad_right = std::max(std::min((xi + 1) * TILE_SIZE_X + prepadding_right - w, prepadding_right), 0);
 
                     ncnn::Mat in_tile_padded;
-                    ncnn::copy_make_border(in_tile[0], in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, net.opt);
+                    ncnn::copy_make_border(in_tile[0], in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, opt);
                     in_tile[0] = in_tile_padded;
                 }
 
@@ -3254,7 +3254,7 @@ int RealCUGAN::process_cpu_se_stage2(const ncnn::Mat& inimage, const std::vector
                     int pad_right = std::max(std::min((xi + 1) * TILE_SIZE_X + prepadding_right - w, prepadding_right), 0);
 
                     ncnn::Mat in_tile_padded;
-                    ncnn::copy_make_border(in_tile, in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, net.opt);
+                    ncnn::copy_make_border(in_tile, in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, opt);
                     in_tile = in_tile_padded;
                 }
 
@@ -3377,7 +3377,7 @@ int RealCUGAN::process_cpu_se_sync_gap(const ncnn::Mat& inimage, const std::vect
     const int TILE_SIZE_X = tilesize;
     const int TILE_SIZE_Y = tilesize;
 
-    ncnn::Option opt = net.opt;
+    ncnn::Option opt = opt;
 
     // each tile 400x400
     const int xtiles = (w + TILE_SIZE_X - 1) / TILE_SIZE_X;
@@ -3482,7 +3482,7 @@ int RealCUGAN::process_cpu_se_very_rough_stage0(const ncnn::Mat& inimage, const 
     const int TILE_SIZE_X = 32;
     const int TILE_SIZE_Y = 32;
 
-    ncnn::Option opt = net.opt;
+    ncnn::Option opt = opt;
 
     // each tile 400x400
     const int xtiles = (w + TILE_SIZE_X - 1) / TILE_SIZE_X;
@@ -3580,7 +3580,7 @@ int RealCUGAN::process_cpu_se_very_rough_stage0(const ncnn::Mat& inimage, const 
                     int pad_right = std::max(std::min((xi + 1) * TILE_SIZE_X + prepadding_right - w, prepadding_right), 0);
 
                     ncnn::Mat in_tile_padded;
-                    ncnn::copy_make_border(in_tile[0], in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, net.opt);
+                    ncnn::copy_make_border(in_tile[0], in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, opt);
                     in_tile[0] = in_tile_padded;
                 }
 
@@ -3690,7 +3690,7 @@ int RealCUGAN::process_cpu_se_very_rough_stage0(const ncnn::Mat& inimage, const 
                     int pad_right = std::max(std::min((xi + 1) * TILE_SIZE_X + prepadding_right - w, prepadding_right), 0);
 
                     ncnn::Mat in_tile_padded;
-                    ncnn::copy_make_border(in_tile, in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, net.opt);
+                    ncnn::copy_make_border(in_tile, in_tile_padded, pad_top, pad_bottom, pad_left, pad_right, 2, 0.f, opt);
                     in_tile = in_tile_padded;
                 }
 
@@ -3732,7 +3732,7 @@ int RealCUGAN::process_cpu_se_very_rough_sync_gap(const ncnn::Mat& inimage, cons
     const int TILE_SIZE_X = 32;
     const int TILE_SIZE_Y = 32;
 
-    ncnn::Option opt = net.opt;
+    ncnn::Option opt = opt;
 
     // each tile 400x400
     const int xtiles = (w + TILE_SIZE_X - 1) / TILE_SIZE_X;

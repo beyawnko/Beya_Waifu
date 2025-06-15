@@ -2,6 +2,21 @@
 # Copyright (C) 2025  beyawnko
 set -e
 
+# Ensure submodules are present
+git submodule update --init --recursive
+
+# Install glslangValidator if missing
+if ! command -v glslangValidator >/dev/null 2>&1; then
+    if command -v apt-get >/dev/null 2>&1; then
+        sudo apt-get update && sudo apt-get install -y glslang-tools
+    else
+        echo "glslangValidator not found and no package manager available"
+    fi
+fi
+
+# Install required Python packages for tests
+pip install --user PySide6 Pillow
+
 # Determine available make tool
 MAKE=make
 command -v $MAKE >/dev/null 2>&1 || MAKE=mingw32-make

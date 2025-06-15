@@ -3326,48 +3326,6 @@ void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum)
 {
     realCuganProcessor->readSettingsVideoGif(ThreadNum);
 }
-bool MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath)
-{
-    // Placeholder implementation - actual logic needed
-    Q_UNUSED(splitFramesFolder); Q_UNUSED(scaledFramesFolder); Q_UNUSED(sourceFileFullPath);
-    Q_UNUSED(framesFileName_qStrList); Q_UNUSED(resultFileFullPath);
-    qDebug() << "APNG_RealcuganNCNNVulkan called but not fully implemented.";
-    return false; // Placeholder
-}
-void MainWindow::Realcugan_ncnn_vulkan_DetectGPU(){}
-QString MainWindow::RealcuganNcnnVulkan_MultiGPU(){ return ""; }
-void MainWindow::AddGPU_MultiGPU_RealcuganNcnnVulkan(QString){}
-QStringList MainWindow::Realcugan_NCNN_Vulkan_PrepareArguments(const QString &inFile, const QString &outFile, int scale, const QString &model, int denoise, int tile, const QString &gpuId, bool tta, const QString &fmt, bool multi, const QString &job, bool experimental)
-{
-    return realCuganProcessor->prepareArguments(inFile, outFile, scale, model, denoise, tile, gpuId, tta, fmt, multi, job, experimental);
-}
-void MainWindow::StartNextRealCUGANPass(QProcess*){}
-void MainWindow::Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString&, int, bool, const QString&){}
-bool MainWindow::Realcugan_ProcessSingleFileIteratively(const QString&, const QString&, int, const QString&, int, int, const QString&, bool, bool, const QString&, bool, int){ return false; }
-void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int, bool){}
-void MainWindow::RealESRGAN_NCNN_Vulkan_GIF(int){}
-void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int){}
-void MainWindow::RealESRGAN_NCNN_Vulkan_Video_BySegment(int){}
-void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings(){}
-void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int){}
-bool MainWindow::APNG_RealESRGANNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath)
-{
-    // Placeholder implementation - actual logic needed
-    Q_UNUSED(splitFramesFolder); Q_UNUSED(scaledFramesFolder); Q_UNUSED(sourceFileFullPath);
-    Q_UNUSED(framesFileName_qStrList); Q_UNUSED(resultFileFullPath);
-    qDebug() << "APNG_RealESRGANNCNNVulkan called but not fully implemented.";
-    return false; // Placeholder
-}
-void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU(){}
-QString MainWindow::RealesrganNcnnVulkan_MultiGPU(){ return ""; }
-void MainWindow::AddGPU_MultiGPU_RealesrganNcnnVulkan(QString){}
-QStringList MainWindow::RealESRGAN_NCNN_Vulkan_PrepareArguments(const QString&, const QString&, int, const QString&, int, const QString&, bool, bool, const QString&){ return QStringList(); }
-bool MainWindow::RealESRGAN_ProcessSingleFileIteratively(const QString&, const QString&, int, int, const QString&, int, const QString&, bool, bool, const QString&, int){ return false; }
-QList<int> MainWindow::CalculateRealESRGANScaleSequence(int, int){ return QList<int>(); }
-bool MainWindow::RealESRGAN_SetupTempDir(const QString&, const QString&, QDir&, QString&){ return false; }
-void MainWindow::RealESRGAN_CleanupTempDir(const QDir&){}
-void MainWindow::on_checkBox_isCompatible_RealCUGAN_NCNN_Vulkan_clicked(){}
-void MainWindow::on_checkBox_isCompatible_RealESRGAN_NCNN_Vulkan_clicked(){}
 // QString MainWindow::video_get_fps(QString videoPath){ FileMetadataCache m = getOrFetchMetadata(videoPath); return m.isValid ? m.fps : ""; } // Removed, use getOrFetchMetadata directly
 // long long MainWindow::video_get_frameNum(QString videoPath){ FileMetadataCache m = getOrFetchMetadata(videoPath); return m.isValid ? m.frameCount : 0; } // Removed
 // int MainWindow::video_get_duration(QString videoPath){ FileMetadataCache m = getOrFetchMetadata(videoPath); return m.isValid ? static_cast<int>(m.duration) : 0; } // Removed
