@@ -65,6 +65,16 @@ git submodule update --init --recursive
         ```
     *   If you are using a specific Qt version manager (like `aqtinstall`), ensure that the chosen Qt version's `bin` directory is in your system's `PATH`.
 
+#### Qt 6 Packages
+
+For a Qt&nbsp;6 environment you can install the following packages on Debian/Ubuntu systems:
+
+```bash
+sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-5compat-dev qt6-shadertools-dev
+```
+
+These packages supply `qmake6`, `qsb`, and the Multimedia and Qt5Compat modules.
+
 3.  **Upscaler Dependencies (Vulkan)**:
     *   The upscaler engines (RealCUGAN, RealESRGAN) are based on ncnn and use Vulkan for GPU acceleration.
     *   **Vulkan SDK**: Download and install the Vulkan SDK from the [LunarG website](https://vulkan.lunarg.com/). Follow their official installation instructions for your Linux distribution.
