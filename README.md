@@ -123,6 +123,8 @@ powershell -ExecutionPolicy Bypass -File .\build_windows.ps1
 The script requires administrator privileges because it installs packages via
 Chocolatey. It will fetch Qt through `aqtinstall` if `qmake` is not available
 and ensures the **qtshadertools** module is present for the Liquid Glass shader.
+If you customize the `-QtDir` argument, supply an absolute Windows path so the
+script can correctly locate Qt.
 
 ## Development Environment
 

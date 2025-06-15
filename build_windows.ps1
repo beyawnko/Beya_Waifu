@@ -206,6 +206,7 @@ function Ensure-QMake {
     if (-not (Test-Path $QtDir)) {
         New-Item -ItemType Directory -Path $QtDir | Out-Null
     }
+    $QtDir = (Resolve-Path $QtDir).Path
 
     $qtModules = @('qtmultimedia', 'qtshadertools')
     $qtInstallArgs = @(
