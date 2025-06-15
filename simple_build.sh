@@ -38,7 +38,32 @@ which make || (echo "make not found in PATH"; exit 1)
 make --version || (echo "make version check failed"; exit 1)
 
 echo "Running qmake..."
-$QMAKE_CMD Waifu2x-Extension-QT.pro CONFIG+=debug CONFIG+=qml_debug CONFIG+=qtquickcompiler || $QMAKE_CMD Waifu2x-Extension-QT.pro
+set +e
+QMAKE_OUTPUT=$($QMAKE_CMD Waifu2x-Extension-QT.pro CONFIG+=debug CONFIG+=qml_debug CONFIG+=qtquickcompiler 2>&1)
+QMAKE_STATUS=$?
+set -e
+if [ $QMAKE_STATUS -ne 0 ]; then
+    echo "$QMAKE_OUTPUT"
+    if echo "$QMAKE_OUTPUT" | grep -q "Unknown module(s) in QT"; then
+        echo "Unknown Qt modules detected. Install the Qt 6 development packages as described in README, e.g.:"
+        echo "sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-5compat-dev qt6-shadertools-dev"
+        exit 2
+    fi
+    echo "Retrying qmake without additional CONFIG options..."
+    set +e
+    QMAKE_OUTPUT=$($QMAKE_CMD Waifu2x-Extension-QT.pro 2>&1)
+    QMAKE_STATUS=$?
+    set -e
+    if [ $QMAKE_STATUS -ne 0 ]; then
+        echo "$QMAKE_OUTPUT"
+        if echo "$QMAKE_OUTPUT" | grep -q "Unknown module(s) in QT"; then
+            echo "Unknown Qt modules detected. Install the Qt 6 development packages as described in README, e.g.:"
+            echo "sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-5compat-dev qt6-shadertools-dev"
+            exit 2
+        fi
+        exit $QMAKE_STATUS
+    fi
+fi
 
 echo "Compiling shaders..."
 SHADER_DIR="./shaders" # Relative to Waifu2x-Extension-QT directory
