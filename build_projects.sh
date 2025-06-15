@@ -21,6 +21,29 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
     msys*|cygwin*|mingw*)
         # Windows specific environment (MSYS, Cygwin, MinGW)
         echo "Windows environment detected. Handling upscaler binaries..."
+
+        # Attempt to add Vulkan SDK to PATH for glslc
+        VULKAN_SDK_BIN_PATH="/c/VulkanSDK/$(ls /c/VulkanSDK/)/Bin" # Adjust if Vulkan SDK version directory varies
+        if [ -d "$VULKAN_SDK_BIN_PATH" ] && [ -f "$VULKAN_SDK_BIN_PATH/glslc.exe" ]; then
+            echo "Found glslc in Vulkan SDK at $VULKAN_SDK_BIN_PATH. Adding to PATH."
+            export PATH="$VULKAN_SDK_BIN_PATH:$PATH"
+        else
+            echo "Vulkan SDK glslc.exe not found at $VULKAN_SDK_BIN_PATH. Assuming glslc is in existing PATH or will be found by CMake."
+            # As an alternative, try to find glslc using 'which' or 'command -v' if the above path fails
+            GLSLC_PATH=$(command -v glslc.exe || true)
+            if [ -n "$GLSLC_PATH" ]; then
+                echo "Found glslc.exe in PATH at $GLSLC_PATH."
+                GLSLC_DIR=$(dirname "$GLSLC_PATH")
+                # Check if already in PATH to avoid duplicates, though usually not harmful
+                if [[ ":$PATH:" != *":$GLSLC_DIR:"* ]]; then
+                    echo "Adding $GLSLC_DIR to PATH."
+                    export PATH="$GLSLC_DIR:$PATH"
+                fi
+            else
+                echo "glslc.exe still not found in common locations or PATH. Build might fail if it's required."
+            fi
+        fi
+
         RESRGAN_PREBUILT_DIR="realesrgan-ncnn-vulkan/windows"
         RCUGAN_PREBUILT_DIR="realcugan-ncnn-vulkan/windows"
         TARGET_LAUNCHER_DIR="Waifu2x-Extension-QT-Launcher" # Launcher directory, kept for Windows builds
@@ -56,6 +79,13 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         else
             # Fallback: Build Real-ESRGAN from source if prebuilt not found.
             echo "Prebuilt Real-ESRGAN not found. Attempting CMake build..."
+            echo "Ensuring nested submodules for $RESRGAN_SRC_DIR are initialized..."
+            if [ -d "$RESRGAN_SRC_DIR" ]; then
+                echo "Updating submodules in $RESRGAN_SRC_DIR..."
+                (cd "$RESRGAN_SRC_DIR" && git submodule update --init --recursive)
+            else
+                echo "Warning: Directory $RESRGAN_SRC_DIR not found. Cannot initialize its submodules."
+            fi
             pushd "$RESRGAN_SRC_DIR" >/dev/null
             mkdir -p build_windows && cd build_windows
             cmake -G "MSYS Makefiles" .. || { echo "Real-ESRGAN CMake failed."; popd >/dev/null; exit 1; }
@@ -110,6 +140,13 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         else
             # Fallback: Build Real-CUGAN from source.
             echo "Prebuilt Real-CUGAN not found. Attempting CMake build..."
+            echo "Ensuring nested submodules for $RCUGAN_SRC_DIR are initialized..."
+            if [ -d "$RCUGAN_SRC_DIR" ]; then
+                echo "Updating submodules in $RCUGAN_SRC_DIR..."
+                (cd "$RCUGAN_SRC_DIR" && git submodule update --init --recursive)
+            else
+                echo "Warning: Directory $RCUGAN_SRC_DIR not found. Cannot initialize its submodules."
+            fi
             pushd "$RCUGAN_SRC_DIR" >/dev/null
             mkdir -p build_windows && cd build_windows
             cmake -G "MSYS Makefiles" .. || { echo "Real-CUGAN CMake failed."; popd >/dev/null; exit 1; }
@@ -143,8 +180,11 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         # On Linux, upscalers are built from their source submodules using CMake.
         echo "Building Real-ESRGAN for Linux..."
         pushd "$RESRGAN_SRC_DIR" >/dev/null
+        echo "Updating submodules in $RESRGAN_SRC_DIR..."
+        git submodule update --init --recursive || { echo "Submodule update failed for $RESRGAN_SRC_DIR"; popd >/dev/null; exit 1; }
+        rm -rf build_linux # Clean previous build
         mkdir -p build_linux && cd build_linux
-        cmake .. || { echo "Real-ESRGAN CMake failed."; popd >/dev/null; exit 1; }
+        cmake ../src || { echo "Real-ESRGAN CMake failed."; popd >/dev/null; exit 1; }
         $MAKE -j$(nproc) || { echo "Real-ESRGAN make failed."; popd >/dev/null; exit 1; }
         # CMake on Linux usually places executables in build_linux/src or build_linux directly
         cp src/realesrgan-ncnn-vulkan "$TARGET_APP_DIR/" 2>/dev/null || cp realesrgan-ncnn-vulkan "$TARGET_APP_DIR/" 2>/dev/null || { echo "Failed to find/copy built realesrgan-ncnn-vulkan"; popd >/dev/null; exit 1; }
@@ -160,8 +200,11 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         echo "Building Real-CUGAN for Linux..."
         RCUGAN_MODEL_SUBDIRS="models-se models-pro models-nose"
         pushd "$RCUGAN_SRC_DIR" >/dev/null
+        echo "Updating submodules in $RCUGAN_SRC_DIR..."
+        git submodule update --init --recursive || { echo "Submodule update failed for $RCUGAN_SRC_DIR"; popd >/dev/null; exit 1; }
+        rm -rf build_linux # Clean previous build
         mkdir -p build_linux && cd build_linux
-        cmake .. || { echo "Real-CUGAN CMake failed."; popd >/dev/null; exit 1; }
+        cmake ../src || { echo "Real-CUGAN CMake failed."; popd >/dev/null; exit 1; }
         $MAKE -j$(nproc) || { echo "Real-CUGAN make failed."; popd >/dev/null; exit 1; }
         cp src/realcugan-ncnn-vulkan "$TARGET_APP_DIR/" 2>/dev/null || cp realcugan-ncnn-vulkan "$TARGET_APP_DIR/" 2>/dev/null || { echo "Failed to find/copy built realcugan-ncnn-vulkan"; popd >/dev/null; exit 1; }
         popd >/dev/null
@@ -189,7 +232,6 @@ echo "Building Waifu2x-Extension-QT..."
 pushd "$TARGET_APP_DIR" >/dev/null # Change to the application directory where the .pro file is located.
 qmake Waifu2x-Extension-QT.pro || { echo "qmake for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
 # 'make liquidglass_frag' is a specific build step for a component of the UI.
-$MAKE liquidglass_frag || { echo "make liquidglass_frag for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
 # General make command for the application, using multiple cores.
 $MAKE -j$(nproc) || { echo "make for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
 popd >/dev/null
