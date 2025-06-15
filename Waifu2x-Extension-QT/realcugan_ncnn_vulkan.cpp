@@ -30,6 +30,12 @@
 #include <QRegularExpression>
 #include <QDirIterator>
 
+static int StartedProc = 0;
+static int NumProc = 0;
+static int FinishedProc = 0;
+static int ErrorProc = 0;
+static int TotalNumProc = 0;
+
 // Utility to warn when an external process fails
 static bool warnProcessFailure(QWidget *parent, QProcess &proc,
                                const QString &context)
@@ -1866,7 +1872,7 @@ void MainWindow::AddGPU_MultiGPU_RealcuganNcnnVulkan(QString GPUID_Name)
 
     for (const auto& map : GPUIDs_List_MultiGPU_RealCUGAN) {
         if (map.value("ID") == selectedGPU_ID_str) {
-            ShowMessageBox("Info", "This GPU has already been added for RealCUGAN.", QMessageBox::Information);
+            ShellMessageBox(tr("Info"), tr("This GPU has already been added for RealCUGAN."), QMessageBox::Information);
             return;
         }
     }
@@ -2007,7 +2013,7 @@ void MainWindow::on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked()
 {
     QString selectedGPU_Text = comboBox_GPUIDs_MultiGPU_RealCUGAN->currentText();
     if (selectedGPU_Text.isEmpty() || selectedGPU_Text.contains("Default GPU (Detection Failed)") || selectedGPU_Text.contains("No available")) {
-        ShowMessageBox("Info", "Please select a valid GPU to add for RealCUGAN.", QMessageBox::Information);
+        ShellMessageBox(tr("Info"), tr("Please select a valid GPU to add for RealCUGAN."), QMessageBox::Information);
         return;
     }
     AddGPU_MultiGPU_RealcuganNcnnVulkan(selectedGPU_Text);
@@ -2017,7 +2023,7 @@ void MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked()
 {
     QListWidgetItem *selectedItem = listWidget_GPUList_MultiGPU_RealCUGAN->currentItem();
     if (!selectedItem) {
-        ShowMessageBox("Info", "Please select a GPU from the list to remove.", QMessageBox::Information);
+        ShellMessageBox(tr("Info"), tr("Please select a GPU from the list to remove."), QMessageBox::Information);
         return;
     }
 
