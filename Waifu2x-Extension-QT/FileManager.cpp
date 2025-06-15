@@ -187,15 +187,18 @@ bool FileManager::openFile(const QString &filePath)
 {
     if (QFile::exists(filePath))
     {
+        QString path = filePath;
 #ifdef Q_OS_WIN
-        if (!QDesktopServices::openUrl(QUrl("file:" + QUrl::toPercentEncoding(filePath), QUrl::TolerantMode)))
+        if (!QDesktopServices::openUrl(
+                QUrl("file:" + QUrl::toPercentEncoding(path), QUrl::TolerantMode)))
         {
-            QProcess::execute("start \"\" \"" + filePath.replace('%', "%%") + "\"");
+            path.replace('%', "%%");
+            QProcess::execute("start \"\" \"" + path + "\"");
         }
 #else
-        if (!QDesktopServices::openUrl(QUrl::fromLocalFile(filePath)))
+        if (!QDesktopServices::openUrl(QUrl::fromLocalFile(path)))
         {
-            QProcess::execute("xdg-open", QStringList() << filePath);
+            QProcess::execute("xdg-open", QStringList() << path);
         }
 #endif
         return true;

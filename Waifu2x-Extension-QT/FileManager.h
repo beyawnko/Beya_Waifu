@@ -28,6 +28,12 @@ public:
     bool isDirWritable(const QString &dirPath);
     bool openFolder(const QString &folderPath);
     bool openFilesFolder(const QString &filePath);
+
+    /**
+     * @brief Open the given file using the system's default application.
+     * @param filePath Path to the file.
+     * @return True if the launch command was issued.
+     */
     bool openFile(const QString &filePath);
     bool generateMarkFile(const QString &fileFullPath, const QString &msg);
 
