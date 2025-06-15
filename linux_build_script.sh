@@ -5,6 +5,7 @@ set -e # Exit immediately if a command exits with a non-zero status.
 # export QTDIR=/usr/lib/qt6 # Or /opt/qt6 - this might not be needed if qmake6 is in path
 # export PATH=$QTDIR/bin:$PATH # Again, might not be needed
 
+git submodule update --init --recursive
 cd Waifu2x-Extension-QT
 
 # Run qmake to generate the Makefile
