@@ -274,7 +274,7 @@ The log can be downloaded from the workflow run's "Artifacts" section.
 ## Static Analysis
 [![cppcheck](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/cppcheck.yml/badge.svg)](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/cppcheck.yml)
 
-Static analysis can be performed with [cppcheck](https://cppcheck.sourceforge.io/). The helper script expects the Qt development headers, `cppcheck` itself and `pkg-config` to be present. On Debian-based distributions install them with:
+Static analysis can be performed with [cppcheck](https://cppcheck.sourceforge.io/). The helper script expects `cppcheck`, `pkg-config` and the Qt development headers to be present. If `pkg-config` cannot locate Qt, install the development package providing the Qt pkg-config files (e.g., `qtbase5-dev` or `qtbase6-dev`). On Debian-based distributions install them with:
 
 ```bash
 sudo apt-get update
