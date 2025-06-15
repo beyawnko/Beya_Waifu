@@ -3376,7 +3376,34 @@ void MainWindow::on_checkBox_isCompatible_RealESRGAN_NCNN_Vulkan_clicked(){}
 int MainWindow::CustRes_CancelCustRes(){ return 0; }
 int MainWindow::Waifu2x(){ return 0;}
 int MainWindow::Waifu2xMainThread(){ return 0; }
-int MainWindow::Waifu2x_NCNN_Vulkan_Image(int,bool){return 0;}
+int MainWindow::Waifu2x_NCNN_Vulkan_Image(int rowNum, bool)
+{
+    if (Stopping)
+        return -1;
+
+    QTableWidgetItem *itemIn = ui->tableWidget_Files->item(rowNum, 0);
+    QTableWidgetItem *itemOut = ui->tableWidget_Files->item(rowNum, 1);
+    if (!itemIn || !itemOut)
+        return -1;
+
+    emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum,
+                                                              tr("Processing"));
+
+    QString cmd = QDir::toNativeSeparators(Waifu2x_ncnn_vulkan_ProgramPath);
+    cmd += " -i \"" + itemIn->text() + "\" -o \"" + itemOut->text() + "\"";
+
+    QProcess proc;
+    QByteArray out; QByteArray err;
+    bool ok = runProcess(&proc, cmd, &out, &err);
+
+    if (!err.isEmpty())
+        emit Send_TextBrowser_NewMessage(QString::fromLocal8Bit(err));
+
+    emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(
+        rowNum, ok ? tr("Finished") : tr("Failed"));
+
+    return ok ? 0 : -1;
+}
 int MainWindow::Waifu2x_NCNN_Vulkan_GIF(int){return 0;}
 int MainWindow::Waifu2x_NCNN_Vulkan_Video(int){return 0;}
 int MainWindow::Waifu2x_NCNN_Vulkan_Video_BySegment(int){return 0;}
@@ -3389,22 +3416,106 @@ int MainWindow::Realsr_NCNN_Vulkan_Video_BySegment(int){return 0;}
 QString MainWindow::Realsr_NCNN_Vulkan_ReadSettings(){return "";}
 int MainWindow::Calculate_Temporary_ScaleRatio_RealsrNCNNVulkan(int){return 0;}
 QString MainWindow::Realsr_NCNN_Vulkan_ReadSettings_Video_GIF(int){return "";}
-int MainWindow::Anime4k_Image(int,bool){return 0;}
+int MainWindow::Anime4k_Image(int rowNum, bool)
+{
+    if (Stopping)
+        return -1;
+
+    QTableWidgetItem *itemIn = ui->tableWidget_Files->item(rowNum, 0);
+    QTableWidgetItem *itemOut = ui->tableWidget_Files->item(rowNum, 1);
+    if (!itemIn || !itemOut)
+        return -1;
+
+    emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum,
+                                                              tr("Processing"));
+
+    QString cmd = QDir::toNativeSeparators(Anime4k_ProgramPath);
+    cmd += " -i \"" + itemIn->text() + "\" -o \"" + itemOut->text() + "\"";
+
+    QProcess proc;
+    QByteArray out; QByteArray err;
+    bool ok = runProcess(&proc, cmd, &out, &err);
+
+    if (!err.isEmpty())
+        emit Send_TextBrowser_NewMessage(QString::fromLocal8Bit(err));
+
+    emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(
+        rowNum, ok ? tr("Finished") : tr("Failed"));
+
+    return ok ? 0 : -1;
+}
 int MainWindow::Anime4k_GIF(int){return 0;}
 int MainWindow::Anime4k_GIF_scale(QMap<QString,QString>,int*,bool*){return 0;}
 int MainWindow::Anime4k_Video(int){return 0;}
 int MainWindow::Anime4k_Video_BySegment(int){return 0;}
 int MainWindow::Anime4k_Video_scale(QMap<QString,QString>,int*,bool*){return 0;}
 QString MainWindow::Anime4k_ReadSettings(bool){return "";}
-void MainWindow::DenoiseLevelSpinboxSetting_Anime4k(){}
-int MainWindow::Get_NumOfGPU_Anime4k(){return 0;}
-int MainWindow::Waifu2x_Converter_Image(int,bool){return 0;}
+void MainWindow::DenoiseLevelSpinboxSetting_Anime4k()
+{
+    bool acnet = ui->checkBox_ACNet_Anime4K->isChecked();
+    bool hdn = ui->checkBox_HDNMode_Anime4k->isChecked();
+
+    bool enable = acnet && !hdn;
+    ui->spinBox_Passes_Anime4K->setEnabled(enable);
+    ui->spinBox_PushColorCount_Anime4K->setEnabled(enable);
+}
+int MainWindow::Get_NumOfGPU_Anime4k()
+{
+    QProcess proc;
+    QByteArray out;
+    QString cmd = QDir::toNativeSeparators(Anime4k_ProgramPath) + " --list-gpus";
+    if (!runProcess(&proc, cmd, &out, nullptr))
+        return 0;
+
+    QStringList lines = QString::fromLocal8Bit(out).split(QRegExp("[\r\n]"),
+                                                       Qt::SkipEmptyParts);
+    int count = 0;
+    for (const QString &l : lines)
+        if (l.trimmed().startsWith("id"))
+            ++count;
+    return count;
+}
+int MainWindow::Waifu2x_Converter_Image(int rowNum, bool)
+{
+    if (Stopping)
+        return -1;
+
+    QTableWidgetItem *itemIn = ui->tableWidget_Files->item(rowNum, 0);
+    QTableWidgetItem *itemOut = ui->tableWidget_Files->item(rowNum, 1);
+    if (!itemIn || !itemOut)
+        return -1;
+
+    emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum,
+                                                              tr("Processing"));
+
+    QString cmd = QDir::toNativeSeparators(Waifu2xConverter_ReadSettings());
+    cmd += " -i \"" + itemIn->text() + "\" -o \"" + itemOut->text() + "\"";
+
+    QProcess proc;
+    QByteArray out; QByteArray err;
+    bool ok = runProcess(&proc, cmd, &out, &err);
+
+    if (!err.isEmpty())
+        emit Send_TextBrowser_NewMessage(QString::fromLocal8Bit(err));
+
+    emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(
+        rowNum, ok ? tr("Finished") : tr("Failed"));
+
+    return ok ? 0 : -1;
+}
 int MainWindow::Waifu2x_Converter_GIF(int){return 0;}
 int MainWindow::Waifu2x_Converter_GIF_scale(QMap<QString, QString>,int*,bool*){return 0;}
 int MainWindow::Waifu2x_Converter_Video(int){return 0;}
 int MainWindow::Waifu2x_Converter_Video_BySegment(int){return 0;}
 int MainWindow::Waifu2x_Converter_Video_scale(QMap<QString,QString>,int*,bool*){return 0;}
-QString MainWindow::Waifu2xConverter_ReadSettings(){return "";}
+QString MainWindow::Waifu2xConverter_ReadSettings()
+{
+    QString exe = Current_Path + "/waifu2x-converter-cpp";
+#ifdef Q_OS_WIN
+    exe += ".exe";
+#endif
+    return exe;
+}
 int MainWindow::SRMD_NCNN_Vulkan_Image(int,bool){return 0;}
 int MainWindow::SRMD_NCNN_Vulkan_GIF(int){return 0;}
 int MainWindow::SRMD_NCNN_Vulkan_Video(int){return 0;}

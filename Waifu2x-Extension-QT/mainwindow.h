@@ -239,12 +239,12 @@ public:
     int Anime4k_Video_BySegment(int rowNum);
     int Anime4k_Video_scale(QMap<QString,QString> Sub_Thread_info,int *Sub_video_ThreadNumRunning,bool *Frame_failed);
     QString Anime4k_ReadSettings(bool PreserveAlphaChannel);
-    void DenoiseLevelSpinboxSetting_Anime4k();
+    void DenoiseLevelSpinboxSetting_Anime4k(); // Adjust Anime4k UI based on checkboxes
     QString Anime4k_ProgramPath = Current_Path + "/Anime4K/Anime4K_waifu2xEX.exe";
     QString FFMPEG_EXE_PATH_Waifu2xEX;
-    int Get_NumOfGPU_Anime4k();
+    int Get_NumOfGPU_Anime4k(); // Query available GPUs for Anime4k
     //=================================
-    int Waifu2x_Converter_Image(int rowNum,bool ReProcess_MissingAlphaChannel);// Converter image upscaling thread
+    int Waifu2x_Converter_Image(int rowNum,bool ReProcess_MissingAlphaChannel); // Process an image via waifu2x-converter
     // Converter GIF upscaling: main thread splits/assembles, sub threads upscale frames
     int Waifu2x_Converter_GIF(int rowNum);
     int Waifu2x_Converter_GIF_scale(QMap<QString, QString> Sub_Thread_info,int *Sub_gif_ThreadNumRunning,bool *Frame_failed);
@@ -252,7 +252,7 @@ public:
     int Waifu2x_Converter_Video(int rowNum);
     int Waifu2x_Converter_Video_BySegment(int rowNum);
     int Waifu2x_Converter_Video_scale(QMap<QString,QString> Sub_Thread_info,int *Sub_video_ThreadNumRunning,bool *Frame_failed);
-    QString Waifu2xConverter_ReadSettings();
+    QString Waifu2xConverter_ReadSettings(); // Return path to waifu2x-converter executable
     //===================================
     int SRMD_NCNN_Vulkan_Image(int rowNum,bool ReProcess_MissingAlphaChannel);// SRMD image upscaling thread
     // SRMD GIF upscaling: main thread splits/assembles, sub threads upscale frames
