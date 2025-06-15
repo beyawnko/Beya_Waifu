@@ -36,8 +36,8 @@ First, ensure you have Git installed to clone the repository and its submodules.
 **1. Clone the Repository:**
 Use the following command to clone the repository including its submodules:
 ```bash
-git clone --recursive https://github.com/AaronFeng753/Waifu2x-Extension-QT.git
-cd Waifu2x-Extension-QT
+git clone --recursive https://github.com/beyawnko/Beya_Waifu.git
+cd Beya_Waifu
 ```
 If you have already cloned the repository without the `--recursive` flag, navigate to the repository's root directory and run the following commands to initialize and fetch the submodules:
 ```bash
