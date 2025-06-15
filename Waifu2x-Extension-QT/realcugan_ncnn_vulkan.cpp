@@ -1187,6 +1187,7 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
     // The case where calculatedTotalScaleByAiPasses != targetScale is now handled by the final resampling step.
 
     QString currentIterInputFile = inputFile;
+    QString currentIterOutputFile;
     QString lastAiPassOutputFile = inputFile; // Will hold the output of the very last AI pass
     bool success = true;
 
@@ -1196,6 +1197,7 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
         int currentPassScale = scaleSequence[i];
         // AI pass outputs always go to a temporary file within tempDir to avoid issues with outputFile path
         lastAiPassOutputFile = tempPathBase + QString::number(i) + "." + outputFormat.toLower();
+        currentIterOutputFile = lastAiPassOutputFile;
 
         // Ensure output directory for intermediate file exists (should be tempDir)
         QFileInfo currentIterOutInfo(currentIterOutputFile);
