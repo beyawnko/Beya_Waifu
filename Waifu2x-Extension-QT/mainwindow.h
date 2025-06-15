@@ -334,6 +334,7 @@ public:
     //================================================================
     int Waifu2x_Compatibility_Test();// engine compatibility check
     int Simple_Compatibility_Test(); // Public member function
+    void waitForCompatibilityTest(); // Wait for compatibility test to finish
     // initialize compatibility test progress bar
     void Init_progressBar_CompatibilityTest();
     // operations after compatibility test finished
@@ -632,6 +633,7 @@ public:
     QFuture<int> AutoUpdate;// monitor auto update thread
     QFuture<int> DownloadOnlineQRCode;// monitor online QR code download
     QFuture<int> Waifu2xMain;// monitor main waifu2x thread
+    QFuture<void> compatibilityTestFuture; // monitor compatibility test thread
     int Force_close();// forcibly close using cmd
     std::atomic<bool> isAlreadyClosed{false};
 
