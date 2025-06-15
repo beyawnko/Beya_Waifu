@@ -121,9 +121,15 @@ QStringList RealCuganProcessor::prepareArguments(const QString &inputFile,
               << "-t" << QString::number(tileSize)
               << "-m" << modelPath(modelName, experimental);
     if (isMultiGPU) {
-        arguments << multiGpuJobArgs.split(" ");
+        // Assuming multiGpuJobArgs is the already formatted string for the -g option (e.g., "0,1,2")
+        // or a special job string if the underlying executable handles that.
+        // For standard realcugan-ncnn-vulkan, -g expects a comma-separated list of IDs.
+        // If multiGpuJobArgs is "id1,id2,id3", it should be passed as a single argument to -g.
+        // If it's a more complex job string for a custom wrapper, it might also be a single arg.
+        // The .split(" ") was likely incorrect unless the job string itself had space-separated flags.
+        arguments << "-g" << multiGpuJobArgs;
     } else {
-        QString actualGpuId = gpuId.split(":")[0];
+        QString actualGpuId = gpuId.split(":")[0]; // Extracts "0" from "0: Default GPU 0"
         arguments << "-g" << actualGpuId;
     }
     if (ttaEnabled) {

@@ -352,6 +352,11 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     Init_ActionsMenu_checkBox_ReplaceOriginalFile();
     Init_ActionsMenu_checkBox_DelOriginal();
 
+    // Initialize Core Components (ensure they are not null if created elsewhere or manage lifetime)
+    // realCuganProcessor is already new'd
+    // videoProcessor is already new'd
+    // fileManager, processRunner, gpuManager, uiController are value members, no explicit init needed here
+
     // Initialize RealCUGAN UI Pointers (members of MainWindow)
     comboBox_Model_RealCUGAN = findChild<QComboBox*>("comboBox_Model_RealCUGAN");
     spinBox_Scale_RealCUGAN = findChild<QSpinBox*>("spinBox_Scale_RealCUGAN");
@@ -390,9 +395,24 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
         connect(pushButton_TileSize_Minus_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_TileSize_Minus_RealCUGAN_clicked);
     if(comboBox_Model_RealCUGAN)
         connect(comboBox_Model_RealCUGAN, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_comboBox_Model_RealCUGAN_currentIndexChanged);
+    if (spinBox_Scale_RealCUGAN) { // Check if found
+        // connect(spinBox_Scale_RealCUGAN, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spinBox_Scale_RealCUGAN_valueChanged); // Example, if slot exists
+    }
+    if (spinBox_DenoiseLevel_RealCUGAN) {
+        // connect(spinBox_DenoiseLevel_RealCUGAN, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spinBox_DenoiseLevel_RealCUGAN_valueChanged);
+    }
+    if (spinBox_TileSize_RealCUGAN) {
+        // connect(spinBox_TileSize_RealCUGAN, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spinBox_TileSize_RealCUGAN_valueChanged);
+    }
+    if (checkBox_TTA_RealCUGAN) {
+        // connect(checkBox_TTA_RealCUGAN, &QCheckBox::stateChanged, this, &MainWindow::on_checkBox_TTA_RealCUGAN_stateChanged);
+    }
+    if (comboBox_GPUID_RealCUGAN) {
+        // connect(comboBox_GPUID_RealCUGAN, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_comboBox_GPUID_RealCUGAN_currentIndexChanged);
+    }
     // End of RealCUGAN UI Initialization
 
-    // Initialize Realsr-ncnn-vulkan UI pointers based on actual widget IDs
+    // Initialize RealESRGAN (Realsr-ncnn-vulkan) UI pointers based on actual widget IDs
     comboBox_Model_RealsrNCNNVulkan = findChild<QComboBox*>("comboBox_Model_RealsrNCNNVulkan");
     comboBox_GPUID_RealsrNCNNVulkan = findChild<QComboBox*>("comboBox_GPUID_RealsrNCNNVulkan");
     pushButton_DetectGPU_RealsrNCNNVulkan = findChild<QPushButton*>("pushButton_DetectGPU_RealsrNCNNVulkan");
@@ -429,6 +449,7 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
         connect(spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::on_spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan_valueChanged);
     if(pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan)
         connect(pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan, &QPushButton::clicked, this, &MainWindow::on_pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan_clicked);
+    // End of RealESRGAN UI Initialization
 
     this->showNormal();
     this->activateWindow();
@@ -479,14 +500,17 @@ void MainWindow::ProcessDroppedFilesAsync(QList<QUrl> urls)
             }, Qt::BlockingQueuedConnection);
 
             if (scanSubFolders) {
-                Add_File_Folder_IncludeSubFolder(Input_path); // This function emits signals for UI updates
+                // Add_File_Folder_IncludeSubFolder(Input_path); // This function emits signals for UI updates
+                QMetaObject::invokeMethod(this, "Add_File_Folder_IncludeSubFolder_MainThread", Qt::BlockingQueuedConnection, Q_ARG(QString, Input_path));
             } else {
-                Add_File_Folder(Input_path); // Process only top-level directory contents
+                // Add_File_Folder(Input_path); // Process only top-level directory contents
+                QMetaObject::invokeMethod(this, "Add_File_Folder_MainThread", Qt::BlockingQueuedConnection, Q_ARG(QString, Input_path));
             }
         }
         else // Is a file
         {
-            Add_File_Folder(Input_path);
+            // Add_File_Folder(Input_path);
+            QMetaObject::invokeMethod(this, "Add_File_Folder_MainThread", Qt::BlockingQueuedConnection, Q_ARG(QString, Input_path));
         }
         // Emit progress bar update on main thread
         QMetaObject::invokeMethod(this, "Send_progressbar_Add", Qt::QueuedConnection);
@@ -501,6 +525,17 @@ void MainWindow::ProcessDroppedFilesAsync(QList<QUrl> urls)
     // This signal should be connected to a slot that re-enables UI, sorts tables etc.
     // (e.g. the existing ProcessDroppedFilesFinished or a modified Read_urls_finfished)
     emit Send_Read_urls_finfished();
+}
+
+// New slots to be called on the main thread
+void MainWindow::Add_File_Folder_MainThread(QString Full_Path)
+{
+    Add_File_Folder(Full_Path);
+}
+
+void MainWindow::Add_File_Folder_IncludeSubFolder_MainThread(QString Full_Path)
+{
+    Add_File_Folder_IncludeSubFolder(Full_Path);
 }
 
 MainWindow::~MainWindow()
@@ -2262,11 +2297,98 @@ void MainWindow::on_pushButton_TileSize_Minus_RealCUGAN_clicked()
 void MainWindow::on_comboBox_Model_RealCUGAN_currentIndexChanged(int index)
 {
     Q_UNUSED(index);
-    if(!ui->comboBox_Model_RealCUGAN) return;
-    qDebug() << "RealCUGAN model changed to:" << ui->comboBox_Model_RealCUGAN->currentText();
-    Realcugan_NCNN_Vulkan_ReadSettings();
+    if(!comboBox_Model_RealCUGAN) return; // Check the member variable
+    qDebug() << "RealCUGAN model changed to:" << comboBox_Model_RealCUGAN->currentText();
+    Realcugan_NCNN_Vulkan_ReadSettings(); // This will update m_realcugan_Model etc.
 }
 
+void MainWindow::on_pushButton_DetectGPU_RealCUGAN_clicked()
+{
+    if (!gpuManager.isCompatible("realcugan")) { // Assuming GpuManager has such a check
+        Send_TextBrowser_NewMessage(tr("RealCUGAN engine not found or incompatible."));
+        return;
+    }
+    // This might be a blocking call or needs to be async with signals
+    Available_GPUID_RealCUGAN = gpuManager.detectGpus("realcugan"); // Or a more specific method
+
+    if (comboBox_GPUID_RealCUGAN) {
+        comboBox_GPUID_RealCUGAN->clear();
+        comboBox_GPUID_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
+    }
+    if (comboBox_GPUIDs_MultiGPU_RealCUGAN) { // Also populate multi-GPU selector
+        comboBox_GPUIDs_MultiGPU_RealCUGAN->clear();
+        comboBox_GPUIDs_MultiGPU_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
+    }
+    Send_TextBrowser_NewMessage(tr("RealCUGAN GPU detection finished. Found %n GPU(s).", "", Available_GPUID_RealCUGAN.size()));
+    emit Send_Realcugan_ncnn_vulkan_DetectGPU_finished();
+}
+
+void MainWindow::on_checkBox_MultiGPU_RealCUGAN_stateChanged(int arg1)
+{
+    if (groupBox_GPUSettings_MultiGPU_RealCUGAN) {
+        groupBox_GPUSettings_MultiGPU_RealCUGAN->setVisible(arg1 == Qt::Checked);
+        // When switching to single GPU mode, clear the multi list and potentially reset single GPU choice
+        if (arg1 != Qt::Checked) {
+            GPUIDs_List_MultiGPU_RealCUGAN.clear();
+            if (listWidget_GPUList_MultiGPU_RealCUGAN) {
+                listWidget_GPUList_MultiGPU_RealCUGAN->clear();
+            }
+            // Optionally, reset the single GPU selection to auto or first available
+            if (comboBox_GPUID_RealCUGAN && comboBox_GPUID_RealCUGAN->count() > 0) {
+                 // comboBox_GPUID_RealCUGAN->setCurrentIndex(0); // Or find "auto"
+            }
+        }
+    }
+    Realcugan_NCNN_Vulkan_ReadSettings(); // Re-read settings as GPU config changes
+}
+
+void MainWindow::on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked()
+{
+    if (!comboBox_GPUIDs_MultiGPU_RealCUGAN || !listWidget_GPUList_MultiGPU_RealCUGAN) return;
+
+    QString selectedGPU = comboBox_GPUIDs_MultiGPU_RealCUGAN->currentText();
+    if (selectedGPU.isEmpty() || selectedGPU.toLower() == "auto") {
+        Send_TextBrowser_NewMessage(tr("Cannot add 'auto' or empty GPU to multi-GPU list. Please select a specific GPU."));
+        return;
+    }
+
+    // Prevent duplicates in logic, though QListWidget itself doesn't enforce unique items by default.
+    for (int i = 0; i < GPUIDs_List_MultiGPU_RealCUGAN.size(); ++i) {
+        if (GPUIDs_List_MultiGPU_RealCUGAN.at(i).value("id") == selectedGPU) {
+            Send_TextBrowser_NewMessage(tr("GPU %1 is already in the list.").arg(selectedGPU));
+            return;
+        }
+    }
+
+    QMap<QString, QString> gpuConfig;
+    gpuConfig["id"] = selectedGPU;
+    // We can add a default tile size here or let user configure it later for this specific GPU instance
+    gpuConfig["tilesize"] = QString::number(spinBox_TileSize_RealCUGAN ? spinBox_TileSize_RealCUGAN->value() : 0); // Get current main tile size as default
+    gpuConfig["enabled"] = "true"; // Enabled by default when added
+
+    GPUIDs_List_MultiGPU_RealCUGAN.append(gpuConfig);
+    listWidget_GPUList_MultiGPU_RealCUGAN->addItem(QString("%1 (Tile: %2, Enabled: %3)").arg(selectedGPU).arg(gpuConfig["tilesize"]).arg(gpuConfig["enabled"]));
+    Realcugan_NCNN_Vulkan_ReadSettings(); // Update job string
+}
+
+void MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked()
+{
+    if (!listWidget_GPUList_MultiGPU_RealCUGAN || listWidget_GPUList_MultiGPU_RealCUGAN->currentRow() < 0) return;
+
+    int selectedRow = listWidget_GPUList_MultiGPU_RealCUGAN->currentRow();
+    GPUIDs_List_MultiGPU_RealCUGAN.removeAt(selectedRow);
+    delete listWidget_GPUList_MultiGPU_RealCUGAN->takeItem(selectedRow); // Removes from UI
+    Realcugan_NCNN_Vulkan_ReadSettings(); // Update job string
+}
+
+void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked()
+{
+    GPUIDs_List_MultiGPU_RealCUGAN.clear();
+    if (listWidget_GPUList_MultiGPU_RealCUGAN) {
+        listWidget_GPUList_MultiGPU_RealCUGAN->clear();
+    }
+    Realcugan_NCNN_Vulkan_ReadSettings(); // Update job string
+}
 
 void MainWindow::on_pushButton_MultipleOfFPS_VFI_ADD_clicked()
 {
@@ -2288,71 +2410,85 @@ void MainWindow::on_pushButton_MultipleOfFPS_VFI_ADD_clicked()
 void MainWindow::PreLoad_Engines_Settings()
 {
     Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_vulkan->count() <= 0) Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_vulkan->count() <= 0) Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
+    if(ui->comboBox_model_vulkan && ui->comboBox_model_vulkan->count() <= 0) Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_vulkan && ui->comboBox_GPUID_vulkan->count() <= 0) Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
     if(Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str != "") Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str = tr("Waifu2x-ncnn-Vulkan Preload Failed:") + "\n" + Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str;
 
     Waifu2x_Converter_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_converter->count() <= 0) Waifu2x_Converter_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
-    if(ui->comboBox_TargetProcessor_converter->count() <= 0) Waifu2x_Converter_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
+    if(ui->comboBox_model_converter && ui->comboBox_model_converter->count() <= 0) Waifu2x_Converter_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
+    if(ui->comboBox_TargetProcessor_converter && ui->comboBox_TargetProcessor_converter->count() <= 0) Waifu2x_Converter_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
     if(Waifu2x_Converter_PreLoad_Settings_Str != "") Waifu2x_Converter_PreLoad_Settings_Str = tr("Waifu2x-Converter-CPP Preload Failed:") + "\n" + Waifu2x_Converter_PreLoad_Settings_Str;
 
     SRMD_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_srmd->count() <= 0) SRMD_NCNN_Vulkan_PreLoad_Settings_Str += tr("SRMD model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_srmd->count() <= 0) SRMD_NCNN_Vulkan_PreLoad_Settings_Str += tr("SRMD GPU list is empty.") + "\n";
+    if(ui->comboBox_model_srmd && ui->comboBox_model_srmd->count() <= 0) SRMD_NCNN_Vulkan_PreLoad_Settings_Str += tr("SRMD model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_srmd && ui->comboBox_GPUID_srmd->count() <= 0) SRMD_NCNN_Vulkan_PreLoad_Settings_Str += tr("SRMD GPU list is empty.") + "\n";
     if(SRMD_NCNN_Vulkan_PreLoad_Settings_Str != "") SRMD_NCNN_Vulkan_PreLoad_Settings_Str = tr("SRMD-ncnn-Vulkan Preload Failed:") + "\n" + SRMD_NCNN_Vulkan_PreLoad_Settings_Str;
 
     SRMD_CUDA_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_srmd_cuda->count() <= 0) SRMD_CUDA_PreLoad_Settings_Str += tr("SRMD model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_srmd_cuda->count() <= 0) SRMD_CUDA_PreLoad_Settings_Str += tr("SRMD GPU list is empty.") + "\n";
+    if(ui->comboBox_model_srmd_cuda && ui->comboBox_model_srmd_cuda->count() <= 0) SRMD_CUDA_PreLoad_Settings_Str += tr("SRMD model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_srmd_cuda && ui->comboBox_GPUID_srmd_cuda->count() <= 0) SRMD_CUDA_PreLoad_Settings_Str += tr("SRMD GPU list is empty.") + "\n";
     if(SRMD_CUDA_PreLoad_Settings_Str != "") SRMD_CUDA_PreLoad_Settings_Str = tr("SRMD-CUDA Preload Failed:") + "\n" + SRMD_CUDA_PreLoad_Settings_Str;
 
     Anime4KCPP_PreLoad_Settings_Str = "";
-    if(ui->checkBox_GPUMode_Anime4K->isChecked() && ui->comboBox_PlatformID_A4k->count() <= 0) Anime4KCPP_PreLoad_Settings_Str += tr("Anime4KCPP Platform ID list is empty.") + "\n";
-    if(ui->checkBox_GPUMode_Anime4K->isChecked() && ui->comboBox_DeviceID_A4k->count() <= 0) Anime4KCPP_PreLoad_Settings_Str += tr("Anime4KCPP Device ID list is empty.") + "\n";
+    if(ui->checkBox_GPUMode_Anime4K && ui->checkBox_GPUMode_Anime4K->isChecked() && ui->comboBox_PlatformID_A4k && ui->comboBox_PlatformID_A4k->count() <= 0) Anime4KCPP_PreLoad_Settings_Str += tr("Anime4KCPP Platform ID list is empty.") + "\n";
+    if(ui->checkBox_GPUMode_Anime4K && ui->checkBox_GPUMode_Anime4K->isChecked() && ui->comboBox_DeviceID_A4k && ui->comboBox_DeviceID_A4k->count() <= 0) Anime4KCPP_PreLoad_Settings_Str += tr("Anime4KCPP Device ID list is empty.") + "\n";
     if(Anime4KCPP_PreLoad_Settings_Str != "") Anime4KCPP_PreLoad_Settings_Str = tr("Anime4KCPP Preload Failed:") + "\n" + Anime4KCPP_PreLoad_Settings_Str;
 
     Waifu2x_Caffe_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_caffe->count() <= 0) Waifu2x_Caffe_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_caffe->count() <= 0) Waifu2x_Caffe_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
+    if(ui->comboBox_model_caffe && ui->comboBox_model_caffe->count() <= 0) Waifu2x_Caffe_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_caffe && ui->comboBox_GPUID_caffe->count() <= 0) Waifu2x_Caffe_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
     if(Waifu2x_Caffe_PreLoad_Settings_Str != "") Waifu2x_Caffe_PreLoad_Settings_Str = tr("Waifu2x-Caffe Preload Failed:") + "\n" + Waifu2x_Caffe_PreLoad_Settings_Str;
 
-    Realsr_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_realsr->count() <= 0) Realsr_NCNN_Vulkan_PreLoad_Settings_Str += tr("Realsr model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_realsr->count() <= 0) Realsr_NCNN_Vulkan_PreLoad_Settings_Str += tr("Realsr GPU list is empty.") + "\n";
+    Realsr_NCNN_Vulkan_PreLoad_Settings_Str = ""; // This is for the older RealSR tab, not RealESRGAN
+    if(ui->comboBox_model_realsr && ui->comboBox_model_realsr->count() <= 0) Realsr_NCNN_Vulkan_PreLoad_Settings_Str += tr("Realsr model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_realsr && ui->comboBox_GPUID_realsr->count() <= 0) Realsr_NCNN_Vulkan_PreLoad_Settings_Str += tr("Realsr GPU list is empty.") + "\n";
     if(Realsr_NCNN_Vulkan_PreLoad_Settings_Str != "") Realsr_NCNN_Vulkan_PreLoad_Settings_Str = tr("Realsr-ncnn-Vulkan Preload Failed:") + "\n" + Realsr_NCNN_Vulkan_PreLoad_Settings_Str;
 
     Realcugan_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    if (ui->comboBox_Model_RealCUGAN && ui->comboBox_GPUID_RealCUGAN) {
-        if(ui->comboBox_Model_RealCUGAN->count() <= 0) Realcugan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealCUGAN model list is empty.") + "\n";
-        if(ui->comboBox_GPUID_RealCUGAN->count() <= 0) Realcugan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealCUGAN GPU list is empty.") + "\n";
+    // Using direct member pointers for RealCUGAN as they were recently added
+    if (comboBox_Model_RealCUGAN) { // Check if the pointer itself is valid
+        if(comboBox_Model_RealCUGAN->count() <= 0) Realcugan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealCUGAN model list is empty.") + "\n";
     } else {
-        Realcugan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealCUGAN UI elements not found.") + "\n";
+        Realcugan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealCUGAN Model ComboBox not found.") + "\n";
     }
-    if(Realcugan_NCNN_Vulkan_PreLoad_Settings_Str != "") Realcugan_NCNN_Vulkan_PreLoad_Settings_Str = tr("RealCUGAN-ncnn-Vulkan Preload Failed:") + "\n" + Realcugan_NCNN_Vulkan_PreLoad_Settings_Str;
+    if (comboBox_GPUID_RealCUGAN) {
+        if(comboBox_GPUID_RealCUGAN->count() <= 0) Realcugan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealCUGAN GPU list is empty.") + "\n";
+    } else {
+        Realcugan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealCUGAN GPU ComboBox not found.") + "\n";
+    }
+    if(Realcugan_NCNN_Vulkan_PreLoad_Settings_Str != "" && !Realcugan_NCNN_Vulkan_PreLoad_Settings_Str.contains("not found")) Realcugan_NCNN_Vulkan_PreLoad_Settings_Str = tr("RealCUGAN-ncnn-Vulkan Preload Failed:") + "\n" + Realcugan_NCNN_Vulkan_PreLoad_Settings_Str;
+    else if (Realcugan_NCNN_Vulkan_PreLoad_Settings_Str.contains("not found")) Realcugan_NCNN_Vulkan_PreLoad_Settings_Str = tr("RealCUGAN-ncnn-Vulkan UI Preload Failed:") + "\n" + Realcugan_NCNN_Vulkan_PreLoad_Settings_Str;
+
 
     Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    if (comboBox_Model_RealsrNCNNVulkan && comboBox_GPUID_RealsrNCNNVulkan) {
+    // Using direct member pointers for RealESRGAN
+    if (comboBox_Model_RealsrNCNNVulkan) { // This is the UI pointer for RealESRGAN models
         if(comboBox_Model_RealsrNCNNVulkan->count() <= 0) Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealESRGAN model list is empty.") + "\n";
+    } else {
+        Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealESRGAN Model ComboBox not found.") + "\n";
+    }
+    if (comboBox_GPUID_RealsrNCNNVulkan) { // This is the UI pointer for RealESRGAN single GPU ID
         if(comboBox_GPUID_RealsrNCNNVulkan->count() <= 0) Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealESRGAN GPU list is empty.") + "\n";
     } else {
-        Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealESRGAN UI elements not found.") + "\n";
+        Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str += tr("RealESRGAN GPU ComboBox not found.") + "\n";
     }
-    if(Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str != "") Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str = tr("RealESRGAN-ncnn-Vulkan Preload Failed:") + "\n" + Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str;
+    if(Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str != "" && !Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str.contains("not found")) Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str = tr("RealESRGAN-ncnn-Vulkan Preload Failed:") + "\n" + Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str;
+    else if (Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str.contains("not found")) Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str = tr("RealESRGAN-ncnn-Vulkan UI Preload Failed:") + "\n" + Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str;
+
 
     Rife_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_rife->count() <= 0) Rife_NCNN_Vulkan_PreLoad_Settings_Str += tr("RIFE model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_rife->count() <= 0) Rife_NCNN_Vulkan_PreLoad_Settings_Str += tr("RIFE GPU list is empty.") + "\n";
+    if(ui->comboBox_model_rife && ui->comboBox_model_rife->count() <= 0) Rife_NCNN_Vulkan_PreLoad_Settings_Str += tr("RIFE model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_rife && ui->comboBox_GPUID_rife->count() <= 0) Rife_NCNN_Vulkan_PreLoad_Settings_Str += tr("RIFE GPU list is empty.") + "\n";
     if(Rife_NCNN_Vulkan_PreLoad_Settings_Str != "") Rife_NCNN_Vulkan_PreLoad_Settings_Str = tr("RIFE-ncnn-Vulkan Preload Failed:") + "\n" + Rife_NCNN_Vulkan_PreLoad_Settings_Str;
 
     Cain_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_cain->count() <= 0) Cain_NCNN_Vulkan_PreLoad_Settings_Str += tr("CAIN model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_cain->count() <= 0) Cain_NCNN_Vulkan_PreLoad_Settings_Str += tr("CAIN GPU list is empty.") + "\n";
+    if(ui->comboBox_model_cain && ui->comboBox_model_cain->count() <= 0) Cain_NCNN_Vulkan_PreLoad_Settings_Str += tr("CAIN model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_cain && ui->comboBox_GPUID_cain->count() <= 0) Cain_NCNN_Vulkan_PreLoad_Settings_Str += tr("CAIN GPU list is empty.") + "\n";
     if(Cain_NCNN_Vulkan_PreLoad_Settings_Str != "") Cain_NCNN_Vulkan_PreLoad_Settings_Str = tr("CAIN-ncnn-Vulkan Preload Failed:") + "\n" + Cain_NCNN_Vulkan_PreLoad_Settings_Str;
 
     Dain_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_dain->count() <= 0) Dain_NCNN_Vulkan_PreLoad_Settings_Str += tr("DAIN model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_dain->count() <= 0) Dain_NCNN_Vulkan_PreLoad_Settings_Str += tr("DAIN GPU list is empty.") + "\n";
+    if(ui->comboBox_model_dain && ui->comboBox_model_dain->count() <= 0) Dain_NCNN_Vulkan_PreLoad_Settings_Str += tr("DAIN model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_dain && ui->comboBox_GPUID_dain->count() <= 0) Dain_NCNN_Vulkan_PreLoad_Settings_Str += tr("DAIN GPU list is empty.") + "\n";
     if(Dain_NCNN_Vulkan_PreLoad_Settings_Str != "") Dain_NCNN_Vulkan_PreLoad_Settings_Str = tr("DAIN-ncnn-Vulkan Preload Failed:") + "\n" + Dain_NCNN_Vulkan_PreLoad_Settings_Str;
 }
 
@@ -3071,7 +3207,29 @@ QString MainWindow::FrameInterpolation_ReadConfig(bool isUhdInput,int NumOfFrame
     // For now, its direct logic based on passed bool seems fine.
     // ... (original logic based on isUhdInput and NumOfFrames remains) ...
     QString ConfigStr = "";
-    // ... (rest of the original function)
+    // ... (rest of the original function, ensure it's complete) ...
+    if (ui->comboBox_Engine_VFI->currentIndex() == 0) { // RIFE
+        ConfigStr += " -m " + ui->comboBox_model_rife->currentText();
+        ConfigStr += " -g " + ui->comboBox_GPUID_rife->currentText();
+        if (ui->checkBox_TTA_VFI->isChecked()) ConfigStr += " -x ";
+        if (ui->checkBox_UHDMode_VFI->isChecked() && isUhdInput) ConfigStr += " -u ";
+        ConfigStr += " -j " + QString::number(ui->spinBox_ThreadNum0_VFI->value()) + ":" + QString::number(ui->spinBox_ThreadNum1_VFI->value()) + ":" + QString::number(ui->spinBox_ThreadNum2_VFI->value());
+    } else if (ui->comboBox_Engine_VFI->currentIndex() == 1) { // CAIN
+        ConfigStr += " -m " + ui->comboBox_model_cain->currentText();
+        ConfigStr += " -g " + ui->comboBox_GPUID_cain->currentText();
+        if (ui->checkBox_TTA_VFI->isChecked()) ConfigStr += " -x ";
+        // CAIN might not have UHD mode or specific job string like RIFE, adjust as per CAIN's CLI
+        // ConfigStr += " -j ..."; // If CAIN supports job/thread config
+    } else if (ui->comboBox_Engine_VFI->currentIndex() == 2) { // DAIN
+        ConfigStr += " -m " + ui->comboBox_model_dain->currentText();
+        ConfigStr += " -g " + ui->comboBox_GPUID_dain->currentText();
+        if (ui->checkBox_TTA_VFI->isChecked()) ConfigStr += " -x ";
+        // DAIN specific params
+        ConfigStr += " -t " + QString::number(ui->spinBox_TileSize_dain->value());
+        if (NumOfFrames > 0) { // Assuming NumOfFrames is passed correctly for DAIN's -N equivalent
+             // ConfigStr += " -N " + QString::number(NumOfFrames); // DAIN might not use -N, check its CLI
+        }
+    }
     return ConfigStr;
 }
 
@@ -3153,7 +3311,142 @@ void MainWindow::on_pushButton_compatibilityTest_clicked(){}
 void MainWindow::on_pushButton_DetectGPU_clicked(){}
 void MainWindow::on_pushButton_SaveSettings_clicked(){}
 void MainWindow::on_pushButton_ResetSettings_clicked(){}
-void MainWindow::on_pushButton_DumpProcessorList_converter_clicked(){}
+void MainWindow::on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked()
+{
+    if (!gpuManager.isCompatible("realesrgan")) { // Assuming GpuManager has such a check
+        Send_TextBrowser_NewMessage(tr("RealESRGAN engine not found or incompatible."));
+        return;
+    }
+    Available_GPUID_RealESRGAN_ncnn_vulkan = gpuManager.detectGpus("realesrgan");
+
+    if (comboBox_GPUID_RealsrNCNNVulkan) {
+        comboBox_GPUID_RealsrNCNNVulkan->clear();
+        comboBox_GPUID_RealsrNCNNVulkan->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
+    }
+    if (comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan) {
+        comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->clear();
+        // For RealESRGAN, the multi-GPU combo box might show available GPUs to pick from,
+        // but the actual configuration is often a job string or individual settings per GPU.
+        // For now, just populate it with detected GPUs. The logic in ReadSettings will build the job string.
+        comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
+    }
+    Send_TextBrowser_NewMessage(tr("RealESRGAN GPU detection finished. Found %n GPU(s).", "", Available_GPUID_RealESRGAN_ncnn_vulkan.size()));
+    emit Send_Realesrgan_ncnn_vulkan_DetectGPU_finished();
+}
+
+void MainWindow::on_comboBox_Model_RealsrNCNNVulkan_currentIndexChanged(int index)
+{
+    Q_UNUSED(index);
+    if(!comboBox_Model_RealsrNCNNVulkan) return;
+    qDebug() << "RealESRGAN model changed to:" << comboBox_Model_RealsrNCNNVulkan->currentText();
+    RealESRGAN_NCNN_Vulkan_ReadSettings(); // This will update m_realesrgan_ModelName etc.
+}
+
+void MainWindow::on_pushButton_Add_TileSize_RealsrNCNNVulkan_clicked()
+{
+    if(!spinBox_TileSize_RealsrNCNNVulkan) return;
+    spinBox_TileSize_RealsrNCNNVulkan->setValue(AddTileSize_NCNNVulkan_Converter(spinBox_TileSize_RealsrNCNNVulkan->value()));
+}
+
+void MainWindow::on_pushButton_Minus_TileSize_RealsrNCNNVulkan_clicked()
+{
+    if(!spinBox_TileSize_RealsrNCNNVulkan) return;
+    spinBox_TileSize_RealsrNCNNVulkan->setValue(MinusTileSize_NCNNVulkan_Converter(spinBox_TileSize_RealsrNCNNVulkan->value()));
+}
+
+void MainWindow::on_checkBox_MultiGPU_RealsrNcnnVulkan_stateChanged(int arg1)
+{
+    if (groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan) {
+        groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan->setVisible(arg1 == Qt::Checked);
+         if (arg1 != Qt::Checked) { // Switched to single GPU
+            // Clear the logical list of multi-GPUs
+            GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.clear();
+            // Potentially update UI list/combo for multi-GPU config if it's dynamically populated
+            // For RealESRGAN, this might mean clearing a display list or resetting individual GPU config fields within the groupbox
+            if(comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan) comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->setCurrentIndex(-1); // Reset selection
+            if(spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan) spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setValue(0);
+            if(checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan) checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setChecked(false);
+        }
+    }
+    RealESRGAN_NCNN_Vulkan_ReadSettings(); // Re-read settings
+}
+
+void MainWindow::on_comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan_currentIndexChanged(int index)
+{
+    if (!checkBox_MultiGPU_RealsrNcnnVulkan || !checkBox_MultiGPU_RealsrNcnnVulkan->isChecked() || index < 0) {
+        if(checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan) checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setChecked(false);
+        if(spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan) spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setValue(0);
+        return;
+    }
+
+    QString selectedGPUID = comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->itemText(index);
+    bool found = false;
+    for (const auto& gpuConfig : GPUIDs_List_MultiGPU_RealesrganNcnnVulkan) {
+        if (gpuConfig.value("id") == selectedGPUID) {
+            if(checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan) checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setChecked(gpuConfig.value("enabled", "false") == "true");
+            if(spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan) spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setValue(gpuConfig.value("tilesize", "0").toInt());
+            found = true;
+            break;
+        }
+    }
+    if (!found) { // Not in our logical list yet, or list is empty. Set defaults.
+        if(checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan) checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setChecked(true); // Enable by default when first selecting
+        if(spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan && spinBox_TileSize_RealsrNCNNVulkan) { // Use main tile size as default
+            spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setValue(spinBox_TileSize_RealsrNCNNVulkan->value());
+        } else if (spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan) {
+            spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setValue(0); // Default tile
+        }
+    }
+}
+
+void MainWindow::on_checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan_clicked()
+{
+    if (!checkBox_MultiGPU_RealsrNcnnVulkan || !checkBox_MultiGPU_RealsrNcnnVulkan->isChecked() ||
+        !comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan || comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->currentIndex() < 0) return;
+
+    QString selectedGPUID = comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->currentText();
+    bool isEnabled = checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan ? checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan->isChecked() : false;
+    int tileSize = spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan ? spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan->value() : 0;
+
+    bool found = false;
+    for (int i = 0; i < GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.size(); ++i) {
+        if (GPUIDs_List_MultiGPU_RealesrganNcnnVulkan[i].value("id") == selectedGPUID) {
+            GPUIDs_List_MultiGPU_RealesrganNcnnVulkan[i]["enabled"] = isEnabled ? "true" : "false";
+            GPUIDs_List_MultiGPU_RealesrganNcnnVulkan[i]["tilesize"] = QString::number(tileSize);
+            found = true;
+            break;
+        }
+    }
+    if (!found) { // Add new entry
+        QMap<QString, QString> newGpuConfig;
+        newGpuConfig["id"] = selectedGPUID;
+        newGpuConfig["enabled"] = isEnabled ? "true" : "false";
+        newGpuConfig["tilesize"] = QString::number(tileSize);
+        GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.append(newGpuConfig);
+    }
+    RealESRGAN_NCNN_Vulkan_ReadSettings(); // Update main job string
+}
+
+void MainWindow::on_spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan_valueChanged(int arg1)
+{
+    // Same logic as enabling/disabling: update the value in the list
+    on_checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan_clicked();
+}
+
+void MainWindow::on_pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan_clicked()
+{
+    // This button might toggle the visibility of the groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan
+    // if it's not directly controlled by the checkBox_MultiGPU_RealsrNcnnVulkan.
+    // Or it could show a dialog with more advanced multi-GPU settings.
+    // For now, assume it toggles visibility if the groupbox isn't directly linked to the checkbox.
+    if (groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan) {
+        bool isVisible = groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan->isVisible();
+        groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan->setVisible(!isVisible);
+        // If this button is the primary way to show/hide, ensure checkbox state matches
+        if(checkBox_MultiGPU_RealsrNcnnVulkan) checkBox_MultiGPU_RealsrNcnnVulkan->setChecked(!isVisible);
+    }
+}
+
 void MainWindow::on_comboBox_TargetProcessor_converter_currentIndexChanged(int){}
 void MainWindow::on_pushButton_DetectGPUID_srmd_clicked(){}
 void MainWindow::on_pushButton_ListGPUs_Anime4k_clicked(){}
@@ -3168,11 +3461,19 @@ void MainWindow::on_checkBox_MultiGPU_SrmdNCNNVulkan_clicked(){}
 void MainWindow::on_comboBox_GPUIDs_MultiGPU_SrmdNCNNVulkan_currentIndexChanged(int){}
 void MainWindow::on_checkBox_isEnable_CurrentGPU_MultiGPU_SrmdNCNNVulkan_clicked(){}
 void MainWindow::on_spinBox_TileSize_CurrentGPU_MultiGPU_SrmdNCNNVulkan_valueChanged(int){}
-void MainWindow::on_checkBox_MultiGPU_RealsrNcnnVulkan_stateChanged(int){}
-void MainWindow::on_checkBox_MultiGPU_RealsrNcnnVulkan_clicked(){}
-void MainWindow::on_comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan_currentIndexChanged(int){}
-void MainWindow::on_checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan_clicked(){}
-void MainWindow::on_spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan_valueChanged(int){}
+// on_checkBox_MultiGPU_RealsrNcnnVulkan_stateChanged is implemented above
+void MainWindow::on_checkBox_MultiGPU_RealsrNcnnVulkan_clicked()
+{
+    // This slot might be redundant if stateChanged is handled, or can be used for immediate actions on click
+    // For now, let stateChanged handle the logic. If specific click-only logic is needed, add here.
+    // For example, if stateChanged is only for programmatic changes.
+    if (checkBox_MultiGPU_RealsrNcnnVulkan) {
+        on_checkBox_MultiGPU_RealsrNcnnVulkan_stateChanged(checkBox_MultiGPU_RealsrNcnnVulkan->checkState());
+    }
+}
+// on_comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan_currentIndexChanged is implemented above
+// on_checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan_clicked is implemented above
+// on_spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan_valueChanged is implemented above
 void MainWindow::on_checkBox_MultiGPU_Waifu2xConverter_clicked(){}
 void MainWindow::on_checkBox_MultiGPU_Waifu2xConverter_stateChanged(int){}
 void MainWindow::on_comboBox_GPUIDs_MultiGPU_Waifu2xConverter_currentIndexChanged(int){}
@@ -3314,23 +3615,380 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardOutput(){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardError(){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError){}
 
-void MainWindow::Realcugan_NCNN_Vulkan_Image(int, bool, bool){}
-void MainWindow::Realcugan_NCNN_Vulkan_GIF(int){}
-void MainWindow::Realcugan_NCNN_Vulkan_Video(int){}
-void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int){}
+// Placeholder slots for QProcess signals (RealCUGAN)
+void MainWindow::onRealCuganProcessFinished(int exitCode, QProcess::ExitStatus exitStatus) {
+    // TODO: Handle process finished, update table, clean up QProcess object
+    // This is a placeholder - actual rowNum and other context will be needed.
+    // May need to use QObject::sender() to get the QProcess instance and manage it.
+    qDebug() << "RealCUGAN process finished. Exit code:" << exitCode;
+    QProcess *process = qobject_cast<QProcess*>(sender());
+    if (process) {
+        ProcList_RealCUGAN.removeAll(process);
+        process->deleteLater();
+    }
+}
+void MainWindow::onRealCuganProcessError(QProcess::ProcessError error) {
+    qDebug() << "RealCUGAN process error:" << error;
+    QProcess *process = qobject_cast<QProcess*>(sender());
+    if (process) {
+        ProcList_RealCUGAN.removeAll(process);
+        process->deleteLater();
+    }
+}
+void MainWindow::onRealCuganProcessStdOut() {
+    QProcess *process = qobject_cast<QProcess*>(sender());
+    if (process) {
+        QByteArray data = process->readAllStandardOutput();
+        emit Send_TextBrowser_NewMessage(QString::fromLocal8Bit(data));
+    }
+}
+void MainWindow::onRealCuganProcessStdErr() {
+    QProcess *process = qobject_cast<QProcess*>(sender());
+    if (process) {
+        QByteArray data = process->readAllStandardError();
+        emit Send_TextBrowser_NewMessage(QString::fromLocal8Bit(data));
+    }
+}
+
+// Placeholder slots for QProcess signals (RealESRGAN)
+void MainWindow::onRealESRGANProcessFinished(int exitCode, QProcess::ExitStatus exitStatus) {
+    qDebug() << "RealESRGAN process finished. Exit code:" << exitCode;
+    QProcess *process = qobject_cast<QProcess*>(sender());
+    if (process) {
+        ProcList_RealESRGAN.removeAll(process);
+        process->deleteLater();
+    }
+}
+void MainWindow::onRealESRGANProcessError(QProcess::ProcessError error) {
+    qDebug() << "RealESRGAN process error:" << error;
+    QProcess *process = qobject_cast<QProcess*>(sender());
+    if (process) {
+        ProcList_RealESRGAN.removeAll(process);
+        process->deleteLater();
+    }
+}
+void MainWindow::onRealESRGANProcessStdOut() {
+    QProcess *process = qobject_cast<QProcess*>(sender());
+    if (process) {
+        QByteArray data = process->readAllStandardOutput();
+        emit Send_TextBrowser_NewMessage(QString::fromLocal8Bit(data));
+    }
+}
+void MainWindow::onRealESRGANProcessStdErr() {
+    QProcess *process = qobject_cast<QProcess*>(sender());
+    if (process) {
+        QByteArray data = process->readAllStandardError();
+        emit Send_TextBrowser_NewMessage(QString::fromLocal8Bit(data));
+    }
+}
+
+
+void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool experimental, bool ReProcess_MissingAlphaChannel)
+{
+    if (Stopping) return;
+    if (rowNum < 0 || rowNum >= Table_model_image->rowCount()) return;
+
+    QString sourceFileFullPath = Table_model_image->item(rowNum, 2)->text();
+    emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, tr("Reading settings..."));
+
+    Realcugan_NCNN_Vulkan_ReadSettings(); // Populates m_realcugan_*
+
+    QString outputFormat = ui->comboBox_ImageSaveFormat->currentText().toLower();
+    QString outputFileFullPath = fileManager.generateOutputFilePath(sourceFileFullPath, आउटपुटFolder_main, outputFormat);
+
+    if (outputFileFullPath.isEmpty()) {
+        emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, tr("Error: Output path generation failed."));
+        return;
+    }
+    fileManager.ensureOutputDirectoryExists(outputFileFullPath);
+
+
+    // Simplified for single pass for now. Iterative logic would go here.
+    QStringList arguments = Realcugan_NCNN_Vulkan_PrepareArguments(
+        sourceFileFullPath,
+        outputFileFullPath,
+        ui->spinBox_Scale_RealCUGAN ? ui->spinBox_Scale_RealCUGAN->value() : 2, // Default scale if UI not found
+        m_realcugan_Model,
+        m_realcugan_DenoiseLevel,
+        m_realcugan_TileSize,
+        m_realcugan_GPUID, // This could be a job string for multi-GPU
+        m_realcugan_TTA,
+        outputFormat,
+        checkBox_MultiGPU_RealCUGAN ? checkBox_MultiGPU_RealCUGAN->isChecked() : false,
+        m_realcugan_gpuJobConfig_temp, // This would be constructed if multi-GPU
+        experimental
+    );
+
+    QString executablePath = realCuganProcessor->executablePath();
+
+    if (executablePath.isEmpty() || !QFile::exists(executablePath)) {
+        emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, tr("Error: RealCUGAN executable not found."));
+        emit Send_TextBrowser_NewMessage(tr("RealCUGAN executable not found at: %1").arg(executablePath));
+        return;
+    }
+
+    emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, tr("Processing..."));
+
+    QProcess *process = new QProcess(this);
+    // Associate rowNum with the process for context in slots
+    process->setProperty("rowNum", rowNum);
+    process->setProperty("fileType", "image"); // To distinguish in slots if needed
+
+    connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &MainWindow::onRealCuganProcessFinished);
+    connect(process, &QProcess::errorOccurred, this, &MainWindow::onRealCuganProcessError);
+    connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::onRealCuganProcessStdOut);
+    connect(process, &QProcess::readyReadStandardError, this, &MainWindow::onRealCuganProcessStdErr);
+
+    ProcList_RealCUGAN.append(process);
+    process->start(executablePath, arguments);
+    // processRunner.run(process, executablePath, arguments); // If using ProcessRunner
+}
+
+void MainWindow::Realcugan_NCNN_Vulkan_GIF(int rowNum)
+{
+    // Stub: Similar logic to Realcugan_NCNN_Vulkan_Image but for GIFs.
+    // Will involve splitting GIF, processing frames, and reassembling.
+    // Uses Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(ThreadNum)
+    qDebug() << "Realcugan_NCNN_Vulkan_GIF called for row" << rowNum;
+    emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, tr("GIF processing not yet implemented."));
+}
+
+void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
+{
+    // Stub: Similar logic for Videos.
+    // Will involve splitting Video, processing frames, and reassembling.
+    // Uses Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(ThreadNum)
+    qDebug() << "Realcugan_NCNN_Vulkan_Video called for row" << rowNum;
+    emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, tr("Video processing not yet implemented."));
+}
+void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
+{
+    qDebug() << "Realcugan_NCNN_Vulkan_Video_BySegment called for row" << rowNum;
+    emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, tr("Video segment processing not yet implemented."));
+}
+
 void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings()
 {
-    realCuganProcessor->readSettings();
+    if (!realCuganProcessor) realCuganProcessor = new RealCuganProcessor(this);
+    // Pass UI pointers to RealCuganProcessor so it can read them
+    realCuganProcessor->setUiPointers(
+        comboBox_Model_RealCUGAN,
+        spinBox_Scale_RealCUGAN,
+        spinBox_DenoiseLevel_RealCUGAN,
+        spinBox_TileSize_RealCUGAN,
+        checkBox_TTA_RealCUGAN,
+        comboBox_GPUID_RealCUGAN,
+        checkBox_MultiGPU_RealCUGAN,
+        comboBox_GPUIDs_MultiGPU_RealCUGAN,
+        listWidget_GPUList_MultiGPU_RealCUGAN
+    );
+    realCuganProcessor->readSettings(); // This method within RealCuganProcessor should use the UI pointers set below.
+    m_realcugan_Model = realCuganProcessor->getModel();
+    m_realcugan_DenoiseLevel = realCuganProcessor->getDenoiseLevel();
+    m_realcugan_TileSize = realCuganProcessor->getTileSize();
+    m_realcugan_TTA = realCuganProcessor->getTTA();
+    m_realcugan_GPUID = realCuganProcessor->getGPUID();
+    m_realcugan_gpuJobConfig_temp = realCuganProcessor->getGpuJobConfig();
+
 }
 void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum)
 {
+    // Similar to Realcugan_NCNN_Vulkan_ReadSettings, but might have different UI or logic for batch
+    if (!realCuganProcessor) realCuganProcessor = new RealCuganProcessor(this); // Should already be initialized in constructor
+    // Ensure UI pointers are set if RealCuganProcessor needs them for this specific read operation,
+    // though ideally, RealCuganProcessor holds its own references or they are passed during its construction/initialization.
+    // If readSettingsVideoGif is self-contained or uses settings already stored in RealCuganProcessor, this explicit call might not be needed here.
+    /* realCuganProcessor->setUiPointers( // Commenting out if readSettingsVideoGif doesn't directly need them passed again here
+        comboBox_Model_RealCUGAN,
+        spinBox_Scale_RealCUGAN,
+        spinBox_DenoiseLevel_RealCUGAN,
+        spinBox_TileSize_RealCUGAN,
+        checkBox_TTA_RealCUGAN,
+        comboBox_GPUID_RealCUGAN,
+        checkBox_MultiGPU_RealCUGAN,
+        comboBox_GPUIDs_MultiGPU_RealCUGAN,
+        listWidget_GPUList_MultiGPU_RealCUGAN
+    ); */
     realCuganProcessor->readSettingsVideoGif(ThreadNum);
+    m_realcugan_Model = realCuganProcessor->getModel();
+    m_realcugan_DenoiseLevel = realCuganProcessor->getDenoiseLevel();
+    m_realcugan_TileSize = realCuganProcessor->getTileSize();
+    m_realcugan_TTA = realCuganProcessor->getTTA();
+    m_realcugan_GPUID = realCuganProcessor->getGPUID(); // This might be more complex for video/gif batch
+    m_realcugan_gpuJobConfig_temp = realCuganProcessor->getGpuJobConfig();
 }
-// QString MainWindow::video_get_fps(QString videoPath){ FileMetadataCache m = getOrFetchMetadata(videoPath); return m.isValid ? m.fps : ""; } // Removed, use getOrFetchMetadata directly
-// long long MainWindow::video_get_frameNum(QString videoPath){ FileMetadataCache m = getOrFetchMetadata(videoPath); return m.isValid ? m.frameCount : 0; } // Removed
-// int MainWindow::video_get_duration(QString videoPath){ FileMetadataCache m = getOrFetchMetadata(videoPath); return m.isValid ? static_cast<int>(m.duration) : 0; } // Removed
-// bool MainWindow::video_isVFR(QString videoPath){ FileMetadataCache m = getOrFetchMetadata(videoPath); return m.isValid && m.isVFR; } // Removed
-// QMap<QString,int> MainWindow::video_get_Resolution(QString VideoFileFullPath){ FileMetadataCache m = getOrFetchMetadata(VideoFileFullPath); QMap<QString,int> r; if(m.isValid){r.insert("width",m.width); r.insert("height",m.height);} else {r.insert("width",0); r.insert("height",0);} return r;} // Removed
+
+
+void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingAlphaChannel)
+{
+    if (Stopping) return;
+    if (rowNum < 0 || rowNum >= Table_model_image->rowCount()) return;
+
+    QString sourceFileFullPath = Table_model_image->item(rowNum, 2)->text();
+    emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, tr("Reading settings..."));
+
+    RealESRGAN_NCNN_Vulkan_ReadSettings(); // Populates m_realesrgan_*
+
+    QString outputFormat = ui->comboBox_ImageSaveFormat->currentText().toLower();
+    QString outputFileFullPath = fileManager.generateOutputFilePath(sourceFileFullPath, OutPutFolder_main, outputFormat);
+
+    if (outputFileFullPath.isEmpty()) {
+        emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, tr("Error: Output path generation failed."));
+        return;
+    }
+    fileManager.ensureOutputDirectoryExists(outputFileFullPath);
+
+    // TODO: Implement RealESRGAN_ProcessSingleFileIteratively or similar multi-pass logic if needed
+    // For now, assuming single pass for simplicity.
+
+    QStringList arguments = RealESRGAN_NCNN_Vulkan_PrepareArguments(
+        sourceFileFullPath,
+        outputFileFullPath,
+        m_realesrgan_ModelNativeScale, // Assuming target scale is model native scale for single pass
+        m_realesrgan_ModelName,
+        m_realesrgan_TileSize,
+        m_realesrgan_GPUID, // This could be a job string for multi-GPU
+        checkBox_MultiGPU_RealsrNcnnVulkan ? checkBox_MultiGPU_RealsrNcnnVulkan->isChecked() : false,
+        m_realesrgan_TTA,
+        outputFormat
+    );
+
+    // Determine executable path (TODO: make this configurable or part of a RealESRGANProcessor class)
+    QString executablePath = Current_Path + "/realesrgan-ncnn-vulkan/realesrgan-ncnn-vulkan_waifu2xEX.exe";
+    if (!QFile::exists(executablePath)) { // Fallback, adjust as necessary
+         executablePath = Current_Path + "/bin/realesrgan-ncnn-vulkan_waifu2xEX.exe";
+    }
+
+
+    if (executablePath.isEmpty() || !QFile::exists(executablePath)) {
+        emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, tr("Error: RealESRGAN executable not found."));
+        emit Send_TextBrowser_NewMessage(tr("RealESRGAN executable not found at: %1").arg(executablePath));
+        return;
+    }
+
+    emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, tr("Processing..."));
+
+    QProcess *process = new QProcess(this);
+    process->setProperty("rowNum", rowNum);
+    process->setProperty("fileType", "image");
+
+    connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &MainWindow::onRealESRGANProcessFinished);
+    connect(process, &QProcess::errorOccurred, this, &MainWindow::onRealESRGANProcessError);
+    connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::onRealESRGANProcessStdOut);
+    connect(process, &QProcess::readyReadStandardError, this, &MainWindow::onRealESRGANProcessStdErr);
+
+    ProcList_RealESRGAN.append(process);
+    process->start(executablePath, arguments);
+}
+
+void MainWindow::RealESRGAN_NCNN_Vulkan_GIF(int rowNum) {
+    qDebug() << "RealESRGAN_NCNN_Vulkan_GIF for row" << rowNum;
+    emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, tr("GIF processing with RealESRGAN not yet implemented."));
+}
+void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int rowNum) {
+     qDebug() << "RealESRGAN_NCNN_Vulkan_Video for row" << rowNum;
+    emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, tr("Video processing with RealESRGAN not yet implemented."));
+}
+void MainWindow::RealESRGAN_NCNN_Vulkan_Video_BySegment(int rowNum) {
+    qDebug() << "RealESRGAN_NCNN_Vulkan_Video_BySegment for row" << rowNum;
+    emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, tr("Segmented video processing with RealESRGAN not yet implemented."));
+}
+
+void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings() {
+    // Ensure UI pointers are valid before accessing them
+    if (comboBox_Model_RealsrNCNNVulkan) {
+        m_realesrgan_ModelName = comboBox_Model_RealsrNCNNVulkan->currentText();
+        // Extract native scale from model name
+        if (m_realesrgan_ModelName.contains("realesr-animevideov3-x2")) m_realesrgan_ModelNativeScale = 2;
+        else if (m_realesrgan_ModelName.contains("realesr-animevideov3-x3")) m_realesrgan_ModelNativeScale = 3;
+        else if (m_realesrgan_ModelName.contains("realesr-animevideov3-x4")) m_realesrgan_ModelNativeScale = 4;
+        else if (m_realesrgan_ModelName.contains("realesrgan-x4plus-anime")) m_realesrgan_ModelNativeScale = 4;
+        else if (m_realesrgan_ModelName.contains("realesrgan-x4plus")) m_realesrgan_ModelNativeScale = 4;
+        else if (m_realesrgan_ModelName.contains("realesrnet-x4plus")) m_realesrgan_ModelNativeScale = 4;
+        // Add more specific model checks if needed for other scales, otherwise default
+        else if (m_realesrgan_ModelName.contains("x2")) m_realesrgan_ModelNativeScale = 2;
+        else if (m_realesrgan_ModelName.contains("x3")) m_realesrgan_ModelNativeScale = 3;
+        else if (m_realesrgan_ModelName.contains("x4")) m_realesrgan_ModelNativeScale = 4;
+        else m_realesrgan_ModelNativeScale = 1; // Default if not determined
+    } else {
+        m_realesrgan_ModelName = "realesrgan-x4plus"; // Default model
+        m_realesrgan_ModelNativeScale = 4;
+        qDebug() << "comboBox_Model_RealsrNCNNVulkan not found, using default RealESRGAN model.";
+    }
+
+    if (spinBox_TileSize_RealsrNCNNVulkan) m_realesrgan_TileSize = spinBox_TileSize_RealsrNCNNVulkan->value();
+    else m_realesrgan_TileSize = 0; // Default tile size (0 usually means auto)
+
+    if (checkBox_TTA_RealsrNCNNVulkan) m_realesrgan_TTA = checkBox_TTA_RealsrNCNNVulkan->isChecked();
+    else m_realesrgan_TTA = false;
+
+    if (comboBox_GPUID_RealsrNCNNVulkan) m_realesrgan_GPUID = comboBox_GPUID_RealsrNCNNVulkan->currentText();
+    else m_realesrgan_GPUID = "auto";
+
+
+    if (checkBox_MultiGPU_RealsrNcnnVulkan && checkBox_MultiGPU_RealsrNcnnVulkan->isChecked() &&
+        groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan && groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan->isVisible()) {
+        // Construct job string for multi-GPU based on GPUIDs_List_MultiGPU_RealesrganNcnnVulkan
+        // This list should be populated by on_comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan_currentIndexChanged and related slots
+        QStringList jobStrings;
+        for (const auto& gpuConfig : GPUIDs_List_MultiGPU_RealesrganNcnnVulkan) {
+            if (gpuConfig.value("enabled", "false") == "true") {
+                jobStrings.append(gpuConfig.value("id") + ":" + gpuConfig.value("tilesize", QString::number(m_realesrgan_TileSize)));
+            }
+        }
+        if (!jobStrings.isEmpty()) {
+            m_realesrgan_gpuJobConfig_temp = jobStrings.join(",");
+        } else {
+            m_realesrgan_gpuJobConfig_temp = ""; // No enabled GPUs in multi-config, fallback or error
+            qDebug() << "RealESRGAN MultiGPU enabled, but no GPUs configured in the list.";
+        }
+    } else {
+        m_realesrgan_gpuJobConfig_temp = ""; // Single GPU or multi-GPU UI not active
+        // For single GPU, m_realesrgan_GPUID will be used directly.
+    }
+}
+
+void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum) {
+    // For batch processing (video/gif frames), settings are typically the same as single image.
+    // GPU ID might be handled differently if cycling through GPUs per frame/segment.
+    RealESRGAN_NCNN_Vulkan_ReadSettings();
+
+    // Example: If cycling GPUs for video/GIF frames in a multi-GPU setup without explicit job string
+    // This is a simplified example; actual multi-GPU frame distribution might be more complex.
+    if (checkBox_MultiGPU_RealsrNcnnVulkan && checkBox_MultiGPU_RealsrNcnnVulkan->isChecked() && m_realesrgan_gpuJobConfig_temp.isEmpty()) {
+        if (!Available_GPUID_RealESRGAN_ncnn_vulkan.isEmpty()) {
+            int gpuIndex = ThreadNum % Available_GPUID_RealESRGAN_ncnn_vulkan.size();
+            m_realesrgan_GPUID = Available_GPUID_RealESRGAN_ncnn_vulkan.at(gpuIndex);
+        }
+    }
+    // If m_realesrgan_gpuJobConfig_temp is set, it will be used, implying a pre-defined multi-GPU job distribution.
+}
+
+QStringList MainWindow::RealESRGAN_NCNN_Vulkan_PrepareArguments(
+    const QString &inputFile, const QString &outputFile, int currentPassScale,
+    const QString &modelName, int tileSize, const QString &gpuIdOrJobConfig,
+    bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat)
+{
+    QStringList args;
+    args << "-i" << inputFile;
+    args << "-o" << outputFile;
+    args << "-n" << modelName;
+    args << "-s" << QString::number(currentPassScale); // Scale is part of model or job string usually for realesrgan
+    if (tileSize > 0) args << "-t" << QString::number(tileSize);
+
+    if (isMultiGPUJob && !gpuIdOrJobConfig.isEmpty()) {
+        args << "-g" << gpuIdOrJobConfig; // Use the pre-formatted job string
+    } else if (!gpuIdOrJobConfig.isEmpty() && gpuIdOrJobConfig.toLower() != "auto") {
+        args << "-g" << gpuIdOrJobConfig;
+    }
+    // If gpuIdOrJobConfig is "auto" or empty and not multi-GPU, ncnn might pick best GPU.
+    // No explicit -g for auto usually needed unless specifying a single "auto" for clarity.
+
+    if (ttaEnabled) args << "-x";
+    args << "-f" << outputFormat;
+    return args;
+}
+
 int MainWindow::CustRes_CancelCustRes(){ return 0; }
 int MainWindow::Waifu2x(){ return 0;}
 int MainWindow::Waifu2xMainThread(){ return 0; }
