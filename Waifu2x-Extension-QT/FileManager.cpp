@@ -10,6 +10,9 @@
 #include <QDesktopServices>
 #include <QProcess>
 #include <QUrl>
+#include <QFileSystemWatcher>
+#include <QEventLoop>
+#include <QTimer>
 #ifdef Q_OS_WIN
 #   include <windows.h>
 #   include <shellapi.h>
