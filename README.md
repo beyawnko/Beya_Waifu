@@ -17,7 +17,7 @@ RealCUGAN and RealESRGAN are currently the only supported upscaling engines.
 
 ## Dependencies
 
-- **Qt 5 or Qt 6** development environment (Core, GUI, Widgets, Multimedia modules)
+- **Qt 5 or Qt 6** development environment (Core, GUI, Widgets, Multimedia, OpenGL, OpenGLWidgets, Qt5Compat modules)
 - **C++11** compatible compiler
 - **FFmpeg** for handling video input/output
 - Included **RealCUGAN** and **RealESRGAN** executables built with ncnn Vulkan
@@ -57,7 +57,8 @@ git submodule update --init --recursive
         ```
 
 2.  **Qt Development Libraries**:
-    *   Qt 5 (e.g., version 5.12 or 5.15). You'll need the `core`, `gui`, `widgets`, and `multimedia` components.
+    *   Qt 5 (e.g., version 5.12 or 5.15). You'll need the `core`, `gui`, `widgets`, and `multimedia` components,
+        plus the `opengl`, `openglwidgets`, and `qt5compat` modules.
     *   Installation example for Debian/Ubuntu systems:
         ```bash
         sudo apt install qtbase5-dev qtmultimedia5-dev libqt5svg5-dev
@@ -90,6 +91,7 @@ git submodule update --init --recursive
     *   During the Qt installation, ensure you select a Qt version built for MinGW (e.g., `mingw81_64` for Qt 5.15.2 if you installed the `mingw-w64-x86_64` toolchain).
     *   Ensure that the `bin` directory of your Qt installation (e.g., `C:\Qt\5.15.2\mingw81_64\bin`) and the MinGW compiler `bin` directory (e.g., `C:\msys64\mingw64\bin`) are added to your system's `PATH` environment variable, especially within the MSYS2 MinGW terminal environment.
     *   Include the **qtshadertools** module so the Liquid Glass shader can be built.
+    *   Install the `opengl`, `openglwidgets`, and `qt5compat` modules.
 
 3.  **Upscaler Dependencies (Vulkan for Windows)**:
     *   As with Linux, install the Vulkan SDK from the [LunarG website](https://vulkan.lunarg.com/).
