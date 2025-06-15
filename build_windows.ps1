@@ -185,13 +185,19 @@ function Ensure-QMake {
     if ($qmakeCmd) {
         $qtBinDir = Split-Path $qmakeCmd.Path
         $qtMultimediaDllPath = Join-Path $qtBinDir "Qt6Multimedia.dll"
-        if (Test-Path $qtMultimediaDllPath) {
+        $qsbPath = Join-Path $qtBinDir 'qsb.exe'
+        if (Test-Path $qtMultimediaDllPath -and (Test-Path $qsbPath)) {
             Write-Host "qmake and required Qt modules appear to be installed."
             $isInstallComplete = $true
             # Store path for the build function
             $script:QtBinPath = $qtBinDir
         } else {
-            Write-Warning "qmake found, but Qt Multimedia module is missing. Re-running Qt installation to add missing modules."
+            if (-not (Test-Path $qtMultimediaDllPath)) {
+                Write-Warning 'qmake found, but Qt Multimedia module is missing. Re-running Qt installation.'
+            }
+            if (-not (Test-Path $qsbPath)) {
+                Write-Warning 'qmake found, but Qt ShaderTools module is missing. Re-running Qt installation.'
+            }
         }
     }
 
@@ -207,8 +213,11 @@ function Ensure-QMake {
         }
         
         # Only specify truly optional modules. The others are included by default.
-        $qtModules = @('qtmultimedia')
-        $qtInstallArgs = @('install-qt', 'windows', 'desktop', $QtVersion, 'win64_mingw', '-O', $QtDir, '-m') + $qtModules
+        $qtModules = @('qtmultimedia', 'qtshadertools')
+        $qtInstallArgs = @(
+            'install-qt', 'windows', 'desktop', $QtVersion, 'win64_mingw',
+            '-O', $QtDir, '-m'
+        ) + $qtModules
         Invoke-Process 'aqt' $qtInstallArgs
         
         $qtBinPath = Join-Path -Path $QtDir -ChildPath "$QtVersion\mingw_64\bin"
@@ -223,6 +232,11 @@ function Ensure-QMake {
 
         if (-not (Get-Command qmake -ErrorAction SilentlyContinue)) {
             throw "Failed to find qmake even after installation and adding to PATH."
+        }
+
+        $qsbPath = Join-Path $qtBinPath 'qsb.exe'
+        if (-not (Test-Path $qsbPath)) {
+            throw "Qt shadertools module missing. qsb.exe not found at '$qsbPath'"
         }
     }
 }
