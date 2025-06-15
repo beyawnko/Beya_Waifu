@@ -72,7 +72,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
     if(QFile::exists(VideoConfiguration_fullPath))
     {
         QSettings *configIniRead = new QSettings(VideoConfiguration_fullPath, QSettings::IniFormat);
-        configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
+        // configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8")); // Removed for Qt6
         //============ Correct folder name =============
         QString VideoClipsFolderPath_old = configIniRead->value("/VideoConfiguration/VideoClipsFolderPath").toString();
         QString VideoClipsFolderName_old = configIniRead->value("/VideoConfiguration/VideoClipsFolderName").toString();
@@ -136,7 +136,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
     if(QFile::exists(VideoConfiguration_fullPath))
     {
         QSettings *configIniRead = new QSettings(VideoConfiguration_fullPath, QSettings::IniFormat);
-        configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
+        // configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8")); // Removed for Qt6
         //=================== Load progress =========================
         StartTime = configIniRead->value("/Progress/StartTime").toInt();
         isSplitComplete = configIniRead->value("/Progress/isSplitComplete").toBool();
@@ -830,7 +830,7 @@ void MainWindow::on_pushButton_DetectGPU_VFI_clicked()
     ui->comboBox_GPUID_VFI->setEnabled(0);
     ui->pushButton_DetectGPU_VFI->setEnabled(0);
     Available_GPUID_FrameInterpolation.clear();
-    QtConcurrent::run(this, &MainWindow::FrameInterpolation_DetectGPU);
+    QtConcurrent::run([this]() { this->FrameInterpolation_DetectGPU(); });
 }
 
 int MainWindow::FrameInterpolation_DetectGPU()

@@ -4,7 +4,7 @@
 void MainWindow::on_pushButton_compatibilityTest_clicked()
 {
     ui->pushButton_compatibilityTest->setEnabled(false);
-    QtConcurrent::run(this, &MainWindow::Simple_Compatibility_Test);
+    QtConcurrent::run([this]() { this->Simple_Compatibility_Test(); });
 }
 
 int MainWindow::Simple_Compatibility_Test()

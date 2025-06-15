@@ -50,7 +50,7 @@ void RealCuganProcessor::preLoadSettings()
     settings.endGroup();
 
     QSettings iniSettings(QDir::currentPath() + "/settings.ini", QSettings::IniFormat);
-    iniSettings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    // iniSettings.setIniCodec(QTextCodec::codecForName("UTF-8")); // Removed for Qt6
     m_mainWindow->ui->comboBox_Engine_Image->setCurrentIndex(iniSettings.value("/settings/ImageEngine", 0).toInt());
     m_mainWindow->ui->comboBox_Engine_GIF->setCurrentIndex(iniSettings.value("/settings/GIFEngine", 0).toInt());
     m_mainWindow->ui->comboBox_Engine_Video->setCurrentIndex(iniSettings.value("/settings/VideoEngine", 0).toInt());
@@ -66,9 +66,16 @@ void RealCuganProcessor::readSettings()
     m_mainWindow->m_realcugan_TTA = m_mainWindow->ui->checkBox_TTA_RealCUGAN->isChecked();
 
     if (m_mainWindow->ui->checkBox_MultiGPU_RealCUGAN->isChecked()) {
-        m_mainWindow->m_realcugan_GPUID = m_mainWindow->ui->comboBox_GPUID_RealCUGAN->currentText();
+        if (!m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
+            m_mainWindow->m_realcugan_GPUID =
+                m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN.first().value("ID");
+        } else {
+            m_mainWindow->m_realcugan_GPUID =
+                m_mainWindow->ui->comboBox_GPUID_RealCUGAN->currentText();
+        }
     } else {
-        m_mainWindow->m_realcugan_GPUID = m_mainWindow->ui->comboBox_GPUID_RealCUGAN->currentText();
+        m_mainWindow->m_realcugan_GPUID =
+            m_mainWindow->ui->comboBox_GPUID_RealCUGAN->currentText();
     }
 
     qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings: Model:" << m_mainWindow->m_realcugan_Model

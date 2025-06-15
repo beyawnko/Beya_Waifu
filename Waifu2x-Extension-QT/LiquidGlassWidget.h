@@ -17,12 +17,12 @@
 */
 
 #include <QOpenGLWidget>
-#include <QOpenGLFunctions>
+#include <QOpenGLFunctions_3_3_Core> // Use a specific version
 #include <QOpenGLShaderProgram>
 #include <QOpenGLTexture>
 #include <QImage>
 
-class LiquidGlassWidget : public QOpenGLWidget, protected QOpenGLFunctions
+class LiquidGlassWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
 {
     Q_OBJECT
 public:

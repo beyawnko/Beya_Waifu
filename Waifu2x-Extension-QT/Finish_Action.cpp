@@ -65,6 +65,7 @@ bool MainWindow::SystemShutDown()
         stream << "Don't delete this file!!";
     }
     //================
+#ifdef Q_OS_WIN
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
     // Get process token
@@ -96,6 +97,14 @@ bool MainWindow::SystemShutDown()
             }
     }
     return false;
+#else
+    // System shutdown/reboot is not supported on non-Windows platforms with this method.
+    if (ui->comboBox_FinishAction->currentIndex() == 1 || ui->comboBox_FinishAction->currentIndex() == 4)
+    {
+        qWarning("System shutdown/reboot requested on a non-Windows platform. Action skipped.");
+    }
+    return false; // Or indicate not supported
+#endif
 }
 /*
 /*
@@ -111,8 +120,11 @@ int MainWindow::SystemShutDown_isAutoShutDown()
         QMessageBox *MSG = new QMessageBox();
         MSG->setWindowTitle(tr("Notification"));
         MSG->setModal(true);
+        // It might be better to show the message only if an action was taken or expected.
+        // For now, keeping original logic but ensuring return.
     }
     QFile::remove(AutoShutDown); // Delete previously generated auto shutdown marker
+    return 0; // Added to satisfy return type
 }
 
 void MainWindow::AutoFinishAction_Message()

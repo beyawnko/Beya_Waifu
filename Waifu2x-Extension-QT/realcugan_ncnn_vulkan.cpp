@@ -18,6 +18,7 @@
 #include "ui_mainwindow.h"
 #include "RealCuganProcessor.h"
 
+#include <QTableWidgetItem> // Added for QTableWidgetItem
 #include <QCoreApplication> // Added for safety, though RealCuganProcessor handles paths
 #include <QFileDialog>
 #include <QFileInfo>
@@ -209,41 +210,19 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
         QDir().mkpath(splitFramesFolder);
         QDir().mkpath(scaledFramesFolder);
 
-        // 1. Extract frames for the current segment
-        // video_video2images_ProcessBySegment might be an existing utility.
-        // If not, ffmpeg command: ffmpeg -ss {startTime} -i {inputFile} -t {currentSegmentDuration} ...frames...
-        // For now, let's assume a conceptual function or direct ffmpeg call.
-        // This requires a more specialized video_video2images_ProcessBySegment.
-        // For this placeholder, we'll simulate it by just processing all frames N times.
-        // THIS IS A SIMPLIFICATION - A REAL IMPLEMENTATION NEEDS SEGMENTED FRAME EXTRACTION.
-        // For now, we'll re-use the full frame extraction and just note it conceptually.
-        // Actual implementation: video_video2images_Segment(sourceFileFullPath, splitFramesFolder, startTime, currentSegmentDuration);
-
-        // Simplified: Re-extract all frames each time for placeholder. Not efficient.
-        // A proper implementation would use ffmpeg -ss and -t to extract only segment frames.
-        // For the purpose of this structure, let's assume splitFramesFolder is correctly populated for the segment.
-        // If video_video2images_ProcessBySegment is not available, this part needs ffmpeg.
-        // For now, let's use the full video_video2images and process ALL frames, which is not true segmentation logic for frames.
-        // This is a known limitation of this placeholder implementation.
-        // A better approach for a quick fill:
-        // If (i==0) video_video2images(sourceFileFullPath, splitFramesFolder, audioPath_dummy_segment); // extract all frames on first segment
-        // then process a SUBSET of framesFileName_qStrList based on segment timing. This is also complex.
-
-        // Let's assume video_video2images_ProcessBySegment(sourceFileFullPath, splitFramesFolder, startTime, currentSegmentDuration) exists and works.
-        // If not, this function cannot be fully implemented correctly here without adding direct ffmpeg calls.
-        // The existing `video_video2images` extracts ALL frames.
-        // For now, let's log a warning and process ALL frames for each "segment" - this will be slow and incorrect for actual segmentation.
-        // CORRECTED APPROACH OUTLINE FOR SEGMENTED FRAME EXTRACTION:
-        // 1. Extract frames for the CURRENT SEGMENT ONLY using ffmpeg -ss and -t
+        // 1. Extract frames for the current segment using ffmpeg
         QProcess ffmpegFrameExtract;
         QStringList extractArgs;
-        QString frameOutputPattern = QDir(splitFramesFolder).filePath("frame_%0"+QString::number(CalNumDigits(video_get_frameNum(sourceFileFullPath)))+"d.png"); // e.g. frame_%06d.png
+        QString frameOutputPattern =
+            QDir(splitFramesFolder)
+                .filePath("frame_%0" +
+                          QString::number(CalNumDigits(video_get_frameNum(sourceFileFullPath))) +
+                          "d.png");
 
-        extractArgs << "-nostdin" << "-y"
-                    << "-ss" << QString::number(startTime)
-                    << "-i" << sourceFileFullPath
+        extractArgs << "-nostdin" << "-y" << "-ss" << QString::number(startTime)
                     << "-t" << QString::number(currentSegmentDuration)
-                    << "-vf" << "fps=" + video_get_fps(sourceFileFullPath) // Maintain original FPS for frame count consistency
+                    << "-i" << sourceFileFullPath
+                    << "-vf" << "fps=" + video_get_fps(sourceFileFullPath)
                     << frameOutputPattern;
 
         emit Send_TextBrowser_NewMessage(tr("Extracting frames for segment %1/%2...").arg(i+1).arg(numSegments));
@@ -963,7 +942,7 @@ void MainWindow::StartNextRealCUGANPass(QProcess *process) {
     }
 }
 
-void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished() {
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess::ExitStatus exitStatus) {
     QProcess *process = qobject_cast<QProcess *>(sender());
     if (!process) return;
 
@@ -2129,56 +2108,4 @@ void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked()
     }
     // ... rest of the process setup using the determined scale for the current pass ...
 */
-
-// The command arguments for -g (GPU ID) and -j (Job Threads for multi-GPU)
-// will need to be handled carefully, especially with multi-GPU.
-// The current code uses ui->comboBox_GPUID_RealCUGAN->currentText().split(" ")[0] for single GPU.
-// For multi-GPU, -j would be a comma-separated list of GPU IDs.
-// The -g parameter is used for single GPU selection.
-// The -j parameter "{THREADS_PER_GPU_0},{THREADS_PER_GPU_1},..." is for job distribution,
-// and the -g parameter "{GPU_ID_0},{GPU_ID_1},..." selects the GPUs to use.
-// This needs clarification from realcugan-ncnn-vulkan.exe documentation or help output.
-// If -j is for thread count and -g for gpu list:
-// arguments << "-g" << "0,1,2" for GPUs 0, 1, and 2.
-// arguments << "-j" << "1:2:2" for 1 thread on primary, 2 on others (example).
-// The current implementation uses -g for single GPU. Multi-GPU needs its own logic.
-
-// The -m (model) argument is constructed as:
-// Current_Path + "/realcugan-ncnn-vulkan/windows/" + ui->comboBox_Model_RealCUGAN->currentText()
-// This implies models are in subdirectories like "models-se", "models-pro", etc.
-// This seems correct based on typical ncnn model structures.
-// Example: "models-se" or "models-nose" or "models-pro"
-
-// The -t (tile size) parameter:
-// arguments << "-t" << QString::number(ui->spinBox_TileSize_RealCUGAN->value())
-// Usually 0 for auto, otherwise a specific tile size. This is standard.
-
-// The -n (denoise level) parameter:
-// arguments << "-n" << QString::number(ui->spinBox_DenoiseLevel_RealCUGAN->value())
-// -1, 0, 1, 2, 3. This is standard.
-
-// -s (scale) parameter:
-// arguments << "-s" << QString::number(ui->spinBox_Scale_RealCUGAN->value())
-// 1, 2, 3, 4. If scale > 4, iterative scaling is needed.
-// If scale = 1, it's for denoising only.
-
-// TTA flag:
-// if (ui->checkBox_TTA_RealCUGAN->isChecked()) { arguments << "-x"; }
-// This is standard.
-
-// Output format:
-// arguments << "-f" << ui->comboBox_OutFormat_Image->currentText().toLower();
-// This is also standard.
-
-// Make sure ProcList_RealCUGAN is declared in mainwindow.h:
-// QList<QProcess*> ProcList_RealCUGAN;
-// And initialized in MainWindow constructor:
-// ProcList_RealCUGAN.clear();
-
-// Also, slots like on_comboBox_Model_RealCUGAN_currentIndexChanged should be connected
-// if they need to trigger actions or validations.
-// For now, basic UI connections are assumed to be in mainwindow.cpp's constructor.
-// The provided file focuses on the engine logic.
-// Further UI interaction logic (enabling/disabling options based on model, etc.)
-// would go into mainwindow.cpp or be connected to slots implemented here if more complex.
 

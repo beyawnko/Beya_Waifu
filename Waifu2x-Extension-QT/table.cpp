@@ -532,7 +532,7 @@ void MainWindow::on_pushButton_SaveFileList_clicked()
     ui->pushButton_BrowserFile->setEnabled(0);
     emit Send_TextBrowser_NewMessage(tr("Write to the file, please wait."));
     Table_Save_Current_Table_Filelist(FilesListFullPath);
-    QtConcurrent::run(this, &MainWindow::Table_Save_Current_Table_Filelist_Watchdog,FilesListFullPath);
+    QtConcurrent::run([this, FilesListFullPath] { this->Table_Save_Current_Table_Filelist_Watchdog(FilesListFullPath); });
 }
 int MainWindow::Table_Save_Current_Table_Filelist_Watchdog(QString Table_FileList_ini)
 {

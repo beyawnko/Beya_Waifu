@@ -1115,7 +1115,7 @@ void MainWindow::AddGPU_MultiGPU_RealesrganNcnnVulkan(QString GPUID_Name) {
 
 void MainWindow::RealESRGAN_NCNN_Vulkan_PreLoad_Settings() {
     QSettings settings(Current_Path + "/settings.ini", QSettings::IniFormat); // Use global settings file
-    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    // settings.setIniCodec(QTextCodec::codecForName("UTF-8")); // Removed for Qt6
     settings.beginGroup("RealESRGAN_NCNN_Vulkan");
     ui->comboBox_Model_RealESRGAN->setCurrentText(settings.value("Model", "realesrgan-x4plus").toString());
     ui->spinBox_TileSize_RealESRGAN->setValue(settings.value("TileSize", 0).toInt());
@@ -1200,7 +1200,7 @@ void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU_finished(int exitCode, QProces
     ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->addItems(Available_GPUID_RealESRGAN_ncnn_vulkan);
 
     QSettings settings(Current_Path + "/settings.ini", QSettings::IniFormat);
-    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    // settings.setIniCodec(QTextCodec::codecForName("UTF-8")); // Removed for Qt6
     settings.beginGroup("RealESRGAN_NCNN_Vulkan");
     settings.setValue("AvailableGPUs", Available_GPUID_RealESRGAN_ncnn_vulkan);
     settings.endGroup();
@@ -1223,10 +1223,10 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::Proces
     process->deleteLater();
 }
 
-void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_finished() { /* Similar to RealCUGAN, but for RealESRGAN QProcess chain if used */ }
-void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error) { /* ... */ }
-void MainWindow::RealESRGAN_NCNN_Vulkan_finished() { /* General fallback if direct QProcess used and not iterative chain */ }
-void MainWindow::RealESRGAN_NCNN_Vulkan_errorOccurred(QProcess::ProcessError error) { /* ... */ }
+void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess::ExitStatus exitStatus) { Q_UNUSED(exitCode); Q_UNUSED(exitStatus); /* Similar to RealCUGAN, but for RealESRGAN QProcess chain if used */ }
+void MainWindow::RealESRGAN_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error) { Q_UNUSED(error); /* ... */ }
+void MainWindow::RealESRGAN_NCNN_Vulkan_finished(int exitCode, QProcess::ExitStatus exitStatus) { Q_UNUSED(exitCode); Q_UNUSED(exitStatus); /* General fallback if direct QProcess used and not iterative chain */ }
+void MainWindow::RealESRGAN_NCNN_Vulkan_errorOccurred(QProcess::ProcessError error) { Q_UNUSED(error); /* ... */ }
 
 
 // --- UI Interaction Slots for RealESRGAN (Copied from existing file, ensure they are connected) ---

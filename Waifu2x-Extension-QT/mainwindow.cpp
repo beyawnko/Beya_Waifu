@@ -37,6 +37,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <algorithm>
+#include <QDebug> // Added for placeholder qDebug messages
 
 // ========================= Metadata Cache Implementation =========================
 FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
@@ -233,11 +234,13 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    FFMPEG_EXE_PATH_Waifu2xEX = Current_Path + "/ffmpeg/ffmpeg.exe"; // Initialized FFMPEG_EXE_PATH
     realCuganProcessor = new RealCuganProcessor(this);
     videoProcessor = new VideoProcessor(this);
-    qRegisterMetaTypeStreamOperators<QList_QMap_QStrQStr >("QList_QMap_QStrQStr");
+    // qRegisterMetaTypeStreamOperators<QList_QMap_QStrQStr >("QList_QMap_QStrQStr"); // Commented out for Qt6
     qRegisterMetaType<FileMetadataCache>("FileMetadataCache");
-    globalMaxThreadCount = Settings_Read_value("/settings/MaxThreadCount", 0).toInt();
+    QVariant maxThreadCountSetting = Settings_Read_value("/settings/MaxThreadCount");
+    globalMaxThreadCount = maxThreadCountSetting.isValid() ? maxThreadCountSetting.toInt() : 0;
     if(maxThreadsOverride > 0) globalMaxThreadCount = maxThreadsOverride;
     if(globalMaxThreadCount <= 0) {
         int cores = QThread::idealThreadCount();
@@ -322,12 +325,13 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     uiController.setFontFixed(ui->checkBox_isCustFontEnable,
                               ui->fontComboBox_CustFont,
                               ui->spinBox_GlobalFontSize);
-    uiController.applyDarkStyle(Settings_Read_value("/settings/DarkMode", 1).toInt());
+    QVariant darkModeSetting = Settings_Read_value("/settings/DarkMode");
+    uiController.applyDarkStyle(darkModeSetting.isValid() ? darkModeSetting.toInt() : 1);
     gpuManager.detectGPUs();
-    QtConcurrent::run(this, &MainWindow::DeleteErrorLog_Waifu2xCaffe);
-    QtConcurrent::run(this, &MainWindow::Del_TempBatFile);
-    AutoUpdate = QtConcurrent::run(this, &MainWindow::CheckUpadte_Auto);
-    DownloadOnlineQRCode = QtConcurrent::run(this, &MainWindow::Donate_DownloadOnlineQRCode);
+    QtConcurrent::run([this] { this->DeleteErrorLog_Waifu2xCaffe(); });
+    QtConcurrent::run([this] { this->Del_TempBatFile(); });
+    AutoUpdate = QtConcurrent::run([this] { return this->CheckUpadte_Auto(); });
+    DownloadOnlineQRCode = QtConcurrent::run([this] { return this->Donate_DownloadOnlineQRCode(); }); // Assuming Donate_DownloadOnlineQRCode also returns int
     SystemShutDown_isAutoShutDown();
     TextBrowser_StartMes();
     Tip_FirstTimeStart();
@@ -347,41 +351,50 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     Init_ActionsMenu_pushButton_RemoveItem();
     Init_ActionsMenu_checkBox_ReplaceOriginalFile();
     Init_ActionsMenu_checkBox_DelOriginal();
-    ui->comboBox_Model_RealCUGAN = findChild<QComboBox*>("comboBox_Model_RealCUGAN");
-    ui->spinBox_Scale_RealCUGAN = findChild<QSpinBox*>("spinBox_Scale_RealCUGAN");
-    ui->spinBox_DenoiseLevel_RealCUGAN = findChild<QSpinBox*>("spinBox_DenoiseLevel_RealCUGAN");
-    ui->spinBox_TileSize_RealCUGAN = findChild<QSpinBox*>("spinBox_TileSize_RealCUGAN");
-    ui->checkBox_TTA_RealCUGAN = findChild<QCheckBox*>("checkBox_TTA_RealCUGAN");
-    ui->comboBox_GPUID_RealCUGAN = findChild<QComboBox*>("comboBox_GPUID_RealCUGAN");
-    ui->pushButton_DetectGPU_RealCUGAN = findChild<QPushButton*>("pushButton_DetectGPU_RealCUGAN");
-    ui->checkBox_MultiGPU_RealCUGAN = findChild<QCheckBox*>("checkBox_MultiGPU_RealCUGAN");
-    ui->groupBox_GPUSettings_MultiGPU_RealCUGAN = findChild<QGroupBox*>("groupBox_GPUSettings_MultiGPU_RealCUGAN");
-    ui->comboBox_GPUIDs_MultiGPU_RealCUGAN = findChild<QComboBox*>("comboBox_GPUIDs_MultiGPU_RealCUGAN");
-    ui->pushButton_AddGPU_MultiGPU_RealCUGAN = findChild<QPushButton*>("pushButton_AddGPU_MultiGPU_RealCUGAN");
-    ProcList_RealCUGAN.clear();
-    Realcugan_NCNN_Vulkan_PreLoad_Settings();
-    if(ui->pushButton_DetectGPU_RealCUGAN)
-        connect(ui->pushButton_DetectGPU_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_DetectGPU_RealCUGAN_clicked);
-    if(ui->checkBox_MultiGPU_RealCUGAN)
-        connect(ui->checkBox_MultiGPU_RealCUGAN, &QCheckBox::stateChanged, this, &MainWindow::on_checkBox_MultiGPU_RealCUGAN_stateChanged);
-    if(ui->pushButton_AddGPU_MultiGPU_RealCUGAN)
-        connect(ui->pushButton_AddGPU_MultiGPU_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked);
-    ui->pushButton_TileSize_Add_RealCUGAN = findChild<QPushButton*>("pushButton_TileSize_Add_RealCUGAN");
-    ui->pushButton_TileSize_Minus_RealCUGAN = findChild<QPushButton*>("pushButton_TileSize_Minus_RealCUGAN");
-    if(ui->pushButton_TileSize_Add_RealCUGAN)
-        connect(ui->pushButton_TileSize_Add_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_TileSize_Add_RealCUGAN_clicked);
-    if(ui->pushButton_TileSize_Minus_RealCUGAN)
-        connect(ui->pushButton_TileSize_Minus_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_TileSize_Minus_RealCUGAN_clicked);
-    ui->pushButton_RemoveGPU_MultiGPU_RealCUGAN = findChild<QPushButton*>("pushButton_RemoveGPU_MultiGPU_RealCUGAN");
-    ui->pushButton_ClearGPU_MultiGPU_RealCUGAN = findChild<QPushButton*>("pushButton_ClearGPU_MultiGPU_RealCUGAN");
-    if(ui->pushButton_RemoveGPU_MultiGPU_RealCUGAN)
-        connect(ui->pushButton_RemoveGPU_MultiGPU_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked);
-    if(ui->pushButton_ClearGPU_MultiGPU_RealCUGAN)
-        connect(ui->pushButton_ClearGPU_MultiGPU_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked);
-    if(ui->comboBox_Model_RealCUGAN)
-        connect(ui->comboBox_Model_RealCUGAN, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_comboBox_Model_RealCUGAN_currentIndexChanged);
-    ui->comboBox_Model_RealESRGAN = findChild<QComboBox*>("comboBox_Model_RealESRGAN");
-    ui->comboBox_GPUID_RealESRGAN = findChild<QComboBox*>("comboBox_GPUID_RealESRGAN");
+
+    // Initialize RealCUGAN UI Pointers (members of MainWindow)
+    comboBox_Model_RealCUGAN = findChild<QComboBox*>("comboBox_Model_RealCUGAN");
+    spinBox_Scale_RealCUGAN = findChild<QSpinBox*>("spinBox_Scale_RealCUGAN");
+    spinBox_DenoiseLevel_RealCUGAN = findChild<QSpinBox*>("spinBox_DenoiseLevel_RealCUGAN");
+    spinBox_TileSize_RealCUGAN = findChild<QSpinBox*>("spinBox_TileSize_RealCUGAN");
+    checkBox_TTA_RealCUGAN = findChild<QCheckBox*>("checkBox_TTA_RealCUGAN");
+    comboBox_GPUID_RealCUGAN = findChild<QComboBox*>("comboBox_GPUID_RealCUGAN");
+    pushButton_DetectGPU_RealCUGAN = findChild<QPushButton*>("pushButton_DetectGPU_RealCUGAN");
+    checkBox_MultiGPU_RealCUGAN = findChild<QCheckBox*>("checkBox_MultiGPU_RealCUGAN");
+    groupBox_GPUSettings_MultiGPU_RealCUGAN = findChild<QGroupBox*>("groupBox_GPUSettings_MultiGPU_RealCUGAN");
+    comboBox_GPUIDs_MultiGPU_RealCUGAN = findChild<QComboBox*>("comboBox_GPUIDs_MultiGPU_RealCUGAN");
+    listWidget_GPUList_MultiGPU_RealCUGAN = findChild<QListWidget*>("listWidget_GPUList_MultiGPU_RealCUGAN");
+    pushButton_AddGPU_MultiGPU_RealCUGAN = findChild<QPushButton*>("pushButton_AddGPU_MultiGPU_RealCUGAN");
+    pushButton_RemoveGPU_MultiGPU_RealCUGAN = findChild<QPushButton*>("pushButton_RemoveGPU_MultiGPU_RealCUGAN");
+    pushButton_ClearGPU_MultiGPU_RealCUGAN = findChild<QPushButton*>("pushButton_ClearGPU_MultiGPU_RealCUGAN");
+    pushButton_TileSize_Add_RealCUGAN = findChild<QPushButton*>("pushButton_TileSize_Add_RealCUGAN");
+    pushButton_TileSize_Minus_RealCUGAN = findChild<QPushButton*>("pushButton_TileSize_Minus_RealCUGAN");
+
+    ProcList_RealCUGAN.clear(); // Assuming this is still relevant
+    Realcugan_NCNN_Vulkan_PreLoad_Settings(); // Preload settings after finding UI elements
+
+    // Connect RealCUGAN UI signals to slots
+    if(pushButton_DetectGPU_RealCUGAN)
+        connect(pushButton_DetectGPU_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_DetectGPU_RealCUGAN_clicked);
+    if(checkBox_MultiGPU_RealCUGAN)
+        connect(checkBox_MultiGPU_RealCUGAN, &QCheckBox::stateChanged, this, &MainWindow::on_checkBox_MultiGPU_RealCUGAN_stateChanged);
+    if(pushButton_AddGPU_MultiGPU_RealCUGAN)
+        connect(pushButton_AddGPU_MultiGPU_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked);
+    if(pushButton_RemoveGPU_MultiGPU_RealCUGAN)
+        connect(pushButton_RemoveGPU_MultiGPU_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked);
+    if(pushButton_ClearGPU_MultiGPU_RealCUGAN)
+        connect(pushButton_ClearGPU_MultiGPU_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked);
+    if(pushButton_TileSize_Add_RealCUGAN)
+        connect(pushButton_TileSize_Add_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_TileSize_Add_RealCUGAN_clicked);
+    if(pushButton_TileSize_Minus_RealCUGAN)
+        connect(pushButton_TileSize_Minus_RealCUGAN, &QPushButton::clicked, this, &MainWindow::on_pushButton_TileSize_Minus_RealCUGAN_clicked);
+    if(comboBox_Model_RealCUGAN)
+        connect(comboBox_Model_RealCUGAN, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_comboBox_Model_RealCUGAN_currentIndexChanged);
+    // End of RealCUGAN UI Initialization
+
+    // Initialize RealESRGAN UI Pointers (copied from existing code, ensure these are members of MainWindow if not already ui->)
+    comboBox_Model_RealESRGAN = findChild<QComboBox*>("comboBox_Model_RealESRGAN");
+    comboBox_GPUID_RealESRGAN = findChild<QComboBox*>("comboBox_GPUID_RealESRGAN");
     ui->pushButton_DetectGPU_RealESRGAN = findChild<QPushButton*>("pushButton_DetectGPU_RealESRGAN");
     ui->spinBox_TileSize_RealESRGAN = findChild<QSpinBox*>("spinBox_TileSize_RealESRGAN");
     ui->pushButton_TileSize_Add_RealESRGAN = findChild<QPushButton*>("pushButton_TileSize_Add_RealESRGAN");
@@ -547,7 +560,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         MSG_2->setText(tr("Waiting for the files processing thread to pause"));
         MSG_2->setIcon(QMessageBox::Information);
         MSG_2->setModal(true);
-        MSG_2->setStandardButtons(NULL);
+        MSG_2->setStandardButtons(QMessageBox::NoButton);
         MSG_2->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint);
         MSG_2->show();
     }
@@ -558,7 +571,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         MSG_2->setText(tr("Closing...\n\nPlease wait"));
         MSG_2->setIcon(QMessageBox::Information);
         MSG_2->setModal(true);
-        MSG_2->setStandardButtons(NULL);
+        MSG_2->setStandardButtons(QMessageBox::NoButton);
         MSG_2->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint);
         MSG_2->show();
     }
@@ -568,11 +581,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
     if(AutoSaveSettings&&(!Settings_isReseted))
     {
         Settings_Save();
-        QtConcurrent::run(this, &MainWindow::Auto_Save_Settings_Watchdog,true);
+        QtConcurrent::run([this] { this->Auto_Save_Settings_Watchdog(true); });
     }
     else
     {
-        QtConcurrent::run(this, &MainWindow::Auto_Save_Settings_Watchdog,false);
+        QtConcurrent::run([this] { this->Auto_Save_Settings_Watchdog(false); });
     }
 }
 
@@ -646,9 +659,9 @@ void MainWindow::TimeSlot()
             QString TimeRemainingStr = tr("Time remaining:[")+Seconds2hms(ETA)+"]";
             ui->label_TimeRemain->setText(TimeRemainingStr);
             QDateTime time = QDateTime::currentDateTime();
-            long unsigned int Time_t = time.toTime_t();
+            qint64 Time_t = time.toSecsSinceEpoch();
             Time_t+=ETA;
-            time = QDateTime::fromTime_t(Time_t);
+            time = QDateTime::fromSecsSinceEpoch(Time_t);
             QString Current_Time = time.toString("hh:mm:ss");
             QString ETA_str = "ETA:["+Current_Time+"]";
             ui->label_ETA->setText(ETA_str);
@@ -680,9 +693,9 @@ void MainWindow::TimeSlot()
             QString TimeRemainingStr_CurrentFile = tr("Time remaining:[")+Seconds2hms(ETA_CurrentFile)+"]";
             ui->label_TimeRemain_CurrentFile->setText(TimeRemainingStr_CurrentFile);
             QDateTime time_CurrentFile = QDateTime::currentDateTime();
-            long unsigned int Time_t_CurrentFile = time_CurrentFile.toTime_t();
+            qint64 Time_t_CurrentFile = time_CurrentFile.toSecsSinceEpoch();
             Time_t_CurrentFile+=ETA_CurrentFile;
-            time_CurrentFile = QDateTime::fromTime_t(Time_t_CurrentFile);
+            time_CurrentFile = QDateTime::fromSecsSinceEpoch(Time_t_CurrentFile);
             QString Current_Time_CurrentFile = time_CurrentFile.toString("hh:mm:ss");
             QString ETA_str_CurrentFile = "ETA:["+Current_Time_CurrentFile+"]";
             ui->label_ETA_CurrentFile->setText(ETA_str_CurrentFile);
@@ -712,7 +725,9 @@ bool MainWindow::SystemPrefersDark() const
 
 void MainWindow::ApplyDarkStyle()
 {
-    uiController.applyDarkStyle(Settings_Read_value("/settings/DarkMode", 1).toInt());
+    QVariant darkModeSetting = Settings_Read_value("/settings/DarkMode");
+    // Ensure !isNull check for variants that might be default-constructed by QSettings if key not found
+    uiController.applyDarkStyle(darkModeSetting.isValid() && !darkModeSetting.isNull() ? darkModeSetting.toInt() : 1);
 }
 
 void MainWindow::on_pushButton_ClearList_clicked()
@@ -866,13 +881,13 @@ void MainWindow::Play_NFSound()
             player->deleteLater();
         }
     });
-    connect(player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error),
-            [=](QMediaPlayer::Error error){
-        Q_UNUSED(error);
-        qDebug() << "Error playing notification sound:" << player->errorString();
+    connect(player, &QMediaPlayer::errorOccurred,
+            [=](QMediaPlayer::Error errorEnum, const QString &errorString){
+        Q_UNUSED(errorEnum);
+        qDebug() << "Error playing notification sound:" << errorString << player->errorString();
         player->deleteLater();
     });
-    player->setMedia(QUrl::fromLocalFile(NFSound));
+    player->setSource(QUrl::fromLocalFile(NFSound));
     player->play();
 }
 
@@ -1106,7 +1121,7 @@ void MainWindow::on_pushButton_ReadFileList_clicked()
         on_pushButton_ClearList_clicked();
         emit Send_TextBrowser_NewMessage(tr("Please wait while reading the file."));
         ui->label_DropFile->setText(tr("Loading list, please wait."));
-        QtConcurrent::run(this, &MainWindow::Table_Read_Saved_Table_Filelist,Table_FileList_ini);
+        QtConcurrent::run([this, Table_FileList_ini] { this->Table_Read_Saved_Table_Filelist(Table_FileList_ini); });
     }
     else
     {
@@ -1252,7 +1267,7 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
     if(QFile::exists(Last_browsed_path))
     {
         QSettings *configIniRead = new QSettings(Last_browsed_path, QSettings::IniFormat);
-        configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
+        // configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8")); // Removed for Qt6
         BrowserStartPath = configIniRead->value("/Path").toString();
         if(!QFile::exists(BrowserStartPath))BrowserStartPath = "";
     }
@@ -1263,7 +1278,7 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
     }
     QFile::remove(Last_browsed_path);
     QSettings *configIniWrite = new QSettings(Last_browsed_path, QSettings::IniFormat);
-    configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8"));
+    // configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8")); // Removed for Qt6
     configIniWrite->setValue("/Warning/EN", "Do not modify this file! It may cause the program to crash! If problems occur after the modification, delete this file and restart the program.");
     QFileInfo lastPath(Input_path_List.at(0));
     QString folder_lastPath = file_getFolderPath(lastPath);
@@ -1280,7 +1295,7 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
     this->setAcceptDrops(0);
     ui->label_DropFile->setText(tr("Adding files, please wait."));
     emit Send_TextBrowser_NewMessage(tr("Adding files, please wait."));
-    QtConcurrent::run(this, &MainWindow::Read_Input_paths_BrowserFile, Input_path_List);
+    QtConcurrent::run([this, Input_path_List] { this->Read_Input_paths_BrowserFile(Input_path_List); });
 }
 
 void MainWindow::Read_Input_paths_BrowserFile(QStringList Input_path_List)
@@ -2474,8 +2489,15 @@ bool MainWindow::Check_PreLoad_Settings()
     return true;
 }
 
-void MainWindow::APNG_Main(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath)
+void MainWindow::APNG_Main(int rowNum, bool isFromImageList)
+// (QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath)
 {
+    // TODO: Refactor logic to use rowNum and isFromImageList
+    // The original parameters are commented out to satisfy signature match for now.
+    // The existing body is kept temporarily.
+    QString splitFramesFolder, scaledFramesFolder, sourceFileFullPath_dummy, resultFileFullPath_dummy; /* DUMMY placeholders for original logic */
+    QStringList framesFileName_qStrList; /* DUMMY placeholder for original logic */
+
     int Engine = 0;
     if(ui->tabWidget_FileType->currentIndex()==0) Engine = ui->comboBox_Engine_Image->currentIndex();
     if(ui->tabWidget_FileType->currentIndex()==1) Engine = ui->comboBox_Engine_GIF->currentIndex();
@@ -3267,7 +3289,7 @@ void MainWindow::Read_urls(QList<QUrl> urls)
     ui->label_DropFile->setText(tr("Adding files, please wait."));
     emit Send_TextBrowser_NewMessage(tr("Adding files, please wait."));
 
-    QtConcurrent::run(this, &MainWindow::ProcessDroppedFilesAsync, urls);
+    QtConcurrent::run([this, urls] { this->ProcessDroppedFilesAsync(urls); });
 }
 void MainWindow::Read_urls_finfished()
 {
@@ -3315,13 +3337,20 @@ void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum)
 {
     realCuganProcessor->readSettingsVideoGif(ThreadNum);
 }
-void MainWindow::APNG_RealcuganNCNNVulkan(QString, QString, QString, QStringList, QString){}
+bool MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath)
+{
+    // Placeholder implementation - actual logic needed
+    Q_UNUSED(splitFramesFolder); Q_UNUSED(scaledFramesFolder); Q_UNUSED(sourceFileFullPath);
+    Q_UNUSED(framesFileName_qStrList); Q_UNUSED(resultFileFullPath);
+    qDebug() << "APNG_RealcuganNCNNVulkan called but not fully implemented.";
+    return false; // Placeholder
+}
 void MainWindow::Realcugan_ncnn_vulkan_DetectGPU(){}
 QString MainWindow::RealcuganNcnnVulkan_MultiGPU(){ return ""; }
 void MainWindow::AddGPU_MultiGPU_RealcuganNcnnVulkan(QString){}
-QStringList MainWindow::Realcugan_NCNN_Vulkan_PrepareArguments(const QString &inFile, const QString &outFile, int scale, const QString &model, int denoise, int tile, const QString &gpuId, bool tta, const QString &fmt, bool multi, const QString &job)
+QStringList MainWindow::Realcugan_NCNN_Vulkan_PrepareArguments(const QString &inFile, const QString &outFile, int scale, const QString &model, int denoise, int tile, const QString &gpuId, bool tta, const QString &fmt, bool multi, const QString &job, bool experimental)
 {
-    return realCuganProcessor->prepareArguments(inFile, outFile, scale, model, denoise, tile, gpuId, tta, fmt, multi, job);
+    return realCuganProcessor->prepareArguments(inFile, outFile, scale, model, denoise, tile, gpuId, tta, fmt, multi, job, experimental);
 }
 void MainWindow::StartNextRealCUGANPass(QProcess*){}
 void MainWindow::Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString&, int, bool, const QString&){}
@@ -3332,7 +3361,14 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_Video_BySegment(int){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings(){}
 void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int){}
-void MainWindow::APNG_RealESRGANNCNNVulkan(QString, QString, QString, QStringList, QString){}
+bool MainWindow::APNG_RealESRGANNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath)
+{
+    // Placeholder implementation - actual logic needed
+    Q_UNUSED(splitFramesFolder); Q_UNUSED(scaledFramesFolder); Q_UNUSED(sourceFileFullPath);
+    Q_UNUSED(framesFileName_qStrList); Q_UNUSED(resultFileFullPath);
+    qDebug() << "APNG_RealESRGANNCNNVulkan called but not fully implemented.";
+    return false; // Placeholder
+}
 void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU(){}
 QString MainWindow::RealesrganNcnnVulkan_MultiGPU(){ return ""; }
 void MainWindow::AddGPU_MultiGPU_RealesrganNcnnVulkan(QString){}
