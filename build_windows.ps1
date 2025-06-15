@@ -214,7 +214,7 @@ function Ensure-QMake {
     }
     $QtDir = (Resolve-Path $QtDir).Path
 
-    $qtModules = @('qtmultimedia', 'qtshadertools')
+    $qtModules = @('qtmultimedia', 'qtshadertools', 'qt5compat')
     $qtInstallArgs = @(
         '-m', 'aqt',
         'install-qt', 'windows', 'desktop', $QtVersion, 'win64_mingw',
