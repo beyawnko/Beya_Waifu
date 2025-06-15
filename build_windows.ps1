@@ -16,7 +16,7 @@
 
 .NOTES
     Author: beyawnko (Refactored by Gemini)
-    Version: 4.4
+    Version: 4.8
     Requires: PowerShell 5.1 or later.
     Must be run with Administrator privileges to install software.
 #>
@@ -186,7 +186,8 @@ function Ensure-QMake {
         $qtBinDir = Split-Path $qmakeCmd.Path
         $qtMultimediaDllPath = Join-Path $qtBinDir "Qt6Multimedia.dll"
         $qsbPath = Join-Path $qtBinDir 'qsb.exe'
-        if (Test-Path $qtMultimediaDllPath -and (Test-Path $qsbPath)) {
+        
+        if ((Test-Path $qtMultimediaDllPath) -and (Test-Path $qsbPath)) {
             Write-Host "qmake and required Qt modules appear to be installed."
             $isInstallComplete = $true
             # Store path for the build function
@@ -212,7 +213,6 @@ function Ensure-QMake {
             New-Item -ItemType Directory -Path $QtDir | Out-Null
         }
         
-        # Only specify truly optional modules. The others are included by default.
         $qtModules = @('qtmultimedia', 'qtshadertools')
         $qtInstallArgs = @(
             'install-qt', 'windows', 'desktop', $QtVersion, 'win64_mingw',
@@ -284,15 +284,53 @@ function Build-Project {
         $pathComponents += $msysQtPath
     }
 
-    # Quote each path component for safety in the bash command
-    $pathPrefix = ($pathComponents | ForEach-Object { "`"$_`"" }) -join ':'
+    # Join the path components for the bash script. No extra quotes here.
+    $pathPrefix = $pathComponents -join ':'
 
-    # Construct the final command string using the -f format operator.
-    # This is the most robust way to prevent PowerShell from expanding '$PATH' prematurely.
-    $finalCommandString = 'export PATH={0}:$PATH && cd "{1}" && {2}' -f $pathPrefix, $msysDir, $buildScriptName
-    
-    Invoke-Process -FilePath $Msys2BashPath -ArgumentList @('-lc', $finalCommandString)
+    # Create a temporary bash script to robustly set the environment and execute the build.
+    # This avoids complex quoting issues when calling bash from PowerShell.
+    $scriptContent = @"
+#!/bin/bash
+# Exit immediately if a command exits with a non-zero status.
+set -e
+
+echo "--- Executing inside temporary bash wrapper ---"
+
+# Unset potentially problematic variables passed from the host environment.
+unset MAKEFLAGS
+unset MFLAGS
+
+# Set the path for the build environment. The dollar sign in `$PATH` is escaped with a backtick (` `)
+# to prevent PowerShell from expanding it prematurely.
+export PATH='{0}':`$PATH
+
+# Change to the project directory.
+cd '{1}'
+
+# Execute the main build script.
+./{2}
+
+echo "--- Finished executing inside temporary bash wrapper ---"
+"@ -f $pathPrefix, $msysDir, $buildScriptName
+
+    $tempScriptName = "temp_build_wrapper.sh"
+    $tempScriptPath = Join-Path -Path (Get-Location).Path -ChildPath $tempScriptName
+
+    try {
+        # Write the script content to the temp file, ensuring LF line endings for bash.
+        [IO.File]::WriteAllLines($tempScriptPath, ($scriptContent -split "`r`n"), [System.Text.Encoding]::ASCII)
+
+        # Execute the wrapper script using bash. The -l flag makes it a login shell.
+        Invoke-Process -FilePath $Msys2BashPath -ArgumentList @('-l', $tempScriptPath)
+    }
+    finally {
+        # Clean up the temporary script
+        if (Test-Path $tempScriptPath) {
+            Remove-Item $tempScriptPath -Force -ErrorAction SilentlyContinue
+        }
+    }
 }
+
 
 # --- Main Execution Logic ---
 
