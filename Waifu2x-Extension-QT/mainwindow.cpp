@@ -3538,6 +3538,11 @@ int MainWindow::SRMD_CUDA_Video(int){return 0;}
 int MainWindow::SRMD_CUDA_Video_BySegment(int){return 0;}
 // ... (The rest of the functions from the original file) ...
 
+void MainWindow::ShellMessageBox(const QString &title, const QString &text, QMessageBox::Icon icon)
+{
+    QMessageBox msg(icon, title, text, QMessageBox::Ok, this);
+    msg.exec();
+}
 
 bool MainWindow::runProcess(QProcess *process, const QString &cmd,
                             QByteArray *stdOut, QByteArray *stdErr)

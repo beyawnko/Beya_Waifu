@@ -425,7 +425,7 @@ public:
     void Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum);
     void Realcugan_NCNN_Vulkan_ReadSettings();
     void Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
-    bool APNG_RealcuganNCNNVulkan(
+    void APNG_RealcuganNCNNVulkan(
         QString splitFramesFolder,
         QString scaledFramesFolder,
         QString sourceFileFullPath,
@@ -459,6 +459,8 @@ public:
         const QString &inputFile,
         const QString &outputFile,
         int targetScale,
+        int originalWidth,
+        int originalHeight,
         const QString &modelName,
         int denoiseLevel,
         int tileSize,
