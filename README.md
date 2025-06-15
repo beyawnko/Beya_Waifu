@@ -25,6 +25,35 @@ RealCUGAN and RealESRGAN are currently the only supported upscaling engines.
 
 Ensure your GPU drivers support Vulkan since both engines rely on it.
 
+## Development Environment
+
+Set up a Python virtual environment to run the helper scripts and tests.
+
+```bash
+python -m venv venv
+```
+
+Activate the environment and install the dependencies:
+
+- **Windows**
+  ```bat
+  venv\Scripts\activate.bat
+  ```
+- **Linux/macOS**
+  ```bash
+  source venv/bin/activate
+  ```
+
+Install the required packages then build the project inside the environment:
+
+```bash
+pip install -r requirements.txt
+./build_projects.sh
+```
+
+When running tests without a display server set `QT_QPA_PLATFORM=offscreen` so
+Qt does not attempt to load a GUI backend.
+
 ## Build and Run
 
 Invoke the provided script to compile both projects and copy the included upscaler binaries:
