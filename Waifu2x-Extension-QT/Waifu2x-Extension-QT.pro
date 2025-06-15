@@ -73,7 +73,7 @@ HEADERS += \
     mainwindow.h \
     topsupporterslist.h \
     LiquidGlassWidget.h \
-    utils/ffprobe_helpers.h
+    utils/ffprobe_helpers.h \
     FileManager.h \
     ProcessRunner.h \
     GpuManager.h \

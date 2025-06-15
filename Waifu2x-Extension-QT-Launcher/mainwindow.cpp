@@ -78,6 +78,7 @@ bool MainWindow::file_isDirWritable(QString DirPath)
 void MainWindow::RUN_SLOT()
 {
     //Current_Path = "D:/workspace/Waifu2x-Extension-QT/Full_package/waifu2x-extension-gui";
+#ifdef Q_OS_WIN
     if(file_isDirWritable(Current_Path)==false)
     {
         ui->label_status->setText("Please grant administrator rights to\n"
@@ -87,6 +88,12 @@ void MainWindow::RUN_SLOT()
         return;
     }
     ShellExecuteW(NULL, QString("open").toStdWString().c_str(), QString(Current_Path+"/Beya_Waifu.exe").toStdWString().c_str(), NULL, NULL, 1);
+#else
+    // For non-Windows systems, try to launch directly or handle appropriately.
+    // This simplified version might not fully replicate the intended Windows behavior.
+    QProcess::startDetached(Current_Path + "/Beya_Waifu.exe"); // Assuming Beya_Waifu.exe is executable on Linux or Wine is used.
+                                                              // Or Current_Path + "/Beya_Waifu" if it's a Linux binary.
+#endif
     this->close();
     return;
 }
@@ -105,7 +112,7 @@ bool MainWindow::runProcess(QProcess *process, const QString &cmd,
         QObject::connect(process, &QProcess::readyReadStandardError,
                          [&](){ stdErr->append(process->readAllStandardError()); });
 
-    QObject::connect(process, qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
+    QObject::connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
                      &loop, &QEventLoop::quit);
     QObject::connect(process, &QProcess::errorOccurred,
                      &loop, &QEventLoop::quit);
