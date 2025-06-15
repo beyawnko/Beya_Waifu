@@ -25,6 +25,91 @@ RealCUGAN and RealESRGAN are currently the only supported upscaling engines.
 
 Ensure your GPU drivers support Vulkan since both engines rely on it.
 
+## Building from Source
+
+This project can be built on Linux and Windows. The `build_projects.sh` script in the root directory is designed to automate the building of the main application, the launcher, and the required upscaler engines (RealCUGAN and RealESRGAN).
+
+### Prerequisites
+
+First, ensure you have Git installed to clone the repository and its submodules.
+
+**1. Clone the Repository:**
+Use the following command to clone the repository including its submodules:
+```bash
+git clone --recursive https://github.com/AaronFeng753/Waifu2x-Extension-QT.git
+cd Waifu2x-Extension-QT
+```
+If you have already cloned the repository without the `--recursive` flag, navigate to the repository's root directory and run the following commands to initialize and fetch the submodules:
+```bash
+git submodule update --init --recursive
+```
+
+### Linux Dependencies
+
+1.  **Compiler and Core Build Tools**:
+    *   A C++11 compatible compiler (e.g., GCC `g++` version 7 or later).
+    *   `make`
+    *   `cmake` (version 3.9 or later is recommended for building the upscaler submodules).
+    *   Installation example for Debian/Ubuntu systems:
+        ```bash
+        sudo apt update
+        sudo apt install build-essential g++ make cmake
+        ```
+
+2.  **Qt Development Libraries**:
+    *   Qt 5 (e.g., version 5.12 or 5.15). You'll need the `core`, `gui`, `widgets`, and `multimedia` components.
+    *   Installation example for Debian/Ubuntu systems:
+        ```bash
+        sudo apt install qtbase5-dev qtmultimedia5-dev libqt5svg5-dev
+        ```
+    *   If you are using a specific Qt version manager (like `aqtinstall`), ensure that the chosen Qt version's `bin` directory is in your system's `PATH`.
+
+3.  **Upscaler Dependencies (Vulkan)**:
+    *   The upscaler engines (RealCUGAN, RealESRGAN) are based on ncnn and use Vulkan for GPU acceleration.
+    *   **Vulkan SDK**: Download and install the Vulkan SDK from the [LunarG website](https://vulkan.lunarg.com/). Follow their official installation instructions for your Linux distribution.
+    *   Ensure that the `VULKAN_SDK` environment variable is set correctly, or that CMake can otherwise locate your Vulkan headers and libraries.
+    *   The upscaler submodules (`realcugan-ncnn-vulkan`, `realesrgan-ncnn-vulkan`) bundle `ncnn` and `glslang` as their own submodules, which are typically built locally by CMake during the upscaler build process.
+
+### Windows Dependencies (Using MSYS2/MinGW)
+
+1.  **MSYS2 Environment**:
+    *   Download and install MSYS2 from [www.msys2.org](https://www.msys2.org/).
+    *   After installation, open an MSYS2 terminal and update the package database and core packages by running:
+        ```bash
+        pacman -Syu
+        pacman -Su
+        ```
+        (You might need to close and reopen the terminal between these commands as instructed by MSYS2).
+    *   Install the MinGW-w64 toolchain (for 64-bit builds), CMake, and Git. Open an "MSYS2 MinGW 64-bit" terminal and run:
+        ```bash
+        pacman -S --needed git mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake mingw-w64-x86_64-make
+        ```
+
+2.  **Qt for MinGW**:
+    *   Install a MinGW-compatible version of Qt 5 (e.g., Qt 5.15.2). You can get this via the Qt Online Installer available from the [official Qt website](https://www.qt.io/download-qt-installer).
+    *   During the Qt installation, ensure you select a Qt version built for MinGW (e.g., `mingw81_64` for Qt 5.15.2 if you installed the `mingw-w64-x86_64` toolchain).
+    *   Ensure that the `bin` directory of your Qt installation (e.g., `C:\Qt\5.15.2\mingw81_64\bin`) and the MinGW compiler `bin` directory (e.g., `C:\msys64\mingw64\bin`) are added to your system's `PATH` environment variable, especially within the MSYS2 MinGW terminal environment.
+
+3.  **Upscaler Dependencies (Vulkan for Windows)**:
+    *   As with Linux, install the Vulkan SDK from the [LunarG website](https://vulkan.lunarg.com/).
+    *   The `build_projects.sh` script will prioritize using pre-built Windows upscaler binaries if they are present in the repository. If not, it will attempt to build them from source using CMake, which will require the Vulkan SDK to be correctly installed and discoverable.
+
+### Building the Application
+
+Once all dependencies are set up correctly for your operating system:
+
+1.  Open your terminal (MSYS2 MinGW 64-bit on Windows, or a standard bash terminal on Linux).
+2.  Navigate to the root directory of the cloned `Waifu2x-Extension-QT` repository.
+3.  Execute the build script:
+    ```bash
+    ./build_projects.sh
+    ```
+4.  Upon successful completion:
+    *   The main application executable (`Beya_Waifu.exe` on Windows, `Beya_Waifu` on Linux) and the upscaler binaries will be located in the `Waifu2x-Extension-QT/` directory.
+    *   The launcher application will be in the `Waifu2x-Extension-QT-Launcher/` directory.
+
+This process compiles the upscalers from source (or copies prebuilt versions on Windows) and then builds the Qt GUI application and launcher.
+
 ## Development Environment
 
 Set up a Python virtual environment to run the helper scripts and tests.
@@ -48,23 +133,12 @@ Install the required packages then build the project inside the environment:
 
 ```bash
 pip install -r requirements.txt
-./build_projects.sh
+# Note: ./build_projects.sh is covered in "Building the Application"
+# and is primarily for the C++ components, not Python environment setup.
 ```
 
 When running tests without a display server set `QT_QPA_PLATFORM=offscreen` so
 Qt does not attempt to load a GUI backend.
-
-## Build and Run
-
-Invoke the provided script to compile both projects and copy the included upscaler binaries:
-
-```bash
-./build_projects.sh
-```
-
-The script calls `qmake` and `make`, builds the `liquidglass_frag` shader and attempts to copy any
-`realcugan-ncnn-vulkan` and `realesrgan-ncnn-vulkan` executables found in the repository beside the
-application. After compilation run `Beya_Waifu` (or the launcher) from `Waifu2x-Extension-QT`.
 
 ### Thread control
 
@@ -121,18 +195,7 @@ environment. They accept **JPG**, **PNG** and **WEBP** images and can be used
 inside the GUI or from the command line for batch processing. Video files are
 handled by extracting frames with FFmpeg and merging them after upscaling.
 
-### Downloading binaries and models
-
-The GUI expects the RealCUGAN and RealESRGAN executables with their `models`
-folders to reside next to the application. Portable archives for all platforms
-are available on the official release pages:
-
-- [realcugan-ncnn-vulkan releases](https://github.com/nihui/realcugan-ncnn-vulkan/releases)
-- [realesrgan-ncnn-vulkan releases](https://github.com/xinntao/Real-ESRGAN/releases)
-
-Download and extract the archive for your operating system, then copy the
-contents so that `realcugan-ncnn-vulkan` and `realesrgan-ncnn-vulkan` can be
-found in the same directory as `Beya_Waifu`.
+The `build_projects.sh` script handles acquiring and placing the upscaler executables and their models into the correct location (`Waifu2x-Extension-QT/`). For Windows, it prioritizes prebuilt binaries from the repository, and for Linux (or if Windows prebuilts are missing), it builds them from source. Models are also copied from the respective submodule's `models` directory or prebuilt directories.
 
 ### Command line examples
 

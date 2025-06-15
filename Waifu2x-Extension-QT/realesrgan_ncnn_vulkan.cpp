@@ -12,6 +12,7 @@
 #include <QDirIterator>
 #include <QRandomGenerator>
 #include <QCoreApplication> // Added for applicationDirPath
+#include <QtGlobal>
 
 // --- RealESRGAN Specific Helper Functions ---
 
@@ -226,7 +227,11 @@ bool MainWindow::RealESRGAN_ProcessSingleFileIteratively(
         }
 
         QProcess proc;
-        QString exePath = QCoreApplication::applicationDirPath() + "/realesrgan-ncnn-vulkan.exe";
+        #ifdef Q_OS_WIN
+            QString exePath = QCoreApplication::applicationDirPath() + "/realesrgan-ncnn-vulkan.exe";
+        #else
+            QString exePath = QCoreApplication::applicationDirPath() + "/realesrgan-ncnn-vulkan";
+        #endif
         qDebug() << "RealESRGAN Pass" << pass+1 << "Cmd:" << exePath << args.join(" ");
         proc.start(exePath, args);
 
@@ -461,7 +466,11 @@ bool MainWindow::RealESRGAN_ProcessDirectoryIteratively(
         emit Send_TextBrowser_NewMessage(tr("Starting RealESRGAN directory pass %1/%2 (Model Scale: %3x)...").arg(i + 1).arg(scaleSequence.size()).arg(currentPassScaleForExe));
 
         QProcess process;
-        QString exePath = QCoreApplication::applicationDirPath() + "/realesrgan-ncnn-vulkan.exe";
+        #ifdef Q_OS_WIN
+            QString exePath = QCoreApplication::applicationDirPath() + "/realesrgan-ncnn-vulkan.exe";
+        #else
+            QString exePath = QCoreApplication::applicationDirPath() + "/realesrgan-ncnn-vulkan";
+        #endif
         qDebug() << "RealESRGAN_ProcessDirectoryIteratively Pass" << i + 1 << "Cmd:" << exePath << arguments.join(" ");
 
         process.start(exePath, arguments);
@@ -1145,7 +1154,11 @@ void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU() {
     connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(RealESRGAN_ncnn_vulkan_DetectGPU_finished(int,QProcess::ExitStatus)));
     connect(process, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(RealESRGAN_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError)));
 
-    QString exePath = QCoreApplication::applicationDirPath() + "/realesrgan-ncnn-vulkan.exe";
+    #ifdef Q_OS_WIN
+        QString exePath = QCoreApplication::applicationDirPath() + "/realesrgan-ncnn-vulkan.exe";
+    #else
+        QString exePath = QCoreApplication::applicationDirPath() + "/realesrgan-ncnn-vulkan";
+    #endif
     QFileInfo exeCheck(exePath);
     if (!exeCheck.exists() || !exeCheck.isExecutable()) {
         QMessageBox::critical(this, tr("Error"), tr("RealESRGAN executable not found at %1").arg(exePath));
