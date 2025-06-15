@@ -22,7 +22,7 @@ RealcuganJobManager::RealcuganJobManager(QObject *parent)
 {}
 
 QString RealcuganJobManager::buildGpuJobString(bool multiGpuEnabled,
-                                              const QList_QMap_QStrQStr &gpuList,
+                                              const QList<QMap<QString, QString>> &gpuList,
                                               const QString &fallbackGpuId) const
 {
     if (multiGpuEnabled) {

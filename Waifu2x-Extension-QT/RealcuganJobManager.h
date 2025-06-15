@@ -19,7 +19,8 @@
 #include <QObject>
 #include <QString>
 #include <QStringList>
-#include "mainwindow.h"
+#include <QList>
+#include <QMap>
 
 /**
  * @brief Manage GPU job configuration for RealCUGAN tasks.
@@ -38,7 +39,7 @@ public:
      * @return Command arguments for GPU job configuration.
      */
     QString buildGpuJobString(bool multiGpuEnabled,
-                              const QList_QMap_QStrQStr &gpuList,
+                              const QList<QMap<QString, QString>> &gpuList,
                               const QString &fallbackGpuId) const;
 };
 
