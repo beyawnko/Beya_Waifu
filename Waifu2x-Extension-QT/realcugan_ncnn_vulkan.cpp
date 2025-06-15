@@ -210,41 +210,19 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
         QDir().mkpath(splitFramesFolder);
         QDir().mkpath(scaledFramesFolder);
 
-        // 1. Extract frames for the current segment
-        // video_video2images_ProcessBySegment might be an existing utility.
-        // If not, ffmpeg command: ffmpeg -ss {startTime} -i {inputFile} -t {currentSegmentDuration} ...frames...
-        // For now, let's assume a conceptual function or direct ffmpeg call.
-        // This requires a more specialized video_video2images_ProcessBySegment.
-        // For this placeholder, we'll simulate it by just processing all frames N times.
-        // THIS IS A SIMPLIFICATION - A REAL IMPLEMENTATION NEEDS SEGMENTED FRAME EXTRACTION.
-        // For now, we'll re-use the full frame extraction and just note it conceptually.
-        // Actual implementation: video_video2images_Segment(sourceFileFullPath, splitFramesFolder, startTime, currentSegmentDuration);
-
-        // Simplified: Re-extract all frames each time for placeholder. Not efficient.
-        // A proper implementation would use ffmpeg -ss and -t to extract only segment frames.
-        // For the purpose of this structure, let's assume splitFramesFolder is correctly populated for the segment.
-        // If video_video2images_ProcessBySegment is not available, this part needs ffmpeg.
-        // For now, let's use the full video_video2images and process ALL frames, which is not true segmentation logic for frames.
-        // This is a known limitation of this placeholder implementation.
-        // A better approach for a quick fill:
-        // If (i==0) video_video2images(sourceFileFullPath, splitFramesFolder, audioPath_dummy_segment); // extract all frames on first segment
-        // then process a SUBSET of framesFileName_qStrList based on segment timing. This is also complex.
-
-        // Let's assume video_video2images_ProcessBySegment(sourceFileFullPath, splitFramesFolder, startTime, currentSegmentDuration) exists and works.
-        // If not, this function cannot be fully implemented correctly here without adding direct ffmpeg calls.
-        // The existing `video_video2images` extracts ALL frames.
-        // For now, let's log a warning and process ALL frames for each "segment" - this will be slow and incorrect for actual segmentation.
-        // CORRECTED APPROACH OUTLINE FOR SEGMENTED FRAME EXTRACTION:
-        // 1. Extract frames for the CURRENT SEGMENT ONLY using ffmpeg -ss and -t
+        // 1. Extract frames for the current segment using ffmpeg
         QProcess ffmpegFrameExtract;
         QStringList extractArgs;
-        QString frameOutputPattern = QDir(splitFramesFolder).filePath("frame_%0"+QString::number(CalNumDigits(video_get_frameNum(sourceFileFullPath)))+"d.png"); // e.g. frame_%06d.png
+        QString frameOutputPattern =
+            QDir(splitFramesFolder)
+                .filePath("frame_%0" +
+                          QString::number(CalNumDigits(video_get_frameNum(sourceFileFullPath))) +
+                          "d.png");
 
-        extractArgs << "-nostdin" << "-y"
-                    << "-ss" << QString::number(startTime)
-                    << "-i" << sourceFileFullPath
+        extractArgs << "-nostdin" << "-y" << "-ss" << QString::number(startTime)
                     << "-t" << QString::number(currentSegmentDuration)
-                    << "-vf" << "fps=" + video_get_fps(sourceFileFullPath) // Maintain original FPS for frame count consistency
+                    << "-i" << sourceFileFullPath
+                    << "-vf" << "fps=" + video_get_fps(sourceFileFullPath)
                     << frameOutputPattern;
 
         emit Send_TextBrowser_NewMessage(tr("Extracting frames for segment %1/%2...").arg(i+1).arg(numSegments));
