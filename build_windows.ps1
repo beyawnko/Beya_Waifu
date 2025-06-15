@@ -347,8 +347,8 @@ try {
     # Ensure-ChocoPackage 'vulkan-sdk'
     
     # Find MSYS2 after ensuring it's installed.
-    # $bashPath = Find-Msys2Bash
-    $bashPath = '/bin/bash' # Provide a dummy path
+    $bashPath = Find-Msys2Bash
+    # $bashPath = '/bin/bash' # Provide a dummy path
 
     # Step 2: Set up the MSYS2 environment.
     # Install-MSYS2Packages -Msys2BashPath $bashPath
