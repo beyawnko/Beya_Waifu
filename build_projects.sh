@@ -7,6 +7,22 @@ MAKE=make
 command -v $MAKE >/dev/null 2>&1 || MAKE=mingw32-make
 command -v $MAKE >/dev/null 2>&1 || { echo "make tool not found"; exit 1; }
 
+# If the caller provided a Qt bin directory, prepend it to PATH.
+QT_BIN_PATH="${QT_BIN_PATH:-${QtBinPath:-}}"
+if [ -n "$QT_BIN_PATH" ]; then
+    export PATH="$QT_BIN_PATH:$PATH"
+fi
+
+# Validate Qt tools are available after updating PATH.
+if ! command -v qmake >/dev/null 2>&1; then
+    echo "qmake not found in PATH. Ensure QT_BIN_PATH points to your Qt bin directory."
+    exit 1
+fi
+
+if ! command -v qsb >/dev/null 2>&1; then
+    echo "Warning: qsb tool not found in PATH. Shader compilation may fail."
+fi
+
 RESRGAN_SRC_DIR="realesrgan-ncnn-vulkan"
 RCUGAN_SRC_DIR="realcugan-ncnn-vulkan"
 # TARGET_APP_DIR specifies the directory where the main application (Beya_Waifu)
@@ -237,7 +253,8 @@ esac
 echo "Building Waifu2x-Extension-QT..."
 pushd "$TARGET_APP_DIR" >/dev/null # Change to the application directory where the .pro file is located.
 qmake Waifu2x-Extension-QT.pro || { echo "qmake for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
-# 'make liquidglass_frag' is a specific build step for a component of the UI.
+$MAKE liquidglass_frag || { echo "make liquidglass_frag failed."; popd >/dev/null; exit 1; }
+# The shader step should produce shaders/liquidglass.frag.qsb via qsb.
 # General make command for the application, using multiple cores.
 $MAKE -j$(nproc) || { echo "make for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
 popd >/dev/null
