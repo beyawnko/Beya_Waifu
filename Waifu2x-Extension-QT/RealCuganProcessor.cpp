@@ -34,18 +34,18 @@ void RealCuganProcessor::preLoadSettings()
 {
     QSettings settings("Waifu2x-Extension-QT", "Waifu2x-Extension-QT");
     settings.beginGroup("RealCUGAN_NCNN_Vulkan");
-    m_mainWindow->ui->comboBox_Model_RealCUGAN->setCurrentText(settings.value("Model", "models-se").toString());
-    m_mainWindow->ui->spinBox_DenoiseLevel_RealCUGAN->setValue(settings.value("DenoiseLevel", -1).toInt());
-    m_mainWindow->ui->spinBox_TileSize_RealCUGAN->setValue(settings.value("TileSize", 0).toInt());
-    m_mainWindow->ui->checkBox_TTA_RealCUGAN->setChecked(settings.value("TTA", false).toBool());
-    m_mainWindow->ui->comboBox_GPUID_RealCUGAN->setCurrentText(settings.value("GPUID", "0: Default GPU 0").toString());
-    m_mainWindow->ui->checkBox_MultiGPU_RealCUGAN->setChecked(settings.value("MultiGPUEnabled", false).toBool());
+    m_mainWindow->comboBox_Model_RealCUGAN->setCurrentText(settings.value("Model", "models-se").toString());
+    m_mainWindow->spinBox_DenoiseLevel_RealCUGAN->setValue(settings.value("DenoiseLevel", -1).toInt());
+    m_mainWindow->spinBox_TileSize_RealCUGAN->setValue(settings.value("TileSize", 0).toInt());
+    m_mainWindow->checkBox_TTA_RealCUGAN->setChecked(settings.value("TTA", false).toBool());
+    m_mainWindow->comboBox_GPUID_RealCUGAN->setCurrentText(settings.value("GPUID", "0: Default GPU 0").toString());
+    m_mainWindow->checkBox_MultiGPU_RealCUGAN->setChecked(settings.value("MultiGPUEnabled", false).toBool());
     m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN = settings.value("MultiGPU_List").value<QList_QMap_QStrQStr>();
-    m_mainWindow->ui->listWidget_GPUList_MultiGPU_RealCUGAN->clear();
+    m_mainWindow->listWidget_GPUList_MultiGPU_RealCUGAN->clear();
     for(const auto &gpuMap : m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN) {
         QListWidgetItem *newItem = new QListWidgetItem();
         newItem->setText(QString("ID: %1, Name: %2, Threads: %3").arg(gpuMap.value("ID"), gpuMap.value("Name"), gpuMap.value("Threads")));
-        m_mainWindow->ui->listWidget_GPUList_MultiGPU_RealCUGAN->addItem(newItem);
+        m_mainWindow->listWidget_GPUList_MultiGPU_RealCUGAN->addItem(newItem);
     }
     settings.endGroup();
 
@@ -60,22 +60,22 @@ void RealCuganProcessor::preLoadSettings()
 
 void RealCuganProcessor::readSettings()
 {
-    m_mainWindow->m_realcugan_Model = m_mainWindow->ui->comboBox_Model_RealCUGAN->currentText();
-    m_mainWindow->m_realcugan_DenoiseLevel = m_mainWindow->ui->spinBox_DenoiseLevel_RealCUGAN->value();
-    m_mainWindow->m_realcugan_TileSize = m_mainWindow->ui->spinBox_TileSize_RealCUGAN->value();
-    m_mainWindow->m_realcugan_TTA = m_mainWindow->ui->checkBox_TTA_RealCUGAN->isChecked();
+    m_mainWindow->m_realcugan_Model = m_mainWindow->comboBox_Model_RealCUGAN->currentText();
+    m_mainWindow->m_realcugan_DenoiseLevel = m_mainWindow->spinBox_DenoiseLevel_RealCUGAN->value();
+    m_mainWindow->m_realcugan_TileSize = m_mainWindow->spinBox_TileSize_RealCUGAN->value();
+    m_mainWindow->m_realcugan_TTA = m_mainWindow->checkBox_TTA_RealCUGAN->isChecked();
 
-    if (m_mainWindow->ui->checkBox_MultiGPU_RealCUGAN->isChecked()) {
+    if (m_mainWindow->checkBox_MultiGPU_RealCUGAN->isChecked()) {
         if (!m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
             m_mainWindow->m_realcugan_GPUID =
                 m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN.first().value("ID");
         } else {
             m_mainWindow->m_realcugan_GPUID =
-                m_mainWindow->ui->comboBox_GPUID_RealCUGAN->currentText();
+                m_mainWindow->comboBox_GPUID_RealCUGAN->currentText();
         }
     } else {
         m_mainWindow->m_realcugan_GPUID =
-            m_mainWindow->ui->comboBox_GPUID_RealCUGAN->currentText();
+            m_mainWindow->comboBox_GPUID_RealCUGAN->currentText();
     }
 
     qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings: Model:" << m_mainWindow->m_realcugan_Model
@@ -91,7 +91,7 @@ void RealCuganProcessor::readSettingsVideoGif(int ThreadNum)
     readSettings();
     QString fallbackId = m_mainWindow->m_realcugan_GPUID.split(":").first();
     QString gpuJobConfig = m_jobManager.buildGpuJobString(
-                m_mainWindow->ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
+                m_mainWindow->checkBox_MultiGPU_RealCUGAN->isChecked(),
                 m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN,
                 fallbackId);
     m_mainWindow->m_realcugan_gpuJobConfig_temp = gpuJobConfig;

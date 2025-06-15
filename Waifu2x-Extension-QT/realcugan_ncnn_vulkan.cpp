@@ -254,7 +254,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
         bool aiSegmentSuccess = Realcugan_ProcessDirectoryIteratively(
             splitFramesFolder, segmentScaledFramesFolderAI, targetScale,
             m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
-            m_realcugan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
+            m_realcugan_gpuJobConfig_temp, checkBox_MultiGPU_RealCUGAN->isChecked(),
             m_realcugan_TTA, ui->comboBox_OutFormat_Image->currentText().toLower(),
             ui->comboBox_Engine_Video->currentIndex() == 2
         );
@@ -465,7 +465,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
     bool aiProcessingSuccess = Realcugan_ProcessDirectoryIteratively(
         splitFramesFolder, scaledFramesFolderAI, targetScale, // scaledFramesFolderAI is out-param
         m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
-        m_realcugan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
+        m_realcugan_gpuJobConfig_temp, checkBox_MultiGPU_RealCUGAN->isChecked(),
         m_realcugan_TTA, ui->comboBox_OutFormat_Image->currentText().toLower(),
         ui->comboBox_Engine_Video->currentIndex() == 2
     );
@@ -752,7 +752,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool experimental, bool
     // For this refactor, ReadSettings will populate necessary parameters for PrepareArguments
     Realcugan_NCNN_Vulkan_ReadSettings(); // This should populate m_realcugan_Model, m_realcugan_DenoiseLevel etc.
 
-    int targetScale = ui->spinBox_Scale_RealCUGAN->value();
+    int targetScale = spinBox_Scale_RealCUGAN->value();
     QList<int> scaleSequence = CalculateRealCUGANScaleSequence(targetScale);
 
     int calculatedTotalScale = 1;
@@ -789,7 +789,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool experimental, bool
         }
 
         QString multiGpuArgs = "";
-        if (ui->checkBox_MultiGPU_RealCUGAN->isChecked()) {
+        if (checkBox_MultiGPU_RealCUGAN->isChecked()) {
             multiGpuArgs = RealcuganNcnnVulkan_MultiGPU();
         }
 
@@ -798,7 +798,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool experimental, bool
             currentInputFile, currentOutputFile, currentPassScale,
             m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
             m_realcugan_GPUID, m_realcugan_TTA, ui->comboBox_OutFormat_Image->currentText(),
-            ui->checkBox_MultiGPU_RealCUGAN->isChecked(), multiGpuArgs /* Pass constructed multi-GPU args */,
+            checkBox_MultiGPU_RealCUGAN->isChecked(), multiGpuArgs /* Pass constructed multi-GPU args */,
             ui->comboBox_Engine_Image->currentIndex() == 2
         );
 
@@ -1360,7 +1360,7 @@ void MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString sca
     // This sets m_realcugan_gpuJobConfig_temp based on multi-GPU UI settings.
     Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(0);
 
-    int targetScale = ui->spinBox_Scale_RealCUGAN->value(); // Use the general RealCUGAN scale
+    int targetScale = spinBox_Scale_RealCUGAN->value(); // Use the general RealCUGAN scale
     if (targetScale <= 0) targetScale = 1;
 
     // Ensure final output scaledFramesFolder exists (it's an output param for this func, but APNG_Main creates it)
@@ -1433,7 +1433,7 @@ void MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString sca
     bool aiProcessingSuccessAPNG = Realcugan_ProcessDirectoryIteratively(
         rgbFramesTempDir, scaledRgbFramesAIDirAPNG, targetScale,
         m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
-        m_realcugan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
+        m_realcugan_gpuJobConfig_temp, checkBox_MultiGPU_RealCUGAN->isChecked(),
         m_realcugan_TTA, "png",
         ui->comboBox_Engine_GIF->currentIndex() == 2
     );
@@ -1620,7 +1620,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_GIF(int rowNum)
     bool aiProcessingSuccess = Realcugan_ProcessDirectoryIteratively(
         rgbFramesTempDir, scaledRgbFramesAIDir, targetScale,
         m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
-        m_realcugan_gpuJobConfig_temp, ui->checkBox_MultiGPU_RealCUGAN->isChecked(),
+        m_realcugan_gpuJobConfig_temp, checkBox_MultiGPU_RealCUGAN->isChecked(),
         m_realcugan_TTA, "png",
         ui->comboBox_Engine_GIF->currentIndex() == 2
     );
@@ -1811,7 +1811,7 @@ QString MainWindow::RealcuganNcnnVulkan_MultiGPU()
     // Construct the multi-GPU argument string using GPUIDs_List_MultiGPU_RealCUGAN
     // Example result: "-g 0,1 -j 2,2"
 
-    if (!ui->checkBox_MultiGPU_RealCUGAN->isChecked() || GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
+    if (!checkBox_MultiGPU_RealCUGAN->isChecked() || GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
         // Not in multi-GPU mode or no GPUs configured, return single GPU string from main settings
         return "-g " + m_realcugan_GPUID.split(" ")[0];
     }
@@ -1879,7 +1879,7 @@ void MainWindow::AddGPU_MultiGPU_RealcuganNcnnVulkan(QString GPUID_Name)
 
     QListWidgetItem *newItem = new QListWidgetItem();
     newItem->setText(QString("ID: %1, Name: %2, Threads: %3").arg(selectedGPU_ID_str, selectedGPU_Name_str, QString::number(threads)));
-    ui->listWidget_GPUList_MultiGPU_RealCUGAN->addItem(newItem);
+    listWidget_GPUList_MultiGPU_RealCUGAN->addItem(newItem);
     qDebug() << "Added Device for RealCUGAN Multi-Processing:" << selectedGPU_ID_str << "Name:" << selectedGPU_Name_str << "Threads:" << threads;
 }
 
@@ -1910,8 +1910,8 @@ void MainWindow::Realcugan_ncnn_vulkan_DetectGPU_finished(int exitCode, QProcess
     qDebug() << "STDOUT:" << output;
     qDebug() << "STDERR:" << errorOutput;
 
-    ui->comboBox_GPUID_RealCUGAN->clear();
-    ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->clear();
+    comboBox_GPUID_RealCUGAN->clear();
+    comboBox_GPUIDs_MultiGPU_RealCUGAN->clear();
 
     if (exitStatus == QProcess::NormalExit && exitCode == 0) {
         // Example output from realcugan-ncnn-vulkan might be like:
@@ -1961,23 +1961,23 @@ void MainWindow::Realcugan_ncnn_vulkan_DetectGPU_finished(int exitCode, QProcess
         }
 
 
-        ui->comboBox_GPUID_RealCUGAN->clear();
-        ui->comboBox_GPUID_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
-        ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->clear();
-        ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
+        comboBox_GPUID_RealCUGAN->clear();
+        comboBox_GPUID_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
+        comboBox_GPUIDs_MultiGPU_RealCUGAN->clear();
+        comboBox_GPUIDs_MultiGPU_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
 
         QMessageBox::information(this, tr("Device Detection"), tr("Detected devices for RealCUGAN (including CPU) have been populated. Please verify the selection."));
 
     } else {
         QMessageBox::warning(this, tr("Device Detection Failed"), tr("realcugan-ncnn-vulkan.exe process failed or returned an error for device detection.\nExit Code: %1\nOutput:\n%2\nError Output:\n%3").arg(exitCode).arg(output).arg(errorOutput));
         // Add CPU and a default option to allow usage even if detection fails
-        ui->comboBox_GPUID_RealCUGAN->clear();
+        comboBox_GPUID_RealCUGAN->clear();
         Available_GPUID_RealCUGAN.clear();
         Available_GPUID_RealCUGAN.append(tr("-1: CPU"));
         Available_GPUID_RealCUGAN.append("0: Default GPU (Detection Failed)");
-        ui->comboBox_GPUID_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
-        ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->clear();
-        ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
+        comboBox_GPUID_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
+        comboBox_GPUIDs_MultiGPU_RealCUGAN->clear();
+        comboBox_GPUIDs_MultiGPU_RealCUGAN->addItems(Available_GPUID_RealCUGAN);
     }
     // ui->pushButton_DetectGPU_RealCUGAN->setEnabled(true); // Re-enable button
     process->deleteLater();
@@ -1993,19 +1993,19 @@ void MainWindow::on_pushButton_DetectGPU_RealCUGAN_clicked()
 void MainWindow::on_checkBox_MultiGPU_RealCUGAN_stateChanged(int state)
 {
     bool isChecked = (state == Qt::Checked);
-    ui->groupBox_GPUSettings_MultiGPU_RealCUGAN->setEnabled(isChecked);
-    ui->comboBox_GPUID_RealCUGAN->setDisabled(isChecked); // Disable single GPU selection if multi is on
+    groupBox_GPUSettings_MultiGPU_RealCUGAN->setEnabled(isChecked);
+    comboBox_GPUID_RealCUGAN->setDisabled(isChecked); // Disable single GPU selection if multi is on
     // ui->spinBox_Threads_RealCUGAN->setDisabled(isChecked); // Disable single GPU threads if one exists
 
     if (!isChecked) { // If multi-GPU is disabled, clear the multi-GPU list for RealCUGAN
         GPUIDs_List_MultiGPU_RealCUGAN.clear();
-        ui->listWidget_GPUList_MultiGPU_RealCUGAN->clear();
+        listWidget_GPUList_MultiGPU_RealCUGAN->clear();
     }
 }
 
 void MainWindow::on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked()
 {
-    QString selectedGPU_Text = ui->comboBox_GPUIDs_MultiGPU_RealCUGAN->currentText();
+    QString selectedGPU_Text = comboBox_GPUIDs_MultiGPU_RealCUGAN->currentText();
     if (selectedGPU_Text.isEmpty() || selectedGPU_Text.contains("Default GPU (Detection Failed)") || selectedGPU_Text.contains("No available")) {
         ShowMessageBox("Info", "Please select a valid GPU to add for RealCUGAN.", QMessageBox::Information);
         return;
@@ -2015,7 +2015,7 @@ void MainWindow::on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked()
 
 void MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked()
 {
-    QListWidgetItem *selectedItem = ui->listWidget_GPUList_MultiGPU_RealCUGAN->currentItem();
+    QListWidgetItem *selectedItem = listWidget_GPUList_MultiGPU_RealCUGAN->currentItem();
     if (!selectedItem) {
         ShowMessageBox("Info", "Please select a GPU from the list to remove.", QMessageBox::Information);
         return;
@@ -2030,7 +2030,7 @@ void MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked()
             break;
         }
     }
-    delete ui->listWidget_GPUList_MultiGPU_RealCUGAN->takeItem(ui->listWidget_GPUList_MultiGPU_RealCUGAN->row(selectedItem));
+    delete listWidget_GPUList_MultiGPU_RealCUGAN->takeItem(listWidget_GPUList_MultiGPU_RealCUGAN->row(selectedItem));
     qDebug() << "Removed GPU for RealCUGAN Multi-GPU: ID" << idToRemove;
 }
 
@@ -2038,7 +2038,7 @@ void MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked()
 void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked()
 {
     GPUIDs_List_MultiGPU_RealCUGAN.clear();
-    ui->listWidget_GPUList_MultiGPU_RealCUGAN->clear();
+    listWidget_GPUList_MultiGPU_RealCUGAN->clear();
     qDebug() << "Cleared all GPUs for RealCUGAN Multi-GPU.";
 }
 
