@@ -110,6 +110,18 @@ Once all dependencies are set up correctly for your operating system:
 
 This process compiles the upscalers from source (or copies prebuilt versions on Windows) and then builds the Qt GUI application and launcher.
 
+### Windows One-Click Build
+
+Run the PowerShell helper to install the required toolchain and build the
+project automatically:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\build_windows.ps1
+```
+
+The script requires administrator privileges because it installs packages via
+Chocolatey. It will fetch Qt through `aqtinstall` if `qmake` is not available.
+
 ## Development Environment
 
 Set up a Python virtual environment to run the helper scripts and tests.
