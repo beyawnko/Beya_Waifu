@@ -225,6 +225,14 @@ function Ensure-QMake {
     if (-not (Test-Path $qsbPath)) {
         throw "Qt shadertools module missing. qsb.exe not found at '$qsbPath'"
     }
+
+    # Verify qmake.exe exists
+    $qmakePath = Join-Path $script:QtBinPath 'qmake.exe'
+    if (-not (Test-Path $qmakePath)) {
+        throw "Qt qmake.exe not found at '$qmakePath'"
+    }
+    Write-Host "qmake.exe successfully found at '$qmakePath'"
+
     Write-Host "Qt installation complete. QtBinPath set to '$($script:QtBinPath)'"
 }
 
@@ -269,6 +277,7 @@ function Build-Project {
     # Convert paths to a format bash understands
     $msysMingwPath = Convert-PathToMsys $mingwBinPath
     $msysUsrBinPath = Convert-PathToMsys $msysBinPath
+    $msysQtPath = '' # Initialize to empty
 
     # Build the path components
     $pathComponents = @(
@@ -276,7 +285,7 @@ function Build-Project {
         $msysUsrBinPath
     )
     if (-not [string]::IsNullOrEmpty($script:QtBinPath)) {
-        $msysQtPath = Convert-PathToMsys $script:QtBinPath
+        $msysQtPath = Convert-PathToMsys $script:QtBinPath # Will be correctly assigned here
         $pathComponents += $msysQtPath
     }
 
@@ -288,9 +297,31 @@ function Build-Project {
     $scriptContent = @"
 #!/bin/bash
 # Exit immediately if a command exits with a non-zero status.
-set -e
+# set -e # Temporarily disable 'set -e' for debugging PATH and qmake
+echo "--- Executing inside temporary bash wrapper (with debugging) ---"
 
-echo "--- Executing inside temporary bash wrapper ---"
+echo "Initial PATH within wrapper:"
+echo "-------------------------------------"
+echo `$PATH | tr ':' '
+'
+echo "-------------------------------------"
+
+# Path to Qt, as passed from PowerShell, converted by Convert-PathToMsys
+echo "Expected Qt bin directory (from PowerShell): {3}"
+echo "Contents of expected Qt bin directory:"
+ls -al "{3}" || echo "Could not list contents of {3}"
+echo "-------------------------------------"
+
+echo "Attempting to find qmake with 'command -v qmake':"
+command -v qmake || echo "qmake not found by 'command -v qmake'"
+echo "-------------------------------------"
+echo "Result of 'which qmake':"
+which qmake || echo "qmake not found by 'which qmake'"
+echo "-------------------------------------"
+
+# Re-enable 'set -e' after debugging output
+set -e
+echo "Continuing with the build script..."
 
 # Unset potentially problematic variables passed from the host environment.
 unset MAKEFLAGS
@@ -307,7 +338,7 @@ cd '{1}'
 ./{2}
 
 echo "--- Finished executing inside temporary bash wrapper ---"
-"@ -f $pathPrefix, $msysDir, $buildScriptName
+"@ -f $pathPrefix, $msysDir, $buildScriptName, $msysQtPath
 
     $tempScriptName = "temp_build_wrapper.sh"
     $tempScriptPath = Join-Path -Path (Get-Location).Path -ChildPath $tempScriptName
