@@ -2,6 +2,11 @@
 # Copyright (C) 2025  beyawnko
 set -e
 
+# Determine available make tool
+MAKE=make
+command -v $MAKE >/dev/null 2>&1 || MAKE=mingw32-make
+command -v $MAKE >/dev/null 2>&1 || { echo "make tool not found"; exit 1; }
+
 RESRGAN_SRC_DIR="realesrgan-ncnn-vulkan"
 RCUGAN_SRC_DIR="realcugan-ncnn-vulkan"
 # TARGET_APP_DIR specifies the directory where the main application (Beya_Waifu)
@@ -54,7 +59,7 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
             pushd "$RESRGAN_SRC_DIR" >/dev/null
             mkdir -p build_windows && cd build_windows
             cmake -G "MSYS Makefiles" .. || { echo "Real-ESRGAN CMake failed."; popd >/dev/null; exit 1; }
-            make -j$(nproc) || { echo "Real-ESRGAN make failed."; popd >/dev/null; exit 1; }
+            $MAKE -j$(nproc) || { echo "Real-ESRGAN make failed."; popd >/dev/null; exit 1; }
 
             # Copy built executable (CMake should place it in build_windows/src or build_windows)
             cp src/realesrgan-ncnn-vulkan.exe "$TARGET_APP_DIR/realesrgan.exe" 2>/dev/null || cp realesrgan-ncnn-vulkan.exe "$TARGET_APP_DIR/realesrgan.exe" 2>/dev/null || { echo "Failed to find/copy built realesrgan.exe"; popd >/dev/null; exit 1; }
@@ -108,7 +113,7 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
             pushd "$RCUGAN_SRC_DIR" >/dev/null
             mkdir -p build_windows && cd build_windows
             cmake -G "MSYS Makefiles" .. || { echo "Real-CUGAN CMake failed."; popd >/dev/null; exit 1; }
-            make -j$(nproc) || { echo "Real-CUGAN make failed."; popd >/dev/null; exit 1; }
+            $MAKE -j$(nproc) || { echo "Real-CUGAN make failed."; popd >/dev/null; exit 1; }
 
             cp src/realcugan-ncnn-vulkan.exe "$TARGET_APP_DIR/realcugan.exe" 2>/dev/null || cp realcugan-ncnn-vulkan.exe "$TARGET_APP_DIR/realcugan.exe" 2>/dev/null || { echo "Failed to find/copy built realcugan.exe"; popd >/dev/null; exit 1; }
             cp src/realcugan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/realcugan.exe" 2>/dev/null || cp realcugan-ncnn-vulkan.exe "$TARGET_LAUNCHER_DIR/realcugan.exe" 2>/dev/null
@@ -140,7 +145,7 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         pushd "$RESRGAN_SRC_DIR" >/dev/null
         mkdir -p build_linux && cd build_linux
         cmake .. || { echo "Real-ESRGAN CMake failed."; popd >/dev/null; exit 1; }
-        make -j$(nproc) || { echo "Real-ESRGAN make failed."; popd >/dev/null; exit 1; }
+        $MAKE -j$(nproc) || { echo "Real-ESRGAN make failed."; popd >/dev/null; exit 1; }
         # CMake on Linux usually places executables in build_linux/src or build_linux directly
         cp src/realesrgan-ncnn-vulkan "$TARGET_APP_DIR/" 2>/dev/null || cp realesrgan-ncnn-vulkan "$TARGET_APP_DIR/" 2>/dev/null || { echo "Failed to find/copy built realesrgan-ncnn-vulkan"; popd >/dev/null; exit 1; }
         popd >/dev/null
@@ -157,7 +162,7 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         pushd "$RCUGAN_SRC_DIR" >/dev/null
         mkdir -p build_linux && cd build_linux
         cmake .. || { echo "Real-CUGAN CMake failed."; popd >/dev/null; exit 1; }
-        make -j$(nproc) || { echo "Real-CUGAN make failed."; popd >/dev/null; exit 1; }
+        $MAKE -j$(nproc) || { echo "Real-CUGAN make failed."; popd >/dev/null; exit 1; }
         cp src/realcugan-ncnn-vulkan "$TARGET_APP_DIR/" 2>/dev/null || cp realcugan-ncnn-vulkan "$TARGET_APP_DIR/" 2>/dev/null || { echo "Failed to find/copy built realcugan-ncnn-vulkan"; popd >/dev/null; exit 1; }
         popd >/dev/null
 
@@ -184,9 +189,9 @@ echo "Building Waifu2x-Extension-QT..."
 pushd "$TARGET_APP_DIR" >/dev/null # Change to the application directory where the .pro file is located.
 qmake Waifu2x-Extension-QT.pro || { echo "qmake for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
 # 'make liquidglass_frag' is a specific build step for a component of the UI.
-make liquidglass_frag || { echo "make liquidglass_frag for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
+$MAKE liquidglass_frag || { echo "make liquidglass_frag for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
 # General make command for the application, using multiple cores.
-make -j$(nproc) || { echo "make for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
+$MAKE -j$(nproc) || { echo "make for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
 popd >/dev/null
 
 # Build the Waifu2x-Extension-QT-Launcher application.
@@ -194,7 +199,7 @@ echo "Building Waifu2x-Extension-QT-Launcher..."
 pushd Waifu2x-Extension-QT-Launcher >/dev/null # Change to the launcher's directory.
 qmake Waifu2x-Extension-QT-Launcher.pro || { echo "qmake for Launcher failed."; popd >/dev/null; exit 1; }
 # General make command for the launcher, using multiple cores.
-make -j$(nproc) || { echo "make for Launcher failed."; popd >/dev/null; exit 1; }
+$MAKE -j$(nproc) || { echo "make for Launcher failed."; popd >/dev/null; exit 1; }
 popd >/dev/null
 
 echo "Build complete."
