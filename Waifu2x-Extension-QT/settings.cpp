@@ -85,7 +85,7 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/settings/spinBox_TileSize_RealsrNCNNVulkan", ui->spinBox_TileSize_RealsrNCNNVulkan->value());
     //GPU ID List
     configIniWrite->setValue("/settings/CurrentGPUID_Waifu2xNCNNVulkan", ui->comboBox_GPUID->currentIndex());
-    configIniWrite->setValue("/settings/Available_GPUID_Waifu2xNCNNVulkan", Available_GPUID);
+    configIniWrite->setValue("/settings/Available_GPUID_Waifu2xNCNNVulkan", Available_GPUID_Waifu2xNcnnVulkan);
     configIniWrite->setValue("/settings/GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan", QVariant::fromValue(GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan));
     configIniWrite->setValue("/settings/checkBox_MultiGPU_Waifu2xNCNNVulkan", ui->checkBox_MultiGPU_Waifu2xNCNNVulkan->isChecked());
     //==
@@ -356,7 +356,7 @@ int MainWindow::Settings_Read_Apply()
     ui->lineEdit_MultiGPUInfo_Waifu2xCaffe->setText(Settings_Read_value("/settings/lineEdit_MultiGPUInfo_Waifu2xCaffe").toString());
     //GPU ID List
     //Waifu2x-NCNN-Vulkan
-    Available_GPUID = Settings_Read_value("/settings/Available_GPUID_Waifu2xNCNNVulkan").toStringList();
+    Available_GPUID_Waifu2xNcnnVulkan = Settings_Read_value("/settings/Available_GPUID_Waifu2xNCNNVulkan").toStringList();
     Waifu2x_DetectGPU_finished();
     ui->comboBox_GPUID->setCurrentIndex(Settings_Read_value("/settings/CurrentGPUID_Waifu2xNCNNVulkan").toInt());
     // Load multi-GPU settings
@@ -413,12 +413,18 @@ int MainWindow::Settings_Read_Apply()
     if(ui->comboBox_Model_RealCUGAN) ui->comboBox_Model_RealCUGAN->setCurrentIndex(Settings_Read_value("/settings/RealCUGAN_Model").toInt());
     // Scale and Denoise for RealCUGAN are not directly saved from dedicated spinboxes in latest UI, but read from main UI if needed.
     // However, if old settings exist, we try to read them.
-    if(ui->spinBox_Scale_RealCUGAN) ui->spinBox_Scale_RealCUGAN->setValue(Settings_Read_value("/settings/RealCUGAN_Scale", ui->spinBox_Scale_RealCUGAN->value()).toInt());
-    if(ui->spinBox_DenoiseLevel_RealCUGAN) ui->spinBox_DenoiseLevel_RealCUGAN->setValue(Settings_Read_value("/settings/RealCUGAN_DenoiseLevel", ui->spinBox_DenoiseLevel_RealCUGAN->value()).toInt());
+    if(ui->spinBox_Scale_RealCUGAN) {
+        QVariant scaleSetting = Settings_Read_value("/settings/RealCUGAN_Scale");
+        ui->spinBox_Scale_RealCUGAN->setValue(scaleSetting.isValid() ? scaleSetting.toInt() : ui->spinBox_Scale_RealCUGAN->value());
+    }
+    if(ui->spinBox_DenoiseLevel_RealCUGAN) {
+        QVariant denoiseSetting = Settings_Read_value("/settings/RealCUGAN_DenoiseLevel");
+        ui->spinBox_DenoiseLevel_RealCUGAN->setValue(denoiseSetting.isValid() ? denoiseSetting.toInt() : ui->spinBox_DenoiseLevel_RealCUGAN->value());
+    }
     if(ui->spinBox_TileSize_RealCUGAN) ui->spinBox_TileSize_RealCUGAN->setValue(Settings_Read_value("/settings/RealCUGAN_TileSize").toInt());
     if(ui->checkBox_TTA_RealCUGAN) ui->checkBox_TTA_RealCUGAN->setChecked(Settings_Read_value("/settings/RealCUGAN_TTA").toBool());
     Available_GPUID_RealCUGAN_ncnn_vulkan = Settings_Read_value("/settings/RealCUGAN_Available_GPUID").toStringList(); // Corrected variable
-    Realcugan_ncnn_vulkan_DetectGPU_finished(); // This will populate the GPU lists
+    // Realcugan_ncnn_vulkan_DetectGPU_finished(); // This will populate the GPU lists - Called by MainWindow after process
     if(ui->comboBox_GPUID_RealCUGAN) ui->comboBox_GPUID_RealCUGAN->setCurrentIndex(Settings_Read_value("/settings/RealCUGAN_GPUID").toInt());
     if(ui->checkBox_MultiGPU_RealCUGAN) ui->checkBox_MultiGPU_RealCUGAN->setChecked(Settings_Read_value("/settings/RealCUGAN_MultiGPU_Enabled").toBool());
     m_realcugan_gpuJobConfig_temp = Settings_Read_value("/settings/RealCUGAN_GPUJobConfig_MultiGPU").value<QList<QMap<QString, QString>>>();
@@ -457,7 +463,7 @@ int MainWindow::Settings_Read_Apply()
     if(ui->spinBox_TileSize_RealESRGAN) ui->spinBox_TileSize_RealESRGAN->setValue(Settings_Read_value("/settings/RealESRGAN_TileSize").toInt());
     if(ui->checkBox_TTA_RealESRGAN) ui->checkBox_TTA_RealESRGAN->setChecked(Settings_Read_value("/settings/RealESRGAN_TTA").toBool());
     Available_GPUID_RealESRGAN_ncnn_vulkan = Settings_Read_value("/settings/RealESRGAN_Available_GPUID").toStringList();
-    RealESRGAN_ncnn_vulkan_DetectGPU_finished(); // Populates GPU lists
+    // RealESRGAN_ncnn_vulkan_DetectGPU_finished(); // Populates GPU lists - Called by MainWindow after process
     if(ui->comboBox_GPUID_RealESRGAN) ui->comboBox_GPUID_RealESRGAN->setCurrentIndex(Settings_Read_value("/settings/RealESRGAN_GPUID").toInt());
     if(ui->checkBox_MultiGPU_RealESRGAN) ui->checkBox_MultiGPU_RealESRGAN->setChecked(Settings_Read_value("/settings/RealESRGAN_MultiGPU_Enabled").toBool());
     m_realesrgan_gpuJobConfig_temp = Settings_Read_value("/settings/RealESRGAN_GPUJobConfig_MultiGPU").value<QList<QMap<QString, QString>>>();
@@ -698,7 +704,8 @@ int MainWindow::Settings_Read_Apply()
     return 0;
 }
 
-QVariant MainWindow::Settings_Read_value(QString Key, QVariant defaultValue)
+QVariant MainWindow::Settings_Read_value(QString Key)
+// QVariant MainWindow::Settings_Read_value(QString Key, QVariant defaultValue) // Old signature
 {
     QString settings_ini_old = Current_Path+"/settings_old.ini";
     QString settings_ini_new = Current_Path+"/settings.ini";
@@ -714,17 +721,14 @@ QVariant MainWindow::Settings_Read_value(QString Key, QVariant defaultValue)
         {
             return configIniRead_old->value(Key);
         }
-        else if (configIniRead_new->contains(Key))
-        {
-            return configIniRead_new->value(Key);
-        }
-        return defaultValue;
-    }
-    //====
-    if (configIniRead_new->contains(Key)) {
+        // If not in old, or if not reading old settings, try new.
+        // QSettings::value() returns an invalid QVariant if key not found.
         return configIniRead_new->value(Key);
     }
-    return defaultValue;
+    //====
+    // If not reading old settings, directly try new.
+    // QSettings::value() returns an invalid QVariant if key not found.
+    return configIniRead_new->value(Key);
 }
 
 /*

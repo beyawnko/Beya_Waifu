@@ -234,6 +234,7 @@ public:
     QString Anime4k_ReadSettings(bool PreserveAlphaChannel);
     void DenoiseLevelSpinboxSetting_Anime4k();
     QString Anime4k_ProgramPath = Current_Path + "/Anime4K/Anime4K_waifu2xEX.exe";
+    QString FFMPEG_EXE_PATH_Waifu2xEX;
     int Get_NumOfGPU_Anime4k();
     //=================================
     int Waifu2x_Converter_Image(int rowNum,bool ReProcess_MissingAlphaChannel);// Converter image upscaling thread
@@ -279,6 +280,7 @@ public:
     void Wait_waifu2x_stop();// watchdog thread waiting for waifu2x threads to stop
     std::atomic<bool> waifu2x_STOP{false};// signal to request waifu2x stop
     std::atomic<bool> waifu2x_STOP_confirm{false};// confirmation from waifu2x stop watchdog
+    std::atomic<bool> Stopping{false}; // Added for general process stopping
 
     int ThreadNumMax = 0;// maximum number of waifu2x threads
     std::atomic<int> ThreadNumRunning{0};// current running waifu2x thread count
@@ -304,6 +306,7 @@ public:
 
     int FrameInterpolation_DetectGPU();// detect available GPUs (Vulkan)
     QStringList Available_GPUID_FrameInterpolation;// available GPU ID list
+    QStringList Available_GPUID_Waifu2xNcnnVulkan; // Added for settings.cpp compatibility
     //======================== Image processing ================================
     bool Image_Gif_AutoSkip_CustRes(int rowNum,bool isGif);
     QMap<QString,int> Image_Gif_Read_Resolution(QString SourceFileFullPath);// obtain image/GIF resolution
@@ -330,6 +333,9 @@ public:
     // compatibility flags
     bool isCompatible_RealCUGAN_NCNN_Vulkan=false;
     bool isCompatible_RealESRGAN_NCNN_Vulkan=false;
+    bool isCompatible_RifeNcnnVulkan = false;
+    bool isCompatible_CainNcnnVulkan = false;
+    bool isCompatible_DainNcnnVulkan = false;
     //============================== Multi-GPU ======================================
 
     //RealsrNcnnVulkan
@@ -337,6 +343,8 @@ public:
     QMap<QString,QString> RealsrNcnnVulkan_MultiGPU();
     QMutex MultiGPU_QMutex_RealsrNcnnVulkan;
     QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_RealsrNcnnVulkan;
+    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan; // Added for settings.cpp compatibility
+    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_SrmdNcnnVulkan; // Added for settings.cpp compatibility
     void AddGPU_MultiGPU_RealsrNcnnVulkan(QString GPUID);
 
     //Waifu2xConverter
@@ -380,6 +388,23 @@ public:
     void Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString &tempPathBase, int maxPassIndex, bool keepFinal = false, const QString& finalFile = "");
     bool Realcugan_ProcessSingleFileIteratively(const QString &inputFile, const QString &outputFile, int targetScale, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat, bool experimental, int rowNumForStatusUpdate = -1);
 
+    //RealCUGAN-ncnn-Vulkan UI Pointers
+    QComboBox *comboBox_Model_RealCUGAN;
+    QSpinBox *spinBox_Scale_RealCUGAN;
+    QSpinBox *spinBox_DenoiseLevel_RealCUGAN;
+    QSpinBox *spinBox_TileSize_RealCUGAN;
+    QCheckBox *checkBox_TTA_RealCUGAN;
+    QComboBox *comboBox_GPUID_RealCUGAN;
+    QPushButton *pushButton_DetectGPU_RealCUGAN;
+    QCheckBox *checkBox_MultiGPU_RealCUGAN;
+    QGroupBox *groupBox_GPUSettings_MultiGPU_RealCUGAN;
+    QComboBox *comboBox_GPUIDs_MultiGPU_RealCUGAN;
+    QListWidget *listWidget_GPUList_MultiGPU_RealCUGAN; // For RealCuganProcessor usage
+    QPushButton *pushButton_AddGPU_MultiGPU_RealCUGAN;
+    QPushButton *pushButton_RemoveGPU_MultiGPU_RealCUGAN;
+    QPushButton *pushButton_ClearGPU_MultiGPU_RealCUGAN;
+    QPushButton *pushButton_TileSize_Add_RealCUGAN;    // For connect in constructor
+    QPushButton *pushButton_TileSize_Minus_RealCUGAN;  // For connect in constructor
 
     //RealESRGAN-ncnn-Vulkan UI Pointers
     QComboBox *comboBox_Model_RealESRGAN;
@@ -670,6 +695,11 @@ public:
     //===
     QString Anime4k_PreLoad_Settings();
     QString Anime4k_PreLoad_Settings_Str = "";
+    QString Realcugan_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    QString Rife_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    QString Cain_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    QString Dain_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    QString SRMD_CUDA_PreLoad_Settings_Str = "";
     QString HDNDenoiseLevel_image = "";
     QString HDNDenoiseLevel_gif = "";
     QString HDNDenoiseLevel_video = "";
@@ -1211,185 +1241,21 @@ signals:
     void Send_Set_checkBox_DisableResize_gif_Checked();
 
 
-private slots: // Ensure ProcessDroppedFilesFinished is declared as a slot
-    void ProcessDroppedFilesFinished();
-    // Add other private slots from the original file that should remain here
-
-    // Example from original, keep existing private slots:
-    void on_pushButton_Start_clicked();
-    void on_pushButton_Stop_clicked();
-    int  on_pushButton_RemoveItem_clicked();
-    void on_pushButton_CheckUpdate_clicked();
-    void on_pushButton_Report_clicked();
-    void on_pushButton_ReadMe_clicked();
-    void on_comboBox_Engine_Image_currentIndexChanged(int index);
-    void on_comboBox_Engine_GIF_currentIndexChanged(int index);
-    void on_comboBox_Engine_Video_currentIndexChanged(int index);
-    void on_pushButton_clear_textbrowser_clicked();
-    void on_spinBox_textbrowser_fontsize_valueChanged(int arg1);
-    void on_pushButton_compatibilityTest_clicked();
-    void on_pushButton_CustRes_apply_clicked();
-    void on_pushButton_CustRes_cancel_clicked();
-    void on_pushButton_HideSettings_clicked();
-    void on_pushButton_DetectGPU_clicked();
-    void on_pushButton_SaveSettings_clicked();
-    void on_pushButton_ResetSettings_clicked();
-    void on_comboBox_language_currentIndexChanged(int index);
-    void on_pushButton_SaveFileList_clicked();
-    void on_pushButton_ReadFileList_clicked();
-    void on_Ext_image_editingFinished();
-    void on_Ext_video_editingFinished();
-    void on_checkBox_AutoSaveSettings_clicked();
-    void on_pushButton_about_clicked();
-    void on_comboBox_AspectRatio_custRes_currentIndexChanged(int index);
-    void on_checkBox_AlwaysHideSettings_stateChanged(int arg1);
-    void on_pushButton_Save_GlobalFontSize_clicked();
-    void on_pushButton_BrowserFile_clicked();
-    void on_pushButton_wiki_clicked();
-    void on_pushButton_HideTextBro_clicked();
-    void on_checkBox_AlwaysHideTextBrowser_stateChanged(int arg1);
-    void on_pushButton_DumpProcessorList_converter_clicked();
-    void on_comboBox_TargetProcessor_converter_currentIndexChanged(int index);
-    void on_Ext_image_textChanged(const QString &arg1);
-    void on_Ext_video_textChanged(const QString &arg1);
-    void on_comboBox_model_vulkan_currentIndexChanged(int index);
-    void on_comboBox_ImageStyle_currentIndexChanged(int index);
-    void on_pushButton_ResetVideoSettings_clicked();
-    void on_lineEdit_encoder_vid_textChanged(const QString &arg1);
-    void on_lineEdit_encoder_audio_textChanged(const QString &arg1);
-    void on_lineEdit_pixformat_textChanged(const QString &arg1);
-    void on_checkBox_vcodec_copy_2mp4_stateChanged(int arg1);
-    void on_checkBox_acodec_copy_2mp4_stateChanged(int arg1);
-    void on_pushButton_encodersList_clicked();
-    void on_checkBox_DelOriginal_stateChanged(int arg1);
-    void on_checkBox_FileList_Interactive_stateChanged(int arg1);
-    void on_checkBox_OutPath_isEnabled_stateChanged(int arg1);
-    void on_pushButton_ForceRetry_clicked();
-    void on_pushButton_PayPal_clicked();
-    void on_pushButton_DetectGPUID_srmd_clicked();
-    void on_checkBox_AudioDenoise_stateChanged(int arg1);
-    void on_tabWidget_currentChanged(int index);
-    void on_checkBox_ProcessVideoBySegment_stateChanged(int arg1);
-    void on_comboBox_version_Waifu2xNCNNVulkan_currentIndexChanged(int index);
-    void on_checkBox_EnablePreProcessing_Anime4k_stateChanged(int arg1);
-    void on_checkBox_EnablePostProcessing_Anime4k_stateChanged(int arg1);
-    void on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_clicked();
-    void on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P_clicked();
-    void on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD_clicked();
-    void on_checkBox_isCompatible_SRMD_NCNN_Vulkan_clicked();
-    void on_checkBox_isCompatible_Waifu2x_Converter_clicked();
-    void on_checkBox_isCompatible_Anime4k_CPU_clicked();
-    void on_checkBox_isCompatible_Anime4k_GPU_clicked();
-    void on_checkBox_SpecifyGPU_Anime4k_stateChanged(int arg1);
-    void on_pushButton_ListGPUs_Anime4k_clicked();
-    void on_checkBox_isCompatible_FFmpeg_clicked();
-    void on_checkBox_isCompatible_FFprobe_clicked();
-    void on_checkBox_isCompatible_ImageMagick_clicked();
-    void on_checkBox_isCompatible_Gifsicle_clicked();
-    void on_checkBox_isCompatible_SoX_clicked();
-    void on_checkBox_GPUMode_Anime4K_stateChanged(int arg1);
-    void on_checkBox_ShowInterPro_stateChanged(int arg1);
-    void on_checkBox_isCompatible_Waifu2x_Caffe_CPU_clicked();
-    void on_checkBox_isCompatible_Waifu2x_Caffe_GPU_clicked();
-    void on_checkBox_isCompatible_Waifu2x_Caffe_cuDNN_clicked();
-    void on_pushButton_SplitSize_Add_Waifu2xCaffe_clicked();
-    void on_pushButton_SplitSize_Minus_Waifu2xCaffe_clicked();
-    void on_checkBox_isCompatible_Realsr_NCNN_Vulkan_clicked();
-    void on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked();
-    void on_checkBox_ACNet_Anime4K_stateChanged(int arg1);
-    void on_checkBox_HDNMode_Anime4k_stateChanged(int arg1);
-    void on_checkBox_MultiGPU_Waifu2xNCNNVulkan_clicked();
-    void on_comboBox_GPUIDs_MultiGPU_Waifu2xNCNNVulkan_currentIndexChanged(int index);
-    void on_spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan_valueChanged(int arg1);
-    void on_checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan_clicked();
-    void on_checkBox_MultiGPU_Waifu2xNCNNVulkan_stateChanged(int arg1);
-    void on_checkBox_MultiGPU_SrmdNCNNVulkan_stateChanged(int arg1);
-    void on_checkBox_MultiGPU_SrmdNCNNVulkan_clicked();
-    void on_comboBox_GPUIDs_MultiGPU_SrmdNCNNVulkan_currentIndexChanged(int index);
-    void on_checkBox_isEnable_CurrentGPU_MultiGPU_SrmdNCNNVulkan_clicked();
-    void on_spinBox_TileSize_CurrentGPU_MultiGPU_SrmdNCNNVulkan_valueChanged(int arg1);
-    void on_checkBox_MultiGPU_RealsrNcnnVulkan_stateChanged(int arg1);
-    void on_checkBox_MultiGPU_RealsrNcnnVulkan_clicked();
-    void on_comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan_currentIndexChanged(int index);
-    void on_checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan_clicked();
-    void on_spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan_valueChanged(int arg1);
-    void on_checkBox_MultiGPU_Waifu2xConverter_clicked();
-    void on_checkBox_MultiGPU_Waifu2xConverter_stateChanged(int arg1);
-    void on_comboBox_GPUIDs_MultiGPU_Waifu2xConverter_currentIndexChanged(int index);
-    void on_checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xConverter_clicked();
-    void on_spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xConverter_valueChanged(int arg1);
-    void on_checkBox_EnableMultiGPU_Waifu2xCaffe_stateChanged(int arg1);
-    void on_comboBox_ProcessMode_Waifu2xCaffe_currentIndexChanged(int index);
-    void on_lineEdit_GPUs_Anime4k_editingFinished();
-    void on_lineEdit_MultiGPUInfo_Waifu2xCaffe_editingFinished();
-    void on_pushButton_VerifyGPUsConfig_Anime4k_clicked();
-    void on_pushButton_VerifyGPUsConfig_Waifu2xCaffe_clicked();
-    void on_tableView_image_doubleClicked(const QModelIndex &index);
-    void on_tableView_gif_doubleClicked(const QModelIndex &index);
-    void on_tableView_video_doubleClicked(const QModelIndex &index);
-    void on_checkBox_BanGitee_clicked();
-    void on_pushButton_ShowMultiGPUSettings_Waifu2xNCNNVulkan_clicked();
-    void on_pushButton_ShowMultiGPUSettings_Waifu2xConverter_clicked();
-    void on_pushButton_ShowMultiGPUSettings_SrmdNCNNVulkan_clicked();
-    void on_pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan_clicked();
-    void on_tableView_image_pressed(const QModelIndex &index);
-    void on_tableView_gif_pressed(const QModelIndex &index);
-    void on_tableView_video_pressed(const QModelIndex &index);
-    void on_comboBox_ImageSaveFormat_currentIndexChanged(int index);
-    void on_pushButton_TileSize_Add_W2xNCNNVulkan_clicked();
-    void on_pushButton_TileSize_Minus_W2xNCNNVulkan_clicked();
-    void on_pushButton_BlockSize_Add_W2xConverter_clicked();
-    void on_pushButton_BlockSize_Minus_W2xConverter_clicked();
-    void on_pushButton_Add_TileSize_SrmdNCNNVulkan_clicked();
-    void on_pushButton_Minus_TileSize_SrmdNCNNVulkan_clicked();
-    void on_pushButton_Add_TileSize_RealsrNCNNVulkan_clicked();
-    void on_pushButton_Minus_TileSize_RealsrNCNNVulkan_clicked();
-    void on_pushButton_DetectGPU_VFI_clicked();
-    void on_lineEdit_MultiGPU_IDs_VFI_editingFinished();
-    void on_checkBox_MultiGPU_VFI_stateChanged(int arg1);
-    void on_groupBox_FrameInterpolation_clicked();
-    void on_checkBox_isCompatible_RifeNcnnVulkan_clicked();
-    void on_comboBox_Engine_VFI_currentIndexChanged(int index);
-    void on_checkBox_isCompatible_CainNcnnVulkan_clicked();
-    void on_pushButton_Verify_MultiGPU_VFI_clicked();
-    void on_checkBox_EnableVFI_Home_clicked();
-    void on_checkBox_MultiThread_VFI_stateChanged(int arg1);
-    void on_checkBox_MultiThread_VFI_clicked();
-    void on_checkBox_isCompatible_DainNcnnVulkan_clicked();
-    void on_pushButton_SupportersList_clicked();
-    void on_pushButton_Patreon_clicked();
-    void on_checkBox_isCompatible_RealCUGAN_NCNN_Vulkan_clicked();
-    void on_checkBox_isCompatible_RealESRGAN_NCNN_Vulkan_clicked();
-
-    void ProcessDroppedFilesFinished(); // Moved to be with other private slots
-
-    // RealESRGAN UI slots
-    void on_pushButton_DetectGPU_RealESRGAN_clicked();
-    void on_comboBox_Model_RealESRGAN_currentIndexChanged(int index);
-    void on_pushButton_TileSize_Add_RealESRGAN_clicked();
-    void on_pushButton_TileSize_Minus_RealESRGAN_clicked();
-    void on_checkBox_MultiGPU_RealESRGAN_stateChanged(int state);
-    void on_comboBox_GPUIDs_MultiGPU_RealESRGAN_currentIndexChanged(int index);
-    void on_checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN_clicked(bool checked);
-    void on_spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN_valueChanged(int value);
-    void on_pushButton_ShowMultiGPUSettings_RealESRGAN_clicked();
-    void on_pushButton_AddGPU_MultiGPU_RealESRGAN_clicked();
-    void on_pushButton_RemoveGPU_MultiGPU_RealESRGAN_clicked();
-    void on_pushButton_ClearGPU_MultiGPU_RealESRGAN_clicked();
-
-
-    // RealCUGAN specific UI slots that were missing explicit declaration
-    void on_pushButton_DetectGPU_RealCUGAN_clicked();
-    void on_checkBox_MultiGPU_RealCUGAN_stateChanged(int state);
-    void on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked();
-    void on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked();
-    void on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked();
-    void on_comboBox_Model_RealCUGAN_currentIndexChanged(int index); // Already connected via findChild in constructor
-    // void on_pushButton_TileSize_Add_RealCUGAN_clicked(); // Already connected via findChild in constructor
-    // void on_pushButton_TileSize_Minus_RealCUGAN_clicked(); // Already connected via findChild in constructor
+private slots:
+    void ProcessDroppedFilesFinished(); // Handles post-processing for drag-and-dropped files.
+    // Add other necessary private slots here if any.
 
 
 private:
+    // Helper function declarations for miscellaneous compilation errors
+    void LoadScaledImageToLabel(const QString &imagePath, QLabel *label);
+    void UpdateTotalProcessedFilesCount();
+    void ProcessNextFile();
+    void CheckIfAllFinished();
+    void UpdateNumberOfActiveThreads();
+    void UpdateProgressBar();
+    void ShellMessageBox(const QString &title, const QString &text, QMessageBox::Icon icon);
+
     Ui::MainWindow *ui;
 };
 

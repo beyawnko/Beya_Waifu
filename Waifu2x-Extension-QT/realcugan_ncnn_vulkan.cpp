@@ -963,7 +963,7 @@ void MainWindow::StartNextRealCUGANPass(QProcess *process) {
     }
 }
 
-void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished() {
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess::ExitStatus exitStatus) {
     QProcess *process = qobject_cast<QProcess *>(sender());
     if (!process) return;
 
