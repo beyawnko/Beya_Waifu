@@ -888,7 +888,6 @@ private slots: // Changed from public slots to private as these are internal
     void on_comboBox_TargetProcessor_converter_currentIndexChanged(int index);
     void on_pushButton_DetectGPUID_srmd_clicked();
     void on_pushButton_ListGPUs_Anime4k_clicked();
-    void on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked();
     void on_checkBox_MultiGPU_Waifu2xNCNNVulkan_clicked();
     void on_comboBox_GPUIDs_MultiGPU_Waifu2xNCNNVulkan_currentIndexChanged(int index);
     void on_spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan_valueChanged(int);
