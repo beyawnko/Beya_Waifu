@@ -72,22 +72,17 @@ if command -v qsb6 &> /dev/null; then
     QSB_CMD="qsb6"
 elif command -v qsb &> /dev/null; then
     QSB_CMD="qsb"
+elif [ -f /usr/lib/qt6/bin/qsb ]; then
+    QSB_CMD="/usr/lib/qt6/bin/qsb"
+elif [ -f /usr/bin/qsb6 ]; then
+    QSB_CMD="/usr/bin/qsb6"
+elif [ -f /usr/lib/qt6/bin/qsb6 ]; then
+    QSB_CMD="/usr/lib/qt6/bin/qsb6"
 else
-    echo "qsb (or qsb6) not found in PATH."
-    # Try to find it in a standard location from apt install
-    if [ -f /usr/lib/qt6/bin/qsb ]; then # Common path for qsb after qt6-base-dev-tools
-        QSB_CMD="/usr/lib/qt6/bin/qsb"
-        echo "Found qsb at /usr/lib/qt6/bin/qsb"
-    elif [ -f /usr/bin/qsb6 ]; then
-        QSB_CMD="/usr/bin/qsb6"
-        echo "Found qsb6 at /usr/bin/qsb6"
-    elif [ -f /usr/lib/qt6/bin/qsb6 ]; then # Common path for qsb6
-        QSB_CMD="/usr/lib/qt6/bin/qsb6"
-        echo "Found qsb6 at /usr/lib/qt6/bin/qsb6"
-    else
-        echo "Could not find qsb or qsb6. Shader compilation might fail."
-        # Allow to continue, make might fail with a clearer error if qsb files are truly needed and not generated.
-    fi
+    echo "Could not find qsb or qsb6."
+    echo "Install the Qt 6 shader tools package, e.g.:"
+    echo "sudo apt install qt6-shadertools-dev"
+    exit 3
 fi
 
 if [ -n "$QSB_CMD" ]; then
@@ -98,8 +93,6 @@ if [ -n "$QSB_CMD" ]; then
         echo "Compiling $SHADER_FILE to $OUTPUT_NAME"
         $QSB_CMD "$SHADER_FILE" -o "$OUTPUT_NAME"
     done
-else
-    echo "Skipping shader compilation as qsb/qsb6 was not found."
 fi
 echo "Shader compilation finished."
 

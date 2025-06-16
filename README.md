@@ -281,6 +281,10 @@ Below is the start-up screen of the optional launcher:
 - Refer to the [Real-CUGAN](https://github.com/bilibili/ailab/tree/main/Real-CUGAN)
   and [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) documentation for
   detailed usage and model descriptions.
+- If `pytest` reports missing modules such as `PySide6` or `Pillow`, run
+  `pip install -r requirements.txt` to install the Python dependencies.
+- When `simple_build.sh` fails with errors about `*.qsb` files, install the Qt 6
+  shader tools package: `sudo apt install qt6-shadertools-dev`.
 
 ## Tests
 
