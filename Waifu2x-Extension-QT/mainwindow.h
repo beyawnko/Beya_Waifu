@@ -666,6 +666,7 @@ public:
 
 
 public slots: // Changed from 'slots:' for clarity, Qt treats them as public slots by default
+    void on_pushButton_compatibilityTest_clicked();
     void Table_EnableSorting(bool EnableSorting);
     void Apply_CustRes_QAction_FileList_slot();
     void Cancel_CustRes_QAction_FileList_slot();
@@ -820,6 +821,11 @@ signals:
     // They were already present and moved to public slots.
 
 private:
+    int m_NumProc = 0;
+    int m_ErrorProc = 0;
+    int m_TotalNumProc = 0;
+    int m_StartedProc = 0;
+    int m_FinishedProc = 0;
     // Helper function declarations
     void LoadScaledImageToLabel(const QString &imagePath, QLabel *label);
     void UpdateTotalProcessedFilesCount();

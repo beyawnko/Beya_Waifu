@@ -1294,7 +1294,6 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
     if(QFile::exists(Last_browsed_path))
     {
         QSettings *configIniRead = new QSettings(Last_browsed_path, QSettings::IniFormat);
-        // configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8")); // Removed for Qt6
         BrowserStartPath = configIniRead->value("/Path").toString();
         if(!QFile::exists(BrowserStartPath))BrowserStartPath = "";
     }
@@ -1305,7 +1304,6 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
     }
     QFile::remove(Last_browsed_path);
     QSettings *configIniWrite = new QSettings(Last_browsed_path, QSettings::IniFormat);
-    // configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8")); // Removed for Qt6
     configIniWrite->setValue("/Warning/EN", "Do not modify this file! It may cause the program to crash! If problems occur after the modification, delete this file and restart the program.");
     QFileInfo lastPath(Input_path_List.at(0));
     QString folder_lastPath = file_getFolderPath(lastPath);
@@ -2287,14 +2285,14 @@ void MainWindow::on_pushButton_MultipleOfFPS_VFI_MIN_clicked()
 
 void MainWindow::on_pushButton_TileSize_Add_RealCUGAN_clicked()
 {
-    if(!ui->spinBox_TileSize_RealCUGAN) return;
-    ui->spinBox_TileSize_RealCUGAN->setValue(AddTileSize_NCNNVulkan_Converter(ui->spinBox_TileSize_RealCUGAN->value()));
+    if(!ui->spinBox_TileSize_srmd) return;
+    ui->spinBox_TileSize_srmd->setValue(AddTileSize_NCNNVulkan_Converter(ui->spinBox_TileSize_srmd->value()));
 }
 
 void MainWindow::on_pushButton_TileSize_Minus_RealCUGAN_clicked()
 {
-    if(!ui->spinBox_TileSize_RealCUGAN) return;
-    ui->spinBox_TileSize_RealCUGAN->setValue(MinusTileSize_NCNNVulkan_Converter(ui->spinBox_TileSize_RealCUGAN->value()));
+    if(!ui->spinBox_TileSize_srmd) return;
+    ui->spinBox_TileSize_srmd->setValue(MinusTileSize_NCNNVulkan_Converter(ui->spinBox_TileSize_srmd->value()));
 }
 
 void MainWindow::on_comboBox_Model_RealCUGAN_currentIndexChanged(int index)
@@ -2414,22 +2412,22 @@ void MainWindow::PreLoad_Engines_Settings()
 {
     Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str = "";
     if(ui->comboBox_model_vulkan && ui->comboBox_model_vulkan->count() <= 0) Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_vulkan && ui->comboBox_GPUID_vulkan->count() <= 0) Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
+    if(ui->comboBox_model_vulkan && ui->comboBox_model_vulkan->count() <= 0) Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
     if(Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str != "") Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str = tr("Waifu2x-ncnn-Vulkan Preload Failed:") + "\n" + Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str;
 
-    Waifu2x_Converter_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_converter && ui->comboBox_model_converter->count() <= 0) Waifu2x_Converter_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
-    if(ui->comboBox_TargetProcessor_converter && ui->comboBox_TargetProcessor_converter->count() <= 0) Waifu2x_Converter_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
-    if(Waifu2x_Converter_PreLoad_Settings_Str != "") Waifu2x_Converter_PreLoad_Settings_Str = tr("Waifu2x-Converter-CPP Preload Failed:") + "\n" + Waifu2x_Converter_PreLoad_Settings_Str;
+    Waifu2xConverter_PreLoad_Settings_Str = "";
+    if(ui->comboBox_model_vulkan && ui->comboBox_model_vulkan->count() <= 0) Waifu2xConverter_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
+    if(ui->comboBox_TargetProcessor_converter && ui->comboBox_TargetProcessor_converter->count() <= 0) Waifu2xConverter_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
+    if(Waifu2xConverter_PreLoad_Settings_Str != "") Waifu2xConverter_PreLoad_Settings_Str = tr("Waifu2x-Converter-CPP Preload Failed:") + "\n" + Waifu2xConverter_PreLoad_Settings_Str;
 
     SRMD_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_srmd && ui->comboBox_model_srmd->count() <= 0) SRMD_NCNN_Vulkan_PreLoad_Settings_Str += tr("SRMD model list is empty.") + "\n";
+    if(ui->comboBox_Model_VFI && ui->comboBox_Model_VFI->count() <= 0) SRMD_NCNN_Vulkan_PreLoad_Settings_Str += tr("SRMD model list is empty.") + "\n";
     if(ui->comboBox_GPUID_srmd && ui->comboBox_GPUID_srmd->count() <= 0) SRMD_NCNN_Vulkan_PreLoad_Settings_Str += tr("SRMD GPU list is empty.") + "\n";
     if(SRMD_NCNN_Vulkan_PreLoad_Settings_Str != "") SRMD_NCNN_Vulkan_PreLoad_Settings_Str = tr("SRMD-ncnn-Vulkan Preload Failed:") + "\n" + SRMD_NCNN_Vulkan_PreLoad_Settings_Str;
 
     SRMD_CUDA_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_srmd_cuda && ui->comboBox_model_srmd_cuda->count() <= 0) SRMD_CUDA_PreLoad_Settings_Str += tr("SRMD model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_srmd_cuda && ui->comboBox_GPUID_srmd_cuda->count() <= 0) SRMD_CUDA_PreLoad_Settings_Str += tr("SRMD GPU list is empty.") + "\n";
+    if(ui->comboBox_Model_VFI_cuda && ui->comboBox_Model_VFI_cuda->count() <= 0) SRMD_CUDA_PreLoad_Settings_Str += tr("SRMD model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_srmd && ui->comboBox_GPUID_srmd->count() <= 0) SRMD_CUDA_PreLoad_Settings_Str += tr("SRMD GPU list is empty.") + "\n";
     if(SRMD_CUDA_PreLoad_Settings_Str != "") SRMD_CUDA_PreLoad_Settings_Str = tr("SRMD-CUDA Preload Failed:") + "\n" + SRMD_CUDA_PreLoad_Settings_Str;
 
     Anime4KCPP_PreLoad_Settings_Str = "";
@@ -2437,14 +2435,14 @@ void MainWindow::PreLoad_Engines_Settings()
     if(ui->checkBox_GPUMode_Anime4K && ui->checkBox_GPUMode_Anime4K->isChecked() && ui->comboBox_DeviceID_A4k && ui->comboBox_DeviceID_A4k->count() <= 0) Anime4KCPP_PreLoad_Settings_Str += tr("Anime4KCPP Device ID list is empty.") + "\n";
     if(Anime4KCPP_PreLoad_Settings_Str != "") Anime4KCPP_PreLoad_Settings_Str = tr("Anime4KCPP Preload Failed:") + "\n" + Anime4KCPP_PreLoad_Settings_Str;
 
-    Waifu2x_Caffe_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_caffe && ui->comboBox_model_caffe->count() <= 0) Waifu2x_Caffe_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_caffe && ui->comboBox_GPUID_caffe->count() <= 0) Waifu2x_Caffe_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
-    if(Waifu2x_Caffe_PreLoad_Settings_Str != "") Waifu2x_Caffe_PreLoad_Settings_Str = tr("Waifu2x-Caffe Preload Failed:") + "\n" + Waifu2x_Caffe_PreLoad_Settings_Str;
+    Waifu2xCaffe_PreLoad_Settings_Str = "";
+    if(ui->comboBox_Model_VFI && ui->comboBox_Model_VFI->count() <= 0) Waifu2xCaffe_PreLoad_Settings_Str += tr("Waifu2x model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_VFI && ui->comboBox_GPUID_VFI->count() <= 0) Waifu2xCaffe_PreLoad_Settings_Str += tr("Waifu2x GPU list is empty.") + "\n";
+    if(Waifu2xCaffe_PreLoad_Settings_Str != "") Waifu2xCaffe_PreLoad_Settings_Str = tr("Waifu2x-Caffe Preload Failed:") + "\n" + Waifu2xCaffe_PreLoad_Settings_Str;
 
     Realsr_NCNN_Vulkan_PreLoad_Settings_Str = ""; // This is for the older RealSR tab, not RealESRGAN
-    if(ui->comboBox_model_realsr && ui->comboBox_model_realsr->count() <= 0) Realsr_NCNN_Vulkan_PreLoad_Settings_Str += tr("Realsr model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_realsr && ui->comboBox_GPUID_realsr->count() <= 0) Realsr_NCNN_Vulkan_PreLoad_Settings_Str += tr("Realsr GPU list is empty.") + "\n";
+    if(ui->comboBox_model_vulkan && ui->comboBox_model_vulkan->count() <= 0) Realsr_NCNN_Vulkan_PreLoad_Settings_Str += tr("Realsr model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_srmd && ui->comboBox_GPUID_srmd->count() <= 0) Realsr_NCNN_Vulkan_PreLoad_Settings_Str += tr("Realsr GPU list is empty.") + "\n";
     if(Realsr_NCNN_Vulkan_PreLoad_Settings_Str != "") Realsr_NCNN_Vulkan_PreLoad_Settings_Str = tr("Realsr-ncnn-Vulkan Preload Failed:") + "\n" + Realsr_NCNN_Vulkan_PreLoad_Settings_Str;
 
     Realcugan_NCNN_Vulkan_PreLoad_Settings_Str = "";
@@ -2480,18 +2478,18 @@ void MainWindow::PreLoad_Engines_Settings()
 
 
     Rife_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_rife && ui->comboBox_model_rife->count() <= 0) Rife_NCNN_Vulkan_PreLoad_Settings_Str += tr("RIFE model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_rife && ui->comboBox_GPUID_rife->count() <= 0) Rife_NCNN_Vulkan_PreLoad_Settings_Str += tr("RIFE GPU list is empty.") + "\n";
+    if(ui->comboBox_Model_VFI && ui->comboBox_Model_VFI->count() <= 0) Rife_NCNN_Vulkan_PreLoad_Settings_Str += tr("RIFE model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_VFI && ui->comboBox_GPUID_VFI->count() <= 0) Rife_NCNN_Vulkan_PreLoad_Settings_Str += tr("RIFE GPU list is empty.") + "\n";
     if(Rife_NCNN_Vulkan_PreLoad_Settings_Str != "") Rife_NCNN_Vulkan_PreLoad_Settings_Str = tr("RIFE-ncnn-Vulkan Preload Failed:") + "\n" + Rife_NCNN_Vulkan_PreLoad_Settings_Str;
 
     Cain_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_cain && ui->comboBox_model_cain->count() <= 0) Cain_NCNN_Vulkan_PreLoad_Settings_Str += tr("CAIN model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_cain && ui->comboBox_GPUID_cain->count() <= 0) Cain_NCNN_Vulkan_PreLoad_Settings_Str += tr("CAIN GPU list is empty.") + "\n";
+    if(ui->comboBox_Model_VFI && ui->comboBox_Model_VFI->count() <= 0) Cain_NCNN_Vulkan_PreLoad_Settings_Str += tr("CAIN model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_VFI && ui->comboBox_GPUID_VFI->count() <= 0) Cain_NCNN_Vulkan_PreLoad_Settings_Str += tr("CAIN GPU list is empty.") + "\n";
     if(Cain_NCNN_Vulkan_PreLoad_Settings_Str != "") Cain_NCNN_Vulkan_PreLoad_Settings_Str = tr("CAIN-ncnn-Vulkan Preload Failed:") + "\n" + Cain_NCNN_Vulkan_PreLoad_Settings_Str;
 
     Dain_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    if(ui->comboBox_model_dain && ui->comboBox_model_dain->count() <= 0) Dain_NCNN_Vulkan_PreLoad_Settings_Str += tr("DAIN model list is empty.") + "\n";
-    if(ui->comboBox_GPUID_dain && ui->comboBox_GPUID_dain->count() <= 0) Dain_NCNN_Vulkan_PreLoad_Settings_Str += tr("DAIN GPU list is empty.") + "\n";
+    if(ui->comboBox_Model_VFI && ui->comboBox_Model_VFI->count() <= 0) Dain_NCNN_Vulkan_PreLoad_Settings_Str += tr("DAIN model list is empty.") + "\n";
+    if(ui->comboBox_GPUID_VFI && ui->comboBox_GPUID_VFI->count() <= 0) Dain_NCNN_Vulkan_PreLoad_Settings_Str += tr("DAIN GPU list is empty.") + "\n";
     if(Dain_NCNN_Vulkan_PreLoad_Settings_Str != "") Dain_NCNN_Vulkan_PreLoad_Settings_Str = tr("DAIN-ncnn-Vulkan Preload Failed:") + "\n" + Dain_NCNN_Vulkan_PreLoad_Settings_Str;
 }
 
@@ -2520,9 +2518,9 @@ bool MainWindow::Check_PreLoad_Settings()
     }
     else if(Engine==1 && (ui->tabWidget_Engines->currentIndex()!=3))
     {
-        if(Waifu2x_Converter_PreLoad_Settings_Str != "")
+        if(Waifu2xConverter_PreLoad_Settings_Str != "")
         {
-            ErrorMsg_PreLoad = Waifu2x_Converter_PreLoad_Settings_Str;
+            ErrorMsg_PreLoad = Waifu2xConverter_PreLoad_Settings_Str;
             isPreLoadError = true;
         }
     }
@@ -2544,9 +2542,9 @@ bool MainWindow::Check_PreLoad_Settings()
     }
     else if(Engine==4 && (ui->tabWidget_Engines->currentIndex()!=3))
     {
-        if(Waifu2x_Caffe_PreLoad_Settings_Str != "")
+        if(Waifu2xCaffe_PreLoad_Settings_Str != "")
         {
-            ErrorMsg_PreLoad = Waifu2x_Caffe_PreLoad_Settings_Str;
+            ErrorMsg_PreLoad = Waifu2xCaffe_PreLoad_Settings_Str;
             isPreLoadError = true;
         }
     }
@@ -2651,7 +2649,6 @@ int MainWindow::Table_Save_Current_Table_Filelist(QString Table_FileList_ini)
 {
     QSettings *configIniWrite = new QSettings(Table_FileList_ini, QSettings::IniFormat);
 #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
-    configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8"));
 #endif
     configIniWrite->setValue("/Warning/EN", "Do not modify this file! It may cause the program to crash! If problems occur after the modification, delete this file and restart the program.");
     configIniWrite->setValue("/Warning/CN", tr("Please do not modify this file, otherwise it may cause the program to crash! If problems occur after modification, please delete this file and restart the program.")); // Please do not modify this file, otherwise it may cause the program to crash! If problems occur after modification, please delete this file and restart the program.
@@ -2716,7 +2713,6 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
 {
     QSettings *configIniRead = new QSettings(Table_FileList_ini, QSettings::IniFormat);
 #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
-    configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
 #endif
 
     int rowCount_image = configIniRead->value("/numOfimage").toInt();
@@ -3219,21 +3215,21 @@ QString MainWindow::FrameInterpolation_ReadConfig(bool isUhdInput,int NumOfFrame
     QString ConfigStr = "";
     // ... (rest of the original function, ensure it's complete) ...
     if (ui->comboBox_Engine_VFI->currentIndex() == 0) { // RIFE
-        ConfigStr += " -m " + ui->comboBox_model_rife->currentText();
-        ConfigStr += " -g " + ui->comboBox_GPUID_rife->currentText();
+        ConfigStr += " -m " + ui->comboBox_Model_VFI->currentText();
+        ConfigStr += " -g " + ui->comboBox_GPUID_VFI->currentText();
         if (ui->checkBox_TTA_VFI->isChecked()) ConfigStr += " -x ";
         if (ui->checkBox_UHD_VFI->isChecked() && isUhdInput) ConfigStr += " -u ";
         // UI spin boxes for per-stage thread counts removed; use single value
         ConfigStr += " -j 1:1:1";
     } else if (ui->comboBox_Engine_VFI->currentIndex() == 1) { // CAIN
-        ConfigStr += " -m " + ui->comboBox_model_cain->currentText();
-        ConfigStr += " -g " + ui->comboBox_GPUID_cain->currentText();
+        ConfigStr += " -m " + ui->comboBox_Model_VFI->currentText();
+        ConfigStr += " -g " + ui->comboBox_GPUID_VFI->currentText();
         if (ui->checkBox_TTA_VFI->isChecked()) ConfigStr += " -x ";
         // CAIN might not have UHD mode or specific job string like RIFE, adjust as per CAIN's CLI
         // ConfigStr += " -j ..."; // If CAIN supports job/thread config
     } else if (ui->comboBox_Engine_VFI->currentIndex() == 2) { // DAIN
-        ConfigStr += " -m " + ui->comboBox_model_dain->currentText();
-        ConfigStr += " -g " + ui->comboBox_GPUID_dain->currentText();
+        ConfigStr += " -m " + ui->comboBox_Model_VFI->currentText();
+        ConfigStr += " -g " + ui->comboBox_GPUID_VFI->currentText();
         if (ui->checkBox_TTA_VFI->isChecked()) ConfigStr += " -x ";
         // DAIN specific params
         // Fallback: use default tile size since UI element is absent
