@@ -541,10 +541,6 @@ void MainWindow::Add_File_Folder_IncludeSubFolder_MainThread(QString Full_Path)
     Add_File_Folder_IncludeSubFolder(Full_Path);
 }
 
-void MainWindow::on_pushButton_CustRes_cancel_clicked()
-{
-    // TODO: Implement custom resolution cancel logic
-}
 
 MainWindow::~MainWindow()
 {
@@ -3506,43 +3502,6 @@ void MainWindow::on_pushButton_BlockSize_Add_W2xConverter_clicked(){}
 void MainWindow::on_pushButton_BlockSize_Minus_W2xConverter_clicked(){}
 void MainWindow::on_pushButton_Add_TileSize_SrmdNCNNVulkan_clicked(){}
 void MainWindow::on_pushButton_Minus_TileSize_SrmdNCNNVulkan_clicked(){}
-void MainWindow::on_pushButton_Add_TileSize_RealsrNCNNVulkan_clicked(){}
-void MainWindow::on_pushButton_Minus_TileSize_RealsrNCNNVulkan_clicked(){}
-void MainWindow::on_pushButton_DetectGPU_VFI_clicked(){}
-void MainWindow::on_lineEdit_MultiGPU_IDs_VFI_editingFinished(){}
-void MainWindow::on_checkBox_MultiGPU_VFI_stateChanged(int){}
-void MainWindow::on_groupBox_FrameInterpolation_clicked(){}
-void MainWindow::on_checkBox_isCompatible_RifeNcnnVulkan_clicked(){}
-void MainWindow::on_comboBox_Engine_VFI_currentIndexChanged(int){}
-void MainWindow::on_checkBox_isCompatible_CainNcnnVulkan_clicked(){}
-void MainWindow::on_pushButton_Verify_MultiGPU_VFI_clicked(){}
-void MainWindow::on_checkBox_EnableVFI_Home_clicked(){}
-void MainWindow::on_checkBox_MultiThread_VFI_stateChanged(int){}
-void MainWindow::on_checkBox_MultiThread_VFI_clicked(){}
-void MainWindow::on_checkBox_isCompatible_DainNcnnVulkan_clicked(){}
-void MainWindow::on_pushButton_SupportersList_clicked(){}
-void MainWindow::Table_EnableSorting(bool){}
-void MainWindow::Apply_CustRes_QAction_FileList_slot(){}
-void MainWindow::Cancel_CustRes_QAction_FileList_slot(){}
-void MainWindow::RemoveALL_image_slot(){}
-void MainWindow::RemoveALL_gif_slot(){}
-void MainWindow::RemoveALL_video_slot(){}
-void MainWindow::Add_progressBar_CompatibilityTest(){}
-void MainWindow::OpenSelectedFilesFolder_FilesList(){}
-void MainWindow::OpenSelectedFile_FilesList(){}
-void MainWindow::OpenOutputFolder(){}
-void MainWindow::Unable2Connect_RawGithubusercontentCom(){}
-void MainWindow::SystemTray_hide_self(){}
-void MainWindow::SystemTray_showNormal_self(){}
-void MainWindow::SystemTray_showDonate(){}
-void MainWindow::SystemTray_NewMessage(QString){}
-void MainWindow::EnableBackgroundMode_SystemTray(){}
-void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason){}
-void MainWindow::progressbar_setRange_min_max(int,int){}
-void MainWindow::progressbar_Add(){}
-void MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString(int,QString){}
-void MainWindow::Table_gif_ChangeStatus_rowNumInt_statusQString(int,QString){}
-void MainWindow::Table_video_ChangeStatus_rowNumInt_statusQString(int,QString){}
 void MainWindow::Waifu2x_Finished(){}
 void MainWindow::Waifu2x_Finished_manual(){}
 void MainWindow::TextBrowser_NewMessage(QString){}
