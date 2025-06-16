@@ -237,9 +237,9 @@ public:
     QString Realsr_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
     QString Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str = ""; // Corrected name
     QStringList Available_GPUID_Realsr_ncnn_vulkan; // Already present
-    int GPU_ID_RealsrNcnnVulkan_MultiGPU = 0; // Already present
-    QMap<QString,QString> RealsrNcnnVulkan_MultiGPU(); // Already present
-    void AddGPU_MultiGPU_RealsrNcnnVulkan(QString GPUID); // Already present
+    int GPU_ID_RealesrganNcnnVulkan_MultiGPU = 0; // Already present
+    QMap<QString,QString> RealesrganNcnnVulkan_MultiGPU(); // Already present
+    void AddGPU_MultiGPU_RealesrganNcnnVulkan(QString GPUID); // Already present
 
 
     // Anime4K
@@ -339,7 +339,7 @@ public:
     QList<QProcess*> ProcList_RealESRGAN;
     QStringList Available_GPUID_RealESRGAN_ncnn_vulkan;
     QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_RealesrganNcnnVulkan;
-    QMutex MultiGPU_QMutex_RealsrNcnnVulkan; // Already present
+    QMutex MultiGPU_QMutex_RealesrganNcnnVulkan; // Already present
     QMutex MultiGPU_QMutex_RealesrganNcnnVulkan; // Required
     void RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingAlphaChannel);
     void RealESRGAN_NCNN_Vulkan_GIF(int rowNum);
@@ -663,12 +663,12 @@ public:
     QPushButton *pushButton_Add_TileSize_RealsrNCNNVulkan;
     QPushButton *pushButton_Minus_TileSize_RealsrNCNNVulkan;
     QCheckBox *checkBox_TTA_RealsrNCNNVulkan;
-    QCheckBox *checkBox_MultiGPU_RealsrNcnnVulkan;
-    QGroupBox *groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan;
-    QComboBox *comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan;
-    QCheckBox *checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan;
-    QSpinBox *spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan;
-    QPushButton *pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan;
+    QCheckBox *checkBox_MultiGPU_RealesrganNcnnVulkan;
+    QGroupBox *groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan;
+    QComboBox *comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan;
+    QCheckBox *checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan;
+    QSpinBox *spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan;
+    QPushButton *pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan;
 
 
 public slots: // Changed from 'slots:' for clarity, Qt treats them as public slots by default
@@ -855,11 +855,11 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     void on_comboBox_Model_RealsrNCNNVulkan_currentIndexChanged(int index);
     void on_pushButton_Add_TileSize_RealsrNCNNVulkan_clicked();
     void on_pushButton_Minus_TileSize_RealsrNCNNVulkan_clicked();
-    void on_checkBox_MultiGPU_RealsrNcnnVulkan_stateChanged(int arg1);
-    void on_comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan_currentIndexChanged(int index);
-    void on_checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan_clicked();
-    void on_spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan_valueChanged(int arg1);
-    void on_pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan_clicked();
+    void on_checkBox_MultiGPU_RealesrganNcnnVulkan_stateChanged(int arg1);
+    void on_comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan_currentIndexChanged(int index);
+    void on_checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan_clicked();
+    void on_spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan_valueChanged(int arg1);
+    void on_pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan_clicked();
     void RealESRGAN_NCNN_Vulkan_finished(int exitCode, QProcess::ExitStatus exitStatus);
     void RealESRGAN_NCNN_Vulkan_errorOccurred(QProcess::ProcessError error);
     void RealESRGAN_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess::ExitStatus exitStatus);

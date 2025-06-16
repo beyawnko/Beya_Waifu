@@ -7066,7 +7066,7 @@ Smaller Split size means waifu2x will use less GPU memory and run slower.</strin
                 </item>
                </layout>
               </widget>
-              <widget class="QWidget" name="tab_RealsrNcnnVulkan">
+              <widget class="QWidget" name="tab_RealesrganNcnnVulkan">
                <attribute name="title">
                 <string notr="true">RealSR-ncnn-vulkan</string>
                </attribute>
@@ -7254,7 +7254,7 @@ padding:10px;
                    </widget>
                   </item>
                   <item>
-                   <widget class="QCheckBox" name="checkBox_MultiGPU_RealsrNcnnVulkan">
+                   <widget class="QCheckBox" name="checkBox_MultiGPU_RealesrganNcnnVulkan">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -7305,7 +7305,7 @@ the number of threads must &gt;= the number of GPUs.
                    </widget>
                   </item>
                   <item>
-                   <widget class="QFrame" name="frame_TileSize_RealsrNcnnVulkan">
+                   <widget class="QFrame" name="frame_TileSize_RealesrganNcnnVulkan">
                     <property name="enabled">
                      <bool>true</bool>
                     </property>
@@ -7408,7 +7408,7 @@ Smaller tile size means Realsr will use less GPU memory and run slower.</string>
                 <item row="6" column="0" colspan="2">
                  <layout class="QHBoxLayout" name="horizontalLayout_34" stretch="1,2">
                   <item>
-                   <widget class="QGroupBox" name="groupBox_GPUSettings_MultiGPU_RealsrNcnnVulkan">
+                   <widget class="QGroupBox" name="groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan">
                     <property name="enabled">
                      <bool>false</bool>
                     </property>
@@ -7447,7 +7447,7 @@ Smaller tile size means Realsr will use less GPU memory and run slower.</string>
                       <number>6</number>
                      </property>
                      <item row="0" column="2">
-                      <widget class="QCheckBox" name="checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan">
+                      <widget class="QCheckBox" name="checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                          <horstretch>0</horstretch>
@@ -7495,7 +7495,7 @@ Smaller tile size means Realsr will use less GPU memory and run slower.</string>
                       </widget>
                      </item>
                      <item row="0" column="6">
-                      <widget class="QPushButton" name="pushButton_ShowMultiGPUSettings_RealsrNcnnVulkan">
+                      <widget class="QPushButton" name="pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan">
                        <property name="toolTip">
                         <string>Show current Multi-GPU settings.</string>
                        </property>
@@ -7535,14 +7535,14 @@ padding:10px;
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan">
+                      <widget class="QComboBox" name="comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan">
                        <property name="currentText">
                         <string notr="true"/>
                        </property>
                       </widget>
                      </item>
                      <item row="0" column="5">
-                      <widget class="QSpinBox" name="spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan">
+                      <widget class="QSpinBox" name="spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan">
                        <property name="minimum">
                         <number>32</number>
                        </property>
