@@ -732,6 +732,8 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     void on_pushButton_Patreon_clicked();
     void on_pushButton_SupportersList_clicked();
 
+    void on_pushButton_CustRes_cancel_clicked();
+
     // RealCUGAN Slots
     void on_pushButton_DetectGPU_RealCUGAN_clicked();
     void on_checkBox_MultiGPU_RealCUGAN_stateChanged(int arg1);

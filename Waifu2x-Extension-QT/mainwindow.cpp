@@ -541,6 +541,11 @@ void MainWindow::Add_File_Folder_IncludeSubFolder_MainThread(QString Full_Path)
     Add_File_Folder_IncludeSubFolder(Full_Path);
 }
 
+void MainWindow::on_pushButton_CustRes_cancel_clicked()
+{
+    // TODO: Implement custom resolution cancel logic
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;

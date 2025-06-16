@@ -1,6 +1,15 @@
 #!/bin/bash
 set -e # Exit immediately if a command exits with a non-zero status.
 
+# Test PySide6 import
+echo "Testing PySide6 import..."
+python3 -c "import PySide6"
+if [ $? -ne 0 ]; then
+    echo "Error: PySide6 import failed. Please ensure PySide6 is installed and accessible."
+    exit 1
+fi
+echo "PySide6 import test successful."
+
 # Ensure Qt tools are in PATH (usually are if installed via apt)
 # Configure Qt toolchain location
 QTDIR=/usr/lib/qt6
