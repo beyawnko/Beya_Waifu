@@ -37,6 +37,9 @@ $QMAKE_EXECUTABLE Waifu2x-Extension-QT.pro -spec linux-g++ CONFIG+=debug
 echo "Cleaning specific build artifacts..."
 rm -f shaders/liquidglass.frag.qsb Beya_Waifu
 
+# Manually compile the liquidglass shader
+"$QTDIR/bin/qsb" Waifu2x-Extension-QT/shaders/liquidglass.frag -o Waifu2x-Extension-QT/shaders/liquidglass.frag.qsb
+
 # Build the project and redirect all output (stdout and stderr) to WinBuildErrorLog.md
 # Using script to tee output to file and stdout
 (make -j$(nproc) 2>&1) | tee ../WinBuildErrorLog.md
