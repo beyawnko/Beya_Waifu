@@ -3507,6 +3507,7 @@ void MainWindow::Read_urls(QList<QUrl> urls)
     // the behaviour used when adding files through the "Browse" button
     // so the UI remains consistent.
     ui_tableViews_setUpdatesEnabled(false);
+}
 void MainWindow::CurrentFileProgress_Stop(){}
 void MainWindow::CurrentFileProgress_progressbar_Add(){}
 void MainWindow::CurrentFileProgress_progressbar_Add_SegmentDuration(int){}
