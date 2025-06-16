@@ -34,7 +34,7 @@ void MainWindow::on_pushButton_CheckUpdate_clicked()
 Automatic update check:
 When the software starts, it runs in a separate thread to detect updates. If there is an update, a pop-up window will be displayed.
 */
-int MainWindow::CheckUpadte_Auto()
+int MainWindow::CheckUpdate_Auto()
 {
     bool isGiteeBanned = ui->checkBox_BanGitee->isChecked();
     //============
@@ -85,7 +85,7 @@ int MainWindow::CheckUpadte_Auto()
         Latest_Ver = Latest_Ver.trimmed();
         if(Latest_Ver!=Current_Ver&&Latest_Ver!="")
         {
-            emit Send_CheckUpadte_NewUpdate(Latest_Ver,Change_log);
+            emit Send_CheckUpdate_NewUpdate(Latest_Ver, Change_log);
         }
         else
         {
@@ -125,7 +125,7 @@ int MainWindow::CheckUpadte_Auto()
             Latest_Ver = Latest_Ver.trimmed();
             if(Latest_Ver!=Current_Ver&&Latest_Ver!="")
             {
-                emit Send_CheckUpadte_NewUpdate(Latest_Ver,Change_log);
+                emit Send_CheckUpdate_NewUpdate(Latest_Ver, Change_log);
             }
             else
             {
@@ -151,7 +151,7 @@ int MainWindow::CheckUpadte_Auto()
 /*
 Automatic update pop-up window
 */
-int MainWindow::CheckUpadte_NewUpdate(QString update_str,QString Change_log)
+int MainWindow::CheckUpdate_NewUpdate(QString update_str, QString Change_log)
 {
     QString UpdateType=ui->comboBox_UpdateChannel->currentText();
     //======
