@@ -2,8 +2,12 @@
 # Copyright (C) 2025  beyawnko
 set -e
 
-# Ensure submodules are present
-git submodule update --init --recursive
+# Ensure submodules are present if git is available
+if command -v git >/dev/null 2>&1; then
+    git submodule update --init --recursive
+else
+    echo "git not found; skipping submodule update"
+fi
 
 # Install glslangValidator if missing
 if ! command -v glslangValidator >/dev/null 2>&1; then
@@ -14,8 +18,12 @@ if ! command -v glslangValidator >/dev/null 2>&1; then
     fi
 fi
 
-# Install required Python packages for tests
-pip install --user PySide6 Pillow
+# Install required Python packages for tests if pip is available
+if command -v pip >/dev/null 2>&1; then
+    pip install --user PySide6 Pillow
+else
+    echo "pip not found; skipping Python package installation"
+fi
 
 # Determine available make tool
 MAKE=make

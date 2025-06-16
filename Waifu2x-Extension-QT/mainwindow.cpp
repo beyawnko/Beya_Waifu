@@ -2492,7 +2492,10 @@ void MainWindow::PreLoad_Engines_Settings()
     if(Dain_NCNN_Vulkan_PreLoad_Settings_Str != "") Dain_NCNN_Vulkan_PreLoad_Settings_Str = tr("DAIN-ncnn-Vulkan Preload Failed:") + "\n" + Dain_NCNN_Vulkan_PreLoad_Settings_Str;
 }
 
-void MainWindow::Waifu2x(){}
+int MainWindow::Waifu2x()
+{
+    return 0;
+}
 
 bool MainWindow::Check_PreLoad_Settings()
 {
@@ -3989,8 +3992,10 @@ QStringList MainWindow::RealESRGAN_NCNN_Vulkan_PrepareArguments(
     return args;
 }
 
-int MainWindow::CustRes_CancelCustRes(){ return 0; }
-int MainWindow::Waifu2x(){ return 0;}
+int MainWindow::CustRes_CancelCustRes()
+{
+    return 0;
+}
 int MainWindow::Waifu2xMainThread(){ return 0; }
 int MainWindow::Waifu2x_NCNN_Vulkan_Image(int rowNum, bool)
 {
