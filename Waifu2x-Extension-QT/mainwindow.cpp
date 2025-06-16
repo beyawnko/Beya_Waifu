@@ -28,6 +28,9 @@
 #include <QEventLoop>
 #include <QTimer>
 #include <QSettings>
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+#include <QTextCodec>
+#endif
 #include <QFile>
 #include <QPalette>
 #include <QColor>
@@ -2647,7 +2650,9 @@ void MainWindow::APNG_Main(int rowNum, bool isFromImageList)
 int MainWindow::Table_Save_Current_Table_Filelist(QString Table_FileList_ini)
 {
     QSettings *configIniWrite = new QSettings(Table_FileList_ini, QSettings::IniFormat);
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
     configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8"));
+#endif
     configIniWrite->setValue("/Warning/EN", "Do not modify this file! It may cause the program to crash! If problems occur after the modification, delete this file and restart the program.");
     configIniWrite->setValue("/Warning/CN", tr("Please do not modify this file, otherwise it may cause the program to crash! If problems occur after modification, please delete this file and restart the program.")); // Please do not modify this file, otherwise it may cause the program to crash! If problems occur after modification, please delete this file and restart the program.
 
@@ -2710,7 +2715,9 @@ int MainWindow::Table_Save_Current_Table_Filelist(QString Table_FileList_ini)
 int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
 {
     QSettings *configIniRead = new QSettings(Table_FileList_ini, QSettings::IniFormat);
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
     configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
+#endif
 
     int rowCount_image = configIniRead->value("/numOfimage").toInt();
     for(int i=0;i<rowCount_image;i++)
