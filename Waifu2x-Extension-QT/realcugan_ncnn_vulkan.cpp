@@ -171,7 +171,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
     // --- Overall Settings & Preparations ---
     Realcugan_NCNN_Vulkan_ReadSettings(); // Load general UI settings
     Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(0); // Prepare for batch frame processing (GPU settings)
-    int targetScale = ui->spinBox_scaleRatio_video->value();
+    int targetScale = ui->doubleSpinBox_ScaleRatio_video->value();
     if (targetScale <= 0) targetScale = 1;
 
     // Get video duration and determine segment length (e.g., from UI or fixed)
@@ -461,7 +461,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
     Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(0); // Sets m_realcugan_gpuJobConfig_temp
 
     // 4. Determine Target Scale
-    int targetScale = ui->spinBox_scaleRatio_video->value();
+    int targetScale = ui->doubleSpinBox_ScaleRatio_video->value();
     if (targetScale <= 0) targetScale = 1;
 
     // --- AI Processing using Directory-level calls ---
@@ -1573,7 +1573,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_GIF(int rowNum)
     Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(0); // Sets m_realcugan_gpuJobConfig_temp
 
     // 4. Determine Target Scale
-    int targetScale = ui->spinBox_scaleRatio_gif->value();
+    int targetScale = ui->doubleSpinBox_ScaleRatio_gif->value();
     if (targetScale <= 0) targetScale = 1;
 
     // --- Alpha Preparation and RGB frame extraction ---

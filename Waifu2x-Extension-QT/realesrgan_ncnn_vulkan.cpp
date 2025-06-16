@@ -568,7 +568,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_GIF(int rowNum) {
     RealESRGAN_NCNN_Vulkan_ReadSettings();
     RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(0); // Sets m_realesrgan_gpuJobConfig_temp
 
-    int targetScale = ui->spinBox_scaleRatio_gif->value();
+    int targetScale = ui->doubleSpinBox_ScaleRatio_gif->value();
     if (targetScale <= 0) targetScale = m_realesrgan_ModelNativeScale; // Fallback to model's native if UI is 0 or less
 
     // --- Alpha Preparation ---
@@ -706,7 +706,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int rowNum) {
 
     RealESRGAN_NCNN_Vulkan_ReadSettings();
     RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(0); // Sets m_realesrgan_gpuJobConfig_temp
-    int targetScale = ui->spinBox_scaleRatio_video->value();
+    int targetScale = ui->doubleSpinBox_ScaleRatio_video->value();
     if (targetScale <= 0) targetScale = m_realesrgan_ModelNativeScale;
 
     // --- AI Processing (Directory) ---
@@ -772,7 +772,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video_BySegment(int rowNum) {
     QString sourceFileNameNoExt = sourceFileInfo.completeBaseName();
     RealESRGAN_NCNN_Vulkan_ReadSettings();
     RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(0);
-    int targetScale = ui->spinBox_scaleRatio_video->value();
+    int targetScale = ui->doubleSpinBox_ScaleRatio_video->value();
     if (targetScale <= 0) targetScale = m_realesrgan_ModelNativeScale;
     int totalDurationSec = video_get_duration(sourceFileFullPath);
     int segmentDurationSec = ui->spinBox_SegmentDuration->value();

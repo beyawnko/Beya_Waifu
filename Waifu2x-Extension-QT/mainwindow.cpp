@@ -2505,12 +2505,12 @@ bool MainWindow::Check_PreLoad_Settings()
     bool isPreLoadError = false;
     QString ErrorMsg_PreLoad = "";
     int Engine = 0;
-    if(ui->tabWidget_FileType->currentIndex()==0) Engine = ui->comboBox_Engine_Image->currentIndex();
-    if(ui->tabWidget_FileType->currentIndex()==1) Engine = ui->comboBox_Engine_GIF->currentIndex();
-    if(ui->tabWidget_FileType->currentIndex()==2) Engine = ui->comboBox_Engine_Video->currentIndex();
-    if(ui->tabWidget_FileType->currentIndex()==3) Engine = ui->comboBox_Engine_VFI->currentIndex();
+    if(ui->tabWidget_Engines->currentIndex()==0) Engine = ui->comboBox_Engine_Image->currentIndex();
+    if(ui->tabWidget_Engines->currentIndex()==1) Engine = ui->comboBox_Engine_GIF->currentIndex();
+    if(ui->tabWidget_Engines->currentIndex()==2) Engine = ui->comboBox_Engine_Video->currentIndex();
+    if(ui->tabWidget_Engines->currentIndex()==3) Engine = ui->comboBox_Engine_VFI->currentIndex();
 
-    if(Engine==0 && (ui->tabWidget_FileType->currentIndex()!=3))
+    if(Engine==0 && (ui->tabWidget_Engines->currentIndex()!=3))
     {
         if(Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str != "")
         {
@@ -2518,7 +2518,7 @@ bool MainWindow::Check_PreLoad_Settings()
             isPreLoadError = true;
         }
     }
-    else if(Engine==1 && (ui->tabWidget_FileType->currentIndex()!=3))
+    else if(Engine==1 && (ui->tabWidget_Engines->currentIndex()!=3))
     {
         if(Waifu2x_Converter_PreLoad_Settings_Str != "")
         {
@@ -2526,7 +2526,7 @@ bool MainWindow::Check_PreLoad_Settings()
             isPreLoadError = true;
         }
     }
-    else if(Engine==2 && (ui->tabWidget_FileType->currentIndex()!=3))
+    else if(Engine==2 && (ui->tabWidget_Engines->currentIndex()!=3))
     {
         if(SRMD_NCNN_Vulkan_PreLoad_Settings_Str != "")
         {
@@ -2534,7 +2534,7 @@ bool MainWindow::Check_PreLoad_Settings()
             isPreLoadError = true;
         }
     }
-    else if(Engine==3 && (ui->tabWidget_FileType->currentIndex()!=3))
+    else if(Engine==3 && (ui->tabWidget_Engines->currentIndex()!=3))
     {
         if(Anime4KCPP_PreLoad_Settings_Str != "")
         {
@@ -2542,7 +2542,7 @@ bool MainWindow::Check_PreLoad_Settings()
             isPreLoadError = true;
         }
     }
-    else if(Engine==4 && (ui->tabWidget_FileType->currentIndex()!=3))
+    else if(Engine==4 && (ui->tabWidget_Engines->currentIndex()!=3))
     {
         if(Waifu2x_Caffe_PreLoad_Settings_Str != "")
         {
@@ -2550,7 +2550,7 @@ bool MainWindow::Check_PreLoad_Settings()
             isPreLoadError = true;
         }
     }
-    else if(Engine==5 && (ui->tabWidget_FileType->currentIndex()!=3))
+    else if(Engine==5 && (ui->tabWidget_Engines->currentIndex()!=3))
     {
         if(Realsr_NCNN_Vulkan_PreLoad_Settings_Str != "")
         {
@@ -2558,7 +2558,7 @@ bool MainWindow::Check_PreLoad_Settings()
             isPreLoadError = true;
         }
     }
-    else if(Engine==6 && (ui->tabWidget_FileType->currentIndex()!=3))
+    else if(Engine==6 && (ui->tabWidget_Engines->currentIndex()!=3))
     {
         if(SRMD_CUDA_PreLoad_Settings_Str != "")
         {
@@ -2582,7 +2582,7 @@ bool MainWindow::Check_PreLoad_Settings()
             isPreLoadError = true;
         }
     }
-    else if(Engine==0 && (ui->tabWidget_FileType->currentIndex()==3))
+    else if(Engine==0 && (ui->tabWidget_Engines->currentIndex()==3))
     {
         if(Rife_NCNN_Vulkan_PreLoad_Settings_Str != "")
         {
@@ -2590,7 +2590,7 @@ bool MainWindow::Check_PreLoad_Settings()
             isPreLoadError = true;
         }
     }
-    else if(Engine==1 && (ui->tabWidget_FileType->currentIndex()==3))
+    else if(Engine==1 && (ui->tabWidget_Engines->currentIndex()==3))
     {
         if(Cain_NCNN_Vulkan_PreLoad_Settings_Str != "")
         {
@@ -2598,7 +2598,7 @@ bool MainWindow::Check_PreLoad_Settings()
             isPreLoadError = true;
         }
     }
-    else if(Engine==2 && (ui->tabWidget_FileType->currentIndex()==3))
+    else if(Engine==2 && (ui->tabWidget_Engines->currentIndex()==3))
     {
         if(Dain_NCNN_Vulkan_PreLoad_Settings_Str != "")
         {
@@ -2630,8 +2630,8 @@ void MainWindow::APNG_Main(int rowNum, bool isFromImageList)
     QStringList framesFileName_qStrList; /* DUMMY placeholder for original logic */
 
     int Engine = 0;
-    if(ui->tabWidget_FileType->currentIndex()==0) Engine = ui->comboBox_Engine_Image->currentIndex();
-    if(ui->tabWidget_FileType->currentIndex()==1) Engine = ui->comboBox_Engine_GIF->currentIndex();
+    if(ui->tabWidget_Engines->currentIndex()==0) Engine = ui->comboBox_Engine_Image->currentIndex();
+    if(ui->tabWidget_Engines->currentIndex()==1) Engine = ui->comboBox_Engine_GIF->currentIndex();
 
     switch(Engine)
     {
@@ -2985,8 +2985,8 @@ int MainWindow::CustRes_SetCustRes()
         return 1;
     }
 
-    int Height_new = ui->spinBox_height_custRes->value();
-    int Width_new = ui->spinBox_width_custRes->value();
+    int Height_new = ui->spinBox_CustRes_height->value();
+    int Width_new = ui->spinBox_CustRes_width->value();
     QString New_Res_str = QString::number(Width_new)+"x"+QString::number(Height_new);
 
     if(EnableApply2All_CustRes)
@@ -3222,8 +3222,9 @@ QString MainWindow::FrameInterpolation_ReadConfig(bool isUhdInput,int NumOfFrame
         ConfigStr += " -m " + ui->comboBox_model_rife->currentText();
         ConfigStr += " -g " + ui->comboBox_GPUID_rife->currentText();
         if (ui->checkBox_TTA_VFI->isChecked()) ConfigStr += " -x ";
-        if (ui->checkBox_UHDMode_VFI->isChecked() && isUhdInput) ConfigStr += " -u ";
-        ConfigStr += " -j " + QString::number(ui->spinBox_ThreadNum0_VFI->value()) + ":" + QString::number(ui->spinBox_ThreadNum1_VFI->value()) + ":" + QString::number(ui->spinBox_ThreadNum2_VFI->value());
+        if (ui->checkBox_UHD_VFI->isChecked() && isUhdInput) ConfigStr += " -u ";
+        // UI spin boxes for per-stage thread counts removed; use single value
+        ConfigStr += " -j 1:1:1";
     } else if (ui->comboBox_Engine_VFI->currentIndex() == 1) { // CAIN
         ConfigStr += " -m " + ui->comboBox_model_cain->currentText();
         ConfigStr += " -g " + ui->comboBox_GPUID_cain->currentText();
@@ -3235,7 +3236,8 @@ QString MainWindow::FrameInterpolation_ReadConfig(bool isUhdInput,int NumOfFrame
         ConfigStr += " -g " + ui->comboBox_GPUID_dain->currentText();
         if (ui->checkBox_TTA_VFI->isChecked()) ConfigStr += " -x ";
         // DAIN specific params
-        ConfigStr += " -t " + QString::number(ui->spinBox_TileSize_dain->value());
+        // Fallback: use default tile size since UI element is absent
+        ConfigStr += " -t 0";
         if (NumOfFrames > 0) { // Assuming NumOfFrames is passed correctly for DAIN's -N equivalent
              // ConfigStr += " -N " + QString::number(NumOfFrames); // DAIN might not use -N, check its CLI
         }
@@ -3270,18 +3272,8 @@ bool MainWindow::Video_AutoSkip_CustRes(int rowNum)
     int original_width = metadata.width;
     int original_height = metadata.height;
 
-    if(original_width > original_height) // Landscape
-    {
-        if(ui->checkBox_AutoSkip_CustRes_lanscape->isChecked()) return true;
-    }
-    if(original_width < original_height) // Portrait
-    {
-        if(ui->checkBox_AutoSkip_CustRes_portrait->isChecked()) return true;
-    }
-    if(original_width == original_height) // Square
-    {
-        if(ui->checkBox_AutoSkip_CustRes_square->isChecked()) return true;
-    }
+    if(ui->checkBox_AutoSkip_CustomRes && ui->checkBox_AutoSkip_CustomRes->isChecked())
+        return true;
     return false;
 }
 
