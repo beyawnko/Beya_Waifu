@@ -85,19 +85,19 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/settings/checkBox_EnableMultiGPU_Waifu2xCaffe", ui->checkBox_EnableMultiGPU_Waifu2xCaffe->isChecked());
     configIniWrite->setValue("/settings/lineEdit_MultiGPUInfo_Waifu2xCaffe", ui->lineEdit_MultiGPUInfo_Waifu2xCaffe->text());
     //===
-    configIniWrite->setValue("/settings/checkBox_TTA_RealsrNCNNVulkan", ui->checkBox_TTA_RealsrNCNNVulkan->isChecked());
-    configIniWrite->setValue("/settings/comboBox_Model_RealsrNCNNVulkan", ui->comboBox_Model_RealsrNCNNVulkan->currentIndex());
-    configIniWrite->setValue("/settings/spinBox_TileSize_RealsrNCNNVulkan", ui->spinBox_TileSize_RealsrNCNNVulkan->value());
+    configIniWrite->setValue("/settings/checkBox_TTA_RealsrNCNNVulkan", checkBox_TTA_RealsrNCNNVulkan->isChecked());
+    configIniWrite->setValue("/settings/comboBox_Model_RealsrNCNNVulkan", comboBox_Model_RealsrNCNNVulkan->currentIndex());
+    configIniWrite->setValue("/settings/spinBox_TileSize_RealsrNCNNVulkan", spinBox_TileSize_RealsrNCNNVulkan->value());
     //GPU ID List
     configIniWrite->setValue("/settings/CurrentGPUID_Waifu2xNCNNVulkan", ui->comboBox_GPUID->currentIndex());
     configIniWrite->setValue("/settings/Available_GPUID_Waifu2xNCNNVulkan", Available_GPUID_Waifu2xNcnnVulkan);
     configIniWrite->setValue("/settings/GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan", QVariant::fromValue(GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan));
     configIniWrite->setValue("/settings/checkBox_MultiGPU_Waifu2xNCNNVulkan", ui->checkBox_MultiGPU_Waifu2xNCNNVulkan->isChecked());
     //==
-    configIniWrite->setValue("/settings/comboBox_GPUID_RealsrNCNNVulkan", ui->comboBox_GPUID_RealsrNCNNVulkan->currentIndex());
+    configIniWrite->setValue("/settings/comboBox_GPUID_RealsrNCNNVulkan", comboBox_GPUID_RealsrNCNNVulkan->currentIndex());
     configIniWrite->setValue("/settings/Available_GPUID_Realsr_ncnn_vulkan", Available_GPUID_Realsr_ncnn_vulkan);
     configIniWrite->setValue("/settings/GPUIDs_List_MultiGPU_RealsrganNcnnVulkan", QVariant::fromValue(GPUIDs_List_MultiGPU_RealesrganNcnnVulkan));
-    configIniWrite->setValue("/settings/checkBox_MultiGPU_RealsrNcnnVulkan", ui->checkBox_MultiGPU_RealsrNcnnVulkan->isChecked());
+    configIniWrite->setValue("/settings/checkBox_MultiGPU_RealsrNcnnVulkan", checkBox_MultiGPU_RealsrNcnnVulkan->isChecked());
     //==
     configIniWrite->setValue("/settings/comboBox_TargetProcessor_converter", ui->comboBox_TargetProcessor_converter->currentIndex());
     configIniWrite->setValue("/settings/Available_ProcessorList_converter", Available_ProcessorList_converter);
@@ -359,9 +359,9 @@ int MainWindow::Settings_Read_Apply()
     ui->spinBox_TileSize_srmd->setValue(Settings_Read_value("/settings/TileSize_SRMD").toInt());
     ui->comboBox_version_Waifu2xNCNNVulkan->setCurrentIndex(Settings_Read_value("/settings/Version_Waifu2xNCNNVulkan").toInt());
     //===
-    ui->checkBox_TTA_RealsrNCNNVulkan->setChecked(Settings_Read_value("/settings/checkBox_TTA_RealsrNCNNVulkan").toBool());
-    ui->comboBox_Model_RealsrNCNNVulkan->setCurrentIndex(Settings_Read_value("/settings/comboBox_Model_RealsrNCNNVulkan").toInt());
-    ui->spinBox_TileSize_RealsrNCNNVulkan->setValue(Settings_Read_value("/settings/spinBox_TileSize_RealsrNCNNVulkan").toInt());
+    checkBox_TTA_RealsrNCNNVulkan->setChecked(Settings_Read_value("/settings/checkBox_TTA_RealsrNCNNVulkan").toBool());
+    comboBox_Model_RealsrNCNNVulkan->setCurrentIndex(Settings_Read_value("/settings/comboBox_Model_RealsrNCNNVulkan").toInt());
+    spinBox_TileSize_RealsrNCNNVulkan->setValue(Settings_Read_value("/settings/spinBox_TileSize_RealsrNCNNVulkan").toInt());
     //===
     ui->checkBox_TTA_Waifu2xCaffe->setChecked(Settings_Read_value("/settings/TTA_Waifu2xCaffe").toBool());
     ui->comboBox_Model_2D_Waifu2xCaffe->setCurrentIndex(Settings_Read_value("/settings/Model_2D_Waifu2xCaffe").toInt());
@@ -389,16 +389,16 @@ int MainWindow::Settings_Read_Apply()
     //Realsr_ncnn_vulkan
     Available_GPUID_Realsr_ncnn_vulkan = Settings_Read_value("/settings/Available_GPUID_Realsr_ncnn_vulkan").toStringList();
     Realsr_ncnn_vulkan_DetectGPU_finished();
-    if(ui->comboBox_GPUID_RealsrNCNNVulkan) ui->comboBox_GPUID_RealsrNCNNVulkan->setCurrentIndex(Settings_Read_value("/settings/comboBox_GPUID_RealsrNCNNVulkan").toInt());
+    if(comboBox_GPUID_RealsrNCNNVulkan) comboBox_GPUID_RealsrNCNNVulkan->setCurrentIndex(Settings_Read_value("/settings/comboBox_GPUID_RealsrNCNNVulkan").toInt());
     // Load multi-GPU settings
     GPUIDs_List_MultiGPU_RealesrganNcnnVulkan = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_RealsrganNcnnVulkan").value<QList<QMap<QString, QString>> >();
-    if(GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan)
+    if(GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.isEmpty()==false && comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan)
     {
-        QMap<QString,QString> GPUInfo_RealsrNcnnVulkan = GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.at(ui->comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->currentIndex());
-        if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan) ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setChecked(GPUInfo_RealsrNcnnVulkan["isEnabled"] == "true");
-        if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan) ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setValue(GPUInfo_RealsrNcnnVulkan["TileSize"].toInt());
+        QMap<QString,QString> GPUInfo_RealsrNcnnVulkan = GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.at(comboBox_GPUIDs_MultiGPU_RealsrNcnnVulkan->currentIndex());
+        if(checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan) checkBox_isEnable_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setChecked(GPUInfo_RealsrNcnnVulkan["isEnabled"] == "true");
+        if(spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan) spinBox_TileSize_CurrentGPU_MultiGPU_RealsrNcnnVulkan->setValue(GPUInfo_RealsrNcnnVulkan["TileSize"].toInt());
     }
-    if(ui->checkBox_MultiGPU_RealsrNcnnVulkan) ui->checkBox_MultiGPU_RealsrNcnnVulkan->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_RealsrNcnnVulkan").toBool());
+    if(checkBox_MultiGPU_RealsrNcnnVulkan) checkBox_MultiGPU_RealsrNcnnVulkan->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_RealsrNcnnVulkan").toBool());
     //Waifu2x-Converter
     Available_ProcessorList_converter = Settings_Read_value("/settings/Available_ProcessorList_converter").toStringList();
     Waifu2x_DumpProcessorList_converter_finished();
@@ -649,7 +649,7 @@ int MainWindow::Settings_Read_Apply()
     ui->checkBox_isCompatible_RifeNcnnVulkan->setChecked(isCompatible_RifeNcnnVulkan);
     ui->checkBox_isCompatible_CainNcnnVulkan->setChecked(isCompatible_CainNcnnVulkan);
     ui->checkBox_isCompatible_DainNcnnVulkan->setChecked(isCompatible_DainNcnnVulkan);
-    if(ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan) ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->setChecked(isCompatible_RealCUGAN_NCNN_Vulkan);
+    if(checkBox_isCompatible_RealCUGAN_NCNN_Vulkan) checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->setChecked(isCompatible_RealCUGAN_NCNN_Vulkan);
     if(ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan) ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan->setChecked(isCompatible_RealESRGAN_NCNN_Vulkan);
     //======================== Load VFI settings ========================
     ui->checkBox_VfiAfterScale_VFI->setChecked(Settings_Read_value("/settings/checkBox_VfiAfterScale_VFI").toBool());
