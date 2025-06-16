@@ -557,7 +557,7 @@ public:
     long unsigned int ETA=0;
     long unsigned int Progressbar_MaxVal = 0;
     long unsigned int Progressbar_CurrentVal = 0;
-    int CheckUpadte_Auto();
+    int CheckUpdate_Auto();
     int Donate_DownloadOnlineQRCode();
     void on_checkBox_BanGitee_clicked();
     bool isSettingsHide=false;
@@ -706,7 +706,7 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     int Waifu2x_DetectGPU_finished();
     int Realsr_ncnn_vulkan_DetectGPU_finished(); // For RealSR (distinct from RealESRGAN)
     int FrameInterpolation_DetectGPU_finished();
-    int CheckUpadte_NewUpdate(QString update_str,QString Change_log);
+    int CheckUpdate_NewUpdate(QString update_str, QString Change_log);
     void FinishedProcessing_DN();
     int Table_FileCount_reload();
     void Table_image_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
@@ -905,7 +905,7 @@ signals:
     void Send_Realsr_ncnn_vulkan_DetectGPU_finished(); // For RealSR
     void Send_FrameInterpolation_DetectGPU_finished();
     void Send_Realesrgan_ncnn_vulkan_DetectGPU_finished(); // For RealESRGAN
-    void Send_CheckUpadte_NewUpdate(QString, QString);
+    void Send_CheckUpdate_NewUpdate(QString, QString);
     void Send_Table_FileCount_reload();
     void Send_Table_image_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
     void Send_Table_gif_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);

@@ -304,7 +304,7 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     connect(this, SIGNAL(Send_Waifu2x_Compatibility_Test_finished()), this, SLOT(Waifu2x_Compatibility_Test_finished()));
     connect(this, SIGNAL(Send_Waifu2x_DetectGPU_finished()), this, SLOT(Waifu2x_DetectGPU_finished()));
     connect(this, SIGNAL(Send_Realsr_ncnn_vulkan_DetectGPU_finished()), this, SLOT(Realsr_ncnn_vulkan_DetectGPU_finished()));
-    connect(this, SIGNAL(Send_CheckUpadte_NewUpdate(QString,QString)), this, SLOT(CheckUpadte_NewUpdate(QString,QString)));
+    connect(this, SIGNAL(Send_CheckUpdate_NewUpdate(QString,QString)), this, SLOT(CheckUpdate_NewUpdate(QString,QString)));
     connect(this, SIGNAL(Send_SystemShutDown()), this, SLOT(SystemShutDown()));
     connect(this, SIGNAL(Send_Waifu2x_DumpProcessorList_converter_finished()), this, SLOT(Waifu2x_DumpProcessorList_converter_finished()));
     connect(this, SIGNAL(Send_Read_urls_finfished()), this, SLOT(Read_urls_finfished())); // Connect the signal to the correct original finishing slot
@@ -335,7 +335,7 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     gpuManager.detectGPUs(""); // Pass empty string for initial/general detection
     QtConcurrent::run([this] { this->DeleteErrorLog_Waifu2xCaffe(); });
     QtConcurrent::run([this] { this->Del_TempBatFile(); });
-    AutoUpdate = QtConcurrent::run([this] { return this->CheckUpadte_Auto(); });
+    AutoUpdate = QtConcurrent::run([this] { return this->CheckUpdate_Auto(); });
     DownloadOnlineQRCode = QtConcurrent::run([this] { return this->Donate_DownloadOnlineQRCode(); }); // Assuming Donate_DownloadOnlineQRCode also returns int
     SystemShutDown_isAutoShutDown();
     TextBrowser_StartMes();
@@ -786,7 +786,7 @@ void MainWindow::on_pushButton_Stop_clicked()
     waifu2x_STOP = true;
     QProcess_stop = true;
     emit TextBrowser_NewMessage(tr("Trying to stop, please wait..."));
-    QtConcurrent::run(this, &MainWindow::Wait_waifu2x_stop);
+    QtConcurrent::run(&MainWindow::Wait_waifu2x_stop, this);
 }
 
 void MainWindow::Wait_waifu2x_stop()
@@ -803,7 +803,7 @@ void MainWindow::Wait_waifu2x_stop()
                 Delay_msec_sleep(300);
             }
             emit TextBrowser_NewMessage(tr("Processing of files has stopped."));
-            QtConcurrent::run(this, &MainWindow::Play_NFSound);
+            QtConcurrent::run(&MainWindow::Play_NFSound, this);
             break;
         }
         Delay_msec_sleep(300);
@@ -1602,7 +1602,7 @@ void MainWindow::on_pushButton_ForceRetry_clicked()
         return;
     }
     ui->pushButton_ForceRetry->setEnabled(0);
-    QtConcurrent::run(this, &MainWindow::isForceRetryClicked_SetTrue_Block_Anime4k);
+    QtConcurrent::run(&MainWindow::isForceRetryClicked_SetTrue_Block_Anime4k, this);
     ForceRetryCount++;
     QProcess Close;
     Close.start("taskkill /f /t /fi \"imagename eq Anime4K_waifu2xEX.exe\"");
@@ -2068,7 +2068,7 @@ void MainWindow::on_comboBox_UpdateChannel_currentIndexChanged(int index)
 {
     if(isClicked_comboBox_UpdateChannel && AutoUpdate.isRunning()==false)
     {
-        AutoUpdate = QtConcurrent::run(this, &MainWindow::CheckUpadte_Auto);
+        AutoUpdate = QtConcurrent::run(&MainWindow::CheckUpdate_Auto, this);
     }
 }
 void MainWindow::on_checkBox_ReplaceOriginalFile_stateChanged(int arg1)
@@ -2242,7 +2242,7 @@ void MainWindow::Set_checkBox_DisableResize_gif_Checked()
 void MainWindow::on_pushButton_TurnOffScreen_clicked()
 {
     if(TurnOffScreen_QF.isRunning() == true)return;
-    TurnOffScreen_QF = QtConcurrent::run(this, &MainWindow::TurnOffScreen);
+    TurnOffScreen_QF = QtConcurrent::run(&MainWindow::TurnOffScreen, this);
 }
 
 void MainWindow::TurnOffScreen()
@@ -3288,7 +3288,7 @@ void MainWindow::TextBrowser_StartMes(){}
 void MainWindow::Init_ActionsMenu_checkBox_ReplaceOriginalFile(){}
 void MainWindow::Init_ActionsMenu_checkBox_DelOriginal(){}
 int MainWindow::Settings_Read_Apply(){ return 0; }
-int MainWindow::CheckUpadte_Auto(){ return 0; }
+int MainWindow::CheckUpdate_Auto(){ return 0; }
 int MainWindow::Donate_DownloadOnlineQRCode(){ return 0; }
 int MainWindow::SystemShutDown_isAutoShutDown(){ return 0; }
 void MainWindow::file_mkDir(QString){}
@@ -3489,7 +3489,7 @@ int MainWindow::Waifu2x_DetectGPU()
 int MainWindow::Waifu2x_DetectGPU_finished(){ return 0; }
 int MainWindow::Realsr_ncnn_vulkan_DetectGPU_finished(){ return 0; }
 int MainWindow::FrameInterpolation_DetectGPU_finished(){ return 0; }
-int MainWindow::CheckUpadte_NewUpdate(QString,QString){ return 0; }
+int MainWindow::CheckUpdate_NewUpdate(QString,QString){ return 0; }
 void MainWindow::FinishedProcessing_DN(){}
 void MainWindow::Table_image_CustRes_rowNumInt_HeightQString_WidthQString(int,QString,QString){}
 void MainWindow::Table_gif_CustRes_rowNumInt_HeightQString_WidthQString(int,QString,QString){}
