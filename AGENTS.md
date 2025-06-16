@@ -56,7 +56,6 @@ To maintain consistency within our codebase, I’m creating some style guideline
 * Use four-space tabs for indentation.
 * Keep lines under 120 characters.
 * Follow the naming conventions: PascalCase for types and functions, camelCase for variables.
-* Header files should start with `#pragma once`.
 * Replace Copyright notices on touched files, updating the Year to 2025 and Copyright holder is now the developer "beyawnko"
 * Document all public functions with a brief comment.
 
