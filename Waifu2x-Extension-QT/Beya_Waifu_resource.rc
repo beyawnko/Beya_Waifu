@@ -1,6 +1,6 @@
 #include <windows.h>
 
-IDI_ICON1	ICON	"G:/My Drive/GitHub/Beya_Waifu/Waifu2x-Extension-QT/icon/icon.ico"
+IDI_ICON1	ICON	"C:/Build/Beya_Waifu/Waifu2x-Extension-QT/icon/icon.ico"
 
 VS_VERSION_INFO VERSIONINFO
 	FILEVERSION 0,0,0,0

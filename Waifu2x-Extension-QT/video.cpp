@@ -16,12 +16,16 @@
 
     My Github homepage: https://github.com/AaronFeng753
 */
+#include <QtCore/qglobal.h>
+
 #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
 #include <QTextCodec>
 #endif
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "VideoProcessor.h"
 #include "utils/ffprobe_helpers.h"
+
 /*
 Remove a video file from the custom resolution list by row number
 */
@@ -69,6 +73,7 @@ Calculate number of digits
 */
 int MainWindow::CalNumDigits(int input_num)
 {
+    if (input_num <= 0) return 1;
     int frameNumDigits=1+(int)log10(input_num);
     return frameNumDigits;
 }
@@ -78,7 +83,7 @@ Determine whether the video is variable frame rate
 */
 bool MainWindow::video_isVFR(QString videoPath)
 {
-    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", videoPath);
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffmpeg/ffprobe_waifu2xEX.exe", videoPath);
     QJsonArray streams = doc.object().value("streams").toArray();
     if(!streams.isEmpty())
     {
@@ -133,7 +138,7 @@ Directly obtain the video resolution
 QMap<QString,int> MainWindow::video_get_Resolution(QString VideoFileFullPath)
 {
     emit Send_TextBrowser_NewMessage(tr("Get resolution of the video:[")+VideoFileFullPath+"]");
-    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", VideoFileFullPath);
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffmpeg/ffprobe_waifu2xEX.exe", VideoFileFullPath);
     QJsonArray streams = doc.object().value("streams").toArray();
     if(!streams.isEmpty())
     {
@@ -192,7 +197,7 @@ void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString V
     QStringList VideoClips_fileName_list;
     VideoClips_fileName_list.clear();
     QFileInfo vfinfo(video_mp4_scaled_fullpath);
-    QString video_dir = file_getFolderPath(video_mp4_scaled_fullpath);
+    QString video_dir = file_getFolderPath(QFileInfo(video_mp4_scaled_fullpath));
     /*
     Generate a QStringList of full paths for video clip files
     */
@@ -239,7 +244,7 @@ void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString V
     /*
     Assemble video
     */
-    QString ffmpeg_path = Current_Path+"/ffmpeg_waifu2xEX.exe";
+    QString ffmpeg_path = Current_Path+"/ffmpeg/ffmpeg_waifu2xEX.exe";
     bool Del_DenoisedAudio = false;
     //=============== Audio denoise ========================
     if((ui->checkBox_AudioDenoise->isChecked())&&QFile::exists(AudioPath))
@@ -344,7 +349,7 @@ void MainWindow::video_video2images_ProcessBySegment(QString VideoPath,QString F
 {
     emit Send_TextBrowser_NewMessage(tr("Start splitting video: [")+VideoPath+"]");
     //=================
-    QString ffmpeg_path = Current_Path+"/ffmpeg_waifu2xEX.exe";
+    QString ffmpeg_path = Current_Path+"/ffmpeg/ffmpeg_waifu2xEX.exe";
     QString video_mp4_fullpath = VideoPath;
     //================ Get fps =====================
     QString fps_video_cmd=" ";
@@ -414,7 +419,7 @@ void MainWindow::video_get_audio(QString VideoPath,QString AudioPath)
 {
     emit Send_TextBrowser_NewMessage(tr("Extract audio from video: [")+VideoPath+"]");
     //==============================================
-    QString ffmpeg_path = Current_Path+"/ffmpeg_waifu2xEX.exe";
+    QString ffmpeg_path = Current_Path+"/ffmpeg/ffmpeg_waifu2xEX.exe";
     QFile::remove(AudioPath);
     QProcess video_splitSound;
     QString sndCmd = "\""+ffmpeg_path+"\" -y -i \""+VideoPath+"\" \""+AudioPath+"\"";
@@ -455,7 +460,7 @@ QString MainWindow::video_To_CFRMp4(QString VideoPath)
     QFile::remove(video_mp4_fullpath);
     //=================
     emit Send_TextBrowser_NewMessage(tr("Start converting video: [")+VideoPath+tr("] to CFR MP4."));
-    QString ffmpeg_path = Current_Path+"/ffmpeg_waifu2xEX.exe";
+    QString ffmpeg_path = Current_Path+"/ffmpeg/ffmpeg_waifu2xEX.exe";
     QString vcodec_copy_cmd = "";
     QString acodec_copy_cmd = "";
     QString bitrate_vid_cmd = "";
@@ -518,7 +523,7 @@ QString MainWindow::video_To_CFRMp4(QString VideoPath)
 int MainWindow::video_get_duration(QString videoPath)
 {
     emit Send_TextBrowser_NewMessage(tr("Get duration of the video:[")+videoPath+"]");
-    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", videoPath);
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffmpeg/ffprobe_waifu2xEX.exe", videoPath);
     double Duration_double = doc.object().value("format").toObject().value("duration").toString().toDouble();
     if(Duration_double <= 0)
     {
@@ -712,7 +717,7 @@ Get video bitrate
 QString MainWindow::video_get_bitrate(QString videoPath,bool isReturnFullCMD,bool isVidOnly)
 {
     emit Send_TextBrowser_NewMessage(tr("Get bitrate of the video:[")+videoPath+"]");
-    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", videoPath);
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffmpeg/ffprobe_waifu2xEX.exe", videoPath);
     QJsonObject root = doc.object();
     QJsonObject stream0 = root.value("streams").toArray().isEmpty() ? QJsonObject() : root.value("streams").toArray().at(0).toObject();
     QString BitRate = stream0.value("bit_rate").toString();
@@ -741,7 +746,7 @@ Get video FPS
 */
 QString MainWindow::video_get_fps(QString videoPath)
 {
-    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", videoPath);
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffmpeg/ffprobe_waifu2xEX.exe", videoPath);
     QString fpsDiv = doc.object().value("streams").toArray().isEmpty() ? QString() :
                      doc.object().value("streams").toArray().at(0).toObject().value("avg_frame_rate").toString();
     if(fpsDiv.isEmpty())
@@ -756,11 +761,11 @@ QString MainWindow::video_get_fps(QString videoPath)
     return fpsDiv;
 }
 
-int MainWindow::video_get_frameNum(QString videoPath)
+long long MainWindow::video_get_frameNum(QString videoPath)
 {
-    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffprobe_waifu2xEX.exe", videoPath);
-    int FrameNum = doc.object().value("streams").toArray().isEmpty() ? 0 :
-                   doc.object().value("streams").toArray().at(0).toObject().value("nb_frames").toString().toInt();
+    QJsonDocument doc = parseFfprobeJson(Current_Path+"/ffmpeg/ffprobe_waifu2xEX.exe", videoPath);
+    long long FrameNum = doc.object().value("streams").toArray().isEmpty() ? 0 :
+                   doc.object().value("streams").toArray().at(0).toObject().value("nb_frames").toString().toLongLong();
     if(FrameNum < 1)
     {
         emit Send_TextBrowser_NewMessage(tr("ERROR! Unable to read the number of frames of the video: [")+videoPath+"]");
@@ -779,7 +784,7 @@ void MainWindow::video_video2images(QString VideoPath,QString FrameFolderPath,QS
 {
     emit Send_TextBrowser_NewMessage(tr("Start splitting video: [")+VideoPath+"]");
     //=================
-    QString ffmpeg_path = Current_Path+"/ffmpeg_waifu2xEX.exe";
+    QString ffmpeg_path = Current_Path+"/ffmpeg/ffmpeg_waifu2xEX.exe";
     //================ Get fps =====================
     QString fps_video_cmd=" ";
     QString fps = video_get_fps(VideoPath).trimmed();
@@ -923,7 +928,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
             resize_cmd.append("-sws_flags lanczos ");
         }
     }
-    QString ffmpeg_path = Current_Path+"/ffmpeg_waifu2xEX.exe";
+    QString ffmpeg_path = Current_Path+"/ffmpeg/ffmpeg_waifu2xEX.exe";
     int FrameNumDigits = video_get_frameNumDigits(VideoPath);
     if(FrameNumDigits==0)return 0;
     QFileInfo vfinfo(VideoPath);
