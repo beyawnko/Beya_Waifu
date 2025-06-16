@@ -2,8 +2,9 @@
 set -e # Exit immediately if a command exits with a non-zero status.
 
 # Ensure Qt tools are in PATH (usually are if installed via apt)
-# export QTDIR=/usr/lib/qt6 # Or /opt/qt6 - this might not be needed if qmake6 is in path
-# export PATH=$QTDIR/bin:$PATH # Again, might not be needed
+# Configure Qt toolchain location
+QTDIR=/usr/lib/qt6
+export PATH="$QTDIR/bin:$PATH"
 
 git submodule update --init --recursive
 cd Waifu2x-Extension-QT

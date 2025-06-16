@@ -668,6 +668,8 @@ public:
 
 public slots: // Changed from 'slots:' for clarity, Qt treats them as public slots by default
     void on_pushButton_compatibilityTest_clicked();
+    /** Handle manual update checks triggered by the user. */
+    void on_pushButton_CheckUpdate_clicked();
     void Table_EnableSorting(bool EnableSorting);
     void Apply_CustRes_QAction_FileList_slot();
     void Cancel_CustRes_QAction_FileList_slot();
