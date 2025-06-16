@@ -315,7 +315,7 @@ public:
     void Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum);
     void Realcugan_NCNN_Vulkan_ReadSettings();
     void Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
-    void APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
+    bool APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
     void Realcugan_ncnn_vulkan_DetectGPU();
     QString RealcuganNcnnVulkan_MultiGPU();
     void AddGPU_MultiGPU_RealcuganNcnnVulkan(QString GPUID);
@@ -554,6 +554,7 @@ public:
     long unsigned int ETA=0;
     int CheckUpadte_Auto();
     int Donate_DownloadOnlineQRCode();
+    void on_checkBox_BanGitee_clicked();
     bool isSettingsHide=false;
     bool isShowAnime4kWarning=true;
     void ConnectivityTest_RawGithubusercontentCom();
@@ -726,6 +727,8 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     void CurrentFileProgress_WatchFolderFileNum_Textbrower(QString SourceFile_fullPath, QString FolderPath, int TotalFileNum);
     void Donate_ReplaceQRCode(QString QRCodePath);
     void Set_checkBox_DisableResize_gif_Checked();
+    void on_pushButton_Patreon_clicked();
+    void on_pushButton_SupportersList_clicked();
 
     // RealCUGAN Slots
     void on_pushButton_DetectGPU_RealCUGAN_clicked();
