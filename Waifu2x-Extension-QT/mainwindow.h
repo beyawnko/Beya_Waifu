@@ -735,6 +735,8 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     void on_pushButton_TileSize_Minus_RealCUGAN_clicked();
     void on_comboBox_Model_RealCUGAN_currentIndexChanged(int index);
     void Realcugan_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess::ExitStatus exitStatus);
+    void Realcugan_NCNN_Vulkan_Iterative_readyReadStandardOutput();
+    void Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError();
     void Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error);
     void Realcugan_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error);
 
@@ -751,6 +753,8 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     void RealESRGAN_NCNN_Vulkan_finished(int exitCode, QProcess::ExitStatus exitStatus);
     void RealESRGAN_NCNN_Vulkan_errorOccurred(QProcess::ProcessError error);
     void RealESRGAN_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess::ExitStatus exitStatus);
+    void RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardOutput();
+    void RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardError();
     void RealESRGAN_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error);
     void RealESRGAN_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error);
 
