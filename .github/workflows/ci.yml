@@ -33,7 +33,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
-          qt-version: '6.5.2'
+          version: '6.5.2'
           modules: 'qtmultimedia qtshadertools qt5compat'
       - name: Install build tools
         run: |
