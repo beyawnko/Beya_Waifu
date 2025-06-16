@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -16,6 +16,9 @@
 
     My Github homepage: https://github.com/AaronFeng753
 */
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+#include <QTextCodec>
+#endif
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "utils/ffprobe_helpers.h"
@@ -566,7 +569,9 @@ Save progress
 void MainWindow::video_write_Progress_ProcessBySegment(QString VideoConfiguration_fullPath,int StartTime,bool isSplitComplete,bool isScaleComplete,int OLDSegmentDuration,int LastVideoClipNo)
 {
     QSettings *configIniWrite = new QSettings(VideoConfiguration_fullPath, QSettings::IniFormat);
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
     configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8"));
+#endif
     //==================== Store progress ==================================
     configIniWrite->setValue("/Progress/StartTime", StartTime);
     configIniWrite->setValue("/Progress/isSplitComplete", isSplitComplete);
@@ -580,7 +585,9 @@ Save video configuration
 void MainWindow::video_write_VideoConfiguration(QString VideoConfiguration_fullPath,int ScaleRatio,int DenoiseLevel,bool CustRes_isEnabled,int CustRes_height,int CustRes_width,QString EngineName,bool isProcessBySegment,QString VideoClipsFolderPath,QString VideoClipsFolderName,bool isVideoFrameInterpolationEnabled,int MultipleOfFPS)
 {
     QSettings *configIniWrite = new QSettings(VideoConfiguration_fullPath, QSettings::IniFormat);
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
     configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8"));
+#endif
     //================= Add warning =========================
     configIniWrite->setValue("/Warning/EN", "Do not modify this file! It may cause the program to crash! If problems occur after the modification, delete this file and restart the program.");
     //==================== Store video information ==================================

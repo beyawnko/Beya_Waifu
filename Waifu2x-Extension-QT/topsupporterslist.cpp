@@ -19,6 +19,9 @@
 
 #include "topsupporterslist.h"
 #include "ui_topsupporterslist.h"
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+#include <QTextCodec>
+#endif
 
 TopSupportersList::TopSupportersList(QWidget *parent) :
     QWidget(parent),
@@ -36,7 +39,9 @@ TopSupportersList::TopSupportersList(QWidget *parent) :
     if(QFile::exists(TopSupportersList_ini_path) == true)
     {
         QSettings *configIniRead = new QSettings(TopSupportersList_ini_path, QSettings::IniFormat);
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
         configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
+#endif
         QString Change_log = configIniRead->value("/TopSupportersList/List").toString();
         if(configIniRead->value("/TopSupportersList/List") != QVariant() && Change_log.trimmed()!="")
         {
