@@ -308,7 +308,7 @@ public:
     int m_realcugan_TileSize;
     bool m_realcugan_TTA;
     QString m_realcugan_GPUID;
-    QString m_realcugan_gpuJobConfig_temp;
+    QList<QMap<QString, QString>> m_realcugan_gpuJobConfig_temp;
     QList<QProcess*> ProcList_RealCUGAN;
     QStringList Available_GPUID_RealCUGAN;
     QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_RealCUGAN;
@@ -335,7 +335,7 @@ public:
     int m_realesrgan_TileSize;
     bool m_realesrgan_TTA;
     QString m_realesrgan_GPUID;
-    QString m_realesrgan_gpuJobConfig_temp;
+    QList<QMap<QString, QString>> m_realesrgan_gpuJobConfig_temp;
     QList<QProcess*> ProcList_RealESRGAN;
     QStringList Available_GPUID_RealESRGAN_ncnn_vulkan;
     QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_RealesrganNcnnVulkan;

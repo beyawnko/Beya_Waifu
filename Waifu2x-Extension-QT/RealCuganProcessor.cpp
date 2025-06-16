@@ -94,7 +94,7 @@ void RealCuganProcessor::readSettingsVideoGif(int ThreadNum)
                 m_mainWindow->checkBox_MultiGPU_RealCUGAN->isChecked(),
                 m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN,
                 fallbackId);
-    m_mainWindow->m_realcugan_gpuJobConfig_temp = gpuJobConfig;
+    m_mainWindow->m_realcugan_gpuJobConfig_temp = m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN;
     qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF for ThreadNum" << ThreadNum
              << "GPU/Job Config:" << gpuJobConfig;
 }
