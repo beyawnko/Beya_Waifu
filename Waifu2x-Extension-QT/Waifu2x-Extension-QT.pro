@@ -110,7 +110,7 @@ liquidglass_frag.files = $$PWD/shaders/liquidglass.frag
 liquidglass_frag.output = $$OUT_PWD/shaders/liquidglass.frag.qsb
 liquidglass_frag.commands = \
     mkdir -p $$OUT_PWD/shaders && \
-    $$[QT_HOST_BINS]/qsb $$PWD/shaders/liquidglass.frag -o $$OUT_PWD/shaders/liquidglass.frag.qsb
+    $$[QT_HOST_BINS]/qsb "$$PWD/shaders/liquidglass.frag" -o "$$OUT_PWD/shaders/liquidglass.frag.qsb"
 liquidglass_frag.CONFIG = no_link
 QMAKE_EXTRA_TARGETS += liquidglass_frag
 PRE_TARGETDEPS += $$liquidglass_frag.output
