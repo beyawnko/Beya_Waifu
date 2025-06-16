@@ -107,10 +107,10 @@ RESOURCES += \
 # compile GLSL shader to QSB
 liquidglass_frag.input = SHADER
 liquidglass_frag.files = $$PWD/shaders/liquidglass.frag
-liquidglass_frag.output = $$OUT_PWD/shaders/liquidglass.frag.qsb
+liquidglass_frag.output = $$PWD/shaders/liquidglass.frag.qsb
 liquidglass_frag.commands = \
-    mkdir -p $$OUT_PWD/shaders && \
-    $$[QT_HOST_BINS]/qsb "$$PWD/shaders/liquidglass.frag" -o "$$OUT_PWD/shaders/liquidglass.frag.qsb"
+    mkdir -p $$PWD/shaders && \
+    $$[QT_HOST_BINS]/qsb "$$PWD/shaders/liquidglass.frag" -o "$$PWD/shaders/liquidglass.frag.qsb"
 liquidglass_frag.CONFIG = no_link
 QMAKE_EXTRA_TARGETS += liquidglass_frag
 PRE_TARGETDEPS += $$liquidglass_frag.output

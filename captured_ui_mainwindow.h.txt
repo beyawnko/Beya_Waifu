@@ -1,0 +1,282 @@
+/********************************************************************************
+** Form generated from reading UI file 'mainwindow.ui'
+**
+** Created by: Qt User Interface Compiler version 6.4.2
+**
+** WARNING! All changes made in this file will be lost when recompiling UI file!
+********************************************************************************/
+
+#ifndef UI_MAINWINDOW_H
+#define UI_MAINWINDOW_H
+
+#include <QtCore/QVariant>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QTextBrowser>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
+
+QT_BEGIN_NAMESPACE
+
+class Ui_MainWindow
+{
+public:
+    QVBoxLayout *verticalLayout_placeholder;
+    QCheckBox *checkBox_MultiGPU_RealCUGAN;
+    QCheckBox *checkBox_TTA_RealCUGAN;
+    QCheckBox *checkBox_isCompatible_RealCUGAN_NCNN_Vulkan;
+    QCheckBox *checkBox_isCompatible_RealESRGAN_NCNN_Vulkan;
+    QComboBox *comboBox_DeviceID_A4k;
+    QComboBox *comboBox_GPUID_RealCUGAN;
+    QComboBox *comboBox_GPUID_caffe;
+    QComboBox *comboBox_GPUID_cain;
+    QComboBox *comboBox_GPUID_dain;
+    QComboBox *comboBox_GPUID_realsr;
+    QComboBox *comboBox_GPUID_rife;
+    QComboBox *comboBox_GPUID_srmd_cuda;
+    QComboBox *comboBox_GPUID_vulkan;
+    QComboBox *comboBox_Model_RealCUGAN;
+    QComboBox *comboBox_OutFormat_Image;
+    QComboBox *comboBox_PlatformID_A4k;
+    QComboBox *comboBox_model_caffe;
+    QComboBox *comboBox_model_cain;
+    QComboBox *comboBox_model_converter;
+    QComboBox *comboBox_model_dain;
+    QComboBox *comboBox_model_realsr;
+    QComboBox *comboBox_model_rife;
+    QComboBox *comboBox_model_srmd;
+    QComboBox *comboBox_model_srmd_cuda;
+    QLabel *label_Preview_Main;
+    QListWidget *listWidget_GPUList_MultiGPU_RealCUGAN;
+    QPushButton *pushButton_DetectGPU_RealCUGAN;
+    QSpinBox *spinBox_DenoiseLevel_RealCUGAN;
+    QSpinBox *spinBox_Scale_RealCUGAN;
+    QSpinBox *spinBox_Scale_RealESRGAN;
+    QSpinBox *spinBox_Threads_MultiGPU_RealCUGAN;
+    QSpinBox *spinBox_Threads_MultiGPU_RealESRGAN;
+    QSpinBox *spinBox_Threads_RealCUGAN;
+    QSpinBox *spinBox_TileSize_RealCUGAN;
+    QTableWidget *tableWidget_Files;
+    QTextBrowser *textBrowser_SupportersNameList;
+    QTabWidget *tabWidget_FileType;
+
+    void setupUi(QWidget *placeholderWidgets)
+    {
+        if (placeholderWidgets->objectName().isEmpty())
+            placeholderWidgets->setObjectName("placeholderWidgets");
+        placeholderWidgets->setVisible(false);
+        verticalLayout_placeholder = new QVBoxLayout(placeholderWidgets);
+        verticalLayout_placeholder->setObjectName("verticalLayout_placeholder");
+        checkBox_MultiGPU_RealCUGAN = new QCheckBox(placeholderWidgets);
+        checkBox_MultiGPU_RealCUGAN->setObjectName("checkBox_MultiGPU_RealCUGAN");
+
+        verticalLayout_placeholder->addWidget(checkBox_MultiGPU_RealCUGAN);
+
+        checkBox_TTA_RealCUGAN = new QCheckBox(placeholderWidgets);
+        checkBox_TTA_RealCUGAN->setObjectName("checkBox_TTA_RealCUGAN");
+
+        verticalLayout_placeholder->addWidget(checkBox_TTA_RealCUGAN);
+
+        checkBox_isCompatible_RealCUGAN_NCNN_Vulkan = new QCheckBox(placeholderWidgets);
+        checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->setObjectName("checkBox_isCompatible_RealCUGAN_NCNN_Vulkan");
+
+        verticalLayout_placeholder->addWidget(checkBox_isCompatible_RealCUGAN_NCNN_Vulkan);
+
+        checkBox_isCompatible_RealESRGAN_NCNN_Vulkan = new QCheckBox(placeholderWidgets);
+        checkBox_isCompatible_RealESRGAN_NCNN_Vulkan->setObjectName("checkBox_isCompatible_RealESRGAN_NCNN_Vulkan");
+
+        verticalLayout_placeholder->addWidget(checkBox_isCompatible_RealESRGAN_NCNN_Vulkan);
+
+        comboBox_DeviceID_A4k = new QComboBox(placeholderWidgets);
+        comboBox_DeviceID_A4k->setObjectName("comboBox_DeviceID_A4k");
+
+        verticalLayout_placeholder->addWidget(comboBox_DeviceID_A4k);
+
+        comboBox_GPUID_RealCUGAN = new QComboBox(placeholderWidgets);
+        comboBox_GPUID_RealCUGAN->setObjectName("comboBox_GPUID_RealCUGAN");
+
+        verticalLayout_placeholder->addWidget(comboBox_GPUID_RealCUGAN);
+
+        comboBox_GPUID_caffe = new QComboBox(placeholderWidgets);
+        comboBox_GPUID_caffe->setObjectName("comboBox_GPUID_caffe");
+
+        verticalLayout_placeholder->addWidget(comboBox_GPUID_caffe);
+
+        comboBox_GPUID_cain = new QComboBox(placeholderWidgets);
+        comboBox_GPUID_cain->setObjectName("comboBox_GPUID_cain");
+
+        verticalLayout_placeholder->addWidget(comboBox_GPUID_cain);
+
+        comboBox_GPUID_dain = new QComboBox(placeholderWidgets);
+        comboBox_GPUID_dain->setObjectName("comboBox_GPUID_dain");
+
+        verticalLayout_placeholder->addWidget(comboBox_GPUID_dain);
+
+        comboBox_GPUID_realsr = new QComboBox(placeholderWidgets);
+        comboBox_GPUID_realsr->setObjectName("comboBox_GPUID_realsr");
+
+        verticalLayout_placeholder->addWidget(comboBox_GPUID_realsr);
+
+        comboBox_GPUID_rife = new QComboBox(placeholderWidgets);
+        comboBox_GPUID_rife->setObjectName("comboBox_GPUID_rife");
+
+        verticalLayout_placeholder->addWidget(comboBox_GPUID_rife);
+
+        comboBox_GPUID_srmd_cuda = new QComboBox(placeholderWidgets);
+        comboBox_GPUID_srmd_cuda->setObjectName("comboBox_GPUID_srmd_cuda");
+
+        verticalLayout_placeholder->addWidget(comboBox_GPUID_srmd_cuda);
+
+        comboBox_GPUID_vulkan = new QComboBox(placeholderWidgets);
+        comboBox_GPUID_vulkan->setObjectName("comboBox_GPUID_vulkan");
+
+        verticalLayout_placeholder->addWidget(comboBox_GPUID_vulkan);
+
+        comboBox_Model_RealCUGAN = new QComboBox(placeholderWidgets);
+        comboBox_Model_RealCUGAN->setObjectName("comboBox_Model_RealCUGAN");
+
+        verticalLayout_placeholder->addWidget(comboBox_Model_RealCUGAN);
+
+        comboBox_OutFormat_Image = new QComboBox(placeholderWidgets);
+        comboBox_OutFormat_Image->setObjectName("comboBox_OutFormat_Image");
+
+        verticalLayout_placeholder->addWidget(comboBox_OutFormat_Image);
+
+        comboBox_PlatformID_A4k = new QComboBox(placeholderWidgets);
+        comboBox_PlatformID_A4k->setObjectName("comboBox_PlatformID_A4k");
+
+        verticalLayout_placeholder->addWidget(comboBox_PlatformID_A4k);
+
+        comboBox_model_caffe = new QComboBox(placeholderWidgets);
+        comboBox_model_caffe->setObjectName("comboBox_model_caffe");
+
+        verticalLayout_placeholder->addWidget(comboBox_model_caffe);
+
+        comboBox_model_cain = new QComboBox(placeholderWidgets);
+        comboBox_model_cain->setObjectName("comboBox_model_cain");
+
+        verticalLayout_placeholder->addWidget(comboBox_model_cain);
+
+        comboBox_model_converter = new QComboBox(placeholderWidgets);
+        comboBox_model_converter->setObjectName("comboBox_model_converter");
+
+        verticalLayout_placeholder->addWidget(comboBox_model_converter);
+
+        comboBox_model_dain = new QComboBox(placeholderWidgets);
+        comboBox_model_dain->setObjectName("comboBox_model_dain");
+
+        verticalLayout_placeholder->addWidget(comboBox_model_dain);
+
+        comboBox_model_realsr = new QComboBox(placeholderWidgets);
+        comboBox_model_realsr->setObjectName("comboBox_model_realsr");
+
+        verticalLayout_placeholder->addWidget(comboBox_model_realsr);
+
+        comboBox_model_rife = new QComboBox(placeholderWidgets);
+        comboBox_model_rife->setObjectName("comboBox_model_rife");
+
+        verticalLayout_placeholder->addWidget(comboBox_model_rife);
+
+        comboBox_model_srmd = new QComboBox(placeholderWidgets);
+        comboBox_model_srmd->setObjectName("comboBox_model_srmd");
+
+        verticalLayout_placeholder->addWidget(comboBox_model_srmd);
+
+        comboBox_model_srmd_cuda = new QComboBox(placeholderWidgets);
+        comboBox_model_srmd_cuda->setObjectName("comboBox_model_srmd_cuda");
+
+        verticalLayout_placeholder->addWidget(comboBox_model_srmd_cuda);
+
+        label_Preview_Main = new QLabel(placeholderWidgets);
+        label_Preview_Main->setObjectName("label_Preview_Main");
+
+        verticalLayout_placeholder->addWidget(label_Preview_Main);
+
+        listWidget_GPUList_MultiGPU_RealCUGAN = new QListWidget(placeholderWidgets);
+        listWidget_GPUList_MultiGPU_RealCUGAN->setObjectName("listWidget_GPUList_MultiGPU_RealCUGAN");
+
+        verticalLayout_placeholder->addWidget(listWidget_GPUList_MultiGPU_RealCUGAN);
+
+        pushButton_DetectGPU_RealCUGAN = new QPushButton(placeholderWidgets);
+        pushButton_DetectGPU_RealCUGAN->setObjectName("pushButton_DetectGPU_RealCUGAN");
+
+        verticalLayout_placeholder->addWidget(pushButton_DetectGPU_RealCUGAN);
+
+        spinBox_DenoiseLevel_RealCUGAN = new QSpinBox(placeholderWidgets);
+        spinBox_DenoiseLevel_RealCUGAN->setObjectName("spinBox_DenoiseLevel_RealCUGAN");
+
+        verticalLayout_placeholder->addWidget(spinBox_DenoiseLevel_RealCUGAN);
+
+        spinBox_Scale_RealCUGAN = new QSpinBox(placeholderWidgets);
+        spinBox_Scale_RealCUGAN->setObjectName("spinBox_Scale_RealCUGAN");
+
+        verticalLayout_placeholder->addWidget(spinBox_Scale_RealCUGAN);
+
+        spinBox_Scale_RealESRGAN = new QSpinBox(placeholderWidgets);
+        spinBox_Scale_RealESRGAN->setObjectName("spinBox_Scale_RealESRGAN");
+
+        verticalLayout_placeholder->addWidget(spinBox_Scale_RealESRGAN);
+
+        spinBox_Threads_MultiGPU_RealCUGAN = new QSpinBox(placeholderWidgets);
+        spinBox_Threads_MultiGPU_RealCUGAN->setObjectName("spinBox_Threads_MultiGPU_RealCUGAN");
+
+        verticalLayout_placeholder->addWidget(spinBox_Threads_MultiGPU_RealCUGAN);
+
+        spinBox_Threads_MultiGPU_RealESRGAN = new QSpinBox(placeholderWidgets);
+        spinBox_Threads_MultiGPU_RealESRGAN->setObjectName("spinBox_Threads_MultiGPU_RealESRGAN");
+
+        verticalLayout_placeholder->addWidget(spinBox_Threads_MultiGPU_RealESRGAN);
+
+        spinBox_Threads_RealCUGAN = new QSpinBox(placeholderWidgets);
+        spinBox_Threads_RealCUGAN->setObjectName("spinBox_Threads_RealCUGAN");
+
+        verticalLayout_placeholder->addWidget(spinBox_Threads_RealCUGAN);
+
+        spinBox_TileSize_RealCUGAN = new QSpinBox(placeholderWidgets);
+        spinBox_TileSize_RealCUGAN->setObjectName("spinBox_TileSize_RealCUGAN");
+
+        verticalLayout_placeholder->addWidget(spinBox_TileSize_RealCUGAN);
+
+        tableWidget_Files = new QTableWidget(placeholderWidgets);
+        tableWidget_Files->setObjectName("tableWidget_Files");
+
+        verticalLayout_placeholder->addWidget(tableWidget_Files);
+
+        textBrowser_SupportersNameList = new QTextBrowser(placeholderWidgets);
+        textBrowser_SupportersNameList->setObjectName("textBrowser_SupportersNameList");
+
+        verticalLayout_placeholder->addWidget(textBrowser_SupportersNameList);
+
+        tabWidget_FileType = new QTabWidget(placeholderWidgets);
+        tabWidget_FileType->setObjectName("tabWidget_FileType");
+
+        verticalLayout_placeholder->addWidget(tabWidget_FileType);
+
+
+        retranslateUi(placeholderWidgets);
+
+        QMetaObject::connectSlotsByName(placeholderWidgets);
+    } // setupUi
+
+    void retranslateUi(QWidget *placeholderWidgets)
+    {
+        (void)placeholderWidgets;
+    } // retranslateUi
+
+};
+
+namespace Ui {
+    class MainWindow: public Ui_MainWindow {};
+} // namespace Ui
+
+QT_END_NAMESPACE
+
+#endif // UI_MAINWINDOW_H

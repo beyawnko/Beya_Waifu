@@ -30,11 +30,11 @@
 #include <QRegularExpression>
 #include <QDirIterator>
 
-static int StartedProc = 0;
-static int NumProc = 0;
-static int FinishedProc = 0;
-static int ErrorProc = 0;
-static int TotalNumProc = 0;
+static int m_StartedProc = 0;
+static int m_NumProc = 0;
+static int m_FinishedProc = 0;
+static int m_ErrorProc = 0;
+static int m_TotalNumProc = 0;
 
 // Utility to warn when an external process fails
 static bool warnProcessFailure(QWidget *parent, QProcess &proc,
@@ -256,10 +256,10 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
 
         // --- AI Processing for the CURRENT SEGMENT's frames (Directory Call) ---
         QString segmentScaledFramesFolderAI = QDir(mainTempFolder).filePath(segmentName + "_scaled_AI");
-        // Realcugan_ProcessDirectoryIteratively will update segmentScaledFramesFolderAI to the actual output path
+        // Realcugan_ProcessSingleFileIteratively will update segmentScaledFramesFolderAI to the actual output path
 
         emit Send_TextBrowser_NewMessage(tr("Starting AI processing for segment %1/%2 frames...").arg(i+1).arg(numSegments));
-        bool aiSegmentSuccess = Realcugan_ProcessDirectoryIteratively(
+        bool aiSegmentSuccess = Realcugan_ProcessSingleFileIteratively(
             splitFramesFolder, segmentScaledFramesFolderAI, targetScale,
             m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
             m_realcugan_gpuJobConfig_temp, checkBox_MultiGPU_RealCUGAN->isChecked(),
@@ -466,11 +466,11 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
 
     // --- AI Processing using Directory-level calls ---
     QString scaledFramesFolderAI = Current_Path + "/temp_W2xEX/" + sourceFileNameNoExt + "_RC_Vid_scaled_AI_" + QDateTime::currentDateTime().toString("yyyyMMddHHmmsszzz");
-    // Note: Realcugan_ProcessDirectoryIteratively will create scaledFramesFolderAI if successful.
+    // Note: Realcugan_ProcessSingleFileIteratively will create scaledFramesFolderAI if successful.
     // It takes scaledFramesFolderAI by reference and updates it to the actual final AI output path.
 
     emit Send_TextBrowser_NewMessage(tr("Starting AI processing for video frames... (RealCUGAN)"));
-    bool aiProcessingSuccess = Realcugan_ProcessDirectoryIteratively(
+    bool aiProcessingSuccess = Realcugan_ProcessSingleFileIteratively(
         splitFramesFolder, scaledFramesFolderAI, targetScale, // scaledFramesFolderAI is out-param
         m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
         m_realcugan_gpuJobConfig_temp, checkBox_MultiGPU_RealCUGAN->isChecked(),
@@ -515,7 +515,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
     for (const QString &aiFrameFileName : aiFramesList) {
         if (Stopping) { resamplingSuccess = false; break; }
         CurrentFileProgress_progressbar_Add();
-        emit Send_TextBrowser_NewMessage(tr("Resampling frame %1/%2 (RealCUGAN Video)").arg(CurrentFileProgress_Value()).arg(aiFramesList.size()));
+        emit Send_TextBrowser_NewMessage(tr("Resampling frame %1/%2 (RealCUGAN Video)").arg(CurrentFileProgress_Start()).arg(aiFramesList.size()));
 
 
         QString aiFramePath = QDir(scaledFramesFolderAI).filePath(aiFrameFileName);
@@ -580,7 +580,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
 
 // Processes a directory of images through RealCUGAN AI passes.
 // finalAIOutputDir will be updated to the path of the directory containing the last AI pass results.
-bool MainWindow::Realcugan_ProcessDirectoryIteratively(
+bool MainWindow::Realcugan_ProcessSingleFileIteratively(
     const QString &initialInputDir, QString &finalAIOutputDir, // finalAIOutputDir is an out-parameter
     int targetOverallScale,
     const QString &modelName, int denoiseLevel, int tileSize,
@@ -588,12 +588,12 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
     bool ttaEnabled, const QString &outputFormat,
     bool experimental)
 {
-    qDebug() << "Realcugan_ProcessDirectoryIteratively: InputDir" << initialInputDir
+    qDebug() << "Realcugan_ProcessSingleFileIteratively: InputDir" << initialInputDir
              << "TargetOverallScale" << targetOverallScale;
 
     QList<int> scaleSequence = CalculateRealCUGANScaleSequence(targetOverallScale);
     if (scaleSequence.isEmpty() || (targetOverallScale > 1 && scaleSequence.first() == targetOverallScale && scaleSequence.first() > 4) ) {
-        qDebug() << "Realcugan_ProcessDirectoryIteratively: Invalid or unsupported scale sequence for target" << targetOverallScale;
+        qDebug() << "Realcugan_ProcessSingleFileIteratively: Invalid or unsupported scale sequence for target" << targetOverallScale;
         // This indicates CalculateRealCUGANScaleSequence couldn't break it down (e.g. 5x, 7x)
         // The resampling step after this function will handle achieving the exact target.
         // For AI processing, if we can't form a sequence, we might do a 1x pass (denoise only) or skip AI.
@@ -634,11 +634,11 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
 
         QProcess process;
         QString exePath = realCuganProcessor->executablePath(experimental);
-        qDebug() << "Realcugan_ProcessDirectoryIteratively Pass" << i + 1 << "Cmd:" << exePath << arguments.join(" ");
+        qDebug() << "Realcugan_ProcessSingleFileIteratively Pass" << i + 1 << "Cmd:" << exePath << arguments.join(" ");
 
         process.start(exePath, arguments);
         if (!process.waitForStarted(10000)) {
-            qDebug() << "Realcugan_ProcessDirectoryIteratively: Process failed to start for pass" << i + 1;
+            qDebug() << "Realcugan_ProcessSingleFileIteratively: Process failed to start for pass" << i + 1;
             QMessageBox::warning(this, tr("Process Failure"),
                                  tr("RealCUGAN failed to start for directory pass %1").arg(i + 1));
             emit Send_TextBrowser_NewMessage(
@@ -665,7 +665,7 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
 
         if (!warnProcessFailure(this, process,
                                 tr("RealCUGAN directory pass %1").arg(i + 1))) {
-            qDebug() << "Realcugan_ProcessDirectoryIteratively: Pass" << i + 1 << "failed. ExitCode:" << process.exitCode() << "Error:" << process.errorString();
+            qDebug() << "Realcugan_ProcessSingleFileIteratively: Pass" << i + 1 << "failed. ExitCode:" << process.exitCode() << "Error:" << process.errorString();
             QByteArray errOut = process.readAllStandardError();
             emit Send_TextBrowser_NewMessage(
                 tr("RealCUGAN directory pass %1 failed with exit code %2\n%3")
@@ -679,7 +679,7 @@ bool MainWindow::Realcugan_ProcessDirectoryIteratively(
         // Check if output directory has content (basic check)
         QDir checkOutDir(passOutputDir);
         if (checkOutDir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot).isEmpty()) {
-             qDebug() << "Realcugan_ProcessDirectoryIteratively: Output directory for pass " << i+1 << " is empty: " << passOutputDir;
+             qDebug() << "Realcugan_ProcessSingleFileIteratively: Output directory for pass " << i+1 << " is empty: " << passOutputDir;
              // This might not be an error if input also had no processable files, but worth logging.
              // If inputDir had files, this is an error.
              if (!QDir(currentPassInputDir).entryInfoList(QDir::Files | QDir::NoDotAndDotDot).isEmpty()){
@@ -893,8 +893,8 @@ void MainWindow::StartNextRealCUGANPass(QProcess *process) {
         delete processQueue;
         process->deleteLater();
         ProcList_RealCUGAN.removeAll(process); // Ensure it's removed
-        NumProc--;
-        ErrorProc++;
+        m_NumProc--;
+        m_ErrorProc++;
         UpdateNumberOfActiveThreads();
         UpdateProgressBar();
         CheckIfAllFinished();
@@ -924,9 +924,9 @@ void MainWindow::StartNextRealCUGANPass(QProcess *process) {
 
     if (!ProcList_RealCUGAN.contains(process)) { // Add only once for the chain
         ProcList_RealCUGAN.append(process);
-        TotalNumProc++; // Counts the whole item as one process
-        NumProc++;
-        StartedProc++;
+        m_TotalNumProc++; // Counts the whole item as one process
+        m_NumProc++;
+        m_StartedProc++;
         UpdateNumberOfActiveThreads();
     }
 
@@ -942,8 +942,8 @@ void MainWindow::StartNextRealCUGANPass(QProcess *process) {
         ProcList_RealCUGAN.removeAll(process);
         delete processQueue;
         process->deleteLater();
-        NumProc--; // Decrement as it failed to start but was counted
-        ErrorProc++;
+        m_NumProc--; // Decrement as it failed to start but was counted
+        m_ErrorProc++;
         UpdateNumberOfActiveThreads(); // Reflect the failure
         UpdateProgressBar();
         CheckIfAllFinished();
@@ -979,7 +979,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess
         ProcList_RealCUGAN.removeAll(process);
         delete processQueue;
         process->deleteLater();
-        NumProc--; ErrorProc++; UpdateNumberOfActiveThreads(); UpdateProgressBar(); CheckIfAllFinished();
+        m_NumProc--; m_ErrorProc++; UpdateNumberOfActiveThreads(); UpdateProgressBar(); CheckIfAllFinished();
         return;
     }
 
@@ -996,7 +996,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess
         ProcList_RealCUGAN.removeAll(process);
         delete processQueue;
         process->deleteLater();
-        NumProc--; ErrorProc++; UpdateNumberOfActiveThreads(); UpdateProgressBar(); CheckIfAllFinished();
+        m_NumProc--; m_ErrorProc++; UpdateNumberOfActiveThreads(); UpdateProgressBar(); CheckIfAllFinished();
         return;
     }
 
@@ -1079,7 +1079,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess
         ProcList_RealCUGAN.removeAll(process);
         delete processQueue;
         process->deleteLater();
-        NumProc--; FinishedProc++; UpdateNumberOfActiveThreads(); UpdateProgressBar(); CheckIfAllFinished();
+        m_NumProc--; m_FinishedProc++; UpdateNumberOfActiveThreads(); UpdateProgressBar(); CheckIfAllFinished();
         // Potentially call LoadScaledImageToLabel if needed
         // LoadScaledImageToLabel(finalOutFile, ui->label_Preview_Main);
     }
@@ -1109,7 +1109,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::Process
     ProcList_RealCUGAN.removeAll(process);
     delete processQueue;
     process->deleteLater();
-    NumProc--; ErrorProc++; UpdateNumberOfActiveThreads(); UpdateProgressBar(); CheckIfAllFinished();
+    m_NumProc--; m_ErrorProc++; UpdateNumberOfActiveThreads(); UpdateProgressBar(); CheckIfAllFinished();
 }
 
 void MainWindow::Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString &tempPathBase, int maxPassIndex, bool keepFinal, const QString& finalFile) {
@@ -1353,7 +1353,7 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(
 }
 
 
-void MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath)
+bool MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath)
 {
     Q_UNUSED(sourceFileFullPath); // sourceFileFullPath might be used for context or naming, but not directly processed here.
     Q_UNUSED(resultFileFullPath); // resultFileFullPath is for APNG_Main after frames are assembled.
@@ -1438,7 +1438,7 @@ void MainWindow::APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString sca
     // --- AI Processing on RGB frames directory ---
     QString scaledRgbFramesAIDirAPNG;
     emit Send_TextBrowser_NewMessage(tr("Starting AI processing for APNG frames... (RealCUGAN)"));
-    bool aiProcessingSuccessAPNG = Realcugan_ProcessDirectoryIteratively(
+    bool aiProcessingSuccessAPNG = Realcugan_ProcessSingleFileIteratively(
         rgbFramesTempDir, scaledRgbFramesAIDirAPNG, targetScale,
         m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
         m_realcugan_gpuJobConfig_temp, checkBox_MultiGPU_RealCUGAN->isChecked(),
@@ -1623,9 +1623,9 @@ void MainWindow::Realcugan_NCNN_Vulkan_GIF(int rowNum)
     }
 
     // --- AI Processing on RGB frames directory ---
-    QString scaledRgbFramesAIDir; // This will be set by Realcugan_ProcessDirectoryIteratively
+    QString scaledRgbFramesAIDir; // This will be set by Realcugan_ProcessSingleFileIteratively
     emit Send_TextBrowser_NewMessage(tr("Starting AI processing for GIF frames... (RealCUGAN)"));
-    bool aiProcessingSuccess = Realcugan_ProcessDirectoryIteratively(
+    bool aiProcessingSuccess = Realcugan_ProcessSingleFileIteratively(
         rgbFramesTempDir, scaledRgbFramesAIDir, targetScale,
         m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
         m_realcugan_gpuJobConfig_temp, checkBox_MultiGPU_RealCUGAN->isChecked(),
@@ -1671,7 +1671,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_GIF(int rowNum)
             // tempRestoreInfo.tempDir does not need to be a valid path here as RestoreAlpha uses rgbPath's dir for its own temp if needed.
             // However, RestoreAlpha expects to be able to create a temp file relative to rgbPath. Ensure scaledRgbFramePath's dir is writable. (It is, it's our temp dir).
 
-            if (!RestoreAlpha(tempRestoreInfo, scaledRgbFramePath, finalCombinedFramePath, true /* use passed alpha for scaling*/, targetScale /* pass target scale for alpha */ )) {
+            if (!RestoreAlpha(tempRestoreInfo, scaledRgbFramePath, finalCombinedFramePath)) {
                  qDebug() << "RealCUGAN GIF: RestoreAlpha failed for" << originalFrameFileName;
                  restoreAlphaSuccess = false; break;
             }
