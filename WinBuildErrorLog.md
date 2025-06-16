@@ -15,107 +15,117 @@ g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_M
 g++ -pipe -g -Wall -Wextra -fPIC -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/data/dummy.cpp
 g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o AnimatedPNG.o AnimatedPNG.cpp
 g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o CompatibilityTest.o CompatibilityTest.cpp
-UiController.cpp: In member function ‘void UiController::outputSettingsAreaSetEnabled(Ui::MainWindow*, bool)’:
-UiController.cpp:61:9: error: ‘class Ui::MainWindow’ has no member named ‘scrollArea_outputPathSettings’
-   61 |     ui->scrollArea_outputPathSettings->setEnabled(enabled);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-UiController.cpp:62:9: error: ‘class Ui::MainWindow’ has no member named ‘lineEdit_outputPath’
-   62 |     ui->lineEdit_outputPath->setClearButtonEnabled(enabled);
-      |         ^~~~~~~~~~~~~~~~~~~
-UiController.cpp:63:9: error: ‘class Ui::MainWindow’ has no member named ‘lineEdit_outputPath’
-   63 |     ui->lineEdit_outputPath->setFocusPolicy(enabled ? Qt::StrongFocus : Qt::NoFocus);
-      |         ^~~~~~~~~~~~~~~~~~~
 g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o Current_File_Progress.o Current_File_Progress.cpp
-make: *** [Makefile:900: UiController.o] Error 1
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o CustomResolution.o CustomResolution.cpp
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o Donate.o Donate.cpp
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o Finish_Action.o Finish_Action.cpp
+Finish_Action.cpp:110:1: warning: "/*" within comment [-Wcomment]
+  110 | /*
+      |
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o Frame_Interpolation.o Frame_Interpolation.cpp
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o Right-click_Menu.o Right-click_Menu.cpp
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o SystemTrayIcon.o SystemTrayIcon.cpp
+Frame_Interpolation.cpp:824:6: error: no declaration matches ‘void MainWindow::on_pushButton_DetectGPU_VFI_clicked()’
+  824 | void MainWindow::on_pushButton_DetectGPU_VFI_clicked()
+      |      ^~~~~~~~~~
+Frame_Interpolation.cpp:824:6: note: no functions named ‘void MainWindow::on_pushButton_DetectGPU_VFI_clicked()’
+In file included from Frame_Interpolation.cpp:19:
+mainwindow.h:111:7: note: ‘class MainWindow’ defined here
+  111 | class MainWindow : public QMainWindow
+      |       ^~~~~~~~~~
+Frame_Interpolation.cpp:942:6: error: no declaration matches ‘void MainWindow::on_lineEdit_MultiGPU_IDs_VFI_editingFinished()’
+  942 | void MainWindow::on_lineEdit_MultiGPU_IDs_VFI_editingFinished()
+      |      ^~~~~~~~~~
+Frame_Interpolation.cpp:942:6: note: no functions named ‘void MainWindow::on_lineEdit_MultiGPU_IDs_VFI_editingFinished()’
+mainwindow.h:111:7: note: ‘class MainWindow’ defined here
+  111 | class MainWindow : public QMainWindow
+      |       ^~~~~~~~~~
+Frame_Interpolation.cpp:950:6: error: no declaration matches ‘void MainWindow::on_checkBox_MultiGPU_VFI_stateChanged(int)’
+  950 | void MainWindow::on_checkBox_MultiGPU_VFI_stateChanged(int arg1)
+      |      ^~~~~~~~~~
+Frame_Interpolation.cpp:950:6: note: no functions named ‘void MainWindow::on_checkBox_MultiGPU_VFI_stateChanged(int)’
+mainwindow.h:111:7: note: ‘class MainWindow’ defined here
+  111 | class MainWindow : public QMainWindow
+      |       ^~~~~~~~~~
+Frame_Interpolation.cpp:958:6: error: no declaration matches ‘void MainWindow::on_groupBox_FrameInterpolation_clicked()’
+  958 | void MainWindow::on_groupBox_FrameInterpolation_clicked()
+      |      ^~~~~~~~~~
+Frame_Interpolation.cpp:958:6: note: no functions named ‘void MainWindow::on_groupBox_FrameInterpolation_clicked()’
+mainwindow.h:111:7: note: ‘class MainWindow’ defined here
+  111 | class MainWindow : public QMainWindow
+      |       ^~~~~~~~~~
+Frame_Interpolation.cpp:981:6: error: no declaration matches ‘void MainWindow::on_checkBox_EnableVFI_Home_clicked()’
+  981 | void MainWindow::on_checkBox_EnableVFI_Home_clicked()
+      |      ^~~~~~~~~~
+Frame_Interpolation.cpp:981:6: note: no functions named ‘void MainWindow::on_checkBox_EnableVFI_Home_clicked()’
+mainwindow.h:111:7: note: ‘class MainWindow’ defined here
+  111 | class MainWindow : public QMainWindow
+      |       ^~~~~~~~~~
+Frame_Interpolation.cpp:991:6: error: no declaration matches ‘void MainWindow::on_checkBox_isCompatible_RifeNcnnVulkan_clicked()’
+  991 | void MainWindow::on_checkBox_isCompatible_RifeNcnnVulkan_clicked()
+      |      ^~~~~~~~~~
+Frame_Interpolation.cpp:991:6: note: no functions named ‘void MainWindow::on_checkBox_isCompatible_RifeNcnnVulkan_clicked()’
+mainwindow.h:111:7: note: ‘class MainWindow’ defined here
+  111 | class MainWindow : public QMainWindow
+      |       ^~~~~~~~~~
+Frame_Interpolation.cpp:996:6: error: no declaration matches ‘void MainWindow::on_checkBox_isCompatible_CainNcnnVulkan_clicked()’
+  996 | void MainWindow::on_checkBox_isCompatible_CainNcnnVulkan_clicked()
+      |      ^~~~~~~~~~
+Frame_Interpolation.cpp:996:6: note: no functions named ‘void MainWindow::on_checkBox_isCompatible_CainNcnnVulkan_clicked()’
+mainwindow.h:111:7: note: ‘class MainWindow’ defined here
+  111 | class MainWindow : public QMainWindow
+      |       ^~~~~~~~~~
+Frame_Interpolation.cpp:1001:6: error: no declaration matches ‘void MainWindow::on_checkBox_isCompatible_DainNcnnVulkan_clicked()’
+ 1001 | void MainWindow::on_checkBox_isCompatible_DainNcnnVulkan_clicked()
+      |      ^~~~~~~~~~
+Frame_Interpolation.cpp:1001:6: note: no functions named ‘void MainWindow::on_checkBox_isCompatible_DainNcnnVulkan_clicked()’
+mainwindow.h:111:7: note: ‘class MainWindow’ defined here
+  111 | class MainWindow : public QMainWindow
+      |       ^~~~~~~~~~
+Frame_Interpolation.cpp:1006:6: error: no declaration matches ‘void MainWindow::on_comboBox_Engine_VFI_currentIndexChanged(int)’
+ 1006 | void MainWindow::on_comboBox_Engine_VFI_currentIndexChanged(int index)
+      |      ^~~~~~~~~~
+Frame_Interpolation.cpp:1006:6: note: no functions named ‘void MainWindow::on_comboBox_Engine_VFI_currentIndexChanged(int)’
+mainwindow.h:111:7: note: ‘class MainWindow’ defined here
+  111 | class MainWindow : public QMainWindow
+      |       ^~~~~~~~~~
+Frame_Interpolation.cpp:1047:6: error: no declaration matches ‘void MainWindow::on_pushButton_Verify_MultiGPU_VFI_clicked()’
+ 1047 | void MainWindow::on_pushButton_Verify_MultiGPU_VFI_clicked()
+      |      ^~~~~~~~~~
+Frame_Interpolation.cpp:1047:6: note: no functions named ‘void MainWindow::on_pushButton_Verify_MultiGPU_VFI_clicked()’
+mainwindow.h:111:7: note: ‘class MainWindow’ defined here
+  111 | class MainWindow : public QMainWindow
+      |       ^~~~~~~~~~
+Frame_Interpolation.cpp:1079:6: error: no declaration matches ‘void MainWindow::on_checkBox_MultiThread_VFI_stateChanged(int)’
+ 1079 | void MainWindow::on_checkBox_MultiThread_VFI_stateChanged(int arg1)
+      |      ^~~~~~~~~~
+Frame_Interpolation.cpp:1079:6: note: no functions named ‘void MainWindow::on_checkBox_MultiThread_VFI_stateChanged(int)’
+mainwindow.h:111:7: note: ‘class MainWindow’ defined here
+  111 | class MainWindow : public QMainWindow
+      |       ^~~~~~~~~~
+Frame_Interpolation.cpp:1095:6: error: no declaration matches ‘void MainWindow::on_checkBox_MultiThread_VFI_clicked()’
+ 1095 | void MainWindow::on_checkBox_MultiThread_VFI_clicked()
+      |      ^~~~~~~~~~
+Frame_Interpolation.cpp:1095:6: note: no functions named ‘void MainWindow::on_checkBox_MultiThread_VFI_clicked()’
+mainwindow.h:111:7: note: ‘class MainWindow’ defined here
+  111 | class MainWindow : public QMainWindow
+      |       ^~~~~~~~~~
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o Web_Activities.o Web_Activities.cpp
+make: *** [Makefile:765: Frame_Interpolation.o] Error 1
 make: *** Waiting for unfinished jobs....
-AnimatedPNG.cpp: In member function ‘void MainWindow::APNG_Main(int, bool)’:
-AnimatedPNG.cpp:50:40: error: ‘class Ui::MainWindow’ has no member named ‘doubleSpinBox_ScaleRatio_gif’
-   50 |     double double_ScaleRatio_gif = ui->doubleSpinBox_ScaleRatio_gif->value();
-      |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-AnimatedPNG.cpp:98:218: error: ‘class Ui::MainWindow’ has no member named ‘spinBox_DenoiseLevel_gif’; did you mean ‘spinBox_DenoiseLevel_RealCUGAN’?
-   98 |         resultFileFullPath = sourceFileFullPath_folderPath+"/"+sourceFileFullPath_baseName+"_"+QString::number(Res_map["width"].toInt(), 10)+"x"+QString::number(Res_map["height"].toInt(),10)+"_"+QString("%1").arg(ui->spinBox_DenoiseLevel_gif->value())+"n_W2xEX"+"."+sourceFileFullPath_fileExt;
-      |                                                                                                                                                                                                                          ^~~~~~~~~~~~~~~~~~~~~~~~
-      |                                                                                                                                                                                                                          spinBox_DenoiseLevel_RealCUGAN
-AnimatedPNG.cpp:102:118: error: ‘class Ui::MainWindow’ has no member named ‘doubleSpinBox_ScaleRatio_gif’
-  102 |         resultFileFullPath = sourceFileFullPath_folderPath+"/"+sourceFileFullPath_baseName+"_"+QString("%1").arg(ui->doubleSpinBox_ScaleRatio_gif->value())+"x_"+QString("%1").arg(ui->spinBox_DenoiseLevel_gif->value())+"n_W2xEX"+"."+sourceFileFullPath_fileExt;
-      |                                                                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-AnimatedPNG.cpp:102:184: error: ‘class Ui::MainWindow’ has no member named ‘spinBox_DenoiseLevel_gif’; did you mean ‘spinBox_DenoiseLevel_RealCUGAN’?
-  102 |         resultFileFullPath = sourceFileFullPath_folderPath+"/"+sourceFileFullPath_baseName+"_"+QString("%1").arg(ui->doubleSpinBox_ScaleRatio_gif->value())+"x_"+QString("%1").arg(ui->spinBox_DenoiseLevel_gif->value())+"n_W2xEX"+"."+sourceFileFullPath_fileExt;
-      |                                                                                                                                                                                        ^~~~~~~~~~~~~~~~~~~~~~~~
-      |                                                                                                                                                                                        spinBox_DenoiseLevel_RealCUGAN
-AnimatedPNG.cpp:131:27: error: ‘class Ui::MainWindow’ has no member named ‘comboBox_Engine_GIF’
-  131 |     int engineIndex = ui->comboBox_Engine_GIF->currentIndex();
-      |                           ^~~~~~~~~~~~~~~~~~~
-AnimatedPNG.cpp:141:64: error: void value not ignored as it ought to be
-  141 |         case 7: isSuccessfullyScaled = APNG_RealcuganNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
-      |                                        ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-AnimatedPNG.cpp:172:12: error: ‘class Ui::MainWindow’ has no member named ‘checkBox_DelOriginal’
-  172 |     if(ui->checkBox_DelOriginal->isChecked()||ui->checkBox_ReplaceOriginalFile->isChecked())
-      |            ^~~~~~~~~~~~~~~~~~~~
-AnimatedPNG.cpp:172:51: error: ‘class Ui::MainWindow’ has no member named ‘checkBox_ReplaceOriginalFile’
-  172 |     if(ui->checkBox_DelOriginal->isChecked()||ui->checkBox_ReplaceOriginalFile->isChecked())
-      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-AnimatedPNG.cpp:188:12: error: ‘class Ui::MainWindow’ has no member named ‘checkBox_OutPath_isEnabled’
-  188 |     if(ui->checkBox_OutPath_isEnabled->isChecked())
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-AnimatedPNG.cpp: In member function ‘void MainWindow::APNG_Frames2APNG(QString, QString, QString, bool)’:
-AnimatedPNG.cpp:241:42: error: ‘class Ui::MainWindow’ has no member named ‘doubleSpinBox_ScaleRatio_gif’
-  241 |             int OriginalScaleRatio = ui->doubleSpinBox_ScaleRatio_gif->value();
-      |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-CompatibilityTest.cpp: In member function ‘void MainWindow::on_pushButton_compatibilityTest_clicked()’:
-CompatibilityTest.cpp:6:9: error: ‘class Ui::MainWindow’ has no member named ‘pushButton_compatibilityTest’
-    6 |     ui->pushButton_compatibilityTest->setEnabled(false);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-make: *** [Makefile:648: AnimatedPNG.o] Error 1
-make: *** [Makefile:657: CompatibilityTest.o] Error 1
-Current_File_Progress.cpp: In member function ‘void MainWindow::CurrentFileProgress_Start(QString, int)’:
-Current_File_Progress.cpp:29:9: error: ‘class Ui::MainWindow’ has no member named ‘groupBox_CurrentFile’
-   29 |     ui->groupBox_CurrentFile->setTitle(tr("Current File:")+" "+FileName);
-      |         ^~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp:31:9: error: ‘class Ui::MainWindow’ has no member named ‘progressBar_CurrentFile’
-   31 |     ui->progressBar_CurrentFile->setRange(0,FrameNum);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp:32:9: error: ‘class Ui::MainWindow’ has no member named ‘progressBar_CurrentFile’
-   32 |     ui->progressBar_CurrentFile->setValue(0);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp:34:9: error: ‘class Ui::MainWindow’ has no member named ‘label_FrameProgress_CurrentFile’
-   34 |     ui->label_FrameProgress_CurrentFile->setText("0/"+QString::number(FrameNum,10));
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp:35:9: error: ‘class Ui::MainWindow’ has no member named ‘label_TimeRemain_CurrentFile’
-   35 |     ui->label_TimeRemain_CurrentFile->setText(tr("Time remaining:NULL"));
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp:36:9: error: ‘class Ui::MainWindow’ has no member named ‘label_TimeCost_CurrentFile’
-   36 |     ui->label_TimeCost_CurrentFile->setText(tr("Time taken:NULL"));
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp:37:9: error: ‘class Ui::MainWindow’ has no member named ‘label_ETA_CurrentFile’
-   37 |     ui->label_ETA_CurrentFile->setText(tr("ETA:NULL"));
-      |         ^~~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp:45:9: error: ‘class Ui::MainWindow’ has no member named ‘groupBox_CurrentFile’
-   45 |     ui->groupBox_CurrentFile->setVisible(1);
-      |         ^~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp: In member function ‘void MainWindow::CurrentFileProgress_Stop()’:
-Current_File_Progress.cpp:55:9: error: ‘class Ui::MainWindow’ has no member named ‘groupBox_CurrentFile’
-   55 |     ui->groupBox_CurrentFile->setVisible(0);
-      |         ^~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp: In member function ‘void MainWindow::CurrentFileProgress_progressbar_Add()’:
-Current_File_Progress.cpp:66:9: error: ‘class Ui::MainWindow’ has no member named ‘progressBar_CurrentFile’
-   66 |     ui->progressBar_CurrentFile->setValue(TaskNumFinished_CurrentFile);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp:67:9: error: ‘class Ui::MainWindow’ has no member named ‘label_FrameProgress_CurrentFile’
-   67 |     ui->label_FrameProgress_CurrentFile->setText(QString::number(TaskNumFinished_CurrentFile,10)+"/"+QString::number(TaskNumTotal_CurrentFile,10));
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp: In member function ‘void MainWindow::CurrentFileProgress_progressbar_Add_SegmentDuration(int)’:
-Current_File_Progress.cpp:76:9: error: ‘class Ui::MainWindow’ has no member named ‘progressBar_CurrentFile’
-   76 |     ui->progressBar_CurrentFile->setValue(TaskNumFinished_CurrentFile);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp:77:9: error: ‘class Ui::MainWindow’ has no member named ‘label_FrameProgress_CurrentFile’
-   77 |     ui->label_FrameProgress_CurrentFile->setText(QString::number(TaskNumFinished_CurrentFile,10)+"/"+QString::number(TaskNumTotal_CurrentFile,10));
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp: In member function ‘void MainWindow::CurrentFileProgress_progressbar_SetFinishedValue(int)’:
-Current_File_Progress.cpp:86:9: error: ‘class Ui::MainWindow’ has no member named ‘progressBar_CurrentFile’
-   86 |     ui->progressBar_CurrentFile->setValue(TaskNumFinished_CurrentFile);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~
-Current_File_Progress.cpp:87:9: error: ‘class Ui::MainWindow’ has no member named ‘label_FrameProgress_CurrentFile’
-   87 |     ui->label_FrameProgress_CurrentFile->setText(QString::number(TaskNumFinished_CurrentFile,10)+"/"+QString::number(TaskNumTotal_CurrentFile,10));
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-make: *** [Makefile:666: Current_File_Progress.o] Error 1
+Right-click_Menu.cpp: In member function ‘void MainWindow::Apply_CustRes_QAction_FileList_slot()’:
+Right-click_Menu.cpp:188:5: error: ‘on_pushButton_CustRes_apply_clicked’ was not declared in this scope; did you mean ‘on_pushButton_CustRes_cancel_clicked’?
+  188 |     on_pushButton_CustRes_apply_clicked();
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |     on_pushButton_CustRes_cancel_clicked
+make: *** [Makefile:774: Right-click_Menu.o] Error 1
+Web_Activities.cpp: In member function ‘void MainWindow::on_checkBox_BanGitee_clicked()’:
+Web_Activities.cpp:47:90: warning: ignoring return value of ‘auto QtConcurrent::run(Function&&, Args&& ...) [with Function = MainWindow::on_checkBox_BanGitee_clicked()::<lambda()>; Args = {}]’, declared with attribute ‘nodiscard’ [-Wunused-result]
+   47 |         QtConcurrent::run([this]() { this->ConnectivityTest_RawGithubusercontentCom(); });//Run network test in the background to determine if raw.githubusercontent.com can be connected
+      |                                                                                          ^
+In file included from /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/QtConcurrent:14,
+                 from mainwindow.h:29,
+                 from Web_Activities.cpp:19:
+/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:55:6: note: declared here
+   55 | auto run(Function &&f, Args &&...args)
+      |      ^~~

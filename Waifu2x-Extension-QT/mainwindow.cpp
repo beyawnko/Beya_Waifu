@@ -541,6 +541,11 @@ void MainWindow::Add_File_Folder_IncludeSubFolder_MainThread(QString Full_Path)
     Add_File_Folder_IncludeSubFolder(Full_Path);
 }
 
+void MainWindow::on_pushButton_CustRes_cancel_clicked()
+{
+    // TODO: Implement custom resolution cancel logic
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -1016,7 +1021,7 @@ void MainWindow::on_spinBox_textbrowser_fontsize_valueChanged(int arg1)
 
 void MainWindow::on_pushButton_CustRes_apply_clicked()
 {
-    CustRes_SetCustRes();
+    // TODO: Implement custom resolution apply logic
 }
 
 void MainWindow::on_pushButton_CustRes_cancel_clicked()
