@@ -33,8 +33,9 @@ fi
 
 $QMAKE_EXECUTABLE Waifu2x-Extension-QT.pro -spec linux-g++ CONFIG+=debug
 
-# Clean previous build artifacts
-make clean
+# Clean specific previous build artifacts to ensure shader is rebuilt
+echo "Cleaning specific build artifacts..."
+rm -f shaders/liquidglass.frag.qsb Beya_Waifu
 
 # Build the project and redirect all output (stdout and stderr) to WinBuildErrorLog.md
 # Using script to tee output to file and stdout

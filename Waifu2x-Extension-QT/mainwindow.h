@@ -732,7 +732,23 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     void on_pushButton_Patreon_clicked();
     void on_pushButton_SupportersList_clicked();
 
+    // Custom Resolution Slots
     void on_pushButton_CustRes_cancel_clicked();
+    void on_pushButton_CustRes_apply_clicked();
+
+    // Frame Interpolation Slots
+    void on_pushButton_DetectGPU_VFI_clicked();
+    void on_lineEdit_MultiGPU_IDs_VFI_editingFinished();
+    void on_checkBox_MultiGPU_VFI_stateChanged(int arg1);
+    void on_groupBox_FrameInterpolation_clicked();
+    void on_checkBox_EnableVFI_Home_clicked();
+    void on_checkBox_isCompatible_RifeNcnnVulkan_clicked();
+    void on_checkBox_isCompatible_CainNcnnVulkan_clicked();
+    void on_checkBox_isCompatible_DainNcnnVulkan_clicked();
+    void on_comboBox_Engine_VFI_currentIndexChanged(int index);
+    void on_pushButton_Verify_MultiGPU_VFI_clicked();
+    void on_checkBox_MultiThread_VFI_stateChanged(int arg1);
+    void on_checkBox_MultiThread_VFI_clicked();
 
     // RealCUGAN Slots
     void on_pushButton_DetectGPU_RealCUGAN_clicked();

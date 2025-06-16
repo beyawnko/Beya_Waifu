@@ -1021,7 +1021,7 @@ void MainWindow::on_spinBox_textbrowser_fontsize_valueChanged(int arg1)
 
 void MainWindow::on_pushButton_CustRes_apply_clicked()
 {
-    CustRes_SetCustRes();
+    // TODO: Implement custom resolution apply logic
 }
 
 void MainWindow::on_pushButton_CustRes_cancel_clicked()
