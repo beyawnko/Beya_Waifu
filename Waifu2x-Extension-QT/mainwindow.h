@@ -626,6 +626,7 @@ public:
     QMutex QMutex_ResizeImage_MultiThread;
     void ResizeImage_MultiThread(int New_width,int New_height,QString ImagesPath);
     ~MainWindow();
+    // Start upscaling with the selected engine, returns 0 on success
     int Waifu2x();
     bool Check_PreLoad_Settings();
 
