@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -309,5 +309,73 @@ bool MainWindow::APNG_isAnimatedPNG(int rowNum)
     QString sourceFileFullPath = Table_model_image->item(rowNum,2)->text();
     FileMetadataCache metadata = getOrFetchMetadata(sourceFileFullPath);
     return metadata.isValid && metadata.isAnimated && metadata.fileFormat == "apng";
+}
+
+/*
+Placeholder implementations for APNG processing functions that are not yet
+ported from the original project. They simply emit a message and return failure
+so the application can compile without providing the actual functionality.
+*/
+
+bool MainWindow::APNG_Waifu2xNCNNVulkan(QString, QString, QString,
+                                        QStringList, QString)
+{
+    emit Send_TextBrowser_NewMessage(tr("APNG_Waifu2xNCNNVulkan is not available."));
+    return false;
+}
+
+bool MainWindow::APNG_Waifu2xConverter(QString, QString, QString,
+                                       QStringList, QString)
+{
+    emit Send_TextBrowser_NewMessage(tr("APNG_Waifu2xConverter is not available."));
+    return false;
+}
+
+int MainWindow::Waifu2x_Converter_APNG_scale(QMap<QString, QString>, int *, bool *)
+{
+    return 0;
+}
+
+bool MainWindow::APNG_SrmdNCNNVulkan(QString, QString, QString,
+                                     QStringList, QString)
+{
+    emit Send_TextBrowser_NewMessage(tr("APNG_SrmdNCNNVulkan is not available."));
+    return false;
+}
+
+bool MainWindow::APNG_Anime4k(QString, QString, QString, QStringList, QString)
+{
+    emit Send_TextBrowser_NewMessage(tr("APNG_Anime4k is not available."));
+    return false;
+}
+
+int MainWindow::Anime4k_APNG_scale(QMap<QString, QString>, int *, bool *)
+{
+    return 0;
+}
+
+bool MainWindow::APNG_SrmdCUDA(QString, QString, QString, QStringList, QString)
+{
+    emit Send_TextBrowser_NewMessage(tr("APNG_SrmdCUDA is not available."));
+    return false;
+}
+
+bool MainWindow::APNG_Waifu2xCaffe(QString, QString, QString,
+                                   QStringList, QString)
+{
+    emit Send_TextBrowser_NewMessage(tr("APNG_Waifu2xCaffe is not available."));
+    return false;
+}
+
+int MainWindow::Waifu2x_Caffe_APNG_scale(QMap<QString, QString>, int *, bool *)
+{
+    return 0;
+}
+
+bool MainWindow::APNG_RealsrNCNNVulkan(QString, QString, QString,
+                                       QStringList, QString)
+{
+    emit Send_TextBrowser_NewMessage(tr("APNG_RealsrNCNNVulkan is not available."));
+    return false;
 }
 
