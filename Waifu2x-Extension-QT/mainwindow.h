@@ -782,6 +782,10 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     void RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardError();
     void RealESRGAN_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error);
     void RealESRGAN_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error);
+    void onRealESRGANProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onRealESRGANProcessError(QProcess::ProcessError error);
+    void onRealESRGANProcessStdOut();
+    void onRealESRGANProcessStdErr();
 
     // Asynchronous file processing for drag and drop
     void ProcessDroppedFilesAsync(QList<QUrl> urls);
