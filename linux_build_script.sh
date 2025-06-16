@@ -38,7 +38,7 @@ echo "Cleaning specific build artifacts..."
 rm -f shaders/liquidglass.frag.qsb Beya_Waifu
 
 # Manually compile the liquidglass shader
-"$QTDIR/bin/qsb" Waifu2x-Extension-QT/shaders/liquidglass.frag -o Waifu2x-Extension-QT/shaders/liquidglass.frag.qsb
+"$QTDIR/bin/qsb" shaders/liquidglass.frag -o shaders/liquidglass.frag.qsb
 
 # Build the project and redirect all output (stdout and stderr) to WinBuildErrorLog.md
 # Using script to tee output to file and stdout
