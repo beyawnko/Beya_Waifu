@@ -1057,6 +1057,7 @@ void MainWindow::on_comboBox_language_currentIndexChanged(int index)
         {
             ui->comboBox_language->setCurrentIndex(2);
         }
+    }
     QString qmFilename="";
     switch(ui->comboBox_language->currentIndex())
     {
