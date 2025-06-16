@@ -10,6 +10,10 @@ if [ $? -ne 0 ]; then
 fi
 echo "PySide6 import test successful."
 
+# Install Qt6 multimedia and core5compat development packages
+sudo apt-get update
+sudo apt-get install -y qt6-multimedia-dev libqt6core5compat6-dev
+
 # Ensure Qt tools are in PATH (usually are if installed via apt)
 # Configure Qt toolchain location
 QTDIR=/usr/lib/qt6
@@ -38,10 +42,14 @@ echo "Cleaning specific build artifacts..."
 rm -f shaders/liquidglass.frag.qsb Beya_Waifu
 
 # Manually compile the liquidglass shader
-"$QTDIR/bin/qsb" Waifu2x-Extension-QT/shaders/liquidglass.frag -o Waifu2x-Extension-QT/shaders/liquidglass.frag.qsb
+"$QTDIR/bin/qsb" shaders/liquidglass.frag -o shaders/liquidglass.frag.qsb
 
 # Build the project and redirect all output (stdout and stderr) to WinBuildErrorLog.md
 # Using script to tee output to file and stdout
 (make -j$(nproc) 2>&1) | tee ../WinBuildErrorLog.md
 
 echo "Build attempt finished. Check WinBuildErrorLog.md for results."
+
+cd ..
+# Install Python dependencies
+python3 -m pip install -r requirements.txt
