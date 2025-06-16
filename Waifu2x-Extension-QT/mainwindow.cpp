@@ -332,7 +332,7 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
                               ui->spinBox_GlobalFontSize);
     QVariant darkModeSetting = Settings_Read_value("/settings/DarkMode");
     uiController.applyDarkStyle(darkModeSetting.isValid() ? darkModeSetting.toInt() : 1);
-    gpuManager.detectGPUs();
+    gpuManager.detectGPUs(""); // Pass empty string for initial/general detection
     QtConcurrent::run([this] { this->DeleteErrorLog_Waifu2xCaffe(); });
     QtConcurrent::run([this] { this->Del_TempBatFile(); });
     AutoUpdate = QtConcurrent::run([this] { return this->CheckUpadte_Auto(); });
@@ -1057,7 +1057,6 @@ void MainWindow::on_comboBox_language_currentIndexChanged(int index)
         {
             ui->comboBox_language->setCurrentIndex(2);
         }
-    }
     QString qmFilename="";
     switch(ui->comboBox_language->currentIndex())
     {
@@ -1441,7 +1440,6 @@ void MainWindow::on_comboBox_ImageStyle_currentIndexChanged(int index)
     {
         ui->comboBox_model_vulkan->setEnabled(0);
     }
-}
 
 void MainWindow::on_pushButton_ResetVideoSettings_clicked()
 {
@@ -2313,7 +2311,7 @@ void MainWindow::on_pushButton_DetectGPU_RealCUGAN_clicked()
         return;
     }
     // This might be a blocking call or needs to be async with signals
-    Available_GPUID_RealCUGAN = gpuManager.detectGpus("realcugan"); // Or a more specific method
+    Available_GPUID_RealCUGAN = gpuManager.detectGPUs("realcugan"); // Or a more specific method
 
     if (comboBox_GPUID_RealCUGAN) {
         comboBox_GPUID_RealCUGAN->clear();
@@ -3318,7 +3316,7 @@ void MainWindow::on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked()
         Send_TextBrowser_NewMessage(tr("RealESRGAN engine not found or incompatible."));
         return;
     }
-    Available_GPUID_RealESRGAN_ncnn_vulkan = gpuManager.detectGpus("realesrgan");
+    Available_GPUID_RealESRGAN_ncnn_vulkan = gpuManager.detectGPUs("realesrgan");
 
     if (comboBox_GPUID_RealsrNCNNVulkan) {
         comboBox_GPUID_RealsrNCNNVulkan->clear();
@@ -3501,6 +3499,7 @@ bool MainWindow::SystemShutDown(){return false;}
 int MainWindow::Waifu2x_DumpProcessorList_converter_finished(){return 0;}
 void MainWindow::Read_urls(QList<QUrl> urls)
 {
+    Q_UNUSED(urls);
     qDebug() << "MainWindow::Read_urls called, dispatching to ProcessDroppedFilesAsync.";
     // Disable drag and drop and give the user feedback while we
     // process the dropped files on a worker thread.  This mirrors
@@ -3882,4 +3881,19 @@ int MainWindow::SRMD_CUDA_Video_BySegment(int){return 0;}
 
 void MainWindow::ShellMessageBox(const QString&, const QString&, QMessageBox::Icon){}
 bool MainWindow::runProcess(QProcess *process,const QString &cmd,QByteArray *stdOut,QByteArray *stdErr){return processRunner.run(process,cmd,stdOut,stdErr);}
+
+void MainWindow::setImageEngineIndex(int index)
+{
+    ui->comboBox_Engine_Image->setCurrentIndex(index);
 }
+
+void MainWindow::setGifEngineIndex(int index)
+{
+    ui->comboBox_Engine_GIF->setCurrentIndex(index);
+}
+
+void MainWindow::setVideoEngineIndex(int index)
+{
+    ui->comboBox_Engine_Video->setCurrentIndex(index);
+}
+} // Closing brace for MainWindow class

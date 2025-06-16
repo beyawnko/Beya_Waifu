@@ -52,7 +52,11 @@ Clear progress bar
 */
 void MainWindow::progressbar_clear()
 {
-    ui->progressBar->setRange(0, 1);
+    Progressbar_CurrentVal = 0;
+    Progressbar_MaxVal = 0;
+    TaskNumFinished = 0; // Also reset TaskNumFinished as it's related to overall progress
+    ETA = 0; // Reset ETA
+    ui->progressBar->setRange(0, 0); // Or setRange(0,1) then setValue(0)
     ui->progressBar->setValue(0);
     ui->label_progressBar_filenum->setText("0/0");
 }
