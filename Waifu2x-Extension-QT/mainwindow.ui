@@ -11220,6 +11220,124 @@ padding:10px;
    </layout>
   </widget>
  </widget>
+ <widget class="QWidget" name="placeholderWidgets">
+  <property name="visible">
+   <bool>false</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_placeholder">
+   <item>
+    <widget class="QCheckBox" name="checkBox_MultiGPU_RealCUGAN"/>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBox_TTA_RealCUGAN"/>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBox_isCompatible_RealCUGAN_NCNN_Vulkan"/>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBox_isCompatible_RealESRGAN_NCNN_Vulkan"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_DeviceID_A4k"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_GPUID_RealCUGAN"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_GPUID_caffe"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_GPUID_cain"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_GPUID_dain"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_GPUID_realsr"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_GPUID_rife"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_GPUID_srmd_cuda"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_GPUID_vulkan"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_Model_RealCUGAN"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_OutFormat_Image"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_PlatformID_A4k"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_model_caffe"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_model_cain"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_model_converter"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_model_dain"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_model_realsr"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_model_rife"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_model_srmd"/>
+   </item>
+   <item>
+    <widget class="QComboBox" name="comboBox_model_srmd_cuda"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_Preview_Main"/>
+   </item>
+   <item>
+    <widget class="QListWidget" name="listWidget_GPUList_MultiGPU_RealCUGAN"/>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pushButton_DetectGPU_RealCUGAN"/>
+   </item>
+   <item>
+    <widget class="QSpinBox" name="spinBox_DenoiseLevel_RealCUGAN"/>
+   </item>
+   <item>
+    <widget class="QSpinBox" name="spinBox_Scale_RealCUGAN"/>
+   </item>
+   <item>
+    <widget class="QSpinBox" name="spinBox_Scale_RealESRGAN"/>
+   </item>
+   <item>
+    <widget class="QSpinBox" name="spinBox_Threads_MultiGPU_RealCUGAN"/>
+   </item>
+   <item>
+    <widget class="QSpinBox" name="spinBox_Threads_MultiGPU_RealESRGAN"/>
+   </item>
+   <item>
+    <widget class="QSpinBox" name="spinBox_Threads_RealCUGAN"/>
+   </item>
+   <item>
+    <widget class="QSpinBox" name="spinBox_TileSize_RealCUGAN"/>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="tableWidget_Files"/>
+   </item>
+   <item>
+    <widget class="QTextBrowser" name="textBrowser_SupportersNameList"/>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="tabWidget_FileType"/>
+   </item>
+  </layout>
+ </widget>
  <resources>
   <include location="icon.qrc"/>
  </resources>
