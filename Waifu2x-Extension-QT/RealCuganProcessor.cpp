@@ -51,9 +51,9 @@ void RealCuganProcessor::preLoadSettings()
 
     QSettings iniSettings(QDir::currentPath() + "/settings.ini", QSettings::IniFormat);
     // iniSettings.setIniCodec(QTextCodec::codecForName("UTF-8")); // Removed for Qt6
-    m_mainWindow->ui->comboBox_Engine_Image->setCurrentIndex(iniSettings.value("/settings/ImageEngine", 0).toInt());
-    m_mainWindow->ui->comboBox_Engine_GIF->setCurrentIndex(iniSettings.value("/settings/GIFEngine", 0).toInt());
-    m_mainWindow->ui->comboBox_Engine_Video->setCurrentIndex(iniSettings.value("/settings/VideoEngine", 0).toInt());
+    m_mainWindow->setImageEngineIndex(iniSettings.value("/settings/ImageEngine", 0).toInt());
+    m_mainWindow->setGifEngineIndex(iniSettings.value("/settings/GIFEngine", 0).toInt());
+    m_mainWindow->setVideoEngineIndex(iniSettings.value("/settings/VideoEngine", 0).toInt());
     readSettings();
     qDebug() << "Realcugan_NCNN_Vulkan_PreLoad_Settings completed.";
 }

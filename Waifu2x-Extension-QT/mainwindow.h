@@ -137,6 +137,9 @@ public:
     void Set_Font_fixed();
     bool SystemPrefersDark() const;
     void ApplyDarkStyle();
+    void setImageEngineIndex(int index);
+    void setGifEngineIndex(int index);
+    void setVideoEngineIndex(int index);
 
     //======================= Paths & Config =======================
     QString Current_Path = qApp->applicationDirPath();
@@ -552,6 +555,8 @@ public:
     long unsigned int TaskNumFinished=0;
     bool NewTaskFinished=false;
     long unsigned int ETA=0;
+    long unsigned int Progressbar_MaxVal = 0;
+    long unsigned int Progressbar_CurrentVal = 0;
     int CheckUpadte_Auto();
     int Donate_DownloadOnlineQRCode();
     void on_checkBox_BanGitee_clicked();
@@ -731,6 +736,86 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     void Set_checkBox_DisableResize_gif_Checked();
     void on_pushButton_Patreon_clicked();
     void on_pushButton_SupportersList_clicked();
+    void on_comboBox_ImageSaveFormat_currentIndexChanged(int index);
+    void on_pushButton_Stop_clicked();
+    int on_pushButton_RemoveItem_clicked();
+    void on_pushButton_Report_clicked();
+    void on_pushButton_ReadMe_clicked();
+    void on_comboBox_Engine_Image_currentIndexChanged(int index);
+    void on_comboBox_Engine_GIF_currentIndexChanged(int index);
+    void on_comboBox_Engine_Video_currentIndexChanged(int index);
+    void on_pushButton_clear_textbrowser_clicked();
+    void on_spinBox_textbrowser_fontsize_valueChanged(int arg1);
+    void on_pushButton_HideSettings_clicked();
+    void on_comboBox_language_currentIndexChanged(int index);
+    void on_pushButton_ReadFileList_clicked();
+    void on_Ext_image_editingFinished();
+    void on_Ext_video_editingFinished();
+    void on_checkBox_AutoSaveSettings_clicked();
+    void on_pushButton_about_clicked();
+    void on_comboBox_AspectRatio_custRes_currentIndexChanged(int index);
+    void on_checkBox_AlwaysHideSettings_stateChanged(int arg1);
+    void on_pushButton_Save_GlobalFontSize_clicked();
+    void on_pushButton_BrowserFile_clicked();
+    void on_pushButton_wiki_clicked();
+    void on_pushButton_HideTextBro_clicked();
+    void on_checkBox_AlwaysHideTextBrowser_stateChanged(int arg1);
+    void on_Ext_image_textChanged(const QString &arg1);
+    void on_Ext_video_textChanged(const QString &arg1);
+    void on_comboBox_model_vulkan_currentIndexChanged(int index);
+    void on_comboBox_ImageStyle_currentIndexChanged(int index);
+    void on_pushButton_ResetVideoSettings_clicked();
+    void on_lineEdit_encoder_vid_textChanged(const QString &arg1);
+    void on_lineEdit_encoder_audio_textChanged(const QString &arg1);
+    void on_lineEdit_pixformat_textChanged(const QString &arg1);
+    void on_checkBox_vcodec_copy_2mp4_stateChanged(int arg1);
+    void on_checkBox_acodec_copy_2mp4_stateChanged(int arg1);
+    void on_pushButton_encodersList_clicked();
+    void on_checkBox_DelOriginal_stateChanged(int arg1);
+    void on_checkBox_FileList_Interactive_stateChanged(int arg1);
+    void on_checkBox_OutPath_isEnabled_stateChanged(int arg1);
+    void on_pushButton_ForceRetry_clicked();
+    void on_pushButton_PayPal_clicked();
+    void on_checkBox_AudioDenoise_stateChanged(int arg1);
+    void on_tabWidget_currentChanged(int index);
+    void on_checkBox_ProcessVideoBySegment_stateChanged(int arg1);
+    void on_comboBox_version_Waifu2xNCNNVulkan_currentIndexChanged(int index);
+    void on_checkBox_EnablePreProcessing_Anime4k_stateChanged(int arg1);
+    void on_checkBox_EnablePostProcessing_Anime4k_stateChanged(int arg1);
+    void on_checkBox_SpecifyGPU_Anime4k_stateChanged(int arg1);
+    void on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_clicked();
+    void on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P_clicked();
+    void on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD_clicked();
+    void on_checkBox_isCompatible_SRMD_NCNN_Vulkan_clicked();
+    void on_checkBox_isCompatible_SRMD_CUDA_clicked();
+    void on_checkBox_isCompatible_Waifu2x_Converter_clicked();
+    void on_checkBox_isCompatible_Anime4k_CPU_clicked();
+    void on_checkBox_isCompatible_Anime4k_GPU_clicked();
+    void on_checkBox_isCompatible_FFmpeg_clicked();
+    void on_checkBox_isCompatible_FFprobe_clicked();
+    void on_checkBox_isCompatible_ImageMagick_clicked();
+    void on_checkBox_isCompatible_Gifsicle_clicked();
+    void on_checkBox_isCompatible_SoX_clicked();
+    void on_checkBox_GPUMode_Anime4K_stateChanged(int arg1);
+    void on_checkBox_ShowInterPro_stateChanged(int arg1);
+    void on_checkBox_isCompatible_Waifu2x_Caffe_CPU_clicked();
+    void on_checkBox_isCompatible_Waifu2x_Caffe_GPU_clicked();
+    void on_checkBox_isCompatible_Waifu2x_Caffe_cuDNN_clicked();
+    void on_pushButton_SplitSize_Add_Waifu2xCaffe_clicked();
+    void on_pushButton_SplitSize_Minus_Waifu2xCaffe_clicked();
+    void on_checkBox_isCompatible_Realsr_NCNN_Vulkan_clicked();
+    void on_checkBox_ACNet_Anime4K_stateChanged(int arg1);
+    void on_checkBox_HDNMode_Anime4k_stateChanged(int arg1);
+    void on_comboBox_UpdateChannel_currentIndexChanged(int index);
+    void on_checkBox_ReplaceOriginalFile_stateChanged(int arg1);
+    void on_checkBox_isCustFontEnable_stateChanged(int arg1);
+    void on_pushButton_ResizeFilesListSplitter_clicked();
+    void on_comboBox_GPGPUModel_A4k_currentIndexChanged(int index);
+    void on_checkBox_DisableGPU_converter_stateChanged(int arg1);
+    void on_groupBox_video_settings_clicked();
+    void on_pushButton_TurnOffScreen_clicked();
+    void on_pushButton_MultipleOfFPS_VFI_MIN_clicked();
+    void on_pushButton_MultipleOfFPS_VFI_ADD_clicked();
 
     // Custom Resolution Slots
     void on_pushButton_CustRes_cancel_clicked();
@@ -790,9 +875,101 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     // Asynchronous file processing for drag and drop
     void ProcessDroppedFilesAsync(QList<QUrl> urls);
     void ProcessDroppedFilesFinished();
+    void progressbar_clear();
+    void progressbar_SetToMax(int maxval); // Already declared, ensuring it's correct
     // Slots for main thread execution from ProcessDroppedFilesAsync
     void Add_File_Folder_MainThread(QString Full_Path);
     void Add_File_Folder_IncludeSubFolder_MainThread(QString Full_Path);
+    void progressbar_SetToMax(int maxval); // Declaration for progressbar_SetToMax
+    void on_pushButton_Start_clicked();
+    void on_pushButton_DetectGPU_clicked();
+    void on_pushButton_SaveSettings_clicked(); // Added from error log
+    void on_pushButton_ResetSettings_clicked(); // Added from error log
+    void on_comboBox_TargetProcessor_converter_currentIndexChanged(int index); // Added
+    void on_pushButton_DetectGPUID_srmd_clicked(); // Added
+    void on_pushButton_ListGPUs_Anime4k_clicked(); // Added
+    void on_checkBox_MultiGPU_Waifu2xNCNNVulkan_clicked(); // Added
+    void on_comboBox_GPUIDs_MultiGPU_Waifu2xNCNNVulkan_currentIndexChanged(int index); // Added
+    void on_spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan_valueChanged(int value); // Added
+    void on_checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan_clicked(); // Added
+    void on_checkBox_MultiGPU_Waifu2xNCNNVulkan_stateChanged(int state); // Added
+    void on_checkBox_MultiGPU_SrmdNCNNVulkan_stateChanged(int state); // Added
+    void on_checkBox_MultiGPU_SrmdNCNNVulkan_clicked(); // Added
+    void on_comboBox_GPUIDs_MultiGPU_SrmdNCNNVulkan_currentIndexChanged(int index); // Added
+    void on_checkBox_isEnable_CurrentGPU_MultiGPU_SrmdNCNNVulkan_clicked(); // Added
+    void on_spinBox_TileSize_CurrentGPU_MultiGPU_SrmdNCNNVulkan_valueChanged(int value); // Added
+    void on_checkBox_MultiGPU_RealsrNcnnVulkan_clicked(); // Added
+    void on_checkBox_MultiGPU_Waifu2xConverter_clicked(); // Added
+    void on_checkBox_MultiGPU_Waifu2xConverter_stateChanged(int state); // Added
+    void on_comboBox_GPUIDs_MultiGPU_Waifu2xConverter_currentIndexChanged(int index); // Added
+    void on_checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xConverter_clicked(); // Added
+    void on_spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xConverter_valueChanged(int value); // Added
+    void on_checkBox_EnableMultiGPU_Waifu2xCaffe_stateChanged(int state);
+    // Adding other frequently mentioned undeclared slots based on typical Qt usage & previous errors
+    void on_pushButton_Stop_clicked();
+    // int on_pushButton_RemoveItem_clicked(); // Return type might need adjustment if it's an error
+    void on_pushButton_Report_clicked();
+    void on_pushButton_ReadMe_clicked();
+    void on_comboBox_Engine_Image_currentIndexChanged(int index);
+    void on_comboBox_Engine_GIF_currentIndexChanged(int index);
+    void on_comboBox_Engine_Video_currentIndexChanged(int index);
+    void on_pushButton_clear_textbrowser_clicked();
+    void on_spinBox_textbrowser_fontsize_valueChanged(int arg1);
+    void on_pushButton_HideSettings_clicked();
+    // void on_comboBox_language_currentIndexChanged(int index); // Already declared
+    void on_pushButton_ReadFileList_clicked();
+    void on_Ext_image_editingFinished();
+    void on_Ext_video_editingFinished();
+    void on_checkBox_AutoSaveSettings_clicked();
+    void on_pushButton_about_clicked();
+    // void on_comboBox_AspectRatio_custRes_currentIndexChanged(int index); // Already declared
+    void on_checkBox_AlwaysHideSettings_stateChanged(int arg1);
+    void on_pushButton_Save_GlobalFontSize_clicked();
+    void on_pushButton_BrowserFile_clicked();
+    void on_pushButton_wiki_clicked();
+    void on_pushButton_HideTextBro_clicked();
+    // void on_checkBox_AlwaysHideTextBrowser_stateChanged(int arg1); // Already declared
+    // void on_Ext_image_textChanged(const QString &arg1); // Already declared
+    // void on_Ext_video_textChanged(const QString &arg1); // Already declared
+    // void on_comboBox_model_vulkan_currentIndexChanged(int index); // Already declared
+    // void on_comboBox_ImageStyle_currentIndexChanged(int index); // Already declared
+    void on_pushButton_ResetVideoSettings_clicked();
+    // void on_lineEdit_encoder_vid_textChanged(const QString &arg1); // Already declared
+    // void on_lineEdit_encoder_audio_textChanged(const QString &arg1); // Already declared
+    // void on_lineEdit_pixformat_textChanged(const QString &arg1); // Already declared
+    // void on_checkBox_vcodec_copy_2mp4_stateChanged(int arg1); // Already declared
+    // void on_checkBox_acodec_copy_2mp4_stateChanged(int arg1); // Already declared
+    void on_pushButton_encodersList_clicked();
+    // void on_checkBox_DelOriginal_stateChanged(int arg1); // Already declared
+    // void on_checkBox_FileList_Interactive_stateChanged(int arg1); // Already declared
+    // void on_checkBox_OutPath_isEnabled_stateChanged(int arg1); // Already declared
+    void on_pushButton_ForceRetry_clicked();
+    void on_pushButton_PayPal_clicked();
+    // void on_checkBox_AudioDenoise_stateChanged(int arg1); // Already declared
+    // void on_tabWidget_currentChanged(int index); // Already declared
+    // void on_checkBox_ProcessVideoBySegment_stateChanged(int arg1); // Already declared
+    // void on_comboBox_version_Waifu2xNCNNVulkan_currentIndexChanged(int index); // Already declared
+    // void on_checkBox_EnablePreProcessing_Anime4k_stateChanged(int arg1); // Already declared
+    // void on_checkBox_EnablePostProcessing_Anime4k_stateChanged(int arg1); // Already declared
+    // void on_checkBox_SpecifyGPU_Anime4k_stateChanged(int arg1); // Already declared
+    // void on_checkBox_GPUMode_Anime4K_stateChanged(int arg1); // Already declared
+    // void on_checkBox_ShowInterPro_stateChanged(int arg1); // Already declared
+    // void on_checkBox_ACNet_Anime4K_stateChanged(int arg1); // Already declared
+    // void on_checkBox_HDNMode_Anime4k_stateChanged(int arg1); // Already declared
+    // void on_comboBox_UpdateChannel_currentIndexChanged(int index); // Already declared
+    // void on_checkBox_ReplaceOriginalFile_stateChanged(int arg1); // Already declared
+    // void on_checkBox_isCustFontEnable_stateChanged(int arg1); // Already declared
+    // void on_pushButton_ResizeFilesListSplitter_clicked(); // Already declared
+    // void on_comboBox_GPGPUModel_A4k_currentIndexChanged(int index); // Already declared
+    // void on_checkBox_DisableGPU_converter_stateChanged(int arg1); // Already declared
+    // void on_groupBox_video_settings_clicked(); // Already declared
+    // void on_pushButton_TurnOffScreen_clicked(); // Already declared
+    // void on_pushButton_MultipleOfFPS_VFI_MIN_clicked(); // Already declared
+    // void on_pushButton_MultipleOfFPS_VFI_ADD_clicked(); // Already declared
+
+private slots: // Changed from public slots to private as these are internal
+    void TextBrowser_StartMes();
+
 
 signals:
     void Send_Table_EnableSorting(bool EnableSorting);

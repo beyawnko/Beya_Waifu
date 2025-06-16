@@ -61,9 +61,7 @@ Read urls
 */
 void MainWindow::Read_urls(QList<QUrl> urls)
 {
-    Progressbar_MaxVal = urls.size();
-    Progressbar_CurrentVal = 0;
-    emit Send_PrograssBar_Range_min_max(0, Progressbar_MaxVal);
+    emit Send_PrograssBar_Range_min_max(0, urls.size());
     if(ui->checkBox_ScanSubFolders->isChecked())
     {
         foreach(QUrl url, urls)
@@ -101,9 +99,7 @@ void MainWindow::Read_urls_finfished()
     ui->label_DropFile->setText(tr("Drag and drop files or folders here\n(Image, GIF and Video)"));
     emit Send_TextBrowser_NewMessage(tr("Add file complete."));
     //===================================================
-    Progressbar_MaxVal = 0;
-    Progressbar_CurrentVal = 0;
-    progressbar_clear();
+    emit Send_PrograssBar_Range_min_max(0, 0);
     //======================
     //If no files were added
     if(AddNew_gif==false&&AddNew_image==false&&AddNew_video==false)
