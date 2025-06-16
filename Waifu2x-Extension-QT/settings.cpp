@@ -313,24 +313,60 @@ int MainWindow::Settings_Read_Apply()
     configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
 #endif
     //=================== Load global font settings =========================
-    ui->spinBox_GlobalFontSize->setValue(Settings_Read_value("/settings/GlobalFontSize").toInt());
-    ui->fontComboBox_CustFont->setCurrentFont(Settings_Read_value("/settings/CustFont").value<QFont>());
-    ui->checkBox_isCustFontEnable->setChecked(Settings_Read_value("/settings/CustFont_isEnabled").toBool());
+    {
+        QVariant tmp = Settings_Read_value("/settings/GlobalFontSize");
+        if (tmp.isValid()) ui->spinBox_GlobalFontSize->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/CustFont");
+        if (tmp.isValid()) ui->fontComboBox_CustFont->setCurrentFont(tmp.value<QFont>());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/CustFont_isEnabled");
+        if (tmp.isValid()) ui->checkBox_isCustFontEnable->setChecked(tmp.toBool());
+    }
     uiController.setFontFixed(ui->checkBox_isCustFontEnable,
                               ui->fontComboBox_CustFont,
                               ui->spinBox_GlobalFontSize);
     //=======  Load scale and denoise values  ======
-    ui->doubleSpinBox_ScaleRatio_image->setValue(Settings_Read_value("/settings/ImageScaleRatio").toDouble());
-    ui->doubleSpinBox_ScaleRatio_gif->setValue(Settings_Read_value("/settings/GIFScaleRatio").toDouble());
-    ui->doubleSpinBox_ScaleRatio_video->setValue(Settings_Read_value("/settings/VideoScaleRatio").toDouble());
+    {
+        QVariant tmp = Settings_Read_value("/settings/ImageScaleRatio");
+        if (tmp.isValid()) ui->doubleSpinBox_ScaleRatio_image->setValue(tmp.toDouble());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/GIFScaleRatio");
+        if (tmp.isValid()) ui->doubleSpinBox_ScaleRatio_gif->setValue(tmp.toDouble());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/VideoScaleRatio");
+        if (tmp.isValid()) ui->doubleSpinBox_ScaleRatio_video->setValue(tmp.toDouble());
+    }
     //============= Load custom width and height ============================
-    ui->spinBox_CustRes_width->setValue(Settings_Read_value("/settings/CustResWidth").toInt());
-    ui->spinBox_CustRes_height->setValue(Settings_Read_value("/settings/CustResHeight").toInt());
-    ui->comboBox_AspectRatio_custRes->setCurrentIndex(Settings_Read_value("/settings/CustResAspectRatioMode").toInt());
+    {
+        QVariant tmp = Settings_Read_value("/settings/CustResWidth");
+        if (tmp.isValid()) ui->spinBox_CustRes_width->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/CustResHeight");
+        if (tmp.isValid()) ui->spinBox_CustRes_height->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/CustResAspectRatioMode");
+        if (tmp.isValid()) ui->comboBox_AspectRatio_custRes->setCurrentIndex(tmp.toInt());
+    }
     //============ Load thread count ==================================
-    ui->spinBox_ThreadNum_image->setValue(Settings_Read_value("/settings/ImageThreadNum").toInt());
-    ui->spinBox_ThreadNum_gif_internal->setValue(Settings_Read_value("/settings/GIFThreadNumInternal").toInt());
-    ui->spinBox_ThreadNum_video_internal->setValue(Settings_Read_value("/settings/VideoThreadNumInternal").toInt());
+    {
+        QVariant tmp = Settings_Read_value("/settings/ImageThreadNum");
+        if (tmp.isValid()) ui->spinBox_ThreadNum_image->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/GIFThreadNumInternal");
+        if (tmp.isValid()) ui->spinBox_ThreadNum_gif_internal->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/VideoThreadNumInternal");
+        if (tmp.isValid()) ui->spinBox_ThreadNum_video_internal->setValue(tmp.toInt());
+    }
     
     QVariant maxThreadCountSetting = Settings_Read_value("/settings/MaxThreadCount");
     globalMaxThreadCount = maxThreadCountSetting.isValid() ? maxThreadCountSetting.toInt() : 0;
@@ -347,60 +383,156 @@ int MainWindow::Settings_Read_Apply()
     QVariant videoEngineSetting = Settings_Read_value("/settings/VideoEngine");
     ui->comboBox_Engine_Video->setCurrentIndex(videoEngineSetting.isValid() ? videoEngineSetting.toInt() : 0);
 
-    ui->comboBox_ImageStyle->setCurrentIndex(Settings_Read_value("/settings/ImageStyle").toInt());
-    ui->comboBox_model_vulkan->setCurrentIndex(Settings_Read_value("/settings/ModelVulkan").toInt());
-    ui->spinBox_TileSize->setValue(Settings_Read_value("/settings/TileSize").toInt());
-    ui->spinBox_BlockSize_converter->setValue(Settings_Read_value("/settings/BlockSizeConverter").toInt());
-    ui->checkBox_DisableGPU_converter->setChecked(Settings_Read_value("/settings/DisableGPUConverter").toBool());
-    ui->checkBox_ForceOpenCL_converter->setChecked(Settings_Read_value("/settings/ForceOpenCLConverter").toBool());
-    ui->checkBox_TTA_vulkan->setChecked(Settings_Read_value("/settings/TTAVulkan").toBool());
-    ui->checkBox_TTA_converter->setChecked(Settings_Read_value("/settings/TTAConverter").toBool());
-    ui->checkBox_TTA_srmd->setChecked(Settings_Read_value("/settings/TTA_SRMD").toBool());
-    ui->spinBox_TileSize_srmd->setValue(Settings_Read_value("/settings/TileSize_SRMD").toInt());
-    ui->comboBox_version_Waifu2xNCNNVulkan->setCurrentIndex(Settings_Read_value("/settings/Version_Waifu2xNCNNVulkan").toInt());
+    {
+        QVariant tmp = Settings_Read_value("/settings/ImageStyle");
+        if (tmp.isValid()) ui->comboBox_ImageStyle->setCurrentIndex(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/ModelVulkan");
+        if (tmp.isValid()) ui->comboBox_model_vulkan->setCurrentIndex(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/TileSize");
+        if (tmp.isValid()) ui->spinBox_TileSize->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/BlockSizeConverter");
+        if (tmp.isValid()) ui->spinBox_BlockSize_converter->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/DisableGPUConverter");
+        if (tmp.isValid()) ui->checkBox_DisableGPU_converter->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/ForceOpenCLConverter");
+        if (tmp.isValid()) ui->checkBox_ForceOpenCL_converter->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/TTAVulkan");
+        if (tmp.isValid()) ui->checkBox_TTA_vulkan->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/TTAConverter");
+        if (tmp.isValid()) ui->checkBox_TTA_converter->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/TTA_SRMD");
+        if (tmp.isValid()) ui->checkBox_TTA_srmd->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/TileSize_SRMD");
+        if (tmp.isValid()) ui->spinBox_TileSize_srmd->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/Version_Waifu2xNCNNVulkan");
+        if (tmp.isValid()) ui->comboBox_version_Waifu2xNCNNVulkan->setCurrentIndex(tmp.toInt());
+    }
     //===
-    checkBox_TTA_RealsrNCNNVulkan->setChecked(Settings_Read_value("/settings/checkBox_TTA_RealsrNCNNVulkan").toBool());
-    comboBox_Model_RealsrNCNNVulkan->setCurrentIndex(Settings_Read_value("/settings/comboBox_Model_RealsrNCNNVulkan").toInt());
-    spinBox_TileSize_RealsrNCNNVulkan->setValue(Settings_Read_value("/settings/spinBox_TileSize_RealsrNCNNVulkan").toInt());
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_TTA_RealsrNCNNVulkan");
+        if (tmp.isValid()) checkBox_TTA_RealsrNCNNVulkan->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/comboBox_Model_RealsrNCNNVulkan");
+        if (tmp.isValid()) comboBox_Model_RealsrNCNNVulkan->setCurrentIndex(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/spinBox_TileSize_RealsrNCNNVulkan");
+        if (tmp.isValid()) spinBox_TileSize_RealsrNCNNVulkan->setValue(tmp.toInt());
+    }
     //===
-    ui->checkBox_TTA_Waifu2xCaffe->setChecked(Settings_Read_value("/settings/TTA_Waifu2xCaffe").toBool());
-    ui->comboBox_Model_2D_Waifu2xCaffe->setCurrentIndex(Settings_Read_value("/settings/Model_2D_Waifu2xCaffe").toInt());
-    ui->comboBox_Model_3D_Waifu2xCaffe->setCurrentIndex(Settings_Read_value("/settings/Model_3D_Waifu2xCaffe").toInt());
-    ui->comboBox_ProcessMode_Waifu2xCaffe->setCurrentIndex(Settings_Read_value("/settings/ProcessMode_Waifu2xCaffe").toInt());
-    ui->spinBox_BatchSize_Waifu2xCaffe->setValue(Settings_Read_value("/settings/BatchSize_Waifu2xCaffe").toInt());
-    ui->spinBox_GPUID_Waifu2xCaffe->setValue(Settings_Read_value("/settings/GPUID_Waifu2xCaffe").toInt());
-    ui->spinBox_SplitSize_Waifu2xCaffe->setValue(Settings_Read_value("/settings/SplitSize_Waifu2xCaffe").toInt());
-    ui->checkBox_EnableMultiGPU_Waifu2xCaffe->setChecked(Settings_Read_value("/settings/checkBox_EnableMultiGPU_Waifu2xCaffe").toBool());
-    ui->lineEdit_MultiGPUInfo_Waifu2xCaffe->setText(Settings_Read_value("/settings/lineEdit_MultiGPUInfo_Waifu2xCaffe").toString());
+    {
+        QVariant tmp = Settings_Read_value("/settings/TTA_Waifu2xCaffe");
+        if (tmp.isValid()) ui->checkBox_TTA_Waifu2xCaffe->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/Model_2D_Waifu2xCaffe");
+        if (tmp.isValid()) ui->comboBox_Model_2D_Waifu2xCaffe->setCurrentIndex(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/Model_3D_Waifu2xCaffe");
+        if (tmp.isValid()) ui->comboBox_Model_3D_Waifu2xCaffe->setCurrentIndex(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/ProcessMode_Waifu2xCaffe");
+        if (tmp.isValid()) ui->comboBox_ProcessMode_Waifu2xCaffe->setCurrentIndex(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/BatchSize_Waifu2xCaffe");
+        if (tmp.isValid()) ui->spinBox_BatchSize_Waifu2xCaffe->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/GPUID_Waifu2xCaffe");
+        if (tmp.isValid()) ui->spinBox_GPUID_Waifu2xCaffe->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/SplitSize_Waifu2xCaffe");
+        if (tmp.isValid()) ui->spinBox_SplitSize_Waifu2xCaffe->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_EnableMultiGPU_Waifu2xCaffe");
+        if (tmp.isValid()) ui->checkBox_EnableMultiGPU_Waifu2xCaffe->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/lineEdit_MultiGPUInfo_Waifu2xCaffe");
+        if (tmp.isValid()) ui->lineEdit_MultiGPUInfo_Waifu2xCaffe->setText(tmp.toString());
+    }
     //GPU ID List
     //Waifu2x-NCNN-Vulkan
-    Available_GPUID_Waifu2xNcnnVulkan = Settings_Read_value("/settings/Available_GPUID_Waifu2xNCNNVulkan").toStringList();
+    {
+        QVariant tmp = Settings_Read_value("/settings/Available_GPUID_Waifu2xNCNNVulkan");
+        if (tmp.isValid()) Available_GPUID_Waifu2xNcnnVulkan = tmp.toStringList();
+    }
     Waifu2x_DetectGPU_finished();
-    ui->comboBox_GPUID->setCurrentIndex(Settings_Read_value("/settings/CurrentGPUID_Waifu2xNCNNVulkan").toInt());
+    {
+        QVariant tmp = Settings_Read_value("/settings/CurrentGPUID_Waifu2xNCNNVulkan");
+        if (tmp.isValid()) ui->comboBox_GPUID->setCurrentIndex(tmp.toInt());
+    }
     // Load multi-GPU settings
-    GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan").value<QList<QMap<QString, QString>> >();
+    {
+        QVariant tmp = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan");
+        if (tmp.isValid()) GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan = tmp.value<QList<QMap<QString, QString>> >();
+    }
     if(GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_Waifu2xNCNNVulkan) // Check if combobox exists
     {
         QMap<QString,QString> GPUInfo_waifu2xNcnnVulkan = GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan.at(ui->comboBox_GPUIDs_MultiGPU_Waifu2xNCNNVulkan->currentIndex());
         if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan) ui->checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan->setChecked(GPUInfo_waifu2xNcnnVulkan["isEnabled"] == "true");
         if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan) ui->spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xNCNNVulkan->setValue(GPUInfo_waifu2xNcnnVulkan["TileSize"].toInt());
     }
-    if(ui->checkBox_MultiGPU_Waifu2xNCNNVulkan) ui->checkBox_MultiGPU_Waifu2xNCNNVulkan->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_Waifu2xNCNNVulkan").toBool());
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_MultiGPU_Waifu2xNCNNVulkan");
+        if (tmp.isValid()) if(ui->checkBox_MultiGPU_Waifu2xNCNNVulkan) ui->checkBox_MultiGPU_Waifu2xNCNNVulkan->setChecked(tmp.toBool());
+    }
     //Realsr_ncnn_vulkan
-    Available_GPUID_Realsr_ncnn_vulkan = Settings_Read_value("/settings/Available_GPUID_Realsr_ncnn_vulkan").toStringList();
+    {
+        QVariant tmp = Settings_Read_value("/settings/Available_GPUID_Realsr_ncnn_vulkan");
+        if (tmp.isValid()) Available_GPUID_Realsr_ncnn_vulkan = tmp.toStringList();
+    }
     Realsr_ncnn_vulkan_DetectGPU_finished();
-    if(comboBox_GPUID_RealsrNCNNVulkan) comboBox_GPUID_RealsrNCNNVulkan->setCurrentIndex(Settings_Read_value("/settings/comboBox_GPUID_RealsrNCNNVulkan").toInt());
+    {
+        QVariant tmp = Settings_Read_value("/settings/comboBox_GPUID_RealsrNCNNVulkan");
+        if (tmp.isValid()) if(comboBox_GPUID_RealsrNCNNVulkan) comboBox_GPUID_RealsrNCNNVulkan->setCurrentIndex(tmp.toInt());
+    }
     // Load multi-GPU settings
-    GPUIDs_List_MultiGPU_RealesrganNcnnVulkan = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_RealsrganNcnnVulkan").value<QList<QMap<QString, QString>> >();
+    {
+        QVariant tmp = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_RealsrganNcnnVulkan");
+        if (tmp.isValid()) GPUIDs_List_MultiGPU_RealesrganNcnnVulkan = tmp.value<QList<QMap<QString, QString>> >();
+    }
     if(GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.isEmpty()==false && comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan)
     {
         QMap<QString,QString> GPUInfo_RealesrganNcnnVulkan = GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.at(comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan->currentIndex());
         if(checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan) checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setChecked(GPUInfo_RealesrganNcnnVulkan["isEnabled"] == "true");
         if(spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan) spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setValue(GPUInfo_RealesrganNcnnVulkan["TileSize"].toInt());
     }
-    if(checkBox_MultiGPU_RealesrganNcnnVulkan) checkBox_MultiGPU_RealesrganNcnnVulkan->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_RealesrganNcnnVulkan").toBool());
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_MultiGPU_RealesrganNcnnVulkan");
+        if (tmp.isValid()) if(checkBox_MultiGPU_RealesrganNcnnVulkan) checkBox_MultiGPU_RealesrganNcnnVulkan->setChecked(tmp.toBool());
+    }
     //Waifu2x-Converter
-    Available_ProcessorList_converter = Settings_Read_value("/settings/Available_ProcessorList_converter").toStringList();
+    {
+        QVariant tmp = Settings_Read_value("/settings/Available_ProcessorList_converter");
+        if (tmp.isValid()) Available_ProcessorList_converter = tmp.toStringList();
+    }
     Waifu2x_DumpProcessorList_converter_finished();
     if(ui->comboBox_TargetProcessor_converter) {
         QVariant converterProcessor = Settings_Read_value("/settings/comboBox_TargetProcessor_converter");
@@ -410,27 +542,45 @@ int MainWindow::Settings_Read_Apply()
     }
     on_comboBox_TargetProcessor_converter_currentIndexChanged(0);
     // Load multi-GPU settings
-    GPUIDs_List_MultiGPU_Waifu2xConverter = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_Waifu2xConverter").value<QList<QMap<QString, QString>> >();
+    {
+        QVariant tmp = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_Waifu2xConverter");
+        if (tmp.isValid()) GPUIDs_List_MultiGPU_Waifu2xConverter = tmp.value<QList<QMap<QString, QString>> >();
+    }
     if(GPUIDs_List_MultiGPU_Waifu2xConverter.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_Waifu2xConverter)
     {
         QMap<QString,QString> GPUInfo_Waifu2xConverter = GPUIDs_List_MultiGPU_Waifu2xConverter.at(ui->comboBox_GPUIDs_MultiGPU_Waifu2xConverter->currentIndex());
         if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xConverter) ui->checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xConverter->setChecked(GPUInfo_Waifu2xConverter["isEnabled"] == "true");
         if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xConverter) ui->spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xConverter->setValue(GPUInfo_Waifu2xConverter["TileSize"].toInt());
     }
-    if(ui->checkBox_MultiGPU_Waifu2xConverter) ui->checkBox_MultiGPU_Waifu2xConverter->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_Waifu2xConverter").toBool());
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_MultiGPU_Waifu2xConverter");
+        if (tmp.isValid()) if(ui->checkBox_MultiGPU_Waifu2xConverter) ui->checkBox_MultiGPU_Waifu2xConverter->setChecked(tmp.toBool());
+    }
     //SRMD-NCNN-Vulkan
-    Available_GPUID_srmd = Settings_Read_value("/settings/Available_GPUID_srmd").toStringList();
+    {
+        QVariant tmp = Settings_Read_value("/settings/Available_GPUID_srmd");
+        if (tmp.isValid()) Available_GPUID_srmd = tmp.toStringList();
+    }
     SRMD_DetectGPU_finished();
-    if(ui->comboBox_GPUID_srmd) ui->comboBox_GPUID_srmd->setCurrentIndex(Settings_Read_value("/settings/comboBox_GPUID_srmd").toInt());
+    {
+        QVariant tmp = Settings_Read_value("/settings/comboBox_GPUID_srmd");
+        if (tmp.isValid()) if(ui->comboBox_GPUID_srmd) ui->comboBox_GPUID_srmd->setCurrentIndex(tmp.toInt());
+    }
     // Load multi-GPU settings
-    GPUIDs_List_MultiGPU_SrmdNcnnVulkan = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_SrmdNcnnVulkan").value<QList<QMap<QString, QString>> >();
+    {
+        QVariant tmp = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_SrmdNcnnVulkan");
+        if (tmp.isValid()) GPUIDs_List_MultiGPU_SrmdNcnnVulkan = tmp.value<QList<QMap<QString, QString>> >();
+    }
     if(GPUIDs_List_MultiGPU_SrmdNcnnVulkan.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_SrmdNCNNVulkan)
     {
         QMap<QString,QString> GPUInfo_SrmdNcnnVulkan = GPUIDs_List_MultiGPU_SrmdNcnnVulkan.at(ui->comboBox_GPUIDs_MultiGPU_SrmdNCNNVulkan->currentIndex());
         if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_SrmdNCNNVulkan) ui->checkBox_isEnable_CurrentGPU_MultiGPU_SrmdNCNNVulkan->setChecked(GPUInfo_SrmdNcnnVulkan["isEnabled"] == "true");
         if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_SrmdNCNNVulkan) ui->spinBox_TileSize_CurrentGPU_MultiGPU_SrmdNCNNVulkan->setValue(GPUInfo_SrmdNcnnVulkan["TileSize"].toInt());
     }
-    if(ui->checkBox_MultiGPU_SrmdNCNNVulkan) ui->checkBox_MultiGPU_SrmdNCNNVulkan->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_SrmdNCNNVulkan").toBool());
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_MultiGPU_SrmdNCNNVulkan");
+        if (tmp.isValid()) if(ui->checkBox_MultiGPU_SrmdNCNNVulkan) ui->checkBox_MultiGPU_SrmdNCNNVulkan->setChecked(tmp.toBool());
+    }
 
     // RealCUGAN Settings
     QVariant realCuganModel = Settings_Read_value("/settings/RealCUGAN_Model");
@@ -452,7 +602,10 @@ int MainWindow::Settings_Read_Apply()
     QVariant ttaCugan = Settings_Read_value("/settings/RealCUGAN_TTA");
     if(checkBox_TTA_RealCUGAN && ttaCugan.isValid()) checkBox_TTA_RealCUGAN->setChecked(ttaCugan.toBool());
     
-    Available_GPUID_RealCUGAN = Settings_Read_value("/settings/RealCUGAN_Available_GPUID").toStringList();
+    {
+        QVariant tmp = Settings_Read_value("/settings/RealCUGAN_Available_GPUID");
+        if (tmp.isValid()) Available_GPUID_RealCUGAN = tmp.toStringList();
+    }
     
     QVariant gpuIDCugan = Settings_Read_value("/settings/RealCUGAN_GPUID");
     if(comboBox_GPUID_RealCUGAN && gpuIDCugan.isValid()) comboBox_GPUID_RealCUGAN->setCurrentIndex(gpuIDCugan.toInt());
@@ -460,7 +613,10 @@ int MainWindow::Settings_Read_Apply()
     QVariant multiGpuCugan = Settings_Read_value("/settings/RealCUGAN_MultiGPU_Enabled");
     if(checkBox_MultiGPU_RealCUGAN && multiGpuCugan.isValid()) checkBox_MultiGPU_RealCUGAN->setChecked(multiGpuCugan.toBool());
     
-    m_realcugan_gpuJobConfig_temp = Settings_Read_value("/settings/RealCUGAN_GPUJobConfig_MultiGPU").value<QList<QMap<QString, QString>>>();
+    {
+        QVariant tmp = Settings_Read_value("/settings/RealCUGAN_GPUJobConfig_MultiGPU");
+        if (tmp.isValid()) m_realcugan_gpuJobConfig_temp = tmp.value<QList<QMap<QString, QString>>>();
+    }
     if (checkBox_MultiGPU_RealCUGAN && checkBox_MultiGPU_RealCUGAN->isChecked()) {
         if (listWidget_GPUList_MultiGPU_RealCUGAN) {
             listWidget_GPUList_MultiGPU_RealCUGAN->clear();
@@ -487,13 +643,25 @@ int MainWindow::Settings_Read_Apply()
 
     // RealESRGAN Settings
     if(comboBox_Model_RealsrNCNNVulkan) {
-        QString modelName = Settings_Read_value("/settings/RealESRGAN_ModelName").toString();
+        {
+            QVariant tmp = Settings_Read_value("/settings/RealESRGAN_ModelName");
+            if (tmp.isValid()) QString modelName = tmp.toString();
+        }
         int modelIndex = comboBox_Model_RealsrNCNNVulkan->findText(modelName);
         if (modelIndex != -1) comboBox_Model_RealsrNCNNVulkan->setCurrentIndex(modelIndex);
     }
-    if(spinBox_TileSize_RealsrNCNNVulkan) spinBox_TileSize_RealsrNCNNVulkan->setValue(Settings_Read_value("/settings/RealESRGAN_TileSize").toInt());
-    if(checkBox_TTA_RealsrNCNNVulkan) checkBox_TTA_RealsrNCNNVulkan->setChecked(Settings_Read_value("/settings/RealESRGAN_TTA").toBool());
-    Available_GPUID_RealESRGAN_ncnn_vulkan = Settings_Read_value("/settings/RealESRGAN_Available_GPUID").toStringList();
+    {
+        QVariant tmp = Settings_Read_value("/settings/RealESRGAN_TileSize");
+        if (tmp.isValid()) if(spinBox_TileSize_RealsrNCNNVulkan) spinBox_TileSize_RealsrNCNNVulkan->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/RealESRGAN_TTA");
+        if (tmp.isValid()) if(checkBox_TTA_RealsrNCNNVulkan) checkBox_TTA_RealsrNCNNVulkan->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/RealESRGAN_Available_GPUID");
+        if (tmp.isValid()) Available_GPUID_RealESRGAN_ncnn_vulkan = tmp.toStringList();
+    }
     
     QVariant gpuIDEsrgan = Settings_Read_value("/settings/RealESRGAN_GPUID");
     if(comboBox_GPUID_RealsrNCNNVulkan && gpuIDEsrgan.isValid()) comboBox_GPUID_RealsrNCNNVulkan->setCurrentIndex(gpuIDEsrgan.toInt());
@@ -501,133 +669,457 @@ int MainWindow::Settings_Read_Apply()
     QVariant multiGpuEsrgan = Settings_Read_value("/settings/RealESRGAN_MultiGPU_Enabled");
     if(checkBox_MultiGPU_RealesrganNcnnVulkan && multiGpuEsrgan.isValid()) checkBox_MultiGPU_RealesrganNcnnVulkan->setChecked(multiGpuEsrgan.toBool());
     
-    m_realesrgan_gpuJobConfig_temp = Settings_Read_value("/settings/RealESRGAN_GPUJobConfig_MultiGPU").value<QList<QMap<QString, QString>>>();
+    {
+        QVariant tmp = Settings_Read_value("/settings/RealESRGAN_GPUJobConfig_MultiGPU");
+        if (tmp.isValid()) m_realesrgan_gpuJobConfig_temp = tmp.value<QList<QMap<QString, QString>>>();
+    }
     if (checkBox_MultiGPU_RealesrganNcnnVulkan && checkBox_MultiGPU_RealesrganNcnnVulkan->isChecked()) {
         RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
     }
 
 
     //================= Load file extensions ===========================
-    ui->Ext_image->setText(Settings_Read_value("/settings/ImageEXT").toString());
-    ui->Ext_video->setText(Settings_Read_value("/settings/VideoEXT").toString());
+    {
+        QVariant tmp = Settings_Read_value("/settings/ImageEXT");
+        if (tmp.isValid()) ui->Ext_image->setText(tmp.toString());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/VideoEXT");
+        if (tmp.isValid()) ui->Ext_video->setText(tmp.toString());
+    }
     //================== Load miscellaneous settings ==================================
-    ui->checkBox_SummaryPopup->setChecked(Settings_Read_value("/settings/checkBox_SummaryPopup").toBool());
-    ui->checkBox_DisableResize_gif->setChecked(Settings_Read_value("/settings/checkBox_DisableResize_gif").toBool());
-    ui->checkBox_AutoSkip_CustomRes->setChecked(Settings_Read_value("/settings/checkBox_AutoSkip_CustomRes").toBool());
-    ui->checkBox_AlwaysPreProcessAlphaPNG->setChecked(Settings_Read_value("/settings/checkBox_AlwaysPreProcessAlphaPNG").toBool());
-    ui->spinBox_ImageQualityLevel->setValue(Settings_Read_value("/settings/spinBox_ImageQualityLevel").toInt());
-    ui->comboBox_ImageSaveFormat->setCurrentIndex(Settings_Read_value("/settings/comboBox_ImageSaveFormat").toInt());
-    ui->checkBox_KeepParentFolder->setChecked(Settings_Read_value("/settings/checkBox_KeepParentFolder").toBool());
-    ui->checkBox_BanGitee->setChecked(Settings_Read_value("/settings/checkBox_BanGitee").toBool());
-    comboBox_UpdateChannel_setCurrentIndex_self(Settings_Read_value("/settings/comboBox_UpdateChannel").toInt());
-    ui->checkBox_MinimizeToTaskbar->setChecked(Settings_Read_value("/settings/checkBox_MinimizeToTaskbar").toBool());
-    ui->checkBox_custres_isAll->setChecked(Settings_Read_value("/settings/checkBox_custres_isAll").toBool());
-    ui->checkBox_DelOriginal->setChecked(Settings_Read_value("/settings/DelOriginal").toBool());
-    ui->checkBox_OptGIF->setChecked(Settings_Read_value("/settings/OptGIF").toBool());
-    ui->checkBox_NfSound->setChecked(Settings_Read_value("/settings/NFSound").toBool());
-    ui->checkBox_ReProcFinFiles->setChecked(Settings_Read_value("/settings/ReProFinFiles").toBool());
-    ui->checkBox_ShowInterPro->setChecked(Settings_Read_value("/settings/ShowInterPro").toBool());
-    ui->checkBox_UpdatePopup->setChecked(Settings_Read_value("/settings/UpdatePopup").toBool());
-    ui->checkBox_FileListAutoSlide->setChecked(Settings_Read_value("/settings/FileListAutoScroll").toBool());
-    ui->checkBox_AutoSaveSettings->setChecked(Settings_Read_value("/settings/AutoSaveSettings").toBool());
-    ui->checkBox_AlwaysHideSettings->setChecked(Settings_Read_value("/settings/AlwaysHideSettings").toBool());
-    ui->checkBox_AlwaysHideTextBrowser->setChecked(Settings_Read_value("/settings/AlwaysHideTextBrowser").toBool());
-    ui->checkBox_ScanSubFolders->setChecked(Settings_Read_value("/settings/ScanSubFolders").toBool());
-    ui->checkBox_FileList_Interactive->setChecked(Settings_Read_value("/settings/InteractiveFileList").toBool());
-    ui->spinBox_retry->setValue(Settings_Read_value("/settings/RetryTimes").toInt());
-    ui->checkBox_AutoDetectAlphaChannel->setChecked(Settings_Read_value("/settings/AutoDetectAlphaChannel").toBool());
-    ui->checkBox_PromptWhenExit->setChecked(Settings_Read_value("/settings/PromptWhenExit").toBool());
-    ui->checkBox_KeepVideoCache->setChecked(Settings_Read_value("/settings/KeepVideoCache").toBool());
-    ui->checkBox_ReplaceOriginalFile->setChecked(Settings_Read_value("/settings/checkBox_ReplaceOriginalFile").toBool());
-    QAction_checkBox_MoveToRecycleBin_checkBox_ReplaceOriginalFile->setChecked(Settings_Read_value("/settings/QAction_checkBox_MoveToRecycleBin_checkBox_ReplaceOriginalFile").toBool());
-    QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal->setChecked(Settings_Read_value("/settings/QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal").toBool());
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_SummaryPopup");
+        if (tmp.isValid()) ui->checkBox_SummaryPopup->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_DisableResize_gif");
+        if (tmp.isValid()) ui->checkBox_DisableResize_gif->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_AutoSkip_CustomRes");
+        if (tmp.isValid()) ui->checkBox_AutoSkip_CustomRes->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_AlwaysPreProcessAlphaPNG");
+        if (tmp.isValid()) ui->checkBox_AlwaysPreProcessAlphaPNG->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/spinBox_ImageQualityLevel");
+        if (tmp.isValid()) ui->spinBox_ImageQualityLevel->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/comboBox_ImageSaveFormat");
+        if (tmp.isValid()) ui->comboBox_ImageSaveFormat->setCurrentIndex(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_KeepParentFolder");
+        if (tmp.isValid()) ui->checkBox_KeepParentFolder->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_BanGitee");
+        if (tmp.isValid()) ui->checkBox_BanGitee->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/comboBox_UpdateChannel");
+        if (tmp.isValid()) comboBox_UpdateChannel_setCurrentIndex_self(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_MinimizeToTaskbar");
+        if (tmp.isValid()) ui->checkBox_MinimizeToTaskbar->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_custres_isAll");
+        if (tmp.isValid()) ui->checkBox_custres_isAll->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/DelOriginal");
+        if (tmp.isValid()) ui->checkBox_DelOriginal->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/OptGIF");
+        if (tmp.isValid()) ui->checkBox_OptGIF->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/NFSound");
+        if (tmp.isValid()) ui->checkBox_NfSound->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/ReProFinFiles");
+        if (tmp.isValid()) ui->checkBox_ReProcFinFiles->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/ShowInterPro");
+        if (tmp.isValid()) ui->checkBox_ShowInterPro->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/UpdatePopup");
+        if (tmp.isValid()) ui->checkBox_UpdatePopup->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/FileListAutoScroll");
+        if (tmp.isValid()) ui->checkBox_FileListAutoSlide->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/AutoSaveSettings");
+        if (tmp.isValid()) ui->checkBox_AutoSaveSettings->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/AlwaysHideSettings");
+        if (tmp.isValid()) ui->checkBox_AlwaysHideSettings->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/AlwaysHideTextBrowser");
+        if (tmp.isValid()) ui->checkBox_AlwaysHideTextBrowser->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/ScanSubFolders");
+        if (tmp.isValid()) ui->checkBox_ScanSubFolders->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/InteractiveFileList");
+        if (tmp.isValid()) ui->checkBox_FileList_Interactive->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/RetryTimes");
+        if (tmp.isValid()) ui->spinBox_retry->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/AutoDetectAlphaChannel");
+        if (tmp.isValid()) ui->checkBox_AutoDetectAlphaChannel->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/PromptWhenExit");
+        if (tmp.isValid()) ui->checkBox_PromptWhenExit->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/KeepVideoCache");
+        if (tmp.isValid()) ui->checkBox_KeepVideoCache->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_ReplaceOriginalFile");
+        if (tmp.isValid()) ui->checkBox_ReplaceOriginalFile->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/QAction_checkBox_MoveToRecycleBin_checkBox_ReplaceOriginalFile");
+        if (tmp.isValid()) QAction_checkBox_MoveToRecycleBin_checkBox_ReplaceOriginalFile->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal");
+        if (tmp.isValid()) QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal->setChecked(tmp.toBool());
+    }
     //===
-    ui->checkBox_ProcessVideoBySegment->setChecked(Settings_Read_value("/settings/ProcessVideoBySegment").toBool());
-    ui->spinBox_SegmentDuration->setValue(Settings_Read_value("/settings/SegmentDuration").toInt());
+    {
+        QVariant tmp = Settings_Read_value("/settings/ProcessVideoBySegment");
+        if (tmp.isValid()) ui->checkBox_ProcessVideoBySegment->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/SegmentDuration");
+        if (tmp.isValid()) ui->spinBox_SegmentDuration->setValue(tmp.toInt());
+    }
     //=========
-    ui->checkBox_AudioDenoise->setChecked(Settings_Read_value("/settings/AudioDenoise").toBool());
-    ui->doubleSpinBox_AudioDenoiseLevel->setValue(Settings_Read_value("/settings/AudioDenoiseLevel").toDouble());
+    {
+        QVariant tmp = Settings_Read_value("/settings/AudioDenoise");
+        if (tmp.isValid()) ui->checkBox_AudioDenoise->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/AudioDenoiseLevel");
+        if (tmp.isValid()) ui->doubleSpinBox_AudioDenoiseLevel->setValue(tmp.toDouble());
+    }
     //=========
-    ui->checkBox_PreProcessImage->setChecked(Settings_Read_value("/settings/checkBox_PreProcessImage").toBool());
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_PreProcessImage");
+        if (tmp.isValid()) ui->checkBox_PreProcessImage->setChecked(tmp.toBool());
+    }
     //=================== Load text browser settings ==========================
-    ui->spinBox_textbrowser_fontsize->setValue(Settings_Read_value("/settings/TextBrowserFontSize").toInt());
+    {
+        QVariant tmp = Settings_Read_value("/settings/TextBrowserFontSize");
+        if (tmp.isValid()) ui->spinBox_textbrowser_fontsize->setValue(tmp.toInt());
+    }
     //=================== Load video settings ===========================
-    ui->groupBox_video_settings->setChecked(Settings_Read_value("/settings/VideoSettingsIsEnabled").toBool());
+    {
+        QVariant tmp = Settings_Read_value("/settings/VideoSettingsIsEnabled");
+        if (tmp.isValid()) ui->groupBox_video_settings->setChecked(tmp.toBool());
+    }
     //===
-    ui->lineEdit_encoder_vid->setText(Settings_Read_value("/settings/EncoderVideo").toString());
-    ui->lineEdit_encoder_audio->setText(Settings_Read_value("/settings/EncoderAudio").toString());
-    ui->lineEdit_pixformat->setText(Settings_Read_value("/settings/PixelFormat").toString());
-    ui->spinBox_bitrate_vid->setValue(Settings_Read_value("/settings/BitrateVideo").toInt());
-    ui->spinBox_bitrate_audio->setValue(Settings_Read_value("/settings/BitrateAudio").toInt());
-    ui->lineEdit_ExCommand_output->setText(Settings_Read_value("/settings/ExtraCommandOutput").toString());
+    {
+        QVariant tmp = Settings_Read_value("/settings/EncoderVideo");
+        if (tmp.isValid()) ui->lineEdit_encoder_vid->setText(tmp.toString());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/EncoderAudio");
+        if (tmp.isValid()) ui->lineEdit_encoder_audio->setText(tmp.toString());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/PixelFormat");
+        if (tmp.isValid()) ui->lineEdit_pixformat->setText(tmp.toString());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/BitrateVideo");
+        if (tmp.isValid()) ui->spinBox_bitrate_vid->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/BitrateAudio");
+        if (tmp.isValid()) ui->spinBox_bitrate_audio->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/ExtraCommandOutput");
+        if (tmp.isValid()) ui->lineEdit_ExCommand_output->setText(tmp.toString());
+    }
     //===
-    ui->spinBox_bitrate_vid_2mp4->setValue(Settings_Read_value("/settings/BitrateVideo2mp4").toInt());
-    ui->spinBox_bitrate_audio_2mp4->setValue(Settings_Read_value("/settings/BitrateAudio2mp4").toInt());
-    ui->checkBox_vcodec_copy_2mp4->setChecked(Settings_Read_value("/settings/vcodecCopy").toBool());
-    ui->checkBox_acodec_copy_2mp4->setChecked(Settings_Read_value("/settings/acodecCopy").toBool());
-    ui->checkBox_IgnoreFrameRateMode->setChecked(Settings_Read_value("/settings/checkBox_IgnoreFrameRateMode").toBool());
-    ui->lineEdit_ExCommand_2mp4->setText(Settings_Read_value("/settings/ExtraCommand2mp4").toString());
+    {
+        QVariant tmp = Settings_Read_value("/settings/BitrateVideo2mp4");
+        if (tmp.isValid()) ui->spinBox_bitrate_vid_2mp4->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/BitrateAudio2mp4");
+        if (tmp.isValid()) ui->spinBox_bitrate_audio_2mp4->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/vcodecCopy");
+        if (tmp.isValid()) ui->checkBox_vcodec_copy_2mp4->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/acodecCopy");
+        if (tmp.isValid()) ui->checkBox_acodec_copy_2mp4->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_IgnoreFrameRateMode");
+        if (tmp.isValid()) ui->checkBox_IgnoreFrameRateMode->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/ExtraCommand2mp4");
+        if (tmp.isValid()) ui->lineEdit_ExCommand_2mp4->setText(tmp.toString());
+    }
     //=============== Load output path settings ===========================
-    ui->lineEdit_outputPath->setText(Settings_Read_value("/settings/OutPutPath").toString());
-    ui->checkBox_OutPath_isEnabled->setChecked(Settings_Read_value("/settings/OutPutPathIsEnabled").toBool());
-    ui->checkBox_OutPath_KeepOriginalFileName->setChecked(Settings_Read_value("/settings/checkBox_OutPath_KeepOriginalFileName").toBool());
-    ui->checkBox_OutPath_Overwrite->setChecked(Settings_Read_value("/settings/checkBox_OutPath_Overwrite").toBool());
-    ui->checkBox_AutoOpenOutputPath->setChecked(Settings_Read_value("/settings/checkBox_AutoOpenOutputPath").toBool());
+    {
+        QVariant tmp = Settings_Read_value("/settings/OutPutPath");
+        if (tmp.isValid()) ui->lineEdit_outputPath->setText(tmp.toString());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/OutPutPathIsEnabled");
+        if (tmp.isValid()) ui->checkBox_OutPath_isEnabled->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_OutPath_KeepOriginalFileName");
+        if (tmp.isValid()) ui->checkBox_OutPath_KeepOriginalFileName->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_OutPath_Overwrite");
+        if (tmp.isValid()) ui->checkBox_OutPath_Overwrite->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_AutoOpenOutputPath");
+        if (tmp.isValid()) ui->checkBox_AutoOpenOutputPath->setChecked(tmp.toBool());
+    }
     //================== Load Anime4k settings ===================================
-    ui->spinBox_OpenCLCommandQueues_A4k->setValue(Settings_Read_value("/settings/spinBox_OpenCLCommandQueues_A4k").toInt());
-    ui->checkBox_OpenCLParallelIO_A4k->setChecked(Settings_Read_value("/settings/checkBox_OpenCLParallelIO_A4k").toBool());
-    ui->comboBox_GPGPUModel_A4k->setCurrentIndex(Settings_Read_value("/settings/comboBox_GPGPUModel_A4k").toInt());
-    ui->checkBox_HDNMode_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_HDNMode_Anime4k").toBool());
-    ui->checkBox_FastMode_Anime4K->setChecked(Settings_Read_value("/settings/checkBox_FastMode_Anime4K").toBool());
-    ui->checkBox_ACNet_Anime4K->setChecked(Settings_Read_value("/settings/checkBox_ACNet_Anime4K").toBool());
-    ui->checkBox_GPUMode_Anime4K->setChecked(Settings_Read_value("/settings/checkBox_GPUMode_Anime4K").toBool());
-    ui->spinBox_Passes_Anime4K->setValue(Settings_Read_value("/settings/spinBox_Passes_Anime4K").toInt());
-    ui->spinBox_PushColorCount_Anime4K->setValue(Settings_Read_value("/settings/spinBox_PushColorCount_Anime4K").toInt());
-    ui->doubleSpinBox_PushColorStrength_Anime4K->setValue(Settings_Read_value("/settings/doubleSpinBox_PushColorStrength_Anime4K").toDouble());
-    ui->doubleSpinBox_PushGradientStrength_Anime4K->setValue(Settings_Read_value("/settings/doubleSpinBox_PushGradientStrength_Anime4K").toDouble());
-    ui->checkBox_SpecifyGPU_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_SpecifyGPU_Anime4k").toBool());
-    ui->lineEdit_GPUs_Anime4k->setText(Settings_Read_value("/settings/lineEdit_GPUs_Anime4k").toString());
+    {
+        QVariant tmp = Settings_Read_value("/settings/spinBox_OpenCLCommandQueues_A4k");
+        if (tmp.isValid()) ui->spinBox_OpenCLCommandQueues_A4k->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_OpenCLParallelIO_A4k");
+        if (tmp.isValid()) ui->checkBox_OpenCLParallelIO_A4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/comboBox_GPGPUModel_A4k");
+        if (tmp.isValid()) ui->comboBox_GPGPUModel_A4k->setCurrentIndex(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_HDNMode_Anime4k");
+        if (tmp.isValid()) ui->checkBox_HDNMode_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_FastMode_Anime4K");
+        if (tmp.isValid()) ui->checkBox_FastMode_Anime4K->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_ACNet_Anime4K");
+        if (tmp.isValid()) ui->checkBox_ACNet_Anime4K->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_GPUMode_Anime4K");
+        if (tmp.isValid()) ui->checkBox_GPUMode_Anime4K->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/spinBox_Passes_Anime4K");
+        if (tmp.isValid()) ui->spinBox_Passes_Anime4K->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/spinBox_PushColorCount_Anime4K");
+        if (tmp.isValid()) ui->spinBox_PushColorCount_Anime4K->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/doubleSpinBox_PushColorStrength_Anime4K");
+        if (tmp.isValid()) ui->doubleSpinBox_PushColorStrength_Anime4K->setValue(tmp.toDouble());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/doubleSpinBox_PushGradientStrength_Anime4K");
+        if (tmp.isValid()) ui->doubleSpinBox_PushGradientStrength_Anime4K->setValue(tmp.toDouble());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_SpecifyGPU_Anime4k");
+        if (tmp.isValid()) ui->checkBox_SpecifyGPU_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/lineEdit_GPUs_Anime4k");
+        if (tmp.isValid()) ui->lineEdit_GPUs_Anime4k->setText(tmp.toString());
+    }
     //Pre-Processing
-    ui->checkBox_EnablePreProcessing_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_EnablePreProcessing_Anime4k").toBool());
-    ui->checkBox_MedianBlur_Pre_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_MedianBlur_Pre_Anime4k").toBool());
-    ui->checkBox_MeanBlur_Pre_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_MeanBlur_Pre_Anime4k").toBool());
-    ui->checkBox_CASSharping_Pre_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_CASSharping_Pre_Anime4k").toBool());
-    ui->checkBox_GaussianBlurWeak_Pre_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_GaussianBlurWeak_Pre_Anime4k").toBool());
-    ui->checkBox_GaussianBlur_Pre_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_GaussianBlur_Pre_Anime4k").toBool());
-    ui->checkBox_BilateralFilter_Pre_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_BilateralFilter_Pre_Anime4k").toBool());
-    ui->checkBox_BilateralFilterFaster_Pre_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_BilateralFilterFaster_Pre_Anime4k").toBool());
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_EnablePreProcessing_Anime4k");
+        if (tmp.isValid()) ui->checkBox_EnablePreProcessing_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_MedianBlur_Pre_Anime4k");
+        if (tmp.isValid()) ui->checkBox_MedianBlur_Pre_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_MeanBlur_Pre_Anime4k");
+        if (tmp.isValid()) ui->checkBox_MeanBlur_Pre_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_CASSharping_Pre_Anime4k");
+        if (tmp.isValid()) ui->checkBox_CASSharping_Pre_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_GaussianBlurWeak_Pre_Anime4k");
+        if (tmp.isValid()) ui->checkBox_GaussianBlurWeak_Pre_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_GaussianBlur_Pre_Anime4k");
+        if (tmp.isValid()) ui->checkBox_GaussianBlur_Pre_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_BilateralFilter_Pre_Anime4k");
+        if (tmp.isValid()) ui->checkBox_BilateralFilter_Pre_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_BilateralFilterFaster_Pre_Anime4k");
+        if (tmp.isValid()) ui->checkBox_BilateralFilterFaster_Pre_Anime4k->setChecked(tmp.toBool());
+    }
     //Post-Processing
-    ui->checkBox_EnablePostProcessing_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_EnablePostProcessing_Anime4k").toBool());
-    ui->checkBox_MedianBlur_Post_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_MedianBlur_Post_Anime4k").toBool());
-    ui->checkBox_MeanBlur_Post_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_MeanBlur_Post_Anime4k").toBool());
-    ui->checkBox_CASSharping_Post_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_CASSharping_Post_Anime4k").toBool());
-    ui->checkBox_GaussianBlurWeak_Post_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_GaussianBlurWeak_Post_Anime4k").toBool());
-    ui->checkBox_GaussianBlur_Post_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_GaussianBlur_Post_Anime4k").toBool());
-    ui->checkBox_BilateralFilter_Post_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_BilateralFilter_Post_Anime4k").toBool());
-    ui->checkBox_BilateralFilterFaster_Post_Anime4k->setChecked(Settings_Read_value("/settings/checkBox_BilateralFilterFaster_Post_Anime4k").toBool());
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_EnablePostProcessing_Anime4k");
+        if (tmp.isValid()) ui->checkBox_EnablePostProcessing_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_MedianBlur_Post_Anime4k");
+        if (tmp.isValid()) ui->checkBox_MedianBlur_Post_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_MeanBlur_Post_Anime4k");
+        if (tmp.isValid()) ui->checkBox_MeanBlur_Post_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_CASSharping_Post_Anime4k");
+        if (tmp.isValid()) ui->checkBox_CASSharping_Post_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_GaussianBlurWeak_Post_Anime4k");
+        if (tmp.isValid()) ui->checkBox_GaussianBlurWeak_Post_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_GaussianBlur_Post_Anime4k");
+        if (tmp.isValid()) ui->checkBox_GaussianBlur_Post_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_BilateralFilter_Post_Anime4k");
+        if (tmp.isValid()) ui->checkBox_BilateralFilter_Post_Anime4k->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_BilateralFilterFaster_Post_Anime4k");
+        if (tmp.isValid()) ui->checkBox_BilateralFilterFaster_Post_Anime4k->setChecked(tmp.toBool());
+    }
     //===================== Load compatibility test results ============================
-    isCompatible_Waifu2x_NCNN_Vulkan_NEW = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW").toBool();
-    isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P").toBool();
-    isCompatible_Waifu2x_NCNN_Vulkan_OLD = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD").toBool();
-    isCompatible_Waifu2x_Converter = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_Converter").toBool();
-    isCompatible_SRMD_NCNN_Vulkan = Settings_Read_value("/settings/checkBox_isCompatible_SRMD_NCNN_Vulkan").toBool();
-    isCompatible_SRMD_CUDA = Settings_Read_value("/settings/checkBox_isCompatible_SRMD_CUDA").toBool();
-    isCompatible_Anime4k_CPU = Settings_Read_value("/settings/checkBox_isCompatible_Anime4k_CPU").toBool();
-    isCompatible_Anime4k_GPU = Settings_Read_value("/settings/checkBox_isCompatible_Anime4k_GPU").toBool();
-    isCompatible_FFmpeg = Settings_Read_value("/settings/checkBox_isCompatible_FFmpeg").toBool();
-    isCompatible_FFprobe = Settings_Read_value("/settings/checkBox_isCompatible_FFprobe").toBool();
-    isCompatible_ImageMagick = Settings_Read_value("/settings/checkBox_isCompatible_ImageMagick").toBool();
-    isCompatible_Gifsicle = Settings_Read_value("/settings/checkBox_isCompatible_Gifsicle").toBool();
-    isCompatible_SoX = Settings_Read_value("/settings/checkBox_isCompatible_SoX").toBool();
-    isCompatible_Waifu2x_Caffe_CPU = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_Caffe_CPU").toBool();
-    isCompatible_Waifu2x_Caffe_GPU = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_Caffe_GPU").toBool();
-    isCompatible_Waifu2x_Caffe_cuDNN = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_Caffe_cuDNN").toBool();
-    isCompatible_Realsr_NCNN_Vulkan = Settings_Read_value("/settings/checkBox_isCompatible_Realsr_NCNN_Vulkan").toBool();
-    isCompatible_RifeNcnnVulkan = Settings_Read_value("/settings/checkBox_isCompatible_RifeNcnnVulkan").toBool();
-    isCompatible_CainNcnnVulkan = Settings_Read_value("/settings/checkBox_isCompatible_CainNcnnVulkan").toBool();
-    isCompatible_DainNcnnVulkan = Settings_Read_value("/settings/checkBox_isCompatible_DainNcnnVulkan").toBool();
-    isCompatible_RealCUGAN_NCNN_Vulkan = Settings_Read_value("/settings/checkBox_isCompatible_RealCUGAN_NCNN_Vulkan").toBool();
-    isCompatible_RealESRGAN_NCNN_Vulkan = Settings_Read_value("/settings/checkBox_isCompatible_RealESRGAN_NCNN_Vulkan").toBool();
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW");
+        if (tmp.isValid()) isCompatible_Waifu2x_NCNN_Vulkan_NEW = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P");
+        if (tmp.isValid()) isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD");
+        if (tmp.isValid()) isCompatible_Waifu2x_NCNN_Vulkan_OLD = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_Converter");
+        if (tmp.isValid()) isCompatible_Waifu2x_Converter = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_SRMD_NCNN_Vulkan");
+        if (tmp.isValid()) isCompatible_SRMD_NCNN_Vulkan = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_SRMD_CUDA");
+        if (tmp.isValid()) isCompatible_SRMD_CUDA = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_Anime4k_CPU");
+        if (tmp.isValid()) isCompatible_Anime4k_CPU = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_Anime4k_GPU");
+        if (tmp.isValid()) isCompatible_Anime4k_GPU = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_FFmpeg");
+        if (tmp.isValid()) isCompatible_FFmpeg = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_FFprobe");
+        if (tmp.isValid()) isCompatible_FFprobe = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_ImageMagick");
+        if (tmp.isValid()) isCompatible_ImageMagick = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_Gifsicle");
+        if (tmp.isValid()) isCompatible_Gifsicle = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_SoX");
+        if (tmp.isValid()) isCompatible_SoX = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_Caffe_CPU");
+        if (tmp.isValid()) isCompatible_Waifu2x_Caffe_CPU = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_Caffe_GPU");
+        if (tmp.isValid()) isCompatible_Waifu2x_Caffe_GPU = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_Waifu2x_Caffe_cuDNN");
+        if (tmp.isValid()) isCompatible_Waifu2x_Caffe_cuDNN = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_Realsr_NCNN_Vulkan");
+        if (tmp.isValid()) isCompatible_Realsr_NCNN_Vulkan = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_RifeNcnnVulkan");
+        if (tmp.isValid()) isCompatible_RifeNcnnVulkan = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_CainNcnnVulkan");
+        if (tmp.isValid()) isCompatible_CainNcnnVulkan = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_DainNcnnVulkan");
+        if (tmp.isValid()) isCompatible_DainNcnnVulkan = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_RealCUGAN_NCNN_Vulkan");
+        if (tmp.isValid()) isCompatible_RealCUGAN_NCNN_Vulkan = tmp.toBool();
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_isCompatible_RealESRGAN_NCNN_Vulkan");
+        if (tmp.isValid()) isCompatible_RealESRGAN_NCNN_Vulkan = tmp.toBool();
+    }
     //===
     ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW->setChecked(isCompatible_Waifu2x_NCNN_Vulkan_NEW);
     ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P->setChecked(isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P);
@@ -652,26 +1144,77 @@ int MainWindow::Settings_Read_Apply()
     if(checkBox_isCompatible_RealCUGAN_NCNN_Vulkan) checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->setChecked(isCompatible_RealCUGAN_NCNN_Vulkan);
     if(ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan) ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan->setChecked(isCompatible_RealESRGAN_NCNN_Vulkan);
     //======================== Load VFI settings ========================
-    ui->checkBox_VfiAfterScale_VFI->setChecked(Settings_Read_value("/settings/checkBox_VfiAfterScale_VFI").toBool());
-    ui->checkBox_MultiThread_VFI->setChecked(Settings_Read_value("/settings/checkBox_MultiThread_VFI").toBool());
-    ui->checkBox_AutoAdjustNumOfThreads_VFI->setChecked(Settings_Read_value("/settings/checkBox_AutoAdjustNumOfThreads_VFI").toBool());
-    ui->checkBox_FrameInterpolationOnly_Video->setChecked(Settings_Read_value("/settings/checkBox_FrameInterpolationOnly_Video").toBool());
-    ui->groupBox_FrameInterpolation->setChecked(Settings_Read_value("/settings/groupBox_FrameInterpolation").toBool());
-    ui->checkBox_MultiGPU_VFI->setChecked(Settings_Read_value("/settings/checkBox_MultiGPU_VFI").toBool());
-    ui->checkBox_TTA_VFI->setChecked(Settings_Read_value("/settings/checkBox_TTA_VFI").toBool());
-    ui->checkBox_UHD_VFI->setChecked(Settings_Read_value("/settings/checkBox_UHD_VFI").toBool());
-    ui->comboBox_Model_VFI->setCurrentIndex(Settings_Read_value("/settings/comboBox_Model_VFI").toInt());
-    Available_GPUID_FrameInterpolation = Settings_Read_value("/settings/Available_GPUID_FrameInterpolation").toStringList();
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_VfiAfterScale_VFI");
+        if (tmp.isValid()) ui->checkBox_VfiAfterScale_VFI->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_MultiThread_VFI");
+        if (tmp.isValid()) ui->checkBox_MultiThread_VFI->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_AutoAdjustNumOfThreads_VFI");
+        if (tmp.isValid()) ui->checkBox_AutoAdjustNumOfThreads_VFI->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_FrameInterpolationOnly_Video");
+        if (tmp.isValid()) ui->checkBox_FrameInterpolationOnly_Video->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/groupBox_FrameInterpolation");
+        if (tmp.isValid()) ui->groupBox_FrameInterpolation->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_MultiGPU_VFI");
+        if (tmp.isValid()) ui->checkBox_MultiGPU_VFI->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_TTA_VFI");
+        if (tmp.isValid()) ui->checkBox_TTA_VFI->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/checkBox_UHD_VFI");
+        if (tmp.isValid()) ui->checkBox_UHD_VFI->setChecked(tmp.toBool());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/comboBox_Model_VFI");
+        if (tmp.isValid()) ui->comboBox_Model_VFI->setCurrentIndex(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/Available_GPUID_FrameInterpolation");
+        if (tmp.isValid()) Available_GPUID_FrameInterpolation = tmp.toStringList();
+    }
     FrameInterpolation_DetectGPU_finished();
-    ui->comboBox_GPUID_VFI->setCurrentIndex(Settings_Read_value("/settings/comboBox_GPUID_VFI").toInt());
-    ui->lineEdit_MultiGPU_IDs_VFI->setText(Settings_Read_value("/settings/lineEdit_MultiGPU_IDs_VFI").toString());
-    ui->spinBox_NumOfThreads_VFI->setValue(Settings_Read_value("/settings/spinBox_NumOfThreads_VFI").toInt());
-    Old_FrameInterpolation_Engine_Index = Settings_Read_value("/settings/comboBox_Engine_VFI").toInt();
+    {
+        QVariant tmp = Settings_Read_value("/settings/comboBox_GPUID_VFI");
+        if (tmp.isValid()) ui->comboBox_GPUID_VFI->setCurrentIndex(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/lineEdit_MultiGPU_IDs_VFI");
+        if (tmp.isValid()) ui->lineEdit_MultiGPU_IDs_VFI->setText(tmp.toString());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/spinBox_NumOfThreads_VFI");
+        if (tmp.isValid()) ui->spinBox_NumOfThreads_VFI->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/comboBox_Engine_VFI");
+        if (tmp.isValid()) Old_FrameInterpolation_Engine_Index = tmp.toInt();
+    }
     ui->comboBox_Engine_VFI->setCurrentIndex(Old_FrameInterpolation_Engine_Index);
-    ui->spinBox_MultipleOfFPS_VFI->setValue(Settings_Read_value("/settings/spinBox_MultipleOfFPS_VFI").toInt());
-    ui->spinBox_TileSize_VFI->setValue(Settings_Read_value("/settings/spinBox_TileSize_VFI").toInt());
+    {
+        QVariant tmp = Settings_Read_value("/settings/spinBox_MultipleOfFPS_VFI");
+        if (tmp.isValid()) ui->spinBox_MultipleOfFPS_VFI->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/spinBox_TileSize_VFI");
+        if (tmp.isValid()) ui->spinBox_TileSize_VFI->setValue(tmp.toInt());
+    }
     //==================== Load language settings =====================
-    ui->comboBox_language->setCurrentIndex(Settings_Read_value("/settings/Language").toInt());
+    {
+        QVariant tmp = Settings_Read_value("/settings/Language");
+        if (tmp.isValid()) ui->comboBox_language->setCurrentIndex(tmp.toInt());
+    }
     on_comboBox_language_currentIndexChanged(0);
     //====================================================
     on_groupBox_FrameInterpolation_clicked();
@@ -698,9 +1241,18 @@ int MainWindow::Settings_Read_Apply()
     on_comboBox_Engine_Video_currentIndexChanged(ui->comboBox_Engine_Video->currentIndex());
     on_comboBox_ImageStyle_currentIndexChanged(0);
     on_comboBox_model_vulkan_currentIndexChanged(0);
-    ui->spinBox_DenoiseLevel_image->setValue(Settings_Read_value("/settings/ImageDenoiseLevel").toInt());
-    ui->spinBox_DenoiseLevel_gif->setValue(Settings_Read_value("/settings/GIFDenoiseLevel").toInt());
-    ui->spinBox_DenoiseLevel_video->setValue(Settings_Read_value("/settings/VideoDenoiseLevel").toInt());
+    {
+        QVariant tmp = Settings_Read_value("/settings/ImageDenoiseLevel");
+        if (tmp.isValid()) ui->spinBox_DenoiseLevel_image->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/GIFDenoiseLevel");
+        if (tmp.isValid()) ui->spinBox_DenoiseLevel_gif->setValue(tmp.toInt());
+    }
+    {
+        QVariant tmp = Settings_Read_value("/settings/VideoDenoiseLevel");
+        if (tmp.isValid()) ui->spinBox_DenoiseLevel_video->setValue(tmp.toInt());
+    }
     //=====
     on_spinBox_textbrowser_fontsize_valueChanged(0);
     //===
