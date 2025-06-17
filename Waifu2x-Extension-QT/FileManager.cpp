@@ -162,14 +162,15 @@ bool FileManager::openFolder(const QString &folderPath)
 {
     if (isDirExist(folderPath))
     {
-        QString path = folderPath;
+        QString path = QDir::toNativeSeparators(folderPath);
 #ifdef Q_OS_WIN
-        path.replace('/', "\\");
-        QProcess::execute("explorer \"" + path + "\"");
+        if (!QProcess::startDetached("explorer", QStringList() << path))
+            qWarning() << "Failed to open" << path;
 #else
         if (!QDesktopServices::openUrl(QUrl::fromLocalFile(path)))
         {
-            QProcess::execute("xdg-open", QStringList() << path);
+            if (!QProcess::startDetached("xdg-open", QStringList() << path))
+                qWarning() << "Failed to open" << path;
         }
 #endif
         return true;
@@ -187,18 +188,19 @@ bool FileManager::openFile(const QString &filePath)
 {
     if (QFile::exists(filePath))
     {
-        QString path = filePath;
+        QString path = QDir::toNativeSeparators(filePath);
 #ifdef Q_OS_WIN
-        if (!QDesktopServices::openUrl(
-                QUrl("file:" + QUrl::toPercentEncoding(path), QUrl::TolerantMode)))
+        if (!QDesktopServices::openUrl(QUrl::fromLocalFile(path)))
         {
-            path.replace('%', "%%");
-            QProcess::execute("start \"\" \"" + path + "\"");
+            if (!QProcess::startDetached("cmd",
+                                       QStringList() << "/c" << "start" << path))
+                qWarning() << "Failed to open" << path;
         }
 #else
         if (!QDesktopServices::openUrl(QUrl::fromLocalFile(path)))
         {
-            QProcess::execute("xdg-open", QStringList() << path);
+            if (!QProcess::startDetached("xdg-open", QStringList() << path))
+                qWarning() << "Failed to open" << path;
         }
 #endif
         return true;

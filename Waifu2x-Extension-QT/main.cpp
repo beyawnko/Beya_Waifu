@@ -18,13 +18,16 @@
 */
 
 #include "mainwindow.h"
+#include "Logger.h"
 
 #include <QApplication>
+#include <QCoreApplication>
 #include <QCommandLineParser>
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc,argv);
+    QApplication a(argc, argv);
+    initLogger(QCoreApplication::applicationDirPath() + "/waifu.log");
     QCommandLineParser parser;
     parser.setApplicationDescription("Beya_Waifu");
     parser.addHelpOption();
@@ -36,7 +39,7 @@ int main(int argc, char *argv[])
     int overrideThreads = 0;
     if(parser.isSet(maxThreadsOpt))
         overrideThreads = parser.value(maxThreadsOpt).toInt();
-    a.setQuitOnLastWindowClosed(false);//Keep running when window is hidden
+    a.setQuitOnLastWindowClosed(true);
     MainWindow *w = new MainWindow(overrideThreads);
     w->show();
     return a.exec();
