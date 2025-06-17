@@ -45,6 +45,7 @@ In file included from /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/QtConcurren
 /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:55:6: note: declared here
    55 | auto run(Function &&f, Args &&...args)
       |      ^~~
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o gif.o gif.cpp
 files.cpp: In member function ‘virtual void MainWindow::dropEvent(QDropEvent*)’:
 files.cpp:57:65: warning: ignoring return value of ‘auto QtConcurrent::run(Function&&, Args&& ...) [with Function = MainWindow::dropEvent(QDropEvent*)::<lambda()>; Args = {}]’, declared with attribute ‘nodiscard’ [-Wunused-result]
    57 |     QtConcurrent::run([this, urls]() { this->Read_urls(urls); });
@@ -55,7 +56,6 @@ In file included from /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/QtConcurren
 /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:55:6: note: declared here
    55 | auto run(Function &&f, Args &&...args)
       |      ^~~
-g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o gif.o gif.cpp
 g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o image.o image.cpp
 g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o main.o main.cpp
 g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o mainwindow.o mainwindow.cpp
@@ -89,138 +89,74 @@ In file included from /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h:12,
       |         ^~~~~~~~~~~~~~~~~~~~~~~
 g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o progressBar.o progressBar.cpp
 g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o realcugan_ncnn_vulkan.o realcugan_ncnn_vulkan.cpp
-mainwindow.cpp: In constructor ‘MainWindow::MainWindow(int, QWidget*)’:
-mainwindow.cpp:336:71: warning: ignoring return value of ‘auto QtConcurrent::run(Function&&, Args&& ...) [with Function = MainWindow::MainWindow(int, QWidget*)::<lambda()>; Args = {}]’, declared with attribute ‘nodiscard’ [-Wunused-result]
-  336 |     QtConcurrent::run([this] { this->DeleteErrorLog_Waifu2xCaffe(); });
-      |                                                                       ^
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o RealCuganProcessor.o RealCuganProcessor.cpp
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o realesrgan_ncnn_vulkan.o realesrgan_ncnn_vulkan.cpp
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o settings.o settings.cpp
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o table.o table.cpp
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o textBrowser.o textBrowser.cpp
+g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o topsupporterslist.o topsupporterslist.cpp
+In file included from /usr/include/x86_64-linux-gnu/qt6/QtCore/qnamespace.h:9,
+                 from /usr/include/x86_64-linux-gnu/qt6/QtCore/qobjectdefs.h:12,
+                 from /usr/include/x86_64-linux-gnu/qt6/QtGui/qwindowdefs.h:8,
+                 from /usr/include/x86_64-linux-gnu/qt6/QtWidgets/qwidget.h:8,
+                 from /usr/include/x86_64-linux-gnu/qt6/QtWidgets/QWidget:1,
+                 from topsupporterslist.h:25,
+                 from topsupporterslist.cpp:20:
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qtmetamacros.h:40: warning: "slots" redefined
+   40 | #     define slots Q_SLOTS
+      |
+topsupporterslist.h:22: note: this is the location of the previous definition
+   22 | #define slots
+      |
+settings.cpp: In member function ‘int MainWindow::Settings_Read_Apply()’:
+settings.cpp:543:11: error: ‘class MainWindow’ has no member named ‘on_comboBox_TargetProcessor_converter_currentIndexChanged’; did you mean ‘on_comboBox_AspectRatio_custRes_currentIndexChanged’?
+  543 |     this->on_comboBox_TargetProcessor_converter_currentIndexChanged(0);
+      |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |           on_comboBox_AspectRatio_custRes_currentIndexChanged
+settings.cpp:1146:12: error: ‘class Ui::MainWindow’ has no member named ‘checkBox_isCompatible_RealCUGAN_NCNN_Vulkan’; did you mean ‘checkBox_isCompatible_Realsr_NCNN_Vulkan’?
+ 1146 |     if(ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan) ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->setChecked(isCompatible_RealCUGAN_NCNN_Vulkan);
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |            checkBox_isCompatible_Realsr_NCNN_Vulkan
+settings.cpp:1146:61: error: ‘class Ui::MainWindow’ has no member named ‘checkBox_isCompatible_RealCUGAN_NCNN_Vulkan’; did you mean ‘checkBox_isCompatible_Realsr_NCNN_Vulkan’?
+ 1146 |     if(ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan) ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->setChecked(isCompatible_RealCUGAN_NCNN_Vulkan);
+      |                                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                             checkBox_isCompatible_Realsr_NCNN_Vulkan
+settings.cpp:311:16: warning: unused variable ‘configIniRead’ [-Wunused-variable]
+  311 |     QSettings *configIniRead = new QSettings(settings_ini, QSettings::IniFormat);
+      |                ^~~~~~~~~~~~~
+table.cpp: In member function ‘void MainWindow::on_pushButton_SaveFileList_clicked()’:
+table.cpp:535:122: warning: ignoring return value of ‘auto QtConcurrent::run(Function&&, Args&& ...) [with Function = MainWindow::on_pushButton_SaveFileList_clicked()::<lambda()>; Args = {}]’, declared with attribute ‘nodiscard’ [-Wunused-result]
+  535 |     QtConcurrent::run([this, FilesListFullPath] { this->Table_Save_Current_Table_Filelist_Watchdog(FilesListFullPath); });
+      |                                                                                                                          ^
 In file included from /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/QtConcurrent:14,
                  from mainwindow.h:29,
-                 from mainwindow.cpp:20:
+                 from table.cpp:20:
 /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:55:6: note: declared here
    55 | auto run(Function &&f, Args &&...args)
       |      ^~~
-mainwindow.cpp:337:59: warning: ignoring return value of ‘auto QtConcurrent::run(Function&&, Args&& ...) [with Function = MainWindow::MainWindow(int, QWidget*)::<lambda()>; Args = {}]’, declared with attribute ‘nodiscard’ [-Wunused-result]
-  337 |     QtConcurrent::run([this] { this->Del_TempBatFile(); });
-      |                                                           ^
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:55:6: note: declared here
-   55 | auto run(Function &&f, Args &&...args)
-      |      ^~~
-g++ -c -pipe -g -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o RealCuganProcessor.o RealCuganProcessor.cpp
-mainwindow.cpp: In member function ‘virtual void MainWindow::closeEvent(QCloseEvent*)’:
-mainwindow.cpp:614:79: warning: ignoring return value of ‘auto QtConcurrent::run(Function&&, Args&& ...) [with Function = MainWindow::closeEvent(QCloseEvent*)::<lambda()>; Args = {}]’, declared with attribute ‘nodiscard’ [-Wunused-result]
-  614 |         QtConcurrent::run([this] { this->Auto_Save_Settings_Watchdog(true); });
-      |                                                                               ^
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:55:6: note: declared here
-   55 | auto run(Function &&f, Args &&...args)
-      |      ^~~
-mainwindow.cpp:618:80: warning: ignoring return value of ‘auto QtConcurrent::run(Function&&, Args&& ...) [with Function = MainWindow::closeEvent(QCloseEvent*)::<lambda()>; Args = {}]’, declared with attribute ‘nodiscard’ [-Wunused-result]
-  618 |         QtConcurrent::run([this] { this->Auto_Save_Settings_Watchdog(false); });
-      |                                                                                ^
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:55:6: note: declared here
-   55 | auto run(Function &&f, Args &&...args)
-      |      ^~~
-In file included from /usr/include/x86_64-linux-gnu/qt6/QtCore/qfuture.h:13,
-                 from /usr/include/x86_64-linux-gnu/qt6/QtCore/QtCore:98,
-                 from /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/QtConcurrentDepends:3,
-                 from /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/QtConcurrent:3:
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qfuture_impl.h: In instantiation of ‘struct QtPrivate::ArgResolver<MainWindow*>’:
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentstoredfunctioncall.h:189:64:   required from ‘struct QtConcurrent::PromiseTaskResolver<MainWindow*, void (MainWindow::*)()>’
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentstoredfunctioncall.h:211:8:   required from ‘struct QtConcurrent::TaskResolverHelper<std::integral_constant<bool, false>, MainWindow*, void (MainWindow::*)()>’
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentstoredfunctioncall.h:217:8:   required from ‘struct QtConcurrent::TaskResolver<MainWindow*, void (MainWindow::*)()>’
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:40:76:   required from ‘auto QtConcurrent::run(QThreadPool*, Function&&, Args&& ...) [with Function = MainWindow*; Args = {void (MainWindow::*)()}]’
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:57:15:   required from ‘auto QtConcurrent::run(Function&&, Args&& ...) [with Function = MainWindow*; Args = {void (MainWindow::*)()}]’
-mainwindow.cpp:789:22:   required from here
-/usr/include/x86_64-linux-gnu/qt6/QtCore/qfuture_impl.h:178:43: error: ‘operator()’ is not a member of ‘std::decay<MainWindow*>::type’ {aka ‘MainWindow*’}
-  178 | struct ArgResolver : ArgResolver<decltype(&std::decay_t<F>::operator())>
-      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtaskbuilder.h:9,
-                 from /usr/include/x86_64-linux-gnu/qt6/QtConcurrent/QtConcurrent:4:
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentstoredfunctioncall.h: In instantiation of ‘struct QtConcurrent::PromiseTaskResolver<MainWindow*, void (MainWindow::*)()>’:
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentstoredfunctioncall.h:211:8:   required from ‘struct QtConcurrent::TaskResolverHelper<std::integral_constant<bool, false>, MainWindow*, void (MainWindow::*)()>’
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentstoredfunctioncall.h:217:8:   required from ‘struct QtConcurrent::TaskResolver<MainWindow*, void (MainWindow::*)()>’
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:40:76:   required from ‘auto QtConcurrent::run(QThreadPool*, Function&&, Args&& ...) [with Function = MainWindow*; Args = {void (MainWindow::*)()}]’
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:57:15:   required from ‘auto QtConcurrent::run(Function&&, Args&& ...) [with Function = MainWindow*; Args = {void (MainWindow::*)()}]’
-mainwindow.cpp:789:22:   required from here
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentstoredfunctioncall.h:189:64: error: no type named ‘IsPromise’ in ‘struct QtPrivate::ArgResolver<MainWindow*>’
-  189 |     static_assert(QtPrivate::ArgResolver<Function>::IsPromise::value,
-      |                                                                ^~~~~
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentstoredfunctioncall.h: In instantiation of ‘static auto QtConcurrent::PromiseTaskResolver<Function, Args ...>::run(TaskWithArgs&&, const QtConcurrent::TaskStartParameters&) [with Function = MainWindow*; Args = {void (MainWindow::*)()}; TaskWithArgs = std::tuple<MainWindow*, void (MainWindow::*)()>]’:
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:40:76:   required from ‘auto QtConcurrent::run(QThreadPool*, Function&&, Args&& ...) [with Function = MainWindow*; Args = {void (MainWindow::*)()}]’
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentrun.h:57:15:   required from ‘auto QtConcurrent::run(Function&&, Args&& ...) [with Function = MainWindow*; Args = {void (MainWindow::*)()}]’
-mainwindow.cpp:789:22:   required from here
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentstoredfunctioncall.h:195:15: error: no type named ‘PromiseType’ in ‘struct QtPrivate::ArgResolver<MainWindow*>’
-  195 |         using PromiseType = typename QtPrivate::ArgResolver<Function>::PromiseType;
-      |               ^~~~~~~~~~~
-/usr/include/x86_64-linux-gnu/qt6/QtConcurrent/qtconcurrentstoredfunctioncall.h:196:17: error: no type named ‘PromiseType’ in ‘struct QtPrivate::ArgResolver<MainWindow*>’
-  196 |         return (new StoredFunctionCallWithPromise<Function, PromiseType, Args...>(std::move(args)))
-      |                ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-mainwindow.cpp: In member function ‘void MainWindow::on_spinBox_textbrowser_fontsize_valueChanged(int)’:
-mainwindow.cpp:1013:67: warning: unused parameter ‘arg1’ [-Wunused-parameter]
- 1013 | void MainWindow::on_spinBox_textbrowser_fontsize_valueChanged(int arg1)
-      |                                                               ~~~~^~~~
-mainwindow.cpp: In member function ‘void MainWindow::on_comboBox_language_currentIndexChanged(int)’:
-mainwindow.cpp:1135:52: error: qualified-id in declaration before ‘(’ token
- 1135 | void MainWindow::on_pushButton_ReadFileList_clicked()
-      |                                                    ^
-mainwindow.cpp:1166:46: error: qualified-id in declaration before ‘(’ token
- 1166 | void MainWindow::on_Ext_image_editingFinished()
-      |                                              ^
-mainwindow.cpp:1175:46: error: qualified-id in declaration before ‘(’ token
- 1175 | void MainWindow::on_Ext_video_editingFinished()
-      |                                              ^
-mainwindow.cpp:1184:54: error: qualified-id in declaration before ‘(’ token
- 1184 | void MainWindow::on_checkBox_AutoSaveSettings_clicked()
-      |                                                      ^
-mainwindow.cpp:1194:45: error: qualified-id in declaration before ‘(’ token
- 1194 | void MainWindow::on_pushButton_about_clicked()
-      |                                             ^
-mainwindow.cpp:1215:69: error: qualified-id in declaration before ‘(’ token
- 1215 | void MainWindow::on_comboBox_AspectRatio_custRes_currentIndexChanged(int index)
-      |                                                                     ^
-mainwindow.cpp:1238:61: error: qualified-id in declaration before ‘(’ token
- 1238 | void MainWindow::on_checkBox_AlwaysHideSettings_stateChanged(int arg1)
-      |                                                             ^
-mainwindow.cpp:1248:59: error: qualified-id in declaration before ‘(’ token
- 1248 | void MainWindow::on_pushButton_Save_GlobalFontSize_clicked()
-      |                                                           ^
-mainwindow.cpp:1261:51: error: qualified-id in declaration before ‘(’ token
- 1261 | void MainWindow::on_pushButton_BrowserFile_clicked()
-      |                                                   ^
-mainwindow.cpp:1328:46: error: qualified-id in declaration before ‘(’ token
- 1328 | void MainWindow::Read_Input_paths_BrowserFile(QStringList Input_path_List)
-      |                                              ^
-mainwindow.cpp:1344:45: error: qualified-id in declaration before ‘(’ token
- 1344 | void MainWindow::ProcessDroppedFilesFinished()
-      |                                             ^
-mainwindow.cpp:1363:44: error: qualified-id in declaration before ‘(’ token
- 1363 | void MainWindow::on_pushButton_wiki_clicked()
-      |                                            ^
-mainwindow.cpp:1372:51: error: qualified-id in declaration before ‘(’ token
- 1372 | void MainWindow::on_pushButton_HideTextBro_clicked()
-      |                                                   ^
-mainwindow.cpp:1386:64: error: qualified-id in declaration before ‘(’ token
- 1386 | void MainWindow::on_checkBox_AlwaysHideTextBrowser_stateChanged(int arg1)
-      |                                                                ^
-mainwindow.cpp:1397:42: error: qualified-id in declaration before ‘(’ token
- 1397 | void MainWindow::on_Ext_image_textChanged(const QString &arg1)
-      |                                          ^
-mainwindow.cpp:1403:42: error: qualified-id in declaration before ‘(’ token
- 1403 | void MainWindow::on_Ext_video_textChanged(const QString &arg1)
-      |                                          ^
-mainwindow.cpp:1409:62: error: qualified-id in declaration before ‘(’ token
- 1409 | void MainWindow::on_comboBox_model_vulkan_currentIndexChanged(int index)
-      |                                                              ^
-mainwindow.cpp:1433:60: error: qualified-id in declaration before ‘(’ token
- 1433 | void MainWindow::on_comboBox_ImageStyle_currentIndexChanged(int index)
-      |                                                            ^
-mainwindow.cpp:3899:2: error: expected ‘}’ at end of input
- 3899 | } // Closing brace for MainWindow class
-      |  ^
-mainwindow.cpp:1047:1: note: to match this ‘{’
- 1047 | {
-      | ^
-mainwindow.cpp:1046:63: warning: unused parameter ‘index’ [-Wunused-parameter]
- 1046 | void MainWindow::on_comboBox_language_currentIndexChanged(int index)
-      |                                                           ~~~~^~~~~
-make: *** [Makefile:781: mainwindow.o] Error 1
+table.cpp: In member function ‘void MainWindow::on_tableView_image_doubleClicked(const QModelIndex&)’:
+table.cpp:773:70: warning: unused parameter ‘index’ [-Wunused-parameter]
+  773 | void MainWindow::on_tableView_image_doubleClicked(const QModelIndex &index)
+      |                                                   ~~~~~~~~~~~~~~~~~~~^~~~~
+table.cpp: In member function ‘void MainWindow::on_tableView_gif_doubleClicked(const QModelIndex&)’:
+table.cpp:779:68: warning: unused parameter ‘index’ [-Wunused-parameter]
+  779 | void MainWindow::on_tableView_gif_doubleClicked(const QModelIndex &index)
+      |                                                 ~~~~~~~~~~~~~~~~~~~^~~~~
+table.cpp: In member function ‘void MainWindow::on_tableView_video_doubleClicked(const QModelIndex&)’:
+table.cpp:785:70: warning: unused parameter ‘index’ [-Wunused-parameter]
+  785 | void MainWindow::on_tableView_video_doubleClicked(const QModelIndex &index)
+      |                                                   ~~~~~~~~~~~~~~~~~~~^~~~~
+table.cpp: In member function ‘void MainWindow::on_tableView_image_pressed(const QModelIndex&)’:
+table.cpp:791:64: warning: unused parameter ‘index’ [-Wunused-parameter]
+  791 | void MainWindow::on_tableView_image_pressed(const QModelIndex &index)
+      |                                             ~~~~~~~~~~~~~~~~~~~^~~~~
+table.cpp: In member function ‘void MainWindow::on_tableView_gif_pressed(const QModelIndex&)’:
+table.cpp:799:62: warning: unused parameter ‘index’ [-Wunused-parameter]
+  799 | void MainWindow::on_tableView_gif_pressed(const QModelIndex &index)
+      |                                           ~~~~~~~~~~~~~~~~~~~^~~~~
+table.cpp: In member function ‘void MainWindow::on_tableView_video_pressed(const QModelIndex&)’:
+table.cpp:807:64: warning: unused parameter ‘index’ [-Wunused-parameter]
+  807 | void MainWindow::on_tableView_video_pressed(const QModelIndex &index)
+      |                                             ~~~~~~~~~~~~~~~~~~~^~~~~
+make: *** [Makefile:828: settings.o] Error 1
 make: *** Waiting for unfinished jobs....
