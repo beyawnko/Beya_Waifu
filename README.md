@@ -2,7 +2,7 @@
 
 Beya_Waifu is a Qt based graphical interface for upscaling and denoising images or
 videos. The project integrates the RealCUGAN and RealESRGAN upscalers and presents them in a
-single GUI. Project is inspired and heavly reworked from Waifu2x_GUI by @AaronFeng753
+single GUI. Project is inspired by and heavily reworked from the original version of Waifu2x_GUI by @AaronFeng753.
 
 ## Features
 
