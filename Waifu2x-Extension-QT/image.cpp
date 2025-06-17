@@ -44,7 +44,7 @@ void MainWindow::ImagesResize_Folder_MultiThread(int New_width,int New_height,QS
         RunningNumOfThreads_ImagesResize_Folder_MultiThread++;
         QMutex_ResizeImage_MultiThread.unlock();
         //====
-        QtConcurrent::run([this, New_width, New_height, OutPut_Path]() { this->ResizeImage_MultiThread(New_width, New_height, OutPut_Path); });
+        (void)QtConcurrent::run([this, New_width, New_height, OutPut_Path]() { this->ResizeImage_MultiThread(New_width, New_height, OutPut_Path); });
         while(RunningNumOfThreads_ImagesResize_Folder_MultiThread>=TotalNumOfThreads_ImagesResize_Folder_MultiThread)
         {
             Delay_msec_sleep(300);
@@ -204,6 +204,7 @@ Determine whether to enable quality level adjustment based on the saved format
 */
 void MainWindow::on_comboBox_ImageSaveFormat_currentIndexChanged(int index)
 {
+    Q_UNUSED(index);
     if(ui->comboBox_ImageSaveFormat->currentIndex()>2)
     {
         ui->spinBox_ImageQualityLevel->setEnabled(0);

@@ -193,7 +193,7 @@ void MainWindow::MoveFileToOutputPath(QString Orginal, QString SourceFilePath) {
 QMap<QString,int> MainWindow::Image_Gif_Read_Resolution(QString SourceFileFullPath) { qDebug() << "STUB: MainWindow::Image_Gif_Read_Resolution called for" << SourceFileFullPath; return QMap<QString,int>(); }
 void MainWindow::Delay_sec_sleep(int time) { qDebug() << "STUB: MainWindow::Delay_sec_sleep called with" << time; QThread::sleep(time); }
 void MainWindow::Delay_msec_sleep(int time) { qDebug() << "STUB: Delay_msec_sleep called with" << time; QThread::msleep(time); }
-void MainWindow::ExecuteCMD_batFile(QString cmd_str, bool requestAdmin) { qDebug() << "STUB: ExecuteCMD_batFile called for" << cmd_str; }
+void MainWindow::ExecuteCMD_batFile(QString cmd_str, bool requestAdmin) { Q_UNUSED(requestAdmin); qDebug() << "STUB: ExecuteCMD_batFile called for" << cmd_str; }
 
 // Stubs for _finished signals/slots and other functions expected in mainwindow.cpp (not causing multiple defs)
 int MainWindow::Waifu2x_DetectGPU_finished() { qDebug() << "STUB: Waifu2x_DetectGPU_finished called"; return 0; }
@@ -203,9 +203,9 @@ int MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU_finished() { qDebug() << "STUB:
 void MainWindow::SRMD_DetectGPU_finished() { qDebug() << "STUB: SRMD_DetectGPU_finished called"; }
 int MainWindow::Waifu2x_DumpProcessorList_converter_finished() { qDebug() << "STUB: Waifu2x_DumpProcessorList_converter_finished called"; return 0; }
 void MainWindow::Set_checkBox_DisableResize_gif_Checked() { qDebug() << "STUB: Set_checkBox_DisableResize_gif_Checked called"; }
-void MainWindow::Table_image_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath) { qDebug() << "STUB: Table_image_insert_fileName_fullPath called for" << fileName; }
-void MainWindow::Table_gif_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath) { qDebug() << "STUB: Table_gif_insert_fileName_fullPath called for" << fileName; }
-void MainWindow::Table_video_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath) { qDebug() << "STUB: Table_video_insert_fileName_fullPath called for" << fileName; }
+void MainWindow::Table_image_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath) { Q_UNUSED(SourceFile_fullPath); qDebug() << "STUB: Table_image_insert_fileName_fullPath called for" << fileName; }
+void MainWindow::Table_gif_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath) { Q_UNUSED(SourceFile_fullPath); qDebug() << "STUB: Table_gif_insert_fileName_fullPath called for" << fileName; }
+void MainWindow::Table_video_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath) { Q_UNUSED(SourceFile_fullPath); qDebug() << "STUB: Table_video_insert_fileName_fullPath called for" << fileName; }
 
 // Stubs for remaining undefined references from linker errors
 void MainWindow::on_pushButton_CustRes_apply_clicked() { qDebug() << "STUB: on_pushButton_CustRes_apply_clicked called"; }
@@ -347,7 +347,7 @@ void MainWindow::Add_File_Folder_IncludeSubFolder_MainThread(QString Full_Path) 
 // Private slots
 
 // Helper function stubs (if any were missed and are private)
-void MainWindow::LoadScaledImageToLabel(const QString &imagePath, QLabel *label) { qDebug() << "STUB: LoadScaledImageToLabel called for" << imagePath; }
+void MainWindow::LoadScaledImageToLabel(const QString &imagePath, QLabel *label) { Q_UNUSED(label); qDebug() << "STUB: LoadScaledImageToLabel called for" << imagePath; }
 void MainWindow::UpdateTotalProcessedFilesCount() { qDebug() << "STUB: UpdateTotalProcessedFilesCount called"; }
 void MainWindow::ProcessNextFile() { qDebug() << "STUB: ProcessNextFile called"; }
 void MainWindow::CheckIfAllFinished() { qDebug() << "STUB: CheckIfAllFinished called"; }

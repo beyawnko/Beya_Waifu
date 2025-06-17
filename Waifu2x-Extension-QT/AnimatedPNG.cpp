@@ -326,8 +326,8 @@ bool MainWindow::APNG_Waifu2xNCNNVulkan(QString, QString, QString,
 }
 
 // Stubs for missing functions
-bool MainWindow::APNG_RealcuganNCNNVulkan(QString s1, QString s2, QString s3, QStringList sl, QString s4) { qDebug() << "STUB: MainWindow::APNG_RealcuganNCNNVulkan called"; return false; }
-bool MainWindow::APNG_RealESRGANNCNNVulkan(QString s1, QString s2, QString s3, QStringList sl, QString s4) { qDebug() << "STUB: MainWindow::APNG_RealESRGANNCNNVulkan called"; return false; }
+bool MainWindow::APNG_RealcuganNCNNVulkan(QString s1, QString s2, QString s3, QStringList sl, QString s4) { Q_UNUSED(s1); Q_UNUSED(s2); Q_UNUSED(s3); Q_UNUSED(sl); Q_UNUSED(s4); qDebug() << "STUB: MainWindow::APNG_RealcuganNCNNVulkan called"; return false; }
+bool MainWindow::APNG_RealESRGANNCNNVulkan(QString s1, QString s2, QString s3, QStringList sl, QString s4) { Q_UNUSED(s1); Q_UNUSED(s2); Q_UNUSED(s3); Q_UNUSED(sl); Q_UNUSED(s4); qDebug() << "STUB: MainWindow::APNG_RealESRGANNCNNVulkan called"; return false; }
 
 bool MainWindow::APNG_Waifu2xConverter(QString, QString, QString,
                                        QStringList, QString)

@@ -308,10 +308,10 @@ int MainWindow::Settings_Read_Apply()
         }
     }
     //=================
-    QSettings *configIniRead = new QSettings(settings_ini, QSettings::IniFormat);
-#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
-    configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
-#endif
+    // QSettings *configIniRead = new QSettings(settings_ini, QSettings::IniFormat); // Unused variable
+// #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+    // configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
+// #endif
     //=================== Load global font settings =========================
     {
         QVariant tmp = Settings_Read_value("/settings/GlobalFontSize");

@@ -107,7 +107,6 @@ bool MainWindow::SystemShutDown()
 #endif
 }
 /*
-/*
 Check whether the previous run triggered auto shutdown
 *
 */
