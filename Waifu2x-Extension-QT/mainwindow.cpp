@@ -48,6 +48,34 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     , current_File_Row_Number(-1) // Initialize here
 {
     ui->setupUi(this);
+    // Initialize RealCUGAN pointers to ensure safe use when the
+    // dedicated widgets are absent. Fallback to Frame Interpolation
+    // widgets when available.
+    comboBox_Model_RealCUGAN = nullptr;
+    spinBox_Scale_RealCUGAN = nullptr;
+    spinBox_DenoiseLevel_RealCUGAN = nullptr;
+    spinBox_TileSize_RealCUGAN = nullptr;
+    checkBox_TTA_RealCUGAN = nullptr;
+    comboBox_GPUID_RealCUGAN = nullptr;
+    pushButton_DetectGPU_RealCUGAN = nullptr;
+    checkBox_MultiGPU_RealCUGAN = nullptr;
+    groupBox_GPUSettings_MultiGPU_RealCUGAN = nullptr;
+    comboBox_GPUIDs_MultiGPU_RealCUGAN = nullptr;
+    listWidget_GPUList_MultiGPU_RealCUGAN = nullptr;
+    pushButton_AddGPU_MultiGPU_RealCUGAN = nullptr;
+    pushButton_RemoveGPU_MultiGPU_RealCUGAN = nullptr;
+    pushButton_ClearGPU_MultiGPU_RealCUGAN = nullptr;
+    pushButton_TileSize_Add_RealCUGAN = nullptr;
+    pushButton_TileSize_Minus_RealCUGAN = nullptr;
+
+    if (ui->comboBox_Model_VFI)
+        comboBox_Model_RealCUGAN = ui->comboBox_Model_VFI;
+    if (ui->comboBox_GPUID_VFI)
+        comboBox_GPUID_RealCUGAN = ui->comboBox_GPUID_VFI;
+    if (ui->pushButton_DetectGPU_VFI)
+        pushButton_DetectGPU_RealCUGAN = ui->pushButton_DetectGPU_VFI;
+    if (ui->checkBox_MultiGPU_VFI)
+        checkBox_MultiGPU_RealCUGAN = ui->checkBox_MultiGPU_VFI;
     // Current_Path is already initialized using qApp->applicationDirPath() in mainwindow.h or before constructor
     TempDir_Path = Current_Path + "/temp"; // Initialize here
     FFMPEG_EXE_PATH_Waifu2xEX = Current_Path + "/ffmpeg/ffmpeg.exe";

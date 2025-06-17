@@ -34,18 +34,39 @@ void RealCuganProcessor::preLoadSettings()
 {
     QSettings settings("Waifu2x-Extension-QT", "Waifu2x-Extension-QT");
     settings.beginGroup("RealCUGAN_NCNN_Vulkan");
-    m_mainWindow->comboBox_Model_RealCUGAN->setCurrentText(settings.value("Model", "models-se").toString());
-    m_mainWindow->spinBox_DenoiseLevel_RealCUGAN->setValue(settings.value("DenoiseLevel", -1).toInt());
-    m_mainWindow->spinBox_TileSize_RealCUGAN->setValue(settings.value("TileSize", 0).toInt());
-    m_mainWindow->checkBox_TTA_RealCUGAN->setChecked(settings.value("TTA", false).toBool());
-    m_mainWindow->comboBox_GPUID_RealCUGAN->setCurrentText(settings.value("GPUID", "0: Default GPU 0").toString());
-    m_mainWindow->checkBox_MultiGPU_RealCUGAN->setChecked(settings.value("MultiGPUEnabled", false).toBool());
+    // Fallback to stored values when specific UI widgets are not available.
+    QVariant modelVar = settings.value("Model", "models-se");
+    if (m_mainWindow->comboBox_Model_RealCUGAN)
+        m_mainWindow->comboBox_Model_RealCUGAN->setCurrentText(modelVar.toString());
+
+    QVariant denoiseVar = settings.value("DenoiseLevel", -1);
+    if (m_mainWindow->spinBox_DenoiseLevel_RealCUGAN)
+        m_mainWindow->spinBox_DenoiseLevel_RealCUGAN->setValue(denoiseVar.toInt());
+
+    QVariant tileVar = settings.value("TileSize", 0);
+    if (m_mainWindow->spinBox_TileSize_RealCUGAN)
+        m_mainWindow->spinBox_TileSize_RealCUGAN->setValue(tileVar.toInt());
+
+    QVariant ttaVar = settings.value("TTA", false);
+    if (m_mainWindow->checkBox_TTA_RealCUGAN)
+        m_mainWindow->checkBox_TTA_RealCUGAN->setChecked(ttaVar.toBool());
+
+    QVariant gpuVar = settings.value("GPUID", "0: Default GPU 0");
+    if (m_mainWindow->comboBox_GPUID_RealCUGAN)
+        m_mainWindow->comboBox_GPUID_RealCUGAN->setCurrentText(gpuVar.toString());
+
+    QVariant multiVar = settings.value("MultiGPUEnabled", false);
+    if (m_mainWindow->checkBox_MultiGPU_RealCUGAN)
+        m_mainWindow->checkBox_MultiGPU_RealCUGAN->setChecked(multiVar.toBool());
+
     m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN = settings.value("MultiGPU_List").value<QList_QMap_QStrQStr>();
-    m_mainWindow->listWidget_GPUList_MultiGPU_RealCUGAN->clear();
-    for(const auto &gpuMap : m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN) {
-        QListWidgetItem *newItem = new QListWidgetItem();
-        newItem->setText(QString("ID: %1, Name: %2, Threads: %3").arg(gpuMap.value("ID"), gpuMap.value("Name"), gpuMap.value("Threads")));
-        m_mainWindow->listWidget_GPUList_MultiGPU_RealCUGAN->addItem(newItem);
+    if (m_mainWindow->listWidget_GPUList_MultiGPU_RealCUGAN) {
+        m_mainWindow->listWidget_GPUList_MultiGPU_RealCUGAN->clear();
+        for(const auto &gpuMap : m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN) {
+            QListWidgetItem *newItem = new QListWidgetItem();
+            newItem->setText(QString("ID: %1, Name: %2, Threads: %3").arg(gpuMap.value("ID"), gpuMap.value("Name"), gpuMap.value("Threads")));
+            m_mainWindow->listWidget_GPUList_MultiGPU_RealCUGAN->addItem(newItem);
+        }
     }
     settings.endGroup();
 
@@ -60,23 +81,43 @@ void RealCuganProcessor::preLoadSettings()
 
 void RealCuganProcessor::readSettings()
 {
-    m_mainWindow->m_realcugan_Model = m_mainWindow->comboBox_Model_RealCUGAN->currentText();
-    m_mainWindow->m_realcugan_DenoiseLevel = m_mainWindow->spinBox_DenoiseLevel_RealCUGAN->value();
-    m_mainWindow->m_realcugan_TileSize = m_mainWindow->spinBox_TileSize_RealCUGAN->value();
-    m_mainWindow->m_realcugan_TTA = m_mainWindow->checkBox_TTA_RealCUGAN->isChecked();
+    QSettings settings("Waifu2x-Extension-QT", "Waifu2x-Extension-QT");
+    settings.beginGroup("RealCUGAN_NCNN_Vulkan");
+    // Use saved settings as defaults when RealCUGAN widgets are absent.
 
-    if (m_mainWindow->checkBox_MultiGPU_RealCUGAN->isChecked()) {
+    m_mainWindow->m_realcugan_Model = m_mainWindow->comboBox_Model_RealCUGAN
+            ? m_mainWindow->comboBox_Model_RealCUGAN->currentText()
+            : settings.value("Model", "models-se").toString();
+    m_mainWindow->m_realcugan_DenoiseLevel = m_mainWindow->spinBox_DenoiseLevel_RealCUGAN
+            ? m_mainWindow->spinBox_DenoiseLevel_RealCUGAN->value()
+            : settings.value("DenoiseLevel", -1).toInt();
+    m_mainWindow->m_realcugan_TileSize = m_mainWindow->spinBox_TileSize_RealCUGAN
+            ? m_mainWindow->spinBox_TileSize_RealCUGAN->value()
+            : settings.value("TileSize", 0).toInt();
+    m_mainWindow->m_realcugan_TTA = m_mainWindow->checkBox_TTA_RealCUGAN
+            ? m_mainWindow->checkBox_TTA_RealCUGAN->isChecked()
+            : settings.value("TTA", false).toBool();
+
+    bool multiEnabled = m_mainWindow->checkBox_MultiGPU_RealCUGAN
+            ? m_mainWindow->checkBox_MultiGPU_RealCUGAN->isChecked()
+            : settings.value("MultiGPUEnabled", false).toBool();
+
+    QString comboGpu = m_mainWindow->comboBox_GPUID_RealCUGAN
+            ? m_mainWindow->comboBox_GPUID_RealCUGAN->currentText()
+            : settings.value("GPUID", "0: Default GPU 0").toString();
+
+    if (multiEnabled) {
         if (!m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
             m_mainWindow->m_realcugan_GPUID =
                 m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN.first().value("ID");
         } else {
-            m_mainWindow->m_realcugan_GPUID =
-                m_mainWindow->comboBox_GPUID_RealCUGAN->currentText();
+            m_mainWindow->m_realcugan_GPUID = comboGpu;
         }
     } else {
-        m_mainWindow->m_realcugan_GPUID =
-            m_mainWindow->comboBox_GPUID_RealCUGAN->currentText();
+        m_mainWindow->m_realcugan_GPUID = comboGpu;
     }
+
+    settings.endGroup();
 
     qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings: Model:" << m_mainWindow->m_realcugan_Model
              << "Denoise:" << m_mainWindow->m_realcugan_DenoiseLevel
@@ -89,14 +130,19 @@ void RealCuganProcessor::readSettingsVideoGif(int ThreadNum)
 {
     Q_UNUSED(ThreadNum);
     readSettings();
+    QSettings settings("Waifu2x-Extension-QT", "Waifu2x-Extension-QT");
+    settings.beginGroup("RealCUGAN_NCNN_Vulkan"); // Needed when widgets are missing
     QString fallbackId = m_mainWindow->m_realcugan_GPUID.split(":").first();
     QString gpuJobConfig = m_jobManager.buildGpuJobString(
-                m_mainWindow->checkBox_MultiGPU_RealCUGAN->isChecked(),
+                m_mainWindow->checkBox_MultiGPU_RealCUGAN
+                    ? m_mainWindow->checkBox_MultiGPU_RealCUGAN->isChecked()
+                    : settings.value("MultiGPUEnabled", false).toBool(),
                 m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN,
                 fallbackId);
     m_mainWindow->m_realcugan_gpuJobConfig_temp = m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN;
     qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF for ThreadNum" << ThreadNum
              << "GPU/Job Config:" << gpuJobConfig;
+    settings.endGroup();
 }
 
 QStringList RealCuganProcessor::prepareArguments(const QString &inputFile,
