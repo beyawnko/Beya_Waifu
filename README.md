@@ -310,8 +310,8 @@ Below is the start-up screen of the optional launcher:
 - Refer to the [Real-CUGAN](https://github.com/bilibili/ailab/tree/main/Real-CUGAN)
   and [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) documentation for
   detailed usage and model descriptions.
-- If `pytest` reports missing modules such as `PySide6` or `Pillow`, run
-  `pip install -r requirements.txt` to install the Python dependencies.
+- Install the packages from `requirements.txt` before running `pytest` or you will
+  encounter `ImportError` messages for modules such as `PySide6` and `Pillow`.
 - When `simple_build.sh` fails with errors about `*.qsb` files, install the Qt 6
   shader tools package: `sudo apt install qt6-shadertools-dev`.
 
@@ -321,15 +321,15 @@ The repository includes Pytest cases which exercise the RealCUGAN and RealESRGAN
 on small sample images. Running the suite requires the `pytest` package. An internet
 connection is also needed for downloading the upscaler binaries.
 
-Before running `pytest` install the required Python packages:
+Install the packages listed in `requirements.txt` before running `pytest`:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-This installs both `PySide6` and `Pillow`. These libraries must be present or the tests will
-fail. The tests automatically download the Linux releases of both upscalers if the executables
-are not present and place them in `tests/bin/`.
+`PySide6` and `Pillow` are required, and missing either will cause `ImportError` failures in
+the tests. The suite automatically downloads the Linux releases of both upscalers if the
+executables are not present and places them in `tests/bin/`.
 
 To execute the tests from the repository root simply run:
 
