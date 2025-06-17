@@ -17,10 +17,18 @@
 #include "LiquidGlassWidget.h"
 #include <QFile>
 #include <QTextStream>
+#include <QMouseEvent> // Included via header, but good for clarity
+#include <QTimer>    // Included via header, but good for clarity
+#include <QDebug>    // For potential debugging
 
 LiquidGlassWidget::LiquidGlassWidget(QWidget *parent)
     : QOpenGLWidget(parent)
 {
+    setMouseTracking(true); // Enable mouse tracking for mouseMoveEvent without button press
+
+    m_animationTimer = new QTimer(this);
+    connect(m_animationTimer, &QTimer::timeout, this, &LiquidGlassWidget::updateElapsedTime);
+    m_animationTimer->start(16); // Aim for ~60 FPS updates (1000ms / 60fps ~= 16.67ms)
 }
 
 LiquidGlassWidget::~LiquidGlassWidget()
@@ -31,6 +39,14 @@ LiquidGlassWidget::~LiquidGlassWidget()
         glDeleteBuffers(1, &m_vbo);
     if (m_vao)
         glDeleteVertexArrays(1, &m_vao);
+
+    // QTimer is a QObject child of this widget, so it will be auto-deleted.
+    // Explicitly stopping if it's active can be good practice.
+    if (m_animationTimer && m_animationTimer->isActive()) {
+        m_animationTimer->stop();
+    }
+    // delete m_animationTimer; // Not strictly necessary if parented
+
     doneCurrent();
 }
 
@@ -100,8 +116,10 @@ void LiquidGlassWidget::initializeGL()
 
 void LiquidGlassWidget::resizeGL(int w, int h)
 {
-    Q_UNUSED(w);
-    Q_UNUSED(h);
+    // Q_UNUSED(w); // No longer unused
+    // Q_UNUSED(h);
+    m_widgetResolution = QVector2D(static_cast<float>(w), static_cast<float>(h));
+    glViewport(0, 0, w, h); // Standard OpenGL viewport setting
 }
 
 void LiquidGlassWidget::paintGL()
@@ -116,12 +134,22 @@ void LiquidGlassWidget::paintGL()
     if (!m_texture)
         return;
 
-    m_program.bind();
+    m_program.bind(); // Ensure program is bound
+
+    // Set uniforms
+    m_program.setUniformValue("sourceTexture", 0); // Texture unit 0
+
+    m_program.setUniformValue("ior", m_ior);
+    m_program.setUniformValue("borderRadius", m_borderRadius);
+    m_program.setUniformValue("chromaticAberrationOffset", m_chromaticAberrationOffset);
+    m_program.setUniformValue("resolution", m_widgetResolution);
+    m_program.setUniformValue("mouse", QVector2D(m_mousePosition)); // Convert QPointF to QVector2D
+    m_program.setUniformValue("time", m_elapsedTime);
+
+
     glActiveTexture(GL_TEXTURE0);
     m_texture->bind();
-    m_program.setUniformValue("sourceTexture", 0);
-    // m_program.setUniformValue("environmentTexture", 0); // Commented out as shader no longer uses it
-    m_program.bind(); // ensure program is bound before drawing
+    // m_program.bind(); // Already bound
 
     glBindVertexArray(m_vao);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -131,3 +159,44 @@ void LiquidGlassWidget::paintGL()
     m_program.release();
 }
 
+// --- New Setter Methods ---
+void LiquidGlassWidget::setIOR(float ior)
+{
+    m_ior = ior;
+    update(); // Trigger repaint
+}
+
+void LiquidGlassWidget::setBorderRadius(float radius)
+{
+    m_borderRadius = radius;
+    update();
+}
+
+void LiquidGlassWidget::setChromaticAberrationOffset(float offset)
+{
+    m_chromaticAberrationOffset = offset;
+    update();
+}
+
+// --- New Event Handlers and Slots ---
+void LiquidGlassWidget::updateElapsedTime()
+{
+    // Approximate time per frame for 60 FPS.
+    // For more accuracy, a QElapsedTimer could be used from the start of the application or widget's life.
+    m_elapsedTime += 0.016f;
+    if (m_elapsedTime > 3600.0f) { // Reset after a long time (e.g., 1 hour) to prevent precision issues
+        m_elapsedTime = 0.0f;
+    }
+    update(); // Trigger repaint to update shader with new time
+}
+
+void LiquidGlassWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    // Store mouse position relative to the widget
+    #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    m_mousePosition = event->position();
+    #else
+    m_mousePosition = event->localPos(); // For Qt5 compatibility if needed
+    #endif
+    update(); // Trigger repaint
+}

@@ -1,64 +1,110 @@
 #version 330 core
 
-in vec2 vTexCoord;
+// Inputs from vertex shader
+in vec2 vTexCoord; // Normalized texture coordinates (0-1)
+
+// Output color
 out vec4 fragColor;
 
-uniform sampler2D sourceTexture;
-//uniform sampler2D environmentTexture; // Commented out for now
+// Uniforms from C++
+uniform sampler2D sourceTexture; // Background texture
+uniform vec2 resolution;         // Viewport/widget resolution (pixels)
+uniform float time;              // Time for animations
+uniform vec2 mouse;              // Mouse coordinates (pixels, relative to widget)
 
-/*
-float sphereSDF(vec3 p, float r)
-{
-    return length(p) - r;
+uniform float ior;                        // Index of Refraction (e.g., 1.5)
+uniform float borderRadius;               // Radius for rounded corners (pixels)
+uniform float chromaticAberrationOffset;  // Offset for chromatic aberration
+
+// --- SDF Function for Rounded Rectangle ---
+// p: current fragment's coordinate (scaled, centered)
+// b: half-size of the box (width/2, height/2)
+// r: border radius
+float sdRoundedBox(vec2 p, vec2 b, float r) {
+    vec2 q = abs(p) - b + r;
+    return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r;
 }
 
-vec3 calcNormal(vec3 p)
-{
-    const vec2 e = vec2(0.001, 0.0);
-    return normalize(vec3(
-        sphereSDF(p + e.xyy, 1.0) - sphereSDF(p - e.xyy, 1.0),
-        sphereSDF(p + e.yxy, 1.0) - sphereSDF(p - e.yxy, 1.0),
-        sphereSDF(p + e.yyx, 1.0) - sphereSDF(p - e.yyx, 1.0)
-    ));
+// --- Normal Calculation from SDF ---
+// p: current fragment's coordinate (scaled, centered)
+// boxSize: full size of the box (width, height)
+// radius: border radius for the sdf
+vec3 calcNormalSDF(vec2 p, vec2 boxSize, float radius) {
+    vec2 e = vec2(1.0, 0.0) / resolution.y; // Small epsilon scaled by pixel size for consistent thickness
+    float sdf_center = sdRoundedBox(p, boxSize * 0.5, radius); // SDF at current point
+    vec2 grad = vec2(
+        sdRoundedBox(p + e.xy, boxSize * 0.5, radius) - sdf_center,
+        sdRoundedBox(p + e.yx, boxSize * 0.5, radius) - sdf_center
+    ) / e.x; // Approximate gradient
+
+    // Simulate a Z component based on proximity to edge (stronger curve near edge)
+    // This is a simplified approach for a 2.5D effect.
+    float z_comp = sqrt(max(0.0, 0.01 - pow(length(grad),2.0) )); // Adjust 0.01 for desired 'depth'
+    return normalize(vec3(grad, z_comp));
 }
-*/
 
-void main()
-{
-    // Basic texture mapping
-    fragColor = texture(sourceTexture, vTexCoord);
 
-    // vec2 p = vTexCoord * 2.0 - 1.0;
-    // vec3 ro = vec3(0.0, 0.0, -2.5);
-    // vec3 rd = normalize(vec3(p, 1.5));
+void main() {
+    // Normalize fragment coordinates to be -0.5 to 0.5 (or similar, depending on aspect handling)
+    // This makes (0,0) the center of the screen/widget.
+    vec2 uv = (gl_FragCoord.xy - 0.5 * resolution.xy) / resolution.y;
 
-    // float t = 0.0;
-    // for (int i = 0; i < 64; ++i) {
-    //     vec3 pos = ro + t * rd;
-    //     float d = sphereSDF(pos, 1.0);
-    //     if (abs(d) < 0.001)
-    //         break;
-    //     t += d;
-    // }
+    // Define rounded box properties (can be made dynamic with more uniforms)
+    // For now, let's make a box that's a fraction of the screen height
+    float boxHeight = resolution.y * 0.4; // Box is 40% of widget height
+    float boxWidth = boxHeight * 1.6;     // Box width (e.g., 1.6:1 aspect)
+    vec2 boxHalfSize = vec2(boxWidth / 2.0, boxHeight / 2.0) / resolution.y; // Scale to UV space
+    float actualBorderRadius = borderRadius / resolution.y; // Scale radius to UV space
 
-    // vec3 pos = ro + t * rd;
-    // vec3 n = calcNormal(pos);
+    // Center the box (or use mouse.xy / resolution.xy - 0.5 to position it with mouse)
+    vec2 boxCenter = vec2(0.0, 0.0); // Centered
+    // vec2 boxCenter = (mouse - 0.5 * resolution.xy) / resolution.y; // Mouse controlled
 
-    // vec3 refl = reflect(rd, n);
-    // vec3 refr = refract(rd, n, 1.0 / 1.33);
+    float d = sdRoundedBox(uv - boxCenter, boxHalfSize, actualBorderRadius);
 
-    // vec3 reflCol = texture(environmentTexture, refl.xy * 0.5 + 0.5).rgb; // Commented out
-    // vec3 refrCol = texture(sourceTexture, refr.xy * 0.5 + 0.5).rgb;
+    if (d > 0.0) { // Outside the shape
+        // Sample background directly or make transparent
+        fragColor = texture(sourceTexture, vTexCoord);
+        // discard; // Alternative: make it fully transparent
+        return;
+    }
 
-    // float cShift = 0.003;
-    // vec3 chroma = vec3(
-    //     texture(environmentTexture, refl.xy * 0.5 + 0.5 + vec2(cShift, 0.0)).r, // Commented out
-    //     texture(environmentTexture, refl.xy * 0.5 + 0.5).g, // Commented out
-    //     texture(environmentTexture, refl.xy * 0.5 + 0.5 - vec2(cShift, 0.0)).b // Commented out
-    // );
+    // Inside the shape or on its border
+    vec3 normal = calcNormalSDF(uv - boxCenter, boxHalfSize * 2.0, actualBorderRadius);
 
-    // vec3 color = mix(reflCol, refrCol, 0.5); // Commented out
-    // color = mix(color, chroma, 0.3); // Commented out
+    // View direction (assuming orthographic or simple perspective)
+    vec3 viewDir = vec3(0.0, 0.0, 1.0); // From camera towards screen
 
-    // fragColor = vec4(color, 1.0); // Commented out
+    // --- Refraction ---
+    // Refract view vector to find where to sample background
+    vec3 refractedDir = refract(-viewDir, normal, 1.0 / ior);
+    // Use vTexCoord as base, perturb by refraction. Scale effect.
+    vec2 refractedUV = vTexCoord + refractedDir.xy * 0.1; // Adjust 0.1 for refraction strength
+    vec3 refractedColor = texture(sourceTexture, refractedUV).rgb;
+
+    // --- Reflection / Specular Highlight (Simplified) ---
+    // A simple rim light effect or fake specular
+    float fresnelFactor = pow(1.0 - max(0.0, dot(normal, viewDir)), 3.0); // Basic Fresnel-like term
+    vec3 specularColor = vec3(0.8) * fresnelFactor; // White highlight
+
+    // --- Chromatic Aberration ---
+    vec2 caOffsetVec = normalize(uv - boxCenter) * chromaticAberrationOffset; // Offset outwards
+    float r_channel = texture(sourceTexture, refractedUV - caOffsetVec).r;
+    float b_channel = texture(sourceTexture, refractedUV + caOffsetVec).b;
+    vec3 finalColor = vec3(r_channel, refractedColor.g, b_channel);
+
+    // Blend effects
+    // Mix refraction with specular highlights
+    finalColor = mix(finalColor, specularColor, fresnelFactor * 0.5); // Adjust 0.5 for specular intensity
+
+    // Add a subtle border to the glass shape
+    float borderThickness = 2.0 / resolution.y; // 2 pixels thick border
+    if (d > -borderThickness) {
+        finalColor = mix(vec3(0.6, 0.6, 0.7), finalColor, smoothstep(-borderThickness, 0.0, d)); // Semi-transparent white border
+    }
+
+    fragColor = vec4(finalColor, 1.0); // Fully opaque glass for now
+    // For transparency on the glass itself (if d < 0):
+    // float alpha = smoothstep(-0.01, 0.0, d); // Make edges slightly smoother
+    // fragColor = vec4(finalColor, 1.0 - alpha * 0.2); // Example: slightly transparent glass
 }
