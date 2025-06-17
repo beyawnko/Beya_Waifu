@@ -18,7 +18,7 @@ RealCUGAN and RealESRGAN are currently the only supported upscaling engines.
 ## Dependencies
 
 - **Qt5compat/Qt 6** development environment (Core, GUI, Widgets, Multimedia, OpenGL, OpenGLWidgets, Qt5Compat modules)
-- **C++17** compatible compiler (experiemntal refactoring to C++20 for coroutines currently)
+- **C++17** compatible compiler (I am currently in the process of working on experimental refactoring to C++20 for coroutines)
 - **FFmpeg** for handling video input/output
 - Included **RealCUGAN** and **RealESRGAN** executables built with ncnn Vulkan
 - Qt6 shadertools package providing the `qsb` tool for the Liquid Glass shader (inspired by current modern UI design)
