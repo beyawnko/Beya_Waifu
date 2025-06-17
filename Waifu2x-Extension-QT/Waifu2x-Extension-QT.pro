@@ -67,9 +67,11 @@ SOURCES += \
     ProcessRunner.cpp \
     LiquidGlassWidget.cpp \
     GpuManager.cpp \
-    UiController.cpp
+    UiController.cpp \
+    Logger.cpp
 
 HEADERS += \
+    Logger.h \
     mainwindow.h \
     topsupporterslist.h \
     LiquidGlassWidget.h \

@@ -66,6 +66,7 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     }
     setWindowTitle(QStringLiteral("Beya_Waifu %1 by beyawnko").arg(VERSION));
     translator = new QTranslator(this);
+    ApplyDarkStyle();
     setAcceptDrops(true);
 }
 
@@ -176,14 +177,9 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    qDebug() << "STUB: MainWindow::closeEvent called";
-    // Example: if (isAlreadyClosed.load()) return;
-    // Ensure settings are saved if auto-save is on
-    // if (ui->checkBox_AutoSaveSettings->isChecked()) {
-    //     Settings_Save();
-    // }
-    // TODO: Implement proper exit procedure (stop threads, save state)
+    qDebug() << "MainWindow closing";
     QMainWindow::closeEvent(event);
+    qApp->quit();
 }
 
 // Stubs for general utility functions that should be in mainwindow.cpp
