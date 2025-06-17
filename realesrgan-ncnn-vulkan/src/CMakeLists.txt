@@ -19,6 +19,7 @@ project(realesrgan-ncnn-vulkan)
 cmake_minimum_required(VERSION 3.9)
 
 set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -march=native" CACHE STRING "Release flags" FORCE)
 
 option(USE_SYSTEM_NCNN "build with system libncnn" OFF)
 option(USE_SYSTEM_WEBP "build with system libwebp" OFF)
