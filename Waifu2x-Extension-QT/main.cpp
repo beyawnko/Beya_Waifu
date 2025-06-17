@@ -23,10 +23,12 @@
 #include <QApplication>
 #include <QCoreApplication>
 #include <QCommandLineParser>
+#include <QStyleFactory>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setStyle(QStyleFactory::create("macos"));
     initLogger(QCoreApplication::applicationDirPath() + "/waifu.log");
     QCommandLineParser parser;
     parser.setApplicationDescription("Beya_Waifu");
