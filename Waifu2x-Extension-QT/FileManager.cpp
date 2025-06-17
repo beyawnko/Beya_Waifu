@@ -124,7 +124,21 @@ void FileManager::moveToTrash(const QString &file)
     fileop.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
     SHFileOperation(&fileop);
 #else
-    Q_UNUSED(file);
+    QFileInfo fileInfo(file);
+    if (!fileInfo.exists())
+        return;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    if (QDesktopServices::moveToTrash(QUrl::fromLocalFile(fileInfo.absoluteFilePath())))
+        return;
+#elif QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    if (QFile::moveToTrash(fileInfo.absoluteFilePath()))
+        return;
+#endif
+    QString absPath = fileInfo.absoluteFilePath();
+    if (!QProcess::startDetached("gio", QStringList() << "trash" << absPath))
+    {
+        QProcess::startDetached("xdg-trash", QStringList() << absPath);
+    }
 #endif
 }
 
