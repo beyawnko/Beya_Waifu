@@ -73,6 +73,7 @@ Copyright (C) 2025  beyawnko
 #include "ProcessRunner.h"
 #include "GpuManager.h"
 #include "UiController.h"
+#include "LiquidGlassWidget.h"
 
 #ifndef Q_DECLARE_METATYPE
 #define Q_DECLARE_METATYPE(Type)
@@ -149,6 +150,7 @@ public:
     //======================= File Handling & Processing =======================
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
     void Read_urls(QList<QUrl> urls);
     void Read_Input_paths_BrowserFile(QStringList Input_path_List);
     bool AddNew_gif=false;
@@ -893,6 +895,7 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     void on_tableView_video_pressed(const QModelIndex &index);
     void on_pushButton_SaveSettings_clicked();
     void on_pushButton_ResetSettings_clicked();
+    void toggleLiquidGlass(bool enabled);
 
 private slots: // Changed from public slots to private as these are internal
     void TextBrowser_StartMes();
@@ -966,6 +969,9 @@ private:
     void UpdateNumberOfActiveThreads();
     void UpdateProgressBar();
     void ShellMessageBox(const QString &title, const QString &text, QMessageBox::Icon icon);
+
+    LiquidGlassWidget *glassWidget {nullptr};
+    bool glassEnabled {false};
 
     Ui::MainWindow *ui;
 };
