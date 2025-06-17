@@ -2,6 +2,15 @@ cmake_policy(SET CMP0091 NEW)
 set(CMAKE_POLICY_DEFAULT_CMP0091 NEW)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
+# -------------- Support C++17 for using filesystem  ------------------#
+# https://cmake.org/cmake/help/latest/prop_tgt/CXX_STANDARD.html
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+# expected behaviour
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++lastest")
+# -------------- End  ------------------#
+
 project(realcugan-ncnn-vulkan)
 
 cmake_minimum_required(VERSION 3.9)
@@ -251,7 +260,7 @@ add_custom_target(generate-spirv DEPENDS ${SHADER_SPV_HEX_FILES})
 
 add_executable(realcugan-ncnn-vulkan main.cpp realcugan.cpp)
 
-set_property(TARGET realcugan-ncnn-vulkan PROPERTY CXX_STANDARD 11)
+set_property(TARGET realcugan-ncnn-vulkan PROPERTY CXX_STANDARD 17)
 
 add_dependencies(realcugan-ncnn-vulkan generate-spirv)
 
@@ -283,4 +292,4 @@ if(OpenMP_CXX_FOUND)
     list(APPEND REALCUGAN_LINK_LIBRARIES ${OpenMP_CXX_LIBRARIES})
 endif()
 
-target_link_libraries(realcugan-ncnn-vulkan ${REALCUGAN_LINK_LIBRARIES})
+target_link_libraries(realcugan-ncnn-vulkan ${REALCUGAN_LINK_LIBRARIES} -static-libstdc++)
