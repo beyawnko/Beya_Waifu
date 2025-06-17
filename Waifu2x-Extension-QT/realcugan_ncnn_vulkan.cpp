@@ -97,6 +97,11 @@ QStringList MainWindow::Realcugan_NCNN_Vulkan_PrepareArguments(
     return args;
 }
 
+/**
+ * @brief Run RealCUGAN on a single image.
+ *
+ * Falls back to stored settings when widgets are absent.
+ */
 void MainWindow::Realcugan_NCNN_Vulkan_Image(int file_list_row_number, bool isBatch, bool /*unused_flag*/)
 {
     if (isProcessing) {
@@ -117,17 +122,29 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int file_list_row_number, bool isBa
     QString output_path = Generate_Output_Path(original_fileName, "RealCUGAN-NCNN-Vulkan");
 
     // --- Get parameters from UI/Settings (Placeholders for RealCUGAN specific UI) ---
-    int noise_level = ui->spinBox_DenoiseLevel_image->value(); // General denoise, might need RealCUGAN specific UI
+    int noise_level = 0;
+    if (ui->spinBox_DenoiseLevel_image)
+        noise_level = ui->spinBox_DenoiseLevel_image->value();
+    else
+        noise_level = Settings_Read_value("/settings/RealCUGAN_DenoiseLevel").toInt();
     // RealCUGAN model dir is typically 'models-se', 'models-pro', 'models-nose'.
     // This needs a dedicated ComboBox in UI, e.g. ui->comboBox_ModelDir_RealCUGAN
     QString model_dir_name_read = Settings_Read_value("/settings/RealCUGANModelDir").toString(); // Placeholder
     if (model_dir_name_read.isEmpty()) model_dir_name_read = "models-se";
     QString model_dir_name = model_dir_name_read;
-    int scale = ui->doubleSpinBox_ScaleRatio_image->value();
+    int scale = 2;
+    if (ui->doubleSpinBox_ScaleRatio_image)
+        scale = ui->doubleSpinBox_ScaleRatio_image->value();
+    else
+        scale = Settings_Read_value("/settings/ImageScaleRatio").toInt();
     int gpu_id_read = Settings_Read_value("/settings/RealCUGANGpuId").toInt(); // Placeholder, e.g. ui->comboBox_GPUID_RealCUGAN
     // Assuming -1 or default int() if conversion fails is acceptable.
     int gpu_id = gpu_id_read;
-    QString format = ui->comboBox_ImageSaveFormat->currentText();
+    QString format = "png";
+    if (ui->comboBox_ImageSaveFormat)
+        format = ui->comboBox_ImageSaveFormat->currentText();
+    else
+        format = Settings_Read_value("/settings/ImageEXT").toString();
     bool tta_mode_read = Settings_Read_value("/settings/RealCUGANTTAMode").toBool(); // Placeholder, e.g. ui->checkBox_TTA_RealCUGAN
     // Assuming false if conversion fails is acceptable.
     bool tta_mode = tta_mode_read;
@@ -175,6 +192,11 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int)
     qDebug() << "Realcugan_NCNN_Vulkan_Video_BySegment stub";
 }
 
+/**
+ * @brief Process a video by applying RealCUGAN to extracted frames.
+ *
+ * Settings provide defaults when widgets are not available.
+ */
 void MainWindow::Realcugan_NCNN_Vulkan_Video(int file_list_row_number)
 {
     if (isProcessing) {
@@ -194,11 +216,19 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int file_list_row_number)
     QString output_path = TempDir_Path + "/" + original_fileName + "_frames_RealCUGAN_NCNN_Vulkan/";
 
     // --- Get parameters from UI/Settings (Placeholders for RealCUGAN specific UI) ---
-    int noise_level = ui->spinBox_DenoiseLevel_video->value(); // General denoise for video
+    int noise_level = 0;
+    if (ui->spinBox_DenoiseLevel_video)
+        noise_level = ui->spinBox_DenoiseLevel_video->value();
+    else
+        noise_level = Settings_Read_value("/settings/VideoDenoiseLevel").toInt();
     QString model_dir_name_read = Settings_Read_value("/settings/RealCUGANModelDirVideo").toString(); // Placeholder
     if (model_dir_name_read.isEmpty()) model_dir_name_read = "models-se";
     QString model_dir_name = model_dir_name_read;
-    int scale = ui->doubleSpinBox_ScaleRatio_video->value();
+    int scale = 2;
+    if (ui->doubleSpinBox_ScaleRatio_video)
+        scale = ui->doubleSpinBox_ScaleRatio_video->value();
+    else
+        scale = Settings_Read_value("/settings/VideoScaleRatio").toInt();
     int gpu_id_read = Settings_Read_value("/settings/RealCUGANGpuIdVideo").toInt(); // Placeholder
     int gpu_id = gpu_id_read;
     QString format = "png"; // Process frames losslessly
@@ -242,6 +272,11 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int file_list_row_number)
     current_File_Row_Number = file_list_row_number;
 }
 
+/**
+ * @brief Upscale GIF frames using RealCUGAN.
+ *
+ * Uses stored settings if corresponding widgets are missing.
+ */
 void MainWindow::Realcugan_NCNN_Vulkan_GIF(int file_list_row_number)
 {
     if (isProcessing) {
@@ -262,11 +297,19 @@ void MainWindow::Realcugan_NCNN_Vulkan_GIF(int file_list_row_number)
     QString output_path = TempDir_Path + "/" + original_fileName + "_frames_RealCUGAN_NCNN_Vulkan/";
 
     // --- Get parameters from UI/Settings (Placeholders for RealCUGAN specific UI) ---
-    int noise_level = ui->spinBox_DenoiseLevel_gif->value(); // General denoise for gif
+    int noise_level = 0;
+    if (ui->spinBox_DenoiseLevel_gif)
+        noise_level = ui->spinBox_DenoiseLevel_gif->value();
+    else
+        noise_level = Settings_Read_value("/settings/GIFDenoiseLevel").toInt();
     QString model_dir_name_read = Settings_Read_value("/settings/RealCUGANModelDirGif").toString(); // Placeholder
     if (model_dir_name_read.isEmpty()) model_dir_name_read = "models-se";
     QString model_dir_name = model_dir_name_read;
-    int scale = ui->doubleSpinBox_ScaleRatio_gif->value();
+    int scale = 2;
+    if (ui->doubleSpinBox_ScaleRatio_gif)
+        scale = ui->doubleSpinBox_ScaleRatio_gif->value();
+    else
+        scale = Settings_Read_value("/settings/GIFScaleRatio").toInt();
     int gpu_id_read = Settings_Read_value("/settings/RealCUGANGpuIdGif").toInt(); // Placeholder
     int gpu_id = gpu_id_read;
     QString format = "png"; // Process frames losslessly
