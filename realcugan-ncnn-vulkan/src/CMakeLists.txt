@@ -36,7 +36,7 @@ endmacro()
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-if(OPENMP_FOUND)
+if(OpenMP_CXX_FOUND)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
@@ -276,6 +276,10 @@ if(USE_STATIC_MOLTENVK)
         ${Foundation}
         ${CoreFoundation}
     )
+endif()
+
+if(OpenMP_CXX_FOUND)
+    list(APPEND REALCUGAN_LINK_LIBRARIES ${OpenMP_CXX_LIBRARIES})
 endif()
 
 target_link_libraries(realcugan-ncnn-vulkan ${REALCUGAN_LINK_LIBRARIES})

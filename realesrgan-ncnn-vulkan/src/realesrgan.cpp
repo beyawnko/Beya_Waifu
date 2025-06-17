@@ -228,7 +228,7 @@ int RealESRGAN::process(const ncnn::Mat& inimage, ncnn::Mat& outimage) const
 
     const size_t in_out_tile_elemsize = opt.use_fp16_storage ? 2u : 4u;
 
-    //#pragma omp parallel for num_threads(2)
+    #pragma omp parallel for num_threads(2)
     for (int yi = 0; yi < ytiles; yi++)
     {
         const int tile_h_nopad = std::min((yi + 1) * TILE_SIZE_Y, h) - yi * TILE_SIZE_Y;
