@@ -34,6 +34,7 @@ Copyright (C) 2025  beyawnko
 #include <QList>
 #include <QMap>
 #include <QDebug>
+#include <QFileDialog>
 
 MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     : QMainWindow(parent)
@@ -279,7 +280,31 @@ void MainWindow::on_pushButton_ReadFileList_clicked() { qDebug() << "STUB: on_pu
 void MainWindow::on_Ext_image_editingFinished() { qDebug() << "STUB: on_Ext_image_editingFinished called"; }
 void MainWindow::on_Ext_video_editingFinished() { qDebug() << "STUB: on_Ext_video_editingFinished called"; }
 void MainWindow::on_checkBox_AutoSaveSettings_clicked() { qDebug() << "STUB: on_checkBox_AutoSaveSettings_clicked called"; }
-void MainWindow::on_pushButton_BrowserFile_clicked() { qDebug() << "STUB: on_pushButton_BrowserFile_clicked called"; }
+/*! Browse for files and add them to the processing queue. */
+void MainWindow::on_pushButton_BrowserFile_clicked()
+{
+    QFileDialog dialog(this);
+    dialog.setFileMode(QFileDialog::ExistingFiles);
+
+    if (!dialog.exec()) {
+        qWarning() << "File dialog failed or was cancelled";
+        return;
+    }
+
+    const QStringList files = dialog.selectedFiles();
+    if (files.isEmpty()) {
+        qWarning() << "No files selected";
+        return;
+    }
+
+    for (const QString &path : files) {
+        if (ui->checkBox_ScanSubFolders->isChecked()) {
+            Add_File_Folder_IncludeSubFolder(path);
+        } else {
+            Add_File_Folder(path);
+        }
+    }
+}
 void MainWindow::on_pushButton_wiki_clicked() { qDebug() << "STUB: on_pushButton_wiki_clicked called"; }
 void MainWindow::on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_clicked called"; }
 void MainWindow::on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P_clicked called"; }
