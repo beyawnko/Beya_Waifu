@@ -81,6 +81,7 @@ HEADERS += \
     VideoProcessor.h \
     RealcuganJobManager.h \
     RealesrganJobManager.h \
+    RealCuganProcessor.h \
 
 FORMS += \
     mainwindow.ui \

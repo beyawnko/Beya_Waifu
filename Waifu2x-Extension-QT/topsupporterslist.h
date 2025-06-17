@@ -18,10 +18,6 @@
     My Github homepage: https://github.com/AaronFeng753
 */
 
-#ifndef slots
-#define slots
-#endif
-
 #include <QWidget>
 #include <QSettings>
 #include <QFile>

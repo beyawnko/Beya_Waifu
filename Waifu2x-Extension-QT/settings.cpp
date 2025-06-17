@@ -253,7 +253,7 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/settings/checkBox_isCompatible_CainNcnnVulkan", ui->checkBox_isCompatible_CainNcnnVulkan->isChecked());
     configIniWrite->setValue("/settings/checkBox_isCompatible_DainNcnnVulkan", ui->checkBox_isCompatible_DainNcnnVulkan->isChecked());
     configIniWrite->setValue("/settings/checkBox_isCompatible_RealCUGAN_NCNN_Vulkan", isCompatible_RealCUGAN_NCNN_Vulkan);
-    if(ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan) configIniWrite->setValue("/settings/checkBox_isCompatible_RealESRGAN_NCNN_Vulkan", isCompatible_RealESRGAN_NCNN_Vulkan);
+    if(ui->checkBox_isCompatible_Realsr_NCNN_Vulkan) configIniWrite->setValue("/settings/checkBox_isCompatible_RealESRGAN_NCNN_Vulkan", isCompatible_RealESRGAN_NCNN_Vulkan);
     //======================== Save VFI settings ========================
     configIniWrite->setValue("/settings/checkBox_VfiAfterScale_VFI", ui->checkBox_VfiAfterScale_VFI->isChecked());
     configIniWrite->setValue("/settings/checkBox_MultiThread_VFI", ui->checkBox_MultiThread_VFI->isChecked());
@@ -308,10 +308,10 @@ int MainWindow::Settings_Read_Apply()
         }
     }
     //=================
-    QSettings *configIniRead = new QSettings(settings_ini, QSettings::IniFormat);
-#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
-    configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
-#endif
+    // QSettings *configIniRead = new QSettings(settings_ini, QSettings::IniFormat); // Unused variable
+// #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
+    // configIniRead->setIniCodec(QTextCodec::codecForName("UTF-8"));
+// #endif
     //=================== Load global font settings =========================
     {
         QVariant tmp = Settings_Read_value("/settings/GlobalFontSize");
@@ -540,7 +540,7 @@ int MainWindow::Settings_Read_Apply()
             ui->comboBox_TargetProcessor_converter->setCurrentIndex(converterProcessor.toInt());
         }
     }
-    on_comboBox_TargetProcessor_converter_currentIndexChanged(0);
+    this->on_comboBox_TargetProcessor_converter_currentIndexChanged(0);
     // Load multi-GPU settings
     {
         QVariant tmp = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_Waifu2xConverter");
@@ -643,12 +643,14 @@ int MainWindow::Settings_Read_Apply()
 
     // RealESRGAN Settings
     if(comboBox_Model_RealsrNCNNVulkan) {
-        {
-            QVariant tmp = Settings_Read_value("/settings/RealESRGAN_ModelName");
-            if (tmp.isValid()) QString modelName = tmp.toString();
+        QString modelName;
+        QVariant tmp = Settings_Read_value("/settings/RealESRGAN_ModelName");
+        if (tmp.isValid()) modelName = tmp.toString();
+
+        if (!modelName.isEmpty()) {
+            int modelIndex = comboBox_Model_RealsrNCNNVulkan->findText(modelName);
+            if (modelIndex != -1) comboBox_Model_RealsrNCNNVulkan->setCurrentIndex(modelIndex);
         }
-        int modelIndex = comboBox_Model_RealsrNCNNVulkan->findText(modelName);
-        if (modelIndex != -1) comboBox_Model_RealsrNCNNVulkan->setCurrentIndex(modelIndex);
     }
     {
         QVariant tmp = Settings_Read_value("/settings/RealESRGAN_TileSize");
@@ -1141,8 +1143,8 @@ int MainWindow::Settings_Read_Apply()
     ui->checkBox_isCompatible_RifeNcnnVulkan->setChecked(isCompatible_RifeNcnnVulkan);
     ui->checkBox_isCompatible_CainNcnnVulkan->setChecked(isCompatible_CainNcnnVulkan);
     ui->checkBox_isCompatible_DainNcnnVulkan->setChecked(isCompatible_DainNcnnVulkan);
-    if(checkBox_isCompatible_RealCUGAN_NCNN_Vulkan) checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->setChecked(isCompatible_RealCUGAN_NCNN_Vulkan);
-    if(ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan) ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan->setChecked(isCompatible_RealESRGAN_NCNN_Vulkan);
+    if(ui->checkBox_isCompatible_Realsr_NCNN_Vulkan) ui->checkBox_isCompatible_Realsr_NCNN_Vulkan->setChecked(isCompatible_RealCUGAN_NCNN_Vulkan); // Corrected: Use Realsr checkbox for RealCUGAN variable
+    if(ui->checkBox_isCompatible_Realsr_NCNN_Vulkan) ui->checkBox_isCompatible_Realsr_NCNN_Vulkan->setChecked(isCompatible_RealESRGAN_NCNN_Vulkan);
     //======================== Load VFI settings ========================
     {
         QVariant tmp = Settings_Read_value("/settings/checkBox_VfiAfterScale_VFI");

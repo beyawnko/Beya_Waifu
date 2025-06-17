@@ -54,7 +54,7 @@ void MainWindow::dropEvent(QDropEvent *event)
     ui->label_DropFile->setText(tr("Adding files, please wait."));
     emit Send_TextBrowser_NewMessage(tr("Adding files, please wait."));
     //===================================================
-    QtConcurrent::run([this, urls]() { this->Read_urls(urls); });
+    (void)QtConcurrent::run([this, urls]() { this->Read_urls(urls); });
 }
 /*
 Read urls

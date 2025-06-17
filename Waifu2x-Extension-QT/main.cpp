@@ -24,7 +24,6 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);//High-resolution screen support
     QApplication a(argc,argv);
     QCommandLineParser parser;
     parser.setApplicationDescription("Beya_Waifu");

@@ -340,7 +340,6 @@ public:
     QStringList Available_GPUID_RealESRGAN_ncnn_vulkan;
     QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_RealesrganNcnnVulkan;
     QMutex MultiGPU_QMutex_RealesrganNcnnVulkan; // Already present
-    QMutex MultiGPU_QMutex_RealesrganNcnnVulkan; // Required
     void RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingAlphaChannel);
     void RealESRGAN_NCNN_Vulkan_GIF(int rowNum);
     void RealESRGAN_NCNN_Vulkan_Video(int rowNum);
@@ -349,8 +348,6 @@ public:
     void RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
     bool APNG_RealESRGANNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
     void RealESRGAN_ncnn_vulkan_DetectGPU();
-    QString RealesrganNcnnVulkan_MultiGPU();
-    void AddGPU_MultiGPU_RealesrganNcnnVulkan(QString GPUID);
     void RealESRGAN_NCNN_Vulkan_PreLoad_Settings();
     // Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str is defined above with other PreLoad_Settings_Str
     QStringList RealESRGAN_NCNN_Vulkan_PrepareArguments(const QString &inputFile, const QString &outputFile, int currentPassScale, const QString &modelName, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat);
@@ -358,6 +355,7 @@ public:
     QList<int> CalculateRealESRGANScaleSequence(int targetScale, int modelNativeScale);
     bool RealESRGAN_SetupTempDir(const QString &inputFile, const QString &outputFile, QDir &tempDir, QString &tempPathBase);
     void RealESRGAN_CleanupTempDir(const QDir &tempDir);
+    void RealESRGAN_NCNN_Vulkan_CleanupTempFiles(const QString& p1, int p2, bool p3, const QString& p4);
     int GPU_ID_RealesrganNcnnVulkan_MultiGPU_CycleCounter; // Already present
 
     // Frame Interpolation (RIFE, CAIN, DAIN)
@@ -566,7 +564,7 @@ public:
     bool isConnectivityTest_RawGithubusercontentCom_Running=false;
     QMutex QMutex_ConnectivityTest_RawGithubusercontentCom;
     bool DownloadTo(QString OnlineLink,QString LocalPath);
-    void closeEvent(QCloseEvent* event);
+    void closeEvent(QCloseEvent* event) override;
     std::atomic<bool> QProcess_stop{false};
     int Auto_Save_Settings_Watchdog(bool isWaitForSave);
     QFuture<int> AutoUpdate;
@@ -623,7 +621,7 @@ public:
     QAction *QAction_checkBox_MoveToRecycleBin_checkBox_ReplaceOriginalFile = new QAction(this);
     void Init_ActionsMenu_checkBox_DelOriginal();
     QAction *QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal = new QAction(this);
-    bool eventFilter(QObject *target, QEvent *event);
+    bool eventFilter(QObject *target, QEvent *event) override;
     int AddTileSize_NCNNVulkan_Converter(int OrginalTileSize);
     int MinusTileSize_NCNNVulkan_Converter(int OrginalTileSize);
     void ImagesResize_Folder_MultiThread(int New_width,int New_height,QString ImagesFolderPath);
@@ -706,6 +704,8 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     int Waifu2x_DetectGPU_finished();
     int Realsr_ncnn_vulkan_DetectGPU_finished(); // For RealSR (distinct from RealESRGAN)
     int FrameInterpolation_DetectGPU_finished();
+    int Realcugan_NCNN_Vulkan_DetectGPU_finished();
+    int RealESRGAN_ncnn_vulkan_DetectGPU_finished();
     int CheckUpdate_NewUpdate(QString update_str, QString Change_log);
     void FinishedProcessing_DN();
     int Table_FileCount_reload();
@@ -817,6 +817,8 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     void on_pushButton_MultipleOfFPS_VFI_MIN_clicked();
     void on_pushButton_MultipleOfFPS_VFI_ADD_clicked();
 
+    void on_comboBox_TargetProcessor_converter_currentIndexChanged(int index);
+
     // Custom Resolution Slots
     void on_pushButton_CustRes_cancel_clicked();
     void on_pushButton_CustRes_apply_clicked();
@@ -880,6 +882,17 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     // Slots for main thread execution from ProcessDroppedFilesAsync
     void Add_File_Folder_MainThread(QString Full_Path);
     void Add_File_Folder_IncludeSubFolder_MainThread(QString Full_Path);
+
+    // Slots from error report
+    void on_pushButton_SaveFileList_clicked();
+    void on_tableView_image_doubleClicked(const QModelIndex &index);
+    void on_tableView_gif_doubleClicked(const QModelIndex &index);
+    void on_tableView_video_doubleClicked(const QModelIndex &index);
+    void on_tableView_image_pressed(const QModelIndex &index);
+    void on_tableView_gif_pressed(const QModelIndex &index);
+    void on_tableView_video_pressed(const QModelIndex &index);
+    void on_pushButton_SaveSettings_clicked();
+    void on_pushButton_ResetSettings_clicked();
 
 private slots: // Changed from public slots to private as these are internal
     void TextBrowser_StartMes();
@@ -948,6 +961,7 @@ private:
     void LoadScaledImageToLabel(const QString &imagePath, QLabel *label);
     void UpdateTotalProcessedFilesCount();
     void ProcessNextFile();
+    void RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
     void CheckIfAllFinished();
     void UpdateNumberOfActiveThreads();
     void UpdateProgressBar();

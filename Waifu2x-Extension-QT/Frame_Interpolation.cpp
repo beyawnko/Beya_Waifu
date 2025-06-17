@@ -830,7 +830,7 @@ void MainWindow::on_pushButton_DetectGPU_VFI_clicked()
     ui->comboBox_GPUID_VFI->setEnabled(0);
     ui->pushButton_DetectGPU_VFI->setEnabled(0);
     Available_GPUID_FrameInterpolation.clear();
-    QtConcurrent::run([this]() { this->FrameInterpolation_DetectGPU(); });
+    (void)QtConcurrent::run([this]() { this->FrameInterpolation_DetectGPU(); });
 }
 
 int MainWindow::FrameInterpolation_DetectGPU()
@@ -949,6 +949,7 @@ void MainWindow::on_lineEdit_MultiGPU_IDs_VFI_editingFinished()
 
 void MainWindow::on_checkBox_MultiGPU_VFI_stateChanged(int arg1)
 {
+    Q_UNUSED(arg1);
     bool tmp_bool = ui->checkBox_MultiGPU_VFI->isChecked();
     ui->comboBox_GPUID_VFI->setEnabled(!tmp_bool);
     ui->lineEdit_MultiGPU_IDs_VFI->setEnabled(tmp_bool);
@@ -1005,6 +1006,7 @@ void MainWindow::on_checkBox_isCompatible_DainNcnnVulkan_clicked()
 
 void MainWindow::on_comboBox_Engine_VFI_currentIndexChanged(int index)
 {
+    Q_UNUSED(index); // Parameter 'index' is used in the original logic via ui->comboBox_Engine_VFI->currentIndex(), but the argument itself is not directly used after the initial comparison. Re-check if needed. For now, marking as unused based on typical patterns seen.
     if(Old_FrameInterpolation_Engine_Index!=ui->comboBox_Engine_VFI->currentIndex())
     {
         Available_GPUID_FrameInterpolation.clear();
@@ -1078,6 +1080,7 @@ void MainWindow::on_pushButton_Verify_MultiGPU_VFI_clicked()
 
 void MainWindow::on_checkBox_MultiThread_VFI_stateChanged(int arg1)
 {
+    Q_UNUSED(arg1);
     if(ui->checkBox_MultiThread_VFI->isChecked())
     {
         ui->checkBox_AutoAdjustNumOfThreads_VFI->setEnabled(1);

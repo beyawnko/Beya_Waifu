@@ -161,3 +161,8 @@ QString RealCuganProcessor::modelPath(const QString &modelName, bool experimenta
     return QCoreApplication::applicationDirPath() + "/" + modelName;
 }
 
+RealCuganProcessor::~RealCuganProcessor()
+{
+    // Destructor logic, if any, or leave empty
+    qDebug() << "RealCuganProcessor destroyed";
+}
