@@ -74,7 +74,7 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     setAcceptDrops(true);
 
     glassWidget = new LiquidGlassWidget(ui->centralwidget);
-    glassWidget->setBackground(QImage(":/icon/BackgroudMode.png"));
+    glassWidget->setBackground(QImage(":/new/prefix1/icon/BackgroudMode.png"));
     glassWidget->hide();
     glassWidget->setAttribute(Qt::WA_TransparentForMouseEvents);
     glassWidget->setGeometry(ui->centralwidget->rect());

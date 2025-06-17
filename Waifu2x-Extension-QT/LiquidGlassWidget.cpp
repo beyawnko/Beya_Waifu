@@ -120,8 +120,8 @@ void LiquidGlassWidget::paintGL()
     glActiveTexture(GL_TEXTURE0);
     m_texture->bind();
     m_program.setUniformValue("sourceTexture", 0);
-    m_program.setUniformValue("environmentTexture", 0);
-    m_program.bind();
+    // m_program.setUniformValue("environmentTexture", 0); // Commented out as shader no longer uses it
+    m_program.bind(); // ensure program is bound before drawing
 
     glBindVertexArray(m_vao);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

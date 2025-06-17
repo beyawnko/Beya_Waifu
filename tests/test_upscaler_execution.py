@@ -5,9 +5,11 @@ import pytest
 from pathlib import Path
 from PIL import Image
 
-# Define the expected directory where the main application and upscaler binaries are located.
-# This should be relative to the repository root where pytest is typically run.
-APP_DIR = "Waifu2x-Extension-QT"
+# Define base directories
+REPO_ROOT = Path(__file__).parent.parent # Assuming tests/ is one level down from repo root
+APP_DIR_NAME = "Waifu2x-Extension-QT"
+CI_BIN_DIR_NAME = "bin"
+TESTS_DIR = Path(__file__).parent
 
 # Define the names of the upscaler executables based on platform.
 if sys.platform == "win32":
@@ -17,33 +19,81 @@ else: # linux, darwin, etc.
     RCUGAN_EXE_NAME = "realcugan-ncnn-vulkan"
     RESRGAN_EXE_NAME = "realesrgan-ncnn-vulkan"
 
+def find_executable_path(exe_name):
+    """Checks CI bin path first, then standard app path."""
+    # Path for CI environment (e.g., tests/bin/executable)
+    ci_path = TESTS_DIR / CI_BIN_DIR_NAME / exe_name
+    if ci_path.is_file():
+        return str(ci_path)
+
+    # Path for local build environment (e.g., Waifu2x-Extension-QT/executable)
+    app_path = REPO_ROOT / APP_DIR_NAME / exe_name
+    if app_path.is_file():
+        return str(app_path)
+
+    # Path for local build environment (e.g., Waifu2x-Extension-QT/Engines/engine_dir/executable)
+    # This matches the C++ code's assumption for Current_Path + "/Engines/..."
+    # RealCUGAN
+    if exe_name == RCUGAN_EXE_NAME:
+        app_engine_path = REPO_ROOT / APP_DIR_NAME / "Engines" / "realcugan-ncnn-vulkan" / exe_name
+        if app_engine_path.is_file():
+            return str(app_engine_path)
+    # RealESRGAN
+    if exe_name == RESRGAN_EXE_NAME:
+        app_engine_path = REPO_ROOT / APP_DIR_NAME / "Engines" / "realesrgan-ncnn-vulkan" / exe_name
+        if app_engine_path.is_file():
+            return str(app_engine_path)
+
+    return None # Executable not found
+
 # Path to the small test image (created by test_binaries.py in tests/)
 TEST_IMAGE_FILENAME = "test_image.png"
-TEST_IMAGE_PATH_REL_TO_TESTS = Path(__file__).parent / TEST_IMAGE_FILENAME
+TEST_IMAGE_PATH_REL_TO_TESTS = TESTS_DIR / TEST_IMAGE_FILENAME
 
 # Timeout for subprocess execution
 TIMEOUT_SECONDS = 30 # Increased timeout for upscaling
+
+def get_model_dir_path(engine_name, model_subdir):
+    """Returns the most likely path for models, preferring APP_DIR/Engines structure."""
+    # Path for local build environment (e.g., Waifu2x-Extension-QT/Engines/engine_dir/model_subdir)
+    app_engine_models_path = REPO_ROOT / APP_DIR_NAME / "Engines" / engine_name / model_subdir
+    if app_engine_models_path.is_dir():
+        return str(app_engine_models_path)
+
+    # Fallback to APP_DIR/model_subdir (older structure or if engines are directly in APP_DIR)
+    app_models_path = REPO_ROOT / APP_DIR_NAME / model_subdir
+    if app_models_path.is_dir():
+        return str(app_models_path)
+
+    # Fallback to tests/bin/model_subdir (CI structure)
+    ci_models_path = TESTS_DIR / CI_BIN_DIR_NAME / model_subdir
+    if ci_models_path.is_dir():
+        return str(ci_models_path)
+
+    return None
+
 
 def test_realcugan_execution_and_basic_upscale(tmp_path):
     """
     Tests if the RealCUGAN executable exists, runs, and performs a basic upscale.
     """
-    exe_path = os.path.join(APP_DIR, RCUGAN_EXE_NAME)
+    exe_path = find_executable_path(RCUGAN_EXE_NAME)
+    if not exe_path:
+        pytest.skip(f"{RCUGAN_EXE_NAME} not found in standard locations.")
+
     input_image_path = TEST_IMAGE_PATH_REL_TO_TESTS
     output_image_path = tmp_path / "test_realcugan_out.png"
-    # RealCUGAN models are specified by a directory path.
-    # The build_projects.sh script should place these inside APP_DIR.
-    model_dir_path = os.path.join(APP_DIR, "models-se")
 
-    print(f"Checking for RealCUGAN at: {os.path.abspath(exe_path)}")
-    if not os.path.isfile(exe_path):
-        pytest.skip(f"{RCUGAN_EXE_NAME} not found at {os.path.abspath(exe_path)}")
+    # RealCUGAN models are specified by a directory path.
+    model_dir_path = get_model_dir_path("realcugan-ncnn-vulkan", "models-se")
+    if not model_dir_path:
+        pytest.skip(f"RealCUGAN model directory 'models-se' not found.")
+
+    print(f"Using RealCUGAN executable at: {os.path.abspath(exe_path)}")
+    print(f"Using RealCUGAN model directory at: {os.path.abspath(model_dir_path)}")
 
     if not input_image_path.exists():
         pytest.skip(f"Test input image {input_image_path} not found.")
-
-    if not os.path.isdir(model_dir_path):
-        pytest.skip(f"RealCUGAN model directory not found at {os.path.abspath(model_dir_path)}")
 
     # Basic device check (optional, but good for quick failure)
     cmd_list_devices = [exe_path]
@@ -79,30 +129,31 @@ def test_realesrgan_execution_and_basic_upscale(tmp_path):
     """
     Tests if the RealESRGAN executable exists, runs, and performs a basic upscale.
     """
-    exe_path = os.path.join(APP_DIR, RESRGAN_EXE_NAME)
+    exe_path = find_executable_path(RESRGAN_EXE_NAME)
+    if not exe_path:
+        pytest.skip(f"{RESRGAN_EXE_NAME} not found in standard locations.")
+
     input_image_path = TEST_IMAGE_PATH_REL_TO_TESTS
     output_image_path = tmp_path / "test_realesrgan_out.png"
-    # RealESRGAN models are typically in a 'models' subdirectory relative to the exe.
-    # The -n parameter specifies the model name (without .bin/.param extension).
-    model_name = "realesr-animevideov3-x2" # A common 2x model
+
+    model_name = "realesr-animevideov3-x2"
     expected_scale = 2
 
-    models_base_dir = os.path.join(APP_DIR, "models") # Base directory where models like 'realesr-animevideov3-x2.bin' should be
-    if not os.path.isdir(models_base_dir):
-        pytest.skip(f"RealESRGAN base models directory not found at {os.path.abspath(models_base_dir)}")
+    # RealESRGAN models are specified by a model name, and the -m flag points to the *directory containing these named model files*.
+    # The executable usually prepends this path to the model name.
+    # e.g. -m models -n realesr-animevideov3-x2 -> looks for models/realesr-animevideov3-x2.param
+    models_dir_param = get_model_dir_path("realesrgan-ncnn-vulkan", "models")
+    if not models_dir_param:
+         pytest.skip(f"RealESRGAN models directory 'models' not found.")
 
-    # Specific model file check (optional, as the exe will error out if not found)
-    # For RealESRGAN, models are usually in APP_DIR/models/
-    # The build_projects.sh copies them there.
-    if not os.path.isfile(os.path.join(models_base_dir, model_name + ".param")):
-         pytest.skip(f"RealESRGAN model {model_name}.param not found in {os.path.abspath(models_base_dir)}")
-    if not os.path.isfile(os.path.join(models_base_dir, model_name + ".bin")):
-         pytest.skip(f"RealESRGAN model {model_name}.bin not found in {os.path.abspath(models_base_dir)}")
+    print(f"Using RealESRGAN executable at: {os.path.abspath(exe_path)}")
+    print(f"Using RealESRGAN models directory parameter: {os.path.abspath(models_dir_param)}")
 
-
-    print(f"Checking for RealESRGAN at: {os.path.abspath(exe_path)}")
-    if not os.path.isfile(exe_path):
-        pytest.skip(f"{RESRGAN_EXE_NAME} not found at {os.path.abspath(exe_path)}")
+    # Specific model file check (optional, but good for debugging)
+    if not (Path(models_dir_param) / (model_name + ".param")).is_file():
+         pytest.skip(f"RealESRGAN model {model_name}.param not found in {os.path.abspath(models_dir_param)}")
+    if not (Path(models_dir_param) / (model_name + ".bin")).is_file():
+         pytest.skip(f"RealESRGAN model {model_name}.bin not found in {os.path.abspath(models_dir_param)}")
 
     if not input_image_path.exists():
         pytest.skip(f"Test input image {input_image_path} not found.")
@@ -119,13 +170,70 @@ def test_realesrgan_execution_and_basic_upscale(tmp_path):
         "-i", str(input_image_path),
         "-o", str(output_image_path),
         "-s", str(expected_scale),
-        "-n", model_name # Model name, exe prepends "models/" path
+        "-n", model_name,
+        "-m", models_dir_param # Pass the models directory
     ]
-    print(f"Running RealESRGAN upscale: {' '.join(cmd_upscale)}")
-    result_upscale = subprocess.run(cmd_upscale, capture_output=True, text=True, timeout=TIMEOUT_SECONDS, check=False)
+    # Set working directory to where the executable is, so it can find its relative model paths if not using absolute for -m
+    executable_dir = Path(exe_path).parent
+    print(f"Running RealESRGAN upscale: {' '.join(cmd_upscale)} in CWD: {executable_dir}")
+    result_upscale = subprocess.run(cmd_upscale, capture_output=True, text=True, timeout=TIMEOUT_SECONDS, check=False, cwd=executable_dir)
 
     assert result_upscale.returncode == 0, f"RealESRGAN upscale failed with code {result_upscale.returncode}. Stderr: '{result_upscale.stderr}'. Stdout: '{result_upscale.stdout}'"
     assert output_image_path.exists(), f"RealESRGAN output image {output_image_path} not created."
+
+    try:
+        with Image.open(input_image_path) as img_in, Image.open(output_image_path) as img_out:
+            expected_width = img_in.width * expected_scale
+            expected_height = img_in.height * expected_scale
+            assert img_out.width == expected_width, f"Output width incorrect. Expected {expected_width}, got {img_out.width}"
+            assert img_out.height == expected_height, f"Output height incorrect. Expected {expected_height}, got {img_out.height}"
+    except Exception as e:
+        pytest.fail(f"Error opening images or checking dimensions: {e}")
+
+def test_realesrgan_x4plus_anime_execution(tmp_path):
+    """
+    Tests RealESRGAN with the 'realesrgan-x4plus-anime' model at 4x scale.
+    """
+    exe_path = find_executable_path(RESRGAN_EXE_NAME)
+    if not exe_path:
+        pytest.skip(f"{RESRGAN_EXE_NAME} not found in standard locations.")
+
+    input_image_path = TEST_IMAGE_PATH_REL_TO_TESTS
+    output_image_path = tmp_path / "test_realesrgan_x4plus_anime_out.png"
+
+    model_name = "realesrgan-x4plus-anime"
+    expected_scale = 4
+
+    models_dir_param = get_model_dir_path("realesrgan-ncnn-vulkan", "models")
+    if not models_dir_param:
+         pytest.skip(f"RealESRGAN models directory 'models' not found.")
+
+    print(f"Using RealESRGAN executable at: {os.path.abspath(exe_path)}")
+    print(f"Using RealESRGAN models directory parameter: {os.path.abspath(models_dir_param)}")
+
+    if not (Path(models_dir_param) / (model_name + ".param")).is_file():
+         pytest.skip(f"RealESRGAN model {model_name}.param not found in {os.path.abspath(models_dir_param)}")
+    if not (Path(models_dir_param) / (model_name + ".bin")).is_file():
+         pytest.skip(f"RealESRGAN model {model_name}.bin not found in {os.path.abspath(models_dir_param)}")
+
+    if not input_image_path.exists():
+        pytest.skip(f"Test input image {input_image_path} not found.")
+
+    # Perform upscaling
+    cmd_upscale = [
+        exe_path,
+        "-i", str(input_image_path),
+        "-o", str(output_image_path),
+        "-s", str(expected_scale), # Explicitly set scale, though model name implies it
+        "-n", model_name,
+        "-m", models_dir_param
+    ]
+    executable_dir = Path(exe_path).parent
+    print(f"Running RealESRGAN (x4plus-anime) upscale: {' '.join(cmd_upscale)} in CWD: {executable_dir}")
+    result_upscale = subprocess.run(cmd_upscale, capture_output=True, text=True, timeout=TIMEOUT_SECONDS, check=False, cwd=executable_dir)
+
+    assert result_upscale.returncode == 0, f"RealESRGAN (x4plus-anime) upscale failed with code {result_upscale.returncode}. Stderr: '{result_upscale.stderr}'. Stdout: '{result_upscale.stdout}'"
+    assert output_image_path.exists(), f"RealESRGAN (x4plus-anime) output image {output_image_path} not created."
 
     try:
         with Image.open(input_image_path) as img_in, Image.open(output_image_path) as img_out:
