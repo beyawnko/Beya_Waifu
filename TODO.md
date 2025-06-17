@@ -7,8 +7,6 @@ All TODO comments across the repository are already written in English. They are
   - Line 27: Replace with appropriate checks (e.g. spell checking).
   - Line 35: Replace with appropriate checks for this patch (e.g. checkpatch.pl).
   - Line 41: Replace with appropriate checks for the whole series (e.g. quick build, coding style checks).
-- **Waifu2x-Extension-QT/realcugan_ncnn_vulkan.cpp**
-  - Line 857: Implement settings reading for Video/GIF, especially for multi-GPU job distribution.
  - **realcugan-ncnn-vulkan/src/stb_image.h**
   - Line 1216: Move `stbi__convert_format` to here.
   - Line 1242: Move `stbi__convert_format16` to here.

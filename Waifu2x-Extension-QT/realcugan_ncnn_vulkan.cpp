@@ -1,5 +1,7 @@
 #include "mainwindow.h"
+#include "RealcuganJobManager.h"
 #include <QDebug>
+#include <QSettings>
 
 // Stub implementations to satisfy the build
 // Note: The incorrect static definitions that were here previously have been removed.
@@ -315,6 +317,28 @@ void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings()
 
 void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int)
 {
+    QSettings settings("Waifu2x-Extension-QT", "Waifu2x-Extension-QT");
+    settings.beginGroup("RealCUGAN_NCNN_Vulkan");
+
+    QVariant listVar = settings.value("RealCUGAN_GPUJobConfig_MultiGPU");
+    GPUIDs_List_MultiGPU_RealCUGAN =
+        listVar.isValid() ? listVar.value<QList<QMap<QString, QString>>>()
+                           : QList<QMap<QString, QString>>();
+
+    bool multiEnabled = settings.value("RealCUGAN_MultiGPU_Enabled", false).toBool();
+    QString fallbackId = settings.value("RealCUGAN_GPUID", "0").toString();
+
+    RealcuganJobManager jobMgr;
+    QString gpuConfig = jobMgr.buildGpuJobString(multiEnabled,
+                                                 GPUIDs_List_MultiGPU_RealCUGAN,
+                                                 fallbackId);
+
+    m_realcugan_gpuJobConfig_temp = GPUIDs_List_MultiGPU_RealCUGAN;
+
+    QString jobsVideo = settings.value("RealCUGANJobsVideo", "1:2:2").toString();
+    qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF GPU config" << gpuConfig
+             << "JobsVideo" << jobsVideo;
+    settings.endGroup();
 }
 
 void MainWindow::Realcugan_NCNN_Vulkan_PreLoad_Settings()
