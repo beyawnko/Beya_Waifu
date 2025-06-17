@@ -325,6 +325,7 @@ public:
 
     // RealCUGAN-ncnn-Vulkan
     QString m_realcugan_Model;
+    int m_realcugan_Scale;
     int m_realcugan_DenoiseLevel;
     int m_realcugan_TileSize;
     bool m_realcugan_TTA;

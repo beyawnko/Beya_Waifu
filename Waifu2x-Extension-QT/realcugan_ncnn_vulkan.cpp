@@ -356,10 +356,26 @@ void MainWindow::Realcugan_NCNN_Vulkan_GIF(int file_list_row_number)
 
 void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings()
 {
+    if (realCuganProcessor)
+        realCuganProcessor->readSettingsVideoGif(0);
+
+    if (ui->doubleSpinBox_ScaleRatio_image)
+        m_realcugan_Scale = static_cast<int>(ui->doubleSpinBox_ScaleRatio_image->value());
+    else
+        m_realcugan_Scale = Settings_Read_value("/settings/ImageScaleRatio").toInt();
+
+    qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings: Model:" << m_realcugan_Model
+             << "Scale:" << m_realcugan_Scale
+             << "Denoise:" << m_realcugan_DenoiseLevel
+             << "Tile:" << m_realcugan_TileSize
+             << "GPUID:" << m_realcugan_GPUID;
 }
 
-void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int)
+void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int threadNum)
 {
+    if (realCuganProcessor)
+        realCuganProcessor->readSettingsVideoGif(threadNum);
+
     QSettings settings("Waifu2x-Extension-QT", "Waifu2x-Extension-QT");
     settings.beginGroup("RealCUGAN_NCNN_Vulkan");
 
@@ -386,6 +402,12 @@ void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int)
 
 void MainWindow::Realcugan_NCNN_Vulkan_PreLoad_Settings()
 {
+    if (realCuganProcessor)
+        realCuganProcessor->preLoadSettings();
+
+    Realcugan_NCNN_Vulkan_ReadSettings();
+    Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(0);
+    qDebug() << "Realcugan_NCNN_Vulkan_PreLoad_Settings completed.";
 }
 
 void MainWindow::Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString&, int, bool, const QString&)
