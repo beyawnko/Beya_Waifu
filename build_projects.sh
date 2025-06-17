@@ -306,7 +306,7 @@ qmake Waifu2x-Extension-QT-Launcher.pro || { echo "qmake for Launcher failed."; 
 $MAKE -j$(nproc) || { echo "make for Launcher failed."; popd >/dev/null; exit 1; }
     echo "Deploying Qt DLLs for Waifu2x-Extension-QT-Launcher..."
     if command -v windeployqt.exe >/dev/null 2>&1; then
-        windeployqt.exe "release/Waifu2x-Extension-QT-Launcher.exe" --no-opengl-sw --no-translations --no-system-d3d-compiler --dir "release"
+        windeployqt.exe "release/Beya_Waifu-Launcher.exe" --no-opengl-sw --no-translations --no-system-d3d-compiler --dir "release"
         echo "Copying MinGW runtime DLLs for Waifu2x-Extension-QT-Launcher..."
         MINGW_BIN_DIR="/mingw64/bin" # This could also be made more robust
         if [ -d "$MINGW_BIN_DIR" ]; then
