@@ -231,3 +231,36 @@ QScrollBar::add-line:vertical:pressed, QScrollBar::sub-line:vertical:pressed {
 }
 
 /* Note: No specific QScrollBar::up-arrow or ::down-arrow if not using images */
+
+QTabBar::tab {
+    color: #dddddd; /* Default text color for tabs */
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3a3a3a, stop:1 #2d2d2d); /* Dark background for non-selected tabs */
+    padding: 8px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border: 1px solid #444444;
+    border-bottom: none; /* No border at the bottom as it connects to the tab pane */
+    min-width: 8ex; /* ensure some minimum width */
+}
+
+QTabBar::tab:hover {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #4a4a4a, stop:1 #3d3d3d); /* Slightly lighter on hover */
+}
+
+QTabBar::tab:selected {
+    color: #ffffff; /* White text for selected tab */
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #505050, stop:1 #404040); /* Active/selected tab background, slightly lighter than default tab pane */
+    border: 1px solid #555555;
+    border-bottom-color: #404040; /* Match the tab pane background or make it appear connected */
+}
+
+QTabBar::tab:!selected {
+    margin-top: 2px; /* make non-selected tabs look slightly recessed */
+    color: #bbbbbb; /* Slightly dimmer text for non-selected tabs */
+}
+
+QTabWidget::pane { /* The area where tab pages are displayed */
+    border: 1px solid #444444;
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #333333, stop:1 #292929);
+    top: -1px; /* Overlap with bottom border of tabs */
+}
