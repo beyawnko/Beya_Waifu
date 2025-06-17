@@ -2653,9 +2653,6 @@ the super-resolution, only interpolate video frames.
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="styleSheet">
-                     <string notr="true">background-color: rgb(255, 255, 255);</string>
-                    </property>
                     <property name="frameShadow">
                      <enum>QFrame::Sunken</enum>
                     </property>
