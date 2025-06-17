@@ -423,17 +423,134 @@ void MainWindow::on_pushButton_DetectGPU_RealCUGAN_clicked() // This slot name m
     // For now, just call the detection logic.
     Realcugan_ncnn_vulkan_DetectGPU();
 }
-void MainWindow::on_checkBox_MultiGPU_RealCUGAN_stateChanged(int arg1) { qDebug() << "STUB: on_checkBox_MultiGPU_RealCUGAN_stateChanged called with" << arg1; }
-void MainWindow::on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked() { qDebug() << "STUB: on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked called"; }
-void MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked() { qDebug() << "STUB: on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked called"; }
-void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked() { qDebug() << "STUB: on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked called"; }
-void MainWindow::on_pushButton_TileSize_Add_RealCUGAN_clicked() { qDebug() << "STUB: on_pushButton_TileSize_Add_RealCUGAN_clicked called"; }
-void MainWindow::on_pushButton_TileSize_Minus_RealCUGAN_clicked() { qDebug() << "STUB: on_pushButton_TileSize_Minus_RealCUGAN_clicked called"; }
-void MainWindow::on_comboBox_Model_RealCUGAN_currentIndexChanged(int index) { qDebug() << "STUB: on_comboBox_Model_RealCUGAN_currentIndexChanged called with index" << index; }
-void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess::ExitStatus exitStatus) { qDebug() << "STUB: Realcugan_NCNN_Vulkan_Iterative_finished called with exitCode" << exitCode << "exitStatus" << exitStatus; }
-void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardOutput() { qDebug() << "STUB: Realcugan_NCNN_Vulkan_Iterative_readyReadStandardOutput called"; }
-void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError() { qDebug() << "STUB: Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError called"; }
-void MainWindow::Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error) { qDebug() << "STUB: Realcugan_NCNN_Vulkan_Iterative_errorOccurred called with error" << error; }
+/** Toggle visibility of the RealCUGAN multi GPU group. */
+void MainWindow::on_checkBox_MultiGPU_RealCUGAN_stateChanged(int arg1)
+{
+    if (groupBox_GPUSettings_MultiGPU_RealCUGAN)
+        groupBox_GPUSettings_MultiGPU_RealCUGAN->setVisible(arg1 == Qt::Checked);
+    // Re-read settings so processor picks up the change
+    if (realCuganProcessor)
+        realCuganProcessor->readSettings();
+    // TODO: update running jobs when multi GPU state changes
+}
+
+/** Add the currently selected GPU to the RealCUGAN GPU list. */
+void MainWindow::on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked()
+{
+    if (!comboBox_GPUIDs_MultiGPU_RealCUGAN || !listWidget_GPUList_MultiGPU_RealCUGAN)
+        return;
+
+    const QString id = comboBox_GPUIDs_MultiGPU_RealCUGAN->currentText();
+    if (id.isEmpty())
+        return;
+
+    for (const auto &gpu : GPUIDs_List_MultiGPU_RealCUGAN) {
+        if (gpu.value("id") == id)
+            return; // already added
+    }
+
+    QMap<QString, QString> map;
+    map["id"] = id;
+    map["threads"] = "1";
+    map["tilesize"] = spinBox_TileSize_RealCUGAN
+            ? QString::number(spinBox_TileSize_RealCUGAN->value())
+            : QStringLiteral("0");
+    map["enabled"] = "true";
+    GPUIDs_List_MultiGPU_RealCUGAN.append(map);
+
+    QListWidgetItem *item = new QListWidgetItem(id, listWidget_GPUList_MultiGPU_RealCUGAN);
+    item->setData(Qt::UserRole, id);
+    listWidget_GPUList_MultiGPU_RealCUGAN->addItem(item);
+    // TODO: allow editing threads and tile size per GPU
+}
+
+/** Remove the selected GPU from the RealCUGAN GPU list. */
+void MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked()
+{
+    if (!listWidget_GPUList_MultiGPU_RealCUGAN)
+        return;
+
+    int row = listWidget_GPUList_MultiGPU_RealCUGAN->currentRow();
+    if (row < 0 || row >= listWidget_GPUList_MultiGPU_RealCUGAN->count())
+        return;
+
+    QString id = listWidget_GPUList_MultiGPU_RealCUGAN->currentItem()->data(Qt::UserRole).toString();
+    listWidget_GPUList_MultiGPU_RealCUGAN->takeItem(row);
+
+    for (int i = 0; i < GPUIDs_List_MultiGPU_RealCUGAN.size(); ++i) {
+        if (GPUIDs_List_MultiGPU_RealCUGAN.at(i).value("id") == id) {
+            GPUIDs_List_MultiGPU_RealCUGAN.removeAt(i);
+            break;
+        }
+    }
+}
+
+/** Clear all GPUs from the RealCUGAN GPU list. */
+void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked()
+{
+    GPUIDs_List_MultiGPU_RealCUGAN.clear();
+    if (listWidget_GPUList_MultiGPU_RealCUGAN)
+        listWidget_GPUList_MultiGPU_RealCUGAN->clear();
+}
+
+/** Increase the RealCUGAN tile size by the spin box step. */
+void MainWindow::on_pushButton_TileSize_Add_RealCUGAN_clicked()
+{
+    if (spinBox_TileSize_RealCUGAN)
+        spinBox_TileSize_RealCUGAN->setValue(spinBox_TileSize_RealCUGAN->value() +
+                                             spinBox_TileSize_RealCUGAN->singleStep());
+}
+
+/** Decrease the RealCUGAN tile size by the spin box step. */
+void MainWindow::on_pushButton_TileSize_Minus_RealCUGAN_clicked()
+{
+    if (!spinBox_TileSize_RealCUGAN)
+        return;
+    int step = spinBox_TileSize_RealCUGAN->singleStep();
+    int newVal = spinBox_TileSize_RealCUGAN->value() - step;
+    if (newVal < spinBox_TileSize_RealCUGAN->minimum())
+        newVal = spinBox_TileSize_RealCUGAN->minimum();
+    spinBox_TileSize_RealCUGAN->setValue(newVal);
+}
+
+/** Store the currently selected RealCUGAN model. */
+void MainWindow::on_comboBox_Model_RealCUGAN_currentIndexChanged(int index)
+{
+    if (comboBox_Model_RealCUGAN)
+        m_realcugan_Model = comboBox_Model_RealCUGAN->itemText(index);
+    // TODO: refresh processor settings when model changes
+}
+
+/** Handle completion of an iterative RealCUGAN process. */
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished(int exitCode,
+                                                          QProcess::ExitStatus exitStatus)
+{
+    qDebug() << "RealCUGAN iterative finished" << exitCode << exitStatus;
+    CheckIfAllFinished();
+    // TODO: report success/failure to the UI
+}
+
+/** Read stdout from iterative RealCUGAN execution. */
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardOutput()
+{
+    if (currentProcess)
+        qDebug().noquote() << currentProcess->readAllStandardOutput();
+    // TODO: parse progress percentage and update progress bar
+}
+
+/** Read stderr from iterative RealCUGAN execution. */
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError()
+{
+    if (currentProcess)
+        qDebug().noquote() << currentProcess->readAllStandardError();
+}
+
+/** Handle errors from iterative RealCUGAN execution. */
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error)
+{
+    qDebug() << "RealCUGAN iterative error" << error;
+    // TODO: surface error details to the user
+}
 void MainWindow::on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked()
 {
     RealESRGAN_ncnn_vulkan_DetectGPU();
