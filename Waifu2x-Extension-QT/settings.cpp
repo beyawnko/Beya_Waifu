@@ -606,7 +606,8 @@ int MainWindow::Settings_Read_Apply()
         QVariant tmp = Settings_Read_value("/settings/RealCUGAN_Available_GPUID");
         if (tmp.isValid()) Available_GPUID_RealCUGAN = tmp.toStringList();
     }
-    
+    Realcugan_NCNN_Vulkan_DetectGPU_finished();
+
     QVariant gpuIDCugan = Settings_Read_value("/settings/RealCUGAN_GPUID");
     if(comboBox_GPUID_RealCUGAN && gpuIDCugan.isValid()) comboBox_GPUID_RealCUGAN->setCurrentIndex(gpuIDCugan.toInt());
 
@@ -664,7 +665,8 @@ int MainWindow::Settings_Read_Apply()
         QVariant tmp = Settings_Read_value("/settings/RealESRGAN_Available_GPUID");
         if (tmp.isValid()) Available_GPUID_RealESRGAN_ncnn_vulkan = tmp.toStringList();
     }
-    
+    RealESRGAN_ncnn_vulkan_DetectGPU_finished();
+
     QVariant gpuIDEsrgan = Settings_Read_value("/settings/RealESRGAN_GPUID");
     if(comboBox_GPUID_RealsrNCNNVulkan && gpuIDEsrgan.isValid()) comboBox_GPUID_RealsrNCNNVulkan->setCurrentIndex(gpuIDEsrgan.toInt());
     

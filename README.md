@@ -25,6 +25,14 @@ RealCUGAN and RealESRGAN are currently the only supported upscaling engines.
 
 Ensure your GPU drivers support Vulkan since both engines rely on it.
 
+## GPU detection
+
+The application queries available Vulkan devices by invoking the bundled
+upscaler binaries with the `-h` option. The output lists devices as
+`GPU device <id>: <name>` or `[<id>] <name>` which is parsed to populate the
+GPU selection menus. Detected IDs are saved to `settings.ini` so that
+subsequent launches restore the last known device list.
+
 ### Quick Build (Linux & Windows)
 
 1.  Install **Qt 6.5** with the Widgets, Multimedia, OpenGL and

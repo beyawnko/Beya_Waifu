@@ -286,6 +286,42 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_CleanupTempFiles(const QString&, int, bo
 {
 }
 
+static QStringList parseVulkanDeviceList(const QString &output)
+{
+    QStringList list;
+    QRegularExpression re(QStringLiteral("^\\s*(?:GPU device\\s*)?\\[?(\\d+)\\]?[:\\-]?\\s*(.+)$"),
+                           QRegularExpression::CaseInsensitiveOption |
+                           QRegularExpression::MultilineOption);
+    auto it = re.globalMatch(output);
+    while (it.hasNext())
+    {
+        auto m = it.next();
+        list << QStringLiteral("%1: %2").arg(m.captured(1).trimmed(), m.captured(2).trimmed());
+    }
+    return list;
+}
+
+void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU()
+{
+    if (!pushButton_DetectGPU_RealsrNCNNVulkan)
+        return;
+
+    pushButton_DetectGPU_RealsrNCNNVulkan->setEnabled(false);
+    pushButton_DetectGPU_RealsrNCNNVulkan->setText(tr("Detecting..."));
+
+    QString exePath = Current_Path + "/Engines/realesrgan-ncnn-vulkan/realesrgan-ncnn-vulkan";
+#ifdef Q_OS_WIN
+    exePath += ".exe";
+#endif
+    QProcess proc;
+    QByteArray out, err;
+    runProcess(&proc, QString("\"%1\" -h").arg(exePath), &out, &err);
+    QString text = QString::fromLocal8Bit(out + err);
+    Available_GPUID_RealESRGAN_ncnn_vulkan = parseVulkanDeviceList(text);
+
+    RealESRGAN_ncnn_vulkan_DetectGPU_finished();
+}
+
 void MainWindow::RealESRGAN_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError)
 {
 }
