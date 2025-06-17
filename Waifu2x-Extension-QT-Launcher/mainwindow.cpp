@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     connect(this, SIGNAL(Send_RUN()), this, SLOT(RUN_SLOT()));
     connect(this, SIGNAL(Send_Duplicate()), this, SLOT(Duplicate_SLOT()));
-    QtConcurrent::run(this, &MainWindow::RUN_Concurrent);
+    QtConcurrent::run([this]() { this->RUN_Concurrent(); });
 }
 
 MainWindow::~MainWindow()

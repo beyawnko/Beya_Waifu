@@ -49,6 +49,33 @@ Ensure your GPU drivers support Vulkan since both engines rely on it.
 
 This project can be built on Linux and Windows. The `build_projects.sh` script in the root directory is designed to automate the building of the main application, the launcher, and the required upscaler engines (RealCUGAN and RealESRGAN).
 
+### Windows
+
+To build the project on Windows, use the `build_windows.ps1` PowerShell script located in the root of the repository.
+
+**Prerequisites:**
+*   Windows Operating System (10 or later recommended)
+*   PowerShell
+*   Git client (must be in PATH)
+*   An active internet connection (the script downloads dependencies)
+*   Administrator privileges (the script installs software like Chocolatey, MSYS2, Qt, and build tools if not already present)
+
+**Steps:**
+1.  Ensure Git submodules are initialized and updated: `git submodule update --init --recursive`
+2.  Open a PowerShell terminal with Administrator privileges.
+3.  Navigate to the root directory of the repository.
+4.  Execute the build script: `.\build_windows.ps1`
+
+The `build_windows.ps1` script will perform the following:
+*   Install Chocolatey (a package manager for Windows) if not already present.
+*   Install necessary tools via Chocolatey, including MSYS2 (for a Unix-like environment on Windows), CMake, Git (if not already fully available), and Python.
+*   Set up the MSYS2/MinGW64 build environment.
+*   Install the required version of Qt (currently 6.5.2 for MinGW) using `aqtinstall`.
+*   Execute the main build script (`build_projects.sh`) which compiles the Waifu2x Extension QT application and the Launcher.
+*   **Deployment:** After a successful compilation, the script automatically bundles the necessary Qt runtime DLLs (using `windeployqt`) and copies essential MinGW runtime DLLs into the respective `release` output directories (`Waifu2x-Extension-QT/release` and `Waifu2x-Extension-QT-Launcher/release`). This makes the compiled applications portable and ready to run on other Windows machines that may not have Qt or MinGW installed.
+
+The final executables and their bundled dependencies will be found in the `Waifu2x-Extension-QT/release/` and `Waifu2x-Extension-QT-Launcher/release/` directories.
+
 ### Prerequisites
 
 First, ensure you have Git installed to clone the repository and its submodules.
