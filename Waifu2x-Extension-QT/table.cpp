@@ -19,6 +19,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QDebug>
 /*
 Initialize table view
 */
@@ -834,3 +835,5 @@ void MainWindow::ui_tableViews_setUpdatesEnabled(bool isEnabled)
     ui->tableView_gif->setUpdatesEnabled(isEnabled);
     ui->tableView_image->setUpdatesEnabled(isEnabled);
 }
+
+void MainWindow::on_pushButton_ClearList_clicked() { qDebug() << "STUB: MainWindow::on_pushButton_ClearList_clicked called"; }

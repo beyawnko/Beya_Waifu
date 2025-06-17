@@ -17,6 +17,7 @@
     My Github homepage: https://github.com/AaronFeng753
 */
 #include "mainwindow.h"
+#include <QDebug>
 // #include "utils/ffprobe_helpers.h" // Not needed anymore due to getOrFetchMetadata
 #include "ui_mainwindow.h"
 
@@ -323,6 +324,10 @@ bool MainWindow::APNG_Waifu2xNCNNVulkan(QString, QString, QString,
     emit Send_TextBrowser_NewMessage(tr("APNG_Waifu2xNCNNVulkan is not available."));
     return false;
 }
+
+// Stubs for missing functions
+bool MainWindow::APNG_RealcuganNCNNVulkan(QString s1, QString s2, QString s3, QStringList sl, QString s4) { qDebug() << "STUB: MainWindow::APNG_RealcuganNCNNVulkan called"; return false; }
+bool MainWindow::APNG_RealESRGANNCNNVulkan(QString s1, QString s2, QString s3, QStringList sl, QString s4) { qDebug() << "STUB: MainWindow::APNG_RealESRGANNCNNVulkan called"; return false; }
 
 bool MainWindow::APNG_Waifu2xConverter(QString, QString, QString,
                                        QStringList, QString)

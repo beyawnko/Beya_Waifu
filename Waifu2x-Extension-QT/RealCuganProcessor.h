@@ -27,6 +27,7 @@ class RealCuganProcessor : public QObject
     Q_OBJECT
 public:
     explicit RealCuganProcessor(MainWindow *parent);
+    virtual ~RealCuganProcessor();
 
     void preLoadSettings();
     void readSettings();

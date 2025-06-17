@@ -564,7 +564,7 @@ public:
     bool isConnectivityTest_RawGithubusercontentCom_Running=false;
     QMutex QMutex_ConnectivityTest_RawGithubusercontentCom;
     bool DownloadTo(QString OnlineLink,QString LocalPath);
-    void closeEvent(QCloseEvent* event);
+    void closeEvent(QCloseEvent* event) override;
     std::atomic<bool> QProcess_stop{false};
     int Auto_Save_Settings_Watchdog(bool isWaitForSave);
     QFuture<int> AutoUpdate;
@@ -621,7 +621,7 @@ public:
     QAction *QAction_checkBox_MoveToRecycleBin_checkBox_ReplaceOriginalFile = new QAction(this);
     void Init_ActionsMenu_checkBox_DelOriginal();
     QAction *QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal = new QAction(this);
-    bool eventFilter(QObject *target, QEvent *event);
+    bool eventFilter(QObject *target, QEvent *event) override;
     int AddTileSize_NCNNVulkan_Converter(int OrginalTileSize);
     int MinusTileSize_NCNNVulkan_Converter(int OrginalTileSize);
     void ImagesResize_Folder_MultiThread(int New_width,int New_height,QString ImagesFolderPath);
@@ -814,6 +814,8 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     void on_pushButton_TurnOffScreen_clicked();
     void on_pushButton_MultipleOfFPS_VFI_MIN_clicked();
     void on_pushButton_MultipleOfFPS_VFI_ADD_clicked();
+
+    void on_comboBox_TargetProcessor_converter_currentIndexChanged(int index);
 
     // Custom Resolution Slots
     void on_pushButton_CustRes_cancel_clicked();

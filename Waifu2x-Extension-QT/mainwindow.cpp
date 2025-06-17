@@ -25,11 +25,13 @@ Copyright (C) 2025  beyawnko
 #include "GpuManager.h"
 #include "UiController.h"
 #include <QApplication>
+#include <QDebug>
 #include <QEventLoop>
 #include <QMessageBox>
 #include <QThreadPool>
 #include <QThread>
 #include <QEvent>
+#include <QCloseEvent>
 
 MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     : QMainWindow(parent)
@@ -160,4 +162,29 @@ void MainWindow::pushButton_Stop_setEnabled_self(bool isEnabled)
     ui->pushButton_Stop->setEnabled(isEnabled);
     Pause_SystemTrayIcon->setEnabled(isEnabled);
     ui->pushButton_Stop->setVisible(isEnabled);
+}
+
+FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath) { qDebug() << "STUB: MainWindow::getOrFetchMetadata called for" << filePath; return FileMetadataCache(); }
+bool MainWindow::ReplaceOriginalFile(QString original_fullpath, QString output_fullpath) { qDebug() << "STUB: MainWindow::ReplaceOriginalFile called for" << original_fullpath << "and" << output_fullpath; return false; }
+void MainWindow::MoveFileToOutputPath(QString Orginal, QString SourceFilePath) { qDebug() << "STUB: MainWindow::MoveFileToOutputPath called for" << Orginal << "and" << SourceFilePath; }
+QMap<QString,int> MainWindow::Image_Gif_Read_Resolution(QString SourceFileFullPath) { qDebug() << "STUB: MainWindow::Image_Gif_Read_Resolution called for" << SourceFileFullPath; return QMap<QString,int>(); }
+void MainWindow::Delay_sec_sleep(int time) { qDebug() << "STUB: MainWindow::Delay_sec_sleep called with" << time; QThread::sleep(time); }
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    // TODO: Add custom event filtering logic if needed
+    qDebug() << "STUB: MainWindow::eventFilter called for object" << obj << "event type" << event->type();
+    return QMainWindow::eventFilter(obj, event);
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    qDebug() << "STUB: MainWindow::closeEvent called";
+    // Example: if (isAlreadyClosed.load()) return;
+    // Ensure settings are saved if auto-save is on
+    // if (ui->checkBox_AutoSaveSettings->isChecked()) {
+    //     Settings_Save();
+    // }
+    // TODO: Implement proper exit procedure (stop threads, save state)
+    QMainWindow::closeEvent(event);
 }

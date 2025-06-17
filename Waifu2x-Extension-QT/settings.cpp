@@ -1143,7 +1143,7 @@ int MainWindow::Settings_Read_Apply()
     ui->checkBox_isCompatible_RifeNcnnVulkan->setChecked(isCompatible_RifeNcnnVulkan);
     ui->checkBox_isCompatible_CainNcnnVulkan->setChecked(isCompatible_CainNcnnVulkan);
     ui->checkBox_isCompatible_DainNcnnVulkan->setChecked(isCompatible_DainNcnnVulkan);
-    if(ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan) ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->setChecked(isCompatible_RealCUGAN_NCNN_Vulkan);
+    if(ui->checkBox_isCompatible_Realsr_NCNN_Vulkan) ui->checkBox_isCompatible_Realsr_NCNN_Vulkan->setChecked(isCompatible_RealCUGAN_NCNN_Vulkan); // Corrected: Use Realsr checkbox for RealCUGAN variable
     if(ui->checkBox_isCompatible_Realsr_NCNN_Vulkan) ui->checkBox_isCompatible_Realsr_NCNN_Vulkan->setChecked(isCompatible_RealESRGAN_NCNN_Vulkan);
     //======================== Load VFI settings ========================
     {
