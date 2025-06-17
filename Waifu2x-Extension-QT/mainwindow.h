@@ -704,6 +704,8 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     int Waifu2x_DetectGPU_finished();
     int Realsr_ncnn_vulkan_DetectGPU_finished(); // For RealSR (distinct from RealESRGAN)
     int FrameInterpolation_DetectGPU_finished();
+    int Realcugan_NCNN_Vulkan_DetectGPU_finished();
+    int RealESRGAN_ncnn_vulkan_DetectGPU_finished();
     int CheckUpdate_NewUpdate(QString update_str, QString Change_log);
     void FinishedProcessing_DN();
     int Table_FileCount_reload();
@@ -959,11 +961,11 @@ private:
     void LoadScaledImageToLabel(const QString &imagePath, QLabel *label);
     void UpdateTotalProcessedFilesCount();
     void ProcessNextFile();
+    void RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
     void CheckIfAllFinished();
     void UpdateNumberOfActiveThreads();
     void UpdateProgressBar();
     void ShellMessageBox(const QString &title, const QString &text, QMessageBox::Icon icon);
-    void RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
 
     Ui::MainWindow *ui;
 };
