@@ -51,7 +51,7 @@ void MainWindow::dropEvent(QDropEvent *event)
     pushButton_Start_setEnabled_self(0);
     ui->checkBox_ScanSubFolders->setEnabled(0);
     this->setAcceptDrops(0);
-    ui->label_DropFile->setText(tr("Adding files, please wait."));
+    // ui->label_DropFile->setText(tr("Adding files, please wait."));
     emit Send_TextBrowser_NewMessage(tr("Adding files, please wait."));
     //===================================================
     (void)QtConcurrent::run([this, urls]() { this->Read_urls(urls); });
@@ -96,7 +96,7 @@ void MainWindow::Read_urls_finfished()
     ui->groupBox_InputExt->setEnabled(1);
     ui->checkBox_ScanSubFolders->setEnabled(1);
     this->setAcceptDrops(1);
-    ui->label_DropFile->setText(tr("Drag and drop files or folders here\n(Image, GIF and Video)"));
+    // ui->label_DropFile->setText(tr("Drag and drop files or folders here\n(Image, GIF and Video)"));
     emit Send_TextBrowser_NewMessage(tr("Add file complete."));
     //===================================================
     emit Send_PrograssBar_Range_min_max(0, 0);
@@ -114,17 +114,17 @@ void MainWindow::Read_urls_finfished()
     }
     if(AddNew_image)
     {
-        ui->label_DropFile->setVisible(0);//Hide file drop label
+        // ui->label_DropFile->setVisible(0);//Hide file drop label
         ui->tableView_image->setVisible(1);
     }
     if(AddNew_gif)
     {
-        ui->label_DropFile->setVisible(0);//Hide file drop label
+        // ui->label_DropFile->setVisible(0);//Hide file drop label
         ui->tableView_gif->setVisible(1);
     }
     if(AddNew_video)
     {
-        ui->label_DropFile->setVisible(0);//Hide file drop label
+        // ui->label_DropFile->setVisible(0);//Hide file drop label
         ui->tableView_video->setVisible(1);
     }
     //===================

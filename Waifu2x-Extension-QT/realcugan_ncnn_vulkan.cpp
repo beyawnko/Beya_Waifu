@@ -2,6 +2,10 @@
 #include <QDebug>
 
 // Stub implementations to satisfy the build
+// Note: The incorrect static definitions that were here previously have been removed.
+// Instance members are declared in mainwindow.h and initialized in mainwindow.cpp constructor.
+// Functions defined as MainWindow::FunctionName should have their declarations in mainwindow.h.
+// Removing runProcess stub from here as it's defined in mainwindow.cpp
 
 QStringList MainWindow::Realcugan_NCNN_Vulkan_PrepareArguments(
     const QString& input_path,
@@ -53,7 +57,9 @@ QStringList MainWindow::Realcugan_NCNN_Vulkan_PrepareArguments(
     // otherwise, use a general setting.
     QString jobs_key = isVideoOrGif ? "/settings/RealCUGANJobsVideo" : "/settings/RealCUGANJobsImage";
     QString default_jobs = isVideoOrGif ? "1:2:2" : "1:1:1"; // Example: more save/load threads for video
-    QString jobs = Settings_Read_value(jobs_key, default_jobs).toString();
+    QString jobs_read = Settings_Read_value(jobs_key).toString();
+    if (jobs_read.isEmpty()) jobs_read = default_jobs;
+    QString jobs = jobs_read;
     args << "-j" << jobs;
 
     // -c syncgap-mode
@@ -112,14 +118,24 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int file_list_row_number, bool isBa
     int noise_level = ui->spinBox_DenoiseLevel_image->value(); // General denoise, might need RealCUGAN specific UI
     // RealCUGAN model dir is typically 'models-se', 'models-pro', 'models-nose'.
     // This needs a dedicated ComboBox in UI, e.g. ui->comboBox_ModelDir_RealCUGAN
-    QString model_dir_name = Settings_Read_value("/settings/RealCUGANModelDir", "models-se").toString(); // Placeholder
+    QString model_dir_name_read = Settings_Read_value("/settings/RealCUGANModelDir").toString(); // Placeholder
+    if (model_dir_name_read.isEmpty()) model_dir_name_read = "models-se";
+    QString model_dir_name = model_dir_name_read;
     int scale = ui->doubleSpinBox_ScaleRatio_image->value();
-    int gpu_id = Settings_Read_value("/settings/RealCUGANGpuId", -1).toInt(); // Placeholder, e.g. ui->comboBox_GPUID_RealCUGAN
+    int gpu_id_read = Settings_Read_value("/settings/RealCUGANGpuId").toInt(); // Placeholder, e.g. ui->comboBox_GPUID_RealCUGAN
+    // Assuming -1 or default int() if conversion fails is acceptable.
+    int gpu_id = gpu_id_read;
     QString format = ui->comboBox_ImageSaveFormat->currentText();
-    bool tta_mode = Settings_Read_value("/settings/RealCUGANTTAMode", false).toBool(); // Placeholder, e.g. ui->checkBox_TTA_RealCUGAN
-    QString tile_size_str = Settings_Read_value("/settings/RealCUGANTileSize", "0").toString(); // Placeholder
+    bool tta_mode_read = Settings_Read_value("/settings/RealCUGANTTAMode").toBool(); // Placeholder, e.g. ui->checkBox_TTA_RealCUGAN
+    // Assuming false if conversion fails is acceptable.
+    bool tta_mode = tta_mode_read;
+    QString tile_size_str_read = Settings_Read_value("/settings/RealCUGANTileSize").toString(); // Placeholder
+    if (tile_size_str_read.isEmpty()) tile_size_str_read = "0";
+    QString tile_size_str = tile_size_str_read;
     bool verbose_log = true;
-    QString syncgap_str = Settings_Read_value("/settings/RealCUGANSyncGap", "3").toString(); // Placeholder
+    QString syncgap_str_read = Settings_Read_value("/settings/RealCUGANSyncGap").toString(); // Placeholder
+    if (syncgap_str_read.isEmpty()) syncgap_str_read = "3";
+    QString syncgap_str = syncgap_str_read;
 
     QStringList arguments = Realcugan_NCNN_Vulkan_PrepareArguments(
         input_path, output_path, noise_level, model_dir_name, scale, gpu_id, format,
@@ -177,14 +193,22 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int file_list_row_number)
 
     // --- Get parameters from UI/Settings (Placeholders for RealCUGAN specific UI) ---
     int noise_level = ui->spinBox_DenoiseLevel_video->value(); // General denoise for video
-    QString model_dir_name = Settings_Read_value("/settings/RealCUGANModelDirVideo", "models-se").toString(); // Placeholder
+    QString model_dir_name_read = Settings_Read_value("/settings/RealCUGANModelDirVideo").toString(); // Placeholder
+    if (model_dir_name_read.isEmpty()) model_dir_name_read = "models-se";
+    QString model_dir_name = model_dir_name_read;
     int scale = ui->doubleSpinBox_ScaleRatio_video->value();
-    int gpu_id = Settings_Read_value("/settings/RealCUGANGpuIdVideo", -1).toInt(); // Placeholder
+    int gpu_id_read = Settings_Read_value("/settings/RealCUGANGpuIdVideo").toInt(); // Placeholder
+    int gpu_id = gpu_id_read;
     QString format = "png"; // Process frames losslessly
-    bool tta_mode = Settings_Read_value("/settings/RealCUGANTTAModeVideo", false).toBool(); // Placeholder
-    QString tile_size_str = Settings_Read_value("/settings/RealCUGANTileSizeVideo", "0").toString(); // Placeholder
+    bool tta_mode_read = Settings_Read_value("/settings/RealCUGANTTAModeVideo").toBool(); // Placeholder
+    bool tta_mode = tta_mode_read;
+    QString tile_size_str_read = Settings_Read_value("/settings/RealCUGANTileSizeVideo").toString(); // Placeholder
+    if (tile_size_str_read.isEmpty()) tile_size_str_read = "0";
+    QString tile_size_str = tile_size_str_read;
     bool verbose_log = true;
-    QString syncgap_str = Settings_Read_value("/settings/RealCUGANSyncGapVideo", "3").toString(); // Placeholder
+    QString syncgap_str_read = Settings_Read_value("/settings/RealCUGANSyncGapVideo").toString(); // Placeholder
+    if (syncgap_str_read.isEmpty()) syncgap_str_read = "3";
+    QString syncgap_str = syncgap_str_read;
 
     QStringList arguments = Realcugan_NCNN_Vulkan_PrepareArguments(
         input_path, output_path, noise_level, model_dir_name, scale, gpu_id, format,
@@ -237,14 +261,22 @@ void MainWindow::Realcugan_NCNN_Vulkan_GIF(int file_list_row_number)
 
     // --- Get parameters from UI/Settings (Placeholders for RealCUGAN specific UI) ---
     int noise_level = ui->spinBox_DenoiseLevel_gif->value(); // General denoise for gif
-    QString model_dir_name = Settings_Read_value("/settings/RealCUGANModelDirGif", "models-se").toString(); // Placeholder
+    QString model_dir_name_read = Settings_Read_value("/settings/RealCUGANModelDirGif").toString(); // Placeholder
+    if (model_dir_name_read.isEmpty()) model_dir_name_read = "models-se";
+    QString model_dir_name = model_dir_name_read;
     int scale = ui->doubleSpinBox_ScaleRatio_gif->value();
-    int gpu_id = Settings_Read_value("/settings/RealCUGANGpuIdGif", -1).toInt(); // Placeholder
+    int gpu_id_read = Settings_Read_value("/settings/RealCUGANGpuIdGif").toInt(); // Placeholder
+    int gpu_id = gpu_id_read;
     QString format = "png"; // Process frames losslessly
-    bool tta_mode = Settings_Read_value("/settings/RealCUGANTTAModeGif", false).toBool(); // Placeholder
-    QString tile_size_str = Settings_Read_value("/settings/RealCUGANTileSizeGif", "0").toString(); // Placeholder
+    bool tta_mode_read = Settings_Read_value("/settings/RealCUGANTTAModeGif").toBool(); // Placeholder
+    bool tta_mode = tta_mode_read;
+    QString tile_size_str_read = Settings_Read_value("/settings/RealCUGANTileSizeGif").toString(); // Placeholder
+    if (tile_size_str_read.isEmpty()) tile_size_str_read = "0";
+    QString tile_size_str = tile_size_str_read;
     bool verbose_log = true;
-    QString syncgap_str = Settings_Read_value("/settings/RealCUGANSyncGapGif", "3").toString(); // Placeholder
+    QString syncgap_str_read = Settings_Read_value("/settings/RealCUGANSyncGapGif").toString(); // Placeholder
+    if (syncgap_str_read.isEmpty()) syncgap_str_read = "3";
+    QString syncgap_str = syncgap_str_read;
 
     QStringList arguments = Realcugan_NCNN_Vulkan_PrepareArguments(
         input_path, output_path, noise_level, model_dir_name, scale, gpu_id, format,
