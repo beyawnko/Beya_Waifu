@@ -158,6 +158,8 @@ These packages supply `qmake6`, `qsb`, and the Multimedia and Qt5Compat modules.
 
 Once all dependencies are set up correctly for your operating system:
 
+**Note:** The project is configured to use the C++17 standard, aligning with the requirements of Qt 6 and modern C++ practices.
+
 1.  Open your terminal (MSYS2 MinGW 64-bit on Windows, or a standard bash terminal on Linux).
 2.  Navigate to the root directory of the cloned `Waifu2x-Extension-QT` repository.
 3.  Execute the build script:

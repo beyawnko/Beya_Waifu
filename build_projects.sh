@@ -281,20 +281,20 @@ $MAKE liquidglass_frag || { echo "make liquidglass_frag failed."; popd >/dev/nul
 # General make command for the application, using multiple cores.
 $MAKE -j$(nproc) || { echo "make for Waifu2x-Extension-QT failed."; popd >/dev/null; exit 1; }
     echo "Deploying Qt DLLs for Waifu2x-Extension-QT..."
-    if [ -n "$QT_BIN_PATH" ] && [ -f "$QT_BIN_PATH/windeployqt.exe" ]; then
-        "$QT_BIN_PATH/windeployqt.exe" "$TARGET_APP_DIR/release/Beya_Waifu.exe" --no-opengl-sw --no-translations --no-system-d3d-compiler --dir "$TARGET_APP_DIR/release"
+    if command -v windeployqt.exe >/dev/null 2>&1; then
+        windeployqt.exe "$TARGET_APP_DIR/release/Beya_Waifu.exe" --no-opengl-sw --no-translations --no-system-d3d-compiler --dir "$TARGET_APP_DIR/release"
         echo "Copying MinGW runtime DLLs for Waifu2x-Extension-QT..."
         # Attempt to locate MinGW bin directory, common path is /mingw64/bin
-        MINGW_BIN_DIR="/mingw64/bin"
+        MINGW_BIN_DIR="/mingw64/bin" # This could also be made more robust, e.g. by deriving from 'which gcc'
         if [ -d "$MINGW_BIN_DIR" ]; then
-            cp "$MINGW_BIN_DIR/libgcc_s_seh-1.dll" "$TARGET_APP_DIR/release/"
-            cp "$MINGW_BIN_DIR/libstdc++-6.dll" "$TARGET_APP_DIR/release/"
-            cp "$MINGW_BIN_DIR/libwinpthread-1.dll" "$TARGET_APP_DIR/release/"
+            cp "$MINGW_BIN_DIR/libgcc_s_seh-1.dll" "$TARGET_APP_DIR/release/" 2>/dev/null || echo "Note: libgcc_s_seh-1.dll not found in $MINGW_BIN_DIR"
+            cp "$MINGW_BIN_DIR/libstdc++-6.dll" "$TARGET_APP_DIR/release/" 2>/dev/null || echo "Note: libstdc++-6.dll not found in $MINGW_BIN_DIR"
+            cp "$MINGW_BIN_DIR/libwinpthread-1.dll" "$TARGET_APP_DIR/release/" 2>/dev/null || echo "Note: libwinpthread-1.dll not found in $MINGW_BIN_DIR"
         else
             echo "Warning: MinGW bin directory not found at $MINGW_BIN_DIR. Runtime DLLs may be missing."
         fi
     else
-        echo "Warning: windeployqt.exe not found or QT_BIN_PATH not set. Skipping Qt deployment for Waifu2x-Extension-QT."
+        echo "Warning: windeployqt.exe not found in PATH. Skipping Qt deployment for Waifu2x-Extension-QT."
     fi
 popd >/dev/null
 
@@ -305,19 +305,19 @@ qmake Waifu2x-Extension-QT-Launcher.pro || { echo "qmake for Launcher failed."; 
 # General make command for the launcher, using multiple cores.
 $MAKE -j$(nproc) || { echo "make for Launcher failed."; popd >/dev/null; exit 1; }
     echo "Deploying Qt DLLs for Waifu2x-Extension-QT-Launcher..."
-    if [ -n "$QT_BIN_PATH" ] && [ -f "$QT_BIN_PATH/windeployqt.exe" ]; then
-        "$QT_BIN_PATH/windeployqt.exe" "Waifu2x-Extension-QT-Launcher/release/Waifu2x-Extension-QT-Launcher.exe" --no-opengl-sw --no-translations --no-system-d3d-compiler --dir "Waifu2x-Extension-QT-Launcher/release"
+    if command -v windeployqt.exe >/dev/null 2>&1; then
+        windeployqt.exe "Waifu2x-Extension-QT-Launcher/release/Waifu2x-Extension-QT-Launcher.exe" --no-opengl-sw --no-translations --no-system-d3d-compiler --dir "Waifu2x-Extension-QT-Launcher/release"
         echo "Copying MinGW runtime DLLs for Waifu2x-Extension-QT-Launcher..."
-        MINGW_BIN_DIR="/mingw64/bin"
+        MINGW_BIN_DIR="/mingw64/bin" # This could also be made more robust
         if [ -d "$MINGW_BIN_DIR" ]; then
-            cp "$MINGW_BIN_DIR/libgcc_s_seh-1.dll" "Waifu2x-Extension-QT-Launcher/release/"
-            cp "$MINGW_BIN_DIR/libstdc++-6.dll" "Waifu2x-Extension-QT-Launcher/release/"
-            cp "$MINGW_BIN_DIR/libwinpthread-1.dll" "Waifu2x-Extension-QT-Launcher/release/"
+            cp "$MINGW_BIN_DIR/libgcc_s_seh-1.dll" "Waifu2x-Extension-QT-Launcher/release/" 2>/dev/null || echo "Note: libgcc_s_seh-1.dll not found in $MINGW_BIN_DIR for Launcher"
+            cp "$MINGW_BIN_DIR/libstdc++-6.dll" "Waifu2x-Extension-QT-Launcher/release/" 2>/dev/null || echo "Note: libstdc++-6.dll not found in $MINGW_BIN_DIR for Launcher"
+            cp "$MINGW_BIN_DIR/libwinpthread-1.dll" "Waifu2x-Extension-QT-Launcher/release/" 2>/dev/null || echo "Note: libwinpthread-1.dll not found in $MINGW_BIN_DIR for Launcher"
         else
-            echo "Warning: MinGW bin directory not found at $MINGW_BIN_DIR. Runtime DLLs may be missing."
+            echo "Warning: MinGW bin directory not found at $MINGW_BIN_DIR. Runtime DLLs may be missing for Launcher."
         fi
     else
-        echo "Warning: windeployqt.exe not found or QT_BIN_PATH not set. Skipping Qt deployment for Waifu2x-Extension-QT-Launcher."
+        echo "Warning: windeployqt.exe not found in PATH. Skipping Qt deployment for Waifu2x-Extension-QT-Launcher."
     fi
 popd >/dev/null
 
