@@ -266,6 +266,13 @@ glass->setBackground(QImage("background.jpg"));
 glass->setRefractionScale(1.33f);
 ```
 
+### Main window integration
+
+The Settings panel exposes a checkbox labeled **Enable Liquid Glass**. Toggling
+this option overlays a refractive sphere on the central widget using the
+`icon/BackgroudMode.png` texture as its environment. The overlay resizes with the
+window and can be enabled or disabled at runtime.
+
 ## RealCUGAN and RealESRGAN
 
 Both upscalers rely on the ncnn Vulkan backend and run without a Python or CUDA

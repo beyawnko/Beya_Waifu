@@ -24,6 +24,9 @@ Copyright (C) 2025  beyawnko
 #include "ProcessRunner.h"
 #include "GpuManager.h"
 #include "UiController.h"
+#include "LiquidGlassWidget.h"
+#include <QGridLayout>
+#include <QCheckBox>
 #include <QApplication>
 #include <QEventLoop>
 #include <QMessageBox>
@@ -69,11 +72,31 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     translator = new QTranslator(this);
     ApplyDarkStyle();
     setAcceptDrops(true);
+
+    glassWidget = new LiquidGlassWidget(ui->centralwidget);
+    glassWidget->setBackground(QImage(":/icon/BackgroudMode.png"));
+    glassWidget->hide();
+    glassWidget->setAttribute(Qt::WA_TransparentForMouseEvents);
+    glassWidget->setGeometry(ui->centralwidget->rect());
+
+    if (auto grid = ui->groupBox_Setting->findChild<QGridLayout*>("gridLayout_4")) {
+        QCheckBox *check = new QCheckBox(tr("Enable Liquid Glass"), this);
+        grid->addWidget(check, grid->rowCount(), 0, 1, grid->columnCount());
+        connect(check, &QCheckBox::toggled, this, &MainWindow::toggleLiquidGlass);
+    }
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    if (glassWidget) {
+        glassWidget->setGeometry(ui->centralwidget->rect());
+    }
+    QMainWindow::resizeEvent(event);
 }
 
 void MainWindow::changeEvent(QEvent *e)
@@ -131,6 +154,14 @@ bool MainWindow::runProcess(QProcess *process, const QString &cmd,
     process->start(cmd);
     loop.exec();
     return process->exitStatus() == QProcess::NormalExit && process->exitCode() == 0;
+}
+
+void MainWindow::toggleLiquidGlass(bool enabled)
+{
+    glassEnabled = enabled;
+    if (glassWidget) {
+        glassWidget->setVisible(enabled);
+    }
 }
 
 void MainWindow::ShellMessageBox(const QString &title, const QString &text, QMessageBox::Icon icon)
