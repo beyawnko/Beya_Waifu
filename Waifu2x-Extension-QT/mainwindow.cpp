@@ -226,8 +226,29 @@ void MainWindow::ExecuteCMD_batFile(QString cmd_str, bool requestAdmin) { Q_UNUS
 // Stubs for _finished signals/slots and other functions expected in mainwindow.cpp (not causing multiple defs)
 int MainWindow::Waifu2x_DetectGPU_finished() { qDebug() << "STUB: Waifu2x_DetectGPU_finished called"; return 0; }
 int MainWindow::Realsr_ncnn_vulkan_DetectGPU_finished() { qDebug() << "STUB: Realsr_ncnn_vulkan_DetectGPU_finished called"; return 0; }
-int MainWindow::Realcugan_NCNN_Vulkan_DetectGPU_finished() { qDebug() << "STUB: Realcugan_NCNN_Vulkan_DetectGPU_finished called"; return 0; }
-int MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU_finished() { qDebug() << "STUB: RealESRGAN_ncnn_vulkan_DetectGPU_finished called"; return 0; }
+int MainWindow::Realcugan_NCNN_Vulkan_DetectGPU_finished()
+{
+    ui->pushButton_DetectGPU_RealCUGAN->setEnabled(true);
+    ui->pushButton_DetectGPU_RealCUGAN->setText(tr("Detect GPU"));
+    ui->comboBox_GPUID_RealCUGAN->clear();
+    for (const QString &gpu : Available_GPUID_RealCUGAN)
+    {
+        ui->comboBox_GPUID_RealCUGAN->addItem(gpu);
+    }
+    return 0;
+}
+
+int MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU_finished()
+{
+    ui->pushButton_DetectGPU_RealsrNCNNVulkan->setEnabled(true);
+    ui->pushButton_DetectGPU_RealsrNCNNVulkan->setText(tr("Detect GPU"));
+    ui->comboBox_GPUID_RealsrNCNNVulkan->clear();
+    for (const QString &gpu : Available_GPUID_RealESRGAN_ncnn_vulkan)
+    {
+        ui->comboBox_GPUID_RealsrNCNNVulkan->addItem(gpu);
+    }
+    return 0;
+}
 void MainWindow::SRMD_DetectGPU_finished() { qDebug() << "STUB: SRMD_DetectGPU_finished called"; }
 int MainWindow::Waifu2x_DumpProcessorList_converter_finished() { qDebug() << "STUB: Waifu2x_DumpProcessorList_converter_finished called"; return 0; }
 void MainWindow::Set_checkBox_DisableResize_gif_Checked() { qDebug() << "STUB: Set_checkBox_DisableResize_gif_Checked called"; }
@@ -356,7 +377,10 @@ void MainWindow::on_checkBox_isCompatible_Waifu2x_Caffe_cuDNN_clicked() { qDebug
 void MainWindow::on_checkBox_isCompatible_Realsr_NCNN_Vulkan_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Realsr_NCNN_Vulkan_clicked called"; }
 void MainWindow::on_comboBox_UpdateChannel_currentIndexChanged(int index) { qDebug() << "STUB: on_comboBox_UpdateChannel_currentIndexChanged called with index" << index; }
 
-void MainWindow::on_pushButton_DetectGPU_RealCUGAN_clicked() { qDebug() << "STUB: on_pushButton_DetectGPU_RealCUGAN_clicked called"; }
+void MainWindow::on_pushButton_DetectGPU_RealCUGAN_clicked()
+{
+    Realcugan_ncnn_vulkan_DetectGPU();
+}
 void MainWindow::on_checkBox_MultiGPU_RealCUGAN_stateChanged(int arg1) { qDebug() << "STUB: on_checkBox_MultiGPU_RealCUGAN_stateChanged called with" << arg1; }
 void MainWindow::on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked() { qDebug() << "STUB: on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked called"; }
 void MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked() { qDebug() << "STUB: on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked called"; }
@@ -368,7 +392,10 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess
 void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardOutput() { qDebug() << "STUB: Realcugan_NCNN_Vulkan_Iterative_readyReadStandardOutput called"; }
 void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError() { qDebug() << "STUB: Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError called"; }
 void MainWindow::Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error) { qDebug() << "STUB: Realcugan_NCNN_Vulkan_Iterative_errorOccurred called with error" << error; }
-void MainWindow::on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked() { qDebug() << "STUB: on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked called"; }
+void MainWindow::on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked()
+{
+    RealESRGAN_ncnn_vulkan_DetectGPU();
+}
 void MainWindow::on_comboBox_Model_RealsrNCNNVulkan_currentIndexChanged(int index) { qDebug() << "STUB: on_comboBox_Model_RealsrNCNNVulkan_currentIndexChanged called with index" << index; }
 void MainWindow::on_pushButton_Add_TileSize_RealsrNCNNVulkan_clicked() { qDebug() << "STUB: on_pushButton_Add_TileSize_RealsrNCNNVulkan_clicked called"; }
 void MainWindow::on_pushButton_Minus_TileSize_RealsrNCNNVulkan_clicked() { qDebug() << "STUB: on_pushButton_Minus_TileSize_RealsrNCNNVulkan_clicked called"; }
