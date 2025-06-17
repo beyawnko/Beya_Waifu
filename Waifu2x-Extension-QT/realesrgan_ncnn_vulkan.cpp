@@ -52,7 +52,9 @@ QStringList MainWindow::RealESRGAN_NCNN_Vulkan_PrepareArguments(
     // Example: "1:2:2" (1 load thread, 2 proc threads, 2 save threads)
     // Proc threads can be per-GPU if multiple GPUs are used, e.g., "1:2,2:2" for 2 GPUs
     // This might come from global settings.
-    QString jobs = Settings_Read_value("/settings/RealESRGANJobs", "1:2:2").toString();
+    QString jobs_read = Settings_Read_value("/settings/RealESRGANJobs").toString();
+    if (jobs_read.isEmpty()) jobs_read = "1:2:2"; // Default value
+    QString jobs = jobs_read;
     args << "-j" << jobs;
 
 

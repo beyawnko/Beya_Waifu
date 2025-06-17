@@ -42,8 +42,14 @@ Copyright (C) 2025  beyawnko
 MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , currentProcess(nullptr) // Initialize here
+    , isProcessing(false)     // Initialize here
+    , Processing_Status(PROCESS_TYPE_NONE)    // Initialize here with enum
+    , current_File_Row_Number(-1) // Initialize here
 {
     ui->setupUi(this);
+    // Current_Path is already initialized using qApp->applicationDirPath() in mainwindow.h or before constructor
+    TempDir_Path = Current_Path + "/temp"; // Initialize here
     FFMPEG_EXE_PATH_Waifu2xEX = Current_Path + "/ffmpeg/ffmpeg.exe";
     realCuganProcessor = new RealCuganProcessor(this);
     videoProcessor = new VideoProcessor(this);
@@ -228,12 +234,17 @@ int MainWindow::Waifu2x_DetectGPU_finished() { qDebug() << "STUB: Waifu2x_Detect
 int MainWindow::Realsr_ncnn_vulkan_DetectGPU_finished() { qDebug() << "STUB: Realsr_ncnn_vulkan_DetectGPU_finished called"; return 0; }
 int MainWindow::Realcugan_NCNN_Vulkan_DetectGPU_finished()
 {
-    ui->pushButton_DetectGPU_RealCUGAN->setEnabled(true);
-    ui->pushButton_DetectGPU_RealCUGAN->setText(tr("Detect GPU"));
-    ui->comboBox_GPUID_RealCUGAN->clear();
-    for (const QString &gpu : Available_GPUID_RealCUGAN)
-    {
-        ui->comboBox_GPUID_RealCUGAN->addItem(gpu);
+    // Assuming RealCUGAN UI elements were consolidated into VFI ones
+    if (ui->pushButton_DetectGPU_VFI) {
+        ui->pushButton_DetectGPU_VFI->setEnabled(true);
+        ui->pushButton_DetectGPU_VFI->setText(tr("Detect GPU"));
+    }
+    if (ui->comboBox_GPUID_VFI) {
+        ui->comboBox_GPUID_VFI->clear();
+        for (const QString &gpu : Available_GPUID_RealCUGAN) // Still use RealCUGAN's available ID list
+        {
+            ui->comboBox_GPUID_VFI->addItem(gpu);
+        }
     }
     return 0;
 }
@@ -377,8 +388,11 @@ void MainWindow::on_checkBox_isCompatible_Waifu2x_Caffe_cuDNN_clicked() { qDebug
 void MainWindow::on_checkBox_isCompatible_Realsr_NCNN_Vulkan_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Realsr_NCNN_Vulkan_clicked called"; }
 void MainWindow::on_comboBox_UpdateChannel_currentIndexChanged(int index) { qDebug() << "STUB: on_comboBox_UpdateChannel_currentIndexChanged called with index" << index; }
 
-void MainWindow::on_pushButton_DetectGPU_RealCUGAN_clicked()
+void MainWindow::on_pushButton_DetectGPU_RealCUGAN_clicked() // This slot name might need to change if the button was renamed in UI
 {
+    // If pushButton_DetectGPU_RealCUGAN was renamed to pushButton_DetectGPU_VFI,
+    // this slot might not be connected anymore or should be renamed too.
+    // For now, just call the detection logic.
     Realcugan_ncnn_vulkan_DetectGPU();
 }
 void MainWindow::on_checkBox_MultiGPU_RealCUGAN_stateChanged(int arg1) { qDebug() << "STUB: on_checkBox_MultiGPU_RealCUGAN_stateChanged called with" << arg1; }
@@ -432,3 +446,28 @@ void MainWindow::ProcessNextFile() { qDebug() << "STUB: ProcessNextFile called";
 void MainWindow::CheckIfAllFinished() { qDebug() << "STUB: CheckIfAllFinished called"; }
 void MainWindow::UpdateNumberOfActiveThreads() { qDebug() << "STUB: UpdateNumberOfActiveThreads called"; }
 void MainWindow::UpdateProgressBar() { qDebug() << "STUB: UpdateProgressBar called"; }
+
+// Definitions for functions declared in mainwindow.h, previously causing linker errors
+QString MainWindow::Generate_Output_Path(const QString& original_fileName, const QString& suffix) {
+    qDebug() << "STUB: MainWindow::Generate_Output_Path called for" << original_fileName << "with suffix" << suffix;
+    // Basic stub implementation
+    return Current_Path + "/output/" + suffix + "_" + original_fileName;
+}
+
+void MainWindow::Set_Progress_Bar_Value(int val, int max_val) {
+    qDebug() << "STUB: MainWindow::Set_Progress_Bar_Value called with val" << val << "max" << max_val;
+    // Basic stub implementation
+    if (ui->progressBar) { // Check if progressBar exists
+        ui->progressBar->setRange(0, max_val);
+        ui->progressBar->setValue(val);
+    }
+}
+
+void MainWindow::Set_Current_File_Progress_Bar_Value(int val, int max_val) {
+    qDebug() << "STUB: MainWindow::Set_Current_File_Progress_Bar_Value called with val" << val << "max" << max_val;
+    // Basic stub implementation
+    if (ui->progressBar_CurrentFile) { // Check if progressBar_CurrentFile exists
+        ui->progressBar_CurrentFile->setRange(0, max_val);
+        ui->progressBar_CurrentFile->setValue(val);
+    }
+}

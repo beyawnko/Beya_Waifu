@@ -98,6 +98,14 @@ struct FileMetadataCache {
 };
 Q_DECLARE_METATYPE(FileMetadataCache)
 
+// Enum for processing status
+enum ProcessingType {
+    PROCESS_TYPE_NONE = 0,
+    PROCESS_TYPE_IMAGE,
+    PROCESS_TYPE_VIDEO,
+    PROCESS_TYPE_GIF
+    // Add other types if they appear elsewhere
+};
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -130,6 +138,17 @@ public:
     ProcessRunner processRunner;
     GpuManager gpuManager;
     UiController uiController;
+
+    //======================= Missing Member Variables (Stubs for realcugan_ncnn_vulkan.cpp) =======================
+    bool isProcessing;
+    QProcess* currentProcess; // Should be initialized (e.g., to nullptr) in constructor
+    QStringList table_image_item_fullpath;
+    QStringList table_image_item_fileName;
+    QStringList table_video_item_fileName;
+    QStringList table_gif_item_fileName;
+    ProcessingType Processing_Status; // Changed from int
+    int current_File_Row_Number;
+    QString TempDir_Path; // Should be initialized
 
     //======================= UI & Styling =======================
     QTranslator * translator;
@@ -506,6 +525,10 @@ public:
     void PreLoad_Engines_Settings();
     int Calculate_Temporary_ScaleRatio_W2xNCNNVulkan(int ScaleRatio);
 
+    //======================== Missing Member Functions (Stubs for realcugan_ncnn_vulkan.cpp) =======================
+    QString Generate_Output_Path(const QString& original_fileName, const QString& suffix);
+    void Set_Progress_Bar_Value(int val, int max_val);
+    void Set_Current_File_Progress_Bar_Value(int val, int max_val);
 
     //======================== APNG Processing =================
     void APNG_Main(int rowNum,bool isFromImageList);
