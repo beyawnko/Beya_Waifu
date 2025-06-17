@@ -2,11 +2,11 @@
 
 Beya_Waifu is a Qt based graphical interface for upscaling and denoising images or
 videos. The project integrates the RealCUGAN and RealESRGAN upscalers and presents them in a
-single GUI.
+single GUI. Project is inspired and heavly reworked from Waifu2x_GUI by @AaronFeng753
 
 ## Features
 
-- Simple Qt interface supporting image, GIF and video files
+- Advanced featured Qt interface with a simple layout supporting image, GIF and video files
 - Queue based processing with per-file progress information
 - Multi-GPU configuration and compatibility tests
 - System tray integration and drag & drop of files
@@ -17,18 +17,18 @@ RealCUGAN and RealESRGAN are currently the only supported upscaling engines.
 
 ## Dependencies
 
-- **Qt 5 or Qt 6** development environment (Core, GUI, Widgets, Multimedia, OpenGL, OpenGLWidgets, Qt5Compat modules)
-- **C++11** compatible compiler
+- **Qt5compat/Qt 6** development environment (Core, GUI, Widgets, Multimedia, OpenGL, OpenGLWidgets, Qt5Compat modules)
+- **C++17** compatible compiler (experiemntal refactoring to C++20 for coroutines currently)
 - **FFmpeg** for handling video input/output
 - Included **RealCUGAN** and **RealESRGAN** executables built with ncnn Vulkan
-- Qt6 shadertools package providing the `qsb` tool for the Liquid Glass shader
+- Qt6 shadertools package providing the `qsb` tool for the Liquid Glass shader (inspired by current modern UI design)
 
 Ensure your GPU drivers support Vulkan since both engines rely on it.
 
 ### Quick Build (Linux & Windows)
 
-1.  Install **Qt 5.15** or **Qt 6.5** with the Widgets, Multimedia, OpenGL and
-    Qt5Compat modules. A C++11 compiler is required (GCC 7+ on Linux or the
+1.  Install **Qt 6.5** with the Widgets, Multimedia, OpenGL and
+    Qt5Compat modules. A C++17 compiler is required (GCC 7+ on Linux or the
     MSYS2 MinGW-w64 toolchain on Windows).
 2.  Clone the repository and its submodules:
     ```bash
@@ -94,7 +94,7 @@ git submodule update --init --recursive
 ### Linux Dependencies
 
 1.  **Compiler and Core Build Tools**:
-    *   A C++11 compatible compiler (e.g., GCC `g++` version 7 or later).
+    *   A C++17 compatible compiler (e.g., GCC `g++` version 7 or later).
     *   `make`
     *   `cmake` (version 3.9 or later is recommended for building the upscaler submodules).
     *   Installation example for Debian/Ubuntu systems:
@@ -104,7 +104,7 @@ git submodule update --init --recursive
         ```
 
 2.  **Qt Development Libraries**:
-    *   Qt 5 (e.g., version 5.12 or 5.15). You'll need the `core`, `gui`, `widgets`, and `multimedia` components,
+    *   Qt 6 (e.g., version 6.5.2). You'll need the `core`, `gui`, `widgets`, and `multimedia` components,
         plus the `opengl`, `openglwidgets`, and `qt5compat` modules.
     *   Installation example for Debian/Ubuntu systems:
         ```bash
@@ -114,7 +114,7 @@ git submodule update --init --recursive
 
 #### Qt 6 Packages
 
-For a Qt&nbsp;6 environment you can install the following packages on Debian/Ubuntu systems:
+For a Qt6 environment (preferred) you can install the following packages on Debian/Ubuntu systems:
 
 ```bash
 sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-5compat-dev qt6-shadertools-dev
