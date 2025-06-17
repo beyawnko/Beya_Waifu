@@ -342,6 +342,8 @@ static QStringList parseVulkanDeviceList(const QString &output)
 
 void MainWindow::Realcugan_ncnn_vulkan_DetectGPU()
 {
+    // Skip when the RealCUGAN widgets are not present. In that case,
+    // GPU detection for Frame Interpolation handles the list.
     if (!pushButton_DetectGPU_RealCUGAN)
         return;
 
