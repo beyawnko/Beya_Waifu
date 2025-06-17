@@ -521,35 +521,63 @@ void MainWindow::on_comboBox_Model_RealCUGAN_currentIndexChanged(int index)
     // TODO: refresh processor settings when model changes
 }
 
-/** Handle completion of an iterative RealCUGAN process. */
+/**
+ * @brief Handle completion of an iterative RealCUGAN process.
+ *
+ * Refresh settings when the process exits normally and notify the user on
+ * failure. Afterwards the overall status is updated.
+ */
 void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished(int exitCode,
                                                           QProcess::ExitStatus exitStatus)
 {
-    qDebug() << "RealCUGAN iterative finished" << exitCode << exitStatus;
+    if (exitStatus == QProcess::NormalExit && exitCode == 0) {
+        if (realCuganProcessor)
+            realCuganProcessor->readSettings();
+        m_FinishedProc++;
+    } else {
+        m_ErrorProc++;
+        ShellMessageBox(tr("RealCUGAN Error"),
+                        tr("RealCUGAN exited with code %1").arg(exitCode),
+                        QMessageBox::Critical);
+    }
     CheckIfAllFinished();
-    // TODO: report success/failure to the UI
 }
 
-/** Read stdout from iterative RealCUGAN execution. */
+/**
+ * @brief Read stdout from iterative RealCUGAN execution and update progress.
+ */
 void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardOutput()
 {
-    if (currentProcess)
-        qDebug().noquote() << currentProcess->readAllStandardOutput();
-    // TODO: parse progress percentage and update progress bar
+    if (!currentProcess)
+        return;
+    QString output = QString::fromLocal8Bit(currentProcess->readAllStandardOutput());
+    QRegularExpression re(QStringLiteral("(\d+)%"));
+    QRegularExpressionMatch m = re.match(output);
+    if (m.hasMatch()) {
+        int percent = m.captured(1).toInt();
+        Set_Current_File_Progress_Bar_Value(percent, 100);
+    }
 }
 
-/** Read stderr from iterative RealCUGAN execution. */
+/**
+ * @brief Read stderr from iterative RealCUGAN execution.
+ */
 void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError()
 {
-    if (currentProcess)
-        qDebug().noquote() << currentProcess->readAllStandardError();
+    if (!currentProcess)
+        return;
+    qWarning().noquote() << currentProcess->readAllStandardError();
 }
 
-/** Handle errors from iterative RealCUGAN execution. */
+/**
+ * @brief Handle errors from iterative RealCUGAN execution.
+ */
 void MainWindow::Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error)
 {
-    qDebug() << "RealCUGAN iterative error" << error;
-    // TODO: surface error details to the user
+    m_ErrorProc++;
+    ShellMessageBox(tr("RealCUGAN Error"), currentProcess ? currentProcess->errorString() : QString(),
+                    QMessageBox::Critical);
+    CheckIfAllFinished();
 }
 void MainWindow::on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked()
 {
