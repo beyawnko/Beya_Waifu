@@ -19,9 +19,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QEventLoop>
-#include <QFileSystemWatcher>
-#include <QTimer>
+#include <QDirIterator>
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -184,29 +182,16 @@ void MainWindow::Add_File_Folder_IncludeSubFolder(QString Full_Path)
     {
         QString file_name = fileinfo.fileName();
         FileList_Add(file_name, Full_Path);
+        return;
     }
-    else
+
+    const QStringList filePaths = getFileNames_IncludeSubFolder(Full_Path);
+    for (const QString &path : filePaths)
     {
-        QStringList FileNameList = getFileNames_IncludeSubFolder(Full_Path);//Read legal file names
-        QString Full_Path_File = "";
-        if(!FileNameList.isEmpty())
+        QFileInfo info(path);
+        if (info.isFile() && QFile::exists(path))
         {
-            QString tmp="";
-            for(int i = 0; i < FileNameList.size(); i++)
-            {
-                tmp = FileNameList.at(i);
-                Full_Path_File = Full_Path + "/" + tmp;
-                QFileInfo fileinfo_tmp(Full_Path_File);
-                if(fileinfo_tmp.isFile())
-                {
-                    if(QFile::exists(Full_Path_File))FileList_Add(tmp, Full_Path_File);
-                }
-                else
-                {
-                    //if(QFile::exists(Full_Path_File))
-                    if(file_isDirExist(Full_Path_File))Add_File_Folder_IncludeSubFolder(Full_Path_File);
-                }
-            }
+            FileList_Add(info.fileName(), path);
         }
     }
 }
@@ -215,24 +200,13 @@ Read file names in folder (including subfolders
 */
 QStringList MainWindow::getFileNames_IncludeSubFolder(QString path)
 {
-    QDir dir(path);
-    QStringList files = dir.entryList(QDir::Dirs | QDir::Files | QDir::Writable, QDir::Name);
-    QFileSystemWatcher watcher;
-    watcher.addPath(path);
-    QEventLoop loop;
-    QTimer timer;
-    timer.setSingleShot(true);
-    timer.setInterval(100);
-    QObject::connect(&watcher, &QFileSystemWatcher::directoryChanged, [&](){
-        files = dir.entryList(QDir::Dirs | QDir::Files | QDir::Writable, QDir::Name);
-        timer.start();
-    });
-    QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-    timer.start();
-    loop.exec();
-    files.removeAll("..");
-    files.removeAll(".");
-    return files;
+    QStringList results;
+    QDirIterator it(path, QDir::Files, QDirIterator::Subdirectories);
+    while (it.hasNext())
+    {
+        results << it.next();
+    }
+    return results;
 }
 /*
 Scan file name list in folder (no filter
