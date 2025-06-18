@@ -116,7 +116,7 @@ git submodule update --init --recursive
         plus the `opengl`, `openglwidgets`, and `qt5compat` modules.
     *   Installation example for Debian/Ubuntu systems:
         ```bash
-        sudo apt install qtbase5-dev qtmultimedia5-dev libqt5svg5-dev
+        sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-5compat-dev qt6-shadertools-dev
         ```
     *   If you are using a specific Qt version manager (like `aqtinstall`), ensure that the chosen Qt version's `bin` directory is in your system's `PATH`.
 
