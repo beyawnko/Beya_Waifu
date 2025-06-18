@@ -45,7 +45,11 @@ public:
                                  const QString &outputFormat,
                                  bool isMultiGPU,
                                  const QString &multiGpuJobArgs,
-                                 bool experimental);
+                                 bool experimental,
+                                 // New parameters with defaults
+                                 const QString &jobsStr = QString(),
+                                 const QString &syncGapStr = "3",
+                                 bool verboseLog = false);
 
 private:
     MainWindow *m_mainWindow;

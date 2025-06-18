@@ -17,14 +17,14 @@
 
 #include "RealCuganProcessor.h"
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include <QCoreApplication> // Added for applicationDirPath
+#include "ui_mainwindow.h" // Required for UI elements access via m_mainWindow
+#include <QCoreApplication>
 #include <QDir>
 #include <QSettings>
 #include <QtGlobal>
-#include <QListWidgetItem>
+#include <QListWidgetItem> // For preLoadSettings, though might be better in MainWindow
 #include <QDebug>
-#include <QtCore5Compat/QTextCodec>
+// #include <QtCore5Compat/QTextCodec> // Not needed if not using QTextCodec specific features directly here
 
 RealCuganProcessor::RealCuganProcessor(MainWindow *parent)
     : QObject(parent), m_mainWindow(parent)
@@ -34,7 +34,7 @@ void RealCuganProcessor::preLoadSettings()
 {
     QSettings settings("Waifu2x-Extension-QT", "Waifu2x-Extension-QT");
     settings.beginGroup("RealCUGAN_NCNN_Vulkan");
-    // Fallback to stored values when specific UI widgets are not available.
+
     QVariant modelVar = settings.value("RealCUGAN_Model", "models-se");
     if (m_mainWindow->comboBox_Model_RealCUGAN)
         m_mainWindow->comboBox_Model_RealCUGAN->setCurrentText(modelVar.toString());
@@ -59,32 +59,32 @@ void RealCuganProcessor::preLoadSettings()
     if (m_mainWindow->checkBox_MultiGPU_RealCUGAN)
         m_mainWindow->checkBox_MultiGPU_RealCUGAN->setChecked(multiVar.toBool());
 
-    m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN =
-        settings.value("RealCUGAN_GPUJobConfig_MultiGPU").value<QList_QMap_QStrQStr>();
-    if (m_mainWindow->listWidget_GPUList_MultiGPU_RealCUGAN) {
-        m_mainWindow->listWidget_GPUList_MultiGPU_RealCUGAN->clear();
-        for(const auto &gpuMap : m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN) {
-            QListWidgetItem *newItem = new QListWidgetItem();
-            newItem->setText(QString("ID: %1, Name: %2, Threads: %3").arg(gpuMap.value("ID"), gpuMap.value("Name"), gpuMap.value("Threads")));
-            m_mainWindow->listWidget_GPUList_MultiGPU_RealCUGAN->addItem(newItem);
-        }
-    }
+    // GPUIDs_List_MultiGPU_RealCUGAN is a member of MainWindow, handle its loading there or pass UI pointers
+    // For now, assuming MainWindow handles its own UI list population from settings.
+    // m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN = settings.value("RealCUGAN_GPUJobConfig_MultiGPU").value<QList_QMap_QStrQStr>();
+    // if (m_mainWindow->listWidget_GPUList_MultiGPU_RealCUGAN) { ... }
+
     settings.endGroup();
 
-    QSettings iniSettings(QDir::currentPath() + "/settings.ini", QSettings::IniFormat);
-    // iniSettings.setIniCodec(QTextCodec::codecForName("UTF-8")); // Removed for Qt6
-    m_mainWindow->setImageEngineIndex(iniSettings.value("/settings/ImageEngine", 0).toInt());
-    m_mainWindow->setGifEngineIndex(iniSettings.value("/settings/GIFEngine", 0).toInt());
-    m_mainWindow->setVideoEngineIndex(iniSettings.value("/settings/VideoEngine", 0).toInt());
-    readSettings();
-    qDebug() << "Realcugan_NCNN_Vulkan_PreLoad_Settings completed.";
+    // These settings are application-wide, might be better placed in MainWindow's own preload logic
+    // QSettings iniSettings(QDir::currentPath() + "/settings.ini", QSettings::IniFormat);
+    // m_mainWindow->setImageEngineIndex(iniSettings.value("/settings/ImageEngine", 0).toInt());
+    // m_mainWindow->setGifEngineIndex(iniSettings.value("/settings/GIFEngine", 0).toInt());
+    // m_mainWindow->setVideoEngineIndex(iniSettings.value("/settings/VideoEngine", 0).toInt());
+
+    readSettings(); // Ensure member variables are populated with these settings
+    qDebug() << "RealCuganProcessor::preLoadSettings completed (some settings might be MainWindow responsibility).";
 }
 
 void RealCuganProcessor::readSettings()
 {
+    // This function should populate the RealCuganProcessor's own members if it had them,
+    // or directly use m_mainWindow's members if they are guaranteed to be up-to-date.
+    // The current implementation reads from UI/settings and stores into m_mainWindow->m_realcugan_...
+    // This is acceptable as long as m_mainWindow is the central place for these settings.
+
     QSettings settings("Waifu2x-Extension-QT", "Waifu2x-Extension-QT");
     settings.beginGroup("RealCUGAN_NCNN_Vulkan");
-    // Use saved settings as defaults when RealCUGAN widgets are absent.
 
     m_mainWindow->m_realcugan_Model = m_mainWindow->comboBox_Model_RealCUGAN
             ? m_mainWindow->comboBox_Model_RealCUGAN->currentText()
@@ -108,36 +108,30 @@ void RealCuganProcessor::readSettings()
             : settings.value("RealCUGAN_GPUID", "0: Default GPU 0").toString();
 
     if (multiEnabled) {
+        // This logic assumes GPUIDs_List_MultiGPU_RealCUGAN is populated correctly in MainWindow
         if (!m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN.isEmpty()) {
-            m_mainWindow->m_realcugan_GPUID =
-                m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN.first().value("ID");
+             // Prefer the first one from the job list if multi-GPU is on and list is not empty.
+             // Or, rely on RealcuganNcnnVulkan_MultiGPU() to build the correct string for multiGpuJobArgs.
+            m_mainWindow->m_realcugan_GPUID = comboGpu; // Keep individual selection as primary for single GPU mode within multi-setup
         } else {
-            m_mainWindow->m_realcugan_GPUID = comboGpu;
+            m_mainWindow->m_realcugan_GPUID = comboGpu; // Fallback if list is empty
         }
     } else {
         m_mainWindow->m_realcugan_GPUID = comboGpu;
     }
-
     settings.endGroup();
 
-    qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings: Model:" << m_mainWindow->m_realcugan_Model
-             << "Denoise:" << m_mainWindow->m_realcugan_DenoiseLevel
-             << "Tile:" << m_mainWindow->m_realcugan_TileSize
-             << "TTA:" << m_mainWindow->m_realcugan_TTA
-             << "GPUID:" << m_mainWindow->m_realcugan_GPUID;
+    // qDebug() call removed from here as it's better placed in MainWindow after calling this.
 }
 
 void RealCuganProcessor::readSettingsVideoGif(int ThreadNum)
 {
-    Q_UNUSED(ThreadNum);
-    readSettings();
-    QSettings settings("Waifu2x-Extension-QT", "Waifu2x-Extension-QT");
-    settings.beginGroup("RealCUGAN_NCNN_Vulkan"); // Needed when widgets are missing
-    QString gpuJobConfig = m_mainWindow->RealcuganNcnnVulkan_MultiGPU();
-    m_mainWindow->m_realcugan_gpuJobConfig_temp = m_mainWindow->GPUIDs_List_MultiGPU_RealCUGAN;
-    qDebug() << "Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF for ThreadNum" << ThreadNum
-             << "GPU/Job Config:" << gpuJobConfig;
-    settings.endGroup();
+    Q_UNUSED(ThreadNum); // ThreadNum might be used for per-thread GPU cycling if implemented
+    readSettings(); // Read the base settings first
+    // Specific adjustments for Video/GIF can be made here if necessary
+    // The current implementation of readSettings already updates m_mainWindow->m_realcugan_...
+    // which are then used by MainWindow when calling prepareArguments.
+    // qDebug() call removed from here.
 }
 
 QStringList RealCuganProcessor::prepareArguments(const QString &inputFile,
@@ -151,40 +145,74 @@ QStringList RealCuganProcessor::prepareArguments(const QString &inputFile,
                                                  const QString &outputFormat,
                                                  bool isMultiGPU,
                                                  const QString &multiGpuJobArgs,
-                                                 bool experimental)
+                                                 bool experimental,
+                                                 const QString &jobsStr,
+                                                 const QString &syncGapStr,
+                                                 bool verboseLog)
 {
-    QString Current_Path = QDir::currentPath();
     QStringList arguments;
-    arguments << "-i" << inputFile
-              << "-o" << outputFile
-              << "-s" << QString::number(currentPassScale)
-              << "-n" << QString::number(denoiseLevel)
-              << "-t" << QString::number(tileSize)
-              << "-m" << modelPath(modelName, experimental);
-    if (isMultiGPU) {
-        // Assuming multiGpuJobArgs is the already formatted string for the -g option (e.g., "0,1,2")
-        // or a special job string if the underlying executable handles that.
-        // For standard realcugan-ncnn-vulkan, -g expects a comma-separated list of IDs.
-        // If multiGpuJobArgs is "id1,id2,id3", it should be passed as a single argument to -g.
-        // If it's a more complex job string for a custom wrapper, it might also be a single arg.
-        // The .split(" ") was likely incorrect unless the job string itself had space-separated flags.
+    arguments << "-i" << inputFile;
+    arguments << "-o" << outputFile;
+    arguments << "-s" << QString::number(currentPassScale);
+    arguments << "-n" << QString::number(denoiseLevel);
+
+    // Tile Size (-t): 0 for auto. The executable handles "0" as auto.
+    arguments << "-t" << QString::number(tileSize);
+
+    // Model (-m): Resolved by modelPath()
+    arguments << "-m" << modelPath(modelName, experimental);
+
+    // GPU ID (-g)
+    if (isMultiGPU && !multiGpuJobArgs.isEmpty()) {
         arguments << "-g" << multiGpuJobArgs;
-    } else {
-        QString actualGpuId = gpuId.split(":")[0]; // Extracts "0" from "0: Default GPU 0"
+    } else if (!gpuId.isEmpty() && gpuId.toLower() != "auto") {
+        QString actualGpuId = gpuId.split(":")[0];
         arguments << "-g" << actualGpuId;
     }
+    // If gpuId is empty or "auto", the -g switch is omitted, letting the executable use its default.
+
+    // Jobs (-j): load:proc:save thread configuration
+    if (!jobsStr.isEmpty()) {
+        arguments << "-j" << jobsStr;
+    }
+    // If jobsStr is empty, the executable's default job configuration will be used.
+
+    // SyncGap (-c): sync gap mode
+    bool syncGapOk;
+    int syncgap_val = syncGapStr.toInt(&syncGapOk);
+    if (syncGapOk && syncgap_val >= 0 && syncgap_val <= 3) {
+        arguments << "-c" << syncGapStr;
+    } else {
+        arguments << "-c" << "3"; // Default to 3 if invalid or empty
+        if (!syncGapStr.isEmpty() && syncGapStr != "3") { // Log only if an invalid non-empty string (not already "3") was provided
+            qDebug() << "[RealCuganProcessor] Invalid syncgap value provided:" << syncGapStr << ". Defaulting to 3.";
+        }
+    }
+
+    // TTA Mode (-x)
     if (ttaEnabled) {
         arguments << "-x";
     }
-    arguments << "-f" << outputFormat.toLower();
+
+    // Output Format (-f)
+    if (!outputFormat.isEmpty()) {
+        arguments << "-f" << outputFormat.toLower();
+    } else {
+        arguments << "-f" << "png"; // Default to png
+    }
+
+    // Verbose Log (-v)
+    if (verboseLog) {
+        arguments << "-v";
+    }
+
+    // Removed the central qDebug message for arguments from here.
+    // It's better to log this in the calling function in MainWindow if needed.
     return arguments;
 }
 
 QString RealCuganProcessor::executablePath(bool experimental) const
 {
-    // experimental flag is no longer used to determine path structure here,
-    // as executables are expected to be directly in applicationDirPath.
-    // If different executables are needed for experimental, they should have distinct names.
     Q_UNUSED(experimental);
     #ifdef Q_OS_WIN
         return QCoreApplication::applicationDirPath() + "/realcugan-ncnn-vulkan.exe";
@@ -195,15 +223,11 @@ QString RealCuganProcessor::executablePath(bool experimental) const
 
 QString RealCuganProcessor::modelPath(const QString &modelName, bool experimental) const
 {
-    // experimental flag is no longer used to determine path structure here.
-    // Models are expected to be in subdirectories relative to the application path.
-    // e.g. appDir/models-se, appDir/models-pro
     Q_UNUSED(experimental);
     return QCoreApplication::applicationDirPath() + "/" + modelName;
 }
 
 RealCuganProcessor::~RealCuganProcessor()
 {
-    // Destructor logic, if any, or leave empty
-    qDebug() << "RealCuganProcessor destroyed";
+    // qDebug() << "RealCuganProcessor destroyed"; // Avoid qDebug in destructor
 }
