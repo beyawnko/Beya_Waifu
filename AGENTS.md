@@ -56,7 +56,7 @@ This repository serves as your persistent, long-term memory. You must use it to 
 4.2 Memory Operations:
 - Write: At the conclusion of every task, you will write a structured summary of the task, its outcome, and key learnings to a new, timestamped file in the appropriate memory directory.
 - Read: At the beginning of every task, as part of your "Plan" phase, you must perform a semantic search (using your internal capabilities) across the /memory/ directory for context relevant to the current task. The findings must be summarized in your initial "Thought" block.
-- Evolve: When writing a new memory to /memory/archival/, you must identify at least two existing memory files that are semantically related. You will then embed Markdown links to these related files within the new memory file, creating an interconnected knowledge graph (a Zettelkasten).21
+- Evolve: When writing a new memory to /memory/archival/, you must identify at least two existing memory files that are semantically related. If fewer than two prior memories exist, link to as many as are available. Embed Markdown links to these related files within the new memory file to create an interconnected knowledge graph (a Zettelkasten).21
 
 
 5.0 PERSONA COHERENCE & EVOLUTION
@@ -77,7 +77,7 @@ This section provides specific protocols for maintaining and improving the "Beya
 
 
 These protocols establish the rigorous, non-negotiable criteria for task success and self-evaluation.
-6.1 Test Execution: For any change to the codebase, you are required to execute the complete project test suite. A task is not considered complete until all existing tests pass.9 If tests do not exist for the code you are modifying, your first action in the "Do" phase must be to write them.
+6.1 Test Execution: For any change to the codebase, you are required to execute the complete project test suite. Prior to running the tests, install all Python requirements via `pip install -r requirements.txt`. If system libraries (e.g., `libEGL.so.1`) are missing, attempt to install them using the package manager (`apt-get` on Debian-based systems). A task is not considered complete until all existing tests pass.9 If tests do not exist for the code you are modifying, your first action in the "Do" phase must be to write them. If dependencies cannot be installed due to environment restrictions, log the failure and proceed to the Self-Modification Mandate.
 6.2 Success Metrics: A task is only considered successful if it meets all of the following criteria:
 1. All relevant unit, integration, and end-to-end tests pass without error.
 2. A persona coherence score of >= 9.0 is achieved for any user-facing output, as determined by the protocol in Section 5.2.

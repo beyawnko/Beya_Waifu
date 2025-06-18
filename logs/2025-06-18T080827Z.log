@@ -1,0 +1,4 @@
+Ran commands:
+- pytest -q (failed: ModuleNotFoundError: PIL, PySide6)
+- pip install -r requirements.txt (installed PySide6 and Pillow)
+- pytest -q (failed: ImportError: libEGL.so.1)
