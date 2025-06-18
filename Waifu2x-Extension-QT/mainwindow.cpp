@@ -2477,21 +2477,27 @@ QString MainWindow::Seconds2hms(long unsigned int seconds)
 
 void MainWindow::Finish_progressBar_CompatibilityTest()
 {
-    qDebug() << "STUB: MainWindow::Finish_progressBar_CompatibilityTest() called.";
-    if (ui->progressBar_CompatibilityTest) { // Check if UI element exists
+    qDebug() << "MainWindow::Finish_progressBar_CompatibilityTest() called.";
+
+    if (ui->progressBar_CompatibilityTest) {
         ui->progressBar_CompatibilityTest->setValue(ui->progressBar_CompatibilityTest->maximum());
         ui->progressBar_CompatibilityTest->setFormat(tr("Compatibility Test Finished"));
+
+        // Reset and hide the progress bar after the test
+        ui->progressBar_CompatibilityTest->setValue(0);
+        ui->progressBar_CompatibilityTest->setVisible(false);
     }
-    // Potentially enable the test button again
-    // if (ui->pushButton_compatibilityTest) {
-    //     ui->pushButton_compatibilityTest->setEnabled(true);
-    //     ui->pushButton_compatibilityTest->setText(tr("Compatibility Test"));
-    // }
+
+    // Re-enable the test button for future runs
+    if (ui->pushButton_compatibilityTest) {
+        ui->pushButton_compatibilityTest->setEnabled(true);
+        ui->pushButton_compatibilityTest->setText(tr("Start compatibility test"));
+    }
 }
 
 void MainWindow::TurnOffScreen()
 {
-    qDebug() << "STUB: MainWindow::TurnOffScreen() called.";
+    qDebug() << "MainWindow::TurnOffScreen() called.";
 #ifdef Q_OS_WIN
     // Simulate turning off the screen by sending SC_MONITORPOWER command
     // HWND_BROADCAST can be problematic. Prefer getting the top-level window handle.
