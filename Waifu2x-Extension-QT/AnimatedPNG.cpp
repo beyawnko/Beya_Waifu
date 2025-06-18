@@ -132,15 +132,26 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
     int engineIndex = ui->comboBox_Engine_GIF->currentIndex();
     switch(engineIndex)
     {
-        case 0: isSuccessfullyScaled = APNG_Waifu2xNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
-        case 1: isSuccessfullyScaled = APNG_Waifu2xConverter(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
-        case 2: isSuccessfullyScaled = APNG_SrmdNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
-        case 3: isSuccessfullyScaled = APNG_Anime4k(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
-        case 4: isSuccessfullyScaled = APNG_Waifu2xCaffe(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
-        case 5: isSuccessfullyScaled = APNG_RealsrNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
-        case 6: isSuccessfullyScaled = APNG_SrmdCUDA(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
-        case 7: isSuccessfullyScaled = APNG_RealcuganNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
-        case 8: isSuccessfullyScaled = APNG_RealESRGANNCNNVulkan(splitFramesFolder, scaledFramesFolder, sourceFileFullPath, framesFileName_qStrList, resultFileFullPath); break;
+        case 4:
+            isSuccessfullyScaled = APNG_RealESRGANNCNNVulkan(
+                splitFramesFolder,
+                scaledFramesFolder,
+                sourceFileFullPath,
+                framesFileName_qStrList,
+                resultFileFullPath);
+            break;
+        case 5:
+            isSuccessfullyScaled = APNG_RealcuganNCNNVulkan(
+                splitFramesFolder,
+                scaledFramesFolder,
+                sourceFileFullPath,
+                framesFileName_qStrList,
+                resultFileFullPath);
+            break;
+        default:
+            emit Send_TextBrowser_NewMessage(
+                tr("Selected GIF engine is not supported for APNG."));
+            break;
     }
 
     file_DelDir(splitFramesFolder);
