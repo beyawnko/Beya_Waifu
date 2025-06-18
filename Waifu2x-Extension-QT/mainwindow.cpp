@@ -45,6 +45,7 @@ Copyright (C) 2025  beyawnko
 #include <QEventLoop> // Required for waiting on QMediaPlayer signals
 #include <QDesktopServices> // For opening URLs
 #include <QStandardItem> // For table view item manipulation
+#include <algorithm>
 
 MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     : QMainWindow(parent)
@@ -774,7 +775,7 @@ void MainWindow::on_pushButton_about_clicked()
     QMessageBox::about(this, tr("About Beya Waifu"),
                        tr("<h3>Beya Waifu %1</h3>"
                           "<p>Upscaling software for images, GIFs, and videos using various AI models.</p>"
-                          "<p>Copyright (C) 2020-2024 Beyawnko</p>"
+                          "<p>Copyright (C) 2025 beyawnko</p>"
                           "<p>This program comes with ABSOLUTELY NO WARRANTY.</p>"
                           "<p>This is free software, and you are welcome to redistribute it "
                           "under certain conditions; see the GNU AGPLv3+ license for details.</p>"
@@ -1434,7 +1435,10 @@ int MainWindow::on_pushButton_RemoveItem_clicked()
     if (currentTableView && currentModel) {
         QModelIndexList selectedRows = currentTableView->selectionModel()->selectedRows();
         // Sort rows in descending order to avoid issues with index changes upon removal
-        std::sort(selectedRows.begin(), selectedRows.end(), std::greater<QModelIndex>());
+        std::sort(selectedRows.begin(), selectedRows.end(),
+                  [](const QModelIndex &a, const QModelIndex &b) {
+                      return a.row() > b.row();
+                  });
         for (const QModelIndex &index : selectedRows) {
             // Also remove from internal lists like table_image_item_fullpath if they are synced
             // Example for image tab:
