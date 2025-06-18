@@ -24,20 +24,30 @@
 #include <QCoreApplication>
 #include <QCommandLineParser>
 #include <QStyleFactory>
+#include <QDir>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     a.setStyle(QStyleFactory::create("macos"));
-    initLogger(QCoreApplication::applicationDirPath() + "/waifu.log");
+
+    QDir logDir(QCoreApplication::applicationDirPath() + "/logs");
+    if (!logDir.exists())
+        logDir.mkpath(".");
+
     QCommandLineParser parser;
     parser.setApplicationDescription("Beya_Waifu");
     parser.addHelpOption();
+    QCommandLineOption verboseOpt(QStringLiteral("verbose"),
+                                  QStringLiteral("Enable verbose debug logging"));
+    parser.addOption(verboseOpt);
     QCommandLineOption maxThreadsOpt(QStringLiteral("max-threads"),
                                      QStringLiteral("Override global thread limit"),
                                      QStringLiteral("count"));
     parser.addOption(maxThreadsOpt);
     parser.process(a);
+    bool verbose = parser.isSet(verboseOpt);
+    initLogger(logDir.filePath("waifu.log"), verbose);
     int overrideThreads = 0;
     if(parser.isSet(maxThreadsOpt))
         overrideThreads = parser.value(maxThreadsOpt).toInt();

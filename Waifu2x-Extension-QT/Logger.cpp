@@ -24,14 +24,19 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QDebug>
+#include <QLoggingCategory>
+
+QLoggingCategory beyaLogCategory("beya.waifu");
 
 static QFile g_logFile;
 static QMutex g_logMutex;
+static bool g_verbose = false;
 
 static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    Q_UNUSED(type);
     Q_UNUSED(context);
+    if (type == QtDebugMsg && !g_verbose)
+        return;
     fprintf(stderr, "%s\n", msg.toLocal8Bit().constData());
     if (g_logFile.isOpen()) {
         QMutexLocker locker(&g_logMutex);
@@ -40,9 +45,12 @@ static void messageHandler(QtMsgType type, const QMessageLogContext &context, co
     }
 }
 
-void initLogger(const QString &filePath)
+void initLogger(const QString &filePath, bool verbose)
 {
+    g_verbose = verbose;
     g_logFile.setFileName(filePath);
     g_logFile.open(QIODevice::Append | QIODevice::Text);
     qInstallMessageHandler(messageHandler);
+    const QString rules = QStringLiteral("beya.waifu.debug=%1\n").arg(verbose ? "true" : "false");
+    QLoggingCategory::setFilterRules(rules);
 }
