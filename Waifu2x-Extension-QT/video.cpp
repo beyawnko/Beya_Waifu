@@ -167,7 +167,7 @@ bool MainWindow::video_isNeedProcessBySegment(int rowNum)
 {
     if(ui->checkBox_ProcessVideoBySegment->isChecked()==false)return false;// if segment processing is disabled, return false
     QString VideoFile = Table_model_video->item(rowNum,2)->text();
-    if(video_get_duration(VideoFile)>ui->spinBox_SegmentDuration->value())
+    if(video_get_duration(VideoFile)>ui->spinBox_VideoSplitDuration->value())
     {
         return true;
     }

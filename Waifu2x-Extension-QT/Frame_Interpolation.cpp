@@ -26,7 +26,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
 {
     //============================= Read settings ================================
     bool DelOriginal = (ui->checkBox_DelOriginal->isChecked()||ui->checkBox_ReplaceOriginalFile->isChecked());
-    int SegmentDuration = ui->spinBox_SegmentDuration->value();
+    int SegmentDuration = ui->spinBox_VideoSplitDuration->value();
     //========================= Disassemble map to get parameters =============================
     emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Processing");
     QString SourceFile_fullPath = Table_model_video->item(rowNum,2)->text();

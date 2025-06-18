@@ -424,12 +424,12 @@ int MainWindow::Waifu2x_DetectGPU_finished()
     // This might be better handled by Waifu2x_DumpProcessorList_converter_finished()
     // For now, let's assume it's a general NCNN Vulkan engine if no specific UI exists.
     // If ui->comboBox_GPUID_Waifu2x exists:
-    if(ui->comboBox_GPUID_Waifu2xNcnn) { // Example if such a combo box exists
-        ui->comboBox_GPUID_Waifu2xNcnn->clear();
-        ui->comboBox_GPUID_Waifu2xNcnn->addItems(Available_GPUID_Waifu2xNcnnVulkan); // Use the correct list
-        if(ui->pushButton_DetectGPU_Waifu2xNcnn) { // Example button
-             ui->pushButton_DetectGPU_Waifu2xNcnn->setEnabled(true);
-             ui->pushButton_DetectGPU_Waifu2xNcnn->setText(tr("Detect GPU"));
+    if(ui->comboBox_GPUID) { // Example if such a combo box exists
+        ui->comboBox_GPUID->clear();
+        ui->comboBox_GPUID->addItems(Available_GPUID_Waifu2xNcnnVulkan); // Use the correct list
+        if(ui->pushButton_DetectGPU) { // Example button
+             ui->pushButton_DetectGPU->setEnabled(true);
+             ui->pushButton_DetectGPU->setText(tr("Detect GPU"));
         }
     }
     qDebug() << "Waifu2x_DetectGPU_finished completed. Populated relevant UI if elements exist.";
@@ -486,16 +486,16 @@ int MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU_finished()
 }
 void MainWindow::SRMD_DetectGPU_finished()
 {
-    if (ui->pushButton_DetectGPU_SRMD) { // Assuming a button like pushButton_DetectGPU_SRMD
-        ui->pushButton_DetectGPU_SRMD->setEnabled(true);
-        ui->pushButton_DetectGPU_SRMD->setText(tr("Detect GPU"));
+    if (ui->pushButton_DetectGPUID_srmd) { // Assuming a button like pushButton_DetectGPUID_srmd
+        ui->pushButton_DetectGPUID_srmd->setEnabled(true);
+        ui->pushButton_DetectGPUID_srmd->setText(tr("Detect GPU"));
     }
-    if (ui->comboBox_GPUID_SRMD) { // Assuming a combobox like comboBox_GPUID_SRMD
-        ui->comboBox_GPUID_SRMD->clear();
-        ui->comboBox_GPUID_SRMD->addItems(Available_GPUID_srmd);
-        qDebug() << "SRMD_DetectGPU_finished: Populated" << ui->comboBox_GPUID_SRMD->objectName() << "with" << Available_GPUID_srmd.join(", ");
+    if (ui->comboBox_GPUID_srmd) { // Assuming a combobox like comboBox_GPUID_srmd
+        ui->comboBox_GPUID_srmd->clear();
+        ui->comboBox_GPUID_srmd->addItems(Available_GPUID_srmd);
+        qDebug() << "SRMD_DetectGPU_finished: Populated" << ui->comboBox_GPUID_srmd->objectName() << "with" << Available_GPUID_srmd.join(", ");
     } else {
-         qWarning() << "SRMD_DetectGPU_finished: comboBox_GPUID_SRMD is null.";
+         qWarning() << "SRMD_DetectGPU_finished: comboBox_GPUID_srmd is null.";
     }
 }
 
@@ -981,10 +981,10 @@ void MainWindow::on_checkBox_FileList_Interactive_stateChanged(int arg1)
 void MainWindow::on_checkBox_OutPath_isEnabled_stateChanged(int arg1)
 {
     bool isEnabled = (arg1 == Qt::Checked);
-    ui->lineEdit_output_path->setEnabled(isEnabled);
-    ui->pushButton_output_path_browse->setEnabled(isEnabled);
+    ui->lineEdit_outputPath->setEnabled(isEnabled);
+    // ui->pushButton_output_path_browse->setEnabled(isEnabled);
     if (!isEnabled) {
-        ui->lineEdit_output_path->clear(); // Optionally clear path if disabled
+        ui->lineEdit_outputPath->clear(); // Optionally clear path if disabled
     }
     Settings_Save(); // Save "Output Path Enabled" preference
     qDebug() << "Output path enabled state changed:" << arg1;
@@ -1090,7 +1090,7 @@ void MainWindow::on_checkBox_SpecifyGPU_Anime4k_stateChanged(int arg1)
 {
     Q_UNUSED(arg1);
     Settings_Save();
-    ui->comboBox_SpecifyGPU_ID_Anime4k->setEnabled(arg1 == Qt::Checked);
+    ui->lineEdit_GPUs_Anime4k->setEnabled(arg1 == Qt::Checked);
     qDebug() << "Anime4K Specify GPU state changed:" << arg1;
 }
 
@@ -1150,7 +1150,8 @@ void MainWindow::on_checkBox_HDNMode_Anime4k_stateChanged(int arg1)
         ui->checkBox_ACNet_Anime4K->setChecked(false); // ACNet and HDN might be mutually exclusive
     }
     // Enable/disable HDN level spinbox
-    if(ui->spinBox_HDNLevel_Anime4k) ui->spinBox_HDNLevel_Anime4k->setEnabled(isChecked);
+    // if(ui->spinBox_HDNLevel_Anime4k) ui->spinBox_HDNLevel_Anime4k->setEnabled(isChecked);
+    // TODO: spinBox_HDNLevel_Anime4k not found in UI. Related control might be ui->spinBox_Passes_Anime4K or was removed.
     qDebug() << "Anime4K HDN Mode state changed:" << arg1;
 }
 
@@ -1284,7 +1285,10 @@ void MainWindow::Waifu2x_Finished()
     TaskNumTotal = 0;
     ETA = 0;
     // TimeCost = 0; // Might want to keep total time cost until cleared
-    ui->label_progress->setText(tr("Waiting for tasks..."));
+    if (ui->progressBar) ui->progressBar->setFormat(tr("Waiting for tasks..."));
+    if (ui->label_progressBar_filenum) ui->label_progressBar_filenum->setText("0/0");
+    if (ui->label_ETA) ui->label_ETA->setText(tr("ETA:N/A"));
+    if (ui->label_TimeCost) ui->label_TimeCost->setText(tr("Time taken:N/A"));
 }
 
 void MainWindow::Waifu2x_Finished_manual()
@@ -1297,7 +1301,7 @@ void MainWindow::Waifu2x_Finished_manual()
     TextBrowser_NewMessage(tr("Processing manually stopped."));
     ui->progressBar->setValue(0);
     ui->progressBar_CurrentFile->setValue(0);
-    ui->label_progress->setText(tr("Stopped."));
+    if (ui->progressBar) ui->progressBar->setFormat(tr("Stopped."));
 }
 
 void MainWindow::TimeSlot()
@@ -1369,7 +1373,7 @@ void MainWindow::on_comboBox_Engine_GIF_currentIndexChanged(int index)
     Q_UNUSED(index);
     Settings_Save();
     // Logic to show/hide engine-specific settings for GIF tab
-    uiController.updateEngineSettingsVisibility(ui->stackedWidget_EngineSettings_gif, index);
+    uiController.updateEngineSettingsVisibility(this->ui, ui->comboBox_Engine_GIF->currentText());
     qDebug() << "GIF Engine changed. Index:" << index << "Engine:" << ui->comboBox_Engine_GIF->currentText();
 }
 
@@ -1378,7 +1382,7 @@ void MainWindow::on_comboBox_Engine_Image_currentIndexChanged(int index)
     Q_UNUSED(index);
     Settings_Save();
     // Logic to show/hide engine-specific settings for Image tab
-    uiController.updateEngineSettingsVisibility(ui->stackedWidget_EngineSettings_image, index);
+    uiController.updateEngineSettingsVisibility(this->ui, ui->comboBox_Engine_Image->currentText());
     qDebug() << "Image Engine changed. Index:" << index << "Engine:" << ui->comboBox_Engine_Image->currentText();
 }
 
@@ -1387,7 +1391,7 @@ void MainWindow::on_comboBox_Engine_Video_currentIndexChanged(int index)
     Q_UNUSED(index);
     Settings_Save();
     // Logic to show/hide engine-specific settings for Video tab
-    uiController.updateEngineSettingsVisibility(ui->stackedWidget_EngineSettings_video, index);
+    uiController.updateEngineSettingsVisibility(this->ui, ui->comboBox_Engine_Video->currentText());
     qDebug() << "Video Engine changed. Index:" << index << "Engine:" << ui->comboBox_Engine_Video->currentText();
 }
 
@@ -1419,7 +1423,7 @@ int MainWindow::on_pushButton_RemoveItem_clicked()
     // Remove selected item(s) from the currently active table view
     QAbstractItemView *currentTableView = nullptr;
     QStandardItemModel *currentModel = nullptr;
-    int currentTabIndex = ui->tabWidget_Input->currentIndex();
+    int currentTabIndex = ui->tabWidget->currentIndex();
 
     if (currentTabIndex == 0) { // Image
         currentTableView = ui->tableView_image;
@@ -2030,8 +2034,8 @@ void MainWindow::UpdateTotalProcessedFilesCount()
     // Assuming m_TotalNumProc holds the total number of files initially queued.
     // m_FinishedProc and m_ErrorProc are incremented as files complete.
     int processedCount = m_FinishedProc + m_ErrorProc;
-    if (ui->label_Files_Done_Total) { // Check if the UI element exists
-        ui->label_Files_Done_Total->setText(QString("%1/%2").arg(processedCount).arg(m_TotalNumProc));
+    if (ui->label_progressBar_filenum) { // Check if the UI element exists
+        ui->label_progressBar_filenum->setText(QString("%1/%2").arg(processedCount).arg(m_TotalNumProc));
     }
     UpdateProgressBar(); // Also update progress bar as it's related
 }
@@ -2103,9 +2107,10 @@ void MainWindow::CheckIfAllFinished()
 
 void MainWindow::UpdateNumberOfActiveThreads()
 {
-    if (ui->label_NumThreadsActive) { // Check if the UI element exists
-        ui->label_NumThreadsActive->setText(QString::number(ThreadNumRunning.load())); // ThreadNumRunning is std::atomic
-    }
+    // if (ui->label_NumThreadsActive) { // Check if the UI element exists
+    //     ui->label_NumThreadsActive->setText(QString::number(ThreadNumRunning.load())); // ThreadNumRunning is std::atomic
+    // }
+    // TODO: label_NumThreadsActive not found in UI. This info might need a new display element.
 }
 
 void MainWindow::UpdateProgressBar()
@@ -2115,16 +2120,15 @@ void MainWindow::UpdateProgressBar()
         int percentage = (int)(((double)processedCount / m_TotalNumProc) * 100.0);
         if (ui->progressBar) { // Check if the UI element exists
             ui->progressBar->setValue(percentage);
-        }
-        if (ui->label_progress) { // Check if the UI element exists
-             ui->label_progress->setText(tr("Overall Progress: %1% (%2/%3)")
-                                        .arg(percentage)
-                                        .arg(processedCount)
-                                        .arg(m_TotalNumProc));
+            ui->progressBar->setFormat(tr("Overall Progress: %p% (%1/%2)")
+                                     .arg(processedCount)
+                                     .arg(m_TotalNumProc));
         }
     } else {
-        if (ui->progressBar) ui->progressBar->setValue(0);
-        if (ui->label_progress) ui->label_progress->setText(tr("Waiting for tasks..."));
+        if (ui->progressBar) {
+            ui->progressBar->setValue(0);
+            ui->progressBar->setFormat(tr("Waiting for tasks..."));
+        }
     }
 }
 
@@ -2272,7 +2276,7 @@ FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
                      loop.quit();
                 }
             } else if (status == QMediaPlayer::InvalidMedia || status == QMediaPlayer::NoMedia ||
-                       status == QMediaPlayer::UnknownMediaStatus || status == QMediaPlayer::EndOfMedia /* EndOfMedia might be too early */) {
+                       status == QMediaPlayer::MediaStatus::UnknownMediaStatus || status == QMediaPlayer::EndOfMedia /* EndOfMedia might be too early */) {
                 qWarning() << "getOrFetchMetadata: Media status issue for" << filePath << "Status:" << status;
                 metadataSuccessfullyLoaded = true; // Ensure loop quits on error or invalid status
                 loop.quit();
