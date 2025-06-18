@@ -17,36 +17,33 @@
 #include "LiquidGlassWidget.h"
 #include <QFile>
 #include <QTextStream>
-#include <QMouseEvent> // Included via header, but good for clarity
-#include <QTimer>    // Included via header, but good for clarity
-#include <QDebug>    // For potential debugging
+#include <QMouseEvent>
+#include <QTimer>
+#include <QDebug>
 
 LiquidGlassWidget::LiquidGlassWidget(QWidget *parent)
     : QOpenGLWidget(parent)
 {
-    setMouseTracking(true); // Enable mouse tracking for mouseMoveEvent without button press
+    setMouseTracking(true);
 
     m_animationTimer = new QTimer(this);
     connect(m_animationTimer, &QTimer::timeout, this, &LiquidGlassWidget::updateElapsedTime);
-    m_animationTimer->start(16); // Aim for ~60 FPS updates (1000ms / 60fps ~= 16.67ms)
+    m_animationTimer->start(16);
 }
 
 LiquidGlassWidget::~LiquidGlassWidget()
 {
     makeCurrent();
+    m_ubo.destroy(); // Destroy UBO
     delete m_texture;
     if (m_vbo)
         glDeleteBuffers(1, &m_vbo);
     if (m_vao)
         glDeleteVertexArrays(1, &m_vao);
 
-    // QTimer is a QObject child of this widget, so it will be auto-deleted.
-    // Explicitly stopping if it's active can be good practice.
     if (m_animationTimer && m_animationTimer->isActive()) {
         m_animationTimer->stop();
     }
-    // delete m_animationTimer; // Not strictly necessary if parented
-
     doneCurrent();
 }
 
@@ -66,7 +63,7 @@ void LiquidGlassWidget::setBackground(const QImage &image)
 
 void LiquidGlassWidget::setRefractionScale(float scale)
 {
-    m_refractionScale = scale;
+    m_refractionScale = scale; // This uniform is not in the UBO, kept as example if needed elsewhere
     update();
 }
 
@@ -84,22 +81,50 @@ static const char *vertexSrc = R"(
 void LiquidGlassWidget::initializeGL()
 {
     initializeOpenGLFunctions();
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Ensure background is black
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     QFile fragFile(":/shaders/liquidglass.frag");
-    fragFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    if (!fragFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Failed to open fragment shader file:" << fragFile.errorString();
+        return;
+    }
     QTextStream fragStream(&fragFile);
     QString fragSrc = fragStream.readAll();
+    fragFile.close();
 
-    m_program.addShaderFromSourceCode(QOpenGLShader::Vertex, vertexSrc);
-    m_program.addShaderFromSourceCode(QOpenGLShader::Fragment, fragSrc);
-    m_program.link();
+    if (!m_program.addShaderFromSourceCode(QOpenGLShader::Vertex, vertexSrc)) {
+        qWarning() << "Vertex shader compilation error:" << m_program.log();
+    }
+    if (!m_program.addShaderFromSourceCode(QOpenGLShader::Fragment, fragSrc)) {
+        qWarning() << "Fragment shader compilation error:" << m_program.log();
+    }
+    if (!m_program.link()) {
+        qWarning() << "Shader program link error:" << m_program.log();
+    }
+
+    // Initialize UBO
+    m_ubo.create();
+    m_ubo.bind();
+    m_ubo.allocate(nullptr, sizeof(LiquidGlassParams));
+    m_ubo.release();
+
+    m_program.bind();
+    // Bind UBO block "SettingsBlock" to binding point 1
+    GLuint blockIndex = glGetUniformBlockIndex(m_program.programId(), "SettingsBlock");
+    if (blockIndex != GL_INVALID_INDEX) {
+        glUniformBlockBinding(m_program.programId(), blockIndex, 1);
+    } else {
+        qWarning() << "Uniform block 'SettingsBlock' not found in shader.";
+    }
+    // Set sampler once
+    m_program.setUniformValue("sourceTexture", 0);
+    m_program.release();
 
     static const float vertices[] = {
         -1.f, -1.f, 0.f, 0.f,
-        1.f, -1.f, 1.f, 0.f,
-        -1.f, 1.f, 0.f, 1.f,
-        1.f, 1.f, 1.f, 1.f
+         1.f, -1.f, 1.f, 0.f,
+        -1.f,  1.f, 0.f, 1.f,
+         1.f,  1.f, 1.f, 1.f
     };
 
     glGenVertexArrays(1, &m_vao);
@@ -117,10 +142,8 @@ void LiquidGlassWidget::initializeGL()
 
 void LiquidGlassWidget::resizeGL(int w, int h)
 {
-    // Q_UNUSED(w); // No longer unused
-    // Q_UNUSED(h);
     m_widgetResolution = QVector2D(static_cast<float>(w), static_cast<float>(h));
-    glViewport(0, 0, w, h); // Standard OpenGL viewport setting
+    glViewport(0, 0, w, h);
 }
 
 void LiquidGlassWidget::paintGL()
@@ -132,25 +155,37 @@ void LiquidGlassWidget::paintGL()
         m_texture->setMinificationFilter(QOpenGLTexture::Linear);
         m_texture->setMagnificationFilter(QOpenGLTexture::Linear);
     }
-    if (!m_texture)
+    if (!m_texture) {
         return;
+    }
 
-    m_program.bind(); // Ensure program is bound
+    m_program.bind();
 
-    // Set uniforms
-    m_program.setUniformValue("sourceTexture", 0); // Texture unit 0
+    // Populate UBO struct
+    LiquidGlassParams params;
+    params.resolution = m_widgetResolution;
+    params.time = m_elapsedTime;
+    // Adjust mouse y-coordinate: GL origin is bottom-left, QWidget top-left
+    // Shader expects mouse coordinates relative to bottom-left of the widget.
+    params.mouse = QVector2D(m_mousePosition.x(), m_widgetResolution.y() - m_mousePosition.y());
+    params.ior = m_ior;
+    params.borderRadius = m_borderRadius;
+    params.chromaticAberrationOffset = m_chromaticAberrationOffset;
+    // padding1 and padding2 are for layout and don't need to be set with specific values.
 
-    m_program.setUniformValue("ior", m_ior);
-    m_program.setUniformValue("borderRadius", m_borderRadius);
-    m_program.setUniformValue("chromaticAberrationOffset", m_chromaticAberrationOffset);
-    m_program.setUniformValue("resolution", m_widgetResolution);
-    m_program.setUniformValue("mouse", QVector2D(m_mousePosition)); // Convert QPointF to QVector2D
-    m_program.setUniformValue("time", m_elapsedTime);
+    // Upload data to UBO
+    if (m_ubo.bind()) {
+        m_ubo.write(0, &params, sizeof(LiquidGlassParams));
+        m_ubo.release();
+    }
 
+    // Bind the UBO to the defined binding point for the current program state
+    glBindBufferBase(GL_UNIFORM_BUFFER, 1, m_ubo.bufferId());
+    // The "sourceTexture" uniform (sampler2D) is set once in initializeGL.
+    // No need to set it per frame unless the texture unit changes.
 
     glActiveTexture(GL_TEXTURE0);
     m_texture->bind();
-    // m_program.bind(); // Already bound
 
     glBindVertexArray(m_vao);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -160,11 +195,11 @@ void LiquidGlassWidget::paintGL()
     m_program.release();
 }
 
-// --- New Setter Methods ---
+// --- Setter Methods ---
 void LiquidGlassWidget::setIOR(float ior)
 {
     m_ior = ior;
-    update(); // Trigger repaint
+    update();
 }
 
 void LiquidGlassWidget::setBorderRadius(float radius)
@@ -179,25 +214,22 @@ void LiquidGlassWidget::setChromaticAberrationOffset(float offset)
     update();
 }
 
-// --- New Event Handlers and Slots ---
+// --- Event Handlers and Slots ---
 void LiquidGlassWidget::updateElapsedTime()
 {
-    // Approximate time per frame for 60 FPS.
-    // For more accuracy, a QElapsedTimer could be used from the start of the application or widget's life.
     m_elapsedTime += 0.016f;
-    if (m_elapsedTime > 3600.0f) { // Reset after a long time (e.g., 1 hour) to prevent precision issues
+    if (m_elapsedTime > 3600.0f) {
         m_elapsedTime = 0.0f;
     }
-    update(); // Trigger repaint to update shader with new time
+    update();
 }
 
 void LiquidGlassWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    // Store mouse position relative to the widget
     #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     m_mousePosition = event->position();
     #else
-    m_mousePosition = event->localPos(); // For Qt5 compatibility if needed
+    m_mousePosition = event->localPos();
     #endif
-    update(); // Trigger repaint
+    update();
 }
