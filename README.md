@@ -375,7 +375,7 @@ Static analysis can be performed with [cppcheck](https://cppcheck.sourceforge.io
 
 ```bash
 sudo apt-get update
-sudo apt-get install qtbase5-dev cppcheck pkg-config
+sudo apt-get install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-5compat-dev qt6-shadertools-dev cppcheck pkg-config
 ```
 
 Run cppcheck from the repository root:
