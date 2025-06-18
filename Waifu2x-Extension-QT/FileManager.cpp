@@ -106,12 +106,12 @@ QString FileManager::getBaseName(const QString &path)
     return fileBasename;
 }
 
-void FileManager::moveToTrash(const QString &file)
+bool FileManager::moveToTrash(const QString &file)
 {
 #ifdef Q_OS_WIN
     QFileInfo fileinfo(file);
     if (!fileinfo.exists())
-        return;
+        return false;
     WCHAR from[MAX_PATH];
     memset(from, 0, sizeof(from));
     int l = fileinfo.absoluteFilePath().toWCharArray(from);
@@ -122,23 +122,22 @@ void FileManager::moveToTrash(const QString &file)
     fileop.wFunc = FO_DELETE;
     fileop.pFrom = from;
     fileop.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
-    SHFileOperation(&fileop);
+    return SHFileOperation(&fileop) == 0;
 #else
     QFileInfo fileInfo(file);
     if (!fileInfo.exists())
-        return;
+        return false;
 #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
     if (QDesktopServices::moveToTrash(QUrl::fromLocalFile(fileInfo.absoluteFilePath())))
-        return;
+        return true;
 #elif QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     if (QFile::moveToTrash(fileInfo.absoluteFilePath()))
-        return;
+        return true;
 #endif
     QString absPath = fileInfo.absoluteFilePath();
-    if (!QProcess::startDetached("gio", QStringList() << "trash" << absPath))
-    {
-        QProcess::startDetached("xdg-trash", QStringList() << absPath);
-    }
+    if (QProcess::startDetached("gio", QStringList() << "trash" << absPath))
+        return true;
+    return QProcess::startDetached("xdg-trash", QStringList() << absPath);
 #endif
 }
 
