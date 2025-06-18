@@ -33,6 +33,21 @@ fi
 echo "Using QMAKE_CMD: $QMAKE_CMD"
 $QMAKE_CMD --version || (echo "qmake version check failed"; exit 1)
 
+# Verify required Qt development packages are installed
+echo "Checking Qt dependencies..."
+MISSING_PKGS=()
+for pkg in qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-5compat-dev qt6-shadertools-dev; do
+    if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+        MISSING_PKGS+=("$pkg")
+    fi
+done
+if [ ${#MISSING_PKGS[@]} -ne 0 ]; then
+    echo "Missing Qt packages: ${MISSING_PKGS[*]}"
+    echo "Install them using:"
+    echo "sudo apt install ${MISSING_PKGS[*]}"
+    exit 2
+fi
+
 echo "Locating make..."
 which make || (echo "make not found in PATH"; exit 1)
 make --version || (echo "make version check failed"; exit 1)
