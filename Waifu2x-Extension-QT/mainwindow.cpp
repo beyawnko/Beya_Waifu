@@ -2276,7 +2276,7 @@ FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
                      loop.quit();
                 }
             } else if (status == QMediaPlayer::InvalidMedia || status == QMediaPlayer::NoMedia ||
-                       status == QMediaPlayer::MediaStatus::UnknownMediaStatus || status == QMediaPlayer::EndOfMedia /* EndOfMedia might be too early */) {
+                       status == QMediaPlayer::EndOfMedia /* EndOfMedia might be too early */) {
                 qWarning() << "getOrFetchMetadata: Media status issue for" << filePath << "Status:" << status;
                 metadataSuccessfullyLoaded = true; // Ensure loop quits on error or invalid status
                 loop.quit();
