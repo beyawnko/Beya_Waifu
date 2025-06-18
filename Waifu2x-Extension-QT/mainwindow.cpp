@@ -784,15 +784,9 @@ void MainWindow::on_pushButton_about_clicked()
 
 void MainWindow::on_spinBox_textbrowser_fontsize_valueChanged(int arg1)
 {
-    QFont font = ui->textBrowser_Debug->font();
+    QFont font = ui->textBrowser->font();
     font.setPointSize(arg1);
-    ui->textBrowser_Debug->setFont(font);
-    // Assuming there's another text browser for general messages
-    if (ui->textBrowser_ProcessInfo) { // Check if it exists
-        QFont font2 = ui->textBrowser_ProcessInfo->font();
-        font2.setPointSize(arg1);
-        ui->textBrowser_ProcessInfo->setFont(font2);
-    }
+    ui->textBrowser->setFont(font);
 }
 
 void MainWindow::on_pushButton_Save_GlobalFontSize_clicked()
@@ -806,11 +800,8 @@ void MainWindow::on_pushButton_Save_GlobalFontSize_clicked()
 
 void MainWindow::on_pushButton_HideTextBro_clicked()
 {
-    bool isHidden = ui->textBrowser_Debug->isHidden();
-    ui->textBrowser_Debug->setHidden(!isHidden);
-    if (ui->textBrowser_ProcessInfo) { // Check if it exists
-         ui->textBrowser_ProcessInfo->setHidden(!isHidden);
-    }
+    bool isHidden = ui->textBrowser->isHidden();
+    ui->textBrowser->setHidden(!isHidden);
     ui->pushButton_HideTextBro->setText(!isHidden ? tr("Show Text Browser") : tr("Hide Text Browser"));
 }
 
@@ -818,10 +809,7 @@ void MainWindow::on_checkBox_AlwaysHideTextBrowser_stateChanged(int arg1)
 {
     bool shouldHide = (arg1 == Qt::Checked);
     if (shouldHide) {
-        ui->textBrowser_Debug->hide();
-         if (ui->textBrowser_ProcessInfo) {
-            ui->textBrowser_ProcessInfo->hide();
-        }
+        ui->textBrowser->hide();
         ui->pushButton_HideTextBro->setText(tr("Show Text Browser"));
         ui->pushButton_HideTextBro->setEnabled(false); // Disable manual toggle if always hidden
     } else {
@@ -1477,8 +1465,7 @@ void MainWindow::on_pushButton_ReadMe_clicked()
 
 void MainWindow::on_pushButton_clear_textbrowser_clicked()
 {
-    ui->textBrowser_Debug->clear();
-    if(ui->textBrowser_ProcessInfo) ui->textBrowser_ProcessInfo->clear();
+    ui->textBrowser->clear();
 }
 
 void MainWindow::on_pushButton_HideSettings_clicked()
