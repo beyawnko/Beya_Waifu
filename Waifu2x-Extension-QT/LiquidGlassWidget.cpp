@@ -20,6 +20,7 @@
 #include <QMouseEvent>
 #include <QTimer>
 #include <QDebug>
+#include <QOpenGLContext>
 
 LiquidGlassWidget::LiquidGlassWidget(QWidget *parent)
     : QOpenGLWidget(parent)
@@ -80,7 +81,20 @@ static const char *vertexSrc = R"(
 
 void LiquidGlassWidget::initializeGL()
 {
-    initializeOpenGLFunctions();
+    if (!initializeOpenGLFunctions()) {
+        qWarning() << "Failed to initialize OpenGL functions";
+        setEnabled(false);
+        return;
+    }
+
+    QOpenGLContext *ctx = context();
+    if (!ctx || ctx->format().majorVersion() < 3 ||
+            (ctx->format().majorVersion() == 3 && ctx->format().minorVersion() < 3)) {
+        qWarning() << "OpenGL 3.3 context required but" << (ctx ? QString::number(ctx->format().majorVersion()) + "." + QString::number(ctx->format().minorVersion()) : "no context");
+        setEnabled(false);
+        return;
+    }
+
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     QFile fragFile(":/shaders/liquidglass.frag");
@@ -94,12 +108,18 @@ void LiquidGlassWidget::initializeGL()
 
     if (!m_program.addShaderFromSourceCode(QOpenGLShader::Vertex, vertexSrc)) {
         qWarning() << "Vertex shader compilation error:" << m_program.log();
+        setEnabled(false);
+        return;
     }
     if (!m_program.addShaderFromSourceCode(QOpenGLShader::Fragment, fragSrc)) {
         qWarning() << "Fragment shader compilation error:" << m_program.log();
+        setEnabled(false);
+        return;
     }
     if (!m_program.link()) {
         qWarning() << "Shader program link error:" << m_program.log();
+        setEnabled(false);
+        return;
     }
 
     // Initialize UBO
