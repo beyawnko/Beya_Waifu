@@ -1171,9 +1171,8 @@ void MainWindow::on_checkBox_HDNMode_Anime4k_stateChanged(int arg1)
     if(isChecked && ui->checkBox_ACNet_Anime4K){ // If ACNet checkbox exists
         ui->checkBox_ACNet_Anime4K->setChecked(false); // ACNet and HDN might be mutually exclusive
     }
-    // Enable/disable HDN level spinbox
-    // if(ui->spinBox_HDNLevel_Anime4k) ui->spinBox_HDNLevel_Anime4k->setEnabled(isChecked);
-    // TODO: spinBox_HDNLevel_Anime4k not found in UI. Related control might be ui->spinBox_Passes_Anime4K or was removed.
+    // Enable/disable passes spin box
+    if(ui->spinBox_Passes_Anime4K) ui->spinBox_Passes_Anime4K->setEnabled(isChecked);
     qDebug() << "Anime4K HDN Mode state changed:" << arg1;
 }
 
