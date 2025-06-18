@@ -2366,10 +2366,13 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(const QString &inputFile
     // These could be specific to the type of content if known (image, video frame, gif frame)
     // For generic iterative processing, using generic keys or fallback to current m_realcugan_ members.
     // Using general settings keys for now.
-    QString jobsStr = Settings_Read_value("/settings/RealCUGANJobsGeneric", "1:1:1").toString();
-    QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapGeneric", "3").toString();
+    QString jobsStr = Settings_Read_value("/settings/RealCUGANJobsGeneric",
+                                         QString("1:1:1")).toString();
+    QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapGeneric",
+                                          QString("3")).toString();
     // verboseLog could also be a member like m_realcugan_verboseLog if it's a global setting for RealCUGAN
-    bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog", false).toBool();
+    bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog",
+                                         QVariant(false)).toBool();
 
 
     if (!realCuganProcessor)

@@ -1277,27 +1277,32 @@ int MainWindow::Settings_Read_Apply()
 
 QVariant MainWindow::Settings_Read_value(QString Key)
 {
-    QString settings_ini_old = Current_Path+"/settings_old.ini";
-    QString settings_ini_new = Current_Path+"/settings.ini";
-    QSettings *configIniRead_new = new QSettings(settings_ini_new, QSettings::IniFormat);
+    return Settings_Read_value(Key, QVariant());
+}
+
+QVariant MainWindow::Settings_Read_value(const QString &Key,
+                                         const QVariant &defaultValue)
+{
+    QString settings_ini_old = Current_Path + "/settings_old.ini";
+    QString settings_ini_new = Current_Path + "/settings.ini";
+    QSettings configIniRead_new(settings_ini_new, QSettings::IniFormat);
 #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
-    configIniRead_new->setIniCodec(QTextCodec::codecForName("UTF-8"));
+    configIniRead_new.setIniCodec(QTextCodec::codecForName("UTF-8"));
 #endif
     //====
-    if(isReadOldSettings&&QFile::exists(settings_ini_old))
+    if (isReadOldSettings && QFile::exists(settings_ini_old))
     {
-        QSettings *configIniRead_old = new QSettings(settings_ini_old, QSettings::IniFormat);
+        QSettings configIniRead_old(settings_ini_old, QSettings::IniFormat);
 #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
-        configIniRead_old->setIniCodec(QTextCodec::codecForName("UTF-8"));
+        configIniRead_old.setIniCodec(QTextCodec::codecForName("UTF-8"));
 #endif
         //====
-        if(configIniRead_old->contains(Key))
+        if (configIniRead_old.contains(Key))
         {
-            return configIniRead_old->value(Key);
+            return configIniRead_old.value(Key, defaultValue);
         }
-        return configIniRead_new->value(Key);
     }
-    return configIniRead_new->value(Key);
+    return configIniRead_new.value(Key, defaultValue);
 }
 
 /*

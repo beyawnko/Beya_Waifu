@@ -528,6 +528,12 @@ public:
     int Settings_Read_Apply();
     bool Settings_isReseted = false;
     QVariant Settings_Read_value(QString Key);
+    /**
+     * @brief Read a value from the settings file.
+     * @param key The key to look up.
+     * @param defaultValue The value to return if the key does not exist.
+     */
+    QVariant Settings_Read_value(const QString &key, const QVariant &defaultValue);
     bool isReadOldSettings = false;
     void PreLoad_Engines_Settings();
     int Calculate_Temporary_ScaleRatio_W2xNCNNVulkan(int ScaleRatio);

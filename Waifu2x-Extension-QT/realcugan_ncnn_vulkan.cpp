@@ -44,9 +44,12 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int file_list_row_number, bool isBa
 
     QString outputFormat = ui->comboBox_ImageSaveFormat ? ui->comboBox_ImageSaveFormat->currentText().toLower() : "png";
 
-    QString jobsStr = Settings_Read_value("/settings/RealCUGANJobsImage", "1:1:1").toString();
-    QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapImage", "3").toString();
-    bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog", false).toBool();
+    QString jobsStr = Settings_Read_value("/settings/RealCUGANJobsImage",
+                                         QString("1:1:1")).toString();
+    QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapImage",
+                                          QString("3")).toString();
+    bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog",
+                                         QVariant(false)).toBool();
 
     bool isMultiGpu = ui->checkBox_MultiGPU_RealCUGAN ? ui->checkBox_MultiGPU_RealCUGAN->isChecked() : false;
     QString multiGpuJobArgsString;
@@ -158,9 +161,12 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
 
     realCuganProcessor->readSettingsVideoGif(0);
 
-    QString jobsStr = Settings_Read_value("/settings/RealCUGANJobsVideo", "1:2:2").toString();
-    QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapVideo", "3").toString();
-    bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog", false).toBool();
+    QString jobsStr = Settings_Read_value("/settings/RealCUGANJobsVideo",
+                                         QString("1:2:2")).toString();
+    QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapVideo",
+                                          QString("3")).toString();
+    bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog",
+                                         QVariant(false)).toBool();
 
     bool isMultiGpu = ui->checkBox_MultiGPU_RealCUGAN ? ui->checkBox_MultiGPU_RealCUGAN->isChecked() : false;
     QString multiGpuJobArgsString;
@@ -268,9 +274,12 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int file_list_row_number)
 
     QString outputFormat = "png";
 
-    QString jobsStr = Settings_Read_value("/settings/RealCUGANJobsVideo", "1:2:2").toString();
-    QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapVideo", "3").toString();
-    bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog", false).toBool();
+    QString jobsStr = Settings_Read_value("/settings/RealCUGANJobsVideo",
+                                         QString("1:2:2")).toString();
+    QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapVideo",
+                                          QString("3")).toString();
+    bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog",
+                                         QVariant(false)).toBool();
 
     bool isMultiGpu = ui->checkBox_MultiGPU_RealCUGAN ? ui->checkBox_MultiGPU_RealCUGAN->isChecked() : false;
     QString multiGpuJobArgsString;
@@ -351,9 +360,12 @@ void MainWindow::Realcugan_NCNN_Vulkan_GIF(int file_list_row_number)
 
     QString outputFormat = "png";
 
-    QString jobsStr = Settings_Read_value("/settings/RealCUGANJobsGif", "1:2:2").toString();
-    QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapGif", "3").toString();
-    bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog", false).toBool();
+    QString jobsStr = Settings_Read_value("/settings/RealCUGANJobsGif",
+                                         QString("1:2:2")).toString();
+    QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapGif",
+                                          QString("3")).toString();
+    bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog",
+                                         QVariant(false)).toBool();
 
     bool isMultiGpu = ui->checkBox_MultiGPU_RealCUGAN ? ui->checkBox_MultiGPU_RealCUGAN->isChecked() : false;
     QString multiGpuJobArgsString;
@@ -419,7 +431,8 @@ void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings()
     if (m_mainWindow->spinBox_Scale_RealCUGAN) // Check if m_mainWindow is valid, and then spinBox
          m_realcugan_Scale = m_mainWindow->spinBox_Scale_RealCUGAN->value();
     else
-         m_realcugan_Scale = Settings_Read_value("RealCUGAN_Scale", 2).toInt();
+         m_realcugan_Scale =
+             Settings_Read_value("RealCUGAN_Scale", QVariant(2)).toInt();
 
 
     qDebug() << "[MW::R_ReadSettings] Model:" << m_realcugan_Model
