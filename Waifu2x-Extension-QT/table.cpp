@@ -836,4 +836,8 @@ void MainWindow::ui_tableViews_setUpdatesEnabled(bool isEnabled)
     ui->tableView_image->setUpdatesEnabled(isEnabled);
 }
 
-void MainWindow::on_pushButton_ClearList_clicked() { qDebug() << "STUB: MainWindow::on_pushButton_ClearList_clicked called"; }
+void MainWindow::on_pushButton_ClearList_clicked()
+{
+    Table_Clear();
+    Table_FileCount_reload();
+}

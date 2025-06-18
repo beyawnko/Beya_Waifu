@@ -542,16 +542,18 @@ public:
     void APNG_Split2Frames(QString sourceFileFullPath,QString splitFramesFolder);
     void APNG_Frames2APNG(QString sourceFileFullPath, QString scaledFramesFolder, QString resultFileFullPath, bool isOverScaled);
     bool APNG_isAnimatedPNG(int rowNum);
-    bool APNG_Waifu2xNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
-    bool APNG_Waifu2xConverter(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
-    int Waifu2x_Converter_APNG_scale(QMap<QString, QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed);
-    bool APNG_SrmdNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
-    bool APNG_Anime4k(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
-    int Anime4k_APNG_scale(QMap<QString,QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed);
-    bool APNG_SrmdCUDA(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
-    bool APNG_Waifu2xCaffe(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
-    int Waifu2x_Caffe_APNG_scale(QMap<QString, QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed);
-    bool APNG_RealsrNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
+    // bool APNG_Waifu2xNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
+    // bool APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
+    // bool APNG_RealESRGANNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
+    // bool APNG_Waifu2xConverter(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
+    // int Waifu2x_Converter_APNG_scale(QMap<QString, QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed); // Removed
+    // bool APNG_SrmdNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
+    // bool APNG_Anime4k(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
+    // int Anime4k_APNG_scale(QMap<QString,QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed); // Removed
+    // bool APNG_SrmdCUDA(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
+    // bool APNG_Waifu2xCaffe(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
+    // int Waifu2x_Caffe_APNG_scale(QMap<QString, QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed); // Removed
+    // bool APNG_RealsrNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
 
 
     //================================ Other Utilities =======================================
