@@ -773,11 +773,11 @@ void MainWindow::on_pushButton_about_clicked()
     QMessageBox::about(this, tr("About Beya Waifu"),
                        tr("<h3>Beya Waifu %1</h3>"
                           "<p>Upscaling software for images, GIFs, and videos using various AI models.</p>"
-                          "<p>Copyright (C) 2020-2024 AaronFeng753</p>"
+                          "<p>Copyright (C) 2020-2024 Beyawnko</p>"
                           "<p>This program comes with ABSOLUTELY NO WARRANTY.</p>"
                           "<p>This is free software, and you are welcome to redistribute it "
                           "under certain conditions; see the GNU AGPLv3+ license for details.</p>"
-                          "<p>GitHub: <a href='https://github.com/AaronFeng753/Waifu2x-Extension-QT'>https://github.com/AaronFeng753/Waifu2x-Extension-QT</a></p>")
+                          "<p>GitHub: <a href='https://github.com/beyawnko/Beya_Waifu'>https://github.com/beyawnko/Beya_Waifu</a></p>")
                        .arg(VERSION));
 }
 
@@ -1038,7 +1038,7 @@ void MainWindow::on_pushButton_ForceRetry_clicked()
 
 void MainWindow::on_pushButton_PayPal_clicked()
 {
-    QDesktopServices::openUrl(QUrl("https://www.paypal.me/AaronFeng753"));
+    QDesktopServices::openUrl(QUrl("https://www.paypal.me/Beyawnko"));
 }
 
 void MainWindow::on_checkBox_AudioDenoise_stateChanged(int arg1)
@@ -1465,13 +1465,13 @@ int MainWindow::on_pushButton_RemoveItem_clicked()
 void MainWindow::on_pushButton_Report_clicked()
 {
     // Open a link to report issues, likely GitHub issues page
-    QDesktopServices::openUrl(QUrl("https://github.com/AaronFeng753/Waifu2x-Extension-QT/issues"));
+    QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/issues"));
 }
 
 void MainWindow::on_pushButton_ReadMe_clicked()
 {
     // Open the project's README file or a wiki page
-    QDesktopServices::openUrl(QUrl("https://github.com/AaronFeng753/Waifu2x-Extension-QT/blob/master/README.md"));
+    QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/README.md"));
 }
 
 void MainWindow::on_pushButton_clear_textbrowser_clicked()
@@ -1551,7 +1551,7 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
  */
 void MainWindow::on_pushButton_wiki_clicked()
 {
-    QDesktopServices::openUrl(QUrl(QStringLiteral("https://github.com/AaronFeng753/Waifu2x-Extension-GUI/wiki")));
+    QDesktopServices::openUrl(QUrl(QStringLiteral("https://github.com/beyawnko/Beya_Waifu")));
 }
 void MainWindow::on_comboBox_UpdateChannel_currentIndexChanged(int index)
 {
