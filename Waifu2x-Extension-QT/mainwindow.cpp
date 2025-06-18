@@ -644,3 +644,56 @@ void MainWindow::Set_Current_File_Progress_Bar_Value(int val, int max_val) {
         ui->progressBar_CurrentFile->setValue(val);
     }
 }
+
+bool MainWindow::Realcugan_ProcessSingleFileIteratively(const QString &inputFile,
+                                                        const QString &outputFile,
+                                                        int targetScale,
+                                                        int /*originalWidth*/,
+                                                        int /*originalHeight*/,
+                                                        const QString &modelName,
+                                                        int denoiseLevel,
+                                                        int tileSize,
+                                                        const QString &gpuIdOrJobConfig,
+                                                        bool isMultiGPUJob,
+                                                        bool ttaEnabled,
+                                                        const QString &outputFormat,
+                                                        bool experimental,
+                                                        int /*rowNumForStatusUpdate*/)
+{
+    if (!realCuganProcessor)
+    {
+        qWarning() << "RealCUGAN processor not available";
+        return false;
+    }
+
+    QString exePath = realCuganProcessor->executablePath(experimental);
+    QStringList args = realCuganProcessor->prepareArguments(inputFile,
+                                                           outputFile,
+                                                           targetScale,
+                                                           modelName,
+                                                           denoiseLevel,
+                                                           tileSize,
+                                                           gpuIdOrJobConfig,
+                                                           ttaEnabled,
+                                                           outputFormat,
+                                                           isMultiGPUJob,
+                                                           gpuIdOrJobConfig,
+                                                           experimental);
+
+    QProcess proc;
+    connect(&proc,
+            &QProcess::readyReadStandardOutput,
+            this,
+            &MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardOutput);
+    connect(&proc,
+            &QProcess::readyReadStandardError,
+            this,
+            &MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError);
+
+    bool ok = runProcess(&proc, QStringLiteral("\"%1\" %2").arg(exePath, args.join(' ')));
+    if (!ok)
+    {
+        qWarning() << "RealCUGAN failed for" << inputFile;
+    }
+    return ok;
+}
