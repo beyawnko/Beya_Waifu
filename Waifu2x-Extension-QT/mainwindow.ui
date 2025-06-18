@@ -9015,7 +9015,7 @@ when processing video in segments.</string>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QSpinBox" name="spinBox_SegmentDuration">
+             <widget class="QSpinBox" name="spinBox_VideoSplitDuration">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -11162,9 +11162,66 @@ padding:10px;
       </widget>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="QWidget" name="widget_RealCUGAN_Hidden">
+      <property name="visible">
+       <bool>false</bool>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_hidden_RealCUGAN">
+       <item row="0" column="0">
+        <widget class="QComboBox" name="comboBox_Model_RealCUGAN"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QSpinBox" name="spinBox_Scale_RealCUGAN"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QSpinBox" name="spinBox_DenoiseLevel_RealCUGAN"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QSpinBox" name="spinBox_TileSize_RealCUGAN"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="checkBox_TTA_RealCUGAN"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QComboBox" name="comboBox_GPUID_RealCUGAN"/>
+       </item>
+       <item row="6" column="0">
+        <widget class="QPushButton" name="pushButton_DetectGPU_RealCUGAN"/>
+       </item>
+       <item row="7" column="0">
+        <widget class="QCheckBox" name="checkBox_MultiGPU_RealCUGAN"/>
+       </item>
+       <item row="8" column="0">
+        <widget class="QGroupBox" name="groupBox_GPUSettings_MultiGPU_RealCUGAN"/>
+       </item>
+       <item row="9" column="0">
+        <widget class="QComboBox" name="comboBox_GPUIDs_MultiGPU_RealCUGAN"/>
+       </item>
+       <item row="10" column="0">
+        <widget class="QListWidget" name="listWidget_GPUList_MultiGPU_RealCUGAN"/>
+       </item>
+       <item row="11" column="0">
+        <widget class="QPushButton" name="pushButton_AddGPU_MultiGPU_RealCUGAN"/>
+       </item>
+       <item row="12" column="0">
+        <widget class="QPushButton" name="pushButton_RemoveGPU_MultiGPU_RealCUGAN"/>
+       </item>
+       <item row="13" column="0">
+        <widget class="QPushButton" name="pushButton_ClearGPU_MultiGPU_RealCUGAN"/>
+       </item>
+       <item row="14" column="0">
+        <widget class="QPushButton" name="pushButton_TileSize_Add_RealCUGAN"/>
+       </item>
+       <item row="15" column="0">
+        <widget class="QPushButton" name="pushButton_TileSize_Minus_RealCUGAN"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
    </layout>
   </widget>
- </widget>
+</widget>
  <resources>
   <include location="icon.qrc"/>
  </resources>
