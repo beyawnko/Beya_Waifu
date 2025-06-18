@@ -263,6 +263,11 @@ this via the command line:
 Beya_Waifu --max-threads 8
 ```
 
+### Debug logging
+
+Qt debug output can be redirected to a log file under `logs/` by enabling verbose mode.
+Run the application with `--verbose` to capture detailed logs in `logs/waifu.log`.
+
 ## Liquid Glass
 
 The application ships with an experimental Liquid Glass shader that creates a refractive glass sphere from the scene

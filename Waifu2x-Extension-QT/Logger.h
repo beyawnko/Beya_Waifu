@@ -19,9 +19,12 @@
 */
 
 #include <QString>
+#include <QLoggingCategory>
 
 /**
  * @brief Initialize application logging.
  * @param filePath Destination log file path.
  */
-void initLogger(const QString &filePath);
+extern QLoggingCategory beyaLogCategory;
+
+void initLogger(const QString &filePath, bool verbose);
