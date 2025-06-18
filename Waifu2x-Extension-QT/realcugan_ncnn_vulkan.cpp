@@ -187,9 +187,155 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int file_list_row_number, bool isBa
 }
 
 
-void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int)
+void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
 {
-    qDebug() << "Realcugan_NCNN_Vulkan_Video_BySegment stub";
+    bool delOriginal = ui->checkBox_DelOriginal->isChecked() ||
+                       ui->checkBox_ReplaceOriginalFile->isChecked();
+    int segmentDuration = ui->spinBox_SegmentDuration->value();
+
+    emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum,
+                                                               "Processing");
+    QString srcPath = Table_model_video->item(rowNum, 2)->text();
+    if (!QFile::exists(srcPath))
+    {
+        emit Send_TextBrowser_NewMessage(tr("Error occured when processing [") +
+                                         srcPath + tr("]. Error: [File does not exist.]"));
+        emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum,
+                                                                   "Failed");
+        emit Send_progressbar_Add();
+        return;
+    }
+
+    QFileInfo finfo(srcPath);
+    QString baseName = file_getBaseName(srcPath);
+    QString suffix = finfo.suffix();
+    QString folder = file_getFolderPath(finfo);
+
+    QString cfrVideo = video_To_CFRMp4(srcPath);
+    if (!QFile::exists(cfrVideo))
+    {
+        emit Send_TextBrowser_NewMessage(tr("Error occured when processing [") +
+                                         srcPath +
+                                         tr("]. Error: [Cannot convert video format to mp4.]"));
+        emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum,
+                                                                   "Failed");
+        emit Send_progressbar_Add();
+        return;
+    }
+
+    QString audioPath = folder + "/Audio_" + baseName + "_" + suffix + "_W2xEX.wav";
+    if (!QFile::exists(audioPath))
+        video_get_audio(cfrVideo, audioPath);
+
+    QString framesPath = folder + "/" + baseName + "_" + suffix + "_SplitFrames_W2xEX";
+    QString clipsPath;
+    QString dateStr;
+    do
+    {
+        dateStr = video_getClipsFolderNo();
+        clipsPath = folder + "/" + dateStr + "_VideoClipsWaifu2xEX";
+    }
+    while (file_isDirExist(clipsPath));
+    QString clipsName = dateStr + "_VideoClipsWaifu2xEX";
+
+    int duration = video_get_duration(cfrVideo);
+    int startTime = 0;
+    int clipIndex = 0;
+
+    if (ui->checkBox_ShowInterPro->isChecked() && duration > segmentDuration)
+        emit Send_CurrentFileProgress_Start(baseName + "." + suffix, duration);
+
+    while (duration > startTime)
+    {
+        int timeLeft = duration - startTime;
+        int segDur = timeLeft >= segmentDuration ? segmentDuration : timeLeft;
+
+        if (file_isDirExist(framesPath))
+            file_DelDir(framesPath);
+        file_mkDir(framesPath);
+
+        video_video2images_ProcessBySegment(cfrVideo, framesPath, startTime, segDur);
+        QStringList frameNames = file_getFileNames_in_Folder_nofilter(framesPath);
+        if (frameNames.isEmpty())
+        {
+            emit Send_TextBrowser_NewMessage(tr("Error occured when processing [") +
+                                             srcPath + tr("]. Error: [Unable to split video into pictures.]"));
+            emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum,
+                                                                       "Failed");
+            emit Send_progressbar_Add();
+            return;
+        }
+
+        QString scaledFramesPath = framesPath + "_Scaled";
+        file_mkDir(scaledFramesPath);
+        for (const QString &frame : frameNames)
+        {
+            QString inFile = framesPath + "/" + frame;
+            QString outFile = scaledFramesPath + "/" + frame;
+            if (!Realcugan_ProcessSingleFileIteratively(inFile,
+                                                       outFile,
+                                                       m_realcugan_Scale,
+                                                       0,
+                                                       0,
+                                                       m_realcugan_Model,
+                                                       m_realcugan_DenoiseLevel,
+                                                       m_realcugan_TileSize,
+                                                       m_realcugan_GPUID,
+                                                       false,
+                                                       m_realcugan_TTA,
+                                                       "png",
+                                                       false,
+                                                       rowNum))
+            {
+                emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum,
+                                                                           "Failed");
+                emit Send_progressbar_Add();
+                return;
+            }
+        }
+
+        if (!file_isDirExist(clipsPath))
+            file_mkDir(clipsPath);
+        clipIndex++;
+        QString clip = clipsPath + "/" + QString::number(clipIndex, 10) + ".mp4";
+        video_images2video(cfrVideo, clip, scaledFramesPath, "", false, 1, 1, false);
+        if (!QFile::exists(clip))
+        {
+            emit Send_TextBrowser_NewMessage(tr("Error occured when processing [") +
+                                             srcPath + tr("]. Error: [Unable to assemble pictures into videos.]"));
+            emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum,
+                                                                       "Failed");
+            emit Send_progressbar_Add();
+            return;
+        }
+
+        if (ui->checkBox_ShowInterPro->isChecked())
+            emit Send_CurrentFileProgress_progressbar_Add_SegmentDuration(segDur);
+
+        startTime += segDur;
+        file_DelDir(framesPath);
+        file_DelDir(scaledFramesPath);
+    }
+
+    emit Send_CurrentFileProgress_Stop();
+
+    QString finalVideo = folder + "/" + baseName + "_RealCUGAN_" + suffix + ".mp4";
+    QFile::remove(finalVideo);
+    video_AssembleVideoClips(clipsPath, clipsName, finalVideo, audioPath);
+    if (!QFile::exists(finalVideo))
+    {
+        emit Send_TextBrowser_NewMessage(tr("Error occured when processing [") +
+                                         srcPath + tr("]. Error: [Unable to assemble video clips.]"));
+        emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
+        emit Send_progressbar_Add();
+        return;
+    }
+
+    if (delOriginal)
+        ReplaceOriginalFile(srcPath, finalVideo);
+
+    emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Finished");
+    emit Send_progressbar_Add();
 }
 
 /**
