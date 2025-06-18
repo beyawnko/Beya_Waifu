@@ -583,6 +583,7 @@ public:
     void Delay_sec_sleep(int time);
     void Delay_msec_sleep(int time);
     void Play_NFSound();
+    QMediaPlayer *m_player = nullptr; // For notification sound
     QTimer *TimeCostTimer;
     long unsigned int TimeCost = 0;
     QString Seconds2hms(long unsigned int seconds);

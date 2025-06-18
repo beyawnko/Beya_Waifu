@@ -44,6 +44,7 @@ Copyright (C) 2025  beyawnko
 #include <QMediaMetaData>
 #include <QEventLoop> // Required for waiting on QMediaPlayer signals
 #include <QDesktopServices> // For opening URLs
+#include <QUrl>
 #include <QStandardItem> // For table view item manipulation
 #include <algorithm>
 #include <QVBoxLayout>
@@ -2452,16 +2453,15 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(const QString &inputFile
 
 void MainWindow::Play_NFSound()
 {
-    qDebug() << "STUB: MainWindow::Play_NFSound() called.";
-    // TODO: Implement actual sound playback logic here
-    // Example using QMediaPlayer (ensure QMediaPlayer is included and a member `m_player` exists and is initialized):
-    // if (Settings_Read_value("/settings/EnableSoundNotification", true).toBool()) {
-    //     if (!m_player) {
-    //         m_player = new QMediaPlayer(this);
-    //     }
-    //     m_player->setSource(QUrl("qrc:/sounds/NFSound_Waifu2xEX.mp3")); // Ensure this path is correct in your .qrc
-    //     m_player->play();
-    // }
+    if (!Settings_Read_value("/settings/EnableSoundNotification", true).toBool())
+        return;
+
+    if (!m_player)
+        m_player = new QMediaPlayer(this);
+
+    const QString soundPath = QDir(Current_Path).filePath("NFSound_Waifu2xEX.mp3");
+    m_player->setSource(QUrl::fromLocalFile(soundPath));
+    m_player->play();
 }
 
 QString MainWindow::Seconds2hms(long unsigned int seconds)
