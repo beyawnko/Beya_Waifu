@@ -21,6 +21,15 @@
 #include <QTimer>    // Included via header, but good for clarity
 #include <QDebug>    // For potential debugging
 
+struct LiquidGlassParamsUbo {
+    QVector2D resolution;
+    float time;
+    QVector2D mouse;
+    float ior;
+    float borderRadius;
+    float chromaticAberrationOffset;
+};
+
 LiquidGlassWidget::LiquidGlassWidget(QWidget *parent)
     : QOpenGLWidget(parent)
 {
@@ -37,6 +46,8 @@ LiquidGlassWidget::~LiquidGlassWidget()
     delete m_texture;
     if (m_vbo)
         glDeleteBuffers(1, &m_vbo);
+    if (m_ubo)
+        glDeleteBuffers(1, &m_ubo);
     if (m_vao)
         glDeleteVertexArrays(1, &m_vao);
 
@@ -95,6 +106,15 @@ void LiquidGlassWidget::initializeGL()
     m_program.addShaderFromSourceCode(QOpenGLShader::Fragment, fragSrc);
     m_program.link();
 
+    // Create UBO for shader parameters
+    glGenBuffers(1, &m_ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(float) * 8, nullptr, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    GLuint blockIndex = glGetUniformBlockIndex(m_program.programId(), "LiquidGlassParams");
+    glUniformBlockBinding(m_program.programId(), blockIndex, 1);
+
     static const float vertices[] = {
         -1.f, -1.f, 0.f, 0.f,
         1.f, -1.f, 1.f, 0.f,
@@ -137,15 +157,22 @@ void LiquidGlassWidget::paintGL()
 
     m_program.bind(); // Ensure program is bound
 
-    // Set uniforms
+    // Set texture unit
     m_program.setUniformValue("sourceTexture", 0); // Texture unit 0
 
-    m_program.setUniformValue("ior", m_ior);
-    m_program.setUniformValue("borderRadius", m_borderRadius);
-    m_program.setUniformValue("chromaticAberrationOffset", m_chromaticAberrationOffset);
-    m_program.setUniformValue("resolution", m_widgetResolution);
-    m_program.setUniformValue("mouse", QVector2D(m_mousePosition)); // Convert QPointF to QVector2D
-    m_program.setUniformValue("time", m_elapsedTime);
+    // Pack parameters into UBO
+    LiquidGlassParamsUbo params;
+    params.resolution = m_widgetResolution;
+    params.time = m_elapsedTime;
+    params.mouse = QVector2D(m_mousePosition);
+    params.ior = m_ior;
+    params.borderRadius = m_borderRadius;
+    params.chromaticAberrationOffset = m_chromaticAberrationOffset;
+
+    glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(LiquidGlassParamsUbo), &params);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 1, m_ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 
     glActiveTexture(GL_TEXTURE0);
