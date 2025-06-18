@@ -62,90 +62,12 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
 {
     ui->setupUi(this);
 
-    // Re-layout for "Files List" title and table on the first tab
-    if (ui->tabWidget_Input && ui->tabWidget_Input->count() > 0) {
-        QWidget* imageTabPage = ui->tabWidget_Input->widget(0); // Get the first tab (presumably ui->tab_image)
-
-        if (imageTabPage && ui->tableView_image) {
-            qDebug() << "Attempting to re-layout image tab content.";
-
-            // 1. Create the new title label
-            QLabel* filesListTitleLabel = new QLabel(tr("Files List"), imageTabPage); // Parent to tab page initially
-
-            // 2. Create a container widget for the title and table
-            QWidget* containerWidget = new QWidget(imageTabPage); // Parent to tab page
-
-            // 3. Create the new QVBoxLayout for the container widget
-            QVBoxLayout* newVLayout = new QVBoxLayout(containerWidget); // Layout for the container
-
-            // 4. Reparent and add widgets to the new layout
-            // It's important to set the parent of widgets before adding them to a layout
-            // that belongs to a different parent, or ensure the layout's parent is correct.
-            // Here, containerWidget is the parent for newVLayout.
-            // filesListTitleLabel and ui->tableView_image should be children of containerWidget
-            // for newVLayout to manage them correctly *within* containerWidget.
-
-            filesListTitleLabel->setParent(containerWidget); // Reparent label to container
-            newVLayout->addWidget(filesListTitleLabel);
-
-            // If ui->tableView_image was previously in a layout on imageTabPage,
-            // it needs to be removed from that layout before being added to newVLayout.
-            // However, just reparenting it should be sufficient if it wasn't in a complex layout.
-            // QLayout* oldParentLayout = ui->tableView_image->parentWidget()->layout();
-            // if (oldParentLayout) {
-            //     oldParentLayout->removeWidget(ui->tableView_image);
-            // }
-            ui->tableView_image->setParent(containerWidget); // Reparent table to container
-            newVLayout->addWidget(ui->tableView_image);
-
-            newVLayout->setContentsMargins(5, 5, 5, 5); // Optional: adjust margins
-            newVLayout->setSpacing(5);                 // Optional: adjust spacing
-            containerWidget->setLayout(newVLayout);
-
-            // 5. Integrate containerWidget into imageTabPage's layout
-            QLayout* tabPageLayout = imageTabPage->layout();
-            if (tabPageLayout) {
-                // If tab page already has a layout, add our container to it.
-                // This assumes other widgets on the tab page are already in this layout.
-                // We'll add our new container at the top.
-                if (QVBoxLayout* vTabPageLayout = qobject_cast<QVBoxLayout*>(tabPageLayout)) {
-                    vTabPageLayout->insertWidget(0, containerWidget);
-                    qDebug() << "Inserted containerWidget into existing QVBoxLayout of imageTabPage.";
-                } else if (QGridLayout* gTabPageLayout = qobject_cast<QGridLayout*>(tabPageLayout)) {
-                    // If it's a grid, add container to row 0, col 0, spanning all columns if needed.
-                    // This might require knowing column span. For simplicity, add to 0,0.
-                    // Any other widgets in the grid layout need to be shifted or handled.
-                    // This is a potential point of visual disruption if not handled carefully.
-                    // For now, just add it; manual adjustment of the UI might be needed if it's a grid.
-                    gTabPageLayout->addWidget(containerWidget, 0, 0); // Add to row 0, column 0
-                    qDebug() << "Added containerWidget to existing QGridLayout of imageTabPage at (0,0).";
-                } else {
-                    // Other layout type - just add widget. May not be ideal.
-                    tabPageLayout->addWidget(containerWidget);
-                    qDebug() << "Added containerWidget to existing layout of imageTabPage (unknown type).";
-                }
-            } else {
-                // If tab page has no layout, create a new one and add our container.
-                // This will become the main layout for the tab page.
-                // WARNING: If there were other widgets directly on imageTabPage (not in a layout),
-                // they will no longer be managed by any layout unless explicitly added here.
-                QVBoxLayout* newTabPageLayout = new QVBoxLayout(imageTabPage);
-                newTabPageLayout->addWidget(containerWidget);
-                imageTabPage->setLayout(newTabPageLayout);
-                qDebug() << "Set new QVBoxLayout on imageTabPage and added containerWidget.";
-            }
-            qDebug() << "Re-layout of Files List title and table view attempted.";
-        } else {
-            if (!imageTabPage) {
-                qDebug() << "Could not find imageTabPage (first tab).";
-            }
-            if (!ui->tableView_image) {
-                qDebug() << "Could not find ui->tableView_image.";
-            }
-        }
-    } else {
-        qDebug() << "Could not find ui->tabWidget_Input or it has no tabs.";
-    }
+    /*
+     * Disabled block that previously re-parented the first image tab's table and
+     * inserted a new layout with a title label. The application no longer
+     * performs this dynamic re-layout and instead relies on the original UI
+     * design from the Qt form.
+     */
 
     // Initialize RealCUGAN pointers to ensure safe use when the
     // dedicated widgets are absent. Fallback to Frame Interpolation
