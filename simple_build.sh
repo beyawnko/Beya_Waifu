@@ -106,7 +106,7 @@ make -j4 > ../WinBuildErrorLog.md 2>&1
 echo "Build attempt finished. Check WinBuildErrorLog.md"
 
 # Check if the executable exists (example name, might need adjustment)
-if [ -f ./release/Waifu2x-Extension-QT.exe ] || [ -f ./Waifu2x-Extension-QT ] || [ -f ./debug/Waifu2x-Extension-QT.exe ] || [ -f ./debug/Waifu2x-Extension-QT ]; then
+if [ -f ./release/Beya_Waifu.exe ] || [ -f ./Beya_Waifu ] || [ -f ./debug/Beya_Waifu.exe ] || [ -f ./debug/Beya_Waifu ]; then
     echo "Build successful, executable found."
 else
     echo "Build might have failed, executable not found at expected locations."
