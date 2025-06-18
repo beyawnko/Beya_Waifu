@@ -653,7 +653,6 @@ public:
     QAction *QAction_checkBox_MoveToRecycleBin_checkBox_ReplaceOriginalFile = new QAction(this);
     void Init_ActionsMenu_checkBox_DelOriginal();
     QAction *QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal = new QAction(this);
-    bool eventFilter(QObject *target, QEvent *event) override;
     int AddTileSize_NCNNVulkan_Converter(int OrginalTileSize);
     int MinusTileSize_NCNNVulkan_Converter(int OrginalTileSize);
     void ImagesResize_Folder_MultiThread(int New_width,int New_height,QString ImagesFolderPath);
@@ -906,14 +905,8 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     void onRealESRGANProcessStdOut();
     void onRealESRGANProcessStdErr();
 
-    // Asynchronous file processing for drag and drop
-    void ProcessDroppedFilesAsync(QList<QUrl> urls);
-    void ProcessDroppedFilesFinished();
     void progressbar_clear();
     void progressbar_SetToMax(int maxval); // Already declared, ensuring it's correct
-    // Slots for main thread execution from ProcessDroppedFilesAsync
-    void Add_File_Folder_MainThread(QString Full_Path);
-    void Add_File_Folder_IncludeSubFolder_MainThread(QString Full_Path);
 
     // Slots from error report
     void on_pushButton_SaveFileList_clicked();
@@ -981,8 +974,6 @@ signals:
 
     // RealESRGAN Signals (Send_Realesrgan_ncnn_vulkan_DetectGPU_finished is already listed above)
 
-    // ProcessDroppedFilesAsync and ProcessDroppedFilesFinished are slots, not signals.
-    // They were already present and moved to public slots.
 
 private:
     int m_NumProc = 0;

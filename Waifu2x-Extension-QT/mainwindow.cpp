@@ -239,13 +239,6 @@ void MainWindow::pushButton_Stop_setEnabled_self(bool isEnabled)
     ui->pushButton_Stop->setVisible(isEnabled);
 }
 
-// Stubs from previous successful steps (eventFilter, closeEvent)
-bool MainWindow::eventFilter(QObject *obj, QEvent *event)
-{
-    // TODO: Add custom event filtering logic if needed
-    qDebug() << "STUB: MainWindow::eventFilter called for object" << obj << "event type" << event->type();
-    return QMainWindow::eventFilter(obj, event);
-}
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -379,9 +372,38 @@ QMap<QString, int> MainWindow::Image_Gif_Read_Resolution(QString SourceFileFullP
 
     return resolutionMap;
 }
-void MainWindow::Delay_sec_sleep(int time) { qDebug() << "STUB: MainWindow::Delay_sec_sleep called with" << time; QThread::sleep(time); }
-void MainWindow::Delay_msec_sleep(int time) { qDebug() << "STUB: Delay_msec_sleep called with" << time; QThread::msleep(time); }
-void MainWindow::ExecuteCMD_batFile(QString cmd_str, bool requestAdmin) { Q_UNUSED(requestAdmin); qDebug() << "STUB: ExecuteCMD_batFile called for" << cmd_str; }
+/**
+ * @brief Pause execution for the specified number of seconds.
+ */
+void MainWindow::Delay_sec_sleep(int time)
+{
+    QThread::sleep(static_cast<unsigned long>(time));
+}
+
+/**
+ * @brief Pause execution for the specified number of milliseconds.
+ */
+void MainWindow::Delay_msec_sleep(int time)
+{
+    QThread::msleep(static_cast<unsigned long>(time));
+}
+/**
+ * @brief Execute a command string using the system shell.
+ *
+ * On Windows this launches cmd.exe, while on POSIX systems it uses
+ * /bin/sh. The requestAdmin flag is currently ignored.
+ */
+void MainWindow::ExecuteCMD_batFile(QString cmd_str, bool requestAdmin)
+{
+    Q_UNUSED(requestAdmin);
+#ifdef Q_OS_WIN
+    QStringList args;
+    args << "/c" << cmd_str;
+    QProcess::startDetached(QStringLiteral("cmd.exe"), args);
+#else
+    QProcess::startDetached(QStringLiteral("/bin/sh"), {"-c", cmd_str});
+#endif
+}
 
 // Stubs for _finished signals/slots and other functions expected in mainwindow.cpp (not causing multiple defs)
 int MainWindow::Waifu2x_DetectGPU_finished()
@@ -493,7 +515,16 @@ int MainWindow::Waifu2x_DumpProcessorList_converter_finished()
     // }
     return 0;
 }
-void MainWindow::Set_checkBox_DisableResize_gif_Checked() { qDebug() << "STUB: Set_checkBox_DisableResize_gif_Checked called"; } // Keep STUB
+/**
+ * @brief Ensure the GIF resize disable checkbox is checked.
+ */
+void MainWindow::Set_checkBox_DisableResize_gif_Checked()
+{
+    if (ui->checkBox_DisableResize_gif && !ui->checkBox_DisableResize_gif->isChecked()) {
+        ui->checkBox_DisableResize_gif->setChecked(true);
+        Settings_Save();
+    }
+}
 
 void MainWindow::Table_image_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath)
 {
@@ -695,7 +726,18 @@ void MainWindow::on_pushButton_CustRes_cancel_clicked()
     TextBrowser_NewMessage(tr("Custom resolution cancelled (actual implementation depends on UI specifics)."));
 }
 
-void MainWindow::comboBox_UpdateChannel_setCurrentIndex_self(int index) { qDebug() << "STUB: comboBox_UpdateChannel_setCurrentIndex_self called with index" << index; }
+/**
+ * @brief Safely update the update channel combo box.
+ */
+void MainWindow::comboBox_UpdateChannel_setCurrentIndex_self(int index)
+{
+    QMutexLocker locker(&comboBox_UpdateChannel_setCurrentIndex_self_QMutex);
+    if (ui->comboBox_UpdateChannel) {
+        if (index >= 0 && index < ui->comboBox_UpdateChannel->count()) {
+            ui->comboBox_UpdateChannel->setCurrentIndex(index);
+        }
+    }
+}
 
 void MainWindow::on_comboBox_language_currentIndexChanged(int index)
 {
@@ -1504,24 +1546,12 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
         }
     }
 }
-void MainWindow::on_pushButton_wiki_clicked() { qDebug() << "STUB: on_pushButton_wiki_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_SRMD_NCNN_Vulkan_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_SRMD_NCNN_Vulkan_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_SRMD_CUDA_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_SRMD_CUDA_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_Waifu2x_Converter_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Waifu2x_Converter_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_Anime4k_CPU_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Anime4k_CPU_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_Anime4k_GPU_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Anime4k_GPU_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_FFmpeg_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_FFmpeg_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_FFprobe_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_FFprobe_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_ImageMagick_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_ImageMagick_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_Gifsicle_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Gifsicle_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_SoX_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_SoX_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_Waifu2x_Caffe_CPU_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Waifu2x_Caffe_CPU_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_Waifu2x_Caffe_GPU_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Waifu2x_Caffe_GPU_clicked called"; }
-void MainWindow::on_checkBox_isCompatible_Waifu2x_Caffe_cuDNN_clicked() { qDebug() << "STUB: on_checkBox_isCompatible_Waifu2x_Caffe_cuDNN_clicked called"; }
-    qDebug() << "STUB: on_checkBox_isCompatible_Realsr_NCNN_Vulkan_clicked called";
+/**
+ * @brief Open the project's online wiki.
+ */
+void MainWindow::on_pushButton_wiki_clicked()
+{
+    QDesktopServices::openUrl(QUrl(QStringLiteral("https://github.com/AaronFeng753/Waifu2x-Extension-GUI/wiki")));
 }
 void MainWindow::on_comboBox_UpdateChannel_currentIndexChanged(int index)
 {
@@ -1985,10 +2015,6 @@ void MainWindow::onRealESRGANProcessStdErr()
 }
 
 
-void MainWindow::ProcessDroppedFilesAsync(QList<QUrl> urls) { qDebug() << "STUB: ProcessDroppedFilesAsync called with" << urls.count() << "urls"; }
-void MainWindow::ProcessDroppedFilesFinished() { qDebug() << "STUB: ProcessDroppedFilesFinished called"; }
-void MainWindow::Add_File_Folder_MainThread(QString Full_Path) { qDebug() << "STUB: Add_File_Folder_MainThread called with path" << Full_Path; }
-void MainWindow::Add_File_Folder_IncludeSubFolder_MainThread(QString Full_Path) { qDebug() << "STUB: Add_File_Folder_IncludeSubFolder_MainThread called with path" << Full_Path; }
 
 // Stubs for slots listed in mainwindow.h but not found/causing errors previously
 // These were in the error report section of mainwindow.h, so they are expected by MOC
@@ -2139,19 +2165,23 @@ QString MainWindow::Generate_Output_Path(const QString& original_fileName_WithEx
     return QDir(outputDirToUse).filePath(newBaseName + "." + outputExt);
 }
 
-void MainWindow::Set_Progress_Bar_Value(int val, int max_val) {
-    qDebug() << "STUB: MainWindow::Set_Progress_Bar_Value called with val" << val << "max" << max_val;
-    // Basic stub implementation
-    if (ui->progressBar) { // Check if progressBar exists
+/**
+ * @brief Update the global progress bar.
+ */
+void MainWindow::Set_Progress_Bar_Value(int val, int max_val)
+{
+    if (ui->progressBar) {
         ui->progressBar->setRange(0, max_val);
         ui->progressBar->setValue(val);
     }
 }
 
-void MainWindow::Set_Current_File_Progress_Bar_Value(int val, int max_val) {
-    qDebug() << "STUB: MainWindow::Set_Current_File_Progress_Bar_Value called with val" << val << "max" << max_val;
-    // Basic stub implementation
-    if (ui->progressBar_CurrentFile) { // Check if progressBar_CurrentFile exists
+/**
+ * @brief Update the progress bar for the currently processed file.
+ */
+void MainWindow::Set_Current_File_Progress_Bar_Value(int val, int max_val)
+{
+    if (ui->progressBar_CurrentFile) {
         ui->progressBar_CurrentFile->setRange(0, max_val);
         ui->progressBar_CurrentFile->setValue(val);
     }
