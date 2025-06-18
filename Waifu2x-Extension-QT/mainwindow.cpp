@@ -25,6 +25,9 @@ Copyright (C) 2025  beyawnko
 #include "GpuManager.h"
 #include "UiController.h"
 #include "LiquidGlassWidget.h"
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
 #include <QGridLayout>
 #include <QCheckBox>
 #include <QApplication>
@@ -2499,13 +2502,9 @@ void MainWindow::TurnOffScreen()
 {
     qDebug() << "MainWindow::TurnOffScreen() called.";
 #ifdef Q_OS_WIN
-    // Simulate turning off the screen by sending SC_MONITORPOWER command
-    // HWND_BROADCAST can be problematic. Prefer getting the top-level window handle.
-    // SendMessage(GetConsoleWindow(), WM_SYSCOMMAND, SC_MONITORPOWER, (LPARAM)2); // 2 = off, 1 = low power, -1 = on
-    // For a GUI app, you might need to find the main window's handle or use a different approach.
-    // This is a placeholder, proper implementation for screen off is platform-specific and complex.
-    qDebug() << "Screen off functionality is platform-specific and not fully implemented in this stub.";
+    // Turn off the monitor by broadcasting the SC_MONITORPOWER command
+    SendMessage(HWND_BROADCAST, WM_SYSCOMMAND, SC_MONITORPOWER, 2);
 #else
-    qDebug() << "Screen off functionality not implemented for this OS in this stub.";
+    qDebug() << "Turn off screen feature is not available on this platform.";
 #endif
 }
