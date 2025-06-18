@@ -24,5 +24,7 @@ public:
     void applyDarkStyle(int mode);
 
     void outputSettingsAreaSetEnabled(Ui::MainWindow *ui, bool enabled);
+
+    void updateEngineSettingsVisibility(Ui::MainWindow *ui, const QString& selectedEngineName);
 };
 

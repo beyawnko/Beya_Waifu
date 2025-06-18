@@ -428,8 +428,8 @@ void MainWindow::Realcugan_NCNN_Vulkan_ReadSettings()
     if (realCuganProcessor)
         realCuganProcessor->readSettings();
 
-    if (m_mainWindow->spinBox_Scale_RealCUGAN) // Check if m_mainWindow is valid, and then spinBox
-         m_realcugan_Scale = m_mainWindow->spinBox_Scale_RealCUGAN->value();
+    if (this->ui->spinBox_Scale_RealCUGAN) // Check if ui and spinBox are valid
+         m_realcugan_Scale = this->ui->spinBox_Scale_RealCUGAN->value();
     else
          m_realcugan_Scale =
              Settings_Read_value("RealCUGAN_Scale", QVariant(2)).toInt();
@@ -505,7 +505,7 @@ static QStringList parseVulkanDeviceList(const QString &output)
 
 void MainWindow::Realcugan_ncnn_vulkan_DetectGPU()
 {
-    QPushButton* detectButton = pushButton_DetectGPU_RealCUGAN ? pushButton_DetectGPU_RealCUGAN : ui->pushButton_DetectGPU_VFI;
+    QPushButton* detectButton = ui->pushButton_DetectGPU_RealCUGAN ? ui->pushButton_DetectGPU_RealCUGAN : ui->pushButton_DetectGPU_VFI;
     if (!detectButton) return;
 
     detectButton->setEnabled(false);
@@ -525,7 +525,7 @@ void MainWindow::Realcugan_ncnn_vulkan_DetectGPU()
 void MainWindow::Realcugan_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error)
 {
     qWarning() << "Error during RealCUGAN GPU detection, process error:" << error;
-    QPushButton* detectButton = pushButton_DetectGPU_RealCUGAN ? pushButton_DetectGPU_RealCUGAN : ui->pushButton_DetectGPU_VFI;
+    QPushButton* detectButton = ui->pushButton_DetectGPU_RealCUGAN ? ui->pushButton_DetectGPU_RealCUGAN : ui->pushButton_DetectGPU_VFI;
     if (detectButton){
         detectButton->setEnabled(true);
         detectButton->setText(tr("Detect GPU"));
