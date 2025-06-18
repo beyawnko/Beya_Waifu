@@ -32,6 +32,9 @@ The application queries available Vulkan devices by invoking the bundled upscale
 output lists devices as `GPU device <id>: <name>` or `[<id>] <name>` which is parsed to populate the GPU selection
 menus. Detected IDs are saved to `settings.ini` so that subsequent launches restore the last known device list.
 
+Verbose output from RealCUGAN can be enabled by setting `RealCUGANVerboseLog=true`
+in `settings.ini`. When enabled the `-v` flag is passed to the engine.
+
 ### Quick Build (Linux & Windows)
 
 1. Install **Qt 6.5** with the Widgets, Multimedia, OpenGL and Qt5Compat modules. A C++17 compiler is required (GCC 7+

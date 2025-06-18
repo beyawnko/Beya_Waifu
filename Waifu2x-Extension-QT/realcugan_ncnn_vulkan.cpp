@@ -162,13 +162,6 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
 
     realCuganProcessor->readSettingsVideoGif(0);
 
-    QString jobsStr = Settings_Read_value("/settings/RealCUGANJobsVideo",
-                                         QString("1:2:2")).toString();
-    QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapVideo",
-                                          QString("3")).toString();
-    // bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog",
-    //                                      QVariant(false)).toBool();
-    bool verboseLog = false; // Defaulting to false, or read from settings if still needed by prepareArguments
 
     bool isMultiGpu = ui->checkBox_MultiGPU_RealCUGAN ? ui->checkBox_MultiGPU_RealCUGAN->isChecked() : false;
     QString multiGpuJobArgsString;
@@ -206,8 +199,8 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
             // Realcugan_ProcessSingleFileIteratively is in mainwindow.cpp
             // It will use realCuganProcessor->prepareArguments itself.
             // We must ensure the parameters passed here are consistent with its needs.
-            // The jobsStr, syncGapStr, verboseLog are now part of prepareArguments,
-            // so Realcugan_ProcessSingleFileIteratively needs to be updated to pass them.
+            // jobsStr, syncGapStr and verboseLog are handled within
+            // Realcugan_ProcessSingleFileIteratively via settings.
             if (!Realcugan_ProcessSingleFileIteratively(inFile, outFile, videoScale, 0,0,
                                                        m_realcugan_Model, m_realcugan_DenoiseLevel, m_realcugan_TileSize,
                                                        m_realcugan_GPUID, // This is the single GPU ID
