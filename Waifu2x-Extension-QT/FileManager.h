@@ -23,7 +23,12 @@ public:
     QStringList getFileNamesNoFilter(const QString &path);
     bool deleteDir(const QString &path);
     QString getBaseName(const QString &path);
-    void moveToTrash(const QString &file);
+    /**
+     * @brief Move the specified file to the system trash.
+     * @param file Absolute file path to remove.
+     * @return True if the file was successfully moved.
+     */
+    bool moveToTrash(const QString &file);
     QString getFolderPath(const QFileInfo &fileInfo);
     bool isDirWritable(const QString &dirPath);
     bool openFolder(const QString &folderPath);
