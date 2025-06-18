@@ -342,8 +342,14 @@ public:
     void Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
     bool APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
     void Realcugan_ncnn_vulkan_DetectGPU();
+    /** Build the -g job string based on the stored GPU list. */
     QString RealcuganNcnnVulkan_MultiGPU();
-    void AddGPU_MultiGPU_RealcuganNcnnVulkan(QString GPUID);
+
+    /** Add a GPU with thread count to the multi GPU list. */
+    void AddGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid, int threads = 1);
+
+    /** Remove a GPU from the multi GPU list. */
+    void RemoveGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid);
     void Realcugan_NCNN_Vulkan_PreLoad_Settings();
     QString Realcugan_NCNN_Vulkan_PreLoad_Settings_Str = "";
     QStringList Realcugan_NCNN_Vulkan_PrepareArguments(const QString &inputFile, const QString &outputFile, int currentPassScale, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuId, bool ttaEnabled, const QString &outputFormat, bool isMultiGPU, const QString &multiGpuJobArgs, bool experimental);

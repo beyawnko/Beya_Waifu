@@ -493,6 +493,46 @@ void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked()
         listWidget_GPUList_MultiGPU_RealCUGAN->clear();
 }
 
+/**
+ * @brief Build the job string for multi GPU execution.
+ *
+ * Uses RealcuganJobManager to convert the stored list to the
+ * formatted -g/-j options required by the executable.
+ */
+QString MainWindow::RealcuganNcnnVulkan_MultiGPU()
+{
+    RealcuganJobManager mgr;
+    QString fallback = m_realcugan_GPUID.split(":").first();
+    bool enabled = checkBox_MultiGPU_RealCUGAN && checkBox_MultiGPU_RealCUGAN->isChecked();
+    return mgr.buildGpuJobString(enabled,
+                                 GPUIDs_List_MultiGPU_RealCUGAN,
+                                 fallback);
+}
+
+/** Add a GPU ID with thread count to the internal list. */
+void MainWindow::AddGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid, int threads)
+{
+    for (const auto &gpu : GPUIDs_List_MultiGPU_RealCUGAN) {
+        if (gpu.value("ID") == gpuid)
+            return;
+    }
+    QMap<QString, QString> map;
+    map["ID"] = gpuid;
+    map["Threads"] = QString::number(threads);
+    GPUIDs_List_MultiGPU_RealCUGAN.append(map);
+}
+
+/** Remove a GPU ID from the internal list. */
+void MainWindow::RemoveGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid)
+{
+    for (int i = 0; i < GPUIDs_List_MultiGPU_RealCUGAN.size(); ++i) {
+        if (GPUIDs_List_MultiGPU_RealCUGAN.at(i).value("ID") == gpuid) {
+            GPUIDs_List_MultiGPU_RealCUGAN.removeAt(i);
+            break;
+        }
+    }
+}
+
 /** Increase the RealCUGAN tile size by the spin box step. */
 void MainWindow::on_pushButton_TileSize_Add_RealCUGAN_clicked()
 {
