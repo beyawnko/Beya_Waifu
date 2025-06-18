@@ -322,6 +322,11 @@ if Windows prebuilts are missing), it builds them from source. Models are also c
 ### Command line examples
 
 RealCUGAN can denoise and upscale anime imagery, while RealESRGAN offers models for general photos as well as anime.
+After the **Simple_Compatibility_Test** runs, the application toggles the
+`widget_RealCUGAN_Hidden` panel based on whether `realcugan-ncnn-vulkan`
+is present. This is done via
+`widget_RealCUGAN_Hidden->setVisible(isCompatible_RealCUGAN_NCNN_Vulkan)`
+so the settings only appear when the executable is available.
 Typical invocations are:
 
 ```bash
