@@ -556,8 +556,39 @@ void MainWindow::Realcugan_NCNN_Vulkan_PreLoad_Settings()
     qDebug() << "Realcugan_NCNN_Vulkan_PreLoad_Settings completed.";
 }
 
-void MainWindow::Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString&, int, bool, const QString&)
+void MainWindow::Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString &tempPathBase,
+                                                        int /*maxPassIndex*/,
+                                                        bool keepFinal,
+                                                        const QString &finalFile)
 {
+    if (keepFinal)
+        return;
+
+    const QString framesDir = tempPathBase + "_frames";
+    const QString scaledDir = framesDir + "_RealCUGAN_NCNN_Vulkan";
+    const QString clipsDir = tempPathBase + "_VideoClipsWaifu2xEX";
+
+    auto removeDirSafely = [this](const QString &path) {
+        if (file_isDirExist(path))
+        {
+            if (!file_DelDir(path))
+                qDebug() << "Failed to delete" << path;
+        }
+        else
+        {
+            qDebug() << "Path does not exist:" << path;
+        }
+    };
+
+    removeDirSafely(framesDir);
+    removeDirSafely(scaledDir);
+    removeDirSafely(clipsDir);
+
+    if (!finalFile.isEmpty() && QFile::exists(finalFile))
+    {
+        if (!QFile::remove(finalFile))
+            qDebug() << "Failed to delete" << finalFile;
+    }
 }
 
 static QStringList parseVulkanDeviceList(const QString &output)
