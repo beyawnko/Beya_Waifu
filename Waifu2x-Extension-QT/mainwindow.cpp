@@ -1553,13 +1553,24 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
         return;
     }
 
+    QList<QUrl> urls;
     for (const QString &path : files) {
-        if (ui->checkBox_ScanSubFolders->isChecked()) {
-            Add_File_Folder_IncludeSubFolder(path);
-        } else {
-            Add_File_Folder(path);
-        }
+        urls << QUrl::fromLocalFile(path);
     }
+
+    // Mirror drag-and-drop behavior to keep UI responsive
+    AddNew_gif = false;
+    AddNew_image = false;
+    AddNew_video = false;
+    ui_tableViews_setUpdatesEnabled(false);
+    ui->groupBox_Setting->setEnabled(0);
+    ui->groupBox_FileList->setEnabled(0);
+    ui->groupBox_InputExt->setEnabled(0);
+    pushButton_Start_setEnabled_self(0);
+    ui->checkBox_ScanSubFolders->setEnabled(0);
+    emit Send_TextBrowser_NewMessage(tr("Adding files, please wait."));
+
+    (void)QtConcurrent::run([this, urls]() { this->Read_urls(urls); });
 }
 /**
  * @brief Open the project's online wiki.
