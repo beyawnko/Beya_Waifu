@@ -2143,10 +2143,9 @@ void MainWindow::CheckIfAllFinished()
 
 void MainWindow::UpdateNumberOfActiveThreads()
 {
-    // if (ui->label_NumThreadsActive) { // Check if the UI element exists
-    //     ui->label_NumThreadsActive->setText(QString::number(ThreadNumRunning.load())); // ThreadNumRunning is std::atomic
-    // }
-    // TODO: label_NumThreadsActive not found in UI. This info might need a new display element.
+    if (ui->label_NumThreadsActive) {
+        ui->label_NumThreadsActive->setText(QString::number(ThreadNumRunning.load()));
+    }
 }
 
 void MainWindow::UpdateProgressBar()
