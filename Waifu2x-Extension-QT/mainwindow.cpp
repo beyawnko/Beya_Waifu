@@ -2239,15 +2239,16 @@ FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
         // Connect signals to handle metadata changes or errors
         connect(&player, &QMediaPlayer::mediaStatusChanged, [&](QMediaPlayer::MediaStatus status) {
             if (status == QMediaPlayer::LoadedMedia) {
-                if (player.isMetaDataAvailable()) {
-                    QVariant resolutionVariant = player.metaData(QMediaMetaData::Resolution);
+                QMediaMetaData md = player.metaData();
+                if (!md.isEmpty()) {
+                    QVariant resolutionVariant = md.value(QMediaMetaData::Resolution);
                     if (resolutionVariant.isValid()) {
                         QSize res = resolutionVariant.toSize();
                         metadata.width = res.width();
                         metadata.height = res.height();
                     }
                     metadata.duration = player.duration(); // in milliseconds
-                    QVariant frameRateVariant = player.metaData(QMediaMetaData::VideoFrameRate);
+                    QVariant frameRateVariant = md.value(QMediaMetaData::VideoFrameRate);
                     if (frameRateVariant.isValid()) {
                         metadata.fps = QString::number(frameRateVariant.toDouble(), 'f', 2); // Format to 2 decimal places
                     }
@@ -2297,15 +2298,16 @@ FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
         loop.exec(); // Start event loop
 
         // One final check if metadata became available right when timeout happened or loop exited for other reasons
-        if (!metadata.isValid && player.isMetaDataAvailable()) {
-            QVariant resolutionVariant = player.metaData(QMediaMetaData::Resolution);
+        QMediaMetaData md = player.metaData();
+        if (!metadata.isValid && !md.isEmpty()) {
+            QVariant resolutionVariant = md.value(QMediaMetaData::Resolution);
             if (resolutionVariant.isValid()) {
                 QSize res = resolutionVariant.toSize();
                 metadata.width = res.width();
                 metadata.height = res.height();
             }
             metadata.duration = player.duration();
-            QVariant frameRateVariant = player.metaData(QMediaMetaData::VideoFrameRate);
+            QVariant frameRateVariant = md.value(QMediaMetaData::VideoFrameRate);
             if (frameRateVariant.isValid()) {
                 metadata.fps = QString::number(frameRateVariant.toDouble(), 'f', 2);
             }
