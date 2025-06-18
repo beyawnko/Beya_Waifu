@@ -92,9 +92,10 @@ int MainWindow::Table_FileCount_reload()
         //Show or hide each list based on its file count
         //===============================================
         int TableView_VisibleCount = 0;
-        if (ui->label_DropFile) { // Check if the pointer is valid
-            ui->label_DropFile->setVisible(false); // Hide when there are files
-        }
+        // Drop-file label has been removed from the UI
+        // if (ui->label_DropFile) {
+        //     ui->label_DropFile->setVisible(false);
+        // }
         if(filecount_image>0)
         {
             ui->tableView_image->setVisible(1);
@@ -150,9 +151,10 @@ int MainWindow::Table_FileCount_reload()
         //====================
         //Hide file lists and clear selection
         //====================
-        if (ui->label_DropFile) { // Check if the pointer is valid
-            ui->label_DropFile->setVisible(true); // Show when no files are present
-        }
+        // Drop-file label has been removed from the UI
+        // if (ui->label_DropFile) {
+        //     ui->label_DropFile->setVisible(true);
+        // }
         curRow_image = -1;
         ui->tableView_image->clearSelection();
         ui->tableView_image->setVisible(0);

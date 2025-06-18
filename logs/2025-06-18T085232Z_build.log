@@ -1,0 +1,9 @@
+Current directory: /workspace/Beya_Waifu/Waifu2x-Extension-QT
+Locating qmake...
+Using QMAKE_CMD: qmake6
+QMake version 3.1
+Using Qt version 6.4.2 in /usr/lib/x86_64-linux-gnu
+Checking Qt dependencies...
+Missing Qt packages: qt6-multimedia-dev qt6-5compat-dev
+Install them using:
+sudo apt install qt6-multimedia-dev qt6-5compat-dev
