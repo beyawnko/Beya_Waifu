@@ -25,27 +25,35 @@ Initialize table view
 */
 void MainWindow::Init_Table()
 {
-    Table_model_image->setColumnCount(4);
+    Table_model_image->setColumnCount(6); // Changed from 4 to 6
     Table_model_image->setHeaderData(0, Qt::Horizontal, tr("Image File Name"));
     Table_model_image->setHeaderData(1, Qt::Horizontal, tr("Status"));
     Table_model_image->setHeaderData(2, Qt::Horizontal, tr("Full Path"));
-    Table_model_image->setHeaderData(3, Qt::Horizontal, tr("Custom resolution(Width x Height)"));
+    Table_model_image->setHeaderData(3, Qt::Horizontal, tr("Resolution")); // Changed from "Custom resolution(Width x Height)"
+    Table_model_image->setHeaderData(4, Qt::Horizontal, tr("Output Path"));   // New
+    Table_model_image->setHeaderData(5, Qt::Horizontal, tr("Engine Settings"));// New
     ui->tableView_image->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
     ui->tableView_image->setModel(Table_model_image);
     //=================================
-    Table_model_gif->setColumnCount(4);
+    Table_model_gif->setColumnCount(6); // Changed from 4 to 6
     Table_model_gif->setHeaderData(0, Qt::Horizontal, tr("Animated Image File Name"));
     Table_model_gif->setHeaderData(1, Qt::Horizontal, tr("Status"));
     Table_model_gif->setHeaderData(2, Qt::Horizontal, tr("Full Path"));
-    Table_model_gif->setHeaderData(3, Qt::Horizontal, tr("Custom resolution(Width x Height)"));
+    Table_model_gif->setHeaderData(3, Qt::Horizontal, tr("Resolution")); // Changed from "Custom resolution(Width x Height)"
+    Table_model_gif->setHeaderData(4, Qt::Horizontal, tr("Output Path"));   // New
+    Table_model_gif->setHeaderData(5, Qt::Horizontal, tr("Engine Settings"));// New
     ui->tableView_gif->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
     ui->tableView_gif->setModel(Table_model_gif);
     //=================================
-    Table_model_video->setColumnCount(4);
+    Table_model_video->setColumnCount(8); // Changed from 4 to 8
     Table_model_video->setHeaderData(0, Qt::Horizontal, tr("Video File Name"));
     Table_model_video->setHeaderData(1, Qt::Horizontal, tr("Status"));
     Table_model_video->setHeaderData(2, Qt::Horizontal, tr("Full Path"));
-    Table_model_video->setHeaderData(3, Qt::Horizontal, tr("Custom resolution(Width x Height)"));
+    Table_model_video->setHeaderData(3, Qt::Horizontal, tr("Resolution"));      // Changed from "Custom resolution(Width x Height)"
+    Table_model_video->setHeaderData(4, Qt::Horizontal, tr("FPS"));             // New
+    Table_model_video->setHeaderData(5, Qt::Horizontal, tr("Duration"));        // New
+    Table_model_video->setHeaderData(6, Qt::Horizontal, tr("Output Path"));     // New
+    Table_model_video->setHeaderData(7, Qt::Horizontal, tr("Engine Settings")); // New
     ui->tableView_video->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
     ui->tableView_video->setModel(Table_model_video);
     //Set horizontal header visible
@@ -84,7 +92,9 @@ int MainWindow::Table_FileCount_reload()
         //Show or hide each list based on its file count
         //===============================================
         int TableView_VisibleCount = 0;
-        // ui->label_DropFile->setVisible(0);//Hide drop file label
+        if (ui->label_DropFile) { // Check if the pointer is valid
+            ui->label_DropFile->setVisible(false); // Hide when there are files
+        }
         if(filecount_image>0)
         {
             ui->tableView_image->setVisible(1);
@@ -140,7 +150,9 @@ int MainWindow::Table_FileCount_reload()
         //====================
         //Hide file lists and clear selection
         //====================
-        // ui->label_DropFile->setVisible(1);
+        if (ui->label_DropFile) { // Check if the pointer is valid
+            ui->label_DropFile->setVisible(true); // Show when no files are present
+        }
         curRow_image = -1;
         ui->tableView_image->clearSelection();
         ui->tableView_image->setVisible(0);
