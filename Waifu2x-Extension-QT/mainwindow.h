@@ -488,7 +488,6 @@ public:
     int Waifu2x_Compatibility_Test();
     int Simple_Compatibility_Test();
     void waitForCompatibilityTest();
-    void Init_progressBar_CompatibilityTest();
     void Finish_progressBar_CompatibilityTest();
     bool isCompatible_RealCUGAN_NCNN_Vulkan=false;
     bool isCompatible_RealESRGAN_NCNN_Vulkan=false;
