@@ -152,9 +152,9 @@ These packages supply `qmake6`, `qsb`, and the Multimedia and Qt5Compat modules.
         ```
 
 2.  **Qt for MinGW**:
-    *   Install a MinGW-compatible version of Qt 5 (e.g., Qt 5.15.2). You can get this via the Qt Online Installer available from the [official Qt website](https://www.qt.io/download-qt-installer).
-    *   During the Qt installation, ensure you select a Qt version built for MinGW (e.g., `mingw81_64` for Qt 5.15.2 if you installed the `mingw-w64-x86_64` toolchain).
-    *   Ensure that the `bin` directory of your Qt installation (e.g., `C:\Qt\5.15.2\mingw81_64\bin`) and the MinGW compiler `bin` directory (e.g., `C:\msys64\mingw64\bin`) are added to your system's `PATH` environment variable, especially within the MSYS2 MinGW terminal environment.
+    *   Install a MinGW-compatible version of Qt 6 (e.g., Qt 6.5.2). You can get this via the Qt Online Installer available from the [official Qt website](https://www.qt.io/download-qt-installer).
+    *   During the Qt installation, ensure you select a Qt version built for MinGW (e.g., `mingw81_64` for Qt 6.5.2 if you installed the `mingw-w64-x86_64` toolchain).
+    *   Ensure that the `bin` directory of your Qt installation (e.g., `C:\Qt\6.5.2\mingw81_64\bin`) and the MinGW compiler `bin` directory (e.g., `C:\msys64\mingw64\bin`) are added to your system's `PATH` environment variable, especially within the MSYS2 MinGW terminal environment.
     *   Include the **qtshadertools** module so the Liquid Glass shader can be built.
     *   Install the `opengl`, `openglwidgets`, and `qt5compat` modules.
 
