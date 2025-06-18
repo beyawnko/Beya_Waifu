@@ -268,6 +268,8 @@ Beya_Waifu --max-threads 8
 The application ships with an experimental Liquid Glass shader that creates a refractive glass sphere from the scene
 behind it. Building this effect requires the `qsb` tool provided by Qt 6. The `Waifu2x-Extension-QT.pro` file runs `qsb`
 automatically and writes `shaders/liquidglass.frag.qsb`. Ensure the tool is available in `PATH` when invoking `qmake`.
+The shader now groups all uniforms in a `LiquidGlassParams` block bound to index **1**, so custom integrations must
+allocate a matching UBO before rendering.
 
 ### Demo
 

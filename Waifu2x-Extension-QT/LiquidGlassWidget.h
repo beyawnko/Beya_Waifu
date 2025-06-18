@@ -60,6 +60,7 @@ private:
     QOpenGLShaderProgram m_program;
     GLuint m_vao {0};
     GLuint m_vbo {0};
+    GLuint m_ubo {0};
     QOpenGLTexture *m_texture {nullptr};
     QImage m_background;
     float m_refractionScale {1.33f}; // Existing
