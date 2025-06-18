@@ -773,24 +773,28 @@ int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString Table_FileList_
 }
 void MainWindow::on_tableView_image_doubleClicked(const QModelIndex &index)
 {
+    Q_UNUSED(index);
     if(curRow_image==-1)return;
     QModelIndex a;
     on_tableView_image_pressed(a);
 }
 void MainWindow::on_tableView_gif_doubleClicked(const QModelIndex &index)
 {
+    Q_UNUSED(index);
     if(curRow_gif==-1)return;
     QModelIndex a;
     on_tableView_gif_pressed(a);
 }
 void MainWindow::on_tableView_video_doubleClicked(const QModelIndex &index)
 {
+    Q_UNUSED(index);
     if(curRow_video==-1)return;
     QModelIndex a;
     on_tableView_video_pressed(a);
 }
 void MainWindow::on_tableView_image_pressed(const QModelIndex &index)
 {
+    Q_UNUSED(index);
     curRow_image = ui->tableView_image->currentIndex().row();
     curRow_gif = -1;
     curRow_video = -1;
@@ -799,6 +803,7 @@ void MainWindow::on_tableView_image_pressed(const QModelIndex &index)
 }
 void MainWindow::on_tableView_gif_pressed(const QModelIndex &index)
 {
+    Q_UNUSED(index);
     curRow_gif = ui->tableView_gif->currentIndex().row();
     curRow_image = -1;
     curRow_video = -1;
@@ -807,6 +812,7 @@ void MainWindow::on_tableView_gif_pressed(const QModelIndex &index)
 }
 void MainWindow::on_tableView_video_pressed(const QModelIndex &index)
 {
+    Q_UNUSED(index);
     curRow_video = ui->tableView_video->currentIndex().row();
     curRow_image = -1;
     curRow_gif = -1;

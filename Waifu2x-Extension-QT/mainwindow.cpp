@@ -49,11 +49,12 @@ Copyright (C) 2025  beyawnko
 
 MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-    , currentProcess(nullptr) // Initialize here
-    , isProcessing(false)     // Initialize here
+    // , ui(new Ui::MainWindow) // Moved
+    , isProcessing(false)     // Matches declaration order
+    , currentProcess(nullptr) // Matches declaration order
     , Processing_Status(PROCESS_TYPE_NONE)    // Initialize here with enum
     , current_File_Row_Number(-1) // Initialize here
+    , ui(new Ui::MainWindow) // Initialize ui later
 {
     ui->setupUi(this);
     // Initialize RealCUGAN pointers to ensure safe use when the
@@ -1820,7 +1821,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardOutput()
     if (!currentProcess)
         return;
     QString output = QString::fromLocal8Bit(currentProcess->readAllStandardOutput());
-    QRegularExpression re(QStringLiteral("(\d+)%"));
+    QRegularExpression re(QStringLiteral("(\\d+)%")); // This line should already be correct from the previous subtask
     QRegularExpressionMatch m = re.match(output);
     if (m.hasMatch()) {
         int percent = m.captured(1).toInt();
@@ -1843,6 +1844,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError()
  */
 void MainWindow::Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error)
 {
+    Q_UNUSED(error); // Add this line
     m_ErrorProc++;
     ShellMessageBox(tr("RealCUGAN Error"), currentProcess ? currentProcess->errorString() : QString(),
                     QMessageBox::Critical);
@@ -2349,6 +2351,7 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(const QString &inputFile
                                                         bool experimental,
                                                         int rowNumForStatusUpdate) // Keep rowNumForStatusUpdate if used by status updates
 {
+    Q_UNUSED(rowNumForStatusUpdate); // Add this line
     // Ensure RealCUGAN settings are up-to-date for the current context
     // This call might be redundant if settings are guaranteed to be fresh before starting iterative processing.
     // However, it's safer to ensure they reflect the latest UI/state if this function can be called
@@ -2412,4 +2415,58 @@ bool MainWindow::Realcugan_ProcessSingleFileIteratively(const QString &inputFile
         qWarning() << "RealCUGAN failed for" << inputFile;
     }
     return ok;
+}
+
+void MainWindow::Play_NFSound()
+{
+    qDebug() << "STUB: MainWindow::Play_NFSound() called.";
+    // TODO: Implement actual sound playback logic here
+    // Example using QMediaPlayer (ensure QMediaPlayer is included and a member `m_player` exists and is initialized):
+    // if (Settings_Read_value("/settings/EnableSoundNotification", true).toBool()) {
+    //     if (!m_player) {
+    //         m_player = new QMediaPlayer(this);
+    //     }
+    //     m_player->setSource(QUrl("qrc:/sounds/NFSound_Waifu2xEX.mp3")); // Ensure this path is correct in your .qrc
+    //     m_player->play();
+    // }
+}
+
+QString MainWindow::Seconds2hms(long unsigned int seconds)
+{
+    long unsigned int h = seconds / 3600;
+    long unsigned int m = (seconds % 3600) / 60;
+    long unsigned int s = seconds % 60;
+    return QString("%1:%2:%3")
+        .arg(h, 2, 10, QChar('0'))
+        .arg(m, 2, 10, QChar('0'))
+        .arg(s, 2, 10, QChar('0'));
+}
+
+void MainWindow::Finish_progressBar_CompatibilityTest()
+{
+    qDebug() << "STUB: MainWindow::Finish_progressBar_CompatibilityTest() called.";
+    if (ui->progressBar_CompatibilityTest) { // Check if UI element exists
+        ui->progressBar_CompatibilityTest->setValue(ui->progressBar_CompatibilityTest->maximum());
+        ui->progressBar_CompatibilityTest->setFormat(tr("Compatibility Test Finished"));
+    }
+    // Potentially enable the test button again
+    // if (ui->pushButton_compatibilityTest) {
+    //     ui->pushButton_compatibilityTest->setEnabled(true);
+    //     ui->pushButton_compatibilityTest->setText(tr("Compatibility Test"));
+    // }
+}
+
+void MainWindow::TurnOffScreen()
+{
+    qDebug() << "STUB: MainWindow::TurnOffScreen() called.";
+#ifdef Q_OS_WIN
+    // Simulate turning off the screen by sending SC_MONITORPOWER command
+    // HWND_BROADCAST can be problematic. Prefer getting the top-level window handle.
+    // SendMessage(GetConsoleWindow(), WM_SYSCOMMAND, SC_MONITORPOWER, (LPARAM)2); // 2 = off, 1 = low power, -1 = on
+    // For a GUI app, you might need to find the main window's handle or use a different approach.
+    // This is a placeholder, proper implementation for screen off is platform-specific and complex.
+    qDebug() << "Screen off functionality is platform-specific and not fully implemented in this stub.";
+#else
+    qDebug() << "Screen off functionality not implemented for this OS in this stub.";
+#endif
 }

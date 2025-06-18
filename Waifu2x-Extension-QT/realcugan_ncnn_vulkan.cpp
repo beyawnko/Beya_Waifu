@@ -48,8 +48,9 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int file_list_row_number, bool isBa
                                          QString("1:1:1")).toString();
     QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapImage",
                                           QString("3")).toString();
-    bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog",
-                                         QVariant(false)).toBool();
+    // bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog",
+    //                                      QVariant(false)).toBool();
+    bool verboseLog = false; // Defaulting to false, or read from settings if still needed by prepareArguments
 
     bool isMultiGpu = ui->checkBox_MultiGPU_RealCUGAN ? ui->checkBox_MultiGPU_RealCUGAN->isChecked() : false;
     QString multiGpuJobArgsString;
@@ -165,8 +166,9 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
                                          QString("1:2:2")).toString();
     QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapVideo",
                                           QString("3")).toString();
-    bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog",
-                                         QVariant(false)).toBool();
+    // bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog",
+    //                                      QVariant(false)).toBool();
+    bool verboseLog = false; // Defaulting to false, or read from settings if still needed by prepareArguments
 
     bool isMultiGpu = ui->checkBox_MultiGPU_RealCUGAN ? ui->checkBox_MultiGPU_RealCUGAN->isChecked() : false;
     QString multiGpuJobArgsString;
@@ -364,8 +366,9 @@ void MainWindow::Realcugan_NCNN_Vulkan_GIF(int file_list_row_number)
                                          QString("1:2:2")).toString();
     QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapGif",
                                           QString("3")).toString();
-    bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog",
-                                         QVariant(false)).toBool();
+    // bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog",
+    //                                      QVariant(false)).toBool();
+    bool verboseLog = false; // Defaulting to false, or read from settings if still needed by prepareArguments
 
     bool isMultiGpu = ui->checkBox_MultiGPU_RealCUGAN ? ui->checkBox_MultiGPU_RealCUGAN->isChecked() : false;
     QString multiGpuJobArgsString;

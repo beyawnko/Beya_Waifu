@@ -132,25 +132,13 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
     int engineIndex = ui->comboBox_Engine_GIF->currentIndex();
     switch(engineIndex)
     {
-        case 4:
-            isSuccessfullyScaled = APNG_RealESRGANNCNNVulkan(
-                splitFramesFolder,
-                scaledFramesFolder,
-                sourceFileFullPath,
-                framesFileName_qStrList,
-                resultFileFullPath);
-            break;
-        case 5:
-            isSuccessfullyScaled = APNG_RealcuganNCNNVulkan(
-                splitFramesFolder,
-                scaledFramesFolder,
-                sourceFileFullPath,
-                framesFileName_qStrList,
-                resultFileFullPath);
-            break;
+        // case 4: and case 5: are removed
         default:
             emit Send_TextBrowser_NewMessage(
                 tr("Selected GIF engine is not supported for APNG."));
+            // It's important to set isSuccessfullyScaled to false or handle appropriately
+            // if no other APNG processing methods are available for other engines.
+            // For now, the existing logic outside the switch handles `isSuccessfullyScaled == false`.
             break;
     }
 
