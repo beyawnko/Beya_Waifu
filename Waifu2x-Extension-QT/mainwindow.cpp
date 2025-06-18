@@ -66,6 +66,11 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
 {
     ui->setupUi(this);
 
+    connect(this,
+            &MainWindow::Send_Add_progressBar_CompatibilityTest,
+            this,
+            &MainWindow::Add_progressBar_CompatibilityTest);
+
     /*
      * Disabled block that previously re-parented the first image tab's table and
      * inserted a new layout with a title label. The application no longer
