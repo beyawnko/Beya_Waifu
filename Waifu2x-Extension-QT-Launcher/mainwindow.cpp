@@ -44,6 +44,7 @@ void MainWindow::RUN_Concurrent()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    Q_UNUSED(event);
     this->hide();
     qApp->setQuitOnLastWindowClosed(true);// do not keep running when no window exists
     qApp->closeAllWindows();

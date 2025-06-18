@@ -166,9 +166,10 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
                                          QString("1:2:2")).toString();
     QString syncGapStr = Settings_Read_value("/settings/RealCUGANSyncGapVideo",
                                           QString("3")).toString();
+    // verboseLog is handled by Realcugan_ProcessSingleFileIteratively itself by reading settings.
     // bool verboseLog = Settings_Read_value("/settings/RealCUGANVerboseLog",
     //                                      QVariant(false)).toBool();
-    bool verboseLog = false; // Defaulting to false, or read from settings if still needed by prepareArguments
+    // bool verboseLog = false; // Defaulting to false, or read from settings if still needed by prepareArguments
 
     bool isMultiGpu = ui->checkBox_MultiGPU_RealCUGAN ? ui->checkBox_MultiGPU_RealCUGAN->isChecked() : false;
     QString multiGpuJobArgsString;

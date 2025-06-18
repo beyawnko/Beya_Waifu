@@ -84,6 +84,7 @@ static const char *vertexSrc = R"(
 void LiquidGlassWidget::initializeGL()
 {
     initializeOpenGLFunctions();
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Ensure background is black
 
     QFile fragFile(":/shaders/liquidglass.frag");
     fragFile.open(QIODevice::ReadOnly | QIODevice::Text);
