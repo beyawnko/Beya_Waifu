@@ -688,6 +688,7 @@ public:
     QPushButton *pushButton_ClearGPU_MultiGPU_RealCUGAN;
     QPushButton *pushButton_TileSize_Add_RealCUGAN;
     QPushButton *pushButton_TileSize_Minus_RealCUGAN;
+    QWidget *widget_RealCUGAN_Hidden;
 
     // RealESRGAN UI Pointers
     QComboBox *comboBox_Model_RealsrNCNNVulkan; // Name implies RealESRGAN

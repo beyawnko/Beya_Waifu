@@ -88,6 +88,7 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     pushButton_ClearGPU_MultiGPU_RealCUGAN = nullptr;
     pushButton_TileSize_Add_RealCUGAN = nullptr;
     pushButton_TileSize_Minus_RealCUGAN = nullptr;
+    widget_RealCUGAN_Hidden = nullptr;
 
     if (ui->comboBox_Model_VFI)
         comboBox_Model_RealCUGAN = ui->comboBox_Model_VFI;
@@ -97,6 +98,8 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
         pushButton_DetectGPU_RealCUGAN = ui->pushButton_DetectGPU_VFI;
     if (ui->checkBox_MultiGPU_VFI)
         checkBox_MultiGPU_RealCUGAN = ui->checkBox_MultiGPU_VFI;
+    if (ui->widget_RealCUGAN_Hidden)
+        widget_RealCUGAN_Hidden = ui->widget_RealCUGAN_Hidden;
     // Current_Path is already initialized using qApp->applicationDirPath() in mainwindow.h or before constructor
     TempDir_Path = Current_Path + "/temp"; // Initialize here
     FFMPEG_EXE_PATH_Waifu2xEX = Current_Path + "/ffmpeg/ffmpeg.exe";
@@ -1358,6 +1361,9 @@ int MainWindow::Waifu2x_Compatibility_Test_finished()
     ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW->setChecked(isCompatible_Waifu2x_NCNN_Vulkan_NEW);
     ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P->setChecked(isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P);
     // ... and so on for all other compatibility flags and their checkboxes
+
+    if (widget_RealCUGAN_Hidden)
+        widget_RealCUGAN_Hidden->setVisible(isCompatible_RealCUGAN_NCNN_Vulkan);
 
     TextBrowser_NewMessage(tr("Compatibility test finished. Check results in settings."));
     return 0;

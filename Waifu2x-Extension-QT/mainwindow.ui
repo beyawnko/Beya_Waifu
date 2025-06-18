@@ -11164,9 +11164,6 @@ padding:10px;
     </item>
     <item row="1" column="0">
      <widget class="QWidget" name="widget_RealCUGAN_Hidden">
-      <property name="visible">
-       <bool>false</bool>
-      </property>
       <layout class="QGridLayout" name="gridLayout_hidden_RealCUGAN">
        <item row="0" column="0">
         <widget class="QComboBox" name="comboBox_Model_RealCUGAN"/>
