@@ -7,7 +7,8 @@
 
 ncnn implementation of Real-CUGAN converter. Runs fast on Intel / AMD / Nvidia / Apple-Silicon with Vulkan API.
 
-realcugan-ncnn-vulkan uses [ncnn project](https://github.com/Tencent/ncnn) as the universal neural network inference framework.
+realcugan-ncnn-vulkan uses [ncnn project](https://github.com/Tencent/ncnn) as the universal neural network inference
+framework.
 
 ## [Download](https://github.com/nihui/realcugan-ncnn-vulkan/releases)
 
@@ -15,7 +16,8 @@ Download Windows/Linux/MacOS Executable for Intel/AMD/Nvidia/Apple-Silicon GPU
 
 **https://github.com/nihui/realcugan-ncnn-vulkan/releases**
 
-This package includes all the binaries and models required. It is portable, so no CUDA or PyTorch runtime environment is needed :)
+This package includes all the binaries and models required. It is portable, so no CUDA or PyTorch runtime environment is
+needed :)
 
 ## About Real-CUGAN
 
@@ -56,8 +58,12 @@ Usage: realcugan-ncnn-vulkan -i infile -o outfile [options]...
 - `scale` = scale level, 1 = no scaling, 2 = upscale 2x
 - `tile-size` = tile size, use smaller value to reduce GPU memory usage, default selects automatically
 - `syncgap-mode` = sync gap mode, 0 = no sync, 1 = accurate sync, 2 = rough sync, 3 = very rough sync
-- `load:proc:save` = thread count for the three stages (image decoding + realcugan upscaling + image encoding), using larger values may increase GPU usage and consume more GPU memory. You can tune this configuration with "4:4:4" for many small-size images, and "2:2:2" for large-size images. The default setting usually works fine for most situations. If you find that your GPU is hungry, try increasing thread count to achieve faster processing.
-- `format` = the format of the image to be output, png is better supported, however webp generally yields smaller file sizes, both are losslessly encoded
+- `load:proc:save` = thread count for the three stages (image decoding + realcugan upscaling + image encoding), using
+  larger values may increase GPU usage and consume more GPU memory. You can tune this configuration with "4:4:4" for
+  many small-size images, and "2:2:2" for large-size images. The default setting usually works fine for most situations.
+  If you find that your GPU is hungry, try increasing thread count to achieve faster processing.
+- `format` = the format of the image to be output, png is better supported, however webp generally yields smaller file
+  sizes, both are losslessly encoded
 
 If you encounter a crash or error, try upgrading your GPU driver:
 
@@ -68,13 +74,17 @@ If you encounter a crash or error, try upgrading your GPU driver:
 ## Build from Source
 
 1. Download and setup the Vulkan SDK from https://vulkan.lunarg.com/
-  - For Linux distributions, you can either get the essential build requirements from package manager
+
+- For Linux distributions, you can either get the essential build requirements from package manager
+
 ```shell
 dnf install vulkan-headers vulkan-loader-devel
 ```
+
 ```shell
 apt-get install libvulkan-dev
 ```
+
 ```shell
 pacman -S vulkan-headers vulkan-icd-loader
 ```
@@ -88,7 +98,8 @@ git submodule update --init --recursive
 ```
 
 3. Build with CMake
-  - You can pass -DUSE_STATIC_MOLTENVK=ON option to avoid linking the vulkan loader library on MacOS
+
+- You can pass -DUSE_STATIC_MOLTENVK=ON option to avoid linking the vulkan loader library on MacOS
 
 ```shell
 mkdir build
