@@ -41,6 +41,7 @@ Copyright (C) 2025  beyawnko
 #include <QImageReader>
 #include <QMovie>
 #include <QMediaPlayer>
+#include <QMediaMetaData>
 #include <QEventLoop> // Required for waiting on QMediaPlayer signals
 #include <QDesktopServices> // For opening URLs
 #include <QStandardItem> // For table view item manipulation
@@ -2286,7 +2287,7 @@ FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
             }
         });
 
-        connect(&player, QOverload<QMediaPlayer::Error, const QString &>::of(&QMediaPlayer::error),
+        connect(&player, &QMediaPlayer::errorOccurred,
             [&](QMediaPlayer::Error error, const QString &errorString) {
             qWarning() << "getOrFetchMetadata: QMediaPlayer error for" << filePath << "Error:" << error << errorString;
             metadataSuccessfullyLoaded = true; // Ensure loop quits on error
