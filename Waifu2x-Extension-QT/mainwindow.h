@@ -170,7 +170,7 @@ public:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
     void resizeEvent(QResizeEvent *event) override;
-    void Read_urls(QList<QUrl> urls);
+    void Read_urls(QList<QUrl> urls, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
     void Read_Input_paths_BrowserFile(QStringList Input_path_List);
     bool AddNew_gif=false;
     bool AddNew_image=false;
@@ -221,9 +221,14 @@ public:
     int Table_Save_Current_Table_Filelist(QString Table_FileList_ini);
     int Table_Read_Saved_Table_Filelist(QString Table_FileList_ini);
     int Table_Save_Current_Table_Filelist_Watchdog(QString Table_FileList_ini);
-    bool Table_insert_finished=false;
-    QMutex mutex_Table_insert_finished;
-    QMutex mutex_Table_insert;
+    // bool Table_insert_finished=false; // Removed for new batch update mechanism
+    // QMutex mutex_Table_insert_finished; // Removed
+    // QMutex mutex_Table_insert; // Removed
+
+    // Getter methods for current file paths for deduplication in worker thread
+    QStringList getImageFullPaths() const; // Retain for images as table_image_item_fullpath is maintained
+    // QStringList getGifFullPaths() const; // Removed, list will be generated on demand in main thread
+    // QStringList getVideoFullPaths() const; // Removed, list will be generated on demand in main thread
 
     //================================= Main Processing Logic (Waifu2x & Others) ====================================
     void ShowFileProcessSummary();
@@ -730,8 +735,10 @@ public slots: // Changed from 'slots:' for clarity, Qt treats them as public slo
     void SystemTray_NewMessage(QString message);
     void EnableBackgroundMode_SystemTray();
     void on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason);
-    void progressbar_setRange_min_max(int min, int max);
-    void progressbar_Add();
+    // void progressbar_setRange_min_max(int min, int max); // Old slot
+    // void progressbar_Add(); // Old slot
+    void progressbar_setRange_min_max_slots(int min, int max_val); // New slot
+    void progressbar_Add_slots(); // New slot
     void Table_image_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status);
     void Table_gif_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status);
     void Table_video_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status);
@@ -938,9 +945,11 @@ signals:
     void Send_Unable2Connect_RawGithubusercontentCom();
     void Send_SetEnable_pushButton_ForceRetry_self();
     void Send_SystemTray_NewMessage(QString message);
-    void Send_PrograssBar_Range_min_max(int, int);
-    void Send_progressbar_Add();
-    void Send_Table_image_ChangeStatus_rowNumInt_statusQString(int, QString);
+    // void Send_PrograssBar_Range_min_max(int, int); // Old signal
+    // void Send_progressbar_Add(); // Old signal
+    void Send_PrograssBar_Range_min_max_slots(int min, int max_val); // New signal
+    void Send_progressbar_Add_slots(); // New signal
+    void Send_Table_image_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status);
     void Send_Table_gif_ChangeStatus_rowNumInt_statusQString(int, QString);
     void Send_Table_video_ChangeStatus_rowNumInt_statusQString(int, QString);
     void Send_Waifu2x_Finished();
@@ -957,6 +966,12 @@ signals:
     void Send_Table_image_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
     void Send_Table_gif_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
     void Send_Table_video_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
+
+    void Send_Batch_Table_Update(const QList<QPair<QString, QString>>& imageFiles,
+                                 const QList<QPair<QString, QString>>& gifFiles,
+                                 const QList<QPair<QString, QString>>& videoFiles,
+                                 bool addNewImage, bool addNewGif, bool addNewVideo);
+
     void Send_Table_image_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width);
     void Send_Table_gif_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width);
     void Send_Table_video_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width);

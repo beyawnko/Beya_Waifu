@@ -590,9 +590,10 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
     int rowCount_gif = configIniRead->value("/table_gif/rowCount").toInt();
     int rowCount_video = configIniRead->value("/table_video/rowCount").toInt();
     //==========
-    Progressbar_MaxVal = rowCount_image + rowCount_gif + rowCount_video;
-    Progressbar_CurrentVal = 0;
-    emit Send_PrograssBar_Range_min_max(0, Progressbar_MaxVal);
+    // Progressbar_MaxVal and Progressbar_CurrentVal are member variables that are being removed.
+    // We'll use a local variable for the total count in this function.
+    int totalFilesToLoad = rowCount_image + rowCount_gif + rowCount_video;
+    emit Send_PrograssBar_Range_min_max_slots(0, totalFilesToLoad); // Use new signal
     //========= Load image ========
     for(int i=0; i<rowCount_image; i++)
     {
@@ -627,7 +628,7 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
             res_map["width"] = CustRes_width;
             Custom_resolution_list.append(res_map);
         }
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots(); // Use new signal
         //Delay_msec_sleep(100);
     }
     //========= Load gif ========
@@ -664,7 +665,7 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
             res_map["width"] = CustRes_width;
             Custom_resolution_list.append(res_map);
         }
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots(); // Use new signal (corrected: only one call)
         //Delay_msec_sleep(100);
     }
     //========= Load video ========
@@ -760,9 +761,12 @@ int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString Table_FileList_
     //============
     emit Send_TextBrowser_NewMessage(tr("File list update is complete!"));
     //====
-    progressbar_SetToMax(Progressbar_MaxVal);
-    Progressbar_MaxVal = 0;
-    Progressbar_CurrentVal = 0;
+    // progressbar_SetToMax(Progressbar_MaxVal); // This was using the member variable.
+                                             // The new slots directly update m_TotalNumProc and m_FinishedProc.
+                                             // The last Send_progressbar_Add_slots() call will bring it to 100%
+                                             // if all files were processed.
+    // Progressbar_MaxVal = 0; // Local variable totalFilesToLoad replaces this for the scope of Table_Read_Saved_Table_Filelist
+    // Progressbar_CurrentVal = 0;
     //====
     if(rowCount_image<=0&&rowCount_video<=0&&rowCount_gif<=0)
     {

@@ -71,6 +71,9 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
             &MainWindow::Send_Add_progressBar_CompatibilityTest,
             this,
             &MainWindow::Add_progressBar_CompatibilityTest);
+    connect(this, &MainWindow::Send_PrograssBar_Range_min_max_slots, this, &MainWindow::progressbar_setRange_min_max_slots);
+    connect(this, &MainWindow::Send_progressbar_Add_slots, this, &MainWindow::progressbar_Add_slots);
+    connect(this, &MainWindow::Send_Batch_Table_Update, this, &MainWindow::Batch_Table_Update_slots);
 
     /*
      * Disabled block that previously re-parented the first image tab's table and
@@ -219,8 +222,37 @@ bool MainWindow::runProcess(QProcess *process, const QString &cmd,
                      &loop,
                      &QEventLoop::quit);
     QObject::connect(process, &QProcess::errorOccurred, &loop, &QEventLoop::quit);
+
+    const int timeoutDuration = 600000; // 10 minutes in milliseconds
+    bool timedOut = false;
+    QTimer timer;
+    timer.setSingleShot(true);
+
+    QObject::connect(&timer, &QTimer::timeout, [&]() {
+        timedOut = true;
+        qWarning() << "Process execution timed out for command (in MainWindow::runProcess):" << cmd;
+        if (process->state() == QProcess::Running) {
+            process->kill(); // Forcefully kill the process
+        }
+        loop.quit(); // Ensure the event loop is quit
+    });
+
     process->start(cmd);
+
+    if (!process->waitForStarted(5000)) { // 5-second timeout for process startup
+        qWarning() << "Process failed to start or started too slow for command (in MainWindow::runProcess):" << cmd << "Error:" << process->errorString();
+        timer.stop();
+        return false;
+    }
+
+    timer.start(timeoutDuration);
     loop.exec();
+    timer.stop(); // Stop the timer: either loop finished normally or timer triggered loop.quit()
+
+    if (timedOut) {
+        return false;
+    }
+
     return process->exitStatus() == QProcess::NormalExit && process->exitCode() == 0;
 }
 
@@ -602,7 +634,7 @@ void MainWindow::Table_image_insert_fileName_fullPath(QString fileName, QString 
         // These lists might be redundant if the model is the source of truth, but kept for compatibility if used elsewhere
         table_image_item_fullpath.append(SourceFile_fullPath);
         table_image_item_fileName.append(fileName);
-        Table_FileCount_reload(); // Update file counts displayed in UI
+        // Table_FileCount_reload(); // Moved to Batch_Table_Update_slots
     }
 }
 
@@ -641,7 +673,7 @@ void MainWindow::Table_gif_insert_fileName_fullPath(QString fileName, QString So
         Table_model_gif->appendRow(rowItems);
         table_gif_item_fileName.append(fileName);
         // table_gif_item_fullpath.append(SourceFile_fullPath); // if this list exists
-        Table_FileCount_reload();
+        // Table_FileCount_reload(); // Moved to Batch_Table_Update_slots
     }
 }
 
@@ -690,9 +722,88 @@ void MainWindow::Table_video_insert_fileName_fullPath(QString fileName, QString 
         Table_model_video->appendRow(rowItems);
         table_video_item_fileName.append(fileName);
         // table_video_item_fullpath.append(SourceFile_fullPath); // if this list exists
-        Table_FileCount_reload();
+        // Table_FileCount_reload(); // Moved to Batch_Table_Update_slots
     }
 }
+
+// Getter implementations for full path lists
+QStringList MainWindow::getImageFullPaths() const {
+    return table_image_item_fullpath;
+}
+
+// getGifFullPaths() and getVideoFullPaths() were removed from .h and their direct model access
+// would be unsafe if called from worker. Data is now prepared in main thread before calling Read_urls.
+
+void MainWindow::Batch_Table_Update_slots(const QList<QPair<QString, QString>>& imageFiles,
+                                          const QList<QPair<QString, QString>>& gifFiles,
+                                          const QList<QPair<QString, QString>>& videoFiles,
+                                          bool addNewImage, bool addNewGif, bool addNewVideo)
+{
+    ui_tableViews_setUpdatesEnabled(false);
+
+    for (const auto& pair : imageFiles) {
+        Table_image_insert_fileName_fullPath(pair.first, pair.second);
+    }
+    for (const auto& pair : gifFiles) {
+        Table_gif_insert_fileName_fullPath(pair.first, pair.second);
+    }
+    for (const auto& pair : videoFiles) {
+        Table_video_insert_fileName_fullPath(pair.first, pair.second);
+    }
+
+    ui_tableViews_setUpdatesEnabled(true);
+
+    // Logic from original Read_urls_finfished()
+    ui->groupBox_Setting->setEnabled(1);
+    ui->groupBox_FileList->setEnabled(1);
+    pushButton_Start_setEnabled_self(1);
+    ui->groupBox_InputExt->setEnabled(1);
+    ui->checkBox_ScanSubFolders->setEnabled(1);
+    this->setAcceptDrops(1);
+    emit Send_TextBrowser_NewMessage(tr("Add file complete."));
+
+    // Reset progress bar (which was used for scanning/collecting files)
+    // The new slots for file loading already handle m_TotalNumProc, m_FinishedProc for the progress bar.
+    // So, this effectively finalizes that progress.
+    if (ui->progressBar) {
+         // Set to 100% of files scanned, then clear or set to "Waiting..."
+        if (m_TotalNumProc > 0) { // m_TotalNumProc was set by Send_PrograssBar_Range_min_max_slots
+             ui->progressBar->setValue(m_TotalNumProc); // Mark as 100% for the "loading files" phase
+        } else {
+             ui->progressBar->setValue(0);
+        }
+        // Consider resetting format here if another operation isn't immediately starting
+        // ui->progressBar->setFormat(tr("Waiting for tasks...")); // Or this might be too soon if processing starts next
+    }
+
+
+    if (!addNewImage && !addNewGif && !addNewVideo) {
+        QMessageBox::warning(this, tr("Warning"), tr("The file format is not supported, please enter supported file format, or add more file extensions yourself."));
+    } else {
+        if (addNewImage) {
+            ui->tableView_image->setVisible(1);
+        }
+        if (addNewGif) {
+            ui->tableView_gif->setVisible(1);
+        }
+        if (addNewVideo) {
+            ui->tableView_video->setVisible(1);
+        }
+    }
+
+    ui->tableView_gif->scrollToBottom();
+    ui->tableView_image->scrollToBottom();
+    ui->tableView_video->scrollToBottom();
+    QScrollBar *image_ScrBar = ui->tableView_image->horizontalScrollBar();
+    if(image_ScrBar) image_ScrBar->setValue(0);
+    QScrollBar *gif_ScrBar = ui->tableView_gif->horizontalScrollBar();
+    if(gif_ScrBar) gif_ScrBar->setValue(0);
+    QScrollBar *video_ScrBar = ui->tableView_video->horizontalScrollBar();
+    if(video_ScrBar) video_ScrBar->setValue(0);
+
+    Table_FileCount_reload(); // Centralized update of file counts
+}
+
 
 // Stubs for remaining undefined references from linker errors
 void MainWindow::on_pushButton_CustRes_apply_clicked()
@@ -1316,7 +1427,13 @@ void MainWindow::Waifu2x_Finished()
     TaskNumTotal = 0;
     ETA = 0;
     // TimeCost = 0; // Might want to keep total time cost until cleared
-    if (ui->progressBar) ui->progressBar->setFormat(tr("Waiting for tasks..."));
+    m_TotalNumProc = 0; // Reset counters for the primary mechanism
+    m_FinishedProc = 0;
+    m_ErrorProc = 0;
+    if (ui->progressBar) {
+        ui->progressBar->setValue(0); // Ensure value is also reset
+        ui->progressBar->setFormat(tr("Waiting for tasks..."));
+    }
     if (ui->label_progressBar_filenum) ui->label_progressBar_filenum->setText("0/0");
     if (ui->label_ETA) ui->label_ETA->setText(tr("ETA:N/A"));
     if (ui->label_TimeCost) ui->label_TimeCost->setText(tr("Time taken:N/A"));
@@ -1332,7 +1449,10 @@ void MainWindow::Waifu2x_Finished_manual()
     TextBrowser_NewMessage(tr("Processing manually stopped."));
     ui->progressBar->setValue(0);
     ui->progressBar_CurrentFile->setValue(0);
-    if (ui->progressBar) ui->progressBar->setFormat(tr("Stopped."));
+    if (ui->progressBar) {
+        ui->progressBar->setValue(0); // Ensure value is also reset
+        ui->progressBar->setFormat(tr("Stopped."));
+    }
 }
 
 void MainWindow::TimeSlot()
@@ -1352,9 +1472,10 @@ void MainWindow::TimeSlot()
         } else {
             ui->label_ETA->setText(tr("Calculating..."));
         }
-        if(TaskNumTotal > 0) {
-             ui->progressBar->setValue((int)((double)TaskNumFinished / TaskNumTotal * 100));
-        }
+        // Overall progress bar is now updated by UpdateProgressBar() based on m_FinishedProc/m_ErrorProc
+        // if(TaskNumTotal > 0) {
+        //      ui->progressBar->setValue((int)((double)TaskNumFinished / TaskNumTotal * 100));
+        // }
     }
 }
 
@@ -1585,7 +1706,31 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
     ui->checkBox_ScanSubFolders->setEnabled(0);
     emit Send_TextBrowser_NewMessage(tr("Adding files, please wait."));
 
-    (void)QtConcurrent::run([this, urls]() { this->Read_urls(urls); });
+    // Prepare lists of existing paths in the main thread
+    QStringList existingImagePaths_copy = getImageFullPaths();
+    QStringList existingGifPaths_copy;
+    if (Table_model_gif) {
+        for (int i = 0; i < Table_model_gif->rowCount(); ++i) {
+            if(Table_model_gif->item(i, 1)) // Ensure item exists
+                existingGifPaths_copy.append(Table_model_gif->item(i, 1)->text());
+        }
+    }
+    QStringList existingVideoPaths_copy;
+    if (Table_model_video) {
+        for (int i = 0; i < Table_model_video->rowCount(); ++i) {
+             if(Table_model_video->item(i, 1)) // Ensure item exists
+                existingVideoPaths_copy.append(Table_model_video->item(i, 1)->text());
+        }
+    }
+
+    // Convert to QSet for efficient lookup in worker thread (capture by copy)
+    QSet<QString> existingImagePaths_set = QSet<QString>::fromList(existingImagePaths_copy);
+    QSet<QString> existingGifPaths_set = QSet<QString>::fromList(existingGifPaths_copy);
+    QSet<QString> existingVideoPaths_set = QSet<QString>::fromList(existingVideoPaths_copy);
+
+    (void)QtConcurrent::run([this, urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set]() {
+        this->Read_urls(urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+    });
 }
 /**
  * @brief Open the project's online wiki.
@@ -2210,21 +2355,67 @@ void MainWindow::UpdateNumberOfActiveThreads()
 
 void MainWindow::UpdateProgressBar()
 {
-    if (m_TotalNumProc > 0) {
-        int processedCount = m_FinishedProc + m_ErrorProc;
-        int percentage = (int)(((double)processedCount / m_TotalNumProc) * 100.0);
-        if (ui->progressBar) { // Check if the UI element exists
-            ui->progressBar->setValue(percentage);
-            ui->progressBar->setFormat(tr("Overall Progress: %p% (%1/%2)")
-                                     .arg(processedCount)
-                                     .arg(m_TotalNumProc));
-        }
-    } else {
-        if (ui->progressBar) {
-            ui->progressBar->setValue(0);
-            ui->progressBar->setFormat(tr("Waiting for tasks..."));
-        }
+    if (!ui->progressBar) return;
+
+    long unsigned int currentBatchTotal = m_TotalNumProc; // Start with m_TotalNumProc
+    QString currentFormatString = ui->progressBar->format();
+    bool isLoadingFiles = currentFormatString.contains(tr("Loading files"));
+
+    // If not in "Loading files" phase (i.e., should be processing) AND m_TotalNumProc is 0 (not set by on_pushButton_Start_clicked yet, or empty list)
+    // AND TaskNumTotal (from Waifu2xMainThread) IS set, then use TaskNumTotal.
+    // This makes TaskNumTotal the effective total for batch processing if m_TotalNumProc wasn't set correctly for it.
+    if (!isLoadingFiles && m_TotalNumProc == 0 && TaskNumTotal > 0) {
+        currentBatchTotal = TaskNumTotal;
     }
+    // If we are in "Loading files" phase, m_TotalNumProc (set by progressbar_setRange_min_max_slots) is authoritative.
+    // If we are in "Overall Progress" phase, m_TotalNumProc (ideally set by on_pushButton_Start_clicked) is authoritative.
+    // The above condition is a fallback.
+
+    if (currentBatchTotal > 0) {
+        int processedCount = m_FinishedProc + m_ErrorProc; // m_FinishedProc is incremented by file loading and file processing
+        int percentage = static_cast<int>((static_cast<double>(processedCount) / currentBatchTotal) * 100.0);
+
+        ui->progressBar->setValue(percentage);
+
+        // Set the correct format string with updated numbers
+        if (isLoadingFiles) {
+             ui->progressBar->setFormat(tr("Loading files: %p% (%1/%2)").arg(m_FinishedProc).arg(currentBatchTotal));
+        } else {
+             ui->progressBar->setFormat(tr("Overall Progress: %p% (%1/%2)").arg(processedCount).arg(currentBatchTotal));
+        }
+
+    } else {
+        ui->progressBar->setValue(0);
+        ui->progressBar->setFormat(tr("Waiting for tasks..."));
+    }
+}
+
+void MainWindow::progressbar_setRange_min_max_slots(int min, int max_val)
+{
+    Q_UNUSED(min); // min is typically 0 for progress
+    if (ui->progressBar) {
+        ui->progressBar->setFormat(tr("Loading files: %p% (%1/%2)").arg(0).arg(max_val)); // Set format for file loading, show 0/max initially
+    }
+    m_TotalNumProc = max_val;
+    m_FinishedProc = 0; // Reset finished count for loading
+    m_ErrorProc = 0;    // Reset error count for loading
+
+    if (ui->progressBar) {
+        ui->progressBar->setValue(0); // Explicitly set value to 0 after setting range and format
+    }
+    // UpdateProgressBar(); // Not strictly needed here if setValue(0) is done and format shows initial numbers.
+                         // Or call it to be consistent, ensuring it respects the "Loading files" format.
+}
+
+void MainWindow::progressbar_Add_slots()
+{
+    // This slot is called for each file successfully identified/prepared during loading
+    if (m_FinishedProc < m_TotalNumProc) { // Only increment if it makes sense
+        m_FinishedProc++;
+    }
+    // The format string is already set by progressbar_setRange_min_max_slots.
+    // UpdateProgressBar will fill in the %1 and %2.
+    UpdateProgressBar();
 }
 
 // Definitions for functions declared in mainwindow.h, previously causing linker errors
