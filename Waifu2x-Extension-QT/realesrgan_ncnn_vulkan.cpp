@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QDebug>
+#include <QSettings>
 
 QStringList MainWindow::RealESRGAN_NCNN_Vulkan_PrepareArguments(
     const QString& input_path,
@@ -99,13 +100,20 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int file_list_row_number, bool isB
     QString original_fileName = table_image_item_fileName.at(file_list_row_number);
     QString output_path = Generate_Output_Path(original_fileName, "RealESRGAN-NCNN-Vulkan");
 
-    int scale = ui->doubleSpinBox_ScaleRatio_image->value(); // Placeholder for actual UI element
-    QString model_name = ui->comboBox_Model_RealsrNCNNVulkan->currentText(); // Placeholder
-    int gpu_id = ui->comboBox_GPUID_RealsrNCNNVulkan->currentText().toInt(); // Placeholder
-    QString format = ui->comboBox_ImageSaveFormat->currentText(); // Placeholder
-    bool tta_mode = ui->checkBox_TTA_RealsrNCNNVulkan->isChecked(); // Placeholder
-    bool verbose_log = true; // Or from a setting
-    QString tile_size_str = ui->spinBox_TileSize_RealsrNCNNVulkan->text(); // Placeholder
+    int scale = ui->doubleSpinBox_ScaleRatio_image
+            ? static_cast<int>(ui->doubleSpinBox_ScaleRatio_image->value())
+            : Settings_Read_value("/settings/ImageScaleRatio", 1).toInt();
+
+    RealESRGAN_NCNN_Vulkan_ReadSettings();
+
+    QString model_name = m_realesrgan_ModelName;
+    int gpu_id = m_realesrgan_GPUID.split(":").first().toInt();
+    QString format = ui->comboBox_ImageSaveFormat
+            ? ui->comboBox_ImageSaveFormat->currentText()
+            : Settings_Read_value("/settings/comboBox_ImageSaveFormat", "png").toString();
+    bool tta_mode = m_realesrgan_TTA;
+    bool verbose_log = false;
+    QString tile_size_str = QString::number(m_realesrgan_TileSize);
 
     // Update model path to be relative to the engine executable
     QString model_path_abs = enginePath + "models";
@@ -174,13 +182,18 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_GIF(int file_list_row_number)
     // Output path should also be a directory for processed frames
     QString output_path = TempDir_Path + "/" + original_fileName + "_frames_RealESRGAN_NCNN_Vulkan/";
 
-    int scale = ui->doubleSpinBox_ScaleRatio_gif->value(); // Placeholder
-    QString model_name = ui->comboBox_Model_RealsrNCNNVulkan->currentText(); // Placeholder
-    int gpu_id = ui->comboBox_GPUID_RealsrNCNNVulkan->currentText().toInt(); // Placeholder
-    QString format = "png"; // Frames should be processed losslessly
-    bool tta_mode = ui->checkBox_TTA_RealsrNCNNVulkan->isChecked(); // Placeholder
-    bool verbose_log = true;
-    QString tile_size_str = ui->spinBox_TileSize_RealsrNCNNVulkan->text(); // Placeholder
+    int scale = ui->doubleSpinBox_ScaleRatio_gif
+            ? static_cast<int>(ui->doubleSpinBox_ScaleRatio_gif->value())
+            : Settings_Read_value("/settings/GIFScaleRatio", 1).toInt();
+
+    RealESRGAN_NCNN_Vulkan_ReadSettings();
+
+    QString model_name = m_realesrgan_ModelName;
+    int gpu_id = m_realesrgan_GPUID.split(":").first().toInt();
+    QString format = "png";
+    bool tta_mode = m_realesrgan_TTA;
+    bool verbose_log = false;
+    QString tile_size_str = QString::number(m_realesrgan_TileSize);
 
     QStringList arguments = RealESRGAN_NCNN_Vulkan_PrepareArguments(
         input_path, output_path, scale, model_name, gpu_id, format, tta_mode, verbose_log, tile_size_str
@@ -230,13 +243,18 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int file_list_row_number)
     QString original_fileName = table_video_item_fileName.at(file_list_row_number);
     QString output_path = TempDir_Path + "/" + original_fileName + "_frames_RealESRGAN_NCNN_Vulkan/";
 
-    int scale = ui->doubleSpinBox_ScaleRatio_video->value(); // Placeholder
-    QString model_name = ui->comboBox_Model_RealsrNCNNVulkan->currentText(); // Placeholder
-    int gpu_id = ui->comboBox_GPUID_RealsrNCNNVulkan->currentText().toInt(); // Placeholder
-    QString format = "png"; // Frames processed losslessly
-    bool tta_mode = ui->checkBox_TTA_RealsrNCNNVulkan->isChecked(); // Placeholder
-    bool verbose_log = true;
-    QString tile_size_str = ui->spinBox_TileSize_RealsrNCNNVulkan->text(); // Placeholder
+    int scale = ui->doubleSpinBox_ScaleRatio_video
+            ? static_cast<int>(ui->doubleSpinBox_ScaleRatio_video->value())
+            : Settings_Read_value("/settings/VideoScaleRatio", 1).toInt();
+
+    RealESRGAN_NCNN_Vulkan_ReadSettings();
+
+    QString model_name = m_realesrgan_ModelName;
+    int gpu_id = m_realesrgan_GPUID.split(":").first().toInt();
+    QString format = "png";
+    bool tta_mode = m_realesrgan_TTA;
+    bool verbose_log = false;
+    QString tile_size_str = QString::number(m_realesrgan_TileSize);
 
     QStringList arguments = RealESRGAN_NCNN_Vulkan_PrepareArguments(
         input_path, output_path, scale, model_name, gpu_id, format, tta_mode, verbose_log, tile_size_str
@@ -274,10 +292,34 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video_BySegment(int)
 
 void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings()
 {
+    QSettings settings("Waifu2x-Extension-QT", "Waifu2x-Extension-QT");
+    settings.beginGroup("RealESRGAN_NCNN_Vulkan");
+
+    m_realesrgan_ModelName = ui->comboBox_Model_RealsrNCNNVulkan
+            ? ui->comboBox_Model_RealsrNCNNVulkan->currentText()
+            : settings.value("RealESRGAN_ModelName", "realesrgan-x4plus").toString();
+
+    m_realesrgan_TileSize = ui->spinBox_TileSize_RealsrNCNNVulkan
+            ? ui->spinBox_TileSize_RealsrNCNNVulkan->value()
+            : settings.value("RealESRGAN_TileSize", 0).toInt();
+
+    m_realesrgan_TTA = ui->checkBox_TTA_RealsrNCNNVulkan
+            ? ui->checkBox_TTA_RealsrNCNNVulkan->isChecked()
+            : settings.value("RealESRGAN_TTA", false).toBool();
+
+    m_realesrgan_GPUID = ui->comboBox_GPUID_RealsrNCNNVulkan
+            ? ui->comboBox_GPUID_RealsrNCNNVulkan->currentText()
+            : settings.value("RealESRGAN_GPUID", "0").toString();
+
+    settings.endGroup();
+    qDebug() << "[MW::RealESRGAN_ReadSettings]" << m_realesrgan_ModelName
+             << m_realesrgan_TileSize << m_realesrgan_TTA << m_realesrgan_GPUID;
 }
 
-void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int)
+void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int threadNum)
 {
+    Q_UNUSED(threadNum);
+    RealESRGAN_NCNN_Vulkan_ReadSettings();
 }
 
 void MainWindow::RealESRGAN_NCNN_Vulkan_PreLoad_Settings()
