@@ -586,142 +586,162 @@ void MainWindow::Set_checkBox_DisableResize_gif_Checked()
     }
 }
 
-void MainWindow::Table_image_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath)
+void MainWindow::Table_image_insert_fileName_fullPath(const FileLoadInfo& fileInfo)
 {
     if (Table_model_image) {
         QList<QStandardItem *> rowItems;
-        QStandardItem *fileNameItem = new QStandardItem(fileName);
-        fileNameItem->setToolTip(SourceFile_fullPath); // Show full path on hover
+        QStandardItem *fileNameItem = new QStandardItem(fileInfo.fileName);
+        fileNameItem->setToolTip(fileInfo.fullPath); // Show full path on hover
         fileNameItem->setEditable(false);
 
-        QStandardItem *pathItem = new QStandardItem(SourceFile_fullPath); // For internal use, can be hidden
+        QStandardItem *pathItem = new QStandardItem(fileInfo.fullPath); // For internal use, can be hidden
         pathItem->setEditable(false);
 
-        QStandardItem *statusItem = new QStandardItem(tr("Waiting"));
+        QStandardItem *statusItem = new QStandardItem(fileInfo.status.isEmpty() ? tr("Waiting") : fileInfo.status);
         statusItem->setEditable(false);
         statusItem->setTextAlignment(Qt::AlignCenter);
-
 
         // Column 0: Filename
         rowItems.append(fileNameItem);
-        // Column 1: Full Path (Store it, but it might not be visible, or only partially)
-        // Depending on table setup, you might just use tooltip or specific user role for full path
-        // For simplicity, let's assume a column for it, which can be hidden by default by UI setup
-        rowItems.append(pathItem);
-        // Column 2: Status
-        rowItems.append(statusItem);
-        // Column 3: Resolution (e.g., "1920x1080") - initially empty or fetched async
-        QStandardItem *resolutionItem = new QStandardItem("");
+        // Column 1: Full Path (this is how it's mapped in Batch_Table_Update_slots, but Init_Table has Status at 1, FullPath at 2)
+        // Correcting order based on Init_Table: 0:FileName, 1:Status, 2:FullPath, 3:Resolution
+        // The implementation below was: 0:FileName, 1:FullPath, 2:Status, 3:Resolution...
+        // Let's stick to the appendRow logic and ensure Init_Table and any direct model access by column index are consistent.
+        // For now, assuming the append order dictates column position for *new* rows.
+        // If Init_Table is the source of truth for column *meaning*, then specific column indices must be used for setItem.
+        // However, appendRow just adds them in order.
+        // The previous code was: rowItems.append(fileNameItem); rowItems.append(pathItem); rowItems.append(statusItem);
+        // This means 0:fileName, 1:path, 2:status. This needs to be consistent.
+        // Let's assume the column order in Init_Table is the target:
+        // 0: FileName, 1: Status, 2: FullPath, 3: Resolution, 4: OutputPath, 5: EngineSettings
+
+        // New order:
+        rowItems.append(fileNameItem); // Col 0
+        rowItems.append(statusItem);   // Col 1
+        rowItems.append(pathItem);     // Col 2
+
+        QString resolutionStr = "";
+        if (!fileInfo.customResolutionWidth.isEmpty() && !fileInfo.customResolutionHeight.isEmpty()) {
+            resolutionStr = fileInfo.customResolutionWidth + "x" + fileInfo.customResolutionHeight;
+        }
+        QStandardItem *resolutionItem = new QStandardItem(resolutionStr);
         resolutionItem->setEditable(false);
         resolutionItem->setTextAlignment(Qt::AlignCenter);
-        rowItems.append(resolutionItem);
+        rowItems.append(resolutionItem); // Col 3
+
         // Column 4: Output Path - initially empty or based on settings
-        QStandardItem *outputPathItem = new QStandardItem("");
+        QStandardItem *outputPathItem = new QStandardItem(""); // Placeholder for output path
         outputPathItem->setEditable(false);
-        rowItems.append(outputPathItem);
+        rowItems.append(outputPathItem); // Col 4
+
         // Column 5: Engine Settings (e.g., "Model: realesrgan-x4plus, Scale: 2x") - initially based on current UI
         QStandardItem *engineSettingsItem = new QStandardItem(""); // Placeholder
         engineSettingsItem->setEditable(false);
-        rowItems.append(engineSettingsItem);
-
+        rowItems.append(engineSettingsItem); // Col 5
 
         Table_model_image->appendRow(rowItems);
 
-        // Store full path in user data for easy access if path column is hidden/managed differently
-        // Table_model_image->item(Table_model_image->rowCount() -1, 0)->setData(SourceFile_fullPath, Qt::UserRole + 1);
-
-
         // These lists might be redundant if the model is the source of truth, but kept for compatibility if used elsewhere
-        table_image_item_fullpath.append(SourceFile_fullPath);
-        table_image_item_fileName.append(fileName);
+        table_image_item_fullpath.append(fileInfo.fullPath);
+        table_image_item_fileName.append(fileInfo.fileName);
         // Table_FileCount_reload(); // Moved to Batch_Table_Update_slots
     }
 }
 
-void MainWindow::Table_gif_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath)
+void MainWindow::Table_gif_insert_fileName_fullPath(const FileLoadInfo& fileInfo)
 {
     if (Table_model_gif) {
         QList<QStandardItem *> rowItems;
-        QStandardItem *fileNameItem = new QStandardItem(fileName);
-        fileNameItem->setToolTip(SourceFile_fullPath);
+        QStandardItem *fileNameItem = new QStandardItem(fileInfo.fileName);
+        fileNameItem->setToolTip(fileInfo.fullPath);
         fileNameItem->setEditable(false);
 
-        QStandardItem *pathItem = new QStandardItem(SourceFile_fullPath);
-        pathItem->setEditable(false);
-
-        QStandardItem *statusItem = new QStandardItem(tr("Waiting"));
+        QStandardItem *statusItem = new QStandardItem(fileInfo.status.isEmpty() ? tr("Waiting") : fileInfo.status);
         statusItem->setEditable(false);
         statusItem->setTextAlignment(Qt::AlignCenter);
 
-        rowItems.append(fileNameItem);
-        rowItems.append(pathItem);
-        rowItems.append(statusItem);
-        // Add more columns similar to image table if needed (Resolution, Output Path, Engine Settings)
-        QStandardItem *resolutionItem = new QStandardItem("");
+        QStandardItem *pathItem = new QStandardItem(fileInfo.fullPath);
+        pathItem->setEditable(false);
+
+        // Order based on Init_Table: 0:FileName, 1:Status, 2:FullPath, 3:Resolution
+        rowItems.append(fileNameItem); // Col 0
+        rowItems.append(statusItem);   // Col 1
+        rowItems.append(pathItem);     // Col 2
+
+        QString resolutionStr = "";
+        if (!fileInfo.customResolutionWidth.isEmpty() && !fileInfo.customResolutionHeight.isEmpty()) {
+            resolutionStr = fileInfo.customResolutionWidth + "x" + fileInfo.customResolutionHeight;
+        }
+        QStandardItem *resolutionItem = new QStandardItem(resolutionStr);
         resolutionItem->setEditable(false);
         resolutionItem->setTextAlignment(Qt::AlignCenter);
-        rowItems.append(resolutionItem);
+        rowItems.append(resolutionItem); // Col 3
 
-        QStandardItem *outputPathItem = new QStandardItem("");
+        QStandardItem *outputPathItem = new QStandardItem(""); // Placeholder
         outputPathItem->setEditable(false);
-        rowItems.append(outputPathItem);
+        rowItems.append(outputPathItem); // Col 4
 
-        QStandardItem *engineSettingsItem = new QStandardItem("");
+        QStandardItem *engineSettingsItem = new QStandardItem(""); // Placeholder
         engineSettingsItem->setEditable(false);
-        rowItems.append(engineSettingsItem);
+        rowItems.append(engineSettingsItem); // Col 5
 
         Table_model_gif->appendRow(rowItems);
-        table_gif_item_fileName.append(fileName);
-        // table_gif_item_fullpath.append(SourceFile_fullPath); // if this list exists
+        table_gif_item_fileName.append(fileInfo.fileName);
+        // table_gif_item_fullpath.append(fileInfo.fullPath); // if this list exists
         // Table_FileCount_reload(); // Moved to Batch_Table_Update_slots
     }
 }
 
-void MainWindow::Table_video_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath)
+void MainWindow::Table_video_insert_fileName_fullPath(const FileLoadInfo& fileInfo)
 {
     if (Table_model_video) {
         QList<QStandardItem *> rowItems;
-        QStandardItem *fileNameItem = new QStandardItem(fileName);
-        fileNameItem->setToolTip(SourceFile_fullPath);
+        QStandardItem *fileNameItem = new QStandardItem(fileInfo.fileName);
+        fileNameItem->setToolTip(fileInfo.fullPath);
         fileNameItem->setEditable(false);
 
-        QStandardItem *pathItem = new QStandardItem(SourceFile_fullPath);
-        pathItem->setEditable(false);
-
-        QStandardItem *statusItem = new QStandardItem(tr("Waiting"));
+        QStandardItem *statusItem = new QStandardItem(fileInfo.status.isEmpty() ? tr("Waiting") : fileInfo.status);
         statusItem->setEditable(false);
         statusItem->setTextAlignment(Qt::AlignCenter);
 
-        rowItems.append(fileNameItem);
-        rowItems.append(pathItem);
-        rowItems.append(statusItem);
-        // Add more columns similar to image table if needed (Resolution, FPS, Duration, Output Path, Engine Settings)
-        QStandardItem *resolutionItem = new QStandardItem(""); // e.g., "1920x1080"
+        QStandardItem *pathItem = new QStandardItem(fileInfo.fullPath);
+        pathItem->setEditable(false);
+
+        // Order based on Init_Table: 0:FileName, 1:Status, 2:FullPath, 3:Resolution, 4:FPS, 5:Duration
+        rowItems.append(fileNameItem); // Col 0
+        rowItems.append(statusItem);   // Col 1
+        rowItems.append(pathItem);     // Col 2
+
+        QString resolutionStr = "";
+        if (!fileInfo.customResolutionWidth.isEmpty() && !fileInfo.customResolutionHeight.isEmpty()) {
+            resolutionStr = fileInfo.customResolutionWidth + "x" + fileInfo.customResolutionHeight;
+        }
+        QStandardItem *resolutionItem = new QStandardItem(resolutionStr); // e.g., "1920x1080"
         resolutionItem->setEditable(false);
         resolutionItem->setTextAlignment(Qt::AlignCenter);
-        rowItems.append(resolutionItem);
+        rowItems.append(resolutionItem); // Col 3
 
-        QStandardItem *fpsItem = new QStandardItem(""); // e.g., "29.97"
+        QStandardItem *fpsItem = new QStandardItem(""); // e.g., "29.97" - To be populated later if needed
         fpsItem->setEditable(false);
         fpsItem->setTextAlignment(Qt::AlignCenter);
-        rowItems.append(fpsItem);
+        rowItems.append(fpsItem); // Col 4
 
-        QStandardItem *durationItem = new QStandardItem(""); // e.g., "00:02:30"
+        QStandardItem *durationItem = new QStandardItem(""); // e.g., "00:02:30" - To be populated later if needed
         durationItem->setEditable(false);
         durationItem->setTextAlignment(Qt::AlignCenter);
-        rowItems.append(durationItem);
+        rowItems.append(durationItem); // Col 5
 
-        QStandardItem *outputPathItem = new QStandardItem("");
+        QStandardItem *outputPathItem = new QStandardItem(""); // Placeholder
         outputPathItem->setEditable(false);
-        rowItems.append(outputPathItem);
+        rowItems.append(outputPathItem); // Col 6
 
-        QStandardItem *engineSettingsItem = new QStandardItem("");
+        QStandardItem *engineSettingsItem = new QStandardItem(""); // Placeholder
         engineSettingsItem->setEditable(false);
-        rowItems.append(engineSettingsItem);
+        rowItems.append(engineSettingsItem); // Col 7
 
         Table_model_video->appendRow(rowItems);
-        table_video_item_fileName.append(fileName);
-        // table_video_item_fullpath.append(SourceFile_fullPath); // if this list exists
+        table_video_item_fileName.append(fileInfo.fileName);
+        // table_video_item_fullpath.append(fileInfo.fullPath); // if this list exists
         // Table_FileCount_reload(); // Moved to Batch_Table_Update_slots
     }
 }
@@ -734,21 +754,70 @@ QStringList MainWindow::getImageFullPaths() const {
 // getGifFullPaths() and getVideoFullPaths() were removed from .h and their direct model access
 // would be unsafe if called from worker. Data is now prepared in main thread before calling Read_urls.
 
-void MainWindow::Batch_Table_Update_slots(const QList<QPair<QString, QString>>& imageFiles,
-                                          const QList<QPair<QString, QString>>& gifFiles,
-                                          const QList<QPair<QString, QString>>& videoFiles,
+void MainWindow::Batch_Table_Update_slots(const QList<FileLoadInfo>& imageFiles,
+                                          const QList<FileLoadInfo>& gifFiles,
+                                          const QList<FileLoadInfo>& videoFiles,
                                           bool addNewImage, bool addNewGif, bool addNewVideo)
 {
     ui_tableViews_setUpdatesEnabled(false);
 
-    for (const auto& pair : imageFiles) {
-        Table_image_insert_fileName_fullPath(pair.first, pair.second);
+    for (const auto& fileInfo : imageFiles) {
+        Table_image_insert_fileName_fullPath(fileInfo);
+        if (!fileInfo.customResolutionWidth.isEmpty() && !fileInfo.customResolutionHeight.isEmpty()) {
+             // Add to Custom_resolution_list if restoring from INI
+             bool found = false;
+             for(const auto& entry : Custom_resolution_list) {
+                 if(entry.value("fullpath") == fileInfo.fullPath) {
+                     found = true;
+                     break;
+                 }
+             }
+             if(!found) {
+                QMap<QString, QString> resMap;
+                resMap.insert("fullpath", fileInfo.fullPath);
+                resMap.insert("width", fileInfo.customResolutionWidth);
+                resMap.insert("height", fileInfo.customResolutionHeight);
+                Custom_resolution_list.append(resMap);
+             }
+        }
     }
-    for (const auto& pair : gifFiles) {
-        Table_gif_insert_fileName_fullPath(pair.first, pair.second);
+    for (const auto& fileInfo : gifFiles) {
+        Table_gif_insert_fileName_fullPath(fileInfo);
+        if (!fileInfo.customResolutionWidth.isEmpty() && !fileInfo.customResolutionHeight.isEmpty()) {
+             bool found = false;
+             for(const auto& entry : Custom_resolution_list) {
+                 if(entry.value("fullpath") == fileInfo.fullPath) {
+                     found = true;
+                     break;
+                 }
+             }
+             if(!found) {
+                QMap<QString, QString> resMap;
+                resMap.insert("fullpath", fileInfo.fullPath);
+                resMap.insert("width", fileInfo.customResolutionWidth);
+                resMap.insert("height", fileInfo.customResolutionHeight);
+                Custom_resolution_list.append(resMap);
+             }
+        }
     }
-    for (const auto& pair : videoFiles) {
-        Table_video_insert_fileName_fullPath(pair.first, pair.second);
+    for (const auto& fileInfo : videoFiles) {
+        Table_video_insert_fileName_fullPath(fileInfo);
+        if (!fileInfo.customResolutionWidth.isEmpty() && !fileInfo.customResolutionHeight.isEmpty()) {
+             bool found = false;
+             for(const auto& entry : Custom_resolution_list) {
+                 if(entry.value("fullpath") == fileInfo.fullPath) {
+                     found = true;
+                     break;
+                 }
+             }
+             if(!found) {
+                QMap<QString, QString> resMap;
+                resMap.insert("fullpath", fileInfo.fullPath);
+                resMap.insert("width", fileInfo.customResolutionWidth);
+                resMap.insert("height", fileInfo.customResolutionHeight);
+                Custom_resolution_list.append(resMap);
+             }
+        }
     }
 
     ui_tableViews_setUpdatesEnabled(true);
@@ -1640,11 +1709,67 @@ void MainWindow::on_pushButton_HideSettings_clicked()
 
 void MainWindow::on_pushButton_ReadFileList_clicked()
 {
-    // Load a list of files from a text file (e.g., .txt, .ini)
-    QString fileListPath = QFileDialog::getOpenFileName(this, tr("Open File List"), "", tr("Text files (*.txt);;INI files (*.ini);;All files (*.*)"));
-    if (!fileListPath.isEmpty()) {
-        Table_Read_Saved_Table_Filelist(fileListPath);
+    QString fileListPath = QFileDialog::getOpenFileName(this, tr("Open File List"), Current_Path, tr("INI files (*.ini);;Text files (*.txt);;All files (*.*)"));
+    if (fileListPath.isEmpty()) {
+        return;
     }
+
+    // Disable UI elements
+    AddNew_gif = false;
+    AddNew_image = false;
+    AddNew_video = false;
+    ui_tableViews_setUpdatesEnabled(false); // Though worker will manage actual additions via Batch_Table_Update_slots
+    ui->groupBox_Setting->setEnabled(0);
+    ui->groupBox_FileList->setEnabled(0);
+    ui->groupBox_InputExt->setEnabled(0);
+    pushButton_Start_setEnabled_self(0);
+    ui->checkBox_ScanSubFolders->setEnabled(0); // Scan subfolders is not typically used when loading a specific list
+    this->setAcceptDrops(0);
+    emit Send_TextBrowser_NewMessage(tr("Loading file list, please wait."));
+
+    // Prepare deduplication sets
+    QStringList existingImagePaths_copy = getImageFullPaths();
+    QStringList existingGifPaths_copy;
+    if (Table_model_gif) {
+        for (int i = 0; i < Table_model_gif->rowCount(); ++i) {
+            if(Table_model_gif->item(i, 2)) // Column 2 is FullPath
+                existingGifPaths_copy.append(Table_model_gif->item(i, 2)->text());
+        }
+    }
+    QStringList existingVideoPaths_copy;
+    if (Table_model_video) {
+        for (int i = 0; i < Table_model_video->rowCount(); ++i) {
+             if(Table_model_video->item(i, 2)) // Column 2 is FullPath
+                existingVideoPaths_copy.append(Table_model_video->item(i, 2)->text());
+        }
+    }
+
+    QSet<QString> existingImagePaths_set;
+    for (const QString& path : existingImagePaths_copy) {
+        existingImagePaths_set.insert(path);
+    }
+    QSet<QString> existingGifPaths_set;
+    for (const QString& path : existingGifPaths_copy) {
+        existingGifPaths_set.insert(path);
+    }
+    QSet<QString> existingVideoPaths_set;
+    for (const QString& path : existingVideoPaths_copy) {
+        existingVideoPaths_set.insert(path);
+    }
+
+    // Launch worker
+    // The actual worker function ProcessFileListWorker will be defined in table.cpp (or files.cpp if preferred)
+    // For now, assume Table_Read_Saved_Table_Filelist itself will be refactored to act as the worker logic.
+    // This means Table_Read_Saved_Table_Filelist needs to be callable by QtConcurrent::run.
+    // We are passing 'this' to make its members accessible if it's not static,
+    // or capture necessary members like ui->Ext_image->text() by copy.
+    // For simplicity, let's assume Table_Read_Saved_Table_Filelist will be adapted.
+    // It's better to create a new dedicated worker function.
+    // Let's name it ProcessFileListWorker and assume it will be a member of MainWindow for now.
+    // This will be created in table.cpp as per plan.
+    (void)QtConcurrent::run([this, fileListPath, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set]() {
+        this->ProcessFileListWorker(fileListPath, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+    });
 }
 
 void MainWindow::on_Ext_image_editingFinished()
