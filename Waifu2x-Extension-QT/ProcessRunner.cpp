@@ -2,6 +2,8 @@
     Copyright (C) 2025  beyawnko
 */
 #include "ProcessRunner.h"
+#include <QTimer>  // Added for QTimer
+#include <QDebug>  // Added for qWarning
 
 bool ProcessRunner::run(QProcess *process, const QString &cmd, QByteArray *stdOut,
                         QByteArray *stdErr)
