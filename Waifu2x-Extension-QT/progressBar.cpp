@@ -20,17 +20,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 /*
-Set the minimum and maximum value of the progress bar
-*/
-void MainWindow::progressbar_setRange_min_max(int min, int max)
-{
-    // This slot is deprecated. File loading progress uses progressbar_setRange_min_max_slots.
-    qDebug() << "Deprecated progressbar_setRange_min_max() called. Min:" << min << "Max:" << max;
-    // ui->progressBar->setRange(min, max);
-    // TaskNumTotal=max;
-    // ui->label_progressBar_filenum->setText("0/"+QString::number(max,10));
-}
-/*
 Fill the progress bar directly
 */
 void MainWindow::progressbar_SetToMax(int maxval)
@@ -51,21 +40,6 @@ void MainWindow::progressbar_SetToMax(int maxval)
     // ui->label_progressBar_filenum is updated by UpdateProgressBar's format string.
     // If a separate label update is still desired:
     // ui->label_progressBar_filenum->setText(QString::number(m_FinishedProc + m_ErrorProc,10)+"/"+QString::number(m_TotalNumProc,10));
-}
-/*
-Progress bar progress +1
-*/
-void MainWindow::progressbar_Add()
-{
-    // This is the OLD progressbar_Add slot.
-    // The new file loading progress is handled by progressbar_Add_slots in mainwindow.cpp
-    // This function should ideally be deprecated or its callsites updated.
-    // For now, let's make it a no-op regarding m_...Proc to avoid interference.
-    // It originally modified Progressbar_CurrentVal, TaskNumFinished, and ui->progressBar.
-    // TaskNumFinished++; // TaskNumFinished is still used by TimeSlot, but should not be incremented by this deprecated function.
-    // NewTaskFinished=true;
-    // ui->label_progressBar_filenum->setText(QString::number(Progressbar_CurrentVal,10)+"/"+QString::number(Progressbar_MaxVal,10)); // Uses obsolete vars
-    qDebug() << "Deprecated progressbar_Add() called. Check call sites.";
 }
 /*
 Clear progress bar

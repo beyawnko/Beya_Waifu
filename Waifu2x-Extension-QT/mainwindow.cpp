@@ -1724,9 +1724,18 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
     }
 
     // Convert to QSet for efficient lookup in worker thread (capture by copy)
-    QSet<QString> existingImagePaths_set = QSet<QString>::fromList(existingImagePaths_copy);
-    QSet<QString> existingGifPaths_set = QSet<QString>::fromList(existingGifPaths_copy);
-    QSet<QString> existingVideoPaths_set = QSet<QString>::fromList(existingVideoPaths_copy);
+    QSet<QString> existingImagePaths_set;
+    for (const QString& path : existingImagePaths_copy) {
+        existingImagePaths_set.insert(path);
+    }
+    QSet<QString> existingGifPaths_set;
+    for (const QString& path : existingGifPaths_copy) {
+        existingGifPaths_set.insert(path);
+    }
+    QSet<QString> existingVideoPaths_set;
+    for (const QString& path : existingVideoPaths_copy) {
+        existingVideoPaths_set.insert(path);
+    }
 
     (void)QtConcurrent::run([this, urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set]() {
         this->Read_urls(urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);

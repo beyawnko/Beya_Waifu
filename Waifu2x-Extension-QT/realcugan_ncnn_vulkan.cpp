@@ -122,7 +122,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [") + srcPath + tr("]. Error: [File does not exist.]"));
         Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); // Direct call
-        Send_progressbar_Add(); // Direct call
+        Send_progressbar_Add_slots(); // Direct call
         return;
     }
 
@@ -136,7 +136,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [") + srcPath + tr("]. Error: [Cannot convert video format to mp4.]"));
         Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        Send_progressbar_Add();
+        Send_progressbar_Add_slots();
         return;
     }
 
@@ -195,7 +195,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
 
         video_video2images_ProcessBySegment(cfrVideo, framesPath, startTime, segDur);
         QStringList frameNames = file_getFileNames_in_Folder_nofilter(framesPath);
-        if (frameNames.isEmpty()) { /* ... error handling ... */ Send_progressbar_Add(); return; }
+        if (frameNames.isEmpty()) { /* ... error handling ... */ Send_progressbar_Add_slots(); return; }
 
         QString scaledFramesPath = framesPath + "_Scaled";
         file_mkDir(scaledFramesPath);
@@ -218,7 +218,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
                                                        rowNum))
             {
                 emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-                Send_progressbar_Add();
+                Send_progressbar_Add_slots();
                 return;
             }
         }
@@ -227,7 +227,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
         clipIndex++;
         QString clip = clipsPath + "/" + QString::number(clipIndex, 10) + ".mp4";
         video_images2video(cfrVideo, clip, scaledFramesPath, "", false, 1, 1, false); // Args might need review for custom res
-        if (!QFile::exists(clip)) { /* ... error handling ... */ Send_progressbar_Add(); return; }
+        if (!QFile::exists(clip)) { /* ... error handling ... */ Send_progressbar_Add_slots(); return; }
 
         if (ui->checkBox_ShowInterPro && ui->checkBox_ShowInterPro->isChecked())
             emit Send_CurrentFileProgress_progressbar_Add_SegmentDuration(segDur);
@@ -245,12 +245,12 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum)
 
     QFile::remove(finalVideo); // Remove if exists before assembling
     video_AssembleVideoClips(clipsPath, clipsName, finalVideo, audioPath);
-    if (!QFile::exists(finalVideo)) { /* ... error handling ... */ Send_progressbar_Add(); return; }
+    if (!QFile::exists(finalVideo)) { /* ... error handling ... */ Send_progressbar_Add_slots(); return; }
 
     if (delOriginal) ReplaceOriginalFile(srcPath, finalVideo);
 
     Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Finished");
-    Send_progressbar_Add();
+    Send_progressbar_Add_slots();
 }
 
 

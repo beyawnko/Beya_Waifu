@@ -175,11 +175,11 @@ public:
     bool AddNew_gif=false;
     bool AddNew_image=false;
     bool AddNew_video=false;
-    void Add_File_Folder(QString Full_Path);
-    void Add_File_Folder_IncludeSubFolder(QString Full_Path);
+    void Add_File_Folder(QString Full_Path, QList<QPair<QString, QString>>& imagesToAdd, QList<QPair<QString, QString>>& gifsToAdd, QList<QPair<QString, QString>>& videosToAdd, bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
+    void Add_File_Folder_IncludeSubFolder(QString Full_Path, QList<QPair<QString, QString>>& imagesToAdd, QList<QPair<QString, QString>>& gifsToAdd, QList<QPair<QString, QString>>& videosToAdd, bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
     QStringList getFileNames_IncludeSubFolder(QString path);
-    int FileList_Add(QString fileName, QString SourceFile_fullPath);
-    bool Deduplicate_filelist(QString SourceFile_fullPath);
+    int FileList_Add(QString fileName, QString SourceFile_fullPath, QList<QPair<QString, QString>>& imagesToAdd, QList<QPair<QString, QString>>& gifsToAdd, QList<QPair<QString, QString>>& videosToAdd, bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
+    bool Deduplicate_filelist(QString SourceFile_fullPath); // This is the old main-thread one
     bool file_isDirExist(QString SourceFile_fullPath);
     void file_mkDir(QString SourceFile_fullPath);
     bool file_isDirEmpty(QString FolderPath);
@@ -641,6 +641,7 @@ public:
     QAction *TopSupportersList_SystemTrayIcon = new QAction(this);
     void Init_ActionsMenu_lineEdit_outputPath();
     QAction *OpenFolder_lineEdit_outputPath = new QAction(this);
+
     void Init_ActionsMenu_FilesList();
     QAction *OpenFile_QAction_FileList = new QAction(this);
     QAction *OpenFilesFolder_QAction_FileList = new QAction(this);
@@ -712,11 +713,11 @@ public:
     QSpinBox *spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan;
     QPushButton *pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan;
 
-
-public slots: // Changed from 'slots:' for clarity, Qt treats them as public slots by default
-    void on_pushButton_compatibilityTest_clicked();
-    /** Handle manual update checks triggered by the user. */
-    void on_pushButton_CheckUpdate_clicked();
+public slots: // Ensure this is the primary public slots section
+    void Batch_Table_Update_slots(const QList<QPair<QString, QString>>& imageFiles,
+                                  const QList<QPair<QString, QString>>& gifFiles,
+                                  const QList<QPair<QString, QString>>& videoFiles,
+                                  bool addNewImage, bool addNewGif, bool addNewVideo);
     void Table_EnableSorting(bool EnableSorting);
     void Apply_CustRes_QAction_FileList_slot();
     void Cancel_CustRes_QAction_FileList_slot();
@@ -998,6 +999,10 @@ signals:
     // RealESRGAN Signals (Send_Realesrgan_ncnn_vulkan_DetectGPU_finished is already listed above)
 
 
+private slots: // Changed from public slots to private as these are internal
+    void TextBrowser_StartMes();
+    // Note: Batch_Table_Update_slots was moved to public slots for connect
+
 private:
     int m_NumProc = 0;
     int m_ErrorProc = 0;
@@ -1013,6 +1018,8 @@ private:
     void UpdateNumberOfActiveThreads();
     void UpdateProgressBar();
     void ShellMessageBox(const QString &title, const QString &text, QMessageBox::Icon icon);
+    // Worker thread deduplication helper
+    bool Deduplicate_filelist_worker(const QString& SourceFile_fullPath, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
 
     LiquidGlassWidget *glassWidget {nullptr};
     bool glassEnabled {false};

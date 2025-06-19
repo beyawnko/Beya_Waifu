@@ -603,14 +603,14 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
         QString fullPath =configIniRead->value("/table_image/"+QString::number(i,10)+"_fullPath").toString();
         QString CustRes_str =configIniRead->value("/table_image/"+QString::number(i,10)+"_CustRes_str").toString();
         //================
-        mutex_Table_insert_finished.lock();
-        Table_insert_finished=false;
-        mutex_Table_insert_finished.unlock();
+        // mutex_Table_insert_finished.lock(); // Obsolete
+        // Table_insert_finished=false; // Obsolete
+        // mutex_Table_insert_finished.unlock(); // Obsolete
         emit Send_Table_image_insert_fileName_fullPath(FileName,fullPath);
-        while(!Table_insert_finished)
-        {
-            Delay_msec_sleep(10);
-        }
+        // while(!Table_insert_finished) // Obsolete
+        // {
+        //     Delay_msec_sleep(10);
+        // }
         emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(i,status);
         if(status=="Failed")
         {
@@ -640,14 +640,14 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
         QString fullPath =configIniRead->value("/table_gif/"+QString::number(i,10)+"_fullPath").toString();
         QString CustRes_str =configIniRead->value("/table_gif/"+QString::number(i,10)+"_CustRes_str").toString();
         //================
-        mutex_Table_insert_finished.lock();
-        Table_insert_finished=false;
-        mutex_Table_insert_finished.unlock();
+        // mutex_Table_insert_finished.lock(); // Obsolete
+        // Table_insert_finished=false; // Obsolete
+        // mutex_Table_insert_finished.unlock(); // Obsolete
         emit Send_Table_gif_insert_fileName_fullPath(FileName,fullPath);
-        while(!Table_insert_finished)
-        {
-            Delay_msec_sleep(10);
-        }
+        // while(!Table_insert_finished) // Obsolete
+        // {
+        //     Delay_msec_sleep(10);
+        // }
         emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(i,status);
         if(status=="Failed")
         {
@@ -677,14 +677,14 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
         QString fullPath =configIniRead->value("/table_video/"+QString::number(i,10)+"_fullPath").toString();
         QString CustRes_str =configIniRead->value("/table_video/"+QString::number(i,10)+"_CustRes_str").toString();
         //================
-        mutex_Table_insert_finished.lock();
-        Table_insert_finished=false;
-        mutex_Table_insert_finished.unlock();
+        // mutex_Table_insert_finished.lock(); // Obsolete
+        // Table_insert_finished=false; // Obsolete
+        // mutex_Table_insert_finished.unlock(); // Obsolete
         emit Send_Table_video_insert_fileName_fullPath(FileName,fullPath);
-        while(!Table_insert_finished)
-        {
-            Delay_msec_sleep(10);
-        }
+        // while(!Table_insert_finished) // Obsolete
+        // {
+        //     Delay_msec_sleep(10);
+        // }
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(i,status);
         if(status=="Failed")
         {
@@ -702,7 +702,7 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
             res_map["width"] = CustRes_width;
             Custom_resolution_list.append(res_map);
         }
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots();
         //Delay_msec_sleep(100);
     }
     //====================
