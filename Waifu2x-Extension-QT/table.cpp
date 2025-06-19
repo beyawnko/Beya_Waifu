@@ -92,10 +92,6 @@ int MainWindow::Table_FileCount_reload()
         //Show or hide each list based on its file count
         //===============================================
         int TableView_VisibleCount = 0;
-        // Drop-file label has been removed from the UI
-        // if (ui->label_DropFile) {
-        //     ui->label_DropFile->setVisible(false);
-        // }
         if(filecount_image>0)
         {
             ui->tableView_image->setVisible(1);
@@ -151,10 +147,6 @@ int MainWindow::Table_FileCount_reload()
         //====================
         //Hide file lists and clear selection
         //====================
-        // Drop-file label has been removed from the UI
-        // if (ui->label_DropFile) {
-        //     ui->label_DropFile->setVisible(true);
-        // }
         curRow_image = -1;
         ui->tableView_image->clearSelection();
         ui->tableView_image->setVisible(0);
@@ -741,21 +733,18 @@ int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString Table_FileList_
     int rowCount_image = configIniRead->value("/table_image/rowCount").toInt();
     if(rowCount_image>0)
     {
-        // ui->label_DropFile->setVisible(0);//Hide drop file label
         ui->tableView_image->setVisible(1);
     }
     //========= gif ========
     int rowCount_gif = configIniRead->value("/table_gif/rowCount").toInt();
     if(rowCount_gif>0)
     {
-        // ui->label_DropFile->setVisible(0);//Hide drop file label
         ui->tableView_gif->setVisible(1);
     }
     //========= video ========
     int rowCount_video = configIniRead->value("/table_video/rowCount").toInt();
     if(rowCount_video>0)
     {
-        // ui->label_DropFile->setVisible(0);//Hide drop file label
         ui->tableView_video->setVisible(1);
     }
     //====================
