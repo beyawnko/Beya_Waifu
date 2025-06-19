@@ -29,7 +29,11 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setStyle(QStyleFactory::create("macos"));
+    QStyle *style = QStyleFactory::create("macos");
+    if (!style)
+        style = QStyleFactory::create("Fusion");
+    if (style)
+        a.setStyle(style);
 
     QDir logDir(QCoreApplication::applicationDirPath() + "/logs");
     if (!logDir.exists())
