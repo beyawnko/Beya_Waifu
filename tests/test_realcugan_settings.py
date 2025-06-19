@@ -1,6 +1,9 @@
 import pytest
-from PySide6.QtCore import QSettings
 from pathlib import Path
+from tests import PYSIDE6_AVAILABLE
+if not PYSIDE6_AVAILABLE:
+    pytest.skip("PySide6 not available", allow_module_level=True)
+from PySide6.QtCore import QSettings
 
 # Helper from test_gpu_job_config.py
 

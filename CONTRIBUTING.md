@@ -1,0 +1,20 @@
+# Contributing to Beya_Waifu
+
+Thank you for considering a contribution! Please follow these steps when preparing changes:
+
+1. Clone the repository with submodules:
+   ```bash
+   git clone --recursive https://github.com/beyawnko/Beya_Waifu.git
+   ```
+2. Install the required Python packages before running the test suite:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Execute the tests from the repository root:
+   ```bash
+   pytest
+   ```
+   The suite relies on `PySide6` and other packages from `requirements.txt`. Tests that
+   depend on PySide6 will be skipped automatically if it is not available.
+
+See the `README.md` for build instructions and additional details.

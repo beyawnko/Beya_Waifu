@@ -1,5 +1,9 @@
 import os
 from pathlib import Path
+import pytest
+from tests import PYSIDE6_AVAILABLE
+if not PYSIDE6_AVAILABLE:
+    pytest.skip("PySide6 not available", allow_module_level=True)
 from PySide6.QtCore import QSettings
 
 
