@@ -346,7 +346,9 @@ public:
     QString RealcuganNcnnVulkan_MultiGPU();
 
     /** Add a GPU with thread count to the multi GPU list. */
-    void AddGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid, int threads = 1);
+    void AddGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid,
+                                              int threads = 1,
+                                              int tile = 0);
 
     /** Remove a GPU from the multi GPU list. */
     void RemoveGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid);
