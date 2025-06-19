@@ -1,22 +1,5 @@
-#pragma once
-/*
-Copyright (C) 2025  beyawnko
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-    My Github homepage: https://github.com/AaronFeng753
-*/
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QDragEnterEvent>
@@ -74,6 +57,7 @@ Copyright (C) 2025  beyawnko
 #include "GpuManager.h"
 #include "UiController.h"
 #include "LiquidGlassWidget.h"
+
 
 #ifndef Q_DECLARE_METATYPE
 #define Q_DECLARE_METATYPE(Type)
@@ -231,14 +215,8 @@ public:
     int Table_Save_Current_Table_Filelist(QString Table_FileList_ini);
     int Table_Read_Saved_Table_Filelist(QString Table_FileList_ini);
     int Table_Save_Current_Table_Filelist_Watchdog(QString Table_FileList_ini);
-    // bool Table_insert_finished=false; // Removed for new batch update mechanism
-    // QMutex mutex_Table_insert_finished; // Removed
-    // QMutex mutex_Table_insert; // Removed
 
-    // Getter methods for current file paths for deduplication in worker thread
-    QStringList getImageFullPaths() const; // Retain for images as table_image_item_fullpath is maintained
-    // QStringList getGifFullPaths() const; // Removed, list will be generated on demand in main thread
-    // QStringList getVideoFullPaths() const; // Removed, list will be generated on demand in main thread
+    QStringList getImageFullPaths() const;
 
     //================================= Main Processing Logic (Waifu2x & Others) ====================================
     void ShowFileProcessSummary();
@@ -250,7 +228,6 @@ public:
     bool isForceRetryEnabled=true;
     bool KILL_TASK_QStringList(QStringList TaskNameList,bool RequestAdmin);
 
-    // Waifu2x-ncnn-Vulkan
     QString Waifu2x_ncnn_vulkan_FolderPath = "";
     QString Waifu2x_ncnn_vulkan_ProgramPath = "";
     int Waifu2x_NCNN_Vulkan_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
@@ -263,7 +240,6 @@ public:
     QStringList Available_GPUID_Waifu2xNcnnVulkan;
     QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan;
 
-    // RealSR-ncnn-Vulkan (Note: some Realsr variables were already present, consolidated here)
     int Realsr_NCNN_Vulkan_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int Realsr_NCNN_Vulkan_GIF(int rowNum);
     int Realsr_NCNN_Vulkan_Video(int rowNum);
@@ -271,14 +247,13 @@ public:
     QString Realsr_NCNN_Vulkan_ReadSettings();
     int Calculate_Temporary_ScaleRatio_RealsrNCNNVulkan(int ScaleRatio);
     QString Realsr_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
-    QString Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str = ""; // Corrected name
-    QStringList Available_GPUID_Realsr_ncnn_vulkan; // Already present
-    int GPU_ID_RealesrganNcnnVulkan_MultiGPU = 0; // Already present
-    QMap<QString,QString> RealesrganNcnnVulkan_MultiGPU(); // Already present
-    void AddGPU_MultiGPU_RealesrganNcnnVulkan(QString GPUID); // Already present
+    QString Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    QStringList Available_GPUID_Realsr_ncnn_vulkan;
+    int GPU_ID_RealesrganNcnnVulkan_MultiGPU = 0;
+    QMap<QString,QString> RealesrganNcnnVulkan_MultiGPU();
+    void AddGPU_MultiGPU_RealesrganNcnnVulkan(QString GPUID);
 
 
-    // Anime4K
     int Anime4k_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int Anime4k_GIF(int rowNum);
     int Anime4k_GIF_scale(QMap<QString,QString> Sub_Thread_info,int *Sub_gif_ThreadNumRunning,bool *Frame_failed);
@@ -290,9 +265,8 @@ public:
     QString Anime4k_ProgramPath = Current_Path + "/Anime4K/Anime4K_waifu2xEX.exe";
     int Get_NumOfGPU_Anime4k();
     QString Anime4k_PreLoad_Settings_Str = "";
-    QString Anime4KCPP_PreLoad_Settings_Str = ""; // Required
+    QString Anime4KCPP_PreLoad_Settings_Str = "";
 
-    // Waifu2x-Converter
     int Waifu2x_Converter_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int Waifu2x_Converter_GIF(int rowNum);
     int Waifu2x_Converter_GIF_scale(QMap<QString, QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed);
@@ -301,14 +275,13 @@ public:
     int Waifu2x_Converter_Video_scale( QMap<QString,QString> Sub_Thread_info, int *Sub_video_ThreadNumRunning, bool *Frame_failed);
     QString Waifu2xConverter_ReadSettings();
     QString Waifu2xConverter_PreLoad_Settings_Str = "";
-    int GPU_ID_Waifu2xConverter_MultiGPU = 0; // Already present
-    QMap<QString,QString> Waifu2xConverter_MultiGPU(); // Already present
-    QMutex MultiGPU_QMutex_Waifu2xConverter; // Already present
-    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_Waifu2xConverter; // Already present
-    void AddGPU_MultiGPU_Waifu2xConverter(QString GPUID); // Already present
+    int GPU_ID_Waifu2xConverter_MultiGPU = 0;
+    QMap<QString,QString> Waifu2xConverter_MultiGPU();
+    QMutex MultiGPU_QMutex_Waifu2xConverter;
+    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_Waifu2xConverter;
+    void AddGPU_MultiGPU_Waifu2xConverter(QString GPUID);
 
 
-    // SRMD-ncnn-Vulkan
     int SRMD_NCNN_Vulkan_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int SRMD_NCNN_Vulkan_GIF(int rowNum);
     int SRMD_NCNN_Vulkan_Video(int rowNum);
@@ -316,10 +289,9 @@ public:
     QString SrmdNcnnVulkan_ReadSettings();
     QMap<QString,int> Calculate_ScaleRatio_SrmdNcnnVulkan(int ScaleRatio);
     QString SrmdNcnnVulkan_ReadSettings_Video_GIF(int ThreadNum);
-    QString SRMD_NCNN_Vulkan_PreLoad_Settings_Str = ""; // Required (corrected from SrmdNcnnVulkan_PreLoad_Settings_Str)
+    QString SRMD_NCNN_Vulkan_PreLoad_Settings_Str = "";
     QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_SrmdNcnnVulkan;
 
-    // Waifu2x-Caffe
     int Waifu2x_Caffe_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int Waifu2x_Caffe_GIF(int rowNum);
     int Waifu2x_Caffe_GIF_scale(QMap<QString, QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed);
@@ -331,14 +303,12 @@ public:
     void DeleteErrorLog_Waifu2xCaffe();
     QString Waifu2xCaffe_PreLoad_Settings_Str = "";
 
-    // SRMD-CUDA
     int SRMD_CUDA_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int SRMD_CUDA_GIF(int rowNum);
     int SRMD_CUDA_Video(int rowNum);
     int SRMD_CUDA_Video_BySegment(int rowNum);
-    QString SRMD_CUDA_PreLoad_Settings_Str = ""; // Required
+    QString SRMD_CUDA_PreLoad_Settings_Str = "";
 
-    // RealCUGAN-ncnn-Vulkan
     QString m_realcugan_Model;
     int m_realcugan_Scale;
     int m_realcugan_DenoiseLevel;
@@ -357,15 +327,8 @@ public:
     void Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
     bool APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
     void Realcugan_ncnn_vulkan_DetectGPU();
-    /** Build the -g job string based on the stored GPU list. */
     QString RealcuganNcnnVulkan_MultiGPU();
-
-    /** Add a GPU with thread count to the multi GPU list. */
-    void AddGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid,
-                                              int threads = 1,
-                                              int tile = 0);
-
-    /** Remove a GPU from the multi GPU list. */
+    void AddGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid, int threads = 1, int tile = 0);
     void RemoveGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid);
     void Realcugan_NCNN_Vulkan_PreLoad_Settings();
     QString Realcugan_NCNN_Vulkan_PreLoad_Settings_Str = "";
@@ -374,7 +337,6 @@ public:
     void Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString &tempPathBase, int maxPassIndex, bool keepFinal = false, const QString& finalFile = "");
     bool Realcugan_ProcessSingleFileIteratively(const QString &inputFile, const QString &outputFile, int targetScale, int originalWidth, int originalHeight, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat, bool experimental, int rowNumForStatusUpdate = -1);
 
-    // Real-ESRGAN-ncnn-Vulkan
     QString m_realesrgan_ModelName;
     int m_realesrgan_ModelNativeScale;
     int m_realesrgan_TileSize;
@@ -384,7 +346,7 @@ public:
     QList<QProcess*> ProcList_RealESRGAN;
     QStringList Available_GPUID_RealESRGAN_ncnn_vulkan;
     QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_RealesrganNcnnVulkan;
-    QMutex MultiGPU_QMutex_RealesrganNcnnVulkan; // Already present
+    QMutex MultiGPU_QMutex_RealesrganNcnnVulkan;
     void RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingAlphaChannel);
     void RealESRGAN_NCNN_Vulkan_GIF(int rowNum);
     void RealESRGAN_NCNN_Vulkan_Video(int rowNum);
@@ -394,19 +356,17 @@ public:
     bool APNG_RealESRGANNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
     void RealESRGAN_ncnn_vulkan_DetectGPU();
     void RealESRGAN_NCNN_Vulkan_PreLoad_Settings();
-    // Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str is defined above with other PreLoad_Settings_Str
     QStringList RealESRGAN_NCNN_Vulkan_PrepareArguments(const QString &inputFile, const QString &outputFile, int currentPassScale, const QString &modelName, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat);
     bool RealESRGAN_ProcessSingleFileIteratively(const QString &inputFile, const QString &outputFile, int targetScale, int modelNativeScale, const QString &modelName, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat, int rowNumForStatusUpdate = -1);
     QList<int> CalculateRealESRGANScaleSequence(int targetScale, int modelNativeScale);
     bool RealESRGAN_SetupTempDir(const QString &inputFile, const QString &outputFile, QDir &tempDir, QString &tempPathBase);
     void RealESRGAN_CleanupTempDir(const QDir &tempDir);
     void RealESRGAN_NCNN_Vulkan_CleanupTempFiles(const QString& p1, int p2, bool p3, const QString& p4);
-    int GPU_ID_RealesrganNcnnVulkan_MultiGPU_CycleCounter; // Already present
+    int GPU_ID_RealesrganNcnnVulkan_MultiGPU_CycleCounter;
 
-    // Frame Interpolation (RIFE, CAIN, DAIN)
-    QString Rife_NCNN_Vulkan_PreLoad_Settings_Str = ""; // Required
-    QString Cain_NCNN_Vulkan_PreLoad_Settings_Str = ""; // Required
-    QString Dain_NCNN_Vulkan_PreLoad_Settings_Str = ""; // Required
+    QString Rife_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    QString Cain_NCNN_Vulkan_PreLoad_Settings_Str = "";
+    QString Dain_NCNN_Vulkan_PreLoad_Settings_Str = "";
     int FrameInterpolation_DetectGPU();
     QStringList Available_GPUID_FrameInterpolation;
     int Old_FrameInterpolation_Engine_Index=0;
@@ -415,8 +375,6 @@ public:
     int FrameInterpolation_Video(int rowNum);
     int FrameInterpolation_Video_BySegment(int rowNum);
 
-
-    //======================= Threading & Process Management =======================
     void Wait_waifu2x_stop();
     std::atomic<bool> waifu2x_STOP{false};
     std::atomic<bool> waifu2x_STOP_confirm{false};
@@ -426,7 +384,6 @@ public:
     QMutex mutex_ThreadNumRunning;
     QMutex mutex_SubThreadNumRunning;
 
-    //======================= GPU Detection & Management =======================
     int Waifu2x_DetectGPU();
     int Waifu2x_DumpProcessorList_converter();
     int Core_num = 0;
@@ -435,17 +392,16 @@ public:
     int SRMD_DetectGPU();
     QStringList Available_GPUID_srmd;
     QString GPU_ID_STR_SRMD="";
-    int Realsr_ncnn_vulkan_DetectGPU(); // Already declared with RealSR section
+    int Realsr_ncnn_vulkan_DetectGPU();
     void ListGPUs_Anime4k();
-    int GPU_ID_Anime4k_GetGPUInfo = 0; // Already present
-    QString Anime4k_GetGPUInfo(); // Already present
-    QMutex GetGPUInfo_QMutex_Anime4k; // Already present
-    int GPU_ID_Waifu2xCaffe_GetGPUInfo = 0; // Already present
-    QString Waifu2xCaffe_GetGPUInfo(); // Already present
-    QMutex GetGPUInfo_QMutex_Waifu2xCaffe; // Already present
-    int Get_NumOfGPU_W2xCaffe(); // Already present
+    int GPU_ID_Anime4k_GetGPUInfo = 0;
+    QString Anime4k_GetGPUInfo();
+    QMutex GetGPUInfo_QMutex_Anime4k;
+    int GPU_ID_Waifu2xCaffe_GetGPUInfo = 0;
+    QString Waifu2xCaffe_GetGPUInfo();
+    QMutex GetGPUInfo_QMutex_Waifu2xCaffe;
+    int Get_NumOfGPU_W2xCaffe();
 
-    //======================== Image & GIF & Video Utilities ================================
     bool Image_Gif_AutoSkip_CustRes(int rowNum,bool isGif);
     QMap<QString,int> Image_Gif_Read_Resolution(QString SourceFileFullPath);
     QString SaveImageAs_FormatAndQuality(QString OriginalSourceImage_fullPath, QString ScaledImage_fullPath, bool isDenoiseLevelEnabled, int DenoiseLevel);
@@ -492,16 +448,14 @@ public:
     QMutex MultiLine_ErrorOutput_QMutex;
     bool video_isNeedProcessBySegment(int rowNum);
     void DelVfiDir(QString VideoPath);
-    QString HDNDenoiseLevel_image; // Required
-    QString HDNDenoiseLevel_gif;   // Required
-    QString HDNDenoiseLevel_video; // Required
+    QString HDNDenoiseLevel_image;
+    QString HDNDenoiseLevel_gif;
+    QString HDNDenoiseLevel_video;
 
-    //======================== Metadata Cache ================================
     FileMetadataCache getOrFetchMetadata(const QString &filePath);
     QMap<QString, FileMetadataCache> m_metadataCache;
     QMutex m_metadataCacheMutex;
 
-    //======================== Compatibility Testing ================================
     int Waifu2x_Compatibility_Test();
     int Simple_Compatibility_Test();
     void waitForCompatibilityTest();
@@ -527,9 +481,8 @@ public:
     bool isCompatible_Waifu2x_Caffe_CPU = false;
     bool isCompatible_Waifu2x_Caffe_GPU = false;
     bool isCompatible_Waifu2x_Caffe_cuDNN = false;
-    bool isCompatible_Realsr_NCNN_Vulkan = false; // Already present
+    bool isCompatible_Realsr_NCNN_Vulkan = false;
 
-    //============================ Custom Resolution ====================================
     QList<QMap<QString, QString>> Custom_resolution_list;
     void CustRes_remove(QString fullpath);
     bool CustRes_isContained(QString fullpath);
@@ -540,42 +493,23 @@ public:
     QMap<QString, QString> DoubleScaleRatio_Cal_NewScaleRatio_NewHW(QString fullpath,double ScaleRatio_double);
     Qt::AspectRatioMode CustRes_AspectRatioMode = Qt::IgnoreAspectRatio;
 
-    //======================== Settings IO ===========================================
     int Settings_Read_Apply();
     bool Settings_isReseted = false;
     QVariant Settings_Read_value(QString Key);
-    /**
-     * @brief Read a value from the settings file.
-     * @param key The key to look up.
-     * @param defaultValue The value to return if the key does not exist.
-     */
     QVariant Settings_Read_value(const QString &key, const QVariant &defaultValue);
     bool isReadOldSettings = false;
     void PreLoad_Engines_Settings();
     int Calculate_Temporary_ScaleRatio_W2xNCNNVulkan(int ScaleRatio);
 
-    //======================== Missing Member Functions (Stubs for realcugan_ncnn_vulkan.cpp) =======================
     QString Generate_Output_Path(const QString& original_fileName, const QString& suffix);
     void Set_Progress_Bar_Value(int val, int max_val);
     void Set_Current_File_Progress_Bar_Value(int val, int max_val);
 
-    //======================== APNG Processing =================
     void APNG_Main(int rowNum,bool isFromImageList);
     void APNG_Split2Frames(QString sourceFileFullPath,QString splitFramesFolder);
     void APNG_Frames2APNG(QString sourceFileFullPath, QString scaledFramesFolder, QString resultFileFullPath, bool isOverScaled);
     bool APNG_isAnimatedPNG(int rowNum);
-    // bool APNG_Waifu2xConverter(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
-    // int Waifu2x_Converter_APNG_scale(QMap<QString, QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed); // Removed
-    // bool APNG_SrmdNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
-    // bool APNG_Anime4k(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
-    // int Anime4k_APNG_scale(QMap<QString,QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed); // Removed
-    // bool APNG_SrmdCUDA(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
-    // bool APNG_Waifu2xCaffe(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
-    // int Waifu2x_Caffe_APNG_scale(QMap<QString, QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed); // Removed
-    // bool APNG_RealsrNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath); // Removed
 
-
-    //================================ Other Utilities =======================================
     bool isCustomVideoSettingsClicked=true;
     void pushButton_Start_setEnabled_self(bool isEnabled);
     void pushButton_Stop_setEnabled_self(bool isEnabled);
@@ -599,7 +533,7 @@ public:
     void Delay_sec_sleep(int time);
     void Delay_msec_sleep(int time);
     void Play_NFSound();
-    QMediaPlayer *m_player = nullptr; // For notification sound
+    QMediaPlayer *m_player = nullptr;
     QTimer *TimeCostTimer;
     long unsigned int TimeCost = 0;
     QString Seconds2hms(long unsigned int seconds);
@@ -684,12 +618,9 @@ public:
     QMutex QMutex_ResizeImage_MultiThread;
     void ResizeImage_MultiThread(int New_width,int New_height,QString ImagesPath);
     ~MainWindow();
-    // Start upscaling with the selected engine, returns 0 on success
     int Waifu2x();
     bool Check_PreLoad_Settings();
 
-    //======================= UI Pointers (Auto-connected by Qt's MOC) =======================
-    // RealCUGAN UI Pointers
     QComboBox *comboBox_Model_RealCUGAN;
     QSpinBox *spinBox_Scale_RealCUGAN;
     QSpinBox *spinBox_DenoiseLevel_RealCUGAN;
@@ -708,8 +639,7 @@ public:
     QPushButton *pushButton_TileSize_Minus_RealCUGAN;
     QWidget *widget_RealCUGAN_Hidden;
 
-    // RealESRGAN UI Pointers
-    QComboBox *comboBox_Model_RealsrNCNNVulkan; // Name implies RealESRGAN
+    QComboBox *comboBox_Model_RealsrNCNNVulkan;
     QComboBox *comboBox_GPUID_RealsrNCNNVulkan;
     QPushButton *pushButton_DetectGPU_RealsrNCNNVulkan;
     QSpinBox *spinBox_TileSize_RealsrNCNNVulkan;
@@ -723,7 +653,7 @@ public:
     QSpinBox *spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan;
     QPushButton *pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan;
 
-public slots: // Ensure this is the primary public slots section
+public slots:
     void Batch_Table_Update_slots(const QList<FileLoadInfo>& imageFiles,
                                   const QList<FileLoadInfo>& gifFiles,
                                   const QList<FileLoadInfo>& videoFiles,
@@ -746,10 +676,8 @@ public slots: // Ensure this is the primary public slots section
     void SystemTray_NewMessage(QString message);
     void EnableBackgroundMode_SystemTray();
     void on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason);
-    // void progressbar_setRange_min_max(int min, int max); // Old slot
-    // void progressbar_Add(); // Old slot
-    void progressbar_setRange_min_max_slots(int min, int max_val); // New slot
-    void progressbar_Add_slots(); // New slot
+    void progressbar_setRange_min_max_slots(int min, int max_val);
+    void progressbar_Add_slots();
     void Table_image_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status);
     void Table_gif_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status);
     void Table_video_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status);
@@ -759,16 +687,16 @@ public slots: // Ensure this is the primary public slots section
     void TimeSlot();
     int Waifu2x_Compatibility_Test_finished();
     int Waifu2x_DetectGPU_finished();
-    int Realsr_ncnn_vulkan_DetectGPU_finished(); // For RealSR (distinct from RealESRGAN)
+    int Realsr_ncnn_vulkan_DetectGPU_finished();
     int FrameInterpolation_DetectGPU_finished();
     int Realcugan_NCNN_Vulkan_DetectGPU_finished();
     int RealESRGAN_ncnn_vulkan_DetectGPU_finished();
     int CheckUpdate_NewUpdate(QString update_str, QString Change_log);
     void FinishedProcessing_DN();
     int Table_FileCount_reload();
-    void Table_image_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
-    void Table_gif_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
-    void Table_video_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
+    void Table_image_insert_fileName_fullPath(const FileLoadInfo& fileInfo); // Corrected Signature
+    void Table_gif_insert_fileName_fullPath(const FileLoadInfo& fileInfo);   // Corrected Signature
+    void Table_video_insert_fileName_fullPath(const FileLoadInfo& fileInfo); // Corrected Signature
     void Table_image_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width);
     void Table_gif_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width);
     void Table_video_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width);
@@ -814,6 +742,8 @@ public slots: // Ensure this is the primary public slots section
     void on_checkBox_AlwaysHideSettings_stateChanged(int arg1);
     void on_pushButton_Save_GlobalFontSize_clicked();
     void on_pushButton_BrowserFile_clicked();
+    void on_pushButton_CheckUpdate_clicked(); // Correctly declared
+    void on_pushButton_compatibilityTest_clicked(); // Correctly declared
     void on_pushButton_wiki_clicked();
     void on_pushButton_HideTextBro_clicked();
     void on_checkBox_AlwaysHideTextBrowser_stateChanged(int arg1);
@@ -873,14 +803,9 @@ public slots: // Ensure this is the primary public slots section
     void on_pushButton_TurnOffScreen_clicked();
     void on_pushButton_MultipleOfFPS_VFI_MIN_clicked();
     void on_pushButton_MultipleOfFPS_VFI_ADD_clicked();
-
     void on_comboBox_TargetProcessor_converter_currentIndexChanged(int index);
-
-    // Custom Resolution Slots
     void on_pushButton_CustRes_cancel_clicked();
     void on_pushButton_CustRes_apply_clicked();
-
-    // Frame Interpolation Slots
     void on_pushButton_DetectGPU_VFI_clicked();
     void on_lineEdit_MultiGPU_IDs_VFI_editingFinished();
     void on_checkBox_MultiGPU_VFI_stateChanged(int arg1);
@@ -893,8 +818,6 @@ public slots: // Ensure this is the primary public slots section
     void on_pushButton_Verify_MultiGPU_VFI_clicked();
     void on_checkBox_MultiThread_VFI_stateChanged(int arg1);
     void on_checkBox_MultiThread_VFI_clicked();
-
-    // RealCUGAN Slots
     void on_pushButton_DetectGPU_RealCUGAN_clicked();
     void on_checkBox_MultiGPU_RealCUGAN_stateChanged(int arg1);
     void on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked();
@@ -908,9 +831,7 @@ public slots: // Ensure this is the primary public slots section
     void Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError();
     void Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error);
     void Realcugan_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error);
-
-    // RealESRGAN Slots
-    void on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked(); // Assuming RealsrNCNNVulkan maps to RealESRGAN UI
+    void on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked();
     void on_comboBox_Model_RealsrNCNNVulkan_currentIndexChanged(int index);
     void on_pushButton_Add_TileSize_RealsrNCNNVulkan_clicked();
     void on_pushButton_Minus_TileSize_RealsrNCNNVulkan_clicked();
@@ -930,11 +851,8 @@ public slots: // Ensure this is the primary public slots section
     void onRealESRGANProcessError(QProcess::ProcessError error);
     void onRealESRGANProcessStdOut();
     void onRealESRGANProcessStdErr();
-
     void progressbar_clear();
-    void progressbar_SetToMax(int maxval); // Already declared, ensuring it's correct
-
-    // Slots from error report
+    void progressbar_SetToMax(int maxval);
     void on_pushButton_SaveFileList_clicked();
     void on_tableView_image_doubleClicked(const QModelIndex &index);
     void on_tableView_gif_doubleClicked(const QModelIndex &index);
@@ -946,9 +864,8 @@ public slots: // Ensure this is the primary public slots section
     void on_pushButton_ResetSettings_clicked();
     void toggleLiquidGlass(bool enabled);
 
-private slots: // Changed from public slots to private as these are internal
-    void TextBrowser_StartMes();
-
+private slots:
+    void TextBrowser_StartMes(); // Single declaration in private slots
 
 signals:
     void Send_Table_EnableSorting(bool EnableSorting);
@@ -956,10 +873,9 @@ signals:
     void Send_Unable2Connect_RawGithubusercontentCom();
     void Send_SetEnable_pushButton_ForceRetry_self();
     void Send_SystemTray_NewMessage(QString message);
-    // void Send_PrograssBar_Range_min_max(int, int); // Old signal
-    // void Send_progressbar_Add(); // Old signal
-    void Send_PrograssBar_Range_min_max_slots(int min, int max_val); // New signal
-    void Send_progressbar_Add_slots(); // New signal
+    void Send_PrograssBar_Range_min_max_slots(int min, int max_val);
+    void Send_progressbar_Add_slots();
+    void Send_progressbar_Add(); // Correct signal
     void Send_Table_image_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status);
     void Send_Table_gif_ChangeStatus_rowNumInt_statusQString(int, QString);
     void Send_Table_video_ChangeStatus_rowNumInt_statusQString(int, QString);
@@ -969,15 +885,15 @@ signals:
     void Send_Waifu2x_Compatibility_Test_finished();
     void Send_Waifu2x_DetectGPU_finished();
     void Send_FinishedProcessing_DN();
-    void Send_Realsr_ncnn_vulkan_DetectGPU_finished(); // For RealSR
+    void Send_Realsr_ncnn_vulkan_DetectGPU_finished();
     void Send_FrameInterpolation_DetectGPU_finished();
-    void Send_Realesrgan_ncnn_vulkan_DetectGPU_finished(); // For RealESRGAN
+    void Send_Realesrgan_ncnn_vulkan_DetectGPU_finished();
     void Send_CheckUpdate_NewUpdate(QString, QString);
     void Send_Table_FileCount_reload();
+    // Keep old signals for Table_..._insert if they are used by other connections, though Batch_Table_Update is preferred
     void Send_Table_image_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
     void Send_Table_gif_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
     void Send_Table_video_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
-    // void Send_Table_video_insert_fileLoadInfo(const FileLoadInfo& fileInfo); // Example for future use if needed
 
     void Send_Batch_Table_Update(const QList<FileLoadInfo>& imageFiles,
                                  const QList<FileLoadInfo>& gifFiles,
@@ -1004,15 +920,8 @@ signals:
     void Send_Donate_ReplaceQRCode(QString QRCodePath);
     void Send_Set_checkBox_DisableResize_gif_Checked();
 
-    // RealCUGAN Signals
-    void Send_Realcugan_ncnn_vulkan_DetectGPU_finished(); // Already present
+    void Send_Realcugan_ncnn_vulkan_DetectGPU_finished();
 
-    // RealESRGAN Signals (Send_Realesrgan_ncnn_vulkan_DetectGPU_finished is already listed above)
-
-
-private slots: // Changed from public slots to private as these are internal
-    void TextBrowser_StartMes();
-    // Note: Batch_Table_Update_slots was moved to public slots for connect
 
 private:
     int m_NumProc = 0;
@@ -1020,7 +929,6 @@ private:
     int m_TotalNumProc = 0;
     int m_StartedProc = 0;
     int m_FinishedProc = 0;
-    // Helper function declarations
     void LoadScaledImageToLabel(const QString &imagePath, QLabel *label);
     void UpdateTotalProcessedFilesCount();
     void ProcessNextFile();
@@ -1029,9 +937,7 @@ private:
     void UpdateNumberOfActiveThreads();
     void UpdateProgressBar();
     void ShellMessageBox(const QString &title, const QString &text, QMessageBox::Icon icon);
-    // Worker thread deduplication helper
     bool Deduplicate_filelist_worker(const QString& SourceFile_fullPath, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
-    // Worker function for loading file lists
     void ProcessFileListWorker(QString file_list_Path, const QSet<QString>& existingImagePaths, const QSet<QString>& existingGifPaths, const QSet<QString>& existingVideoPaths);
 
     LiquidGlassWidget *glassWidget {nullptr};
@@ -1039,3 +945,4 @@ private:
 
     Ui::MainWindow *ui;
 };
+#endif // MAINWINDOW_H

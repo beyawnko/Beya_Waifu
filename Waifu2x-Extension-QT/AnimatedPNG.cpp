@@ -165,7 +165,7 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+sourceFileFullPath+tr("]. Error: [Unable to assemble APNG.]"));
         if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
         else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots();
         return;
     }
 

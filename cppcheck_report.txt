@@ -1,0 +1,6 @@
+Waifu2x-Extension-QT/topsupporterslist.h:40:9: error: There is an unknown macro here somewhere. Configuration is required. If slots is a macro then please configure it. [unknownMacro]
+private slots:
+        ^
+Waifu2x-Extension-QT/LiquidGlassWidget.h:64:8: error: There is an unknown macro here somewhere. Configuration is required. If Q_SLOTS is a macro then please configure it. [unknownMacro]
+public Q_SLOTS:
+       ^

@@ -1119,5 +1119,3 @@ QString MainWindow::isPreVFIDone_MarkFilePath(QString VideoPath)
     QString video_ext = vfinfo.suffix();
     return video_dir+"/"+video_filename+"_"+video_ext+"_PreVFIDone.W2xEX";
 }
-
-[end of Waifu2x-Extension-QT/Frame_Interpolation.cpp]
