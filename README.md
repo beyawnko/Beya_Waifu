@@ -322,7 +322,7 @@ glass->setRefractionScale(1.33f);
 ### Main window integration
 
 The Settings panel exposes a checkbox labeled **Enable Liquid Glass**. Toggling this option overlays a refractive sphere
-on the central widget using the `icon/BackgroudMode.png` texture as its environment. The overlay resizes with the window
+on the central widget using the `icon/BackgroundMode.png` texture as its environment. The overlay resizes with the window
 and can be enabled or disabled at runtime.
 
 ## RealCUGAN and RealESRGAN

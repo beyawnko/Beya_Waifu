@@ -245,7 +245,7 @@ debug/qrc_icon.cpp: icon.qrc \
 		icon/refresh.png \
 		icon/cancel.png \
 		icon/patreon.png \
-		icon/BackgroudMode.png \
+		icon/BackgroundMode.png \
 		icon/patreon_sysTray.png \
 		icon/RemoveItem_disabled.png \
 		icon/TurnOffScreen_hover.png \
