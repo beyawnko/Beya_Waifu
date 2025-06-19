@@ -41,6 +41,13 @@ menus. Detected IDs are saved to `settings.ini` so that subsequent launches rest
    git clone --recursive https://github.com/beyawnko/Beya_Waifu.git
    cd Beya_Waifu
    ```
+   Qt's `uic` tool generates `ui_mainwindow.h` from `mainwindow.ui` during the
+   build. If you need to regenerate this header manually, run:
+   ```bash
+   uic Waifu2x-Extension-QT/mainwindow.ui -o ui_mainwindow.h
+   ```
+   The previous `captured_ui_mainwindow.h.txt` snapshot has been removed and is
+   no longer needed.
 1. Build all components with the helper script:
    ```bash
    ./build_projects.sh

@@ -1,0 +1,1 @@
+Removed obsolete captured_ui_mainwindow.h.txt which was a snapshot of Qt's generated header. Added README note on regenerating ui_mainwindow.h using Qt's uic. Pytest shows mainwindow.ui fails to load due to mismatched tag (line 2830).
