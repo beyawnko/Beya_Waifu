@@ -34,7 +34,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [File does not exist.]"));
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots();
         return 0;
     }
     //==========================
@@ -49,7 +49,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Cannot convert video format to mp4.]"));
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots();
         return 0;//If stop bit is enabled, return directly
     }
     //=================
@@ -223,7 +223,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
                 {
                     emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Unable to split video into pictures.]"));
                     emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-                    emit Send_progressbar_Add();
+                    emit Send_progressbar_Add_slots();
                     return 0;//If stop bit is enabled, return directly
                 }
             }
@@ -252,7 +252,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
             }
             emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Unable to assemble pictures into videos.]"));
             emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-            emit Send_progressbar_Add();
+            emit Send_progressbar_Add_slots();
             return 0;//If stop bit is enabled, return directly
         }
         /*==========================
@@ -285,7 +285,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
         }
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Unable to assemble video clips.]"));
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots();
         return 0;//If stop bit is enabled, return directly
     }
     //============================== Delete cache files ====================================================
@@ -327,7 +327,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
         MoveFileToOutputPath(video_mp4_scaled_fullpath,SourceFile_fullPath);
     }
     //============================ Update progress bar =================================
-    emit Send_progressbar_Add();
+    emit Send_progressbar_Add_slots();
     //=========
     return 0;
 }
@@ -346,7 +346,7 @@ int MainWindow::FrameInterpolation_Video(int rowNum)
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [File does not exist.]"));
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots();
         return 0;
     }
     //==========================
@@ -361,7 +361,7 @@ int MainWindow::FrameInterpolation_Video(int rowNum)
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Cannot convert video format to mp4.]"));
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots();
         return 0;//If stop bit is enabled, return directly
     }
     QString AudioPath = file_path+"/Audio_"+file_name+"_"+file_ext+"_W2xEX.wav";//Audio
@@ -379,7 +379,7 @@ int MainWindow::FrameInterpolation_Video(int rowNum)
     {
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Unable to split video into pictures.]"));
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots();
         return 0;//If stop bit is enabled, return directly
     }
     //======================================== Assemble ======================================================
@@ -395,7 +395,7 @@ int MainWindow::FrameInterpolation_Video(int rowNum)
         }
         emit Send_TextBrowser_NewMessage(tr("Error occured when processing [")+SourceFile_fullPath+tr("]. Error: [Unable to assemble pictures into videos.]"));
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed");
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots();
         return 0;//If stop bit is enabled, return directly
     }
     //============================== Delete cache files ====================================================
@@ -435,7 +435,7 @@ int MainWindow::FrameInterpolation_Video(int rowNum)
         MoveFileToOutputPath(video_mp4_scaled_fullpath,SourceFile_fullPath);
     }
     //============================ Update progress bar =================================
-    emit Send_progressbar_Add();
+    emit Send_progressbar_Add_slots();
     //=========================== Separator ==============================
     return 0;
 }
@@ -1119,3 +1119,5 @@ QString MainWindow::isPreVFIDone_MarkFilePath(QString VideoPath)
     QString video_ext = vfinfo.suffix();
     return video_dir+"/"+video_filename+"_"+video_ext+"_PreVFIDone.W2xEX";
 }
+
+[end of Waifu2x-Extension-QT/Frame_Interpolation.cpp]

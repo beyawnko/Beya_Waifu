@@ -57,7 +57,7 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
             emit Send_TextBrowser_NewMessage(tr("Warning! Unable to read the resolution of [") + sourceFileFullPath + tr("]. This file will only be scaled to ") + QString::number((int)double_ScaleRatio_gif,10) + "X.");
             if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
             else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
-            emit Send_progressbar_Add();
+            emit Send_progressbar_Add_slots();
             return;
         }
         int origWidth = metadata.width;
@@ -72,7 +72,7 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
              // If fractional scaling cannot determine original size, it's an error for this path.
             if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
             else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
-            emit Send_progressbar_Add();
+            emit Send_progressbar_Add_slots();
             return;
         }
 
@@ -124,7 +124,7 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
         file_DelDir(splitFramesFolder);
         file_DelDir(scaledFramesFolder);
         if(isNeedRemoveFromCustResList)CustRes_remove(sourceFileFullPath);
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots();
         return;
     }
 
@@ -156,7 +156,7 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
     {
         if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
         else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots(); // Corrected: Only one call
         return;
     }
 
@@ -189,7 +189,7 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
     {
         MoveFileToOutputPath(resultFileFullPath,sourceFileFullPath);
     }
-    emit Send_progressbar_Add();
+    emit Send_progressbar_Add_slots();
     return;
 }
 

@@ -51,65 +51,35 @@ void MainWindow::dropEvent(QDropEvent *event)
     this->setAcceptDrops(0);
     emit Send_TextBrowser_NewMessage(tr("Adding files, please wait."));
     //===================================================
-    (void)QtConcurrent::run([this, urls]() { this->Read_urls(urls); });
-}
-/*
-Read urls
-*/
-void MainWindow::Read_urls(QList<QUrl> urls)
-{
-    // Emit signal to set the total number of items for progress bar (using new slot name)
-    // Data collection lists
-    QList<QPair<QString, QString>> imagesToAdd;
-    QList<QPair<QString, QString>> gifsToAdd;
-    QList<QPair<QString, QString>> videosToAdd;
-    bool localAddNewImage = false;
-    bool localAddNewGif = false;
-    bool localAddNewVideo = false;
-
-    // For Deduplication: Fetch current paths from MainWindow (main thread) once.
-    // This assumes 'this' (MainWindow*) is safe to call directly if QtConcurrent::run captures it appropriately.
-    // For greater safety, these could be passed as copies to Read_urls if it were a free function.
-    QSet<QString> existingImagePaths = QSet<QString>::fromList(this->getImageFullPaths());
-    QSet<QString> existingGifPaths = QSet<QString>::fromList(this->getGifFullPaths());
-    QSet<QString> existingVideoPaths = QSet<QString>::fromList(this->getVideoFullPaths());
-
-    emit Send_PrograssBar_Range_min_max_slots(0, urls.size()); // For scanning progress
-
-    if(ui->checkBox_ScanSubFolders->isChecked())
-    {
-        for(const QUrl &url : urls) // Use const ref
-        {
-            // Pass down the collected lists and flags to be populated
-            Add_File_Folder_IncludeSubFolder(url.toLocalFile(),
-                                             imagesToAdd, gifsToAdd, videosToAdd,
-                                             localAddNewImage, localAddNewGif, localAddNewVideo,
-                                             existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set); // Pass QSet directly
-            emit Send_progressbar_Add_slots(); // Progress for each URL scanned
+    // Prepare lists of existing paths in the main thread (as dropEvent is a MainWindow method)
+    QStringList existingImagePaths_copy = this->getImageFullPaths();
+    QStringList existingGifPaths_copy;
+    if (this->Table_model_gif) { // 'this' refers to MainWindow instance
+        for (int i = 0; i < this->Table_model_gif->rowCount(); ++i) {
+            if(this->Table_model_gif->item(i, 1))
+                existingGifPaths_copy.append(this->Table_model_gif->item(i, 1)->text());
         }
     }
-    else
-    {
-        for(const QUrl &url : urls) // Use const ref
-        {
-            Add_File_Folder(url.toLocalFile(),
-                            imagesToAdd, gifsToAdd, videosToAdd,
-                            localAddNewImage, localAddNewGif, localAddNewVideo,
-                            existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set); // Pass QSet directly
-            emit Send_progressbar_Add_slots(); // Progress for each URL scanned
+    QStringList existingVideoPaths_copy;
+    if (this->Table_model_video) {
+        for (int i = 0; i < this->Table_model_video->rowCount(); ++i) {
+             if(this->Table_model_video->item(i, 1))
+                existingVideoPaths_copy.append(this->Table_model_video->item(i, 1)->text());
         }
     }
 
-    // After processing all URLs, emit one signal to update the tables in the main thread.
-    emit Send_Batch_Table_Update(imagesToAdd, gifsToAdd, videosToAdd, localAddNewImage, localAddNewGif, localAddNewVideo);
-    // Send_Read_urls_finfished(); // This is now effectively handled by Batch_Table_Update_slots
+    // Convert to QSet for efficient lookup in worker thread (capture by copy)
+    QSet<QString> existingImagePaths_set = QSet<QString>::fromList(existingImagePaths_copy);
+    QSet<QString> existingGifPaths_set = QSet<QString>::fromList(existingGifPaths_copy);
+    QSet<QString> existingVideoPaths_set = QSet<QString>::fromList(existingVideoPaths_copy);
+
+    (void)QtConcurrent::run([this, urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set]() {
+        this->Read_urls(urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+    });
 }
 /*
-Read urls (signature changed to accept QSet for deduplication)
+Read urls (this is the implementation for the signature in mainwindow.h called by QtConcurrent::run)
 */
-// The actual function signature for Read_urls that is called by QtConcurrent::run
-// is in mainwindow.h and mainwindow.cpp (where it's defined).
-// This version in files.cpp is actually MainWindow::Read_urls
 void MainWindow::Read_urls(QList<QUrl> urls,
                            const QSet<QString>& existingImagePaths_set,
                            const QSet<QString>& existingGifPaths_set,
