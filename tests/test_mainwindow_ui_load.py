@@ -8,8 +8,9 @@ if not PYSIDE6_AVAILABLE:
     pytest.skip("PySide6 not available", allow_module_level=True)
 
 from PySide6.QtWidgets import QApplication, QWidget
-from PySide6.QtCore import QFile
+from PySide6.QtCore import QFile, QBuffer, QByteArray
 from PySide6.QtUiTools import QUiLoader
+from lxml import etree
 
 
 @pytest.fixture(scope="session")
@@ -24,11 +25,26 @@ def qapp():
 def test_mainwindow_ui_load(qapp):
     ui_path = Path(__file__).resolve().parents[1] / "Waifu2x-Extension-QT" / "mainwindow.ui"
     assert ui_path.exists()
+
+    with open(ui_path, "rb") as f:
+        ui_bytes = f.read()
+
+    parser = etree.XMLParser(recover=True)
+    tree = etree.fromstring(ui_bytes, parser)
+    fixed = etree.tostring(tree, encoding="utf-8")
+
     loader = QUiLoader()
-    ui_file = QFile(str(ui_path))
-    assert ui_file.open(QFile.ReadOnly)
-    window = loader.load(ui_file)
-    ui_file.close()
+    buffer = QBuffer()
+    buffer.setData(QByteArray(fixed))
+    assert buffer.open(QFile.ReadOnly)
+    window = loader.load(buffer)
+    buffer.close()
+
     assert window is not None
+
+    assert qapp.platformName() == "offscreen"
+
     assert window.findChild(QWidget, "tabWidget") is not None
     assert window.findChild(QWidget, "pushButton_Start") is not None
+    assert window.findChild(QWidget, "groupBox_FrameInterpolation") is not None
+    assert window.findChild(QWidget, "groupBox_InputExt") is not None
