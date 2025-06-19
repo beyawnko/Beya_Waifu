@@ -54,7 +54,7 @@ void MainWindow::Init_SystemTrayIcon()
     //===
     BackgroundModeAct_SystemTrayIcon->setText(tr("Background mode"));
     BackgroundModeAct_SystemTrayIcon->setToolTip(tr("Set the number of threads to \"1\" to reduce background resource usage."));
-    BackgroundModeAct_SystemTrayIcon->setIcon(QIcon(":/new/prefix1/icon/BackgroudMode.png"));
+    BackgroundModeAct_SystemTrayIcon->setIcon(QIcon(":/new/prefix1/icon/BackgroundMode.png"));
     //===
     SendFeedback_SystemTrayIcon->setText(tr("Send feedback"));
     SendFeedback_SystemTrayIcon->setIcon(QIcon(":/new/prefix1/icon/SendFeedback.png"));

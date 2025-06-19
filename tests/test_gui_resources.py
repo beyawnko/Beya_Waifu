@@ -17,7 +17,7 @@ def test_liquid_glass_background_resource_exists():
     # and linked, without a full QApplication running, but it's safer if one is.
     # We assume pytest-qt or similar sets up the minimal Qt environment.
 
-    image_path = ":/new/prefix1/icon/BackgroudMode.png"
+    image_path = ":/new/prefix1/icon/BackgroundMode.png"
     image = QImage(image_path)
 
     if image.isNull():
