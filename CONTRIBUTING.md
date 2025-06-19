@@ -10,7 +10,11 @@ Thank you for considering a contribution! Please follow these steps when prepari
    ```bash
    pip install -r requirements.txt
    ```
-3. Execute the tests from the repository root:
+3. Generate the Liquid Glass shader if `shaders/liquidglass.frag.qsb` is missing:
+   ```bash
+   ./tools/build_liquidglass_shader.sh
+   ```
+4. Execute the tests from the repository root:
    ```bash
    pytest
    ```

@@ -273,6 +273,11 @@ Run the application with `--verbose` to capture detailed logs in `logs/waifu.log
 The application ships with an experimental Liquid Glass shader that creates a refractive glass sphere from the scene
 behind it. Building this effect requires the `qsb` tool provided by Qt 6. The `Waifu2x-Extension-QT.pro` file runs `qsb`
 automatically and writes `shaders/liquidglass.frag.qsb`. Ensure the tool is available in `PATH` when invoking `qmake`.
+If you cloned the repository without build artifacts, create this file manually using `qsb`:
+
+```bash
+./tools/build_liquidglass_shader.sh
+```
 The Liquid Glass shader parameters (resolution, time, mouse, IOR, etc.) are now passed via a Uniform Buffer Object (UBO).
 This change in `liquidglass.frag` requires corresponding setup in `LiquidGlassWidget.cpp` to define, populate, and bind this UBO.
 
@@ -363,8 +368,8 @@ Below is the start-up screen of the optional launcher:
   [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) documentation for detailed usage and model descriptions.
 - Install the packages from `requirements.txt` before running `pytest` or you will encounter `ImportError` messages for
   modules such as `PySide6` and `Pillow`.
-- When `simple_build.sh` fails with errors about `*.qsb` files, install the Qt 6 shader tools package:
-  `sudo apt install qt6-shadertools-dev`.
+  - When `simple_build.sh` or the GUI tests fail with errors about `*.qsb` files, install the Qt 6 shader tools package and
+    regenerate `shaders/liquidglass.frag.qsb` using `./tools/build_liquidglass_shader.sh`.
 
 ## Tests
 
@@ -376,6 +381,12 @@ Install the packages listed in `requirements.txt` before running `pytest`:
 
 ```bash
 pip install -r requirements.txt
+```
+
+If `tests/test_qml_liquidglass.py` warns that `shaders/liquidglass.frag.qsb` is missing, run:
+
+```bash
+./tools/build_liquidglass_shader.sh
 ```
 
 `PySide6` and `Pillow` are required, and missing either will cause `ImportError` failures in the tests. The suite
