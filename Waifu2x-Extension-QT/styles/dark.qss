@@ -264,3 +264,181 @@ QTabWidget::pane { /* The area where tab pages are displayed */
     background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #333333, stop:1 #292929);
     top: -1px; /* Overlap with bottom border of tabs */
 }
+
+/* Added Styles Start Here */
+
+QComboBox {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3a3a3a, stop:1 #2d2d2d);
+    border: 1px solid #444444;
+    border-radius: 3px;
+    padding: 2px 18px 2px 3px; /* Padding for text, leave space for arrow */
+    min-width: 6em;
+    color: #eeeeee;
+    selection-background-color: #506070; /* Consistent selection color */
+}
+
+QComboBox:on { /* Shift the text when the popup is open */
+    padding-top: 3px;
+    padding-left: 4px;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+    border-left-width: 1px;
+    border-left-color: #444444;
+    border-left-style: solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #414141, stop:1 #2c2c2c);
+}
+QComboBox::drop-down:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #5a5a5a, stop:1 #454545);
+}
+
+QComboBox::down-arrow {
+    image: url(:/qt-project.org/styles/commonstyle/images/down_arrow.png); /* Standard Qt arrow, should be recolored by QStyle or replaced */
+    /* For a pure QSS arrow, you might need to use a character or border trick, or a resource image */
+}
+QComboBox::down-arrow:on {
+    top: 1px;
+    left: 1px;
+}
+
+QComboBox QAbstractItemView { /* Popup list */
+    background-color: #2d2d2d;
+    border: 1px solid #555555;
+    selection-background-color: #506070;
+    color: #eeeeee;
+}
+
+QSpinBox {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3a3a3a, stop:1 #2d2d2d);
+    border: 1px solid #444444;
+    padding-right: 15px; /* make room for buttons */
+    color: #eeeeee;
+    selection-background-color: #606060;
+}
+
+QSpinBox::up-button, QSpinBox::down-button {
+    subcontrol-origin: border; /* Position buttons inside the border */
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #414141, stop:1 #2c2c2c);
+    border-left: 1px solid #444444;
+    width: 14px; /* Width of the buttons */
+}
+QSpinBox::up-button:hover, QSpinBox::down-button:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #5a5a5a, stop:1 #454545);
+}
+QSpinBox::up-button:pressed, QSpinBox::down-button:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #252525, stop:1 #303030);
+}
+
+QSpinBox::up-button {
+    subcontrol-position: top right; /* Position at the top right corner */
+}
+QSpinBox::down-button {
+    subcontrol-position: bottom right; /* Position at the bottom right corner */
+}
+
+QSpinBox::up-arrow {
+    image: url(:/qt-project.org/styles/commonstyle/images/up_arrow.png);
+    width: 7px;
+    height: 7px;
+}
+QSpinBox::down-arrow {
+    image: url(:/qt-project.org/styles/commonstyle/images/down_arrow.png);
+    width: 7px;
+    height: 7px;
+}
+QSpinBox:disabled {
+    background-color: #3b3b3b;
+    color: #777777;
+    border-color: #4c4c4c;
+}
+QSpinBox::up-button:disabled, QSpinBox::down-button:disabled {
+    background-color: #3b3b3b;
+    border-left-color: #4c4c4c;
+}
+
+QTableView {
+    background-color: #2d2d2d; /* Slightly darker than main background for contrast */
+    border: 1px solid #444444;
+    gridline-color: #444444;
+    color: #dddddd;
+    selection-background-color: #506070;
+    selection-color: #ffffff; /* Text color for selected items */
+}
+
+QTableView::item {
+    padding: 3px;
+    /* No specific background for items by default, uses QTableView background */
+}
+
+QTableView::item:selected {
+    background-color: #506070; /* Selection background */
+    color: #ffffff; /* Selected text color */
+}
+
+QHeaderView::section {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #414141, stop:1 #2c2c2c);
+    color: #eeeeee;
+    padding: 4px;
+    border: 1px solid #555555;
+    border-bottom: 2px solid #4c8ad9; /* Accent for header bottom */
+}
+QHeaderView::section:hover {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #5a5a5a, stop:1 #454545);
+}
+QHeaderView::section:pressed {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #252525, stop:1 #303030);
+}
+
+QSplitter::handle {
+    background-color: #303030;
+    border: 1px solid #262626;
+}
+QSplitter::handle:horizontal {
+    width: 5px;
+    image: url(:/qt-project.org/styles/commonstyle/images/splitter_horizontal.png); /* Needs a dark-themed image or use borders */
+}
+QSplitter::handle:vertical {
+    height: 5px;
+    image: url(:/qt-project.org/styles/commonstyle/images/splitter_vertical.png); /* Needs a dark-themed image or use borders */
+}
+QSplitter::handle:pressed {
+    background-color: #4c8ad9;
+}
+
+QStatusBar {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #303030, stop:1 #262626);
+    border-top: 1px solid #444444;
+    color: #dddddd;
+}
+QStatusBar::item {
+    border: none; /* No border for items by default */
+    margin: 0px;
+}
+
+QDialog {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #303030, stop:1 #262626);
+    color: #dddddd;
+    border: 1px solid #444444; /* Optional: if dialogs should have a distinct border */
+}
+
+QToolTip {
+    background-color: #262626;
+    color: #dddddd;
+    border: 1px solid #555555;
+    padding: 4px;
+    border-radius: 3px;
+    opacity: 220; /* Slightly transparent */
+}
+
+/* Ensure scrollbars within QTableView and QAbstractItemView (like QComboBox popup) also get styled */
+QTableView QScrollBar:horizontal, QAbstractItemView QScrollBar:horizontal {
+    /* Uses global QScrollBar:horizontal styles */
+}
+QTableView QScrollBar:vertical, QAbstractItemView QScrollBar:vertical {
+    /* Uses global QScrollBar:vertical styles */
+}

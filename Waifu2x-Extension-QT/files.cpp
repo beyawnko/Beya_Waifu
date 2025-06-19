@@ -58,110 +58,145 @@ Read urls
 */
 void MainWindow::Read_urls(QList<QUrl> urls)
 {
-    emit Send_PrograssBar_Range_min_max(0, urls.size());
+    // Emit signal to set the total number of items for progress bar (using new slot name)
+    // Data collection lists
+    QList<QPair<QString, QString>> imagesToAdd;
+    QList<QPair<QString, QString>> gifsToAdd;
+    QList<QPair<QString, QString>> videosToAdd;
+    bool localAddNewImage = false;
+    bool localAddNewGif = false;
+    bool localAddNewVideo = false;
+
+    // For Deduplication: Fetch current paths from MainWindow (main thread) once.
+    // This assumes 'this' (MainWindow*) is safe to call directly if QtConcurrent::run captures it appropriately.
+    // For greater safety, these could be passed as copies to Read_urls if it were a free function.
+    QSet<QString> existingImagePaths = QSet<QString>::fromList(this->getImageFullPaths());
+    QSet<QString> existingGifPaths = QSet<QString>::fromList(this->getGifFullPaths());
+    QSet<QString> existingVideoPaths = QSet<QString>::fromList(this->getVideoFullPaths());
+
+    emit Send_PrograssBar_Range_min_max_slots(0, urls.size()); // For scanning progress
+
     if(ui->checkBox_ScanSubFolders->isChecked())
     {
-        foreach(QUrl url, urls)
+        for(const QUrl &url : urls) // Use const ref
         {
-            Add_File_Folder_IncludeSubFolder(url.toLocalFile());
-            emit Send_progressbar_Add();
+            // Pass down the collected lists and flags to be populated
+            Add_File_Folder_IncludeSubFolder(url.toLocalFile(),
+                                             imagesToAdd, gifsToAdd, videosToAdd,
+                                             localAddNewImage, localAddNewGif, localAddNewVideo,
+                                             existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set); // Pass QSet directly
+            emit Send_progressbar_Add_slots(); // Progress for each URL scanned
         }
     }
     else
     {
-        foreach(QUrl url, urls)
+        for(const QUrl &url : urls) // Use const ref
         {
-            Add_File_Folder(url.toLocalFile());
-            emit Send_progressbar_Add();
+            Add_File_Folder(url.toLocalFile(),
+                            imagesToAdd, gifsToAdd, videosToAdd,
+                            localAddNewImage, localAddNewGif, localAddNewVideo,
+                            existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set); // Pass QSet directly
+            emit Send_progressbar_Add_slots(); // Progress for each URL scanned
         }
     }
-    emit Send_Read_urls_finfished();
-    return;
+
+    // After processing all URLs, emit one signal to update the tables in the main thread.
+    emit Send_Batch_Table_Update(imagesToAdd, gifsToAdd, videosToAdd, localAddNewImage, localAddNewGif, localAddNewVideo);
+    // Send_Read_urls_finfished(); // This is now effectively handled by Batch_Table_Update_slots
 }
+/*
+Read urls (signature changed to accept QSet for deduplication)
+*/
+// The actual function signature for Read_urls that is called by QtConcurrent::run
+// is in mainwindow.h and mainwindow.cpp (where it's defined).
+// This version in files.cpp is actually MainWindow::Read_urls
+void MainWindow::Read_urls(QList<QUrl> urls,
+                           const QSet<QString>& existingImagePaths_set,
+                           const QSet<QString>& existingGifPaths_set,
+                           const QSet<QString>& existingVideoPaths_set)
+{
+    // Data collection lists
+    QList<QPair<QString, QString>> imagesToAdd;
+    QList<QPair<QString, QString>> gifsToAdd;
+    QList<QPair<QString, QString>> videosToAdd;
+    bool localAddNewImage = false;
+    bool localAddNewGif = false;
+    bool localAddNewVideo = false;
+
+    // Note: existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set are now passed in directly.
+
+    emit Send_PrograssBar_Range_min_max_slots(0, urls.size()); // For scanning progress
+
+    if(ui->checkBox_ScanSubFolders->isChecked())
+    {
+        for(const QUrl &url : urls) // Use const ref
+        {
+            Add_File_Folder_IncludeSubFolder(url.toLocalFile(),
+                                             imagesToAdd, gifsToAdd, videosToAdd,
+                                             localAddNewImage, localAddNewGif, localAddNewVideo,
+                                             existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+            emit Send_progressbar_Add_slots(); // Progress for each URL scanned
+        }
+    }
+    else
+    {
+        for(const QUrl &url : urls) // Use const ref
+        {
+            Add_File_Folder(url.toLocalFile(),
+                            imagesToAdd, gifsToAdd, videosToAdd,
+                            localAddNewImage, localAddNewGif, localAddNewVideo,
+                            existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+            emit Send_progressbar_Add_slots(); // Progress for each URL scanned
+        }
+    }
+
+    // After processing all URLs, emit one signal to update the tables in the main thread.
+    emit Send_Batch_Table_Update(imagesToAdd, gifsToAdd, videosToAdd, localAddNewImage, localAddNewGif, localAddNewVideo);
+}
+
 /*
 Read urls
 Aftermath/Cleanup
 */
 void MainWindow::Read_urls_finfished()
 {
-    //================== Release UI control ========================
-    ui_tableViews_setUpdatesEnabled(true);
-    //===
-    ui->groupBox_Setting->setEnabled(1);
-    ui->groupBox_FileList->setEnabled(1);
-    pushButton_Start_setEnabled_self(1);
-    ui->groupBox_InputExt->setEnabled(1);
-    ui->checkBox_ScanSubFolders->setEnabled(1);
-    this->setAcceptDrops(1);
-    emit Send_TextBrowser_NewMessage(tr("Add file complete."));
-    //===================================================
-    emit Send_PrograssBar_Range_min_max(0, 0);
-    //======================
-    //If no files were added
-    if(AddNew_gif==false&&AddNew_image==false&&AddNew_video==false)
-    {
-        QMessageBox *MSG = new QMessageBox();
-        MSG->setWindowTitle(tr("Warning"));
-        MSG->setText(tr("The file format is not supported, please enter supported file format, or add more file extensions yourself."));
-        MSG->setIcon(QMessageBox::Warning);
-        MSG->setModal(true);
-        MSG->show();
-        return;
-    }
-    if(AddNew_image)
-    {
-        ui->tableView_image->setVisible(1);
-    }
-    if(AddNew_gif)
-    {
-        ui->tableView_gif->setVisible(1);
-    }
-    if(AddNew_video)
-    {
-        ui->tableView_video->setVisible(1);
-    }
-    //===================
-    ui->tableView_gif->scrollToBottom();
-    ui->tableView_image->scrollToBottom();
-    ui->tableView_video->scrollToBottom();
-    QScrollBar *image_ScrBar = ui->tableView_image->horizontalScrollBar();
-    image_ScrBar->setValue(0);
-    QScrollBar *gif_ScrBar = ui->tableView_gif->horizontalScrollBar();
-    gif_ScrBar->setValue(0);
-    QScrollBar *video_ScrBar = ui->tableView_video->horizontalScrollBar();
-    video_ScrBar->setValue(0);
-    //==========
-    AddNew_image=false;
-    AddNew_gif=false;
-    AddNew_video=false;
-    //============
-    Table_FileCount_reload();
+    // This function's primary responsibilities (re-enabling UI, showing messages, updating tables)
+    // have been moved to Batch_Table_Update_slots, which is called in the main thread
+    // after the worker thread (Read_urls) finishes collecting all file information.
+    // The progress bar reset for the "loading files" phase is also handled there.
+    // Global AddNew_image flags are also handled by the new slot based on info from worker.
+    qDebug() << "Read_urls_finfished() called - its responsibilities are now in Batch_Table_Update_slots.";
 }
 
 
 /*
 Add files & folders
 */
-void MainWindow::Add_File_Folder(QString Full_Path)
+void MainWindow::Add_File_Folder(QString Full_Path,
+                                 QList<QPair<QString, QString>>& imagesToAdd,
+                                 QList<QPair<QString, QString>>& gifsToAdd,
+                                 QList<QPair<QString, QString>>& videosToAdd,
+                                 bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo,
+                                 const QSet<QString>& existingImagePaths_set, // Changed to _set
+                                 const QSet<QString>& existingGifPaths_set,   // Changed to _set
+                                 const QSet<QString>& existingVideoPaths_set) // Changed to _set
 {
     QFileInfo fileinfo(Full_Path);
     if(fileinfo.isFile())
     {
         QString file_name = fileinfo.fileName();
-        FileList_Add(file_name, Full_Path);
+        FileList_Add(file_name, Full_Path, imagesToAdd, gifsToAdd, videosToAdd, localAddNewImage, localAddNewGif, localAddNewVideo, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
     }
     else
     {
-        QStringList FileNameList = file_getFileNames_in_Folder_nofilter(Full_Path);//Read legal file names
+        QStringList FileNameList = file_getFileNames_in_Folder_nofilter(Full_Path); //Read legal file names
         QString Full_Path_File = "";
         if(!FileNameList.isEmpty())
         {
-            QString tmp="";
-            for(int i = 0; i < FileNameList.size(); i++)
+            for(const QString &tmp : FileNameList) // Use const ref and range-based for
             {
-                tmp = FileNameList.at(i);
                 Full_Path_File = Full_Path + "/" + tmp;
-                FileList_Add(tmp, Full_Path_File);
+                FileList_Add(tmp, Full_Path_File, imagesToAdd, gifsToAdd, videosToAdd, localAddNewImage, localAddNewGif, localAddNewVideo, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
             }
         }
     }
@@ -170,13 +205,20 @@ void MainWindow::Add_File_Folder(QString Full_Path)
 Add files & folders
 Scan subfolders
 */
-void MainWindow::Add_File_Folder_IncludeSubFolder(QString Full_Path)
+void MainWindow::Add_File_Folder_IncludeSubFolder(QString Full_Path,
+                                                  QList<QPair<QString, QString>>& imagesToAdd,
+                                                  QList<QPair<QString, QString>>& gifsToAdd,
+                                                  QList<QPair<QString, QString>>& videosToAdd,
+                                                  bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo,
+                                                  const QSet<QString>& existingImagePaths_set, // Changed to _set
+                                                  const QSet<QString>& existingGifPaths_set,   // Changed to _set
+                                                  const QSet<QString>& existingVideoPaths_set) // Changed to _set
 {
     QFileInfo fileinfo(Full_Path);
     if(fileinfo.isFile())
     {
         QString file_name = fileinfo.fileName();
-        FileList_Add(file_name, Full_Path);
+        FileList_Add(file_name, Full_Path, imagesToAdd, gifsToAdd, videosToAdd, localAddNewImage, localAddNewGif, localAddNewVideo, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
         return;
     }
 
@@ -184,9 +226,9 @@ void MainWindow::Add_File_Folder_IncludeSubFolder(QString Full_Path)
     for (const QString &path : filePaths)
     {
         QFileInfo info(path);
-        if (info.isFile() && QFile::exists(path))
+        if (info.isFile() && QFile::exists(path)) // Ensure it's an existing file
         {
-            FileList_Add(info.fileName(), path);
+            FileList_Add(info.fileName(), path, imagesToAdd, gifsToAdd, videosToAdd, localAddNewImage, localAddNewGif, localAddNewVideo, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
         }
     }
 }
@@ -214,33 +256,33 @@ QStringList MainWindow::file_getFileNames_in_Folder_nofilter(QString path)
 /*
 Add files to file list and table
 */
-int MainWindow::FileList_Add(QString fileName, QString SourceFile_fullPath)
+// Modified FileList_Add to populate lists instead of emitting signals directly
+int MainWindow::FileList_Add(QString fileName, QString SourceFile_fullPath,
+                             QList<QPair<QString, QString>>& imagesToAdd,
+                             QList<QPair<QString, QString>>& gifsToAdd,
+                             QList<QPair<QString, QString>>& videosToAdd,
+                             bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo,
+                             const QSet<QString>& existingImagePaths_set, // Changed to _set
+                             const QSet<QString>& existingGifPaths_set,   // Changed to _set
+                             const QSet<QString>& existingVideoPaths_set) // Changed to _set
 {
     QFileInfo fileinfo(SourceFile_fullPath);
     QString file_ext = fileinfo.suffix().toLower();
+
+    // Deduplication using the passed-in sets
+    if (Deduplicate_filelist_worker(SourceFile_fullPath, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set)) { // Use _set
+        return 0; // Already exists in one of the lists (implicitly, as sets are based on current table content)
+    }
+
     //============================  Determine if it is an image ===============================
-    QString Ext_image_str = ui->Ext_image->text().toLower();
+    QString Ext_image_str = ui->Ext_image->text().toLower(); // Assuming ui elements are accessible if 'this' is MainWindow
     QStringList nameFilters_image = Ext_image_str.split(":");
     nameFilters_image.removeAll("gif");
     nameFilters_image.removeAll("apng");
     if (nameFilters_image.contains(file_ext))
     {
-        AddNew_image=true;
-        int rowNum = Table_image_get_rowNum();
-        QMap<QString, QString> map;
-        map["SourceFile_fullPath"] = SourceFile_fullPath;
-        map["rowNum"] = QString::number(rowNum, 10);
-        if(!Deduplicate_filelist(SourceFile_fullPath))
-        {
-            mutex_Table_insert_finished.lock();
-            Table_insert_finished=false;
-            mutex_Table_insert_finished.unlock();
-            emit Send_Table_image_insert_fileName_fullPath(fileName, SourceFile_fullPath);
-            while(!Table_insert_finished)
-            {
-                Delay_msec_sleep(10);
-            }
-        }
+        imagesToAdd.append(qMakePair(fileName, SourceFile_fullPath));
+        localAddNewImage = true;
         return 0;
     }
     //============================  Determine if it is a video ===============================
@@ -250,55 +292,49 @@ int MainWindow::FileList_Add(QString fileName, QString SourceFile_fullPath)
     nameFilters_video.removeAll("apng");
     if (nameFilters_video.contains(file_ext))
     {
-        AddNew_video=true;
-        int rowNum = Table_video_get_rowNum();
-        QMap<QString, QString> map;
-        map["SourceFile_fullPath"] = SourceFile_fullPath;
-        map["rowNum"] = QString::number(rowNum, 10);
-        if(!Deduplicate_filelist(SourceFile_fullPath))
-        {
-            mutex_Table_insert_finished.lock();
-            Table_insert_finished=false;
-            mutex_Table_insert_finished.unlock();
-            emit Send_Table_video_insert_fileName_fullPath(fileName, SourceFile_fullPath);
-            while(!Table_insert_finished)
-            {
-                Delay_msec_sleep(10);
-            }
-        }
+        videosToAdd.append(qMakePair(fileName, SourceFile_fullPath));
+        localAddNewVideo = true;
         return 0;
     }
     //============================  Finally, it can only be gif & apng ===============================
     if(file_ext=="gif" || file_ext=="apng")
     {
-        int rowNum = Table_gif_get_rowNum();
-        QMap<QString, QString> map;
-        map["SourceFile_fullPath"] = SourceFile_fullPath;
-        map["rowNum"] = QString::number(rowNum, 10);
-        AddNew_gif=true;
-        if(!Deduplicate_filelist(SourceFile_fullPath))
-        {
-            mutex_Table_insert_finished.lock();
-            Table_insert_finished=false;
-            mutex_Table_insert_finished.unlock();
-            emit Send_Table_gif_insert_fileName_fullPath(fileName, SourceFile_fullPath);
-            while(!Table_insert_finished)
-            {
-                Delay_msec_sleep(10);
-            }
-        }
+        gifsToAdd.append(qMakePair(fileName, SourceFile_fullPath));
+        localAddNewGif = true;
         return 0;
     }
     return 0;
 }
+
 /*
-Determine if it is already in the file list
+Determine if it is already in the file list (Worker thread version)
 */
+bool MainWindow::Deduplicate_filelist_worker(const QString& SourceFile_fullPath,
+                                             const QSet<QString>& existingImagePaths_set, // Changed to _set
+                                             const QSet<QString>& existingGifPaths_set,   // Changed to _set
+                                             const QSet<QString>& existingVideoPaths_set) // Changed to _set
+{
+    // This function is called from the worker thread.
+    // It checks against copies of paths taken at the start of Read_urls.
+    if (existingImagePaths_set.contains(SourceFile_fullPath) ||
+        existingGifPaths_set.contains(SourceFile_fullPath) ||
+        existingVideoPaths_set.contains(SourceFile_fullPath)) {
+        return true;
+    }
+    return false;
+}
+
+// Original Deduplicate_filelist is kept for now if called from elsewhere,
+// but drag-and-drop should use Deduplicate_filelist_worker.
 bool MainWindow::Deduplicate_filelist(QString SourceFile_fullPath)
 {
+    // This version accesses Table_model directly, should only be called from main thread.
+    // Kept for compatibility if other parts of the code use it.
+    // The drag-and-drop path will use Deduplicate_filelist_worker.
     for ( int i = 0; i < Table_model_image->rowCount(); i++ )
     {
-        QString fullpath_readRow =  Table_model_image->item(i,2)->text();
+        // Assuming full path is in column 1 now based on Batch_Table_Update_slots and getter analysis
+        QString fullpath_readRow =  Table_model_image->item(i,1)->text();
         if(fullpath_readRow == SourceFile_fullPath)
         {
             return true;
@@ -306,7 +342,7 @@ bool MainWindow::Deduplicate_filelist(QString SourceFile_fullPath)
     }
     for ( int i = 0; i < Table_model_gif->rowCount(); i++ )
     {
-        QString fullpath_readRow =  Table_model_gif->item(i,2)->text();
+        QString fullpath_readRow =  Table_model_gif->item(i,1)->text();
         if(fullpath_readRow == SourceFile_fullPath)
         {
             return true;
@@ -314,7 +350,7 @@ bool MainWindow::Deduplicate_filelist(QString SourceFile_fullPath)
     }
     for ( int i = 0; i < Table_model_video->rowCount(); i++ )
     {
-        QString fullpath_readRow =  Table_model_video->item(i,2)->text();
+        QString fullpath_readRow =  Table_model_video->item(i,1)->text();
         if(fullpath_readRow == SourceFile_fullPath)
         {
             return true;
