@@ -603,14 +603,14 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
         QString fullPath =configIniRead->value("/table_image/"+QString::number(i,10)+"_fullPath").toString();
         QString CustRes_str =configIniRead->value("/table_image/"+QString::number(i,10)+"_CustRes_str").toString();
         //================
-        mutex_Table_insert_finished.lock();
-        Table_insert_finished=false;
-        mutex_Table_insert_finished.unlock();
+        // mutex_Table_insert_finished.lock(); // Obsolete
+        // Table_insert_finished=false; // Obsolete
+        // mutex_Table_insert_finished.unlock(); // Obsolete
         emit Send_Table_image_insert_fileName_fullPath(FileName,fullPath);
-        while(!Table_insert_finished)
-        {
-            Delay_msec_sleep(10);
-        }
+        // while(!Table_insert_finished) // Obsolete
+        // {
+        //     Delay_msec_sleep(10);
+        // }
         emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(i,status);
         if(status=="Failed")
         {
@@ -640,14 +640,14 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
         QString fullPath =configIniRead->value("/table_gif/"+QString::number(i,10)+"_fullPath").toString();
         QString CustRes_str =configIniRead->value("/table_gif/"+QString::number(i,10)+"_CustRes_str").toString();
         //================
-        mutex_Table_insert_finished.lock();
-        Table_insert_finished=false;
-        mutex_Table_insert_finished.unlock();
+        // mutex_Table_insert_finished.lock(); // Obsolete
+        // Table_insert_finished=false; // Obsolete
+        // mutex_Table_insert_finished.unlock(); // Obsolete
         emit Send_Table_gif_insert_fileName_fullPath(FileName,fullPath);
-        while(!Table_insert_finished)
-        {
-            Delay_msec_sleep(10);
-        }
+        // while(!Table_insert_finished) // Obsolete
+        // {
+        //     Delay_msec_sleep(10);
+        // }
         emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(i,status);
         if(status=="Failed")
         {
@@ -677,14 +677,14 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
         QString fullPath =configIniRead->value("/table_video/"+QString::number(i,10)+"_fullPath").toString();
         QString CustRes_str =configIniRead->value("/table_video/"+QString::number(i,10)+"_CustRes_str").toString();
         //================
-        mutex_Table_insert_finished.lock();
-        Table_insert_finished=false;
-        mutex_Table_insert_finished.unlock();
+        // mutex_Table_insert_finished.lock(); // Obsolete
+        // Table_insert_finished=false; // Obsolete
+        // mutex_Table_insert_finished.unlock(); // Obsolete
         emit Send_Table_video_insert_fileName_fullPath(FileName,fullPath);
-        while(!Table_insert_finished)
-        {
-            Delay_msec_sleep(10);
-        }
+        // while(!Table_insert_finished) // Obsolete
+        // {
+        //     Delay_msec_sleep(10);
+        // }
         emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(i,status);
         if(status=="Failed")
         {
@@ -702,20 +702,151 @@ int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
             res_map["width"] = CustRes_width;
             Custom_resolution_list.append(res_map);
         }
-        emit Send_progressbar_Add();
+        emit Send_progressbar_Add_slots();
         //Delay_msec_sleep(100);
     }
     //====================
-    emit Send_Table_Read_Saved_Table_Filelist_Finished(Table_FileList_ini);
+    // The main logic has been moved to ProcessFileListWorker.
+    // This function is kept to avoid breaking potential (though unlikely) direct internal calls,
+    // but it should no longer be the primary entry point for loading saved lists.
+    // on_pushButton_ReadFileList_clicked now calls ProcessFileListWorker directly via QtConcurrent.
+    // emit Send_Table_Read_Saved_Table_Filelist_Finished(Table_FileList_ini); // This is now emitted by the worker.
     return 0;
 }
+
+void MainWindow::ProcessFileListWorker(QString file_list_Path, const QSet<QString>& existingImagePaths, const QSet<QString>& existingGifPaths, const QSet<QString>& existingVideoPaths)
+{
+    if (!QFile::exists(file_list_Path)) {
+        emit Send_TextBrowser_NewMessage(tr("Cannot find the saved Files List!"));
+        // Ensure UI is re-enabled by emitting the finished signal
+        emit Send_Table_Read_Saved_Table_Filelist_Finished(file_list_Path);
+        return;
+    }
+
+    QSettings *configIniRead = new QSettings(file_list_Path, QSettings::IniFormat);
+
+    int rowCount_image = configIniRead->value("/table_image/rowCount", 0).toInt();
+    int rowCount_gif = configIniRead->value("/table_gif/rowCount", 0).toInt();
+    int rowCount_video = configIniRead->value("/table_video/rowCount", 0).toInt();
+    int totalFilesToLoad = rowCount_image + rowCount_gif + rowCount_video;
+
+    if (totalFilesToLoad == 0) {
+        emit Send_TextBrowser_NewMessage(tr("The file list is empty."));
+        emit Send_Table_Read_Saved_Table_Filelist_Finished(file_list_Path);
+        delete configIniRead;
+        return;
+    }
+
+    emit Send_PrograssBar_Range_min_max_slots(0, totalFilesToLoad);
+
+    QList<FileLoadInfo> imagesToLoad;
+    QList<FileLoadInfo> gifsToLoad;
+    QList<FileLoadInfo> videosToLoad;
+    bool localAddNewImage = false;
+    bool localAddNewGif = false;
+    bool localAddNewVideo = false;
+
+    // Read extensions (ideally pass these as args to worker, but using ui for now)
+    QString Ext_image_str = ui->Ext_image->text().toLower();
+    QStringList nameFilters_image = Ext_image_str.split(":");
+    nameFilters_image.removeAll("gif");
+    nameFilters_image.removeAll("apng");
+
+    QString Ext_video_str = ui->Ext_video->text().toLower();
+    QStringList nameFilters_video = Ext_video_str.split(":");
+    nameFilters_video.removeAll("gif");
+    nameFilters_video.removeAll("apng");
+
+    // Load Images
+    for (int i = 0; i < rowCount_image; i++) {
+        FileLoadInfo info;
+        info.fileName = configIniRead->value("/table_image/" + QString::number(i) + "_FileName").toString();
+        info.status = configIniRead->value("/table_image/" + QString::number(i) + "_status").toString();
+        info.fullPath = configIniRead->value("/table_image/" + QString::number(i) + "_fullPath").toString();
+        QString custResStr = configIniRead->value("/table_image/" + QString::number(i) + "_CustRes_str").toString();
+        if (!custResStr.isEmpty()) {
+            info.customResolutionHeight = configIniRead->value("/table_image/" + QString::number(i) + "_CustRes_height").toString();
+            info.customResolutionWidth = configIniRead->value("/table_image/" + QString::number(i) + "_CustRes_width").toString();
+        }
+
+        if (!Deduplicate_filelist_worker(info.fullPath, existingImagePaths, existingGifPaths, existingVideoPaths)) {
+            imagesToLoad.append(info);
+            localAddNewImage = true;
+        }
+        emit Send_progressbar_Add_slots();
+    }
+
+    // Load GIFs
+    for (int i = 0; i < rowCount_gif; i++) {
+        FileLoadInfo info;
+        info.fileName = configIniRead->value("/table_gif/" + QString::number(i) + "_FileName").toString();
+        info.status = configIniRead->value("/table_gif/" + QString::number(i) + "_status").toString();
+        info.fullPath = configIniRead->value("/table_gif/" + QString::number(i) + "_fullPath").toString();
+        QString custResStr = configIniRead->value("/table_gif/" + QString::number(i) + "_CustRes_str").toString();
+        if (!custResStr.isEmpty()) {
+            info.customResolutionHeight = configIniRead->value("/table_gif/" + QString::number(i) + "_CustRes_height").toString();
+            info.customResolutionWidth = configIniRead->value("/table_gif/" + QString::number(i) + "_CustRes_width").toString();
+        }
+
+        if (!Deduplicate_filelist_worker(info.fullPath, existingImagePaths, existingGifPaths, existingVideoPaths)) {
+            // Double check file type based on extension, as INI might be old/mixed
+            QFileInfo qFileInfo(info.fullPath);
+            QString file_ext = qFileInfo.suffix().toLower();
+            if (file_ext == "gif" || file_ext == "apng") {
+                 gifsToLoad.append(info);
+                 localAddNewGif = true;
+            } else if (nameFilters_image.contains(file_ext)) {
+                 imagesToLoad.append(info); // Re-classify as image if needed
+                 localAddNewImage = true;
+            } else {
+                // Could add to a generic "unknown" list or log if necessary
+            }
+        }
+        emit Send_progressbar_Add_slots();
+    }
+
+    // Load Videos
+    for (int i = 0; i < rowCount_video; i++) {
+        FileLoadInfo info;
+        info.fileName = configIniRead->value("/table_video/" + QString::number(i) + "_FileName").toString();
+        info.status = configIniRead->value("/table_video/" + QString::number(i) + "_status").toString();
+        info.fullPath = configIniRead->value("/table_video/" + QString::number(i) + "_fullPath").toString();
+        QString custResStr = configIniRead->value("/table_video/" + QString::number(i) + "_CustRes_str").toString();
+        if (!custResStr.isEmpty()) {
+            info.customResolutionHeight = configIniRead->value("/table_video/" + QString::number(i) + "_CustRes_height").toString();
+            info.customResolutionWidth = configIniRead->value("/table_video/" + QString::number(i) + "_CustRes_width").toString();
+        }
+
+        if (!Deduplicate_filelist_worker(info.fullPath, existingImagePaths, existingGifPaths, existingVideoPaths)) {
+            // Double check file type
+            QFileInfo qFileInfo(info.fullPath);
+            QString file_ext = qFileInfo.suffix().toLower();
+            if (nameFilters_video.contains(file_ext)) {
+                videosToLoad.append(info);
+                localAddNewVideo = true;
+            } else {
+                // Could add to a generic "unknown" list or log
+            }
+        }
+        emit Send_progressbar_Add_slots();
+    }
+
+    delete configIniRead;
+
+    emit Send_Batch_Table_Update(imagesToLoad, gifsToLoad, videosToLoad, localAddNewImage, localAddNewGif, localAddNewVideo);
+    emit Send_Table_Read_Saved_Table_Filelist_Finished(file_list_Path); // Signal completion
+}
+
 int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString Table_FileList_ini)
 {
-    Progressbar_MaxVal = 0;
-    Progressbar_CurrentVal = 0;
-    progressbar_clear();
-    //====
-    ui_tableViews_setUpdatesEnabled(true);
+    // This function is now primarily for UI re-enablement and final messages.
+    // The actual table population is done by Batch_Table_Update_slots.
+    // Progressbar_MaxVal = 0; // Obsolete
+    // Progressbar_CurrentVal = 0; // Obsolete
+    // progressbar_clear(); // This resets m_TotalNumProc, which might be undesirable if it was set by the worker.
+                         // Batch_Table_Update_slots handles the progress bar finalization for loading.
+
+    ui_tableViews_setUpdatesEnabled(true); // Ensure updates are on
     this->setAcceptDrops(1);
     pushButton_Start_setEnabled_self(1);
     ui->pushButton_CustRes_cancel->setEnabled(1);
@@ -723,59 +854,43 @@ int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString Table_FileList_
     ui->pushButton_ReadFileList->setEnabled(1);
     ui->pushButton_SaveFileList->setEnabled(1);
     ui->pushButton_BrowserFile->setEnabled(1);
-    if(!QFile::exists(Table_FileList_ini))
+    // Re-enable other UI elements disabled by on_pushButton_ReadFileList_clicked
+    ui->groupBox_Setting->setEnabled(1);
+    ui->groupBox_FileList->setEnabled(1);
+    ui->groupBox_InputExt->setEnabled(1);
+    ui->checkBox_ScanSubFolders->setEnabled(1);
+
+
+    if(!QFile::exists(Table_FileList_ini)) // Should not happen if worker checked first
     {
         return 0;
     }
-    //=================
-    QSettings *configIniRead = new QSettings(Table_FileList_ini, QSettings::IniFormat);
-    //====================
-    //========= image ========
-    int rowCount_image = configIniRead->value("/table_image/rowCount").toInt();
-    if(rowCount_image>0)
-    {
-        ui->tableView_image->setVisible(1);
+
+    // The visibility and scrolling logic is now handled by Batch_Table_Update_slots
+    // So, no need to re-read rowCounts here for that purpose.
+
+    Table_FileCount_reload(); // Ensure file counts are accurate based on what was actually added
+
+    // Check if anything was actually added (Batch_Table_Update_slots also has a similar check)
+    bool anyAdded = false;
+    if (Table_model_image->rowCount() > 0 || Table_model_gif->rowCount() > 0 || Table_model_video->rowCount() > 0) {
+        anyAdded = true; // A rough check, better if Batch_Table_Update_slots communicated this
     }
-    //========= gif ========
-    int rowCount_gif = configIniRead->value("/table_gif/rowCount").toInt();
-    if(rowCount_gif>0)
-    {
-        ui->tableView_gif->setVisible(1);
+
+    if(!anyAdded && QFile::exists(Table_FileList_ini)) { // If the file existed but nothing got added (e.g. all duplicates or empty sections)
+         QSettings settings(Table_FileList_ini, QSettings::IniFormat);
+         if (settings.childGroups().isEmpty() ||
+            (settings.value("/table_image/rowCount", 0).toInt() == 0 &&
+             settings.value("/table_gif/rowCount", 0).toInt() == 0 &&
+             settings.value("/table_video/rowCount", 0).toInt() == 0))
+         {
+            emit Send_TextBrowser_NewMessage(tr("The file list saved last time is empty."));
+         } else if (!localAddNewImage && !localAddNewGif && !localAddNewVideo) {
+            // This requires localAddNew flags to be member, or pass this info via another signal
+            // For now, Batch_Table_Update_slots handles the "no new files added" message more generically
+         }
     }
-    //========= video ========
-    int rowCount_video = configIniRead->value("/table_video/rowCount").toInt();
-    if(rowCount_video>0)
-    {
-        ui->tableView_video->setVisible(1);
-    }
-    //====================
-    ui->tableView_gif->scrollToBottom();
-    ui->tableView_image->scrollToBottom();
-    ui->tableView_video->scrollToBottom();
-    QScrollBar *image_ScrBar = ui->tableView_image->horizontalScrollBar();
-    image_ScrBar->setValue(0);
-    QScrollBar *gif_ScrBar = ui->tableView_gif->horizontalScrollBar();
-    gif_ScrBar->setValue(0);
-    QScrollBar *video_ScrBar = ui->tableView_video->horizontalScrollBar();
-    video_ScrBar->setValue(0);
-    //============
-    emit Send_TextBrowser_NewMessage(tr("File list update is complete!"));
-    //====
-    // progressbar_SetToMax(Progressbar_MaxVal); // This was using the member variable.
-                                             // The new slots directly update m_TotalNumProc and m_FinishedProc.
-                                             // The last Send_progressbar_Add_slots() call will bring it to 100%
-                                             // if all files were processed.
-    // Progressbar_MaxVal = 0; // Local variable totalFilesToLoad replaces this for the scope of Table_Read_Saved_Table_Filelist
-    // Progressbar_CurrentVal = 0;
-    //====
-    if(rowCount_image<=0&&rowCount_video<=0&&rowCount_gif<=0)
-    {
-        emit Send_TextBrowser_NewMessage(tr("The file list saved last time is empty."));
-        progressbar_clear();
-    }
-    //==
-    Table_FileCount_reload();
-    //===
+    emit Send_TextBrowser_NewMessage(tr("Finished loading file list.")); // General completion message
     return 0;
 }
 void MainWindow::on_tableView_image_doubleClicked(const QModelIndex &index)
