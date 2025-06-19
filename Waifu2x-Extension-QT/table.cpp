@@ -885,10 +885,8 @@ int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString Table_FileList_
              settings.value("/table_video/rowCount", 0).toInt() == 0))
          {
             emit Send_TextBrowser_NewMessage(tr("The file list saved last time is empty."));
-         } else if (!localAddNewImage && !localAddNewGif && !localAddNewVideo) {
-            // This requires localAddNew flags to be member, or pass this info via another signal
-            // For now, Batch_Table_Update_slots handles the "no new files added" message more generically
          }
+         // The problematic 'else if' block is removed.
     }
     emit Send_TextBrowser_NewMessage(tr("Finished loading file list.")); // General completion message
     return 0;

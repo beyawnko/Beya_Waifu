@@ -61,7 +61,7 @@ public:
     /* Set the refraction intensity of the effect. */
     void setRefractionScale(float scale); // Existing setter
 
-public Q_SLOTS:
+public slots:
     void setIOR(float ior);
     void setBorderRadius(float radius);
     void setChromaticAberrationOffset(float offset);

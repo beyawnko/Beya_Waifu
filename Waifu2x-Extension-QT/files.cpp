@@ -95,9 +95,9 @@ void MainWindow::Read_urls(QList<QUrl> urls,
                            const QSet<QString>& existingVideoPaths_set)
 {
     // Data collection lists
-    QList<QPair<QString, QString>> imagesToAdd;
-    QList<QPair<QString, QString>> gifsToAdd;
-    QList<QPair<QString, QString>> videosToAdd;
+    QList<QPair<QString, QString>> imagesToAdd_pair;
+    QList<QPair<QString, QString>> gifsToAdd_pair;
+    QList<QPair<QString, QString>> videosToAdd_pair;
     bool localAddNewImage = false;
     bool localAddNewGif = false;
     bool localAddNewVideo = false;
@@ -111,7 +111,7 @@ void MainWindow::Read_urls(QList<QUrl> urls,
         for(const QUrl &url : urls) // Use const ref
         {
             Add_File_Folder_IncludeSubFolder(url.toLocalFile(),
-                                             imagesToAdd, gifsToAdd, videosToAdd,
+                                             imagesToAdd_pair, gifsToAdd_pair, videosToAdd_pair,
                                              localAddNewImage, localAddNewGif, localAddNewVideo,
                                              existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
             emit Send_progressbar_Add_slots(); // Progress for each URL scanned
@@ -122,15 +122,48 @@ void MainWindow::Read_urls(QList<QUrl> urls,
         for(const QUrl &url : urls) // Use const ref
         {
             Add_File_Folder(url.toLocalFile(),
-                            imagesToAdd, gifsToAdd, videosToAdd,
+                            imagesToAdd_pair, gifsToAdd_pair, videosToAdd_pair,
                             localAddNewImage, localAddNewGif, localAddNewVideo,
                             existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
             emit Send_progressbar_Add_slots(); // Progress for each URL scanned
         }
     }
 
+    QList<FileLoadInfo> imageFileLoadInfoList;
+    for (const auto& pair : imagesToAdd_pair) {
+        FileLoadInfo info;
+        info.fileName = pair.first;
+        info.fullPath = pair.second;
+        info.status = "Waiting";
+        info.customResolutionWidth = "";
+        info.customResolutionHeight = "";
+        imageFileLoadInfoList.append(info);
+    }
+
+    QList<FileLoadInfo> gifFileLoadInfoList;
+    for (const auto& pair : gifsToAdd_pair) {
+        FileLoadInfo info;
+        info.fileName = pair.first;
+        info.fullPath = pair.second;
+        info.status = "Waiting";
+        info.customResolutionWidth = "";
+        info.customResolutionHeight = "";
+        gifFileLoadInfoList.append(info);
+    }
+
+    QList<FileLoadInfo> videoFileLoadInfoList;
+    for (const auto& pair : videosToAdd_pair) {
+        FileLoadInfo info;
+        info.fileName = pair.first;
+        info.fullPath = pair.second;
+        info.status = "Waiting";
+        info.customResolutionWidth = "";
+        info.customResolutionHeight = "";
+        videoFileLoadInfoList.append(info);
+    }
+
     // After processing all URLs, emit one signal to update the tables in the main thread.
-    emit Send_Batch_Table_Update(imagesToAdd, gifsToAdd, videosToAdd, localAddNewImage, localAddNewGif, localAddNewVideo);
+    emit Send_Batch_Table_Update(imageFileLoadInfoList, gifFileLoadInfoList, videoFileLoadInfoList, localAddNewImage, localAddNewGif, localAddNewVideo);
 }
 
 /*
@@ -152,9 +185,9 @@ void MainWindow::Read_urls_finfished()
 Add files & folders
 */
 void MainWindow::Add_File_Folder(QString Full_Path,
-                                 QList<QPair<QString, QString>>& imagesToAdd,
-                                 QList<QPair<QString, QString>>& gifsToAdd,
-                                 QList<QPair<QString, QString>>& videosToAdd,
+                                 QList<QPair<QString, QString>>& imagesToAdd_pair,
+                                 QList<QPair<QString, QString>>& gifsToAdd_pair,
+                                 QList<QPair<QString, QString>>& videosToAdd_pair,
                                  bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo,
                                  const QSet<QString>& existingImagePaths_set, // Changed to _set
                                  const QSet<QString>& existingGifPaths_set,   // Changed to _set
@@ -164,7 +197,7 @@ void MainWindow::Add_File_Folder(QString Full_Path,
     if(fileinfo.isFile())
     {
         QString file_name = fileinfo.fileName();
-        FileList_Add(file_name, Full_Path, imagesToAdd, gifsToAdd, videosToAdd, localAddNewImage, localAddNewGif, localAddNewVideo, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+        FileList_Add(file_name, Full_Path, imagesToAdd_pair, gifsToAdd_pair, videosToAdd_pair, localAddNewImage, localAddNewGif, localAddNewVideo, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
     }
     else
     {
@@ -175,7 +208,7 @@ void MainWindow::Add_File_Folder(QString Full_Path,
             for(const QString &tmp : FileNameList) // Use const ref and range-based for
             {
                 Full_Path_File = Full_Path + "/" + tmp;
-                FileList_Add(tmp, Full_Path_File, imagesToAdd, gifsToAdd, videosToAdd, localAddNewImage, localAddNewGif, localAddNewVideo, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+                FileList_Add(tmp, Full_Path_File, imagesToAdd_pair, gifsToAdd_pair, videosToAdd_pair, localAddNewImage, localAddNewGif, localAddNewVideo, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
             }
         }
     }
@@ -185,9 +218,9 @@ Add files & folders
 Scan subfolders
 */
 void MainWindow::Add_File_Folder_IncludeSubFolder(QString Full_Path,
-                                                  QList<QPair<QString, QString>>& imagesToAdd,
-                                                  QList<QPair<QString, QString>>& gifsToAdd,
-                                                  QList<QPair<QString, QString>>& videosToAdd,
+                                                  QList<QPair<QString, QString>>& imagesToAdd_pair,
+                                                  QList<QPair<QString, QString>>& gifsToAdd_pair,
+                                                  QList<QPair<QString, QString>>& videosToAdd_pair,
                                                   bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo,
                                                   const QSet<QString>& existingImagePaths_set, // Changed to _set
                                                   const QSet<QString>& existingGifPaths_set,   // Changed to _set
@@ -197,7 +230,7 @@ void MainWindow::Add_File_Folder_IncludeSubFolder(QString Full_Path,
     if(fileinfo.isFile())
     {
         QString file_name = fileinfo.fileName();
-        FileList_Add(file_name, Full_Path, imagesToAdd, gifsToAdd, videosToAdd, localAddNewImage, localAddNewGif, localAddNewVideo, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+        FileList_Add(file_name, Full_Path, imagesToAdd_pair, gifsToAdd_pair, videosToAdd_pair, localAddNewImage, localAddNewGif, localAddNewVideo, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
         return;
     }
 
@@ -207,7 +240,7 @@ void MainWindow::Add_File_Folder_IncludeSubFolder(QString Full_Path,
         QFileInfo info(path);
         if (info.isFile() && QFile::exists(path)) // Ensure it's an existing file
         {
-            FileList_Add(info.fileName(), path, imagesToAdd, gifsToAdd, videosToAdd, localAddNewImage, localAddNewGif, localAddNewVideo, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+            FileList_Add(info.fileName(), path, imagesToAdd_pair, gifsToAdd_pair, videosToAdd_pair, localAddNewImage, localAddNewGif, localAddNewVideo, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
         }
     }
 }
@@ -237,9 +270,9 @@ Add files to file list and table
 */
 // Modified FileList_Add to populate lists instead of emitting signals directly
 int MainWindow::FileList_Add(QString fileName, QString SourceFile_fullPath,
-                             QList<QPair<QString, QString>>& imagesToAdd,
-                             QList<QPair<QString, QString>>& gifsToAdd,
-                             QList<QPair<QString, QString>>& videosToAdd,
+                             QList<QPair<QString, QString>>& imagesToAdd_pair,
+                             QList<QPair<QString, QString>>& gifsToAdd_pair,
+                             QList<QPair<QString, QString>>& videosToAdd_pair,
                              bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo,
                              const QSet<QString>& existingImagePaths_set, // Changed to _set
                              const QSet<QString>& existingGifPaths_set,   // Changed to _set
@@ -260,7 +293,7 @@ int MainWindow::FileList_Add(QString fileName, QString SourceFile_fullPath,
     nameFilters_image.removeAll("apng");
     if (nameFilters_image.contains(file_ext))
     {
-        imagesToAdd.append(qMakePair(fileName, SourceFile_fullPath));
+        imagesToAdd_pair.append(qMakePair(fileName, SourceFile_fullPath));
         localAddNewImage = true;
         return 0;
     }
@@ -271,14 +304,14 @@ int MainWindow::FileList_Add(QString fileName, QString SourceFile_fullPath,
     nameFilters_video.removeAll("apng");
     if (nameFilters_video.contains(file_ext))
     {
-        videosToAdd.append(qMakePair(fileName, SourceFile_fullPath));
+        videosToAdd_pair.append(qMakePair(fileName, SourceFile_fullPath));
         localAddNewVideo = true;
         return 0;
     }
     //============================  Finally, it can only be gif & apng ===============================
     if(file_ext=="gif" || file_ext=="apng")
     {
-        gifsToAdd.append(qMakePair(fileName, SourceFile_fullPath));
+        gifsToAdd_pair.append(qMakePair(fileName, SourceFile_fullPath));
         localAddNewGif = true;
         return 0;
     }
