@@ -388,6 +388,9 @@ To execute the tests from the repository root simply run:
 pytest
 ```
 
+For a concise checklist when preparing pull requests, see
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
 When running the tests without a display server, set the Qt platform to "offscreen" so PySide6 does not attempt to load
 the native GUI libraries:
 

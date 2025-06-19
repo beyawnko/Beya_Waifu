@@ -2,6 +2,9 @@ import os
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 from pathlib import Path
 import pytest
+from tests import PYSIDE6_AVAILABLE
+if not PYSIDE6_AVAILABLE:
+    pytest.skip("PySide6 not available", allow_module_level=True)
 from PySide6.QtCore import QUrl
 from PySide6.QtQml import QQmlEngine, QQmlComponent
 from PySide6.QtWidgets import QApplication

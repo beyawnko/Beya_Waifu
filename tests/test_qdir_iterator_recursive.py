@@ -1,4 +1,8 @@
 import os
+import pytest
+from tests import PYSIDE6_AVAILABLE
+if not PYSIDE6_AVAILABLE:
+    pytest.skip("PySide6 not available", allow_module_level=True)
 from PySide6.QtCore import QDirIterator, QDir
 
 def test_qdir_iterator_recursive(tmp_path):

@@ -1,6 +1,9 @@
 import pytest
+from tests import PYSIDE6_AVAILABLE
+if not PYSIDE6_AVAILABLE:
+    pytest.skip("PySide6 not available", allow_module_level=True)
 from PySide6.QtGui import QImage
-from PySide6.QtCore import QCoreApplication # Required for resources to be initialized in some contexts
+from PySide6.QtCore import QCoreApplication  # Required for resources to be initialized in some contexts
 
 def test_liquid_glass_background_resource_exists():
     """
