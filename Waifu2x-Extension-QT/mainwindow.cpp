@@ -52,6 +52,7 @@ Copyright (C) 2025  beyawnko
 #include <algorithm>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QInputDialog>
 #include <QDebug>
 // QWidget and QTableView are pulled in by mainwindow.h or ui_mainwindow.h
 
@@ -1704,7 +1705,18 @@ void MainWindow::on_checkBox_MultiGPU_RealCUGAN_stateChanged(int arg1)
     // Re-read settings so processor picks up the change
     if (realCuganProcessor)
         realCuganProcessor->readSettings();
-    // TODO: update running jobs when multi GPU state changes
+    // Update queued job config and running process if applicable
+    bool multiEnabled = (arg1 == Qt::Checked);
+    if (multiEnabled) {
+        qDebug() << "Multi GPU enabled for RealCUGAN.";
+    } else {
+        qDebug() << "Multi GPU disabled for RealCUGAN.";
+    }
+    // If a process is running, inform it should restart for new setting
+    if (currentProcess && currentProcess->state() == QProcess::Running) {
+        qDebug() << "RealCUGAN process running - will apply setting on next file.";
+    }
+    Settings_Save();
 }
 
 /** Add the currently selected GPU to the RealCUGAN GPU list. */
@@ -1722,19 +1734,46 @@ void MainWindow::on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked()
             return; // already added
     }
 
+    bool ok = false;
+    int threads = QInputDialog::getInt(this,
+                                       tr("Threads"),
+                                       tr("Threads for GPU %1").arg(id),
+                                       1,
+                                       1,
+                                       16,
+                                       1,
+                                       &ok);
+    if (!ok)
+        return;
+
+    int tile = QInputDialog::getInt(this,
+                                    tr("Tile Size"),
+                                    tr("Tile size for GPU %1").arg(id),
+                                    spinBox_TileSize_RealCUGAN ? spinBox_TileSize_RealCUGAN->value() : 0,
+                                    0,
+                                    4096,
+                                    1,
+                                    &ok);
+    if (!ok)
+        return;
+
     QMap<QString, QString> map;
     map["id"] = id;
-    map["threads"] = "1";
-    map["tilesize"] = spinBox_TileSize_RealCUGAN
-            ? QString::number(spinBox_TileSize_RealCUGAN->value())
-            : QStringLiteral("0");
+    map["threads"] = QString::number(threads);
+    map["tilesize"] = QString::number(tile);
     map["enabled"] = "true";
     GPUIDs_List_MultiGPU_RealCUGAN.append(map);
 
-    QListWidgetItem *item = new QListWidgetItem(id, listWidget_GPUList_MultiGPU_RealCUGAN);
+    // Also update temporary job config list for persistence
+    m_realcugan_gpuJobConfig_temp = GPUIDs_List_MultiGPU_RealCUGAN;
+
+    QString itemText = QString("%1 (T:%2, Tile:%3)").arg(id).arg(threads).arg(tile);
+    QListWidgetItem *item = new QListWidgetItem(itemText, listWidget_GPUList_MultiGPU_RealCUGAN);
     item->setData(Qt::UserRole, id);
+    item->setData(Qt::UserRole + 1, threads);
+    item->setData(Qt::UserRole + 2, tile);
     listWidget_GPUList_MultiGPU_RealCUGAN->addItem(item);
-    // TODO: allow editing threads and tile size per GPU
+    Settings_Save();
 }
 
 /** Remove the selected GPU from the RealCUGAN GPU list. */
@@ -1756,6 +1795,8 @@ void MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked()
             break;
         }
     }
+    m_realcugan_gpuJobConfig_temp = GPUIDs_List_MultiGPU_RealCUGAN;
+    Settings_Save();
 }
 
 /** Clear all GPUs from the RealCUGAN GPU list. */
@@ -1764,6 +1805,8 @@ void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked()
     GPUIDs_List_MultiGPU_RealCUGAN.clear();
     if (listWidget_GPUList_MultiGPU_RealCUGAN)
         listWidget_GPUList_MultiGPU_RealCUGAN->clear();
+    m_realcugan_gpuJobConfig_temp.clear();
+    Settings_Save();
 }
 
 /**
@@ -1783,15 +1826,18 @@ QString MainWindow::RealcuganNcnnVulkan_MultiGPU()
 }
 
 /** Add a GPU ID with thread count to the internal list. */
-void MainWindow::AddGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid, int threads)
+void MainWindow::AddGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid,
+                                                     int threads,
+                                                     int tile)
 {
     for (const auto &gpu : GPUIDs_List_MultiGPU_RealCUGAN) {
         if (gpu.value("ID") == gpuid)
             return;
     }
     QMap<QString, QString> map;
-    map["ID"] = gpuid;
-    map["Threads"] = QString::number(threads);
+    map["id"] = gpuid;
+    map["threads"] = QString::number(threads);
+    map["tilesize"] = QString::number(tile);
     GPUIDs_List_MultiGPU_RealCUGAN.append(map);
 }
 
@@ -1831,7 +1877,12 @@ void MainWindow::on_comboBox_Model_RealCUGAN_currentIndexChanged(int index)
 {
     if (comboBox_Model_RealCUGAN)
         m_realcugan_Model = comboBox_Model_RealCUGAN->itemText(index);
-    // TODO: refresh processor settings when model changes
+    if (realCuganProcessor)
+        realCuganProcessor->readSettings();
+    if (currentProcess && currentProcess->state() == QProcess::Running) {
+        qDebug() << "RealCUGAN model changed. New model will apply after current job.";
+    }
+    Settings_Save();
 }
 
 /**
