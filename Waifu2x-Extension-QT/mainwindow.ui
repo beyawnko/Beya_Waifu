@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
@@ -156,7 +156,7 @@ height:35
             </font>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Please donate to support the developers, so we can bring further updates for this software, thank you! (｡･∀･)ﾉﾞ &lt;/p&gt;&lt;p align=&quot;center&quot;&gt;If you don't wanna see the Donate page anymore, you can &lt;span style=&quot; color:#ff0004;&quot;&gt;get the &lt;/span&gt;&lt;span style=&quot; font-weight:600; color:#ff0004;&quot;&gt;Premium&lt;/span&gt;&lt;span style=&quot; color:#ff0004;&quot;&gt; version by support me on Patreon.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="center"&gt;Please donate to support the developers, so we can bring further updates for this software, thank you! (｡･∀･)ﾉﾞ &lt;/p&gt;&lt;p align="center"&gt;If you don't wanna see the Donate page anymore, you can &lt;span style=" color:#ff0004;"&gt;get the &lt;/span&gt;&lt;span style=" font-weight:600; color:#ff0004;"&gt;Premium&lt;/span&gt;&lt;span style=" color:#ff0004;"&gt; version by support me on Patreon.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -192,7 +192,9 @@ height:35
              <property name="toolTip">
               <string>Donate to the developer through PayPal.</string>
              </property>
-             <property name="class"><string>blue</string></property>
+             <property name="class">
+              <string>blue</string>
+             </property>
              <property name="text">
               <string notr="true"> PayPal</string>
              </property>
@@ -226,7 +228,9 @@ height:35
              <property name="toolTip">
               <string>Support this project on Patreon and get Premium version.</string>
              </property>
-             <property name="class"><string>red</string></property>
+             <property name="class">
+              <string>red</string>
+             </property>
              <property name="text">
               <string> Get Premium version on Patreon</string>
              </property>
@@ -490,7 +494,9 @@ height:35
               <property name="toolTip">
                <string/>
               </property>
-              <property name="class"><string>green</string></property>
+              <property name="class">
+               <string>green</string>
+              </property>
               <property name="text">
                <string>Start</string>
               </property>
@@ -520,7 +526,9 @@ height:35
                 <height>16777215</height>
                </size>
               </property>
-              <property name="class"><string>orange</string></property>
+              <property name="class">
+               <string>orange</string>
+              </property>
               <property name="text">
                <string>Pause</string>
               </property>
@@ -558,7 +566,9 @@ You can try using [Force Retry] to end the Engine process
 and restart it, and the entire [Scale and denoise] process 
 will not be interrupted and will continue.</string>
               </property>
-              <property name="class"><string>purple</string></property>
+              <property name="class">
+               <string>purple</string>
+              </property>
               <property name="text">
                <string>Force retry</string>
               </property>
@@ -1069,64 +1079,66 @@ selection-background-color: rgb(178, 58, 238);
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QFrame" name="frame_11">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
-                 </property>
-                 <layout class="QGridLayout" name="gridLayout_3">
-                  <property name="leftMargin">
-                   <number>0</number>
+              </layout>
+             </item>
+             <item>
+              <widget class="QFrame" name="frame_11">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_3">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item row="0" column="6">
+                 <widget class="QPushButton" name="pushButton_ReadFileList">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
                   </property>
-                  <property name="topMargin">
-                   <number>0</number>
+                  <property name="minimumSize">
+                   <size>
+                    <width>35</width>
+                    <height>35</height>
+                   </size>
                   </property>
-                  <property name="rightMargin">
-                   <number>0</number>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
                   </property>
-                  <property name="bottomMargin">
-                   <number>0</number>
+                  <property name="toolTip">
+                   <string>Read Files List</string>
                   </property>
-                  <item row="0" column="6">
-                   <widget class="QPushButton" name="pushButton_ReadFileList">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>35</width>
-                      <height>35</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="toolTip">
-                     <string>Read Files List</string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton{
 image: url(:/new/prefix1/icon/Read_FileList.png);
 border-style:transparent;
 border-radius:0px;
@@ -1150,57 +1162,57 @@ border-style:transparent;
 border-radius:0px;
 padding:0px;
 }</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="iconSize">
-                     <size>
-                      <width>35</width>
-                      <height>35</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="7">
-                   <widget class="Line" name="line_10">
-                    <property name="frameShadow">
-                     <enum>QFrame::Sunken</enum>
-                    </property>
-                    <property name="lineWidth">
-                     <number>1</number>
-                    </property>
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="4">
-                   <widget class="Line" name="line_25">
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="3">
-                   <widget class="QPushButton" name="pushButton_ResizeFilesListSplitter">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>35</width>
-                      <height>35</height>
-                     </size>
-                    </property>
-                    <property name="toolTip">
-                     <string>Reset Files List scale.</string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>35</width>
+                    <height>35</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="7">
+                 <widget class="Line" name="line_10">
+                  <property name="frameShadow">
+                   <enum>QFrame::Sunken</enum>
+                  </property>
+                  <property name="lineWidth">
+                   <number>1</number>
+                  </property>
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="4">
+                 <widget class="Line" name="line_25">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QPushButton" name="pushButton_ResizeFilesListSplitter">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>35</width>
+                    <height>35</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Reset Files List scale.</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton{
 image: url(:/new/prefix1/icon/ResizeFilesListSplitter.png);
 border-style:transparent;
 border-radius:0px;
@@ -1224,42 +1236,42 @@ border-style:transparent;
 border-radius:0px;
 padding:0px;
 }</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="1">
-                   <widget class="QPushButton" name="pushButton_RemoveItem">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>35</width>
-                      <height>35</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="contextMenuPolicy">
-                     <enum>Qt::ActionsContextMenu</enum>
-                    </property>
-                    <property name="toolTip">
-                     <string>Remove the selected file from File List.
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QPushButton" name="pushButton_RemoveItem">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>35</width>
+                    <height>35</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="contextMenuPolicy">
+                   <enum>Qt::ActionsContextMenu</enum>
+                  </property>
+                  <property name="toolTip">
+                   <string>Remove the selected file from File List.
 
 [Right click here to show more options]</string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton{
 image: url(:/new/prefix1/icon/RemoveItem.png);
 border-style:transparent;
 border-radius:0px;
@@ -1283,31 +1295,31 @@ border-style:transparent;
 border-radius:0px;
 padding:0px;
 }</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="8">
-                   <widget class="QPushButton" name="pushButton_BrowserFile">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>35</width>
-                      <height>35</height>
-                     </size>
-                    </property>
-                    <property name="toolTip">
-                     <string>Browse and add files.</string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="8">
+                 <widget class="QPushButton" name="pushButton_BrowserFile">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>35</width>
+                    <height>35</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Browse and add files.</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton{
 image: url(:/new/prefix1/icon/AddNewFile.png);
 border-style:transparent;
 border-radius:0px;
@@ -1331,44 +1343,44 @@ border-style:transparent;
 border-radius:0px;
 padding:0px;
 }</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="2">
-                   <widget class="Line" name="line_20">
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QPushButton" name="pushButton_ClearList">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>35</width>
-                      <height>35</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="toolTip">
-                     <string>Remove all the files in the File list.</string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="Line" name="line_20">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QPushButton" name="pushButton_ClearList">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>35</width>
+                    <height>35</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Remove all the files in the File list.</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton{
 image: url(:/new/prefix1/icon/ClearList.png);
 border-style:transparent;
 border-radius:0px;
@@ -1392,31 +1404,31 @@ border-style:transparent;
 border-radius:0px;
 padding:0px;
 }</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="5">
-                   <widget class="QPushButton" name="pushButton_SaveFileList">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>35</width>
-                      <height>35</height>
-                     </size>
-                    </property>
-                    <property name="toolTip">
-                     <string>Save Files List</string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="5">
+                 <widget class="QPushButton" name="pushButton_SaveFileList">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>35</width>
+                    <height>35</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Save Files List</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton{
 image: url(:/new/prefix1/icon/Save_FileList.png);
 border-style:transparent;
 border-radius:0px;
@@ -1440,34 +1452,34 @@ border-style:transparent;
 border-radius:0px;
 padding:0px;
 }</string>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="iconSize">
-                     <size>
-                      <width>35</width>
-                      <height>35</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="10">
-                   <widget class="QPushButton" name="pushButton_TurnOffScreen">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>35</width>
-                      <height>35</height>
-                     </size>
-                    </property>
-                    <property name="toolTip">
-                     <string>Turn off screen.
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>35</width>
+                    <height>35</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="10">
+                 <widget class="QPushButton" name="pushButton_TurnOffScreen">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>35</width>
+                    <height>35</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Turn off screen.
 
 We recommand you to use this button to turn off screen
 while program is running. Using other methods to turn off
@@ -1475,12 +1487,12 @@ the screen may cause the software to freeze during the screen
 shutdown. And we recommend that you turn off the automatic
 shutdown screen and automatic sleep of the Windows system while
 the software is running.</string>
-                    </property>
-                    <property name="toolTipDuration">
-                     <number>60000</number>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
+                  </property>
+                  <property name="toolTipDuration">
+                   <number>60000</number>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton{
 image: url(:/new/prefix1/icon/TurnOffScreen.png);
 border-style:transparent;
 border-radius:0px;
@@ -1504,766 +1516,774 @@ border-style:transparent;
 border-radius:0px;
 padding:0px;
 }</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="9">
-                   <widget class="Line" name="line_15">
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <spacer name="spacerItem_FileListControls">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QGroupBox" name="groupBox_Setting">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="title">
-             <string/>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_RightPane">
-             <property name="spacing">
-              <number>6</number>
-             </property>
-             <property name="leftMargin">
-              <number>6</number>
-             </property>
-             <property name="topMargin">
-              <number>6</number>
-             </property>
-             <property name="rightMargin">
-              <number>6</number>
-             </property>
-             <property name="bottomMargin">
-              <number>6</number>
-             </property>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_HideButtons">
-               <property name="spacing">
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QPushButton" name="pushButton_HideSettings">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="toolTip">
-                  <string/>
-                 </property>
-                 <property name="class"><string>blue</string></property>
-                 <property name="text">
-                  <string>Hide settings</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="pushButton_HideTextBro">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="class"><string>purple</string></property>
-                 <property name="text">
-                  <string>Hide Text Browser</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="horizontalSpacer_HideButtons">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <widget class="QGroupBox" name="groupBox_CustRes">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string/>
-               </property>
-               <property name="title">
-                <string>Custom resolution</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_CustRes_New">
-                <property name="leftMargin">
-                 <number>6</number>
-                </property>
-                <property name="topMargin">
-                 <number>6</number>
-                </property>
-                <property name="rightMargin">
-                 <number>6</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>6</number>
-                </property>
-                <property name="spacing">
-                 <number>6</number>
-                </property>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_18">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
                   </property>
                   <property name="text">
-                   <string>Width:</string>
+                   <string notr="true"/>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="1">
-                 <widget class="QSpinBox" name="spinBox_CustRes_width">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="suffix">
-                   <string> pixels</string>
-                  </property>
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>999999999</number>
-                  </property>
-                  <property name="value">
-                   <number>1920</number>
+                <item row="0" column="9">
+                 <widget class="Line" name="line_15">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
                   </property>
                  </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_15">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Height:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QSpinBox" name="spinBox_CustRes_height">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="suffix">
-                   <string> pixels</string>
-                  </property>
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>999999999</number>
-                  </property>
-                  <property name="value">
-                   <number>1080</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0" colspan="2">
-                 <widget class="QLabel" name="label_44">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/new/prefix1/OtherPic/AspectRatioStrategy.jpg&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="text">
-                   <string>Aspect Ratio:</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0" colspan="2">
-                 <widget class="QComboBox" name="comboBox_AspectRatio_custRes">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>280</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/new/prefix1/OtherPic/AspectRatioStrategy.jpg&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                  <property name="currentIndex">
-                   <number>1</number>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>Ignore Aspect Ratio</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Keep Aspect Ratio</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Keep Aspect Ratio By Expanding</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="4" column="0" colspan="2">
-                 <layout class="QHBoxLayout" name="horizontalLayout">
-                  <item>
-                   <widget class="QPushButton" name="pushButton_CustRes_apply">
-                    <property name="toolTip">
-                     <string>1.Set the height and width of the resolution.
-2.Select a file in the file list.
-3.Click the Apply button to set the resolution.
-
-★Scale ratio will not be applied to files which
-already have custom resolution applied.★</string>
-                    </property>
-                    <property name="class"><string>green</string></property>
-                    <property name="text">
-                     <string>Apply</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButton_CustRes_cancel">
-                    <property name="toolTip">
-                     <string>1.Select a file in the file list.
-2.Click the Cancel button to cancel the custom resolution.</string>
-                    </property>
-                    <property name="class"><string>orange</string></property>
-                    <property name="text">
-                     <string>Cancel</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item row="5" column="0" colspan="2">
-                 <layout class="QHBoxLayout" name="horizontalLayout_CustRes_Checkboxes">
-                  <property name="spacing">
-                   <number>6</number>
-                  </property>
-                  <item>
-                   <widget class="QCheckBox" name="checkBox_custres_isAll">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="toolTip">
-                     <string>Valid for all files.</string>
-                    </property>
-                    <property name="text">
-                     <string>Apply to all</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QCheckBox" name="checkBox_AutoSkip_CustomRes">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="toolTip">
-                     <string>Automatically skip file when its resolution
-is larger than the specified resolution.</string>
-                    </property>
-                    <property name="text">
-                     <string>Auto Skip</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
                 </item>
                </layout>
               </widget>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupBox_2">
+              <spacer name="spacerItem_FileListControls">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+         <widget class="QGroupBox" name="groupBox_Setting">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="title">
+           <string/>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_RightPane">
+           <property name="spacing">
+            <number>6</number>
+           </property>
+           <property name="leftMargin">
+            <number>6</number>
+           </property>
+           <property name="topMargin">
+            <number>6</number>
+           </property>
+           <property name="rightMargin">
+            <number>6</number>
+           </property>
+           <property name="bottomMargin">
+            <number>6</number>
+           </property>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_HideButtons">
+             <property name="spacing">
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="pushButton_HideSettings">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="title">
+               <property name="toolTip">
                 <string/>
                </property>
-               <layout class="QGridLayout" name="gridLayout_26">
-                <property name="leftMargin">
-                 <number>6</number>
+               <property name="class">
+                <string>blue</string>
+               </property>
+               <property name="text">
+                <string>Hide settings</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_HideTextBro">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="class">
+                <string>purple</string>
+               </property>
+               <property name="text">
+                <string>Hide Text Browser</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_HideButtons">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_CustRes">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string/>
+             </property>
+             <property name="title">
+              <string>Custom resolution</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_CustRes_New">
+              <property name="leftMargin">
+               <number>6</number>
+              </property>
+              <property name="topMargin">
+               <number>6</number>
+              </property>
+              <property name="rightMargin">
+               <number>6</number>
+              </property>
+              <property name="bottomMargin">
+               <number>6</number>
+              </property>
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_18">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
                 </property>
-                <property name="topMargin">
-                 <number>6</number>
+                <property name="text">
+                 <string>Width:</string>
                 </property>
-                <property name="rightMargin">
-                 <number>6</number>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QSpinBox" name="spinBox_CustRes_width">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
                 </property>
-                <property name="bottomMargin">
-                 <number>6</number>
+                <property name="suffix">
+                 <string> pixels</string>
                 </property>
-                <item row="1" column="1">
-                 <widget class="QFrame" name="frame_2">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>45</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
-                  </property>
-                  <layout class="QGridLayout" name="gridLayout_45">
-                   <property name="sizeConstraint">
-                    <enum>QLayout::SetDefaultConstraint</enum>
-                   </property>
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="spacing">
-                    <number>7</number>
-                   </property>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="label_63">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="text">
-                      <string>Image quality:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="0">
-                    <widget class="QSpinBox" name="spinBox_ImageQualityLevel">
-                     <property name="toolTip">
-                      <string>Only takes effect when processing Static Image.
-
-Will NOT take effect when processing Video and GIF.</string>
-                     </property>
-                     <property name="minimum">
-                      <number>1</number>
-                     </property>
-                     <property name="maximum">
-                      <number>100</number>
-                     </property>
-                     <property name="value">
-                      <number>100</number>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>999999999</number>
+                </property>
+                <property name="value">
+                 <number>1920</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_15">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Height:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QSpinBox" name="spinBox_CustRes_height">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="suffix">
+                 <string> pixels</string>
+                </property>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>999999999</number>
+                </property>
+                <property name="value">
+                 <number>1080</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0" colspan="2">
+               <widget class="QLabel" name="label_44">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string notr="true">htmlhead/bodypimg src=:/new/prefix1/OtherPic/AspectRatioStrategy.jpg//p/body/html</string>
+                </property>
+                <property name="text">
+                 <string>Aspect Ratio:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0" colspan="2">
+               <widget class="QComboBox" name="comboBox_AspectRatio_custRes">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>280</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string notr="true">htmlhead/bodypimg src=:/new/prefix1/OtherPic/AspectRatioStrategy.jpg//p/body/html</string>
+                </property>
+                <property name="currentIndex">
+                 <number>1</number>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Ignore Aspect Ratio</string>
+                 </property>
                 </item>
-                <item row="7" column="0">
-                 <widget class="QLabel" name="label_ImageStyle_W2xNCNNVulkan">
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
+                <item>
+                 <property name="text">
+                  <string>Keep Aspect Ratio</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Keep Aspect Ratio By Expanding</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="4" column="0" colspan="2">
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
+                 <widget class="QPushButton" name="pushButton_CustRes_apply">
                   <property name="toolTip">
-                   <string>Select the image style of the source files.
-So the engine can load the correct model when processing files.</string>
+                   <string>1.Set the height and width of the resolution.
+2.Select a file in the file list.
+3.Click the Apply button to set the resolution.
+
+★Scale ratio will not be applied to files which
+already have custom resolution applied.★</string>
+                  </property>
+                  <property name="class">
+                   <string>green</string>
                   </property>
                   <property name="text">
-                   <string>Image Style(waifu2x-ncnn-vulkan):</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                   <string>Apply</string>
                   </property>
                  </widget>
                 </item>
-                <item row="8" column="0">
-                 <widget class="QLabel" name="label_ImageStyle_W2xCaffe">
+                <item>
+                 <widget class="QPushButton" name="pushButton_CustRes_cancel">
                   <property name="toolTip">
-                   <string>Select the image style of the source files.
-So the engine can load the correct model when processing files.</string>
+                   <string>1.Select a file in the file list.
+2.Click the Cancel button to cancel the custom resolution.</string>
+                  </property>
+                  <property name="class">
+                   <string>orange</string>
                   </property>
                   <property name="text">
-                   <string>Image Style(waifu2x-caffe):</string>
+                   <string>Cancel</string>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="0">
-                 <widget class="QFrame" name="frame">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
+               </layout>
+              </item>
+              <item row="5" column="0" colspan="2">
+               <layout class="QHBoxLayout" name="horizontalLayout_CustRes_Checkboxes">
+                <property name="spacing">
+                 <number>6</number>
+                </property>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_custres_isAll">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>45</height>
-                   </size>
+                  <property name="toolTip">
+                   <string>Valid for all files.</string>
                   </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>16777215</height>
-                   </size>
+                  <property name="text">
+                   <string>Apply to all</string>
                   </property>
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_AutoSkip_CustomRes">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
                   </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Plain</enum>
+                  <property name="toolTip">
+                   <string>Automatically skip file when its resolution
+is larger than the specified resolution.</string>
                   </property>
-                  <property name="lineWidth">
-                   <number>0</number>
+                  <property name="text">
+                   <string>Auto Skip</string>
                   </property>
-                  <layout class="QGridLayout" name="gridLayout_42">
-                   <property name="leftMargin">
-                    <number>0</number>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="title">
+              <string/>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_26">
+              <property name="leftMargin">
+               <number>6</number>
+              </property>
+              <property name="topMargin">
+               <number>6</number>
+              </property>
+              <property name="rightMargin">
+               <number>6</number>
+              </property>
+              <property name="bottomMargin">
+               <number>6</number>
+              </property>
+              <item row="1" column="1">
+               <widget class="QFrame" name="frame_2">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>45</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_45">
+                 <property name="sizeConstraint">
+                  <enum>QLayout::SetDefaultConstraint</enum>
+                 </property>
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="spacing">
+                  <number>7</number>
+                 </property>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_63">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
                    </property>
-                   <property name="topMargin">
-                    <number>0</number>
+                   <property name="text">
+                    <string>Image quality:</string>
                    </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="spacing">
-                    <number>7</number>
-                   </property>
-                   <item row="1" column="0">
-                    <widget class="QComboBox" name="comboBox_ImageSaveFormat">
-                     <property name="toolTip">
-                      <string>Only takes effect when processing Static Image.
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QSpinBox" name="spinBox_ImageQualityLevel">
+                   <property name="toolTip">
+                    <string>Only takes effect when processing Static Image.
 
 Will NOT take effect when processing Video and GIF.</string>
-                     </property>
-                     <property name="currentIndex">
-                      <number>0</number>
-                     </property>
-                     <property name="maxVisibleItems">
-                      <number>15</number>
-                     </property>
-                     <item>
-                      <property name="text">
-                       <string notr="true">png</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">jpg</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">webp</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">bmp</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">tiff</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">pdf</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">gif</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">eps</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">tga</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">jp2</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">svg</string>
-                      </property>
-                     </item>
-                    </widget>
-                   </item>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label_20">
-                     <property name="text">
-                      <string>Save image as:</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item row="7" column="1">
-                 <widget class="QComboBox" name="comboBox_ImageStyle">
-                  <property name="minimumSize">
-                   <size>
-                    <width>120</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Select the image style of the source files.
+                   </property>
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>100</number>
+                   </property>
+                   <property name="value">
+                    <number>100</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="label_ImageStyle_W2xNCNNVulkan">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Select the image style of the source files.
 So the engine can load the correct model when processing files.</string>
-                  </property>
-                  <property name="currentText">
-                   <string notr="true">2D Anime</string>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>2D Anime</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>3D Real-life</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item row="8" column="1">
-                 <widget class="QComboBox" name="comboBox_ImageStyle_Waifu2xCaffe">
-                  <property name="toolTip">
-                   <string>Select the image style of the source files.
+                </property>
+                <property name="text">
+                 <string>Image Style(waifu2x-ncnn-vulkan):</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="label_ImageStyle_W2xCaffe">
+                <property name="toolTip">
+                 <string>Select the image style of the source files.
 So the engine can load the correct model when processing files.</string>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>2D Anime</string>
+                </property>
+                <property name="text">
+                 <string>Image Style(waifu2x-caffe):</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QFrame" name="frame">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>45</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Plain</enum>
+                </property>
+                <property name="lineWidth">
+                 <number>0</number>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_42">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="spacing">
+                  <number>7</number>
+                 </property>
+                 <item row="1" column="0">
+                  <widget class="QComboBox" name="comboBox_ImageSaveFormat">
+                   <property name="toolTip">
+                    <string>Only takes effect when processing Static Image.
+
+Will NOT take effect when processing Video and GIF.</string>
                    </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>3D Real-life</string>
+                   <property name="currentIndex">
+                    <number>0</number>
                    </property>
-                  </item>
-                 </widget>
+                   <property name="maxVisibleItems">
+                    <number>15</number>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string notr="true">png</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string notr="true">jpg</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string notr="true">webp</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string notr="true">bmp</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string notr="true">tiff</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string notr="true">pdf</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string notr="true">gif</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string notr="true">eps</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string notr="true">tga</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string notr="true">jp2</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string notr="true">svg</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_20">
+                   <property name="text">
+                    <string>Save image as:</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QComboBox" name="comboBox_ImageStyle">
+                <property name="minimumSize">
+                 <size>
+                  <width>120</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Select the image style of the source files.
+So the engine can load the correct model when processing files.</string>
+                </property>
+                <property name="currentText">
+                 <string notr="true">2D Anime</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>2D Anime</string>
+                 </property>
                 </item>
-                <item row="4" column="0" colspan="2">
-                 <widget class="QFrame" name="frame_13">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                  <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
-                  </property>
-                  <layout class="QGridLayout" name="gridLayout_66">
-                   <property name="leftMargin">
-                    <number>0</number>
+                <item>
+                 <property name="text">
+                  <string>3D Real-life</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QComboBox" name="comboBox_ImageStyle_Waifu2xCaffe">
+                <property name="toolTip">
+                 <string>Select the image style of the source files.
+So the engine can load the correct model when processing files.</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>2D Anime</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>3D Real-life</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="4" column="0" colspan="2">
+               <widget class="QFrame" name="frame_13">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_66">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="horizontalSpacing">
+                  <number>3</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="1">
+                  <widget class="QCheckBox" name="checkBox_DelOriginal">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
                    </property>
-                   <property name="topMargin">
-                    <number>0</number>
+                   <property name="contextMenuPolicy">
+                    <enum>Qt::ActionsContextMenu</enum>
                    </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="horizontalSpacing">
-                    <number>3</number>
-                   </property>
-                   <property name="verticalSpacing">
-                    <number>0</number>
-                   </property>
-                   <item row="0" column="1">
-                    <widget class="QCheckBox" name="checkBox_DelOriginal">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="contextMenuPolicy">
-                      <enum>Qt::ActionsContextMenu</enum>
-                     </property>
-                     <property name="toolTip">
-                      <string>Delete the original file after processing is complete.
+                   <property name="toolTip">
+                    <string>Delete the original file after processing is complete.
 
 *This option will be deactivated when [Replace original
 file] is enabled*
 
 [Right click here to show more options]</string>
-                     </property>
-                     <property name="text">
-                      <string>Delete original files</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="2">
-                    <widget class="QCheckBox" name="checkBox_ReplaceOriginalFile">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="contextMenuPolicy">
-                      <enum>Qt::ActionsContextMenu</enum>
-                     </property>
-                     <property name="toolTip">
-                      <string>After processing the file, directly replace
+                   </property>
+                   <property name="text">
+                    <string>Delete original files</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QCheckBox" name="checkBox_ReplaceOriginalFile">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="contextMenuPolicy">
+                    <enum>Qt::ActionsContextMenu</enum>
+                   </property>
+                   <property name="toolTip">
+                    <string>After processing the file, directly replace
 the original file with the result file.
 (And keep the original file name.)
 
@@ -2273,109 +2293,109 @@ WARNING: The original file will be DELETED.
 path] or [Delete original files] is enabled*
 
 [Right click here to show more options]</string>
-                     </property>
-                     <property name="text">
-                      <string>Replace original file</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0">
-                    <widget class="QCheckBox" name="checkBox_OptGIF">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="toolTip">
-                      <string>Optimizing the scaled gif will slightly reduce the
+                   </property>
+                   <property name="text">
+                    <string>Replace original file</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QCheckBox" name="checkBox_OptGIF">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="toolTip">
+                    <string>Optimizing the scaled gif will slightly reduce the
 image quality, but it can reduce the GIF file size.
 
 It is recommended to enable this option.</string>
-                     </property>
-                     <property name="text">
-                      <string>Optimize GIF</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QComboBox" name="comboBox_FinishAction">
-                  <property name="toolTip">
-                   <string>Select the action to be executed automatically
+                   </property>
+                   <property name="text">
+                    <string>Optimize GIF</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QComboBox" name="comboBox_FinishAction">
+                <property name="toolTip">
+                 <string>Select the action to be executed automatically
 after processing all files in the file list.</string>
-                  </property>
-                  <item>
-                   <property name="text">
-                    <string>Do nothing(when finished)</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Shut down</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Sleep</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Hibernate</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>Restart</string>
-                   </property>
-                  </item>
-                 </widget>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Do nothing(when finished)</string>
+                 </property>
                 </item>
-                <item row="5" column="1">
-                 <widget class="QCheckBox" name="checkBox_ReProcFinFiles">
-                  <property name="toolTip">
-                   <string>When there are finished files in the list, the finished files will
+                <item>
+                 <property name="text">
+                  <string>Shut down</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Sleep</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Hibernate</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Restart</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QCheckBox" name="checkBox_ReProcFinFiles">
+                <property name="toolTip">
+                 <string>When there are finished files in the list, the finished files will
 be processed again when the processing process is started again.</string>
-                  </property>
-                  <property name="text">
-                   <string>Re-process finished files</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QCheckBox" name="checkBox_FrameInterpolationOnly_Video">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <weight>50</weight>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="toolTip">
-                   <string>Skip the super-resolution, only interpolate video frames.
+                </property>
+                <property name="text">
+                 <string>Re-process finished files</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QCheckBox" name="checkBox_FrameInterpolationOnly_Video">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="toolTip">
+                 <string>Skip the super-resolution, only interpolate video frames.
 
 You can modify the settings of Frame Interpolation in the
 [Video settings] tab.
 
 *Only taken effect when processing video*</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="text">
-                   <string>Frame Interpolation only(Video)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="checkBox_EnableVFI_Home">
-                  <property name="toolTip">
-                   <string>Interpolate frames after super-resolution of the video.
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Frame Interpolation only(Video)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="checkBox_EnableVFI_Home">
+                <property name="toolTip">
+                 <string>Interpolate frames after super-resolution of the video.
 (Increase the frame rate to the result video.)
 
 You can modify the settings of Frame Interpolation
@@ -2385,179 +2405,179 @@ You can enable [Frame Interpolation only(Video)] to skip
 the super-resolution, only interpolate video frames.
 
 *Only taken effect when processing video*</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(33, 85, 255);</string>
-                  </property>
-                  <property name="text">
-                   <string>Video Frame Interpolation</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QGroupBox" name="groupBox_OutPut">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="title">
-                <string>Output path(Folder):</string>
-               </property>
-               <property name="checkable">
-                <bool>false</bool>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_23">
-                <property name="leftMargin">
-                 <number>6</number>
                 </property>
-                <property name="topMargin">
-                 <number>6</number>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(33, 85, 255);</string>
                 </property>
-                <property name="rightMargin">
-                 <number>6</number>
+                <property name="text">
+                 <string>Video Frame Interpolation</string>
                 </property>
-                <property name="bottomMargin">
-                 <number>6</number>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_OutPut">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="title">
+              <string>Output path(Folder):</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_23">
+              <property name="leftMargin">
+               <number>6</number>
+              </property>
+              <property name="topMargin">
+               <number>6</number>
+              </property>
+              <property name="rightMargin">
+               <number>6</number>
+              </property>
+              <property name="bottomMargin">
+               <number>6</number>
+              </property>
+              <item row="0" column="0" colspan="3">
+               <widget class="QLineEdit" name="lineEdit_outputPath">
+                <property name="enabled">
+                 <bool>false</bool>
                 </property>
-                <item row="0" column="0" colspan="3">
-                 <widget class="QLineEdit" name="lineEdit_outputPath">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="focusPolicy">
-                   <enum>Qt::StrongFocus</enum>
-                  </property>
-                  <property name="contextMenuPolicy">
-                   <enum>Qt::ActionsContextMenu</enum>
-                  </property>
-                  <property name="toolTip">
-                   <string>Output path must be a Folder.
+                <property name="focusPolicy">
+                 <enum>Qt::StrongFocus</enum>
+                </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::ActionsContextMenu</enum>
+                </property>
+                <property name="toolTip">
+                 <string>Output path must be a Folder.
 
 [Right click here to show more options]</string>
-                  </property>
-                  <property name="text">
-                   <string notr="true"/>
-                  </property>
-                  <property name="clearButtonEnabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0" rowspan="3" colspan="3">
-                 <widget class="QScrollArea" name="scrollArea_outputPathSettings">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Sunken</enum>
-                  </property>
-                  <property name="sizeAdjustPolicy">
-                   <enum>QAbstractScrollArea::AdjustIgnored</enum>
-                  </property>
-                  <property name="widgetResizable">
-                   <bool>true</bool>
-                  </property>
-                  <widget class="QWidget" name="scrollAreaWidgetContents">
-                   <property name="geometry">
-                    <rect>
-                     <x>0</x>
-                     <y>0</y>
-                     <width>241</width>
-                     <height>150</height>
-                    </rect>
-                   </property>
-                   <layout class="QGridLayout" name="gridLayout_37">
-                    <item row="0" column="0">
-                     <layout class="QHBoxLayout" name="horizontalLayout_5">
-                      <item>
-                       <widget class="QCheckBox" name="checkBox_OutPath_isEnabled">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="toolTip">
-                         <string>When this option is enabled, the output file 
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="clearButtonEnabled">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" rowspan="3" colspan="3">
+               <widget class="QScrollArea" name="scrollArea_outputPathSettings">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Sunken</enum>
+                </property>
+                <property name="sizeAdjustPolicy">
+                 <enum>QAbstractScrollArea::AdjustIgnored</enum>
+                </property>
+                <property name="widgetResizable">
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="scrollAreaWidgetContents">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>241</width>
+                   <height>150</height>
+                  </rect>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_37">
+                  <item row="0" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_5">
+                    <item>
+                     <widget class="QCheckBox" name="checkBox_OutPath_isEnabled">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="toolTip">
+                       <string>When this option is enabled, the output file 
 will be moved to the path you specified. 
 Otherwise, it will be saved in the same 
 folder as the source file.
 
 *This option will be deactivated when [Replace
 original file] is enabled*</string>
-                        </property>
-                        <property name="text">
-                         <string>Enabled</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QCheckBox" name="checkBox_OutPath_Overwrite">
-                        <property name="enabled">
-                         <bool>false</bool>
-                        </property>
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="text">
-                         <string>Keep parent folder</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </item>
-                    <item row="1" column="0">
-                     <widget class="QCheckBox" name="checkBox_AutoOpenOutputPath">
-                      <property name="enabled">
-                       <bool>false</bool>
-                      </property>
-                      <property name="toolTip">
-                       <string>Automatically open the output folder
-after processing all files.</string>
                       </property>
                       <property name="text">
-                       <string>Auto-open after finished</string>
+                       <string>Enabled</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="0">
-                     <widget class="QCheckBox" name="checkBox_OutPath_KeepOriginalFileName">
+                    <item>
+                     <widget class="QCheckBox" name="checkBox_OutPath_Overwrite">
                       <property name="enabled">
                        <bool>false</bool>
                       </property>
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
                       </property>
                       <property name="text">
-                       <string>Keep original file name</string>
+                       <string>Keep parent folder</string>
                       </property>
                      </widget>
                     </item>
                    </layout>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QCheckBox" name="checkBox_AutoOpenOutputPath">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="toolTip">
+                     <string>Automatically open the output folder
+after processing all files.</string>
+                    </property>
+                    <property name="text">
+                     <string>Auto-open after finished</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QCheckBox" name="checkBox_OutPath_KeepOriginalFileName">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Keep original file name</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
-               </item>
-              </layout>
-             </item>
+               </widget>
+              </item>
+             </layout>
              <item row="1" column="0" colspan="3">
               <widget class="QGroupBox" name="groupBox_ScaleRaton_DenoiseLevel">
                <property name="sizePolicy">
@@ -2928,7 +2948,7 @@ after processing all files.</string>
                     <property name="toolTip">
                      <string>You need to enable [Video Frame Interpolation] to use this option.
 
-If the fps of orignal video is 30 fps, multiple of fps is &quot;4&quot;,
+If the fps of orignal video is 30 fps, multiple of fps is 4,
 then the result video will be 120 fps.</string>
                     </property>
                     <property name="text">
@@ -2959,7 +2979,7 @@ then the result video will be 120 fps.</string>
                       <property name="toolTip">
                        <string>You need to enable [Video Frame Interpolation] to use this option.
 
-If the fps of orignal video is 30 fps, multiple of fps is &quot;4&quot;,
+If the fps of orignal video is 30 fps, multiple of fps is 4,
 then the result video will be 120 fps.</string>
                       </property>
                       <property name="wrapping">
@@ -3024,10 +3044,10 @@ then the result video will be 120 fps.</string>
                </layout>
               </widget>
              </item>
-            </layout>
-           </widget>
-          </widget>
-         </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </layout>
        </widget>
        <widget class="QWidget" name="tab_EngineSettings">
@@ -3315,54 +3335,54 @@ process at the same time.</string>
              </widget>
             </item>
             <item row="0" column="0">
-            <spacer name="horizontalSpacer_29">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="1" column="0">
-            <spacer name="horizontalSpacer_49">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLabel" name="label_NumThreadsActive">
-             <property name="text">
-              <string>0</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <spacer name="horizontalSpacer_50">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-        </item>
+             <spacer name="horizontalSpacer_29">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0">
+             <spacer name="horizontalSpacer_49">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="label_NumThreadsActive">
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <spacer name="horizontalSpacer_50">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
          <item row="0" column="0">
           <widget class="QGroupBox" name="groupBox_Engine">
            <property name="minimumSize">
@@ -3498,13 +3518,13 @@ process at the same time.</string>
                      </size>
                     </property>
                     <property name="toolTip">
-                     <string>Waifu2x-NCNN-Vulkan [Speed:★★   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
+                     <string>Waifu2x-NCNN-Vulkan [Speed:★★   Image quality:★★★] [2D Anime][3D Real-life]
 Waifu2x-Converter   [Speed:★☆   Image quality:★★☆] [2D Anime]
 Anime4K             [Speed:★★★ Image quality:★☆  ] [2D Anime]
-SRMD-NCNN-Vulkan    [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Caffe       [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
+SRMD-NCNN-Vulkan    [Speed:★☆   Image quality:★★★] [2D Anime][3D Real-life]
+Waifu2x-Caffe       [Speed:★☆   Image quality:★★★] [2D Anime][3D Real-life]
 RealSR-NCNN-Vulkan  [Speed:☆     Image quality:★★★] [3D Real-life]
-SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D Real-life]</string>
+SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime][3D Real-life]</string>
                     </property>
                     <property name="currentText">
                      <string notr="true">RealESRGAN-NCNN-Vulkan</string>
@@ -3620,13 +3640,13 @@ SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D
                      </size>
                     </property>
                     <property name="toolTip">
-                     <string>Waifu2x-NCNN-Vulkan [Speed:★★   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
+                     <string>Waifu2x-NCNN-Vulkan [Speed:★★   Image quality:★★★] [2D Anime][3D Real-life]
 Waifu2x-Converter   [Speed:★☆   Image quality:★★☆] [2D Anime]
 Anime4K             [Speed:★★★ Image quality:★☆  ] [2D Anime]
-SRMD-NCNN-Vulkan    [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Caffe       [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
+SRMD-NCNN-Vulkan    [Speed:★☆   Image quality:★★★] [2D Anime][3D Real-life]
+Waifu2x-Caffe       [Speed:★☆   Image quality:★★★] [2D Anime][3D Real-life]
 RealSR-NCNN-Vulkan  [Speed:☆     Image quality:★★★] [3D Real-life]
-SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D Real-life]</string>
+SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime][3D Real-life]</string>
                     </property>
                     <property name="currentText">
                      <string notr="true">waifu2x-ncnn-vulkan</string>
@@ -3689,13 +3709,13 @@ SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D
                      </size>
                     </property>
                     <property name="toolTip">
-                     <string>Waifu2x-NCNN-Vulkan [Speed:★★   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
+                     <string>Waifu2x-NCNN-Vulkan [Speed:★★   Image quality:★★★] [2D Anime][3D Real-life]
 Waifu2x-Converter   [Speed:★☆   Image quality:★★☆] [2D Anime]
 Anime4K             [Speed:★★★ Image quality:★☆  ] [2D Anime]
-SRMD-NCNN-Vulkan    [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Caffe       [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
+SRMD-NCNN-Vulkan    [Speed:★☆   Image quality:★★★] [2D Anime][3D Real-life]
+Waifu2x-Caffe       [Speed:★☆   Image quality:★★★] [2D Anime][3D Real-life]
 RealSR-NCNN-Vulkan  [Speed:☆     Image quality:★★★] [3D Real-life]
-SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D Real-life]</string>
+SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime][3D Real-life]</string>
                     </property>
                     <property name="currentText">
                      <string notr="true">RealESRGAN-NCNN-Vulkan</string>
@@ -3809,7 +3829,7 @@ same time, you need to change [Image style] settings at [Home] tab.
                      </sizepolicy>
                     </property>
                     <property name="toolTip">
-                     <string>Select the GPU to use when enabling the &quot;waifu2x-ncnn-vulkan&quot; engine.</string>
+                     <string>Select the GPU to use when enabling the waifu2x-ncnn-vulkan engine.</string>
                     </property>
                     <property name="text">
                      <string>GPU ID:</string>
@@ -3834,8 +3854,8 @@ same time, you need to change [Image style] settings at [Home] tab.
                      </size>
                     </property>
                     <property name="toolTip">
-                     <string>Select the GPU to use when enabling the &quot;waifu2x-ncnn-vulkan&quot; engine.
-★ &quot;-1&quot; is CPU,others are GPUs ★</string>
+                     <string>Select the GPU to use when enabling the waifu2x-ncnn-vulkan engine.
+★ -1 is CPU,others are GPUs ★</string>
                     </property>
                     <property name="currentText">
                      <string notr="true">auto</string>
@@ -3858,7 +3878,9 @@ same time, you need to change [Image style] settings at [Home] tab.
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="class"><string>purple</string></property>
+                    <property name="class">
+                     <string>purple</string>
+                    </property>
                     <property name="text">
                      <string>Detect available GPU ID</string>
                     </property>
@@ -3876,7 +3898,7 @@ same time, you need to change [Image style] settings at [Home] tab.
                      <string>1.You need at least 2 available GPUs.
 
 2.If you wanna get all GPUs running together,
-the number of threads must &gt;= the number of GPUs.
+the number of threads must = the number of GPUs.
 
 3.You need to [Detect available GPU ID] first.
 
@@ -3922,7 +3944,7 @@ the number of threads must &gt;= the number of GPUs.
                      <string>Tile size: This value will affects GPU memory usage.
 Larger tile size means waifu2x will use more GPU memory and run faster.
 Smaller tile size means waifu2x will use less GPU memory and run slower.
-(Only works when using &quot;waifu2x-ncnn-vulkan&quot; engine.)</string>
+(Only works when using waifu2x-ncnn-vulkan engine.)</string>
                     </property>
                     <property name="text">
                      <string>Tile size:</string>
@@ -4133,7 +4155,9 @@ Smaller Tile size means waifu2x will use less GPU memory and run slower.</string
                        <property name="toolTip">
                         <string>Show current Multi-GPU settings.</string>
                        </property>
-                       <property name="class"><string>orange</string></property>
+                       <property name="class">
+                        <string>orange</string>
+                       </property>
                        <property name="text">
                         <string>Show GPUs Settings</string>
                        </property>
@@ -4280,10 +4304,10 @@ Smaller Tile size means waifu2x will use less GPU memory and run slower.</string
                   <item>
                    <widget class="QComboBox" name="comboBox_model_vulkan">
                     <property name="toolTip">
-                     <string>We recommend you use the default &quot;upconv_7&quot; model.
-Only &quot;upconv_7&quot; model supports image style switching.
-&quot;cunet&quot; model only supports 2D anime image style, 
-and it's much more slower than &quot;upconv_7&quot; model.</string>
+                     <string>We recommend you use the default upconv_7 model.
+Only upconv_7 model supports image style switching.
+cunet model only supports 2D anime image style, 
+and it's much more slower than upconv_7 model.</string>
                     </property>
                     <item>
                      <property name="text">
@@ -4541,7 +4565,7 @@ padding:10px;
                      <string>1.You need at least 2 available processors.
 
 2.If you wanna get all processors running together,
-the number of threads must &gt;= the number of processors.
+the number of threads must = the number of processors.
 
 3.You need to [Dump processor list] first.</string>
                     </property>
@@ -4723,7 +4747,9 @@ Smaller Block size means waifu2x will use less GPU memory and run slower.</strin
                        <property name="toolTip">
                         <string>Show current Multi-Processor settings.</string>
                        </property>
-                       <property name="class"><string>orange</string></property>
+                       <property name="class">
+                        <string>orange</string>
+                       </property>
                        <property name="text">
                         <string>Show Processor Settings</string>
                        </property>
@@ -5085,7 +5111,7 @@ Example: 0,0:0,1:1,0:
 You must follow the format,otherwise the software may crash.
 
 If you wanna get all GPUs running together,
-the number of threads must &gt;= the number of GPUs.</string>
+the number of threads must = the number of GPUs.</string>
                      </property>
                      <property name="text">
                       <string notr="true">0,0:</string>
@@ -5112,7 +5138,9 @@ the number of threads must &gt;= the number of GPUs.</string>
                        <height>35</height>
                       </size>
                      </property>
-                     <property name="class"><string>green</string></property>
+                     <property name="class">
+                      <string>green</string>
+                     </property>
                      <property name="text">
                       <string>List GPUs</string>
                      </property>
@@ -5189,7 +5217,9 @@ Only NVIDIA products support CUDA.</string>
                      <property name="toolTip">
                       <string>Verify your GPUs configuration.</string>
                      </property>
-                     <property name="class"><string>purple</string></property>
+                     <property name="class">
+                      <string>purple</string>
+                     </property>
                      <property name="text">
                       <string>Verify</string>
                      </property>
@@ -5758,7 +5788,9 @@ utilize the capabilities of your PC.
                        <property name="toolTip">
                         <string>Show current Multi-GPU settings.</string>
                        </property>
-                       <property name="class"><string>orange</string></property>
+                       <property name="class">
+                        <string>orange</string>
+                       </property>
                        <property name="text">
                         <string>Show GPUs Settings</string>
                        </property>
@@ -5845,7 +5877,7 @@ utilize the capabilities of your PC.
                      </size>
                     </property>
                     <property name="toolTip">
-                     <string>Select the GPU to use when enabling the &quot;srmd-ncnn-vulkan&quot; engine.</string>
+                     <string>Select the GPU to use when enabling the srmd-ncnn-vulkan engine.</string>
                     </property>
                     <property name="currentText">
                      <string notr="true">auto</string>
@@ -5865,7 +5897,9 @@ utilize the capabilities of your PC.
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="class"><string>blue</string></property>
+                    <property name="class">
+                     <string>blue</string>
+                    </property>
                     <property name="text">
                      <string>Detect available GPU ID</string>
                     </property>
@@ -5883,7 +5917,7 @@ utilize the capabilities of your PC.
                      <string>1.You need at least 2 available GPUs.
 
 2.If you wanna get all GPUs running together,
-the number of threads must &gt;= the number of GPUs.
+the number of threads must = the number of GPUs.
 
 3.You need to [Detect available GPU ID] first.</string>
                     </property>
@@ -6316,7 +6350,7 @@ Example: 0,1,128:1,2,64:2,1,128:
 You must follow the format,otherwise the software may crash.
 
 If you wanna get all GPUs running together,
-the number of threads must &gt;= the number of GPUs.</string>
+the number of threads must = the number of GPUs.</string>
                     </property>
                     <property name="text">
                      <string notr="true">0,1,128:</string>
@@ -6340,7 +6374,9 @@ the number of threads must &gt;= the number of GPUs.</string>
                     <property name="toolTip">
                      <string>Verify your GPUs configuration.</string>
                     </property>
-                    <property name="class"><string>purple</string></property>
+                    <property name="class">
+                     <string>purple</string>
+                    </property>
                     <property name="text">
                      <string>Verify</string>
                     </property>
@@ -6484,7 +6520,7 @@ the number of threads must &gt;= the number of GPUs.</string>
                      </size>
                     </property>
                     <property name="toolTip">
-                     <string>Select the GPU to use when enabling the &quot;waifu2x-caffe&quot; engine.</string>
+                     <string>Select the GPU to use when enabling the waifu2x-caffe engine.</string>
                     </property>
                     <property name="maximum">
                      <number>999999999</number>
@@ -6754,7 +6790,7 @@ but the effect may not be obvious. It is not recommended to enable it.</string>
                      </size>
                     </property>
                     <property name="toolTip">
-                     <string>Select the GPU to use when enabling the &quot;Realsr-ncnn-vulkan&quot; engine.</string>
+                     <string>Select the GPU to use when enabling the Realsr-ncnn-vulkan engine.</string>
                     </property>
                     <property name="currentText">
                      <string notr="true">auto</string>
@@ -6777,7 +6813,9 @@ but the effect may not be obvious. It is not recommended to enable it.</string>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="class"><string>blue</string></property>
+                    <property name="class">
+                     <string>blue</string>
+                    </property>
                     <property name="text">
                      <string>Detect available GPU ID</string>
                     </property>
@@ -6795,7 +6833,7 @@ but the effect may not be obvious. It is not recommended to enable it.</string>
                      <string>1.You need at least 2 available GPUs.
 
 2.If you wanna get all GPUs running together,
-the number of threads must &gt;= the number of GPUs.
+the number of threads must = the number of GPUs.
 
 3.You need to [Detect available GPU ID] first.</string>
                     </property>
@@ -7029,7 +7067,9 @@ Smaller tile size means Realsr will use less GPU memory and run slower.</string>
                        <property name="toolTip">
                         <string>Show current Multi-GPU settings.</string>
                        </property>
-                       <property name="class"><string>orange</string></property>
+                       <property name="class">
+                        <string>orange</string>
+                       </property>
                        <property name="text">
                         <string>Show GPUs Settings</string>
                        </property>
@@ -7328,7 +7368,8 @@ will increase the time required to process video.</string>
          <item>
           <widget class="QGroupBox" name="groupBox_FrameInterpolation">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred"> <!-- Changed from Fixed, Fixed -->
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <!-- Changed from Fixed, Fixed -->
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -7342,32 +7383,27 @@ will increase the time required to process video.</string>
            <property name="checked">
             <bool>false</bool>
            </property>
-           <layout class="QGridLayout" name="gridLayout_FrameInterpolation_Outer"> <!-- Renamed for clarity, was gridLayout_64 -->
+           <layout class="QGridLayout" name="gridLayout_68">
+            <!-- This is the existing internal grid -->
             <property name="leftMargin">
-             <number>6</number>
-            </property>
-            <property name="topMargin">
-             <number>6</number>
-            </property>
-            <property name="rightMargin">
-             <number>6</number>
-            </property>
-            <property name="bottomMargin">
-             <number>6</number>
-            </property>
-            <property name="spacing">
              <number>0</number>
             </property>
-            <item row="0" column="0">
-             <widget class="QFrame" name="frame_FrameInterpolation">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0" colspan="3">
+             <widget class="QFrame" name="frame_15">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
               <property name="frameShape">
                <enum>QFrame::NoFrame</enum>
@@ -7375,10 +7411,7 @@ will increase the time required to process video.</string>
               <property name="frameShadow">
                <enum>QFrame::Raised</enum>
               </property>
-              <property name="lineWidth">
-               <number>0</number>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_68"> <!-- This is the existing internal grid -->
+              <layout class="QGridLayout" name="gridLayout_67">
                <property name="leftMargin">
                 <number>0</number>
                </property>
@@ -7391,10 +7424,51 @@ will increase the time required to process video.</string>
                <property name="bottomMargin">
                 <number>0</number>
                </property>
-               <item row="0" column="0" colspan="3">
-                <widget class="QFrame" name="frame_15">
+               <item row="0" column="6">
+                <widget class="QCheckBox" name="checkBox_UHD_VFI">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>You should enable this option when processing Ultra High Definition videos.
+
+The software will automatically enable UHD Mode when it detects input with
+resolution higher than 3840×2160.
+
+Only works when using [rife-ncnn-vulkan] engine.</string>
+                 </property>
+                 <property name="text">
+                  <string>UHD Mode</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="8">
+                <spacer name="horizontalSpacer_12">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="0" column="4">
+                <widget class="Line" name="line_28">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QFrame" name="frame_14">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
@@ -7405,7 +7479,7 @@ will increase the time required to process video.</string>
                  <property name="frameShadow">
                   <enum>QFrame::Raised</enum>
                  </property>
-                 <layout class="QGridLayout" name="gridLayout_67">
+                 <layout class="QGridLayout" name="gridLayout_65">
                   <property name="leftMargin">
                    <number>0</number>
                   </property>
@@ -7418,447 +7492,380 @@ will increase the time required to process video.</string>
                   <property name="bottomMargin">
                    <number>0</number>
                   </property>
-                  <item row="0" column="6">
-                   <widget class="QCheckBox" name="checkBox_UHD_VFI">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="toolTip">
-                     <string>You should enable this option when processing Ultra High Definition videos.
-
-The software will automatically enable UHD Mode when it detects input with
-resolution higher than 3840×2160.
-
-Only works when using [rife-ncnn-vulkan] engine.</string>
-                    </property>
-                    <property name="text">
-                     <string>UHD Mode</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="8">
-                   <spacer name="horizontalSpacer_12">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                  <item row="0" column="4">
-                   <widget class="Line" name="line_28">
-                    <property name="orientation">
-                     <enum>Qt::Vertical</enum>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="3">
-                   <widget class="QFrame" name="frame_14">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_37">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="frameShape">
-                     <enum>QFrame::NoFrame</enum>
+                    <property name="text">
+                     <string>Frame Interpolation Engine:</string>
                     </property>
-                    <property name="frameShadow">
-                     <enum>QFrame::Raised</enum>
-                    </property>
-                    <layout class="QGridLayout" name="gridLayout_65">
-                     <property name="leftMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="rightMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="bottomMargin">
-                      <number>0</number>
-                     </property>
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="label_37">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="text">
-                        <string>Frame Interpolation Engine:</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="1">
-                      <widget class="QComboBox" name="comboBox_Engine_VFI">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="toolTip">
-                        <string>RIFE-NCNN-Vulkan [Speed:★★★ Image quality:★★☆] [2D Anime]&amp;[3D Real-life]
-CAIN-NCNN-Vulkan [Speed:★★★ Image quality:★★☆] [2D Anime]&amp;[3D Real-life]
-DAIN-NCNN-Vulkan [Speed:☆     Image quality:★★★] [2D Anime]&amp;[3D Real-life]</string>
-                       </property>
-                       <item>
-                        <property name="text">
-                         <string notr="true">rife-ncnn-vulkan</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string notr="true">cain-ncnn-vulkan</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string notr="true">dain-ncnn-vulkan</string>
-                        </property>
-                       </item>
-                      </widget>
-                     </item>
-                    </layout>
                    </widget>
                   </item>
-                  <item row="0" column="5">
-                   <widget class="QCheckBox" name="checkBox_TTA_VFI">
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="comboBox_Engine_VFI">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
                     <property name="toolTip">
-                     <string>TTA(Test-Time Augmentation):
-The processing time is eight times longer than when unchecked, 
-and the peak signal-to-noise ratio (PSNR) is increased by 0.15, 
-but the effect may not be obvious. It is not recommended to enable it.
-
-Only works when using [rife-ncnn-vulkan] engine.</string>
+                     <string>RIFE-NCNN-Vulkan [Speed:★★★ Image quality:★★☆] [2D Anime][3D Real-life]
+CAIN-NCNN-Vulkan [Speed:★★★ Image quality:★★☆] [2D Anime][3D Real-life]
+DAIN-NCNN-Vulkan [Speed:☆     Image quality:★★★] [2D Anime][3D Real-life]</string>
                     </property>
-                    <property name="text">
-                     <string>TTA Mode</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="7">
-                   <widget class="QCheckBox" name="checkBox_VfiAfterScale_VFI">
-                    <property name="toolTip">
-                     <string>Interpolate frames after upscaled.
-
-By default the frames will be interpolated before upscaled,
-because PC with low vram will encounter difficulties when
-interpolate high res frames.</string>
-                    </property>
-                    <property name="text">
-                     <string>After Upscale</string>
-                    </property>
+                    <item>
+                     <property name="text">
+                      <string notr="true">rife-ncnn-vulkan</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string notr="true">cain-ncnn-vulkan</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string notr="true">dain-ncnn-vulkan</string>
+                     </property>
+                    </item>
                    </widget>
                   </item>
                  </layout>
                 </widget>
                </item>
-               <item row="1" column="0" colspan="3">
-                <widget class="Line" name="line_27">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+               <item row="0" column="5">
+                <widget class="QCheckBox" name="checkBox_TTA_VFI">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>TTA(Test-Time Augmentation):
+The processing time is eight times longer than when unchecked, 
+and the peak signal-to-noise ratio (PSNR) is increased by 0.15, 
+but the effect may not be obvious. It is not recommended to enable it.
+
+Only works when using [rife-ncnn-vulkan] engine.</string>
+                 </property>
+                 <property name="text">
+                  <string>TTA Mode</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1" rowspan="3">
-                <widget class="Line" name="line_29">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
+               <item row="0" column="7">
+                <widget class="QCheckBox" name="checkBox_VfiAfterScale_VFI">
+                 <property name="toolTip">
+                  <string>Interpolate frames after upscaled.
+
+By default the frames will be interpolated before upscaled,
+because PC with low vram will encounter difficulties when
+interpolate high res frames.</string>
+                 </property>
+                 <property name="text">
+                  <string>After Upscale</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="2">
-                <layout class="QHBoxLayout" name="horizontalLayout_4">
-                 <item>
-                  <widget class="QLabel" name="label_30">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>GPU ID:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QComboBox" name="comboBox_GPUID_VFI">
-                   <property name="toolTip">
-                    <string>&quot;-1&quot; is CPU, others are GPUs</string>
-                   </property>
-                   <item>
-                    <property name="text">
-                     <string notr="true">auto</string>
-                    </property>
-                   </item>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="pushButton_DetectGPU_VFI">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="class"><string>blue</string></property>
-                   <property name="text">
-                    <string>Detect available GPU ID</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="3" column="2">
-                <layout class="QHBoxLayout" name="horizontalLayout_6">
-                 <item>
-                  <widget class="QCheckBox" name="checkBox_MultiGPU_VFI">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Multi GPU</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLineEdit" name="lineEdit_MultiGPU_IDs_VFI">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="toolTip">
-                    <string>Format: GPU ID,GPU ID
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="3">
+             <widget class="Line" name="line_27">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1" rowspan="3">
+             <widget class="Line" name="line_29">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QLabel" name="label_30">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>GPU ID:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboBox_GPUID_VFI">
+                <property name="toolTip">
+                 <string>-1 is CPU, others are GPUs</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string notr="true">auto</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_DetectGPU_VFI">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="class">
+                 <string>blue</string>
+                </property>
+                <property name="text">
+                 <string>Detect available GPU ID</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="3" column="2">
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QCheckBox" name="checkBox_MultiGPU_VFI">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Multi GPU</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEdit_MultiGPU_IDs_VFI">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="toolTip">
+                 <string>Format: GPU ID,GPU ID
 
 Example: 0,1
 
 You must follow the format,otherwise the software may crash.</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="pushButton_Verify_MultiGPU_VFI">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="toolTip">
-                    <string>Verify your Multi GPU configuration.</string>
-                   </property>
-                   <property name="class"><string>purple</string></property>
-                   <property name="text">
-                    <string>Verify</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item row="4" column="2">
-                <layout class="QHBoxLayout" name="horizontalLayout_49">
-                 <item>
-                  <widget class="QLabel" name="label_19">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="toolTip">
-                    <string>This value will affects GPU memory usage.
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_Verify_MultiGPU_VFI">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="toolTip">
+                 <string>Verify your Multi GPU configuration.</string>
+                </property>
+                <property name="class">
+                 <string>purple</string>
+                </property>
+                <property name="text">
+                 <string>Verify</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="4" column="2">
+             <layout class="QHBoxLayout" name="horizontalLayout_49">
+              <item>
+               <widget class="QLabel" name="label_19">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="toolTip">
+                 <string>This value will affects GPU memory usage.
 Only works when using [dain-ncnn-vulkan] engine.</string>
-                   </property>
-                   <property name="text">
-                    <string>Tile size:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QSpinBox" name="spinBox_TileSize_VFI">
-                   <property name="focusPolicy">
-                    <enum>Qt::NoFocus</enum>
-                   </property>
-                   <property name="toolTip">
-                    <string>This value will affects GPU memory usage.
+                </property>
+                <property name="text">
+                 <string>Tile size:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBox_TileSize_VFI">
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
+                <property name="toolTip">
+                 <string>This value will affects GPU memory usage.
 Only works when using [dain-ncnn-vulkan] engine.</string>
-                   </property>
-                   <property name="minimum">
-                    <number>128</number>
-                   </property>
-                   <property name="maximum">
-                    <number>999999999</number>
-                   </property>
-                   <property name="singleStep">
-                    <number>32</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer_48">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </item>
-               <item row="2" column="0" rowspan="3">
-                <layout class="QVBoxLayout" name="verticalLayout_7">
-                 <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout_11">
-                   <item>
-                    <widget class="QLabel" name="label_3">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="text">
-                      <string>Model:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QComboBox" name="comboBox_Model_VFI">
-                     <property name="toolTip">
-                      <string>Choose the model for rife-ncnn-vulkan engine.
+                </property>
+                <property name="minimum">
+                 <number>128</number>
+                </property>
+                <property name="maximum">
+                 <number>999999999</number>
+                </property>
+                <property name="singleStep">
+                 <number>32</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_48">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="0" rowspan="3">
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_11">
+                <item>
+                 <widget class="QLabel" name="label_3">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Model:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_Model_VFI">
+                  <property name="toolTip">
+                   <string>Choose the model for rife-ncnn-vulkan engine.
 
-We recommend you to use the default model &quot;rife-v2.4&quot;.
+We recommend you to use the default model rife-v2.4.
 
 Only works when using [rife-ncnn-vulkan] engine.</string>
-                     </property>
-                     <property name="currentIndex">
-                      <number>5</number>
-                     </property>
-                     <item>
-                      <property name="text">
-                       <string notr="true">rife</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">rife-anime</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">rife-HD</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">rife-UHD</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">rife-v2</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">rife-v2.4</string>
-                      </property>
-                     </item>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout_9">
-                   <item>
-                    <widget class="QCheckBox" name="checkBox_MultiThread_VFI">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="toolTip">
-                      <string>The multi-threading of the frame interpolation engines is NOT
+                  </property>
+                  <property name="currentIndex">
+                   <number>5</number>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string notr="true">rife</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string notr="true">rife-anime</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string notr="true">rife-HD</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string notr="true">rife-UHD</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string notr="true">rife-v2</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string notr="true">rife-v2.4</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_9">
+                <item>
+                 <widget class="QCheckBox" name="checkBox_MultiThread_VFI">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="toolTip">
+                   <string>The multi-threading of the frame interpolation engines is NOT
 very stable, we don't recommend you to enable this option.</string>
-                     </property>
-                     <property name="text">
-                      <string>Multithreading:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QSpinBox" name="spinBox_NumOfThreads_VFI">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="toolTip">
-                      <string>Number of threads.</string>
-                     </property>
-                     <property name="minimum">
-                      <number>1</number>
-                     </property>
-                     <property name="maximum">
-                      <number>999999999</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QCheckBox" name="checkBox_AutoAdjustNumOfThreads_VFI">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="toolTip">
-                      <string>When successive failures are detected, the number
+                  </property>
+                  <property name="text">
+                   <string>Multithreading:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="spinBox_NumOfThreads_VFI">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="toolTip">
+                   <string>Number of threads.</string>
+                  </property>
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
+                  <property name="maximum">
+                   <number>999999999</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_AutoAdjustNumOfThreads_VFI">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="toolTip">
+                   <string>When successive failures are detected, the number
 of threads will be adjusted automatically.</string>
-                     </property>
-                     <property name="text">
-                      <string>Auto adjust</string>
-                     </property>
-                     <property name="checked">
-                      <bool>false</bool>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
+                  </property>
+                  <property name="text">
+                   <string>Auto adjust</string>
+                  </property>
+                  <property name="checked">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>
@@ -8316,7 +8323,9 @@ Might cause ERROR.</string>
              <property name="toolTip">
               <string>Reset video settings</string>
              </property>
-             <property name="class"><string>orange</string></property>
+             <property name="class">
+              <string>orange</string>
+             </property>
              <property name="text">
               <string>Reset video settings</string>
              </property>
@@ -8330,7 +8339,9 @@ Might cause ERROR.</string>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="class"><string>blue</string></property>
+             <property name="class">
+              <string>blue</string>
+             </property>
              <property name="text">
               <string>List Available Encoders</string>
              </property>
@@ -8412,7 +8423,7 @@ Might cause ERROR.</string>
 be added to the file list, you can add the file extension yourself 
 in the additional settings.
 
-Each extension needs to be separated by &quot;:&quot;
+Each extension needs to be separated by :
 
 (There is no guarantee that the file format you add will 
 be processed successfully)</string>
@@ -8438,7 +8449,7 @@ be processed successfully)</string>
 be added to the file list, you can add the file extension yourself 
 in the additional settings.
 
-Each extension needs to be separated by &quot;:&quot;
+Each extension needs to be separated by :
 
 (There is no guarantee that the file format you add will 
 be processed successfully)</string>
@@ -8471,7 +8482,7 @@ be processed successfully)</string>
 be added to the file list, you can add the file extension yourself 
 in the additional settings.
 
-Each extension needs to be separated by &quot;:&quot;
+Each extension needs to be separated by :
 
 (There is no guarantee that the file format you add will 
 be processed successfully)</string>
@@ -8497,7 +8508,7 @@ be processed successfully)</string>
 be added to the file list, you can add the file extension yourself 
 in the additional settings.
 
-Each extension needs to be separated by &quot;:&quot;
+Each extension needs to be separated by :
 
 (There is no guarantee that the file format you add will 
 be processed successfully)</string>
@@ -8648,7 +8659,9 @@ frequently occurs when processing images, you can enable this option to save tim
                     <height>16777215</height>
                    </size>
                   </property>
-                  <property name="class"><string>green</string></property>
+                  <property name="class">
+                   <string>green</string>
+                  </property>
                   <property name="text">
                    <string>Save Custom Font Settings</string>
                   </property>
@@ -8767,7 +8780,9 @@ frequently occurs when processing images, you can enable this option to save tim
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
-                  <property name="class"><string>purple</string></property>
+                  <property name="class">
+                   <string>purple</string>
+                  </property>
                   <property name="text">
                    <string>Save settings</string>
                   </property>
@@ -8818,7 +8833,9 @@ padding:10px;
                     <underline>false</underline>
                    </font>
                   </property>
-                  <property name="class"><string>green</string></property>
+                  <property name="class">
+                   <string>green</string>
+                  </property>
                   <property name="text">
                    <string>Check update</string>
                   </property>
@@ -8835,7 +8852,9 @@ padding:10px;
                     <underline>false</underline>
                    </font>
                   </property>
-                  <property name="class"><string>orange</string></property>
+                  <property name="class">
+                   <string>orange</string>
+                  </property>
                   <property name="text">
                    <string>Report issue</string>
                   </property>
@@ -8888,7 +8907,9 @@ padding:10px;
                   <property name="toolTip">
                    <string>Open Waifu2x-Extension-GUI online wiki.</string>
                   </property>
-                  <property name="class"><string>purple</string></property>
+                  <property name="class">
+                   <string>purple</string>
+                  </property>
                   <property name="text">
                    <string>Wiki</string>
                   </property>
@@ -8906,7 +8927,9 @@ padding:10px;
                     <height>16777215</height>
                    </size>
                   </property>
-                  <property name="class"><string>blue</string></property>
+                  <property name="class">
+                   <string>blue</string>
+                  </property>
                   <property name="text">
                    <string>About</string>
                   </property>
@@ -8914,7 +8937,9 @@ padding:10px;
                 </item>
                 <item>
                  <widget class="QPushButton" name="pushButton_SupportersList">
-                  <property name="class"><string>red</string></property>
+                  <property name="class">
+                   <string>red</string>
+                  </property>
                   <property name="text">
                    <string>Top Supporters</string>
                   </property>
@@ -9010,7 +9035,7 @@ performance and fix issues when the software detects
 that your PC has compatibility issues with ImageMagick.</string>
              </property>
              <property name="text">
-              <string>Disable &quot;-resize&quot;</string>
+              <string>Disable -resize</string>
              </property>
             </widget>
            </item>
@@ -9605,17 +9630,17 @@ https://github.com/nihui/dain-ncnn-vulkan</string>
            <property name="text">
             <string>[FFmpeg, FFprobe, ImageMagick, Gifsicle, SoX], one of the Super-Resolution engines and one of the Frame Interpolation engines must be compatible with your computer, to make sure you can use all functions in this software.
 
-Waifu2x-NCNN-Vulkan [Speed:★★   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
+Waifu2x-NCNN-Vulkan [Speed:★★   Image quality:★★★] [2D Anime][3D Real-life]
 Waifu2x-Converter   [Speed:★☆   Image quality:★★☆] [2D Anime]
 Anime4K             [Speed:★★★ Image quality:★☆  ] [2D Anime]
-SRMD-NCNN-Vulkan    [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
-Waifu2x-Caffe       [Speed:★☆   Image quality:★★★] [2D Anime]&amp;[3D Real-life]
+SRMD-NCNN-Vulkan    [Speed:★☆   Image quality:★★★] [2D Anime][3D Real-life]
+Waifu2x-Caffe       [Speed:★☆   Image quality:★★★] [2D Anime][3D Real-life]
 RealSR-NCNN-Vulkan  [Speed:☆     Image quality:★★★] [3D Real-life]
-SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime]&amp;[3D Real-life]
+SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime][3D Real-life]
 
-RIFE-NCNN-Vulkan [Speed:★★★ Image quality:★★☆] [2D Anime]&amp;[3D Real-life]
-CAIN-NCNN-Vulkan [Speed:★★★ Image quality:★★☆] [2D Anime]&amp;[3D Real-life]
-DAIN-NCNN-Vulkan [Speed:☆     Image quality:★★★] [2D Anime]&amp;[3D Real-life]</string>
+RIFE-NCNN-Vulkan [Speed:★★★ Image quality:★★☆] [2D Anime][3D Real-life]
+CAIN-NCNN-Vulkan [Speed:★★★ Image quality:★★☆] [2D Anime][3D Real-life]
+DAIN-NCNN-Vulkan [Speed:☆     Image quality:★★★] [2D Anime][3D Real-life]</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -9957,13 +9982,8 @@ padding:10px;
        </item>
       </layout>
      </widget>
-     </widget>
     </item>
    </layout>
   </widget>
-</widget>
- <resources>
-  <include location="icon.qrc"/>
- </resources>
- <connections/>
+ </widget>
 </ui>
