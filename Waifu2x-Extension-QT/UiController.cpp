@@ -43,9 +43,16 @@ void UiController::applyDarkStyle(int mode)
         enable = systemPrefersDark();
 
     if (enable) {
+        QString style;
         QFile f(":/style/styles/dark.qss");
         if (f.open(QIODevice::ReadOnly))
-            qApp->setStyleSheet(QString::fromUtf8(f.readAll()));
+            style += QString::fromUtf8(f.readAll());
+
+        QFile f2(":/style/styles/button.qss");
+        if (f2.open(QIODevice::ReadOnly))
+            style += QString::fromUtf8(f2.readAll());
+
+        qApp->setStyleSheet(style);
     } else {
         qApp->setStyleSheet("");
     }
