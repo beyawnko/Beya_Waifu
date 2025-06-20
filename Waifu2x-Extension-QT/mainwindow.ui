@@ -192,36 +192,7 @@ height:35
              <property name="toolTip">
               <string>Donate to the developer through PayPal.</string>
              </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton{
-background-color: rgb(52, 152, 219);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(60, 177, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(45, 134, 193);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-             </property>
+             <property name="class"><string>blue</string></property>
              <property name="text">
               <string notr="true"> PayPal</string>
              </property>
@@ -255,36 +226,7 @@ padding:10px;
              <property name="toolTip">
               <string>Support this project on Patreon and get Premium version.</string>
              </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton{
-background-color: rgb(255, 66, 77);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(255, 105, 112);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(223, 50, 61);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-             </property>
+             <property name="class"><string>red</string></property>
              <property name="text">
               <string> Get Premium version on Patreon</string>
              </property>
@@ -548,36 +490,7 @@ padding:10px;
               <property name="toolTip">
                <string/>
               </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton{
-background-color: rgb(26, 188, 156);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(29, 214, 177);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(23, 173, 143);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-              </property>
+              <property name="class"><string>green</string></property>
               <property name="text">
                <string>Start</string>
               </property>
@@ -607,36 +520,7 @@ padding:10px;
                 <height>16777215</height>
                </size>
               </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton{
-background-color: rgb(231, 76, 60);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(255, 102, 64);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(204, 65, 53);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-              </property>
+              <property name="class"><string>orange</string></property>
               <property name="text">
                <string>Pause</string>
               </property>
@@ -674,36 +558,7 @@ You can try using [Force Retry] to end the Engine process
 and restart it, and the entire [Scale and denoise] process 
 will not be interrupted and will continue.</string>
               </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton{
-background-color: rgb(178, 58, 238);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(191, 62, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(154, 50, 205);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-              </property>
+              <property name="class"><string>purple</string></property>
               <property name="text">
                <string>Force retry</string>
               </property>
@@ -1736,36 +1591,7 @@ padding:0px;
                  <property name="toolTip">
                   <string/>
                  </property>
-                 <property name="styleSheet">
-                  <string notr="true">QPushButton{
-background-color: rgb(52, 152, 219);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(60, 177, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(45, 134, 193);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                 </property>
+                 <property name="class"><string>blue</string></property>
                  <property name="text">
                   <string>Hide settings</string>
                  </property>
@@ -1779,36 +1605,7 @@ padding:10px;
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
-                 <property name="styleSheet">
-                  <string notr="true">QPushButton{
-background-color: rgb(178, 58, 238);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(191, 62, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(154, 50, 205);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                 </property>
+                 <property name="class"><string>purple</string></property>
                  <property name="text">
                   <string>Hide Text Browser</string>
                  </property>
@@ -2012,36 +1809,7 @@ padding:10px;
 ★Scale ratio will not be applied to files which
 already have custom resolution applied.★</string>
                     </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
-background-color: rgb(26, 188, 156);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(29, 214, 177);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(23, 173, 143);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                    </property>
+                    <property name="class"><string>green</string></property>
                     <property name="text">
                      <string>Apply</string>
                     </property>
@@ -2053,50 +1821,7 @@ padding:10px;
                      <string>1.Select a file in the file list.
 2.Click the Cancel button to cancel the custom resolution.</string>
                     </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
-background-color: rgb(231, 76, 60);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(255, 102, 64);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(204, 65, 53);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton{
-background-color: rgb(231, 76, 60);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(255, 102, 64);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-	background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                    </property>
+                    <property name="class"><string>orange</string></property>
                     <property name="text">
                      <string>Cancel</string>
                     </property>
@@ -4133,36 +3858,7 @@ same time, you need to change [Image style] settings at [Home] tab.
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
-background-color: rgb(178, 58, 238);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(191, 62, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(154, 50, 205);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                    </property>
+                    <property name="class"><string>purple</string></property>
                     <property name="text">
                      <string>Detect available GPU ID</string>
                     </property>
@@ -4437,36 +4133,7 @@ Smaller Tile size means waifu2x will use less GPU memory and run slower.</string
                        <property name="toolTip">
                         <string>Show current Multi-GPU settings.</string>
                        </property>
-                       <property name="styleSheet">
-                        <string notr="true">QPushButton{
-background-color: rgb(231, 76, 60);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(255, 102, 64);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(204, 65, 53);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                       </property>
+                       <property name="class"><string>orange</string></property>
                        <property name="text">
                         <string>Show GPUs Settings</string>
                        </property>
@@ -5056,36 +4723,7 @@ Smaller Block size means waifu2x will use less GPU memory and run slower.</strin
                        <property name="toolTip">
                         <string>Show current Multi-Processor settings.</string>
                        </property>
-                       <property name="styleSheet">
-                        <string notr="true">QPushButton{
-background-color: rgb(231, 76, 60);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(255, 102, 64);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(204, 65, 53);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                       </property>
+                       <property name="class"><string>orange</string></property>
                        <property name="text">
                         <string>Show Processor Settings</string>
                        </property>
@@ -5474,36 +5112,7 @@ the number of threads must &gt;= the number of GPUs.</string>
                        <height>35</height>
                       </size>
                      </property>
-                     <property name="styleSheet">
-                      <string notr="true">QPushButton{
-background-color: rgb(26, 188, 156);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(29, 214, 177);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(23, 173, 143);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                     </property>
+                     <property name="class"><string>green</string></property>
                      <property name="text">
                       <string>List GPUs</string>
                      </property>
@@ -5580,36 +5189,7 @@ Only NVIDIA products support CUDA.</string>
                      <property name="toolTip">
                       <string>Verify your GPUs configuration.</string>
                      </property>
-                     <property name="styleSheet">
-                      <string notr="true">QPushButton{
-background-color: rgb(178, 58, 238);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(191, 62, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(154, 50, 205);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                     </property>
+                     <property name="class"><string>purple</string></property>
                      <property name="text">
                       <string>Verify</string>
                      </property>
@@ -6178,36 +5758,7 @@ utilize the capabilities of your PC.
                        <property name="toolTip">
                         <string>Show current Multi-GPU settings.</string>
                        </property>
-                       <property name="styleSheet">
-                        <string notr="true">QPushButton{
-background-color: rgb(231, 76, 60);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(255, 102, 64);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(204, 65, 53);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                       </property>
+                       <property name="class"><string>orange</string></property>
                        <property name="text">
                         <string>Show GPUs Settings</string>
                        </property>
@@ -6314,36 +5865,7 @@ padding:10px;
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
-background-color: rgb(52, 152, 219);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(60, 177, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(45, 134, 193);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                    </property>
+                    <property name="class"><string>blue</string></property>
                     <property name="text">
                      <string>Detect available GPU ID</string>
                     </property>
@@ -6818,36 +6340,7 @@ the number of threads must &gt;= the number of GPUs.</string>
                     <property name="toolTip">
                      <string>Verify your GPUs configuration.</string>
                     </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
-background-color: rgb(178, 58, 238);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(191, 62, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(154, 50, 205);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                    </property>
+                    <property name="class"><string>purple</string></property>
                     <property name="text">
                      <string>Verify</string>
                     </property>
@@ -7284,36 +6777,7 @@ but the effect may not be obvious. It is not recommended to enable it.</string>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
-background-color: rgb(52, 152, 219);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(60, 177, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(45, 134, 193);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                    </property>
+                    <property name="class"><string>blue</string></property>
                     <property name="text">
                      <string>Detect available GPU ID</string>
                     </property>
@@ -7565,36 +7029,7 @@ Smaller tile size means Realsr will use less GPU memory and run slower.</string>
                        <property name="toolTip">
                         <string>Show current Multi-GPU settings.</string>
                        </property>
-                       <property name="styleSheet">
-                        <string notr="true">QPushButton{
-background-color: rgb(231, 76, 60);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(255, 102, 64);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(204, 65, 53);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                       </property>
+                       <property name="class"><string>orange</string></property>
                        <property name="text">
                         <string>Show GPUs Settings</string>
                        </property>
@@ -8184,36 +7619,7 @@ interpolate high res frames.</string>
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
-                   <property name="styleSheet">
-                    <string notr="true">QPushButton{
-background-color: rgb(52, 152, 219);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(60, 177, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(45, 134, 193);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                   </property>
+                   <property name="class"><string>blue</string></property>
                    <property name="text">
                     <string>Detect available GPU ID</string>
                    </property>
@@ -8264,36 +7670,7 @@ You must follow the format,otherwise the software may crash.</string>
                    <property name="toolTip">
                     <string>Verify your Multi GPU configuration.</string>
                    </property>
-                   <property name="styleSheet">
-                    <string notr="true">QPushButton{
-background-color: rgb(178, 58, 238);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(191, 62, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(154, 50, 205);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                   </property>
+                   <property name="class"><string>purple</string></property>
                    <property name="text">
                     <string>Verify</string>
                    </property>
@@ -8939,36 +8316,7 @@ Might cause ERROR.</string>
              <property name="toolTip">
               <string>Reset video settings</string>
              </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton{
-background-color: rgb(231, 76, 60);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(255, 102, 64);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(204, 65, 53);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-             </property>
+             <property name="class"><string>orange</string></property>
              <property name="text">
               <string>Reset video settings</string>
              </property>
@@ -8982,36 +8330,7 @@ padding:10px;
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton{
-background-color: rgb(52, 152, 219);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(60, 177, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(45, 134, 193);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-             </property>
+             <property name="class"><string>blue</string></property>
              <property name="text">
               <string>List Available Encoders</string>
              </property>
@@ -9329,36 +8648,7 @@ frequently occurs when processing images, you can enable this option to save tim
                     <height>16777215</height>
                    </size>
                   </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton{
-background-color: rgb(26, 188, 156);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(29, 214, 177);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(23, 173, 143);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                  </property>
+                  <property name="class"><string>green</string></property>
                   <property name="text">
                    <string>Save Custom Font Settings</string>
                   </property>
@@ -9477,36 +8767,7 @@ padding:10px;
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton{
-background-color: rgb(178, 58, 238);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(191, 62, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(154, 50, 205);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                  </property>
+                  <property name="class"><string>purple</string></property>
                   <property name="text">
                    <string>Save settings</string>
                   </property>
@@ -9557,36 +8818,7 @@ padding:10px;
                     <underline>false</underline>
                    </font>
                   </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton{
-background-color: rgb(26, 188, 156);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(29, 214, 177);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(23, 173, 143);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                  </property>
+                  <property name="class"><string>green</string></property>
                   <property name="text">
                    <string>Check update</string>
                   </property>
@@ -9603,36 +8835,7 @@ padding:10px;
                     <underline>false</underline>
                    </font>
                   </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton{
-background-color: rgb(231, 76, 60);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(255, 102, 64);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(204, 65, 53);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                  </property>
+                  <property name="class"><string>orange</string></property>
                   <property name="text">
                    <string>Report issue</string>
                   </property>
@@ -9685,36 +8888,7 @@ padding:10px;
                   <property name="toolTip">
                    <string>Open Waifu2x-Extension-GUI online wiki.</string>
                   </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton{
-background-color: rgb(178, 58, 238);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(191, 62, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(154, 50, 205);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                  </property>
+                  <property name="class"><string>purple</string></property>
                   <property name="text">
                    <string>Wiki</string>
                   </property>
@@ -9732,36 +8906,7 @@ padding:10px;
                     <height>16777215</height>
                    </size>
                   </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton{
-background-color: rgb(52, 152, 219);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(60, 177, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(45, 134, 193);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                  </property>
+                  <property name="class"><string>blue</string></property>
                   <property name="text">
                    <string>About</string>
                   </property>
@@ -9769,36 +8914,7 @@ padding:10px;
                 </item>
                 <item>
                  <widget class="QPushButton" name="pushButton_SupportersList">
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton{
-background-color: rgb(255, 66, 77);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(255, 105, 112);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(223, 50, 61);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                  </property>
+                  <property name="class"><string>red</string></property>
                   <property name="text">
                    <string>Top Supporters</string>
                   </property>

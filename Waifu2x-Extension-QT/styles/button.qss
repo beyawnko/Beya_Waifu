@@ -1,0 +1,36 @@
+/* Common button styles extracted from mainwindow.ui */
+QPushButton[class="blue"],
+QPushButton[class="red"],
+QPushButton[class="green"],
+QPushButton[class="orange"],
+QPushButton[class="purple"] {
+    color: rgb(255, 255, 255);
+    border-style: outset;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+QPushButton[class="blue"] { background-color: rgb(52, 152, 219); }
+QPushButton[class="blue"]:hover { background-color: rgb(60, 177, 255); }
+QPushButton[class="blue"]:pressed { background-color: rgb(45, 134, 193); }
+QPushButton[class="blue"]:disabled { background-color: rgb(166, 166, 166); }
+
+QPushButton[class="red"] { background-color: rgb(255, 66, 77); }
+QPushButton[class="red"]:hover { background-color: rgb(255, 105, 112); }
+QPushButton[class="red"]:pressed { background-color: rgb(223, 50, 61); }
+QPushButton[class="red"]:disabled { background-color: rgb(166, 166, 166); }
+
+QPushButton[class="green"] { background-color: rgb(26, 188, 156); }
+QPushButton[class="green"]:hover { background-color: rgb(29, 214, 177); }
+QPushButton[class="green"]:pressed { background-color: rgb(23, 173, 143); }
+QPushButton[class="green"]:disabled { background-color: rgb(166, 166, 166); }
+
+QPushButton[class="orange"] { background-color: rgb(231, 76, 60); }
+QPushButton[class="orange"]:hover { background-color: rgb(255, 102, 64); }
+QPushButton[class="orange"]:pressed { background-color: rgb(204, 65, 53); }
+QPushButton[class="orange"]:disabled { background-color: rgb(166, 166, 166); }
+
+QPushButton[class="purple"] { background-color: rgb(178, 58, 238); }
+QPushButton[class="purple"]:hover { background-color: rgb(191, 62, 255); }
+QPushButton[class="purple"]:pressed { background-color: rgb(154, 50, 205); }
+QPushButton[class="purple"]:disabled { background-color: rgb(166, 166, 166); }

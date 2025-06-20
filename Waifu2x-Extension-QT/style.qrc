@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/style">
         <file>styles/dark.qss</file>
+        <file>styles/button.qss</file>
     </qresource>
 </RCC>
