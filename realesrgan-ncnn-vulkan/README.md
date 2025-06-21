@@ -78,6 +78,7 @@ Usage: realesrgan-ncnn-vulkan.exe -i infile -o outfile [options]...
   -x                   enable tta mode"
   -f format            output image format (jpg/png/webp, default=ext/png)"
   -v                   verbose output"
+  -q queue-size        task queue size (default=8)"
 ```
 
 - `input-path` and `output-path` accept either file path or directory path
@@ -89,6 +90,7 @@ Usage: realesrgan-ncnn-vulkan.exe -i infile -o outfile [options]...
   you find that your GPU is hungry, try increasing thread count to achieve faster processing.
 - `format` = the format of the image to be output, png is better supported, however webp generally yields smaller file
   sizes, both are losslessly encoded
+- `queue-size` = number of tasks allowed in the queue at once
 
 If you encounter crash or error, try to upgrade your GPU driver
 

@@ -101,6 +101,8 @@ static std::vector<int> parse_optarg_int_array(const char* optarg)
 
 #include "filesystem_utils.h"
 
+static int queue_size = 8;
+
 static void print_usage()
 {
     fprintf(stderr, "Usage: realesrgan-ncnn-vulkan -i infile -o outfile [options]...\n\n");
@@ -116,6 +118,7 @@ static void print_usage()
     fprintf(stderr, "  -x                   enable tta mode\n");
     fprintf(stderr, "  -f format            output image format (jpg/png/webp, default=ext/png)\n");
     fprintf(stderr, "  -v                   verbose output\n");
+    fprintf(stderr, "  -q queue-size        task queue size (default=8)\n");
 }
 
 class Task
@@ -142,7 +145,7 @@ public:
     {
         lock.lock();
 
-        while (tasks.size() >= 8) // FIXME hardcode queue length
+        while (tasks.size() >= queue_size)
         {
             condition.wait(lock);
         }
@@ -451,7 +454,7 @@ int main(int argc, char** argv)
 #if _WIN32
     setlocale(LC_ALL, "");
     wchar_t opt;
-    while ((opt = getopt(argc, argv, L"i:o:s:t:m:n:g:j:f:vxh")) != (wchar_t)-1)
+    while ((opt = getopt(argc, argv, L"i:o:s:t:m:n:g:j:f:q:vxh")) != (wchar_t)-1)
     {
         switch (opt)
         {
@@ -483,6 +486,9 @@ int main(int argc, char** argv)
         case L'f':
             format = optarg;
             break;
+        case L'q':
+            queue_size = _wtoi(optarg);
+            break;
         case L'v':
             verbose = 1;
             break;
@@ -497,7 +503,7 @@ int main(int argc, char** argv)
     }
 #else // _WIN32
     int opt;
-    while ((opt = getopt(argc, argv, "i:o:s:t:m:n:g:j:f:vxh")) != -1)
+    while ((opt = getopt(argc, argv, "i:o:s:t:m:n:g:j:f:q:vxh")) != -1)
     {
         switch (opt)
         {
@@ -528,6 +534,9 @@ int main(int argc, char** argv)
             break;
         case 'f':
             format = optarg;
+            break;
+        case 'q':
+            queue_size = atoi(optarg);
             break;
         case 'v':
             verbose = 1;
@@ -583,6 +592,12 @@ int main(int argc, char** argv)
             fprintf(stderr, "invalid jobs_proc thread count argument\n");
             return -1;
         }
+    }
+
+    if (queue_size < 1)
+    {
+        fprintf(stderr, "invalid queue size\n");
+        return -1;
     }
 
     if (!path_is_directory(outputpath))
