@@ -24,10 +24,7 @@ Manually check for updates: directly open the release page
 */
 void MainWindow::on_pushButton_CheckUpdate_clicked()
 {
-    if(ui->comboBox_language->currentIndex()==1)
-    {
-        QDesktopServices::openUrl(QUrl("https://gitee.com/beyawnko/Beya_Waifu/releases"));
-    }
+    // comboBox_language removed, default to GitHub link
     QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/releases"));
 }
 /*
@@ -42,22 +39,22 @@ int MainWindow::CheckUpdate_Auto()
     QString Current_Ver="";
     QString Github_UpdateInfo_online = "";
     QString Gitee_UpdateInfo_online = "";
-    QString UpdateType=ui->comboBox_UpdateChannel->currentText();
-    switch(ui->comboBox_UpdateChannel->currentIndex())
-    {
-        case 0:
-            Current_Ver=LastStableVer;
+    // comboBox_UpdateChannel removed, default to Stable channel (index 0)
+    QString UpdateType=tr("Stable"); // Defaulting to "Stable"
+    // switch(ui->comboBox_UpdateChannel->currentIndex()) // comboBox_UpdateChannel removed
+    // {
+    //     case 0:
             Github_UpdateInfo_online = "https://raw.githubusercontent.com/beyawnko/Beya_Waifu/master/.github/Update_Info.ini";
             Gitee_UpdateInfo_online = "https://gitee.com/beyawnko/Beya_Waifu/raw/master/.github/Update_Info.ini";
-            break;
-        case 1:
-            Current_Ver=LastBetaVer;
-            Github_UpdateInfo_online = "https://raw.githubusercontent.com/beyawnko/Beya_Waifu/master/.github/Update_Info_Beta.ini";
-            Gitee_UpdateInfo_online = "https://gitee.com/beyawnko/Beya_Waifu/raw/master/.github/Update_Info_Beta.ini";
-            break;
-        default:
-            break;
-    }
+    //        break; // Part of removed switch
+    //    case 1: // Beta channel - logic removed, defaults to stable
+    //        Current_Ver=LastBetaVer;
+    //        Github_UpdateInfo_online = "https://raw.githubusercontent.com/beyawnko/Beya_Waifu/master/.github/Update_Info_Beta.ini";
+    //        Gitee_UpdateInfo_online = "https://gitee.com/beyawnko/Beya_Waifu/raw/master/.github/Update_Info_Beta.ini";
+    //        break;
+    //    default:
+    //        break;
+    //}
     //============================
     QString Github_UpdateInfo_local = Current_Path+"/Update_Info_Github.ini";
     QString Gitee_UpdateInfo_local = Current_Path+"/Update_Info_Gitee.ini";
@@ -153,30 +150,32 @@ Automatic update pop-up window
 */
 int MainWindow::CheckUpdate_NewUpdate(QString update_str, QString Change_log)
 {
-    QString UpdateType=ui->comboBox_UpdateChannel->currentText();
+    // comboBox_UpdateChannel removed, default to Stable
+    QString UpdateType= tr("Stable");
     //======
     if(ui->checkBox_UpdatePopup->isChecked())
     {
         QMessageBox Msg(QMessageBox::Question, QString(tr("New ")+UpdateType+tr(" update available!")), QString(tr("New version: %1\n\nBrief change log:\n%2\n\nDo you wanna update now???")).arg(update_str).arg(Change_log));
         Msg.setIcon(QMessageBox::Information);
-        if(ui->comboBox_language->currentIndex()==1) // Assuming index 1 is Chinese
-        {
-            QAbstractButton *pYesBtn_Github = Msg.addButton(tr("Download from Github"), QMessageBox::YesRole); // Go to Github to download
-            QAbstractButton *pYesBtn_Gitee = Msg.addButton(tr("Download from Gitee"), QMessageBox::YesRole); // Go to Gitee to download
-            Msg.addButton(QString(tr("NO")), QMessageBox::NoRole);
-            Msg.exec();
-            if (Msg.clickedButton() == pYesBtn_Github)QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/releases/"+update_str.trimmed()));
-            if (Msg.clickedButton() == pYesBtn_Gitee)QDesktopServices::openUrl(QUrl("https://gitee.com/beyawnko/Beya_Waifu/releases/"+update_str.trimmed()));
-            return 0;
-        }
-        else
-        {
+        // comboBox_language removed, default to English behavior (single "YES" button for GitHub)
+        // if(ui->comboBox_language->currentIndex()==1) // Assuming index 1 is Chinese
+        // {
+        //     QAbstractButton *pYesBtn_Github = Msg.addButton(tr("Download from Github"), QMessageBox::YesRole); // Go to Github to download
+        //     QAbstractButton *pYesBtn_Gitee = Msg.addButton(tr("Download from Gitee"), QMessageBox::YesRole); // Go to Gitee to download
+        //     Msg.addButton(QString(tr("NO")), QMessageBox::NoRole);
+        //     Msg.exec();
+        //     if (Msg.clickedButton() == pYesBtn_Github)QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/releases/"+update_str.trimmed()));
+        //     if (Msg.clickedButton() == pYesBtn_Gitee)QDesktopServices::openUrl(QUrl("https://gitee.com/beyawnko/Beya_Waifu/releases/"+update_str.trimmed()));
+        //     return 0;
+        // }
+        // else
+        // {
             QAbstractButton *pYesBtn = Msg.addButton(QString(tr("YES")), QMessageBox::YesRole);
             Msg.addButton(QString(tr("NO")), QMessageBox::NoRole);
             Msg.exec();
             if (Msg.clickedButton() == pYesBtn)QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/releases/"+update_str.trimmed()));
             return 0;
-        }
+        // }
     }
     else
     {
