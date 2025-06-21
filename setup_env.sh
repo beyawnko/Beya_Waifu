@@ -38,6 +38,13 @@ sudo apt-get install -y --no-install-recommends \
   pkg-config \
   ffmpeg
 
+# Install Vulkan dependencies
+
+wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
+sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.4.313-noble.list https://packages.lunarg.com/vulkan/1.4.313/lunarg-vulkan-1.4.313-noble.list
+sudo apt update
+sudo apt install glslang-dev glslang-tools
+
 # Clean up apt cache
 sudo apt-get clean
 sudo rm -rf /var/lib/apt/lists/*
