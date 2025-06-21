@@ -75,6 +75,10 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     connect(this, &MainWindow::Send_progressbar_Add_slots, this, &MainWindow::progressbar_Add_slots);
     connect(this, &MainWindow::Send_Batch_Table_Update, this, &MainWindow::Batch_Table_Update_slots);
 
+    // Connect VFI synchronization signals
+    connect(ui->checkBox_EnableVFI_Home, &QCheckBox::toggled, this, &MainWindow::on_checkBox_EnableVFI_Home_toggled);
+    connect(ui->groupBox_FrameInterpolation, &QGroupBox::toggled, this, &MainWindow::on_groupBox_FrameInterpolation_toggled);
+
     /*
      * Disabled block that previously re-parented the first image tab's table and
      * inserted a new layout with a title label. The application no longer
@@ -463,6 +467,54 @@ void MainWindow::ExecuteCMD_batFile(QString cmd_str, bool requestAdmin)
 #else
     QProcess::startDetached(QStringLiteral("/bin/sh"), {"-c", cmd_str});
 #endif
+}
+
+void MainWindow::on_checkBox_EnableVFI_Home_toggled(bool checked)
+{
+    if (m_isVFISyncing) return; // Prevent recursion
+    m_isVFISyncing = true;
+
+    if (ui->groupBox_FrameInterpolation) {
+        ui->groupBox_FrameInterpolation->setChecked(checked);
+    }
+    // The groupBox_FrameInterpolation being checkable will automatically
+    // enable/disable its children.
+
+    // Update the FrameInterpolationOnly_Video checkbox state based on VFI_Home
+    if (ui->checkBox_FrameInterpolationOnly_Video) {
+        ui->checkBox_FrameInterpolationOnly_Video->setEnabled(checked);
+        if (!checked) {
+            // If VFI is disabled, "VFI Only" should also be unchecked and disabled.
+            ui->checkBox_FrameInterpolationOnly_Video->setChecked(false);
+        }
+    }
+
+    Settings_Save(); // Save the master VFI state
+    m_isVFISyncing = false;
+}
+
+void MainWindow::on_groupBox_FrameInterpolation_toggled(bool checked)
+{
+    if (m_isVFISyncing) return; // Prevent recursion
+    m_isVFISyncing = true;
+
+    if (ui->checkBox_EnableVFI_Home) {
+        ui->checkBox_EnableVFI_Home->setChecked(checked);
+    }
+
+    // If FrameInterpolation groupbox is unchecked, ensure "VFI Only" is also unchecked and disabled.
+    // If FrameInterpolation groupbox is checked, "VFI Only" becomes enabled (its checked state is independent then).
+    if (ui->checkBox_FrameInterpolationOnly_Video) {
+         ui->checkBox_FrameInterpolationOnly_Video->setEnabled(checked);
+        if (!checked) {
+            ui->checkBox_FrameInterpolationOnly_Video->setChecked(false);
+        }
+    }
+    // No need to call Settings_Save() here as on_checkBox_EnableVFI_Home_toggled will handle it.
+    // Or, if this can be the primary initiator, then Settings_Save() could be called here too,
+    // but it's better to have one source of truth for saving. The checkBox_EnableVFI_Home
+    // is the more prominent control.
+    m_isVFISyncing = false;
 }
 
 // Stubs for _finished signals/slots and other functions expected in mainwindow.cpp (not causing multiple defs)

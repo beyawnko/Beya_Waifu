@@ -258,8 +258,12 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/settings/checkBox_VfiAfterScale_VFI", ui->checkBox_VfiAfterScale_VFI->isChecked());
     configIniWrite->setValue("/settings/checkBox_MultiThread_VFI", ui->checkBox_MultiThread_VFI->isChecked());
     configIniWrite->setValue("/settings/checkBox_AutoAdjustNumOfThreads_VFI", ui->checkBox_AutoAdjustNumOfThreads_VFI->isChecked());
+    // Save the master VFI state from checkBox_EnableVFI_Home
+    configIniWrite->setValue("/settings/EnableVFI_Home", ui->checkBox_EnableVFI_Home->isChecked());
+    // Save FrameInterpolationOnly_Video state (its enabled state is derived, but checked state is independent when VFI is on)
     configIniWrite->setValue("/settings/checkBox_FrameInterpolationOnly_Video", ui->checkBox_FrameInterpolationOnly_Video->isChecked());
-    configIniWrite->setValue("/settings/groupBox_FrameInterpolation", ui->groupBox_FrameInterpolation->isChecked());
+    // No longer save groupBox_FrameInterpolation's state separately as it's synced with checkBox_EnableVFI_Home
+    // configIniWrite->setValue("/settings/groupBox_FrameInterpolation", ui->groupBox_FrameInterpolation->isChecked());
     configIniWrite->setValue("/settings/checkBox_MultiGPU_VFI", ui->checkBox_MultiGPU_VFI->isChecked());
     configIniWrite->setValue("/settings/checkBox_TTA_VFI", ui->checkBox_TTA_VFI->isChecked());
     configIniWrite->setValue("/settings/checkBox_UHD_VFI", ui->checkBox_UHD_VFI->isChecked());
@@ -1160,14 +1164,31 @@ int MainWindow::Settings_Read_Apply()
         QVariant tmp = Settings_Read_value("/settings/checkBox_AutoAdjustNumOfThreads_VFI");
         if (tmp.isValid()) ui->checkBox_AutoAdjustNumOfThreads_VFI->setChecked(tmp.toBool());
     }
-    {
-        QVariant tmp = Settings_Read_value("/settings/checkBox_FrameInterpolationOnly_Video");
-        if (tmp.isValid()) ui->checkBox_FrameInterpolationOnly_Video->setChecked(tmp.toBool());
+
+    // Load the master VFI setting for checkBox_EnableVFI_Home.
+    // Its toggled() signal, connected in MainWindow constructor, will call on_checkBox_EnableVFI_Home_toggled().
+    // That slot will then correctly set:
+    // 1. ui->groupBox_FrameInterpolation->setChecked()
+    // 2. ui->checkBox_FrameInterpolationOnly_Video->setEnabled()
+    // 3. ui->checkBox_FrameInterpolationOnly_Video->setChecked() (if VFI is disabled)
+    bool vfiEnabled = Settings_Read_value("/settings/EnableVFI_Home", false).toBool();
+    ui->checkBox_EnableVFI_Home->setChecked(vfiEnabled);
+
+    // We still need to load the independent checked state of FrameInterpolationOnly_Video for when VFI *is* enabled.
+    // The enabled state and the forced unchecked state (when VFI is off) are handled by the slot.
+    if (vfiEnabled) { // Only restore its checked state if VFI is enabled, otherwise slot forces it false.
+        QVariant tmpVfiOnly = Settings_Read_value("/settings/checkBox_FrameInterpolationOnly_Video", false).toBool();
+        if (tmpVfiOnly.isValid()) {
+            // Temporarily disable signals to prevent its toggled signal from firing if it has one,
+            // or to avoid recursive calls if it were part of the same sync chain directly.
+            // However, checkBox_FrameInterpolationOnly_Video does not have its own sync slot in this refactor.
+            bool oldSignalsBlocked = ui->checkBox_FrameInterpolationOnly_Video->blockSignals(true);
+            ui->checkBox_FrameInterpolationOnly_Video->setChecked(tmpVfiOnly.toBool());
+            ui->checkBox_FrameInterpolationOnly_Video->blockSignals(oldSignalsBlocked);
+        }
     }
-    {
-        QVariant tmp = Settings_Read_value("/settings/groupBox_FrameInterpolation");
-        if (tmp.isValid()) ui->groupBox_FrameInterpolation->setChecked(tmp.toBool());
-    }
+    // Note: The state of groupBox_FrameInterpolation itself is no longer directly loaded from a separate setting.
+
     {
         QVariant tmp = Settings_Read_value("/settings/checkBox_MultiGPU_VFI");
         if (tmp.isValid()) ui->checkBox_MultiGPU_VFI->setChecked(tmp.toBool());

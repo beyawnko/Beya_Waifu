@@ -527,6 +527,7 @@ public:
     QMutex isForceRetryClicked_QMutex;
     void DelTrash_ForceRetry_Anime4k(QString OutPut_Path);
     void isForceRetryClicked_SetTrue_Block_Anime4k();
+    bool m_isVFISyncing = false; // Flag to prevent signal recursion
     void AutoFinishAction_Message();
     int SystemShutDown_Countdown();
     int SystemShutDown_isAutoShutDown();
@@ -863,6 +864,10 @@ public slots:
     void on_pushButton_SaveSettings_clicked();
     void on_pushButton_ResetSettings_clicked();
     void toggleLiquidGlass(bool enabled);
+
+    // Slots for VFI synchronization
+    void on_checkBox_EnableVFI_Home_toggled(bool checked);
+    void on_groupBox_FrameInterpolation_toggled(bool checked);
 
 private slots:
     void TextBrowser_StartMes(); // Single declaration in private slots
