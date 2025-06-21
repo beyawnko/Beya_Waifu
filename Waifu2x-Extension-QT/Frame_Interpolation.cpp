@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -14,8 +14,9 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    My Github homepage: https://github.com/AaronFeng753
+    My Github homepage: https://github.com/beyawnko
 */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QEventLoop>
@@ -553,7 +554,7 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
         //=======
         // Default retry count to 1 as spinBox_retry was removed.
         // The retry_add logic was also removed.
-        for(int retry=0; retry < 1; retry++) // ui->spinBox_retry->value() replaced with 1
+        for(int retry=0; retry < 1; retry++) // 1 replaced with 1
         {
             FrameInterpolation_QProcess_failed = false;
             ErrorMSG="";

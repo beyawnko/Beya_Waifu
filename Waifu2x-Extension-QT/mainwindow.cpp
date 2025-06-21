@@ -992,7 +992,7 @@ void MainWindow::on_pushButton_CustRes_cancel_clicked()
 void MainWindow::comboBox_UpdateChannel_setCurrentIndex_self(int index)
 {
     QMutexLocker locker(&comboBox_UpdateChannel_setCurrentIndex_self_QMutex);
-    // ui->comboBox_UpdateChannel was removed. This function is now a no-op.
+//     // ui->comboBox_UpdateChannel was removed. This function is now a no-op.
     // Consider removing calls to this function if it's no longer needed.
     Q_UNUSED(index);
     qDebug() << "comboBox_UpdateChannel_setCurrentIndex_self called, but comboBox_UpdateChannel was removed.";
@@ -1000,7 +1000,7 @@ void MainWindow::comboBox_UpdateChannel_setCurrentIndex_self(int index)
 
 void MainWindow::on_comboBox_language_currentIndexChanged(int index)
 {
-    // QString lang = ui->comboBox_language->itemData(index).toString(); // comboBox_language removed
+//     // QString lang = ui->comboBox_language->itemData(index).toString(); // comboBox_language removed
     // Defaulting to English ("en") as comboBox_language is no longer available.
     QString lang = "en";
     Q_UNUSED(index); // Index is no longer used directly
@@ -1034,7 +1034,7 @@ void MainWindow::on_comboBox_language_currentIndexChanged(int index)
 
     Settings_Save(); // Save the new language preference
     ui->retranslateUi(this); // Retranslate UI (though Qt does much of this automatically on changeEvent)
-    TextBrowser_NewMessage(tr("Language changed to %1. Restart recommended if not all elements updated.").arg(ui->comboBox_language->currentText()));
+//     TextBrowser_NewMessage(tr("Language changed to %1. Restart recommended if not all elements updated.").arg(ui->comboBox_language->currentText()));
 }
 
 void MainWindow::on_pushButton_about_clicked()
@@ -1933,7 +1933,7 @@ void MainWindow::on_comboBox_UpdateChannel_currentIndexChanged(int index)
     Q_UNUSED(index);
     Settings_Save(); // Save the selected update channel
     // Potentially trigger an immediate check for updates or change how updates are fetched
-    qDebug() << "Update channel changed. Index:" << index << "Channel:" << ui->comboBox_UpdateChannel->currentText();
+//     qDebug() << "Update channel changed. Index:" << index << "Channel:" << ui->comboBox_UpdateChannel->currentText();
 }
 
 // Compatibility Checkbox Implementations
