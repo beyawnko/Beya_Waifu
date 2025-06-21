@@ -457,12 +457,6 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
     if(file_isDirExist(SourcePath)==false)return false;
     //=======
     emit Send_TextBrowser_NewMessage(tr("Starting to interpolate frames in:[")+SourcePath+"]");
-    //==== Check if automatic thread count adjustment is enabled, if so, force retry count to be greater than 6 ====
-    int retry_add = 0;
-    if(ui->checkBox_AutoAdjustNumOfThreads_VFI->isChecked()==true && ui->spinBox_retry->value()<6 && ui->checkBox_MultiThread_VFI->isChecked())
-    {
-        retry_add = 6-ui->spinBox_retry->value();
-    }
     //==== Check if rife is being used, if so, check if uhd mode needs to be enabled ====
     bool isUhdInput=false;
     if(ui->comboBox_Engine_VFI->currentIndex()==0 && ui->checkBox_UHD_VFI->isChecked()==false)
@@ -557,7 +551,9 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
         file_DelDir(OutputPath_Curr);
         file_mkDir(OutputPath_Curr);
         //=======
-        for(int retry=0; retry<(ui->spinBox_retry->value()+retry_add); retry++)
+        // Default retry count to 1 as spinBox_retry was removed.
+        // The retry_add logic was also removed.
+        for(int retry=0; retry<1; retry++)
         {
             FrameInterpolation_QProcess_failed = false;
             ErrorMSG="";
@@ -622,7 +618,10 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
             {
                 file_DelDir(OutputPath_Curr);
                 //===
-                if(retry==(ui->spinBox_retry->value()+retry_add-1))
+                // spinBox_retry and retry_add were removed, so this check is simplified.
+                // Since retry loop is now for(int retry=0; retry<1; retry++),
+                // this condition effectively means if the first (and only) attempt failed.
+                if(retry==0) // If the first attempt failed
                 {
                     break;
                 }
@@ -958,7 +957,9 @@ void MainWindow::on_checkBox_MultiGPU_VFI_stateChanged(int arg1)
 
 void MainWindow::on_groupBox_FrameInterpolation_clicked()
 {
-    ui->frame_FrameInterpolation->setEnabled(ui->groupBox_FrameInterpolation->isChecked());
+    // frame_FrameInterpolation was replaced by groupBox_FrameInterpolation itself being checkable.
+    // The enabled state of groupBox_FrameInterpolation already controls its children.
+    // So, the explicit setEnabled on a child frame is no longer needed.
     ui->spinBox_MultipleOfFPS_VFI->setEnabled(ui->groupBox_FrameInterpolation->isChecked());
     ui->pushButton_MultipleOfFPS_VFI_ADD->setEnabled(ui->groupBox_FrameInterpolation->isChecked());
     ui->pushButton_MultipleOfFPS_VFI_MIN->setEnabled(ui->groupBox_FrameInterpolation->isChecked());

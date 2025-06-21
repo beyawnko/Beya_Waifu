@@ -992,16 +992,19 @@ void MainWindow::on_pushButton_CustRes_cancel_clicked()
 void MainWindow::comboBox_UpdateChannel_setCurrentIndex_self(int index)
 {
     QMutexLocker locker(&comboBox_UpdateChannel_setCurrentIndex_self_QMutex);
-    if (ui->comboBox_UpdateChannel) {
-        if (index >= 0 && index < ui->comboBox_UpdateChannel->count()) {
-            ui->comboBox_UpdateChannel->setCurrentIndex(index);
-        }
-    }
+    // ui->comboBox_UpdateChannel was removed. This function is now a no-op.
+    // Consider removing calls to this function if it's no longer needed.
+    Q_UNUSED(index);
+    qDebug() << "comboBox_UpdateChannel_setCurrentIndex_self called, but comboBox_UpdateChannel was removed.";
 }
 
 void MainWindow::on_comboBox_language_currentIndexChanged(int index)
 {
-    QString lang = ui->comboBox_language->itemData(index).toString(); // Assuming itemData stores "en", "zh_CN" etc.
+    // QString lang = ui->comboBox_language->itemData(index).toString(); // comboBox_language removed
+    // Defaulting to English ("en") as comboBox_language is no longer available.
+    QString lang = "en";
+    Q_UNUSED(index); // Index is no longer used directly
+
     if (translator->isEmpty()) {
         qApp->installTranslator(translator);
     } else {
