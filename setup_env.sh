@@ -21,28 +21,25 @@ fi
 
 # Install system dependencies for Debian/Ubuntu
 # Update package lists
-apt-get update -y
+sudo apt-get update -y
 
-# Install build tools and C++ compiler
-apt-get install -y --no-install-recommends \
+# Install build tools, C++ compiler, Qt6, cppcheck, and pkg-config
+sudo apt-get install -y --no-install-recommends \
   build-essential \
   g++ \
   make \
-  cmake
-
-# Install Qt6 development libraries
-apt-get install -y --no-install-recommends \
+  cmake \
   qt6-base-dev \
   qt6-base-dev-tools \
   qt6-multimedia-dev \
   qt6-5compat-dev \
-  qt6-shadertools-dev
-
-# Install FFmpeg (optional, but listed as a dependency)
-apt-get install -y --no-install-recommends ffmpeg
+  qt6-shadertools-dev \
+  cppcheck \
+  pkg-config \
+  ffmpeg
 
 # Clean up apt cache
-apt-get clean
-rm -rf /var/lib/apt/lists/*
+sudo apt-get clean
+sudo rm -rf /var/lib/apt/lists/*
 
 echo "Environment setup complete."
