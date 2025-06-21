@@ -382,7 +382,79 @@ try {
     Ensure-ChocoPackage 'msys2'
     Ensure-ChocoPackage 'cmake'
     Ensure-ChocoPackage 'git'
-    Ensure-ChocoPackage 'vulkan-sdk'
+
+    # Custom Vulkan SDK Installation
+    $vulkanSdkInstalled = $false
+    $vulkanVersion = "1.3.268.0" # Specify a known good version
+    $vulkanSdkPath = "C:\VulkanSDK\$vulkanVersion"
+    $envVulkanSdkPath = $env:VULKAN_SDK
+
+    if ($envVulkanSdkPath -and (Test-Path (Join-Path $envVulkanSdkPath "bin\glslc.exe"))) {
+        Write-Host "Vulkan SDK found at '$envVulkanSdkPath' (via VULKAN_SDK env var). Checking version..."
+        # Try to get version from path, simple check
+        if ($envVulkanSdkPath -like "*$vulkanVersion*") {
+            Write-Host "Vulkan SDK version appears to be $vulkanVersion or compatible."
+            $vulkanSdkInstalled = $true
+        } else {
+            Write-Host "Vulkan SDK at $envVulkanSdkPath might be a different version. Will attempt to install $vulkanVersion if specific components are missing."
+            # We could be more sophisticated here, but for now, if glslc.exe exists, assume it's usable
+            # and let the build script determine if it's sufficient.
+            # If a specific version is strictly required, uncommenting the install block is better.
+             $vulkanSdkInstalled = $true # Tentatively mark as installed if glslc is found
+        }
+    } elseif (Test-Path (Join-Path $vulkanSdkPath "bin\glslc.exe")) {
+        Write-Host "Vulkan SDK $vulkanVersion found at default path '$vulkanSdkPath'."
+        $vulkanSdkInstalled = $true
+        if (-not $envVulkanSdkPath) {
+            Write-Host "Setting VULKAN_SDK environment variable for this session."
+            $env:VULKAN_SDK = $vulkanSdkPath
+            $env:PATH = "$($env:VULKAN_SDK)\Bin;$env:PATH"
+        }
+    }
+
+    if (-not $vulkanSdkInstalled) {
+        Write-Host "Vulkan SDK $vulkanVersion not found or version mismatch. Installing..."
+        $vulkanInstallerName = "VulkanSDK-$($vulkanVersion)-Installer.exe"
+        $vulkanDownloadUrl = "https://sdk.lunarg.com/sdk/download/$($vulkanVersion)/windows/$($vulkanInstallerName)"
+        $tempInstallerPath = Join-Path $env:TEMP $vulkanInstallerName
+
+        try {
+            Write-Host "Downloading Vulkan SDK from $vulkanDownloadUrl..."
+            Invoke-WebRequest -Uri $vulkanDownloadUrl -OutFile $tempInstallerPath -UseBasicParsing
+            Write-Host "Installing Vulkan SDK..."
+            # Installer needs admin rights if not already running as admin.
+            # The --root option could be used if a different install path is desired.
+            $installArgs = @(
+                "--accept-licenses",
+                "--default-answer",
+                "--confirm-command",
+                "install"
+            )
+            Invoke-Process -FilePath $tempInstallerPath -ArgumentList $installArgs
+
+            # Verify installation by checking default path and setting VULKAN_SDK if needed
+            if (Test-Path (Join-Path $vulkanSdkPath "bin\glslc.exe")) {
+                Write-Host "Vulkan SDK installed successfully to $vulkanSdkPath"
+                if (-not $env:VULKAN_SDK) {
+                    $env:VULKAN_SDK = $vulkanSdkPath
+                    $env:PATH = "$($env:VULKAN_SDK)\Bin;$env:PATH"
+                    Write-Host "VULKAN_SDK environment variable set for this session."
+                }
+            } else {
+                throw "Vulkan SDK installation may have failed. '$vulkanSdkPath\bin\glslc.exe' not found after install."
+            }
+        }
+        catch {
+            throw "Failed to download or install Vulkan SDK: $($_.Exception.Message)"
+        }
+        finally {
+            if (Test-Path $tempInstallerPath) {
+                Remove-Item $tempInstallerPath -Force -ErrorAction SilentlyContinue
+            }
+        }
+    } else {
+        Write-Host "Vulkan SDK $vulkanVersion (or a usable version) is already present. Skipping installation."
+    }
     
     # Find MSYS2 after ensuring it's installed.
     $bashPath = Find-Msys2Bash
