@@ -986,57 +986,6 @@ void MainWindow::on_pushButton_CustRes_cancel_clicked()
     TextBrowser_NewMessage(tr("Custom resolution cancelled (actual implementation depends on UI specifics)."));
 }
 
-/**
- * @brief Safely update the update channel combo box.
- */
-void MainWindow::comboBox_UpdateChannel_setCurrentIndex_self(int index)
-{
-    QMutexLocker locker(&comboBox_UpdateChannel_setCurrentIndex_self_QMutex);
-//     // ui->comboBox_UpdateChannel was removed. This function is now a no-op.
-    // Consider removing calls to this function if it's no longer needed.
-    Q_UNUSED(index);
-    qDebug() << "comboBox_UpdateChannel_setCurrentIndex_self called, but comboBox_UpdateChannel was removed.";
-}
-
-void MainWindow::on_comboBox_language_currentIndexChanged(int index)
-{
-//     // QString lang = ui->comboBox_language->itemData(index).toString(); // comboBox_language removed
-    // Defaulting to English ("en") as comboBox_language is no longer available.
-    QString lang = "en";
-    Q_UNUSED(index); // Index is no longer used directly
-
-    if (translator->isEmpty()) {
-        qApp->installTranslator(translator);
-    } else {
-        qApp->removeTranslator(translator); // Remove previous translator
-        delete translator; // Delete the old translator object
-        translator = new QTranslator(this); // Create a new one
-        qApp->installTranslator(translator);
-    }
-
-    if (lang == "en") {
-        if (!translator->load(":/language/language_English.qm")) {
-            qWarning() << "Failed to load translation file: :/language/language_English.qm";
-        }
-    } else if (lang == "zh_CN") {
-        if (!translator->load(":/language/language_ChineseSimplified.qm")) { // Example path
-            qWarning() << "Failed to load translation file: :/language/language_ChineseSimplified.qm";
-        }
-    } else if (lang == "zh_TW") {
-        if (!translator->load(":/language/language_ChineseTraditional.qm")) { // Example path
-            qWarning() << "Failed to load translation file: :/language/language_ChineseTraditional.qm";
-        }
-    }
-    // Add other languages here
-    // else if (lang == "ja") {
-    //     translator->load(":/language/language_Japanese.qm");
-    // }
-
-    Settings_Save(); // Save the new language preference
-    ui->retranslateUi(this); // Retranslate UI (though Qt does much of this automatically on changeEvent)
-//     TextBrowser_NewMessage(tr("Language changed to %1. Restart recommended if not all elements updated.").arg(ui->comboBox_language->currentText()));
-}
-
 void MainWindow::on_pushButton_about_clicked()
 {
     QMessageBox::about(this, tr("About Beya Waifu"),
@@ -1927,15 +1876,6 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
 void MainWindow::on_pushButton_wiki_clicked()
 {
     QDesktopServices::openUrl(QUrl(QStringLiteral("https://github.com/beyawnko/Beya_Waifu")));
-}
-void MainWindow::on_comboBox_UpdateChannel_currentIndexChanged(int index)
-{
-    Q_UNUSED(index);
-    Settings_Save(); // Save the selected update channel
-    // Potentially trigger an immediate check for updates or change how updates are fetched
-//     qDebug() << "Update channel changed. Index:" << index << "Channel:" << ui->comboBox_UpdateChannel->currentText();
-}
-
 // Compatibility Checkbox Implementations
 void MainWindow::on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_clicked()
 {

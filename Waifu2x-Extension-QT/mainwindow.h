@@ -602,9 +602,6 @@ public:
     void ExecuteCMD_batFile(QString cmd_str,bool requestAdmin);
     QMutex ExecuteCMD_batFile_QMutex;
     void Del_TempBatFile();
-    void comboBox_UpdateChannel_setCurrentIndex_self(int index);
-    QMutex comboBox_UpdateChannel_setCurrentIndex_self_QMutex;
-    bool isClicked_comboBox_UpdateChannel=true;
     void checkBox_ReplaceOriginalFile_setEnabled_True_Self();
     bool ReplaceOriginalFile(QString original_fullpath,QString output_fullpath);
     void Init_ActionsMenu_checkBox_ReplaceOriginalFile();
@@ -733,7 +730,6 @@ public slots:
     void on_pushButton_clear_textbrowser_clicked();
     void on_spinBox_textbrowser_fontsize_valueChanged(int arg1);
     void on_pushButton_HideSettings_clicked();
-    void on_comboBox_language_currentIndexChanged(int index);
     void on_pushButton_ReadFileList_clicked();
     void on_Ext_image_editingFinished();
     void on_Ext_video_editingFinished();
@@ -794,7 +790,6 @@ public slots:
     void on_checkBox_isCompatible_Realsr_NCNN_Vulkan_clicked();
     void on_checkBox_ACNet_Anime4K_stateChanged(int arg1);
     void on_checkBox_HDNMode_Anime4k_stateChanged(int arg1);
-    void on_comboBox_UpdateChannel_currentIndexChanged(int index);
     void on_checkBox_ReplaceOriginalFile_stateChanged(int arg1);
     void on_checkBox_isCustFontEnable_stateChanged(int arg1);
     void on_pushButton_ResizeFilesListSplitter_clicked();
