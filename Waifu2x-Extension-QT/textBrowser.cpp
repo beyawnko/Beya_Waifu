@@ -48,7 +48,7 @@ void MainWindow::TextBrowser_StartMes()
     ui->textBrowser->append("Beya_Waifu by beyawnko");
     ui->textBrowser->append(tr("Version:")+" "+VERSION+" "+CurrentVerState);
     ui->textBrowser->append("Github: https://github.com/beyawnko/Beya_Waifu");
-    if(ui->comboBox_language->currentIndex()==1)ui->textBrowser->append("Gitee: https://gitee.com/beyawnko/Beya_Waifu");
+    ui->textBrowser->append("Gitee: https://gitee.com/beyawnko/Beya_Waifu");
     ui->textBrowser->append(tr("Please donate to support the developers, so we can bring further updates for this software, thank you! (^_^)/"));
     ui->textBrowser->moveCursor(QTextCursor::End);
 }

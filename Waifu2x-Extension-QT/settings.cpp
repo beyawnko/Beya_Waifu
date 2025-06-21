@@ -153,7 +153,7 @@ int MainWindow::Settings_Save()
     configIniWrite->setValue("/settings/AlwaysHideTextBrowser", ui->checkBox_AlwaysHideTextBrowser->isChecked());
     configIniWrite->setValue("/settings/ScanSubFolders", ui->checkBox_ScanSubFolders->isChecked());
     configIniWrite->setValue("/settings/InteractiveFileList", ui->checkBox_FileList_Interactive->isChecked());
-    configIniWrite->setValue("/settings/RetryTimes", ui->spinBox_retry->value());
+//     configIniWrite->setValue("/settings/RetryTimes", ui->spinBox_retry->value());
     configIniWrite->setValue("/settings/AutoDetectAlphaChannel", ui->checkBox_AutoDetectAlphaChannel->isChecked());
     configIniWrite->setValue("/settings/PromptWhenExit", ui->checkBox_PromptWhenExit->isChecked());
     configIniWrite->setValue("/settings/KeepVideoCache", ui->checkBox_KeepVideoCache->isChecked());
@@ -173,7 +173,7 @@ int MainWindow::Settings_Save()
     //===================== Save text browser settings =====================
     configIniWrite->setValue("/settings/TextBrowserFontSize", ui->spinBox_textbrowser_fontsize->value());
     //===================== Save language settings ================================
-    configIniWrite->setValue("/settings/Language", ui->comboBox_language->currentIndex());
+//     configIniWrite->setValue("/settings/Language", ui->comboBox_language->currentIndex());
     //================== Save global font settings =========================
     configIniWrite->setValue("/settings/GlobalFontSize", ui->spinBox_GlobalFontSize->value());
     configIniWrite->setValue("/settings/CustFont", ui->fontComboBox_CustFont->currentFont());
@@ -288,10 +288,10 @@ int MainWindow::Settings_Read_Apply()
     if(!QFile::exists(settings_ini))
     {
         QAction_checkBox_MoveToRecycleBin_checkBox_ReplaceOriginalFile->setChecked(1);
-        QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal->setChecked(1);
-        if(isBetaVer)comboBox_UpdateChannel_setCurrentIndex_self(1);
+        QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal->setChecked(1);// 
+//         if(isBetaVer)comboBox_UpdateChannel_setCurrentIndex_self(1);
         Settings_Save();
-        Settings_Read_Apply();
+//         Settings_Read_Apply();
         return 0;
     }
     else
@@ -305,8 +305,8 @@ int MainWindow::Settings_Read_Apply()
         {
             isReadOldSettings=true;
             QFile::rename(settings_ini,Current_Path+"/settings_old.ini");
-            if(isBetaVer)comboBox_UpdateChannel_setCurrentIndex_self(1);
-            Settings_Save();
+//             if(isBetaVer)comboBox_UpdateChannel_setCurrentIndex_self(1);
+//             Settings_Save();
             Settings_Read_Apply();
             return 0;
         }
@@ -730,8 +730,8 @@ int MainWindow::Settings_Read_Apply()
     }
     {
         QVariant tmp = Settings_Read_value("/settings/comboBox_UpdateChannel");
-        if (tmp.isValid()) comboBox_UpdateChannel_setCurrentIndex_self(tmp.toInt());
-    }
+//         if (tmp.isValid()) comboBox_UpdateChannel_setCurrentIndex_self(tmp.toInt());
+// //     }
     {
         QVariant tmp = Settings_Read_value("/settings/checkBox_MinimizeToTaskbar");
         if (tmp.isValid()) ui->checkBox_MinimizeToTaskbar->setChecked(tmp.toBool());
@@ -790,9 +790,9 @@ int MainWindow::Settings_Read_Apply()
     }
     {
         QVariant tmp = Settings_Read_value("/settings/RetryTimes");
-        if (tmp.isValid()) ui->spinBox_retry->setValue(tmp.toInt());
+//         if (tmp.isValid()) ui->spinBox_retry->setValue(tmp.toInt());
     }
-    {
+// //     {
         QVariant tmp = Settings_Read_value("/settings/AutoDetectAlphaChannel");
         if (tmp.isValid()) ui->checkBox_AutoDetectAlphaChannel->setChecked(tmp.toBool());
     }
@@ -1235,12 +1235,7 @@ int MainWindow::Settings_Read_Apply()
         QVariant tmp = Settings_Read_value("/settings/spinBox_TileSize_VFI");
         if (tmp.isValid()) ui->spinBox_TileSize_VFI->setValue(tmp.toInt());
     }
-    //==================== Load language settings =====================
-    {
-        QVariant tmp = Settings_Read_value("/settings/Language");
-        if (tmp.isValid()) ui->comboBox_language->setCurrentIndex(tmp.toInt());
-    }
-    on_comboBox_language_currentIndexChanged(0);
+    // Language settings removed; default to English
     //====================================================
     on_groupBox_FrameInterpolation_clicked();
     isCustomVideoSettingsClicked=false;

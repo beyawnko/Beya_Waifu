@@ -192,7 +192,7 @@ height:35
              <property name="toolTip">
               <string>Donate to the developer through PayPal.</string>
              </property>
-             <property name="class">
+             <property name="cssClass">
               <string>blue</string>
              </property>
              <property name="text">
@@ -228,7 +228,7 @@ height:35
              <property name="toolTip">
               <string>Support this project on Patreon and get Premium version.</string>
              </property>
-             <property name="class">
+             <property name="cssClass">
               <string>red</string>
              </property>
              <property name="text">
@@ -494,7 +494,7 @@ height:35
               <property name="toolTip">
                <string/>
               </property>
-              <property name="class">
+              <property name="cssClass">
                <string>green</string>
               </property>
               <property name="text">
@@ -526,7 +526,7 @@ height:35
                 <height>16777215</height>
                </size>
               </property>
-              <property name="class">
+              <property name="cssClass">
                <string>orange</string>
               </property>
               <property name="text">
@@ -566,7 +566,7 @@ You can try using [Force Retry] to end the Engine process
 and restart it, and the entire [Scale and denoise] process 
 will not be interrupted and will continue.</string>
               </property>
-              <property name="class">
+              <property name="cssClass">
                <string>purple</string>
               </property>
               <property name="text">
@@ -1604,7 +1604,7 @@ padding:0px;
                <property name="toolTip">
                 <string/>
                </property>
-               <property name="class">
+               <property name="cssClass">
                 <string>blue</string>
                </property>
                <property name="text">
@@ -1620,7 +1620,7 @@ padding:0px;
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="class">
+               <property name="cssClass">
                 <string>purple</string>
                </property>
                <property name="text">
@@ -1826,7 +1826,7 @@ padding:0px;
 ★Scale ratio will not be applied to files which
 already have custom resolution applied.★</string>
                   </property>
-                  <property name="class">
+                  <property name="cssClass">
                    <string>green</string>
                   </property>
                   <property name="text">
@@ -1840,7 +1840,7 @@ already have custom resolution applied.★</string>
                    <string>1.Select a file in the file list.
 2.Click the Cancel button to cancel the custom resolution.</string>
                   </property>
-                  <property name="class">
+                  <property name="cssClass">
                    <string>orange</string>
                   </property>
                   <property name="text">
@@ -3880,7 +3880,7 @@ same time, you need to change [Image style] settings at [Home] tab.
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="class">
+                    <property name="cssClass">
                      <string>purple</string>
                     </property>
                     <property name="text">
@@ -4157,7 +4157,7 @@ Smaller Tile size means waifu2x will use less GPU memory and run slower.</string
                        <property name="toolTip">
                         <string>Show current Multi-GPU settings.</string>
                        </property>
-                       <property name="class">
+                       <property name="cssClass">
                         <string>orange</string>
                        </property>
                        <property name="text">
@@ -4749,7 +4749,7 @@ Smaller Block size means waifu2x will use less GPU memory and run slower.</strin
                        <property name="toolTip">
                         <string>Show current Multi-Processor settings.</string>
                        </property>
-                       <property name="class">
+                       <property name="cssClass">
                         <string>orange</string>
                        </property>
                        <property name="text">
@@ -5140,7 +5140,7 @@ the number of threads must = the number of GPUs.</string>
                        <height>35</height>
                       </size>
                      </property>
-                     <property name="class">
+                     <property name="cssClass">
                       <string>green</string>
                      </property>
                      <property name="text">
@@ -5219,7 +5219,7 @@ Only NVIDIA products support CUDA.</string>
                      <property name="toolTip">
                       <string>Verify your GPUs configuration.</string>
                      </property>
-                     <property name="class">
+                     <property name="cssClass">
                       <string>purple</string>
                      </property>
                      <property name="text">
@@ -5790,7 +5790,7 @@ utilize the capabilities of your PC.
                        <property name="toolTip">
                         <string>Show current Multi-GPU settings.</string>
                        </property>
-                       <property name="class">
+                       <property name="cssClass">
                         <string>orange</string>
                        </property>
                        <property name="text">
@@ -5899,7 +5899,7 @@ utilize the capabilities of your PC.
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="class">
+                    <property name="cssClass">
                      <string>blue</string>
                     </property>
                     <property name="text">
@@ -6376,7 +6376,7 @@ the number of threads must = the number of GPUs.</string>
                     <property name="toolTip">
                      <string>Verify your GPUs configuration.</string>
                     </property>
-                    <property name="class">
+                    <property name="cssClass">
                      <string>purple</string>
                     </property>
                     <property name="text">
@@ -6815,7 +6815,7 @@ but the effect may not be obvious. It is not recommended to enable it.</string>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="class">
+                    <property name="cssClass">
                      <string>blue</string>
                     </property>
                     <property name="text">
@@ -7069,7 +7069,7 @@ Smaller tile size means Realsr will use less GPU memory and run slower.</string>
                        <property name="toolTip">
                         <string>Show current Multi-GPU settings.</string>
                        </property>
-                       <property name="class">
+                       <property name="cssClass">
                         <string>orange</string>
                        </property>
                        <property name="text">
@@ -7627,7 +7627,7 @@ interpolate high res frames.</string>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
-                <property name="class">
+                <property name="cssClass">
                  <string>blue</string>
                 </property>
                 <property name="text">
@@ -7680,7 +7680,7 @@ You must follow the format,otherwise the software may crash.</string>
                 <property name="toolTip">
                  <string>Verify your Multi GPU configuration.</string>
                 </property>
-                <property name="class">
+                <property name="cssClass">
                  <string>purple</string>
                 </property>
                 <property name="text">
@@ -8325,7 +8325,7 @@ Might cause ERROR.</string>
              <property name="toolTip">
               <string>Reset video settings</string>
              </property>
-             <property name="class">
+             <property name="cssClass">
               <string>orange</string>
              </property>
              <property name="text">
@@ -8341,7 +8341,7 @@ Might cause ERROR.</string>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <property name="class">
+             <property name="cssClass">
               <string>blue</string>
              </property>
              <property name="text">
@@ -8661,7 +8661,7 @@ frequently occurs when processing images, you can enable this option to save tim
                     <height>16777215</height>
                    </size>
                   </property>
-                  <property name="class">
+                  <property name="cssClass">
                    <string>green</string>
                   </property>
                   <property name="text">
@@ -8782,7 +8782,7 @@ frequently occurs when processing images, you can enable this option to save tim
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
-                  <property name="class">
+                  <property name="cssClass">
                    <string>purple</string>
                   </property>
                   <property name="text">
@@ -8835,7 +8835,7 @@ padding:10px;
                     <underline>false</underline>
                    </font>
                   </property>
-                  <property name="class">
+                  <property name="cssClass">
                    <string>green</string>
                   </property>
                   <property name="text">
@@ -8854,7 +8854,7 @@ padding:10px;
                     <underline>false</underline>
                    </font>
                   </property>
-                  <property name="class">
+                  <property name="cssClass">
                    <string>orange</string>
                   </property>
                   <property name="text">
@@ -8909,7 +8909,7 @@ padding:10px;
                   <property name="toolTip">
                    <string>Open Waifu2x-Extension-GUI online wiki.</string>
                   </property>
-                  <property name="class">
+                  <property name="cssClass">
                    <string>purple</string>
                   </property>
                   <property name="text">
@@ -8929,7 +8929,7 @@ padding:10px;
                     <height>16777215</height>
                    </size>
                   </property>
-                  <property name="class">
+                  <property name="cssClass">
                    <string>blue</string>
                   </property>
                   <property name="text">
@@ -8939,7 +8939,7 @@ padding:10px;
                 </item>
                 <item>
                  <widget class="QPushButton" name="pushButton_SupportersList">
-                  <property name="class">
+                  <property name="cssClass">
                    <string>red</string>
                   </property>
                   <property name="text">
