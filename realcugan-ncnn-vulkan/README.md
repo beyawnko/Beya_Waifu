@@ -51,6 +51,7 @@ Usage: realcugan-ncnn-vulkan -i infile -o outfile [options]...
   -j load:proc:save    thread count for load/proc/save (default=1:2:2) can be 1:2,2,2:2 for multi-gpu
   -x                   enable tta mode
   -f format            output image format (jpg/png/webp, default=ext/png)
+  -q queue-size        task queue size (default=8)
 ```
 
 - `input-path` and `output-path` accept either file path or directory path
@@ -62,6 +63,7 @@ Usage: realcugan-ncnn-vulkan -i infile -o outfile [options]...
   larger values may increase GPU usage and consume more GPU memory. You can tune this configuration with "4:4:4" for
   many small-size images, and "2:2:2" for large-size images. The default setting usually works fine for most situations.
   If you find that your GPU is hungry, try increasing thread count to achieve faster processing.
+- `queue-size` = number of tasks allowed in the queue at once
 - `format` = the format of the image to be output, png is better supported, however webp generally yields smaller file
   sizes, both are losslessly encoded
 
