@@ -1605,7 +1605,7 @@ padding:0px;
                 <string/>
                </property>
                <property name="class">
-               <string>blue</string>
+                <string>blue</string>
                </property>
                <property name="text">
                 <string>Hide settings</string>
