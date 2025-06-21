@@ -378,18 +378,18 @@ try {
     Write-Host "`n--- Starting Build Process ---`n"
 
     # Step 1: Ensure core dependencies are installed with Chocolatey.
-    # Ensure-Chocolatey
-    # Ensure-ChocoPackage 'msys2'
-    # Ensure-ChocoPackage 'cmake'
-    # Ensure-ChocoPackage 'git'
-    # Ensure-ChocoPackage 'vulkan-sdk'
+    Ensure-Chocolatey
+    Ensure-ChocoPackage 'msys2'
+    Ensure-ChocoPackage 'cmake'
+    Ensure-ChocoPackage 'git'
+    Ensure-ChocoPackage 'vulkan-sdk'
     
     # Find MSYS2 after ensuring it's installed.
     $bashPath = Find-Msys2Bash
     # $bashPath = '/bin/bash' # Provide a dummy path
 
     # Step 2: Set up the MSYS2 environment.
-    # Install-MSYS2Packages -Msys2BashPath $bashPath
+    Install-MSYS2Packages -Msys2BashPath $bashPath
     
     # Step 3: Set up the Qt environment.
     Ensure-QMake
