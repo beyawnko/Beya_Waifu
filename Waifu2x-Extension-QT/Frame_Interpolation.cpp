@@ -553,7 +553,7 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
         //=======
         // Default retry count to 1 as spinBox_retry was removed.
         // The retry_add logic was also removed.
-        for(int retry=0; retry<1; retry++)
+        for(int retry=0; retry < 1; retry++) // ui->spinBox_retry->value() replaced with 1
         {
             FrameInterpolation_QProcess_failed = false;
             ErrorMSG="";

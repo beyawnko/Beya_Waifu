@@ -1,356 +1,399 @@
-Continuing with the build script...
-glslangValidator not found and no package manager available
-pip not found; skipping Python package installation
-Windows environment detected. Handling upscaler binaries...
-Found glslc in Vulkan SDK at /c/VulkanSDK/1.4.313.2/Bin. Adding to PATH.
-Handling Real-ESRGAN for Windows...
-Found prebuilt Real-ESRGAN executable. Copying...
-Handling Real-CUGAN for Windows...
-Found prebuilt Real-CUGAN executable. Copying...
-Building Waifu2x-Extension-QT...
-Info: creating stash file C:\Build\Beya_Waifu\Waifu2x-Extension-QT\.qmake.stash
-mkdir -p C:/Build/Beya_Waifu/Waifu2x-Extension-QT/shaders && qsb C:/Build/Beya_Waifu/Waifu2x-Extension-QT/shaders/liquidglass.frag -o C:/Build/Beya_Waifu/Waifu2x-Extension-QT/shaders/liquidglass.frag.qsb
-C:/tools/msys64/mingw64/bin/mingw32-make.exe -f Makefile.Release
-mingw32-make[1]: Entering directory 'C:/Build/Beya_Waifu/Waifu2x-Extension-QT'
-'C:\tmp\Qt\6.5.2\mingw_64\bin\uic.exe' mainwindow.ui -o ui_mainwindow.h
-'C:\tmp\Qt\6.5.2\mingw_64\bin\uic.exe' topsupporterslist.ui -o ui_topsupporterslist.h
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/VideoProcessor.o VideoProcessor.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/RealcuganJobManager.o RealcuganJobManager.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/RealesrganJobManager.o RealesrganJobManager.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/FileManager.o FileManager.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/ProcessRunner.o ProcessRunner.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/LiquidGlassWidget.o LiquidGlassWidget.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/GpuManager.o GpuManager.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/UiController.o UiController.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/Logger.o Logger.cpp
-'C:\tmp\Qt\6.5.2\mingw_64\bin\rcc.exe' -name OtherPic --no-zstd OtherPic.qrc -o release/qrc_OtherPic.cpp
-'C:\tmp\Qt\6.5.2\mingw_64\bin\rcc.exe' -name donate --no-zstd donate.qrc -o release/qrc_donate.cpp
-'C:\tmp\Qt\6.5.2\mingw_64\bin\rcc.exe' -name icon --no-zstd icon.qrc -o release/qrc_icon.cpp
-'C:\tmp\Qt\6.5.2\mingw_64\bin\rcc.exe' -name style --no-zstd style.qrc -o release/qrc_style.cpp
-'C:\tmp\Qt\6.5.2\mingw_64\bin\rcc.exe' -name shaders --no-zstd shaders.qrc -o release/qrc_shaders.cpp
-g++ -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -dM -E -o release/moc_predefs.h ../../../tmp/Qt/6.5.2/mingw_64/mkspecs/features/data/dummy.cpp
-windres -i Beya_Waifu_resource.rc -o release/Beya_Waifu_resource_res.o --include-dir=. -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/AnimatedPNG.o AnimatedPNG.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/CompatibilityTest.o CompatibilityTest.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/Current_File_Progress.o Current_File_Progress.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/CustomResolution.o CustomResolution.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/Donate.o Donate.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/Finish_Action.o Finish_Action.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/Frame_Interpolation.o Frame_Interpolation.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/Right-click_Menu.o Right-click_Menu.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/SystemTrayIcon.o SystemTrayIcon.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/Web_Activities.o Web_Activities.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/checkupdate.o checkupdate.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/files.o files.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/gif.o gif.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/image.o image.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/main.o main.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/mainwindow.o mainwindow.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/progressBar.o progressBar.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/realcugan_ncnn_vulkan.o realcugan_ncnn_vulkan.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/RealCuganProcessor.o RealCuganProcessor.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/realesrgan_ncnn_vulkan.o realesrgan_ncnn_vulkan.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/settings.o settings.cpp
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from Current_File_Progress.cpp:20:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from RealesrganJobManager.h:22,
-                 from RealesrganJobManager.cpp:18:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from image.cpp:19:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from Frame_Interpolation.cpp:19:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from CompatibilityTest.cpp:1:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from SystemTrayIcon.cpp:20:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from gif.cpp:20:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from files.cpp:20:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
+/usr/lib/qt6/libexec/uic mainwindow.ui -o ui_mainwindow.h
+/usr/lib/qt6/libexec/uic topsupporterslist.ui -o ui_topsupporterslist.h
+g++ -c -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o VideoProcessor.o VideoProcessor.cpp
+g++ -c -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o RealcuganJobManager.o RealcuganJobManager.cpp
+g++ -c -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o FileManager.o FileManager.cpp
+g++ -c -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o ProcessRunner.o ProcessRunner.cpp
+g++ -c -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o LiquidGlassWidget.o LiquidGlassWidget.cpp
+g++ -c -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o GpuManager.o GpuManager.cpp
+g++ -c -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o UiController.o UiController.cpp
+g++ -c -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o Logger.o Logger.cpp
+/usr/lib/qt6/libexec/rcc -name OtherPic OtherPic.qrc -o qrc_OtherPic.cpp
+/usr/lib/qt6/libexec/rcc -name donate donate.qrc -o qrc_donate.cpp
+/usr/lib/qt6/libexec/rcc -name icon icon.qrc -o qrc_icon.cpp
+/usr/lib/qt6/libexec/rcc -name style style.qrc -o qrc_style.cpp
+/usr/lib/qt6/libexec/rcc -name shaders shaders.qrc -o qrc_shaders.cpp
+g++ -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/data/dummy.cpp
+g++ -c -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o AnimatedPNG.o AnimatedPNG.cpp
+In file included from UiController.h:9,
+                 from UiController.cpp:4:
+ui_mainwindow.h: In member function ‘void Ui_MainWindow::retranslateUi(QMainWindow*)’:
+ui_mainwindow.h:5446:28: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5446 |         pushButton_PayPal->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                            ^~~~~~~~
+ui_mainwindow.h:5450:29: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5450 |         pushButton_Patreon->setClass(QCoreApplication::translate("MainWindow", "red", nullptr));
+      |                             ^~~~~~~~
+ui_mainwindow.h:5464:27: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5464 |         pushButton_Start->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                           ^~~~~~~~
+ui_mainwindow.h:5466:26: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5466 |         pushButton_Stop->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                          ^~~~~~~~
+ui_mainwindow.h:5479:32: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5479 |         pushButton_ForceRetry->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                ^~~~~~~~
+ui_mainwindow.h:5553:34: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5553 |         pushButton_HideSettings->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                  ^~~~~~~~
+ui_mainwindow.h:5555:33: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5555 |         pushButton_HideTextBro->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                 ^~~~~~~~
+ui_mainwindow.h:5578:35: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5578 |         pushButton_CustRes_apply->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                   ^~~~~~~~
+ui_mainwindow.h:5584:36: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5584 |         pushButton_CustRes_cancel->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                    ^~~~~~~~
+ui_mainwindow.h:5848:31: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5848 |         pushButton_DetectGPU->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                               ^~~~~~~~
+ui_mainwindow.h:5878:60: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5878 |         pushButton_ShowMultiGPUSettings_Waifu2xNCNNVulkan->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                            ^~~~~~~~
+ui_mainwindow.h:5951:59: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5951 |         pushButton_ShowMultiGPUSettings_Waifu2xConverter->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                           ^~~~~~~~
+ui_mainwindow.h:5998:38: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5998 |         pushButton_ListGPUs_Anime4k->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                      ^~~~~~~~
+ui_mainwindow.h:6013:46: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6013 |         pushButton_VerifyGPUsConfig_Anime4k->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                              ^~~~~~~~
+ui_mainwindow.h:6088:57: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6088 |         pushButton_ShowMultiGPUSettings_SrmdNCNNVulkan->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                         ^~~~~~~~
+ui_mainwindow.h:6096:38: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6096 |         pushButton_DetectGPUID_srmd->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                      ^~~~~~~~
+ui_mainwindow.h:6175:51: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6175 |         pushButton_VerifyGPUsConfig_Waifu2xCaffe->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                                   ^~~~~~~~
+ui_mainwindow.h:6232:48: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6232 |         pushButton_DetectGPU_RealsrNCNNVulkan->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                                ^~~~~~~~
+ui_mainwindow.h:6256:63: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6256 |         pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                               ^~~~~~~~
+ui_mainwindow.h:6338:35: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6338 |         pushButton_DetectGPU_VFI->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                   ^~~~~~~~
+ui_mainwindow.h:6351:41: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6351 |         pushButton_Verify_MultiGPU_VFI->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                         ^~~~~~~~
+ui_mainwindow.h:6451:40: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6451 |         pushButton_ResetVideoSettings->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                        ^~~~~~~~
+ui_mainwindow.h:6453:34: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6453 |         pushButton_encodersList->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                  ^~~~~~~~
+ui_mainwindow.h:6521:41: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6521 |         pushButton_Save_GlobalFontSize->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                         ^~~~~~~~
+ui_mainwindow.h:6529:34: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6529 |         pushButton_SaveSettings->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                  ^~~~~~~~
+ui_mainwindow.h:6532:33: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6532 |         pushButton_CheckUpdate->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                 ^~~~~~~~
+ui_mainwindow.h:6534:28: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6534 |         pushButton_Report->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                            ^~~~~~~~
+ui_mainwindow.h:6540:26: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6540 |         pushButton_wiki->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                          ^~~~~~~~
+ui_mainwindow.h:6542:27: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6542 |         pushButton_about->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                           ^~~~~~~~
+ui_mainwindow.h:6544:36: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6544 |         pushButton_SupportersList->setClass(QCoreApplication::translate("MainWindow", "red", nullptr));
+      |                                    ^~~~~~~~
+g++ -c -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o CompatibilityTest.o CompatibilityTest.cpp
+g++ -c -pipe -g -std=gnu++1z -Wall -Wextra -fPIC -D_REENTRANT -DQT_DEPRECATED_WARNINGS -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -I. -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -o Current_File_Progress.o Current_File_Progress.cpp
+make: *** [Makefile:958: UiController.o] Error 1
+make: *** Waiting for unfinished jobs....
+In file included from UiController.h:9,
+                 from mainwindow.h:58,
                  from AnimatedPNG.cpp:19:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from Finish_Action.cpp:19:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from Donate.cpp:20:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from Web_Activities.cpp:19:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from Right-click_Menu.cpp:19:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/table.o table.cpp
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from checkupdate.cpp:19:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from CustomResolution.cpp:20:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from main.cpp:20:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/textBrowser.o textBrowser.cpp
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from mainwindow.cpp:20:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from progressBar.cpp:20:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from RealCuganProcessor.cpp:19:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from realesrgan_ncnn_vulkan.cpp:1:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from realcugan_ncnn_vulkan.cpp:1:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from settings.cpp:20:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/topsupporterslist.o topsupporterslist.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/video.o video.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/qrc_OtherPic.o release/qrc_OtherPic.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/qrc_donate.o release/qrc_donate.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/qrc_icon.o release/qrc_icon.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/qrc_style.o release/qrc_style.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/qrc_shaders.o release/qrc_shaders.cpp
-'C:\tmp\Qt\6.5.2\mingw_64\bin\moc.exe' -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN --include C:/Build/Beya_Waifu/Waifu2x-Extension-QT/release/moc_predefs.h -IC:/tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++ -IC:/Build/Beya_Waifu/Waifu2x-Extension-QT -IC:/tmp/Qt/6.5.2/mingw_64/include -IC:/tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -IC:/tmp/Qt/6.5.2/mingw_64/include/QtWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtGui -IC:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -IC:/tmp/Qt/6.5.2/mingw_64/include/QtNetwork -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore -IC:/tools/msys64/mingw64/include/c++/15.1.0 -IC:/tools/msys64/mingw64/include/c++/15.1.0/x86_64-w64-mingw32 -IC:/tools/msys64/mingw64/include/c++/15.1.0/backward -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include -IC:/tools/msys64/mingw64/include -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include-fixed mainwindow.h -o release/moc_mainwindow.cpp
-'C:\tmp\Qt\6.5.2\mingw_64\bin\moc.exe' -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN --include C:/Build/Beya_Waifu/Waifu2x-Extension-QT/release/moc_predefs.h -IC:/tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++ -IC:/Build/Beya_Waifu/Waifu2x-Extension-QT -IC:/tmp/Qt/6.5.2/mingw_64/include -IC:/tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -IC:/tmp/Qt/6.5.2/mingw_64/include/QtWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtGui -IC:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -IC:/tmp/Qt/6.5.2/mingw_64/include/QtNetwork -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore -IC:/tools/msys64/mingw64/include/c++/15.1.0 -IC:/tools/msys64/mingw64/include/c++/15.1.0/x86_64-w64-mingw32 -IC:/tools/msys64/mingw64/include/c++/15.1.0/backward -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include -IC:/tools/msys64/mingw64/include -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include-fixed topsupporterslist.h -o release/moc_topsupporterslist.cpp
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from table.cpp:20:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-'C:\tmp\Qt\6.5.2\mingw_64\bin\moc.exe' -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN --include C:/Build/Beya_Waifu/Waifu2x-Extension-QT/release/moc_predefs.h -IC:/tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++ -IC:/Build/Beya_Waifu/Waifu2x-Extension-QT -IC:/tmp/Qt/6.5.2/mingw_64/include -IC:/tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -IC:/tmp/Qt/6.5.2/mingw_64/include/QtWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtGui -IC:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -IC:/tmp/Qt/6.5.2/mingw_64/include/QtNetwork -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore -IC:/tools/msys64/mingw64/include/c++/15.1.0 -IC:/tools/msys64/mingw64/include/c++/15.1.0/x86_64-w64-mingw32 -IC:/tools/msys64/mingw64/include/c++/15.1.0/backward -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include -IC:/tools/msys64/mingw64/include -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include-fixed LiquidGlassWidget.h -o release/moc_LiquidGlassWidget.cpp
-'C:\tmp\Qt\6.5.2\mingw_64\bin\moc.exe' -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN --include C:/Build/Beya_Waifu/Waifu2x-Extension-QT/release/moc_predefs.h -IC:/tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++ -IC:/Build/Beya_Waifu/Waifu2x-Extension-QT -IC:/tmp/Qt/6.5.2/mingw_64/include -IC:/tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -IC:/tmp/Qt/6.5.2/mingw_64/include/QtWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtGui -IC:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -IC:/tmp/Qt/6.5.2/mingw_64/include/QtNetwork -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore -IC:/tools/msys64/mingw64/include/c++/15.1.0 -IC:/tools/msys64/mingw64/include/c++/15.1.0/x86_64-w64-mingw32 -IC:/tools/msys64/mingw64/include/c++/15.1.0/backward -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include -IC:/tools/msys64/mingw64/include -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include-fixed VideoProcessor.h -o release/moc_VideoProcessor.cpp
-'C:\tmp\Qt\6.5.2\mingw_64\bin\moc.exe' -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN --include C:/Build/Beya_Waifu/Waifu2x-Extension-QT/release/moc_predefs.h -IC:/tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++ -IC:/Build/Beya_Waifu/Waifu2x-Extension-QT -IC:/tmp/Qt/6.5.2/mingw_64/include -IC:/tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -IC:/tmp/Qt/6.5.2/mingw_64/include/QtWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtGui -IC:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -IC:/tmp/Qt/6.5.2/mingw_64/include/QtNetwork -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore -IC:/tools/msys64/mingw64/include/c++/15.1.0 -IC:/tools/msys64/mingw64/include/c++/15.1.0/x86_64-w64-mingw32 -IC:/tools/msys64/mingw64/include/c++/15.1.0/backward -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include -IC:/tools/msys64/mingw64/include -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include-fixed RealcuganJobManager.h -o release/moc_RealcuganJobManager.cpp
-'C:\tmp\Qt\6.5.2\mingw_64\bin\moc.exe' -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN --include C:/Build/Beya_Waifu/Waifu2x-Extension-QT/release/moc_predefs.h -IC:/tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++ -IC:/Build/Beya_Waifu/Waifu2x-Extension-QT -IC:/tmp/Qt/6.5.2/mingw_64/include -IC:/tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -IC:/tmp/Qt/6.5.2/mingw_64/include/QtWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtGui -IC:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -IC:/tmp/Qt/6.5.2/mingw_64/include/QtNetwork -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore -IC:/tools/msys64/mingw64/include/c++/15.1.0 -IC:/tools/msys64/mingw64/include/c++/15.1.0/x86_64-w64-mingw32 -IC:/tools/msys64/mingw64/include/c++/15.1.0/backward -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include -IC:/tools/msys64/mingw64/include -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include-fixed RealesrganJobManager.h -o release/moc_RealesrganJobManager.cpp
-'C:\tmp\Qt\6.5.2\mingw_64\bin\moc.exe' -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN --include C:/Build/Beya_Waifu/Waifu2x-Extension-QT/release/moc_predefs.h -IC:/tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++ -IC:/Build/Beya_Waifu/Waifu2x-Extension-QT -IC:/tmp/Qt/6.5.2/mingw_64/include -IC:/tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -IC:/tmp/Qt/6.5.2/mingw_64/include/QtWidgets -IC:/tmp/Qt/6.5.2/mingw_64/include/QtGui -IC:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -IC:/tmp/Qt/6.5.2/mingw_64/include/QtNetwork -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -IC:/tmp/Qt/6.5.2/mingw_64/include/QtCore -IC:/tools/msys64/mingw64/include/c++/15.1.0 -IC:/tools/msys64/mingw64/include/c++/15.1.0/x86_64-w64-mingw32 -IC:/tools/msys64/mingw64/include/c++/15.1.0/backward -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include -IC:/tools/msys64/mingw64/include -IC:/tools/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/15.1.0/include-fixed RealCuganProcessor.h -o release/moc_RealCuganProcessor.cpp
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from textBrowser.cpp:20:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-mainwindow.cpp: In constructor 'MainWindow::MainWindow(int, QWidget*)':
-mainwindow.cpp:66:13: error: 'class Ui::MainWindow' has no member named 'tabWidget_Input'
-   66 |     if (ui->tabWidget_Input && ui->tabWidget_Input->count() > 0) {
-      |             ^~~~~~~~~~~~~~~
-mainwindow.cpp:66:36: error: 'class Ui::MainWindow' has no member named 'tabWidget_Input'
-   66 |     if (ui->tabWidget_Input && ui->tabWidget_Input->count() > 0) {
-      |                                    ^~~~~~~~~~~~~~~
-mainwindow.cpp:67:37: error: 'class Ui::MainWindow' has no member named 'tabWidget_Input'
-   67 |         QWidget* imageTabPage = ui->tabWidget_Input->widget(0); // Get the first tab (presumably ui->tab_image)
-      |                                     ^~~~~~~~~~~~~~~
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/moc_topsupporterslist.o release/moc_topsupporterslist.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/moc_VideoProcessor.o release/moc_VideoProcessor.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/moc_RealcuganJobManager.o release/moc_RealcuganJobManager.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/moc_RealCuganProcessor.o release/moc_RealCuganProcessor.cpp
-g++ -c -fno-keep-inline-dllexport -O2 -std=gnu++1z -Wall -Wextra -Wextra -fexceptions -mthreads -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_MULTIMEDIA_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_NETWORK_LIB -DQT_CORE5COMPAT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN -I. -I../../../tmp/Qt/6.5.2/mingw_64/include -I../../../tmp/Qt/6.5.2/mingw_64/include/QtMultimedia -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGLWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtOpenGL -I../../../tmp/Qt/6.5.2/mingw_64/include/QtWidgets -I../../../tmp/Qt/6.5.2/mingw_64/include/QtGui -I../../../tmp/Qt/6.5.2/mingw_64/include/QtConcurrent -I../../../tmp/Qt/6.5.2/mingw_64/include/QtNetwork -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore5Compat -I../../../tmp/Qt/6.5.2/mingw_64/include/QtCore -Irelease -I. -I../../../VulkanSDK/1.4.313.2/include -I../../../tmp/Qt/6.5.2/mingw_64/mkspecs/win32-g++  -o release/moc_mainwindow.o release/moc_mainwindow.cpp
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from mainwindow.h:29,
-                 from video.cpp:24:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-mingw32-make[1]: *** [Makefile.Release:12025: release/table.o] Error 1
-In file included from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfuture.h:9,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/QtCore:104,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrentDepends:3,
-                 from C:/tmp/Qt/6.5.2/mingw_64/include/QtConcurrent/QtConcurrent:3,
-                 from release/../mainwindow.h:29,
-                 from release/moc_mainwindow.cpp:9:
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
-  455 |     explicit QFutureInterface<void>(State initialState = NoState)
-      |                                     ^~~~~
-C:/tmp/Qt/6.5.2/mingw_64/include/QtCore/qfutureinterface.h:455:37: note: remove the '< >'
-mingw32-make[1]: Leaving directory 'C:/Build/Beya_Waifu/Waifu2x-Extension-QT'
-mingw32-make: *** [Makefile:45: release] Error 2
-make for Waifu2x-Extension-QT failed.
-C:\Build\Beya_Waifu\build_windows.ps1 : A critical error occurred during the build process: Command failed with exit
-code 1: 'C:\tools\msys64\usr\bin\bash.exe' -l C:\Build\Beya_Waifu\temp_build_wrapper.sh
-At line:1 char:1
-+ .\build_windows.ps1
-+ ~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
-    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,build_windows.ps1
+ui_mainwindow.h: In member function ‘void Ui_MainWindow::retranslateUi(QMainWindow*)’:
+ui_mainwindow.h:5446:28: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5446 |         pushButton_PayPal->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                            ^~~~~~~~
+ui_mainwindow.h:5450:29: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5450 |         pushButton_Patreon->setClass(QCoreApplication::translate("MainWindow", "red", nullptr));
+      |                             ^~~~~~~~
+ui_mainwindow.h:5464:27: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5464 |         pushButton_Start->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                           ^~~~~~~~
+ui_mainwindow.h:5466:26: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5466 |         pushButton_Stop->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                          ^~~~~~~~
+ui_mainwindow.h:5479:32: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5479 |         pushButton_ForceRetry->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                ^~~~~~~~
+ui_mainwindow.h:5553:34: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5553 |         pushButton_HideSettings->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                  ^~~~~~~~
+ui_mainwindow.h:5555:33: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5555 |         pushButton_HideTextBro->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                 ^~~~~~~~
+ui_mainwindow.h:5578:35: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5578 |         pushButton_CustRes_apply->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                   ^~~~~~~~
+ui_mainwindow.h:5584:36: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5584 |         pushButton_CustRes_cancel->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                    ^~~~~~~~
+ui_mainwindow.h:5848:31: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5848 |         pushButton_DetectGPU->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                               ^~~~~~~~
+ui_mainwindow.h:5878:60: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5878 |         pushButton_ShowMultiGPUSettings_Waifu2xNCNNVulkan->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                            ^~~~~~~~
+ui_mainwindow.h:5951:59: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5951 |         pushButton_ShowMultiGPUSettings_Waifu2xConverter->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                           ^~~~~~~~
+ui_mainwindow.h:5998:38: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5998 |         pushButton_ListGPUs_Anime4k->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                      ^~~~~~~~
+ui_mainwindow.h:6013:46: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6013 |         pushButton_VerifyGPUsConfig_Anime4k->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                              ^~~~~~~~
+ui_mainwindow.h:6088:57: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6088 |         pushButton_ShowMultiGPUSettings_SrmdNCNNVulkan->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                         ^~~~~~~~
+ui_mainwindow.h:6096:38: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6096 |         pushButton_DetectGPUID_srmd->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                      ^~~~~~~~
+ui_mainwindow.h:6175:51: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6175 |         pushButton_VerifyGPUsConfig_Waifu2xCaffe->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                                   ^~~~~~~~
+ui_mainwindow.h:6232:48: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6232 |         pushButton_DetectGPU_RealsrNCNNVulkan->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                                ^~~~~~~~
+ui_mainwindow.h:6256:63: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6256 |         pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                               ^~~~~~~~
+ui_mainwindow.h:6338:35: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6338 |         pushButton_DetectGPU_VFI->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                   ^~~~~~~~
+ui_mainwindow.h:6351:41: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6351 |         pushButton_Verify_MultiGPU_VFI->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                         ^~~~~~~~
+ui_mainwindow.h:6451:40: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6451 |         pushButton_ResetVideoSettings->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                        ^~~~~~~~
+ui_mainwindow.h:6453:34: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6453 |         pushButton_encodersList->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                  ^~~~~~~~
+ui_mainwindow.h:6521:41: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6521 |         pushButton_Save_GlobalFontSize->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                         ^~~~~~~~
+ui_mainwindow.h:6529:34: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6529 |         pushButton_SaveSettings->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                  ^~~~~~~~
+ui_mainwindow.h:6532:33: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6532 |         pushButton_CheckUpdate->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                 ^~~~~~~~
+ui_mainwindow.h:6534:28: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6534 |         pushButton_Report->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                            ^~~~~~~~
+ui_mainwindow.h:6540:26: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6540 |         pushButton_wiki->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                          ^~~~~~~~
+ui_mainwindow.h:6542:27: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6542 |         pushButton_about->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                           ^~~~~~~~
+ui_mainwindow.h:6544:36: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6544 |         pushButton_SupportersList->setClass(QCoreApplication::translate("MainWindow", "red", nullptr));
+      |                                    ^~~~~~~~
+In file included from UiController.h:9,
+                 from mainwindow.h:58,
+                 from Current_File_Progress.cpp:20:
+ui_mainwindow.h: In member function ‘void Ui_MainWindow::retranslateUi(QMainWindow*)’:
+ui_mainwindow.h:5446:28: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5446 |         pushButton_PayPal->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                            ^~~~~~~~
+ui_mainwindow.h:5450:29: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5450 |         pushButton_Patreon->setClass(QCoreApplication::translate("MainWindow", "red", nullptr));
+      |                             ^~~~~~~~
+ui_mainwindow.h:5464:27: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5464 |         pushButton_Start->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                           ^~~~~~~~
+ui_mainwindow.h:5466:26: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5466 |         pushButton_Stop->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                          ^~~~~~~~
+ui_mainwindow.h:5479:32: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5479 |         pushButton_ForceRetry->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                ^~~~~~~~
+ui_mainwindow.h:5553:34: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5553 |         pushButton_HideSettings->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                  ^~~~~~~~
+ui_mainwindow.h:5555:33: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5555 |         pushButton_HideTextBro->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                 ^~~~~~~~
+ui_mainwindow.h:5578:35: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5578 |         pushButton_CustRes_apply->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                   ^~~~~~~~
+ui_mainwindow.h:5584:36: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5584 |         pushButton_CustRes_cancel->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                    ^~~~~~~~
+ui_mainwindow.h:5848:31: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5848 |         pushButton_DetectGPU->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                               ^~~~~~~~
+ui_mainwindow.h:5878:60: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5878 |         pushButton_ShowMultiGPUSettings_Waifu2xNCNNVulkan->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                            ^~~~~~~~
+ui_mainwindow.h:5951:59: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5951 |         pushButton_ShowMultiGPUSettings_Waifu2xConverter->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                           ^~~~~~~~
+ui_mainwindow.h:5998:38: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5998 |         pushButton_ListGPUs_Anime4k->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                      ^~~~~~~~
+ui_mainwindow.h:6013:46: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6013 |         pushButton_VerifyGPUsConfig_Anime4k->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                              ^~~~~~~~
+ui_mainwindow.h:6088:57: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6088 |         pushButton_ShowMultiGPUSettings_SrmdNCNNVulkan->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                         ^~~~~~~~
+ui_mainwindow.h:6096:38: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6096 |         pushButton_DetectGPUID_srmd->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                      ^~~~~~~~
+ui_mainwindow.h:6175:51: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6175 |         pushButton_VerifyGPUsConfig_Waifu2xCaffe->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                                   ^~~~~~~~
+ui_mainwindow.h:6232:48: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6232 |         pushButton_DetectGPU_RealsrNCNNVulkan->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                                ^~~~~~~~
+ui_mainwindow.h:6256:63: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6256 |         pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                               ^~~~~~~~
+ui_mainwindow.h:6338:35: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6338 |         pushButton_DetectGPU_VFI->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                   ^~~~~~~~
+ui_mainwindow.h:6351:41: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6351 |         pushButton_Verify_MultiGPU_VFI->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                         ^~~~~~~~
+ui_mainwindow.h:6451:40: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6451 |         pushButton_ResetVideoSettings->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                        ^~~~~~~~
+ui_mainwindow.h:6453:34: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6453 |         pushButton_encodersList->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                  ^~~~~~~~
+ui_mainwindow.h:6521:41: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6521 |         pushButton_Save_GlobalFontSize->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                         ^~~~~~~~
+ui_mainwindow.h:6529:34: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6529 |         pushButton_SaveSettings->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                  ^~~~~~~~
+ui_mainwindow.h:6532:33: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6532 |         pushButton_CheckUpdate->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                 ^~~~~~~~
+ui_mainwindow.h:6534:28: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6534 |         pushButton_Report->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                            ^~~~~~~~
+ui_mainwindow.h:6540:26: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6540 |         pushButton_wiki->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                          ^~~~~~~~
+ui_mainwindow.h:6542:27: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6542 |         pushButton_about->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                           ^~~~~~~~
+ui_mainwindow.h:6544:36: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6544 |         pushButton_SupportersList->setClass(QCoreApplication::translate("MainWindow", "red", nullptr));
+      |                                    ^~~~~~~~
+In file included from UiController.h:9,
+                 from mainwindow.h:58,
+                 from CompatibilityTest.cpp:1:
+ui_mainwindow.h: In member function ‘void Ui_MainWindow::retranslateUi(QMainWindow*)’:
+ui_mainwindow.h:5446:28: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5446 |         pushButton_PayPal->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                            ^~~~~~~~
+ui_mainwindow.h:5450:29: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5450 |         pushButton_Patreon->setClass(QCoreApplication::translate("MainWindow", "red", nullptr));
+      |                             ^~~~~~~~
+ui_mainwindow.h:5464:27: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5464 |         pushButton_Start->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                           ^~~~~~~~
+ui_mainwindow.h:5466:26: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5466 |         pushButton_Stop->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                          ^~~~~~~~
+ui_mainwindow.h:5479:32: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5479 |         pushButton_ForceRetry->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                ^~~~~~~~
+ui_mainwindow.h:5553:34: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5553 |         pushButton_HideSettings->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                  ^~~~~~~~
+ui_mainwindow.h:5555:33: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5555 |         pushButton_HideTextBro->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                 ^~~~~~~~
+ui_mainwindow.h:5578:35: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5578 |         pushButton_CustRes_apply->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                   ^~~~~~~~
+ui_mainwindow.h:5584:36: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5584 |         pushButton_CustRes_cancel->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                    ^~~~~~~~
+ui_mainwindow.h:5848:31: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5848 |         pushButton_DetectGPU->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                               ^~~~~~~~
+ui_mainwindow.h:5878:60: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5878 |         pushButton_ShowMultiGPUSettings_Waifu2xNCNNVulkan->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                            ^~~~~~~~
+ui_mainwindow.h:5951:59: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5951 |         pushButton_ShowMultiGPUSettings_Waifu2xConverter->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                           ^~~~~~~~
+ui_mainwindow.h:5998:38: error: ‘class QPushButton’ has no member named ‘setClass’
+ 5998 |         pushButton_ListGPUs_Anime4k->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                      ^~~~~~~~
+ui_mainwindow.h:6013:46: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6013 |         pushButton_VerifyGPUsConfig_Anime4k->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                              ^~~~~~~~
+ui_mainwindow.h:6088:57: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6088 |         pushButton_ShowMultiGPUSettings_SrmdNCNNVulkan->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                         ^~~~~~~~
+ui_mainwindow.h:6096:38: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6096 |         pushButton_DetectGPUID_srmd->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                      ^~~~~~~~
+ui_mainwindow.h:6175:51: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6175 |         pushButton_VerifyGPUsConfig_Waifu2xCaffe->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                                   ^~~~~~~~
+ui_mainwindow.h:6232:48: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6232 |         pushButton_DetectGPU_RealsrNCNNVulkan->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                                ^~~~~~~~
+ui_mainwindow.h:6256:63: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6256 |         pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                                               ^~~~~~~~
+ui_mainwindow.h:6338:35: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6338 |         pushButton_DetectGPU_VFI->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                   ^~~~~~~~
+ui_mainwindow.h:6351:41: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6351 |         pushButton_Verify_MultiGPU_VFI->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                         ^~~~~~~~
+ui_mainwindow.h:6451:40: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6451 |         pushButton_ResetVideoSettings->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                                        ^~~~~~~~
+ui_mainwindow.h:6453:34: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6453 |         pushButton_encodersList->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                                  ^~~~~~~~
+ui_mainwindow.h:6521:41: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6521 |         pushButton_Save_GlobalFontSize->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                         ^~~~~~~~
+ui_mainwindow.h:6529:34: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6529 |         pushButton_SaveSettings->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                                  ^~~~~~~~
+ui_mainwindow.h:6532:33: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6532 |         pushButton_CheckUpdate->setClass(QCoreApplication::translate("MainWindow", "green", nullptr));
+      |                                 ^~~~~~~~
+ui_mainwindow.h:6534:28: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6534 |         pushButton_Report->setClass(QCoreApplication::translate("MainWindow", "orange", nullptr));
+      |                            ^~~~~~~~
+ui_mainwindow.h:6540:26: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6540 |         pushButton_wiki->setClass(QCoreApplication::translate("MainWindow", "purple", nullptr));
+      |                          ^~~~~~~~
+ui_mainwindow.h:6542:27: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6542 |         pushButton_about->setClass(QCoreApplication::translate("MainWindow", "blue", nullptr));
+      |                           ^~~~~~~~
+ui_mainwindow.h:6544:36: error: ‘class QPushButton’ has no member named ‘setClass’
+ 6544 |         pushButton_SupportersList->setClass(QCoreApplication::translate("MainWindow", "red", nullptr));
+      |                                    ^~~~~~~~
+make: *** [Makefile:680: AnimatedPNG.o] Error 1
+make: *** [Makefile:700: Current_File_Progress.o] Error 1
+make: *** [Makefile:690: CompatibilityTest.o] Error 1

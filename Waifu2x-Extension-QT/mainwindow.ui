@@ -192,7 +192,7 @@ height:35
              <property name="toolTip">
               <string>Donate to the developer through PayPal.</string>
              </property>
-             <property name="styleClass">
+             <property name="class">
               <string>blue</string>
              </property>
              <property name="text">
@@ -228,7 +228,7 @@ height:35
              <property name="toolTip">
               <string>Support this project on Patreon and get Premium version.</string>
              </property>
-             <property name="styleClass">
+             <property name="class">
               <string>red</string>
              </property>
              <property name="text">
@@ -494,7 +494,7 @@ height:35
               <property name="toolTip">
                <string/>
               </property>
-              <property name="styleClass">
+              <property name="class">
                <string>green</string>
               </property>
               <property name="text">
@@ -526,7 +526,7 @@ height:35
                 <height>16777215</height>
                </size>
               </property>
-              <property name="styleClass">
+              <property name="class">
                <string>orange</string>
               </property>
               <property name="text">
@@ -566,7 +566,7 @@ You can try using [Force Retry] to end the Engine process
 and restart it, and the entire [Scale and denoise] process 
 will not be interrupted and will continue.</string>
               </property>
-              <property name="styleClass">
+              <property name="class">
                <string>purple</string>
               </property>
               <property name="text">
@@ -1605,7 +1605,7 @@ padding:0px;
                 <string/>
                </property>
                <property name="class">
-                <string>blue</string>
+               <string>blue</string>
                </property>
                <property name="text">
                 <string>Hide settings</string>
@@ -8325,7 +8325,7 @@ Might cause ERROR.</string>
              <property name="toolTip">
               <string>Reset video settings</string>
              </property>
-             <property name="styleClass">
+             <property name="class">
               <string>orange</string>
              </property>
              <property name="text">
