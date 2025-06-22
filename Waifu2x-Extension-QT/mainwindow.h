@@ -33,8 +33,7 @@
 #include <QCloseEvent>
 #include <QFileDialog>
 #include <QtCore5Compat/QTextCodec>
-#include <math.h>
-#include <QMutex>
+#include <cmath>
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QMetaType>
@@ -67,20 +66,20 @@ typedef QList<QMap<QString, QString>> QList_QMap_QStrQStr;
 Q_DECLARE_METATYPE(QList_QMap_QStrQStr)
 
 // Struct for caching file metadata
-struct FileMetadataCache {
+struct FileMetadata {
     bool isValid = false;
     int width = 0;
     int height = 0;
     QString fps;
     double duration = 0.0;
     QString bitRate;
-    long long frameCount = 0;
+    qint64 frameCount = 0;
     bool isVFR = false;
     QString identifyOutput;
     bool isAnimated = false;
     QString fileFormat;
 };
-Q_DECLARE_METATYPE(FileMetadataCache)
+Q_DECLARE_METATYPE(FileMetadata)
 
 // Struct for loading file info from list
 struct FileLoadInfo {
@@ -118,6 +117,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(int maxThreadsOverride = 0, QWidget *parent = nullptr);
     void changeEvent(QEvent *e);
+    void resizeEvent(QResizeEvent *event) override;
 
     //======================= Version Info =======================
     QString VERSION = "v3.41.02-beta";
@@ -163,7 +163,6 @@ public:
     //======================= File Handling & Processing =======================
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
-    void resizeEvent(QResizeEvent *event) override;
     void Read_urls(QList<QUrl> urls, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
     void Read_Input_paths_BrowserFile(QStringList Input_path_List);
     bool AddNew_gif=false;
@@ -452,8 +451,8 @@ public:
     QString HDNDenoiseLevel_gif;
     QString HDNDenoiseLevel_video;
 
-    FileMetadataCache getOrFetchMetadata(const QString &filePath);
-    QMap<QString, FileMetadataCache> m_metadataCache;
+    FileMetadata getOrFetchMetadata(const QString &filePath);
+    QMap<QString, FileMetadata> m_metadataCache;
     QMutex m_metadataCacheMutex;
 
     int Waifu2x_Compatibility_Test();
@@ -527,7 +526,6 @@ public:
     QMutex isForceRetryClicked_QMutex;
     void DelTrash_ForceRetry_Anime4k(QString OutPut_Path);
     void isForceRetryClicked_SetTrue_Block_Anime4k();
-    bool m_isVFISyncing = false; // Flag to prevent signal recursion
     void AutoFinishAction_Message();
     int SystemShutDown_Countdown();
     int SystemShutDown_isAutoShutDown();
@@ -858,7 +856,7 @@ public slots:
     void on_tableView_video_pressed(const QModelIndex &index);
     void on_pushButton_SaveSettings_clicked();
     void on_pushButton_ResetSettings_clicked();
-    void toggleLiquidGlass(bool enabled);
+    // void toggleLiquidGlass(bool enabled); // Already added in private slots
 
     // Slots for VFI synchronization
     void on_checkBox_EnableVFI_Home_toggled(bool checked);
@@ -866,6 +864,7 @@ public slots:
 
 private slots:
     void TextBrowser_StartMes(); // Single declaration in private slots
+    void toggleLiquidGlass(bool enabled);
 
 signals:
     void Send_Table_EnableSorting(bool EnableSorting);
@@ -939,7 +938,7 @@ private:
     void ShellMessageBox(const QString &title, const QString &text, QMessageBox::Icon icon);
     bool Deduplicate_filelist_worker(const QString& SourceFile_fullPath, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
     void ProcessFileListWorker(QString file_list_Path, const QSet<QString>& existingImagePaths, const QSet<QString>& existingGifPaths, const QSet<QString>& existingVideoPaths);
-
+    bool m_isVFISyncing = false; // Flag to prevent signal recursion
     LiquidGlassWidget *glassWidget {nullptr};
     bool glassEnabled {false};
 
