@@ -52,7 +52,6 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     progressBar.cpp \
-    realcugan_ncnn_vulkan.cpp \
     RealCuganProcessor.cpp \
     realesrgan_ncnn_vulkan.cpp \
     settings.cpp \

@@ -174,6 +174,22 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     TempDir_Path = Current_Path + "/temp"; // Initialize here
     FFMPEG_EXE_PATH_Waifu2xEX = Current_Path + "/ffmpeg/ffmpeg.exe";
     realCuganProcessor = new RealCuganProcessor(this);
+
+    // Connect signals from the new RealCuganProcessor
+    connect(realCuganProcessor, &RealCuganProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
+    connect(realCuganProcessor, &RealCuganProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString);
+    connect(realCuganProcessor, &RealCuganProcessor::fileProgress, this, [this](int rowNum, int percent){
+        if (rowNum == current_File_Row_Number) {
+            Set_Current_File_Progress_Bar_Value(percent, 100);
+        }
+    });
+    connect(realCuganProcessor, &RealCuganProcessor::processingFinished, this, [this](int rowNum, bool success){
+        qInfo() << "RealCUGAN processing finished for row" << rowNum << "Success:" << success;
+        if (success) m_FinishedProc++; else m_ErrorProc++;
+        UpdateProgressBar();
+        ProcessNextFile();
+    });
+
     videoProcessor = new VideoProcessor(this);
     qRegisterMetaType<FileMetadata>("FileMetadata");
 
