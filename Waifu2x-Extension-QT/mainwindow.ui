@@ -120,9 +120,6 @@ height:35
        <property name="movable">
         <bool>false</bool>
        </property>
-       <property name="tabBarAutoHide">
-        <bool>false</bool>
-       </property>
        <widget class="QWidget" name="tab_Donate">
         <property name="enabled">
          <bool>true</bool>

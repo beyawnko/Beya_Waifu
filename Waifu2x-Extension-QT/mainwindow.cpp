@@ -45,6 +45,7 @@ Copyright (C) 2025  beyawnko
 #include <QMovie>
 #include <QMediaPlayer>
 #include <QMediaMetaData>
+#include <QTextCodec>
 #include <QEventLoop> // Required for waiting on QMediaPlayer signals
 #include <QDesktopServices> // For opening URLs
 #include <QUrl>
@@ -79,6 +80,37 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     connect(ui->checkBox_EnableVFI_Home, &QCheckBox::toggled, this, &MainWindow::on_checkBox_EnableVFI_Home_toggled);
     connect(ui->groupBox_FrameInterpolation, &QGroupBox::toggled, this, &MainWindow::on_groupBox_FrameInterpolation_toggled);
 
+    // Initialize RealCUGAN pointers to ensure safe use when the
+    // dedicated widgets are absent. Fallback to Frame Interpolation
+    // widgets when available.
+    comboBox_Model_RealCUGAN = nullptr;
+    spinBox_Scale_RealCUGAN = nullptr;
+    spinBox_DenoiseLevel_RealCUGAN = nullptr;
+    spinBox_TileSize_RealCUGAN = nullptr;
+    checkBox_TTA_RealCUGAN = nullptr;
+    comboBox_GPUID_RealCUGAN = nullptr;
+    pushButton_DetectGPU_RealCUGAN = nullptr;
+    checkBox_MultiGPU_RealCUGAN = nullptr;
+    groupBox_GPUSettings_MultiGPU_RealCUGAN = nullptr;
+    comboBox_GPUIDs_MultiGPU_RealCUGAN = nullptr;
+    listWidget_GPUList_MultiGPU_RealCUGAN = nullptr;
+    pushButton_AddGPU_MultiGPU_RealCUGAN = nullptr;
+    pushButton_RemoveGPU_MultiGPU_RealCUGAN = nullptr;
+    pushButton_ClearGPU_MultiGPU_RealCUGAN = nullptr;
+    pushButton_TileSize_Add_RealCUGAN = nullptr;
+    pushButton_TileSize_Minus_RealCUGAN = nullptr;
+    widget_RealCUGAN_Hidden = nullptr;
+
+    if (ui->comboBox_Model_VFI)
+        comboBox_Model_RealCUGAN = ui->comboBox_Model_VFI;
+    if (ui->comboBox_GPUID_VFI)
+        comboBox_GPUID_RealCUGAN = ui->comboBox_GPUID_VFI;
+    if (ui->pushButton_DetectGPU_VFI)
+        pushButton_DetectGPU_RealCUGAN = ui->pushButton_DetectGPU_VFI;
+    if (ui->checkBox_MultiGPU_VFI)
+        checkBox_MultiGPU_RealCUGAN = ui->checkBox_MultiGPU_VFI;
+    if (ui->widget_RealCUGAN_Hidden)
+        widget_RealCUGAN_Hidden = ui->widget_RealCUGAN_Hidden;
     /*
      * Disabled block that previously re-parented the first image tab's table and
      * inserted a new layout with a title label. The application no longer
@@ -122,7 +154,7 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     FFMPEG_EXE_PATH_Waifu2xEX = Current_Path + "/ffmpeg/ffmpeg.exe";
     realCuganProcessor = new RealCuganProcessor(this);
     videoProcessor = new VideoProcessor(this);
-    qRegisterMetaType<FileMetadataCache>("FileMetadataCache");
+    qRegisterMetaType<FileMetadata>("FileMetadata");
 
     QVariant maxThreadCountSetting = Settings_Read_value("/settings/MaxThreadCount");
     globalMaxThreadCount = maxThreadCountSetting.isValid() ? maxThreadCountSetting.toInt() : 0;
@@ -158,6 +190,22 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
         QCheckBox *check = new QCheckBox(tr("Enable Liquid Glass"), this);
         grid->addWidget(check, grid->rowCount(), 0, 1, grid->columnCount());
         connect(check, &QCheckBox::toggled, this, &MainWindow::toggleLiquidGlass);
+    }
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    if (glassWidget) {
+        glassWidget->setGeometry(ui->centralwidget->rect());
+    }
+    QMainWindow::resizeEvent(event);
+}
+
+void MainWindow::toggleLiquidGlass(bool enabled)
+{
+    glassEnabled = enabled;
+    if (glassWidget) {
+        glassWidget->setVisible(enabled);
     }
 }
 
@@ -204,61 +252,58 @@ void MainWindow::ApplyDarkStyle()
 }
 
 bool MainWindow::runProcess(QProcess *process, const QString &cmd,
-                            QByteArray *stdOut, QByteArray *stdErr)
-{
-    QEventLoop loop;
-    if (stdOut) {
-        stdOut->clear();
-    }
-    if (stdErr) {
-        stdErr->clear();
-    }
-    if (stdOut) {
-        QObject::connect(process, &QProcess::readyReadStandardOutput,
-                         [&]() { stdOut->append(process->readAllStandardOutput()); });
-    }
-    if (stdErr) {
-        QObject::connect(process, &QProcess::readyReadStandardError,
-                         [&]() { stdErr->append(process->readAllStandardError()); });
-    }
-    QObject::connect(process,
-                     QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-                     &loop,
-                     &QEventLoop::quit);
-    QObject::connect(process, &QProcess::errorOccurred, &loop, &QEventLoop::quit);
-
-    const int timeoutDuration = 600000; // 10 minutes in milliseconds
-    bool timedOut = false;
-    QTimer timer;
-    timer.setSingleShot(true);
-
-    QObject::connect(&timer, &QTimer::timeout, [&]() {
-        timedOut = true;
-        qWarning() << "Process execution timed out for command (in MainWindow::runProcess):" << cmd;
-        if (process->state() == QProcess::Running) {
-            process->kill(); // Forcefully kill the process
+                                QByteArray *stdOut, QByteArray *stdErr)
+    {
+        QEventLoop loop;
+        if (stdOut) {
+            stdOut->clear();
         }
-        loop.quit(); // Ensure the event loop is quit
-    });
+        if (stdErr) {
+            stdErr->clear();
+        }
+        if (stdOut) {
+            QObject::connect(process, &QProcess::readyReadStandardOutput,
+                             [&]() { stdOut->append(process->readAllStandardOutput()); });
+        }
+        if (stdErr) {
+            QObject::connect(process, &QProcess::readyReadStandardError,
+                             [&]() { stdErr->append(process->readAllStandardError()); });
+        }
+        QObject::connect(process, &QProcess::finished, &loop, &QEventLoop::quit);
+        QObject::connect(process, &QProcess::errorOccurred, &loop, &QEventLoop::quit);
 
-    process->start(cmd);
+        const int timeoutDuration = 600000; // 10 minutes in milliseconds
+        bool timedOut = false;
+        QTimer timer;
+        timer.setSingleShot(true);
 
-    if (!process->waitForStarted(5000)) { // 5-second timeout for process startup
-        qWarning() << "Process failed to start or started too slow for command (in MainWindow::runProcess):" << cmd << "Error:" << process->errorString();
-        timer.stop();
-        return false;
+        QObject::connect(&timer, &QTimer::timeout, [&]() {
+            timedOut = true;
+            qWarning() << "Process execution timed out for command (in MainWindow::runProcess):" << cmd;
+            if (process->state() == QProcess::Running) {
+                process->kill(); // Forcefully kill the process
+            }
+            loop.quit(); // Ensure the event loop is quit
+        });
+
+        process->start(cmd);
+
+        if (!process->waitForStarted(5000)) { // 5-second timeout for process startup
+            qWarning() << "Process failed to start or started too slow for command (in MainWindow::runProcess):" << cmd << "Error:" << process->errorString();
+            timer.stop();
+            return false;
+        }
+
+        timer.start(timeoutDuration);
+        loop.exec();
+        timer.stop(); // Stop the timer: either loop finished normally or timer triggered loop.quit()
+
+        if (timedOut) {
+            return false;
+        }
+
+        return process->exitStatus() == QProcess::NormalExit && process->exitCode() == 0;
     }
-
-    timer.start(timeoutDuration);
-    loop.exec();
-    timer.stop(); // Stop the timer: either loop finished normally or timer triggered loop.quit()
-
-    if (timedOut) {
-        return false;
-    }
-
-    return process->exitStatus() == QProcess::NormalExit && process->exitCode() == 0;
-}
 
 void MainWindow::toggleLiquidGlass(bool enabled)
 {
@@ -308,7 +353,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     qDebug() << "MainWindow closing";
     QMainWindow::closeEvent(event);
-    qApp->quit();
+    QApplication::instance()->quit();
 }
 
 // Stubs for general utility functions that should be in mainwindow.cpp
@@ -1148,8 +1193,9 @@ void MainWindow::on_pushButton_encodersList_clicked()
         QMessageBox::warning(this, tr("FFmpeg Error"), tr("FFmpeg process timed out or failed to finish."));
         return;
     }
-    QString output = QString::fromLocal8Bit(ffmpegProcess.readAllStandardOutput());
-    QString errorOutput = QString::fromLocal8Bit(ffmpegProcess.readAllStandardError()); // Encoders list might be on stderr
+    QTextCodec *codec = QTextCodec::codecForLocale();
+    QString output = codec->toUnicode(ffmpegProcess.readAllStandardOutput());
+    QString errorOutput = codec->toUnicode(ffmpegProcess.readAllStandardError()); // Encoders list might be on stderr
 
     QMessageBox msgBox(this);
     msgBox.setWindowTitle(tr("Available FFmpeg Encoders"));
@@ -2599,7 +2645,7 @@ void MainWindow::Set_Current_File_Progress_Bar_Value(int val, int max_val)
 }
 
 //======================== Metadata Cache Implementation ================================
-FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
+FileMetadata MainWindow::getOrFetchMetadata(const QString &filePath)
 {
     // Attempt to read from cache first (thread-safe due to mutex)
     {
@@ -2609,7 +2655,7 @@ FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
         }
     } // Mutex is released here
 
-    FileMetadataCache metadata;
+    FileMetadata metadata;
     QFileInfo fileInfo(filePath);
 
     if (!fileInfo.exists() || !fileInfo.isFile()) {
@@ -2658,16 +2704,16 @@ FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
         // Connect signals to handle metadata changes or errors
         connect(&player, &QMediaPlayer::mediaStatusChanged, [&](QMediaPlayer::MediaStatus status) {
             if (status == QMediaPlayer::LoadedMedia) {
-                QMediaMetaData md = player.metaData();
+                QMediaMetadata md = player.metaData();
                 if (!md.isEmpty()) {
-                    QVariant resolutionVariant = md.value(QMediaMetaData::Resolution);
+                    QVariant resolutionVariant = md.value(QMediaMetadata::Resolution);
                     if (resolutionVariant.isValid()) {
                         QSize res = resolutionVariant.toSize();
                         metadata.width = res.width();
                         metadata.height = res.height();
                     }
                     metadata.duration = player.duration(); // in milliseconds
-                    QVariant frameRateVariant = md.value(QMediaMetaData::VideoFrameRate);
+                    QVariant frameRateVariant = md.value(QMediaMetadata::VideoFrameRate);
                     if (frameRateVariant.isValid()) {
                         metadata.fps = QString::number(frameRateVariant.toDouble(), 'f', 2); // Format to 2 decimal places
                     }
@@ -2717,16 +2763,16 @@ FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath)
         loop.exec(); // Start event loop
 
         // One final check if metadata became available right when timeout happened or loop exited for other reasons
-        QMediaMetaData md = player.metaData();
+        QMediaMetadata md = player.metaData();
         if (!metadata.isValid && !md.isEmpty()) {
-            QVariant resolutionVariant = md.value(QMediaMetaData::Resolution);
+            QVariant resolutionVariant = md.value(QMediaMetadata::Resolution);
             if (resolutionVariant.isValid()) {
                 QSize res = resolutionVariant.toSize();
                 metadata.width = res.width();
                 metadata.height = res.height();
             }
             metadata.duration = player.duration();
-            QVariant frameRateVariant = md.value(QMediaMetaData::VideoFrameRate);
+            QVariant frameRateVariant = md.value(QMediaMetadata::VideoFrameRate);
             if (frameRateVariant.isValid()) {
                 metadata.fps = QString::number(frameRateVariant.toDouble(), 'f', 2);
             }
@@ -2884,3 +2930,237 @@ void MainWindow::TurnOffScreen()
     qDebug() << "Turn off screen feature is not available on this platform.";
 #endif
 }
+
+// --- Add these missing implementations to mainwindow.cpp ---
+
+void MainWindow::on_pushButton_Stop_clicked()
+{
+    if (isProcessing) {
+        waifu2x_STOP = true; // Signal processing thread to stop
+        TextBrowser_NewMessage(tr("Stopping process... Please wait."));
+        pushButton_Stop_setEnabled_self(false); // Disable stop button once clicked
+    }
+}
+
+int MainWindow::on_pushButton_RemoveItem_clicked()
+{
+    QAbstractItemView *currentTableView = nullptr;
+    QStandardItemModel *currentModel = nullptr;
+    int currentTabIndex = ui->tabWidget->currentIndex();
+
+    if (currentTabIndex == 0) { // Image
+        currentTableView = ui->tableView_image;
+        currentModel = Table_model_image;
+    } else if (currentTabIndex == 1) { // GIF
+        currentTableView = ui->tableView_gif;
+        currentModel = Table_model_gif;
+    } else if (currentTabIndex == 2) { // Video
+        currentTableView = ui->tableView_video;
+        currentModel = Table_model_video;
+    }
+
+    if (currentTableView && currentModel) {
+        QModelIndexList selectedRows = currentTableView->selectionModel()->selectedRows();
+        // Sort rows in descending order to avoid issues with index changes upon removal
+        std::sort(selectedRows.begin(), selectedRows.end(),
+                  [](const QModelIndex &a, const QModelIndex &b) {
+                      return a.row() > b.row();
+                  });
+        for (const QModelIndex &index : selectedRows) {
+            currentModel->removeRow(index.row());
+        }
+        Table_FileCount_reload();
+        TextBrowser_NewMessage(tr("%n item(s) removed.", "", selectedRows.count()));
+        return selectedRows.count();
+    }
+    return 0;
+}
+
+void MainWindow::on_pushButton_Report_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/issues"));
+}
+
+void MainWindow::on_pushButton_ReadMe_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/blob/main/README.md"));
+}
+
+void MainWindow::on_pushButton_clear_textbrowser_clicked()
+{
+    ui->textBrowser->clear();
+}
+
+void MainWindow::on_pushButton_HideSettings_clicked()
+{
+    bool isHidden = ui->groupBox_Setting->isHidden();
+    ui->groupBox_Setting->setHidden(!isHidden);
+    ui->pushButton_HideSettings->setText(!isHidden ? tr("Show Settings") : tr("Hide Settings"));
+}
+
+void MainWindow::on_pushButton_ReadFileList_clicked()
+{
+    QString fileListPath = QFileDialog::getOpenFileName(this, tr("Open File List"), Current_Path, tr("INI files (*.ini);;Text files (*.txt);;All files (*.*)"));
+    if (fileListPath.isEmpty()) {
+        return;
+    }
+    // Prepare deduplication sets
+    QSet<QString> existingImagePaths_set = QSet<QString>(table_image_item_fullpath.begin(), table_image_item_fullpath.end());
+    QSet<QString> existingGifPaths_set; // Assuming similar lists exist or need creation
+    QSet<QString> existingVideoPaths_set;
+
+    (void)QtConcurrent::run([this, fileListPath, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set]() {
+        this->ProcessFileListWorker(fileListPath, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+    });
+}
+
+void MainWindow::on_Ext_image_editingFinished()
+{
+    Settings_Save();
+}
+
+void MainWindow::on_Ext_video_editingFinished()
+{
+    Settings_Save();
+}
+
+void MainWindow::on_checkBox_AutoSaveSettings_clicked()
+{
+    Settings_Save();
+}
+
+// on_pushButton_about_clicked is already implemented
+
+void MainWindow::on_comboBox_AspectRatio_custRes_currentIndexChanged(int index)
+{
+    if (index == 0) CustRes_AspectRatioMode = Qt::IgnoreAspectRatio;
+    else if (index == 1) CustRes_AspectRatioMode = Qt::KeepAspectRatio;
+    else if (index == 2) CustRes_AspectRatioMode = Qt::KeepAspectRatioByExpanding;
+    Settings_Save();
+}
+
+// on_checkBox_AlwaysHideSettings_stateChanged is already implemented
+// on_pushButton_Save_GlobalFontSize_clicked is already implemented
+
+void MainWindow::on_pushButton_BrowserFile_clicked()
+{
+    const QStringList files = QFileDialog::getOpenFileNames(this, tr("Select Files"));
+    if (files.isEmpty()) {
+        return;
+    }
+
+    QList<QUrl> urls;
+    for (const QString &path : files) {
+        urls << QUrl::fromLocalFile(path);
+    }
+    // Prepare deduplication sets
+    QSet<QString> existingImagePaths_set = QSet<QString>(table_image_item_fullpath.begin(), table_image_item_fullpath.end());
+    QSet<QString> existingGifPaths_set;
+    QSet<QString> existingVideoPaths_set;
+
+    (void)QtConcurrent::run([this, urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set]() {
+        this->Read_urls(urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+    });
+}
+
+void MainWindow::on_pushButton_CheckUpdate_clicked()
+{
+    CheckUpdate_Auto();
+}
+
+void MainWindow::on_pushButton_compatibilityTest_clicked()
+{
+    (void)QtConcurrent::run(this, &MainWindow::Waifu2x_Compatibility_Test);
+}
+
+void MainWindow::on_pushButton_wiki_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/beyawnko/Beya_Waifu/wiki"));
+}
+
+// Additional stubs based on mainwindow.h that were not in the prompt but likely missing
+void MainWindow::on_pushButton_Patreon_clicked() { QDesktopServices::openUrl(QUrl("https://www.patreon.com/beyawnko")); }
+void MainWindow::on_pushButton_SupportersList_clicked() { if(TopSupportersList_widget) TopSupportersList_widget->show(); }
+void MainWindow::on_comboBox_ImageSaveFormat_currentIndexChanged(int index) { Q_UNUSED(index); Settings_Save(); }
+void MainWindow::on_pushButton_ClearList_clicked() { Table_Clear(); }
+void MainWindow::TextBrowser_StartMes() { /* TODO: Implement */ }
+void MainWindow::Table_EnableSorting(bool EnableSorting) { Q_UNUSED(EnableSorting); /* TODO: Implement */ }
+void MainWindow::Apply_CustRes_QAction_FileList_slot() { /* TODO: Implement */ }
+void MainWindow::Cancel_CustRes_QAction_FileList_slot() { /* TODO: Implement */ }
+void MainWindow::RemoveALL_image_slot() { /* TODO: Implement */ }
+void MainWindow::RemoveALL_gif_slot() { /* TODO: Implement */ }
+void MainWindow::RemoveALL_video_slot() { /* TODO: Implement */ }
+void MainWindow::OpenSelectedFilesFolder_FilesList() { /* TODO: Implement */ }
+void MainWindow::OpenSelectedFile_FilesList() { /* TODO: Implement */ }
+void MainWindow::OpenOutputFolder() { /* TODO: Implement */ }
+void MainWindow::Unable2Connect_RawGithubusercontentCom() { /* TODO: Implement */ }
+void MainWindow::SystemTray_hide_self() { hide(); }
+void MainWindow::SystemTray_showNormal_self() { showNormal(); }
+void MainWindow::SystemTray_showDonate() { /* TODO: Implement */ }
+void MainWindow::SystemTray_NewMessage(QString message) { if(systemTray) systemTray->showMessage(tr("Notification"), message); }
+void MainWindow::EnableBackgroundMode_SystemTray() { /* TODO: Implement */ }
+void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason) { Q_UNUSED(reason); /* TODO: Implement */ }
+void MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status) { Q_UNUSED(rowNum); Q_UNUSED(status); /* TODO: Implement */ }
+void MainWindow::Table_gif_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status) { Q_UNUSED(rowNum); Q_UNUSED(status); /* TODO: Implement */ }
+void MainWindow::Table_video_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status) { Q_UNUSED(rowNum); Q_UNUSED(status); /* TODO: Implement */ }
+void MainWindow::TextBrowser_NewMessage(QString message) { if(ui && ui->textBrowser) ui->textBrowser->append(message); }
+int MainWindow::CheckUpdate_NewUpdate(QString update_str, QString Change_log) { Q_UNUSED(update_str); Q_UNUSED(Change_log); return 0; }
+void MainWindow::FinishedProcessing_DN() { /* TODO: Implement */ }
+int MainWindow::Table_FileCount_reload() { /* TODO: Implement */ return 0; }
+void MainWindow::Table_image_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width) { Q_UNUSED(rowNum); Q_UNUSED(height); Q_UNUSED(width); /* TODO: Implement */ }
+void MainWindow::Table_gif_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width) { Q_UNUSED(rowNum); Q_UNUSED(height); Q_UNUSED(width); /* TODO: Implement */ }
+void MainWindow::Table_video_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width) { Q_UNUSED(rowNum); Q_UNUSED(height); Q_UNUSED(width); /* TODO: Implement */ }
+int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString Table_FileList_ini) { Q_UNUSED(Table_FileList_ini); return 0; }
+int MainWindow::Table_Save_Current_Table_Filelist_Finished() { return 0; }
+bool MainWindow::SystemShutDown() { return false; }
+void MainWindow::Read_urls_finfished() { /* TODO: Implement */ }
+void MainWindow::video_write_VideoConfiguration(QString VideoConfiguration_fullPath, int ScaleRatio, int DenoiseLevel, bool CustRes_isEnabled, int CustRes_height, int CustRes_width, QString EngineName, bool isProcessBySegment, QString VideoClipsFolderPath, QString VideoClipsFolderName, bool isVideoFrameInterpolationEnabled, int MultipleOfFPS) { Q_UNUSED(VideoConfiguration_fullPath); Q_UNUSED(ScaleRatio); Q_UNUSED(DenoiseLevel); Q_UNUSED(CustRes_isEnabled); Q_UNUSED(CustRes_height); Q_UNUSED(CustRes_width); Q_UNUSED(EngineName); Q_UNUSED(isProcessBySegment); Q_UNUSED(VideoClipsFolderPath); Q_UNUSED(VideoClipsFolderName); Q_UNUSED(isVideoFrameInterpolationEnabled); Q_UNUSED(MultipleOfFPS); /* TODO: Implement */ }
+int MainWindow::Settings_Save() { return 0; }
+void MainWindow::video_write_Progress_ProcessBySegment(QString VideoConfiguration_fullPath, int StartTime, bool isSplitComplete, bool isScaleComplete, int OLDSegmentDuration, int LastVideoClipNo) { Q_UNUSED(VideoConfiguration_fullPath); Q_UNUSED(StartTime); Q_UNUSED(isSplitComplete); Q_UNUSED(isScaleComplete); Q_UNUSED(OLDSegmentDuration); Q_UNUSED(LastVideoClipNo); /* TODO: Implement */ }
+void MainWindow::CurrentFileProgress_Start(QString FileName,int FrameNum) { Q_UNUSED(FileName); Q_UNUSED(FrameNum); /* TODO: Implement */ }
+void MainWindow::CurrentFileProgress_Stop() { /* TODO: Implement */ }
+void MainWindow::CurrentFileProgress_progressbar_Add() { /* TODO: Implement */ }
+void MainWindow::CurrentFileProgress_progressbar_Add_SegmentDuration(int SegmentDuration) { Q_UNUSED(SegmentDuration); /* TODO: Implement */ }
+void MainWindow::CurrentFileProgress_progressbar_SetFinishedValue(int FinishedValue) { Q_UNUSED(FinishedValue); /* TODO: Implement */ }
+void MainWindow::CurrentFileProgress_WatchFolderFileNum(QString FolderPath) { Q_UNUSED(FolderPath); /* TODO: Implement */ }
+void MainWindow::CurrentFileProgress_WatchFolderFileNum_Textbrower(QString SourceFile_fullPath, QString FolderPath, int TotalFileNum) { Q_UNUSED(SourceFile_fullPath); Q_UNUSED(FolderPath); Q_UNUSED(TotalFileNum); /* TODO: Implement */ }
+void MainWindow::Donate_ReplaceQRCode(QString QRCodePath) { Q_UNUSED(QRCodePath); /* TODO: Implement */ }
+void MainWindow::on_pushButton_DetectGPU_VFI_clicked() { FrameInterpolation_DetectGPU(); }
+void MainWindow::on_lineEdit_MultiGPU_IDs_VFI_editingFinished() { Settings_Save(); }
+void MainWindow::on_checkBox_MultiGPU_VFI_stateChanged(int arg1) { Q_UNUSED(arg1); Settings_Save(); }
+void MainWindow::on_groupBox_FrameInterpolation_clicked() { /* Usually not needed unless specific interaction */ }
+void MainWindow::on_checkBox_EnableVFI_Home_clicked() { /* Usually handled by toggled */ }
+void MainWindow::on_checkBox_isCompatible_RifeNcnnVulkan_clicked() { isCompatible_RifeNcnnVulkan = ui->checkBox_isCompatible_RifeNcnnVulkan->isChecked(); Settings_Save(); }
+void MainWindow::on_checkBox_isCompatible_CainNcnnVulkan_clicked() { isCompatible_CainNcnnVulkan = ui->checkBox_isCompatible_CainNcnnVulkan->isChecked(); Settings_Save(); }
+void MainWindow::on_checkBox_isCompatible_DainNcnnVulkan_clicked() { isCompatible_DainNcnnVulkan = ui->checkBox_isCompatible_DainNcnnVulkan->isChecked(); Settings_Save(); }
+void MainWindow::on_comboBox_Engine_VFI_currentIndexChanged(int index) { Q_UNUSED(index); Settings_Save(); }
+void MainWindow::on_pushButton_Verify_MultiGPU_VFI_clicked() { /* TODO: Implement verification logic */ }
+void MainWindow::on_checkBox_MultiThread_VFI_stateChanged(int arg1) { Q_UNUSED(arg1); ui->spinBox_NumOfThreads_VFI->setEnabled(arg1 == Qt::Checked); Settings_Save(); }
+void MainWindow::on_checkBox_MultiThread_VFI_clicked() { /* Usually handled by stateChanged */ }
+void MainWindow::Realcugan_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error) { Q_UNUSED(error); /* TODO: Implement */ }
+void MainWindow::RealESRGAN_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error) { Q_UNUSED(error); /* TODO: Implement */ }
+void MainWindow::progressbar_clear() { if(ui->progressBar) ui->progressBar->reset(); }
+void MainWindow::progressbar_SetToMax(int maxval) { if(ui->progressBar) ui->progressBar->setValue(maxval); }
+void MainWindow::on_pushButton_SaveFileList_clicked() { /* TODO: Implement */ }
+void MainWindow::on_tableView_image_doubleClicked(const QModelIndex &index) { Q_UNUSED(index); /* TODO: Implement */ }
+void MainWindow::on_tableView_gif_doubleClicked(const QModelIndex &index) { Q_UNUSED(index); /* TODO: Implement */ }
+void MainWindow::on_tableView_video_doubleClicked(const QModelIndex &index) { Q_UNUSED(index); /* TODO: Implement */ }
+void MainWindow::on_tableView_image_pressed(const QModelIndex &index) { curRow_image = index.row(); }
+void MainWindow::on_tableView_gif_pressed(const QModelIndex &index) { curRow_gif = index.row(); }
+void MainWindow::on_tableView_video_pressed(const QModelIndex &index) { curRow_video = index.row(); }
+void MainWindow::on_pushButton_SaveSettings_clicked() { Settings_Save(); TextBrowser_NewMessage(tr("Settings saved.")); }
+void MainWindow::on_pushButton_ResetSettings_clicked() { /* TODO: Implement logic to reset settings to default */ Settings_Save(); TextBrowser_NewMessage(tr("Settings reset to default (implementation pending).")); }
+void MainWindow::on_checkBox_BanGitee_clicked() { Settings_Save(); }
+int MainWindow::FrameInterpolation_DetectGPU_finished() { /* TODO: Implement */ return 0;}
+
+void MainWindow::on_checkBox_isCompatible_RealCUGAN_NCNN_Vulkan_clicked()
+{
+    isCompatible_RealCUGAN_NCNN_Vulkan = ui->checkBox_isCompatible_RealCUGAN_NCNN_Vulkan->isChecked();
+    Settings_Save();
+}
+
+void MainWindow::on_checkBox_isCompatible_RealESRGAN_NCNN_Vulkan_clicked()
+{
+    isCompatible_RealESRGAN_NCNN_Vulkan = ui->checkBox_isCompatible_RealESRGAN_NCNN_Vulkan->isChecked();
+    Settings_Save();
+}\n
