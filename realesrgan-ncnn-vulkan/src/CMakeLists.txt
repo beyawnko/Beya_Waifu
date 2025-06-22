@@ -135,7 +135,7 @@ endif()
 if(NOT USE_SYSTEM_NCNN)
     # build ncnn library
     if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ncnn/CMakeLists.txt")
-        message(FATAL_ERROR "The submodules were not downloaded! Please update submodules with \"git submodule update --init --recursive\" and try again.")
+        message(WARNING "NCNN submodule not found at ${CMAKE_CURRENT_SOURCE_DIR}/ncnn/CMakeLists.txt. Continuing, but build may fail if system NCNN is not found or not used.")
     endif()
 
     option(NCNN_INSTALL_SDK "" OFF)
@@ -243,7 +243,7 @@ endif()
 if(NOT USE_SYSTEM_WEBP)
     # build libwebp library
     if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/libwebp/CMakeLists.txt")
-        message(FATAL_ERROR "The submodules were not downloaded! Please update submodules with \"git submodule update --init --recursive\" and try again.")
+        message(WARNING "libwebp submodule not found at ${CMAKE_CURRENT_SOURCE_DIR}/libwebp/CMakeLists.txt. Continuing, but build may fail if system libwebp is not found or not used.")
     endif()
 
     option(WEBP_ENABLE_SIMD "" ON)
