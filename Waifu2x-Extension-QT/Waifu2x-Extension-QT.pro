@@ -69,7 +69,8 @@ SOURCES += \
     GpuManager.cpp \
     UiController.cpp \
     Logger.cpp \
-    realesrganprocessor.cpp
+    realesrganprocessor.cpp \
+    srmdprocessor.cpp
 
 HEADERS += \
     Logger.h \
@@ -86,7 +87,9 @@ HEADERS += \
     RealesrganJobManager.h \
     RealCuganProcessor.h \
     realesrgan_settings.h \
-    realesrganprocessor.h
+    realesrganprocessor.h \
+    srmd_settings.h \
+    srmdprocessor.h
 
 FORMS += \
     mainwindow.ui \

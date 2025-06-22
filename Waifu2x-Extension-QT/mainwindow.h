@@ -57,6 +57,7 @@
 #include "LiquidGlassWidget.h"
 #include "anime4kprocessor.h"
 #include "realesrganprocessor.h"
+#include "srmdprocessor.h"
 
 
 #ifndef Q_DECLARE_METATYPE
@@ -258,16 +259,6 @@ public:
     QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_Waifu2xConverter;
     void AddGPU_MultiGPU_Waifu2xConverter(QString GPUID);
 
-
-    int SRMD_NCNN_Vulkan_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
-    int SRMD_NCNN_Vulkan_GIF(int rowNum);
-    int SRMD_NCNN_Vulkan_Video(int rowNum);
-    int SRMD_NCNN_Vulkan_Video_BySegment(int rowNum);
-    QString SrmdNcnnVulkan_ReadSettings();
-    QMap<QString,int> Calculate_ScaleRatio_SrmdNcnnVulkan(int ScaleRatio);
-    QString SrmdNcnnVulkan_ReadSettings_Video_GIF(int ThreadNum);
-    QString SRMD_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_SrmdNcnnVulkan;
 
     int Waifu2x_Caffe_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int Waifu2x_Caffe_GIF(int rowNum);
@@ -879,6 +870,7 @@ private:
     LiquidGlassWidget *glassWidget {nullptr};
     bool glassEnabled {false};
     Anime4KProcessor *m_anime4kProcessor;
+    SrmdProcessor *m_srmdProcessor;
 
     Ui::MainWindow *ui;
 };
