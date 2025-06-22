@@ -69,7 +69,9 @@ SOURCES += \
     GpuManager.cpp \
     UiController.cpp \
     Logger.cpp \
-    realesrganprocessor.cpp
+    realesrganprocessor.cpp \
+    srmdprocessor.cpp \
+    waifu2xconverterprocessor.cpp
 
 HEADERS += \
     Logger.h \
@@ -86,7 +88,11 @@ HEADERS += \
     RealesrganJobManager.h \
     RealCuganProcessor.h \
     realesrgan_settings.h \
-    realesrganprocessor.h
+    realesrganprocessor.h \
+    srmd_settings.h \
+    srmdprocessor.h \
+    waifu2xconverter_settings.h \
+    waifu2xconverterprocessor.h
 
 FORMS += \
     mainwindow.ui \

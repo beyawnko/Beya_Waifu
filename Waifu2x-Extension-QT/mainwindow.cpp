@@ -105,7 +105,19 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     connect(m_realEsrganProcessor, &RealEsrganProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
     connect(m_realEsrganProcessor, &RealEsrganProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString); // Assuming image table for now, adapt if engine supports other types
     connect(m_realEsrganProcessor, &RealEsrganProcessor::fileProgress, this, &MainWindow::onFileProgress); // Assuming onFileProgress is a suitable slot
+
+    m_srmdProcessor = new SrmdProcessor(this);
+    connect(m_srmdProcessor, &SrmdProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
+    connect(m_srmdProcessor, &SrmdProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString);
+    connect(m_srmdProcessor, &SrmdProcessor::fileProgress, this, &MainWindow::onFileProgress);
+    connect(m_srmdProcessor, &SrmdProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
     connect(m_realEsrganProcessor, &RealEsrganProcessor::processingFinished, this, &MainWindow::onProcessingFinished); // Assuming onProcessingFinished is suitable
+
+    m_srmdProcessor = new SrmdProcessor(this);
+    connect(m_srmdProcessor, &SrmdProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
+    connect(m_srmdProcessor, &SrmdProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString);
+    connect(m_srmdProcessor, &SrmdProcessor::fileProgress, this, &MainWindow::onFileProgress);
+    connect(m_srmdProcessor, &SrmdProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
 
     // Initialize RealCUGAN pointers to ensure safe use when the
     // dedicated widgets are absent. Fallback to Frame Interpolation
