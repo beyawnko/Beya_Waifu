@@ -278,7 +278,6 @@ public:
     void Realcugan_NCNN_Vulkan_Image(int rowNum, bool experimental, bool ReProcess_MissingAlphaChannel);
     void Realcugan_NCNN_Vulkan_GIF(int rowNum);
     void Realcugan_NCNN_Vulkan_Video(int rowNum);
-    void Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum);
     void Realcugan_NCNN_Vulkan_ReadSettings();
     void Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
     bool APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
