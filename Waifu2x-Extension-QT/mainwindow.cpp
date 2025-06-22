@@ -248,6 +248,50 @@ void MainWindow::toggleLiquidGlass(bool enabled)
     }
 }
 
+int MainWindow::Waifu2x_Caffe_Image(int rowNum, bool /*ReProcess_MissingAlphaChannel*/)
+{
+    /*******************************************************
+    *        Waifu2x-Caffe Image (Refactored Wrapper)
+    *******************************************************/
+
+    // Lazy-initialize the processor to avoid modifying the constructor
+    if (!m_caffeProcessor) {
+        m_caffeProcessor = new Waifu2xCaffeProcessor(this);
+        connect(m_caffeProcessor, &Waifu2xCaffeProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
+        connect(m_caffeProcessor, &Waifu2xCaffeProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString);
+        connect(m_caffeProcessor, &Waifu2xCaffeProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
+    }
+
+    QString sourceFile = Table_model_image->item(rowNum, 2)->text();
+    QString destFile = Generate_Output_Path(sourceFile, "w2x-caffe");
+
+    Waifu2xCaffeSettings settings;
+    settings.programPath = Current_Path + "/waifu2x-caffe/waifu2x-caffe.exe";
+    settings.processMode = ui->comboBox_ProcessMode_Waifu2xCaffe->currentText();
+    settings.batchSize = ui->spinBox_BatchSize_Waifu2xCaffe->value();
+    settings.splitSize = ui->spinBox_SplitSize_Waifu2xCaffe->value();
+    settings.ttaEnabled = ui->checkBox_TTA_Waifu2xCaffe->isChecked();
+    settings.gpuId = ui->spinBox_GPUID_Waifu2xCaffe->value();
+
+    // Determine model path based on UI
+    QString imageStyle = ui->comboBox_ImageStyle_Waifu2xCaffe->currentText();
+    if (imageStyle == "3D Real-life") {
+        settings.model = Current_Path + "/waifu2x-caffe/models/" + ui->comboBox_Model_3D_Waifu2xCaffe->currentText();
+    } else { // 2D Anime
+        settings.model = Current_Path + "/waifu2x-caffe/models/" + ui->comboBox_Model_2D_Waifu2xCaffe->currentText();
+    }
+
+    // Handle Multi-GPU
+    settings.multiGpuEnabled = ui->checkBox_EnableMultiGPU_Waifu2xCaffe->isChecked();
+    if (settings.multiGpuEnabled) {
+        settings.multiGpuConfig = ui->lineEdit_MultiGPUInfo_Waifu2xCaffe->text();
+    }
+
+    m_caffeProcessor->processImage(rowNum, sourceFile, destFile, settings);
+
+    return 0; // The async processor handles the result
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;

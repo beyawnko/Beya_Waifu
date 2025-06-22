@@ -71,7 +71,8 @@ SOURCES += \
     Logger.cpp \
     realesrganprocessor.cpp \
     srmdprocessor.cpp \
-    waifu2xconverterprocessor.cpp
+    waifu2xconverterprocessor.cpp \
+    waifu2xcaffeprocessor.cpp
 
 HEADERS += \
     Logger.h \
@@ -92,7 +93,9 @@ HEADERS += \
     srmd_settings.h \
     srmdprocessor.h \
     waifu2xconverter_settings.h \
-    waifu2xconverterprocessor.h
+    waifu2xconverterprocessor.h \
+    waifu2xcaffe_settings.h \
+    waifu2xcaffeprocessor.h
 
 FORMS += \
     mainwindow.ui \

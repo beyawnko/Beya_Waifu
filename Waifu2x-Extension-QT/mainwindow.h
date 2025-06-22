@@ -59,6 +59,7 @@
 #include "realesrganprocessor.h"
 #include "srmdprocessor.h"
 #include "waifu2xconverterprocessor.h"
+#include "waifu2xcaffeprocessor.h" // Add this with the other processor includes
 
 
 #ifndef Q_DECLARE_METATYPE
@@ -113,6 +114,7 @@ QT_END_NAMESPACE
 class RealCuganProcessor;
 class VideoProcessor;
 class RealEsrganProcessor; // Forward declaration
+class Waifu2xCaffeProcessor; // Forward-declare
 
 class MainWindow : public QMainWindow
 {
@@ -246,17 +248,6 @@ public:
 
     // Anime4K related members are handled by Anime4KProcessor
 
-    int Waifu2x_Caffe_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
-    int Waifu2x_Caffe_GIF(int rowNum);
-    int Waifu2x_Caffe_GIF_scale(QMap<QString, QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed);
-    int Waifu2x_Caffe_Video(int rowNum);
-    int Waifu2x_Caffe_Video_BySegment(int rowNum);
-    int Waifu2x_Caffe_Video_scale(QMap<QString,QString> Sub_Thread_info, int *Sub_video_ThreadNumRunning, bool *Frame_failed);
-    QString Waifu2x_Caffe_ReadSettings();
-    bool isWaifu2xCaffeEnabled();
-    void DeleteErrorLog_Waifu2xCaffe();
-    QString Waifu2xCaffe_PreLoad_Settings_Str = "";
-
     int SRMD_CUDA_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int SRMD_CUDA_GIF(int rowNum);
     int SRMD_CUDA_Video(int rowNum);
@@ -319,10 +310,6 @@ public:
     int SRMD_DetectGPU();
     QStringList Available_GPUID_srmd;
     QString GPU_ID_STR_SRMD="";
-    int GPU_ID_Waifu2xCaffe_GetGPUInfo = 0;
-    QString Waifu2xCaffe_GetGPUInfo();
-    QMutex GetGPUInfo_QMutex_Waifu2xCaffe;
-    int Get_NumOfGPU_W2xCaffe();
 
     bool Image_Gif_AutoSkip_CustRes(int rowNum,bool isGif);
     QMap<QString,int> Image_Gif_Read_Resolution(QString SourceFileFullPath);
@@ -858,6 +845,7 @@ private:
     Anime4KProcessor *m_anime4kProcessor;
     SrmdProcessor *m_srmdProcessor;
     Waifu2xConverterProcessor *m_converterProcessor = nullptr;
+    Waifu2xCaffeProcessor *m_caffeProcessor = nullptr; // Add this member pointer, initialized to nullptr
 
     Ui::MainWindow *ui;
 };
