@@ -56,6 +56,7 @@
 #include "UiController.h"
 #include "LiquidGlassWidget.h"
 #include "anime4kprocessor.h"
+#include "realesrganprocessor.h"
 
 
 #ifndef Q_DECLARE_METATYPE
@@ -109,6 +110,7 @@ QT_END_NAMESPACE
 
 class RealCuganProcessor;
 class VideoProcessor;
+class RealEsrganProcessor; // Forward declaration
 
 class MainWindow : public QMainWindow
 {
@@ -128,6 +130,7 @@ public:
     //======================= Core Components =======================
     RealCuganProcessor *realCuganProcessor;
     VideoProcessor *videoProcessor;
+    RealEsrganProcessor *m_realEsrganProcessor;
     FileManager fileManager;
     ProcessRunner processRunner;
     GpuManager gpuManager;
@@ -239,20 +242,7 @@ public:
     QStringList Available_GPUID_Waifu2xNcnnVulkan;
     QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan;
 
-    int Realsr_NCNN_Vulkan_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
-    int Realsr_NCNN_Vulkan_GIF(int rowNum);
-    int Realsr_NCNN_Vulkan_Video(int rowNum);
-    int Realsr_NCNN_Vulkan_Video_BySegment(int rowNum);
-    QString Realsr_NCNN_Vulkan_ReadSettings();
-    int Calculate_Temporary_ScaleRatio_RealsrNCNNVulkan(int ScaleRatio);
-    QString Realsr_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
-    QString Realesrgan_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    QStringList Available_GPUID_Realsr_ncnn_vulkan;
-    int GPU_ID_RealesrganNcnnVulkan_MultiGPU = 0;
-    QMap<QString,QString> RealesrganNcnnVulkan_MultiGPU();
-    void AddGPU_MultiGPU_RealesrganNcnnVulkan(QString GPUID);
-
-    // Removed Anime4k_Image, Anime4k_GIF, Anime4k_GIF_scale, Anime4k_Video, Anime4k_Video_BySegment, Anime4k_Video_scale, Anime4k_ReadSettings
+    // Anime4K related members are handled by Anime4KProcessor
 
     int Waifu2x_Converter_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int Waifu2x_Converter_GIF(int rowNum);
@@ -324,33 +314,6 @@ public:
     void Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString &tempPathBase, int maxPassIndex, bool keepFinal = false, const QString& finalFile = "");
     bool Realcugan_ProcessSingleFileIteratively(const QString &inputFile, const QString &outputFile, int targetScale, int originalWidth, int originalHeight, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat, bool experimental, int rowNumForStatusUpdate = -1);
 
-    QString m_realesrgan_ModelName;
-    int m_realesrgan_ModelNativeScale;
-    int m_realesrgan_TileSize;
-    bool m_realesrgan_TTA;
-    QString m_realesrgan_GPUID;
-    QList<QMap<QString, QString>> m_realesrgan_gpuJobConfig_temp;
-    QList<QProcess*> ProcList_RealESRGAN;
-    QStringList Available_GPUID_RealESRGAN_ncnn_vulkan;
-    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_RealesrganNcnnVulkan;
-    QMutex MultiGPU_QMutex_RealesrganNcnnVulkan;
-    void RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool ReProcess_MissingAlphaChannel);
-    void RealESRGAN_NCNN_Vulkan_GIF(int rowNum);
-    void RealESRGAN_NCNN_Vulkan_Video(int rowNum);
-    void RealESRGAN_NCNN_Vulkan_Video_BySegment(int rowNum);
-    void RealESRGAN_NCNN_Vulkan_ReadSettings();
-    void RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
-    bool APNG_RealESRGANNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
-    void RealESRGAN_ncnn_vulkan_DetectGPU();
-    void RealESRGAN_NCNN_Vulkan_PreLoad_Settings();
-    QStringList RealESRGAN_NCNN_Vulkan_PrepareArguments(const QString &inputFile, const QString &outputFile, int currentPassScale, const QString &modelName, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat);
-    bool RealESRGAN_ProcessSingleFileIteratively(const QString &inputFile, const QString &outputFile, int targetScale, int modelNativeScale, const QString &modelName, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat, int rowNumForStatusUpdate = -1);
-    QList<int> CalculateRealESRGANScaleSequence(int targetScale, int modelNativeScale);
-    bool RealESRGAN_SetupTempDir(const QString &inputFile, const QString &outputFile, QDir &tempDir, QString &tempPathBase);
-    void RealESRGAN_CleanupTempDir(const QDir &tempDir);
-    void RealESRGAN_NCNN_Vulkan_CleanupTempFiles(const QString& p1, int p2, bool p3, const QString& p4);
-    int GPU_ID_RealesrganNcnnVulkan_MultiGPU_CycleCounter;
-
     QString Rife_NCNN_Vulkan_PreLoad_Settings_Str = "";
     QString Cain_NCNN_Vulkan_PreLoad_Settings_Str = "";
     QString Dain_NCNN_Vulkan_PreLoad_Settings_Str = "";
@@ -379,7 +342,6 @@ public:
     int SRMD_DetectGPU();
     QStringList Available_GPUID_srmd;
     QString GPU_ID_STR_SRMD="";
-    int Realsr_ncnn_vulkan_DetectGPU();
     int GPU_ID_Waifu2xCaffe_GetGPUInfo = 0;
     QString Waifu2xCaffe_GetGPUInfo();
     QMutex GetGPUInfo_QMutex_Waifu2xCaffe;
@@ -664,10 +626,8 @@ public slots:
     void TimeSlot();
     int Waifu2x_Compatibility_Test_finished();
     int Waifu2x_DetectGPU_finished();
-    int Realsr_ncnn_vulkan_DetectGPU_finished();
     int FrameInterpolation_DetectGPU_finished();
     int Realcugan_NCNN_Vulkan_DetectGPU_finished();
-    int RealESRGAN_ncnn_vulkan_DetectGPU_finished();
     int CheckUpdate_NewUpdate(QString update_str, QString Change_log);
     void FinishedProcessing_DN();
     int Table_FileCount_reload();
@@ -806,26 +766,21 @@ public slots:
     void Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError();
     void Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error);
     void Realcugan_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error);
-    void on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked();
-    void on_comboBox_Model_RealsrNCNNVulkan_currentIndexChanged(int index);
-    void on_pushButton_Add_TileSize_RealsrNCNNVulkan_clicked();
-    void on_pushButton_Minus_TileSize_RealsrNCNNVulkan_clicked();
-    void on_checkBox_MultiGPU_RealesrganNcnnVulkan_stateChanged(int arg1);
-    void on_comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan_currentIndexChanged(int index);
-    void on_checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan_clicked();
-    void on_spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan_valueChanged(int arg1);
-    void on_pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan_clicked();
-    void RealESRGAN_NCNN_Vulkan_finished(int exitCode, QProcess::ExitStatus exitStatus);
-    void RealESRGAN_NCNN_Vulkan_errorOccurred(QProcess::ProcessError error);
-    void RealESRGAN_NCNN_Vulkan_Iterative_finished(int exitCode, QProcess::ExitStatus exitStatus);
-    void RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardOutput();
-    void RealESRGAN_NCNN_Vulkan_Iterative_readyReadStandardError();
-    void RealESRGAN_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error);
-    void RealESRGAN_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error);
-    void onRealESRGANProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void onRealESRGANProcessError(QProcess::ProcessError error);
-    void onRealESRGANProcessStdOut();
-    void onRealESRGANProcessStdErr();
+    // void on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked(); // Slot for old UI element, might be removed later if UI is also changing
+    // void on_comboBox_Model_RealsrNCNNVulkan_currentIndexChanged(int index); // Slot for old UI element
+    // void on_pushButton_Add_TileSize_RealsrNCNNVulkan_clicked(); // Slot for old UI element
+    // void on_pushButton_Minus_TileSize_RealsrNCNNVulkan_clicked(); // Slot for old UI element
+    // void on_checkBox_MultiGPU_RealesrganNcnnVulkan_stateChanged(int arg1); // Slot for old UI element
+    // void on_comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan_currentIndexChanged(int index); // Slot for old UI element
+    // void on_checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan_clicked(); // Slot for old UI element
+    // void on_spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan_valueChanged(int arg1); // Slot for old UI element
+    // void on_pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan_clicked(); // Slot for old UI element
+
+    // Slots for the new RealEsrganProcessor will be connected in mainwindow.cpp
+    // No specific individual slots like RealESRGAN_NCNN_Vulkan_Iterative_finished needed here anymore for RealESRGAN
+    // as the processor handles its own QProcess signals internally.
+    // The generic onProcessingFinished, onFileProgress, etc. will handle updates from the new processor.
+
     void progressbar_clear();
     void progressbar_SetToMax(int maxval);
     void on_pushButton_SaveFileList_clicked();
@@ -841,6 +796,10 @@ public slots:
 
     // Slots for VFI synchronization
     void on_groupBox_FrameInterpolation_toggled(bool checked);
+
+    // Slots for generic processor signals
+    void onFileProgress(int rowNum, int percent);
+    void onProcessingFinished(int rowNum, bool success);
 
 private slots:
     void TextBrowser_StartMes(); // Single declaration in private slots
@@ -864,9 +823,7 @@ signals:
     void Send_Waifu2x_Compatibility_Test_finished();
     void Send_Waifu2x_DetectGPU_finished();
     void Send_FinishedProcessing_DN();
-    void Send_Realsr_ncnn_vulkan_DetectGPU_finished();
     void Send_FrameInterpolation_DetectGPU_finished();
-    void Send_Realesrgan_ncnn_vulkan_DetectGPU_finished();
     void Send_CheckUpdate_NewUpdate(QString, QString);
     void Send_Table_FileCount_reload();
     // Keep old signals for Table_..._insert if they are used by other connections, though Batch_Table_Update is preferred

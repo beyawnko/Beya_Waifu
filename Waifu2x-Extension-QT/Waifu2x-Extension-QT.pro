@@ -68,7 +68,8 @@ SOURCES += \
     LiquidGlassWidget.cpp \
     GpuManager.cpp \
     UiController.cpp \
-    Logger.cpp
+    Logger.cpp \
+    realesrganprocessor.cpp
 
 HEADERS += \
     Logger.h \
@@ -84,6 +85,8 @@ HEADERS += \
     RealcuganJobManager.h \
     RealesrganJobManager.h \
     RealCuganProcessor.h \
+    realesrgan_settings.h \
+    realesrganprocessor.h
 
 FORMS += \
     mainwindow.ui \
