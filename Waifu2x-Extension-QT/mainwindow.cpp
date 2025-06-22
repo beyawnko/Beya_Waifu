@@ -278,6 +278,46 @@ int MainWindow::Waifu2x_Caffe_Image(int rowNum, bool /*ReProcess_MissingAlphaCha
     return 0; // The async processor handles the result
 }
 
+int MainWindow::Waifu2x_Converter_Image(int rowNum, bool /*ReProcess_MissingAlphaChannel*/)
+{
+    /*******************************************************
+    *      Waifu2x-Converter Image (Refactored Wrapper)
+    *******************************************************/
+
+    // Lazy-initialize the processor to avoid modifying the constructor
+    if (!m_converterProcessor) {
+        m_converterProcessor = new Waifu2xConverterProcessor(this);
+        connect(m_converterProcessor, &Waifu2xConverterProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
+        connect(m_converterProcessor, &Waifu2xConverterProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString);
+        connect(m_converterProcessor, &Waifu2xConverterProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
+    }
+
+    QString sourceFile = Table_model_image->item(rowNum, 2)->text();
+    QString destFile = Generate_Output_Path(sourceFile, "w2x-conv");
+
+    Waifu2xConverterSettings settings;
+    settings.programPath = Current_Path + "/waifu2x-converter/waifu2x-converter.exe";
+    settings.targetProcessor = ui->comboBox_TargetProcessor_converter->currentText();
+    settings.scaleRatio = ui->doubleSpinBox_ScaleRatio_image->value();
+    settings.denoiseLevel = ui->spinBox_DenoiseLevel_image->value();
+    settings.blockSize = ui->spinBox_BlockSize_converter->value();
+    settings.ttaEnabled = ui->checkBox_TTA_converter->isChecked();
+    settings.disableGpu = ui->checkBox_DisableGPU_converter->isChecked();
+    settings.forceOpenCl = ui->checkBox_ForceOpenCL_converter->isChecked();
+
+    // Handle Multi-Processor
+    settings.multiProcessorEnabled = ui->checkBox_MultiGPU_Waifu2xConverter->isChecked();
+    if (settings.multiProcessorEnabled) {
+        // Logic to build the multi-processor string would go here
+        // For now, assuming it's read from a line edit if available, or constructed.
+        // settings.multiProcessorConfig = build_converter_multi_processor_string();
+    }
+
+    m_converterProcessor->processImage(rowNum, sourceFile, destFile, settings);
+
+    return 0; // The async processor now handles the result
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
