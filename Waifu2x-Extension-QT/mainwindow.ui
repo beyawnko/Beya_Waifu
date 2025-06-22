@@ -39,7 +39,7 @@
     <normaloff>:/new/prefix1/icon/icon_main.png</normaloff>:/new/prefix1/icon/icon_main.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true" />
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
@@ -49,7 +49,7 @@
     </sizepolicy>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true" />
    </property>
    <layout class="QGridLayout" name="gridLayout_40">
     <property name="leftMargin">
@@ -67,7 +67,7 @@
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter_4">
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true" />
       </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -125,7 +125,7 @@ height:35
          <bool>true</bool>
         </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true" />
         </property>
         <attribute name="icon">
          <iconset resource="icon.qrc">
@@ -274,7 +274,7 @@ height:35
             <enum>QFrame::NoFrame</enum>
            </property>
            <property name="text">
-            <string/>
+            <string />
            </property>
            <property name="scaledContents">
             <bool>false</bool>
@@ -333,7 +333,7 @@ height:35
             </size>
            </property>
            <property name="title">
-            <string/>
+            <string />
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_Progress">
             <property name="spacing">
@@ -483,7 +483,7 @@ height:35
                </size>
               </property>
               <property name="toolTip">
-               <string/>
+               <string />
               </property>
               <property name="text">
                <string>Start</string>
@@ -1033,10 +1033,10 @@ selection-background-color: rgb(178, 58, 238);
                   </sizepolicy>
                  </property>
                  <property name="toolTip">
-                  <string/>
+                  <string />
                  </property>
                  <property name="styleSheet">
-                  <string notr="true"/>
+                  <string notr="true" />
                  </property>
                  <property name="frameShape">
                   <enum>QFrame::Box</enum>
@@ -1146,7 +1146,7 @@ padding:0px;
 }</string>
                   </property>
                   <property name="text">
-                   <string/>
+                   <string />
                   </property>
                   <property name="iconSize">
                    <size>
@@ -1220,7 +1220,7 @@ padding:0px;
 }</string>
                   </property>
                   <property name="text">
-                   <string/>
+                   <string />
                   </property>
                  </widget>
                 </item>
@@ -1279,7 +1279,7 @@ padding:0px;
 }</string>
                   </property>
                   <property name="text">
-                   <string/>
+                   <string />
                   </property>
                  </widget>
                 </item>
@@ -1327,7 +1327,7 @@ padding:0px;
 }</string>
                   </property>
                   <property name="text">
-                   <string/>
+                   <string />
                   </property>
                  </widget>
                 </item>
@@ -1388,7 +1388,7 @@ padding:0px;
 }</string>
                   </property>
                   <property name="text">
-                   <string/>
+                   <string />
                   </property>
                  </widget>
                 </item>
@@ -1436,7 +1436,7 @@ padding:0px;
 }</string>
                   </property>
                   <property name="text">
-                   <string/>
+                   <string />
                   </property>
                   <property name="iconSize">
                    <size>
@@ -1500,7 +1500,7 @@ padding:0px;
 }</string>
                   </property>
                   <property name="text">
-                   <string notr="true"/>
+                   <string notr="true" />
                   </property>
                  </widget>
                 </item>
@@ -1552,7 +1552,7 @@ padding:0px;
            </size>
           </property>
           <property name="title">
-           <string/>
+           <string />
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_RightPane">
            <property name="spacing">
@@ -1584,7 +1584,7 @@ padding:0px;
                 </sizepolicy>
                </property>
                <property name="toolTip">
-                <string/>
+                <string />
                </property>
                <property name="text">
                 <string>Hide settings</string>
@@ -1634,7 +1634,7 @@ padding:0px;
               </size>
              </property>
              <property name="toolTip">
-              <string/>
+              <string />
              </property>
              <property name="title">
               <string>Custom resolution</string>
@@ -1878,7 +1878,7 @@ is larger than the specified resolution.</string>
               </size>
              </property>
              <property name="title">
-              <string/>
+              <string />
              </property>
              <layout class="QGridLayout" name="gridLayout_26">
               <property name="leftMargin">
@@ -2389,7 +2389,7 @@ be processed again when the processing process is started again.</string>
 [Right click here to show more options]</string>
                 </property>
                 <property name="text">
-                 <string notr="true"/>
+                 <string notr="true" />
                 </property>
                 <property name="clearButtonEnabled">
                  <bool>true</bool>
@@ -2520,7 +2520,7 @@ after processing all files.</string>
                  </size>
                 </property>
                 <property name="title">
-                 <string notr="true"/>
+                 <string notr="true" />
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -3015,7 +3015,7 @@ then the result video will be 120 fps.</string>
             </size>
            </property>
            <property name="toolTip">
-            <string/>
+            <string />
            </property>
            <property name="title">
             <string>Number of threads</string>
@@ -3094,13 +3094,13 @@ then the result video will be 120 fps.</string>
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string/>
+                  <string />
                  </property>
                  <property name="statusTip">
-                  <string/>
+                  <string />
                  </property>
                  <property name="whatsThis">
-                  <string/>
+                  <string />
                  </property>
                  <property name="text">
                   <string>Image:</string>
@@ -3129,7 +3129,7 @@ then the result video will be 120 fps.</string>
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string/>
+                  <string />
                  </property>
                  <property name="text">
                   <string>Video:</string>
@@ -3220,7 +3220,7 @@ and Waifu2x-converter.(Only when processing GIF and Video)</string>
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string/>
+                  <string />
                  </property>
                  <property name="text">
                   <string>Animated Image:</string>
@@ -3700,7 +3700,7 @@ SRMD-CUDA           [Speed:★★☆ Image quality:★★★] [2D Anime][3D Real
             <item row="3" column="0" colspan="4">
              <widget class="QTabWidget" name="tabWidget_Engines">
               <property name="toolTip">
-               <string/>
+               <string />
               </property>
               <property name="tabPosition">
                <enum>QTabWidget::North</enum>
@@ -4034,7 +4034,7 @@ Smaller Tile size means waifu2x will use less GPU memory and run slower.</string
                      <item row="0" column="1">
                       <widget class="QComboBox" name="comboBox_GPUIDs_MultiGPU_Waifu2xNCNNVulkan">
                        <property name="currentText">
-                        <string notr="true"/>
+                        <string notr="true" />
                        </property>
                       </widget>
                      </item>
@@ -4704,7 +4704,7 @@ Smaller Block size means waifu2x will use less GPU memory and run slower.</strin
                      <item row="0" column="1">
                       <widget class="QComboBox" name="comboBox_GPUIDs_MultiGPU_Waifu2xConverter">
                        <property name="currentText">
-                        <string notr="true"/>
+                        <string notr="true" />
                        </property>
                       </widget>
                      </item>
@@ -5052,9 +5052,6 @@ the number of threads must = the number of GPUs.</string>
                        <height>35</height>
                       </size>
                      </property>
-                     <dynamicProperty name="cssClass">
-                      <string>green</string>
-                     </dynamicProperty>
                      <property name="text">
                       <string>List GPUs</string>
                      </property>
@@ -5131,9 +5128,6 @@ Only NVIDIA products support CUDA.</string>
                      <property name="toolTip">
                       <string>Verify your GPUs configuration.</string>
                      </property>
-                     <dynamicProperty name="cssClass">
-                      <string>purple</string>
-                     </dynamicProperty>
                      <property name="text">
                       <string>Verify</string>
                      </property>
@@ -5389,7 +5383,7 @@ utilize the capabilities of your PC.
                      </size>
                     </property>
                     <property name="toolTip">
-                     <string/>
+                     <string />
                     </property>
                     <property name="title">
                      <string>Pre-processing</string>
@@ -5485,7 +5479,7 @@ utilize the capabilities of your PC.
                   <item>
                    <widget class="QGroupBox" name="groupBox_PostProcessing_Anime4k">
                     <property name="toolTip">
-                     <string/>
+                     <string />
                     </property>
                     <property name="title">
                      <string>Post-processing</string>
@@ -5693,7 +5687,7 @@ utilize the capabilities of your PC.
                      <item row="0" column="1">
                       <widget class="QComboBox" name="comboBox_GPUIDs_MultiGPU_SrmdNCNNVulkan">
                        <property name="currentText">
-                        <string notr="true"/>
+                        <string notr="true" />
                        </property>
                       </widget>
                      </item>
@@ -6969,9 +6963,6 @@ Smaller tile size means Realsr will use less GPU memory and run slower.</string>
                        <property name="toolTip">
                         <string>Show current Multi-GPU settings.</string>
                        </property>
-                       <dynamicProperty name="cssClass">
-                        <string>orange</string>
-                       </dynamicProperty>
                        <property name="text">
                         <string>Show GPUs Settings</string>
                        </property>
@@ -6980,7 +6971,7 @@ Smaller tile size means Realsr will use less GPU memory and run slower.</string>
                      <item row="0" column="1">
                       <widget class="QComboBox" name="comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan">
                        <property name="currentText">
-                        <string notr="true"/>
+                        <string notr="true" />
                        </property>
                       </widget>
                      </item>
@@ -7213,7 +7204,7 @@ when processing video in segments.</string>
                  <string> secs</string>
                 </property>
                 <property name="prefix">
-                 <string/>
+                 <string />
                 </property>
                 <property name="minimum">
                  <number>1</number>
@@ -7266,12 +7257,12 @@ will increase the time required to process video.</string>
            </item>
           </layout>
          </item>
-         <!-- groupBox_FrameInterpolation will be added here by moving its existing block -->
+
          <item>
           <widget class="QGroupBox" name="groupBox_FrameInterpolation">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <!-- Changed from Fixed, Fixed -->
+
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -7286,7 +7277,7 @@ will increase the time required to process video.</string>
             <bool>false</bool>
            </property>
            <layout class="QGridLayout" name="gridLayout_68">
-            <!-- This is the existing internal grid -->
+
             <property name="leftMargin">
              <number>0</number>
             </property>
@@ -7991,7 +7982,7 @@ of threads will be adjusted automatically.</string>
                   <string>You can enter ffmpeg instructions here.</string>
                  </property>
                  <property name="text">
-                  <string notr="true"/>
+                  <string notr="true" />
                  </property>
                  <property name="clearButtonEnabled">
                   <bool>true</bool>
@@ -8180,7 +8171,7 @@ Might cause ERROR.</string>
                   <string>You can enter ffmpeg instructions here.</string>
                  </property>
                  <property name="text">
-                  <string notr="true"/>
+                  <string notr="true" />
                  </property>
                  <property name="clearButtonEnabled">
                   <bool>true</bool>
@@ -8219,9 +8210,6 @@ Might cause ERROR.</string>
              <property name="toolTip">
               <string>Reset video settings</string>
              </property>
-             <dynamicProperty name="cssClass">
-              <string>orange</string>
-             </dynamicProperty>
              <property name="text">
               <string>Reset video settings</string>
              </property>
@@ -8552,9 +8540,6 @@ frequently occurs when processing images, you can enable this option to save tim
                     <height>16777215</height>
                    </size>
                   </property>
-                  <dynamicProperty name="cssClass">
-                   <string>green</string>
-                  </dynamicProperty>
                   <property name="text">
                    <string>Save Custom Font Settings</string>
                   </property>
@@ -8663,7 +8648,7 @@ frequently occurs when processing images, you can enable this option to save tim
               </size>
              </property>
              <property name="title">
-              <string/>
+              <string />
              </property>
              <layout class="QGridLayout" name="gridLayout_7">
               <item row="0" column="0">
@@ -8673,9 +8658,6 @@ frequently occurs when processing images, you can enable this option to save tim
                   <property name="enabled">
                    <bool>true</bool>
                   </property>
-                  <dynamicProperty name="cssClass">
-                   <string>purple</string>
-                  </dynamicProperty>
                   <property name="text">
                    <string>Save settings</string>
                   </property>
@@ -8726,9 +8708,6 @@ padding:10px;
                     <underline>false</underline>
                    </font>
                   </property>
-                  <dynamicProperty name="cssClass">
-                   <string>green</string>
-                  </dynamicProperty>
                   <property name="text">
                    <string>Check update</string>
                   </property>
@@ -8745,9 +8724,6 @@ padding:10px;
                     <underline>false</underline>
                    </font>
                   </property>
-                  <dynamicProperty name="cssClass">
-                   <string>orange</string>
-                  </dynamicProperty>
                   <property name="text">
                    <string>Report issue</string>
                   </property>
@@ -8800,9 +8776,6 @@ padding:10px;
                   <property name="toolTip">
                    <string>Open Waifu2x-Extension-GUI online wiki.</string>
                   </property>
-                  <dynamicProperty name="cssClass">
-                   <string>purple</string>
-                  </dynamicProperty>
                   <property name="text">
                    <string>Wiki</string>
                   </property>
@@ -8820,9 +8793,6 @@ padding:10px;
                     <height>16777215</height>
                    </size>
                   </property>
-                  <dynamicProperty name="cssClass">
-                   <string>blue</string>
-                  </dynamicProperty>
                   <property name="text">
                    <string>About</string>
                   </property>
@@ -8830,9 +8800,6 @@ padding:10px;
                 </item>
                 <item>
                  <widget class="QPushButton" name="pushButton_SupportersList">
-                  <dynamicProperty name="cssClass">
-                   <string>red</string>
-                  </dynamicProperty>
                   <property name="text">
                    <string>Top Supporters</string>
                   </property>
@@ -9693,10 +9660,10 @@ padding:10px;
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true" />
         </property>
         <property name="title">
-         <string notr="true"/>
+         <string notr="true" />
         </property>
         <property name="flat">
          <bool>false</bool>
@@ -9826,52 +9793,52 @@ padding:10px;
      <widget class="QWidget" name="widget_RealCUGAN_Hidden">
       <layout class="QGridLayout" name="gridLayout_hidden_RealCUGAN">
        <item row="0" column="0">
-        <widget class="QComboBox" name="comboBox_Model_RealCUGAN"/>
+        <widget class="QComboBox" name="comboBox_Model_RealCUGAN" />
        </item>
        <item row="1" column="0">
-        <widget class="QSpinBox" name="spinBox_Scale_RealCUGAN"/>
+        <widget class="QSpinBox" name="spinBox_Scale_RealCUGAN" />
        </item>
        <item row="2" column="0">
-        <widget class="QSpinBox" name="spinBox_DenoiseLevel_RealCUGAN"/>
+        <widget class="QSpinBox" name="spinBox_DenoiseLevel_RealCUGAN" />
        </item>
        <item row="3" column="0">
-        <widget class="QSpinBox" name="spinBox_TileSize_RealCUGAN"/>
+        <widget class="QSpinBox" name="spinBox_TileSize_RealCUGAN" />
        </item>
        <item row="4" column="0">
-        <widget class="QCheckBox" name="checkBox_TTA_RealCUGAN"/>
+        <widget class="QCheckBox" name="checkBox_TTA_RealCUGAN" />
        </item>
        <item row="5" column="0">
-        <widget class="QComboBox" name="comboBox_GPUID_RealCUGAN"/>
+        <widget class="QComboBox" name="comboBox_GPUID_RealCUGAN" />
        </item>
        <item row="6" column="0">
-        <widget class="QPushButton" name="pushButton_DetectGPU_RealCUGAN"/>
+        <widget class="QPushButton" name="pushButton_DetectGPU_RealCUGAN" />
        </item>
        <item row="7" column="0">
-        <widget class="QCheckBox" name="checkBox_MultiGPU_RealCUGAN"/>
+        <widget class="QCheckBox" name="checkBox_MultiGPU_RealCUGAN" />
        </item>
        <item row="8" column="0">
-        <widget class="QGroupBox" name="groupBox_GPUSettings_MultiGPU_RealCUGAN"/>
+        <widget class="QGroupBox" name="groupBox_GPUSettings_MultiGPU_RealCUGAN" />
        </item>
        <item row="9" column="0">
-        <widget class="QComboBox" name="comboBox_GPUIDs_MultiGPU_RealCUGAN"/>
+        <widget class="QComboBox" name="comboBox_GPUIDs_MultiGPU_RealCUGAN" />
        </item>
        <item row="10" column="0">
-        <widget class="QListWidget" name="listWidget_GPUList_MultiGPU_RealCUGAN"/>
+        <widget class="QListWidget" name="listWidget_GPUList_MultiGPU_RealCUGAN" />
        </item>
        <item row="11" column="0">
-        <widget class="QPushButton" name="pushButton_AddGPU_MultiGPU_RealCUGAN"/>
+        <widget class="QPushButton" name="pushButton_AddGPU_MultiGPU_RealCUGAN" />
        </item>
        <item row="12" column="0">
-        <widget class="QPushButton" name="pushButton_RemoveGPU_MultiGPU_RealCUGAN"/>
+        <widget class="QPushButton" name="pushButton_RemoveGPU_MultiGPU_RealCUGAN" />
        </item>
        <item row="13" column="0">
-        <widget class="QPushButton" name="pushButton_ClearGPU_MultiGPU_RealCUGAN"/>
+        <widget class="QPushButton" name="pushButton_ClearGPU_MultiGPU_RealCUGAN" />
        </item>
        <item row="14" column="0">
-        <widget class="QPushButton" name="pushButton_TileSize_Add_RealCUGAN"/>
+        <widget class="QPushButton" name="pushButton_TileSize_Add_RealCUGAN" />
        </item>
        <item row="15" column="0">
-        <widget class="QPushButton" name="pushButton_TileSize_Minus_RealCUGAN"/>
+        <widget class="QPushButton" name="pushButton_TileSize_Minus_RealCUGAN" />
        </item>
       </layout>
      </widget>
