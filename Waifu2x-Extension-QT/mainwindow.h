@@ -56,6 +56,7 @@
 #include "UiController.h"
 #include "LiquidGlassWidget.h"
 #include "anime4kprocessor.h"
+#include "waifu2xncnnvulkanprocessor.h"
 
 
 #ifndef Q_DECLARE_METATYPE
@@ -132,6 +133,7 @@ public:
     ProcessRunner processRunner;
     GpuManager gpuManager;
     UiController uiController;
+    Waifu2xNcnnVulkanProcessor *m_waifu2xProcessor;
 
     //======================= Missing Member Variables (Stubs for realcugan_ncnn_vulkan.cpp) =======================
     bool isProcessing;
@@ -227,18 +229,6 @@ public:
     bool isForceRetryEnabled=true;
     bool KILL_TASK_QStringList(QStringList TaskNameList,bool RequestAdmin);
 
-    QString Waifu2x_ncnn_vulkan_FolderPath = "";
-    QString Waifu2x_ncnn_vulkan_ProgramPath = "";
-    int Waifu2x_NCNN_Vulkan_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
-    int Waifu2x_NCNN_Vulkan_GIF(int rowNum);
-    int Waifu2x_NCNN_Vulkan_Video(int rowNum);
-    int Waifu2x_NCNN_Vulkan_Video_BySegment(int rowNum);
-    QString Waifu2x_NCNN_Vulkan_ReadSettings();
-    QString Waifu2x_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
-    QString Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    QStringList Available_GPUID_Waifu2xNcnnVulkan;
-    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan;
-
     int Realsr_NCNN_Vulkan_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int Realsr_NCNN_Vulkan_GIF(int rowNum);
     int Realsr_NCNN_Vulkan_Video(int rowNum);
@@ -295,34 +285,6 @@ public:
     int SRMD_CUDA_Video(int rowNum);
     int SRMD_CUDA_Video_BySegment(int rowNum);
     QString SRMD_CUDA_PreLoad_Settings_Str = "";
-
-    QString m_realcugan_Model;
-    int m_realcugan_Scale;
-    int m_realcugan_DenoiseLevel;
-    int m_realcugan_TileSize;
-    bool m_realcugan_TTA;
-    QString m_realcugan_GPUID;
-    QList<QMap<QString, QString>> m_realcugan_gpuJobConfig_temp;
-    QList<QProcess*> ProcList_RealCUGAN;
-    QStringList Available_GPUID_RealCUGAN;
-    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_RealCUGAN;
-    void Realcugan_NCNN_Vulkan_Image(int rowNum, bool experimental, bool ReProcess_MissingAlphaChannel);
-    void Realcugan_NCNN_Vulkan_GIF(int rowNum);
-    void Realcugan_NCNN_Vulkan_Video(int rowNum);
-    void Realcugan_NCNN_Vulkan_Video_BySegment(int rowNum);
-    void Realcugan_NCNN_Vulkan_ReadSettings();
-    void Realcugan_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
-    bool APNG_RealcuganNCNNVulkan(QString splitFramesFolder, QString scaledFramesFolder, QString sourceFileFullPath, QStringList framesFileName_qStrList, QString resultFileFullPath);
-    void Realcugan_ncnn_vulkan_DetectGPU();
-    QString RealcuganNcnnVulkan_MultiGPU();
-    void AddGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid, int threads = 1, int tile = 0);
-    void RemoveGPU_MultiGPU_RealcuganNcnnVulkan(const QString &gpuid);
-    void Realcugan_NCNN_Vulkan_PreLoad_Settings();
-    QString Realcugan_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    QStringList Realcugan_NCNN_Vulkan_PrepareArguments(const QString &inputFile, const QString &outputFile, int currentPassScale, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuId, bool ttaEnabled, const QString &outputFormat, bool isMultiGPU, const QString &multiGpuJobArgs, bool experimental);
-    void StartNextRealCUGANPass(QProcess *process);
-    void Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString &tempPathBase, int maxPassIndex, bool keepFinal = false, const QString& finalFile = "");
-    bool Realcugan_ProcessSingleFileIteratively(const QString &inputFile, const QString &outputFile, int targetScale, int originalWidth, int originalHeight, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat, bool experimental, int rowNumForStatusUpdate = -1);
 
     QString m_realesrgan_ModelName;
     int m_realesrgan_ModelNativeScale;
@@ -479,7 +441,6 @@ public:
     QVariant Settings_Read_value(const QString &key, const QVariant &defaultValue);
     bool isReadOldSettings = false;
     void PreLoad_Engines_Settings();
-    int Calculate_Temporary_ScaleRatio_W2xNCNNVulkan(int ScaleRatio);
 
     QString Generate_Output_Path(const QString& original_fileName, const QString& suffix);
     void Set_Progress_Bar_Value(int val, int max_val);

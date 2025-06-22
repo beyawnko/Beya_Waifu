@@ -52,8 +52,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     progressBar.cpp \
-    realcugan_ncnn_vulkan.cpp \
     RealCuganProcessor.cpp \
+    waifu2xncnnvulkanprocessor.cpp \
     realesrgan_ncnn_vulkan.cpp \
     settings.cpp \
     table.cpp \
@@ -84,6 +84,8 @@ HEADERS += \
     RealcuganJobManager.h \
     RealesrganJobManager.h \
     RealCuganProcessor.h \
+    waifu2xncnnvulkan_settings.h \
+    waifu2xncnnvulkanprocessor.h \
 
 FORMS += \
     mainwindow.ui \
