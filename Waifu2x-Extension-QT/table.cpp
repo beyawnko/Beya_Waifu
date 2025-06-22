@@ -552,7 +552,7 @@ int MainWindow::Table_Save_Current_Table_Filelist_Watchdog(QString Table_FileLis
 }
 int MainWindow::Table_Save_Current_Table_Filelist_Finished()
 {
-    if(Waifu2xMain.isRunning()==false)
+    if(!this->isProcessing)
     {
         this->setAcceptDrops(1);//Enable drop file
         ui->pushButton_ClearList->setEnabled(1);

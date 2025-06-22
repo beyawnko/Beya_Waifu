@@ -2,332 +2,85 @@
 #include <QDebug>
 #include <QSettings>
 
-QStringList MainWindow::RealESRGAN_NCNN_Vulkan_PrepareArguments(
-    const QString& input_path,
-    const QString& output_path,
-    int scale_arg, // Note: scale is often part of the model name for RealESRGAN
-    const QString& model_name, // This is -n
-    int gpu_id,
-    const QString& format,
-    bool tta_mode,
-    bool verbose_log,
-    const QString& tile_size_str)
+void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int file_list_row_number, bool /*isBatch*/)
 {
-    QStringList args;
+    /*******************************************************
+    *        Real-ESRGAN Image Processing (Refactored Wrapper)
+    *******************************************************/
 
-    // -i input-path
-    args << "-i" << input_path;
+    // Note: Assuming Table_model_image is the correct model for this function.
+    // The original code used table_image_item_fullpath.at(file_list_row_number),
+    // so we get the full path from column 2 of Table_model_image.
+    QString sourceFile = Table_model_image->item(file_list_row_number, 2)->text(); // Col 2 is FullPath
+    QString destFile = Generate_Output_Path(sourceFile, "realesrgan");
 
-    // -o output-path
-    args << "-o" << output_path;
+    RealEsrganSettings settings;
+    settings.programPath = Current_Path + "/realesrgan-ncnn-vulkan/realesrgan-ncnn-vulkan.exe"; // Path to the executable
 
-    // -n model-name (This is the primary model selector)
-    args << "-n" << model_name;
+    // UI elements for RealESRGAN settings:
+    // ui->comboBox_Model_RealsrNCNNVulkan
+    // ui->doubleSpinBox_ScaleRatio_image (assuming this is general image scale, RealESRGAN might have its own or derive from model)
+    // ui->spinBox_TileSize_RealsrNCNNVulkan
+    // ui->checkBox_TTA_RealsrNCNNVulkan
+    // ui->comboBox_GPUID_RealsrNCNNVulkan
 
-    // -s scale (The actual scale factor, RealESRGAN models often have scale in their name,
-    // but the -s param might still be needed if the model is generic or for verification)
-    // For many RealESRGAN models, the scale is implicit in the model chosen with -n.
-    // However, some models like realesr-animevideov3 use -s to select a submodel file.
-    // Example: realesr-animevideov3-x2.bin, realesr-animevideov3-x4.bin
-    // If model_name already contains scale (e.g. "realesrgan-x4plus"), -s might be redundant or used differently.
-    // For now, we pass it as provided.
-    args << "-s" << QString::number(scale_arg);
+    settings.modelName = ui->comboBox_Model_RealsrNCNNVulkan->currentText();
 
-    // -t tile-size
-    if (!tile_size_str.isEmpty() && tile_size_str != "0" && tile_size_str != "auto") {
-        args << "-t" << tile_size_str;
+    // Target scale: Use the general image scale ratio for now.
+    // The RealEsrganProcessor will handle iterative scaling if targetScale > modelNativeScale.
+    if (ui->doubleSpinBox_ScaleRatio_image) {
+        settings.targetScale = static_cast<int>(ui->doubleSpinBox_ScaleRatio_image->value());
     } else {
-        args << "-t" << "0"; // Auto tile size
+        settings.targetScale = Settings_Read_value("/settings/ImageScaleRatio", 2).toInt(); // Default to 2x if UI element not found
     }
 
-    // -m model-path (Assuming models are in a directory relative to the engine)
-    // This path needs to be determined correctly, possibly from settings or a fixed relative path.
-    // For now, let's assume "models" is a subdirectory where the executable is.
-    // This will be refined when we know where the executables and models are deployed.
-    args << "-m" << "models"; // Placeholder - this needs to be correct relative to exe
-
-    // -g gpu-id
-    args << "-g" << QString::number(gpu_id);
-
-    // -j load:proc:save (Using default values for now, can be configurable later)
-    // Example: "1:2:2" (1 load thread, 2 proc threads, 2 save threads)
-    // Proc threads can be per-GPU if multiple GPUs are used, e.g., "1:2,2:2" for 2 GPUs
-    // This might come from global settings.
-    QString jobs_read = Settings_Read_value("/settings/RealESRGANJobs").toString();
-    if (jobs_read.isEmpty()) jobs_read = "1:2:2"; // Default value
-    QString jobs = jobs_read;
-    args << "-j" << jobs;
-
-
-    // -f format
-    if (!format.isEmpty()) {
-        args << "-f" << format;
+    if (ui->spinBox_TileSize_RealsrNCNNVulkan) {
+        settings.tileSize = ui->spinBox_TileSize_RealsrNCNNVulkan->value();
+    } else {
+        settings.tileSize = 0; // Auto
     }
 
-    // -x tta_mode
-    if (tta_mode) {
-        args << "-x";
+    if (ui->checkBox_TTA_RealsrNCNNVulkan) {
+        settings.ttaEnabled = ui->checkBox_TTA_RealsrNCNNVulkan->isChecked();
+    } else {
+        settings.ttaEnabled = false;
     }
 
-    // -v verbose_log
-    if (verbose_log) {
-        args << "-v";
+    if (ui->comboBox_GPUID_RealsrNCNNVulkan) {
+        settings.singleGpuId = ui->comboBox_GPUID_RealsrNCNNVulkan->currentText();
+    } else {
+        settings.singleGpuId = "auto";
     }
 
-    return args;
-}
-
-void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int file_list_row_number, bool isBatch)
-{
-    if (isProcessing) {
-        if (isBatch) return; // Don't start if already processing in batch mode
-        QMessageBox::information(this, tr("Error"), tr("Another process is already running. Please wait."));
-        return;
+    // Determine model's native scale from its name (e.g., "realesrgan-x4plus")
+    if (settings.modelName.contains("x4")) {
+        settings.modelNativeScale = 4;
+    } else if (settings.modelName.contains("x2")) {
+        settings.modelNativeScale = 2;
+    } else {
+        // Fallback or default native scale. Many common RealESRGAN models are x4.
+        // If not specified in name, it might be a generic model where -s param is more critical.
+        // For safety, let's assume 4 if not specified, or 1 if it's truly unknown and relies on -s from user.
+        // The processor's buildArguments uses settings.modelNativeScale for the -s parameter.
+        settings.modelNativeScale = 4; // Default to 4x, can be adjusted if behavior is different.
+        qDebug() << "RealESRGAN_NCNN_Vulkan_Image: Model native scale not explicitly in name, defaulting to" << settings.modelNativeScale;
     }
 
-    isProcessing = true;
-    currentProcess = new QProcess(this);
-
-    // Determine executable path (adjust as per actual deployment)
-    QString enginePath = Current_Path + "/Engines/realesrgan-ncnn-vulkan/";
-    QString executableName = "realesrgan-ncnn-vulkan.exe"; // Assuming Windows, adjust for other platforms
-    QString executableFullPath = enginePath + executableName;
-
-    // --- Get parameters from UI/Settings ---
-    // These would typically be read from ui->comboBox_Engine_Image, ui->spinBox_ScaleRatio_image, etc.
-    // Using placeholder values for now.
-    QString input_path = table_image_item_fullpath.at(file_list_row_number);
-    QString original_fileName = table_image_item_fileName.at(file_list_row_number);
-    QString output_path = Generate_Output_Path(original_fileName, "RealESRGAN-NCNN-Vulkan");
-
-    int scale = ui->doubleSpinBox_ScaleRatio_image
-            ? static_cast<int>(ui->doubleSpinBox_ScaleRatio_image->value())
-            : Settings_Read_value("/settings/ImageScaleRatio", 1).toInt();
-
-    RealESRGAN_NCNN_Vulkan_ReadSettings();
-
-    QString model_name = m_realesrgan_ModelName;
-    int gpu_id = m_realesrgan_GPUID.split(":").first().toInt();
-    QString format = ui->comboBox_ImageSaveFormat
-            ? ui->comboBox_ImageSaveFormat->currentText()
-            : Settings_Read_value("/settings/comboBox_ImageSaveFormat", "png").toString();
-    bool tta_mode = m_realesrgan_TTA;
-    bool verbose_log = false;
-    QString tile_size_str = QString::number(m_realesrgan_TileSize);
-
-    // Update model path to be relative to the engine executable
-    QString model_path_abs = enginePath + "models";
-    // The -m parameter for realesrgan expects just the folder name if it's standard, or full path
-    // For now, assuming the executable handles finding "models" if it's in the same dir or sub dir.
-    // If realesrgan requires an absolute path to models, then model_path_abs should be passed.
-    // The current PrepareArguments uses a relative "models".
-
-    QStringList arguments = RealESRGAN_NCNN_Vulkan_PrepareArguments(
-        input_path, output_path, scale, model_name, gpu_id, format, tta_mode, verbose_log, tile_size_str
-    );
-
-    // Ensure the model path argument is correct if it needs to be absolute
-    // This might involve modifying PrepareArguments or adjusting it here.
-    // For now, we assume PrepareArguments handles it with the "models" relative path.
-    // If RealESRGAN needs an absolute model path:
-    // int model_arg_idx = arguments.indexOf("-m");
-    // if(model_arg_idx != -1 && model_arg_idx + 1 < arguments.length()){
-    //     arguments[model_arg_idx+1] = model_path_abs;
-    // }
-
-
-    connect(currentProcess, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(onProcessFinished(int, QProcess::ExitStatus)));
-    connect(currentProcess, SIGNAL(errorOccurred(QProcess::ProcessError)),
-            this, SLOT(onProcessError(QProcess::ProcessError)));
-    connect(currentProcess, SIGNAL(readyReadStandardOutput()),
-            this, SLOT(onProcessStdOut()));
-    connect(currentProcess, SIGNAL(readyReadStandardError()),
-            this, SLOT(onProcessStdErr()));
-
-    qDebug() << "Starting RealESRGAN for image:" << input_path;
-    qDebug() << "Arguments:" << arguments.join(" ");
-    qDebug() << "Executable:" << executableFullPath;
-
-    currentProcess->setWorkingDirectory(enginePath); // Important for finding models if relative paths are used
-    currentProcess->start(executableFullPath, arguments);
-
-    // Update UI: progress bar, status text, disable start button, etc.
-    Set_Progress_Bar_Value(0, 0); // Overall progress
-    Set_Current_File_Progress_Bar_Value(0,0); // Current file progress
-    ui->label_ETA->setText(tr("ETA: Calculating..."));
-    ui->pushButton_Start->setEnabled(false);
-    ui->pushButton_Stop->setEnabled(true);
-    Processing_Status = PROCESS_TYPE_IMAGE; // Set current process type
-    current_File_Row_Number = file_list_row_number; // Store current file being processed
-}
-
-void MainWindow::RealESRGAN_NCNN_Vulkan_GIF(int file_list_row_number)
-{
-    if (isProcessing) {
-        QMessageBox::information(this, tr("Error"), tr("Another process is already running. Please wait."));
-        return;
+    // Set output format from general image settings
+    if (ui->comboBox_ImageSaveFormat) {
+        settings.outputFormat = ui->comboBox_ImageSaveFormat->currentText().toLower();
+        if (settings.outputFormat == "keep original") settings.outputFormat = QFileInfo(sourceFile).suffix().toLower();
+        if (settings.outputFormat.isEmpty()) settings.outputFormat = "png"; // Default if "Keep Original" on a file without suffix
+    } else {
+        settings.outputFormat = "png";
     }
 
-    isProcessing = true;
-    currentProcess = new QProcess(this);
 
-    QString enginePath = Current_Path + "/Engines/realesrgan-ncnn-vulkan/";
-    QString executableName = "realesrgan-ncnn-vulkan.exe";
-    QString executableFullPath = enginePath + executableName;
+    // The MainWindow's current_File_Row_Number and Processing_Status
+    // should be set by the calling loop (e.g., in Waifu2xMainThread or whatever calls this)
+    // before this function is invoked. This wrapper just passes the rowNum.
 
-    // Assuming input_path for GIF is a directory of frames extracted by another function
-    QString input_path = TempDir_Path + "/" + table_gif_item_fileName.at(file_list_row_number) + "_frames/";
-    QString original_fileName = table_gif_item_fileName.at(file_list_row_number);
-    // Output path should also be a directory for processed frames
-    QString output_path = TempDir_Path + "/" + original_fileName + "_frames_RealESRGAN_NCNN_Vulkan/";
-
-    int scale = ui->doubleSpinBox_ScaleRatio_gif
-            ? static_cast<int>(ui->doubleSpinBox_ScaleRatio_gif->value())
-            : Settings_Read_value("/settings/GIFScaleRatio", 1).toInt();
-
-    RealESRGAN_NCNN_Vulkan_ReadSettings();
-
-    QString model_name = m_realesrgan_ModelName;
-    int gpu_id = m_realesrgan_GPUID.split(":").first().toInt();
-    QString format = "png";
-    bool tta_mode = m_realesrgan_TTA;
-    bool verbose_log = false;
-    QString tile_size_str = QString::number(m_realesrgan_TileSize);
-
-    QStringList arguments = RealESRGAN_NCNN_Vulkan_PrepareArguments(
-        input_path, output_path, scale, model_name, gpu_id, format, tta_mode, verbose_log, tile_size_str
-    );
-
-    connect(currentProcess, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(onProcessFinished(int, QProcess::ExitStatus)));
-    connect(currentProcess, SIGNAL(errorOccurred(QProcess::ProcessError)),
-            this, SLOT(onProcessError(QProcess::ProcessError)));
-    connect(currentProcess, SIGNAL(readyReadStandardOutput()),
-            this, SLOT(onProcessStdOut()));
-    connect(currentProcess, SIGNAL(readyReadStandardError()),
-            this, SLOT(onProcessStdErr()));
-
-    qDebug() << "Starting RealESRGAN for GIF (frames):" << input_path;
-    qDebug() << "Arguments:" << arguments.join(" ");
-    qDebug() << "Executable:" << executableFullPath;
-
-    currentProcess->setWorkingDirectory(enginePath);
-    currentProcess->start(executableFullPath, arguments);
-
-    Set_Progress_Bar_Value(0, 0);
-    Set_Current_File_Progress_Bar_Value(0,0);
-    ui->label_ETA->setText(tr("ETA: Calculating..."));
-    ui->pushButton_Start->setEnabled(false);
-    ui->pushButton_Stop->setEnabled(true);
-    Processing_Status = PROCESS_TYPE_GIF;
-    current_File_Row_Number = file_list_row_number;
-}
-
-void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int file_list_row_number)
-{
-    if (isProcessing) {
-        QMessageBox::information(this, tr("Error"), tr("Another process is already running. Please wait."));
-        return;
-    }
-
-    isProcessing = true;
-    currentProcess = new QProcess(this);
-
-    QString enginePath = Current_Path + "/Engines/realesrgan-ncnn-vulkan/";
-    QString executableName = "realesrgan-ncnn-vulkan.exe";
-    QString executableFullPath = enginePath + executableName;
-
-    // Assuming input_path for Video is a directory of frames
-    QString input_path = TempDir_Path + "/" + table_video_item_fileName.at(file_list_row_number) + "_frames/";
-    QString original_fileName = table_video_item_fileName.at(file_list_row_number);
-    QString output_path = TempDir_Path + "/" + original_fileName + "_frames_RealESRGAN_NCNN_Vulkan/";
-
-    int scale = ui->doubleSpinBox_ScaleRatio_video
-            ? static_cast<int>(ui->doubleSpinBox_ScaleRatio_video->value())
-            : Settings_Read_value("/settings/VideoScaleRatio", 1).toInt();
-
-    RealESRGAN_NCNN_Vulkan_ReadSettings();
-
-    QString model_name = m_realesrgan_ModelName;
-    int gpu_id = m_realesrgan_GPUID.split(":").first().toInt();
-    QString format = "png";
-    bool tta_mode = m_realesrgan_TTA;
-    bool verbose_log = false;
-    QString tile_size_str = QString::number(m_realesrgan_TileSize);
-
-    QStringList arguments = RealESRGAN_NCNN_Vulkan_PrepareArguments(
-        input_path, output_path, scale, model_name, gpu_id, format, tta_mode, verbose_log, tile_size_str
-    );
-
-    connect(currentProcess, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(onProcessFinished(int, QProcess::ExitStatus)));
-    connect(currentProcess, SIGNAL(errorOccurred(QProcess::ProcessError)),
-            this, SLOT(onProcessError(QProcess::ProcessError)));
-    connect(currentProcess, SIGNAL(readyReadStandardOutput()),
-            this, SLOT(onProcessStdOut()));
-    connect(currentProcess, SIGNAL(readyReadStandardError()),
-            this, SLOT(onProcessStdErr()));
-
-    qDebug() << "Starting RealESRGAN for Video (frames):" << input_path;
-    qDebug() << "Arguments:" << arguments.join(" ");
-    qDebug() << "Executable:" << executableFullPath;
-
-    currentProcess->setWorkingDirectory(enginePath);
-    currentProcess->start(executableFullPath, arguments);
-
-    Set_Progress_Bar_Value(0, 0);
-    Set_Current_File_Progress_Bar_Value(0,0);
-    ui->label_ETA->setText(tr("ETA: Calculating..."));
-    ui->pushButton_Start->setEnabled(false);
-    ui->pushButton_Stop->setEnabled(true);
-    Processing_Status = PROCESS_TYPE_VIDEO;
-    current_File_Row_Number = file_list_row_number;
-}
-
-void MainWindow::RealESRGAN_NCNN_Vulkan_Video_BySegment(int)
-{
-    qDebug() << "RealESRGAN_NCNN_Vulkan_Video_BySegment stub";
-}
-
-void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings()
-{
-    QSettings settings("Waifu2x-Extension-QT", "Waifu2x-Extension-QT");
-    settings.beginGroup("RealESRGAN_NCNN_Vulkan");
-
-    m_realesrgan_ModelName = ui->comboBox_Model_RealsrNCNNVulkan
-            ? ui->comboBox_Model_RealsrNCNNVulkan->currentText()
-            : settings.value("RealESRGAN_ModelName", "realesrgan-x4plus").toString();
-
-    m_realesrgan_TileSize = ui->spinBox_TileSize_RealsrNCNNVulkan
-            ? ui->spinBox_TileSize_RealsrNCNNVulkan->value()
-            : settings.value("RealESRGAN_TileSize", 0).toInt();
-
-    m_realesrgan_TTA = ui->checkBox_TTA_RealsrNCNNVulkan
-            ? ui->checkBox_TTA_RealsrNCNNVulkan->isChecked()
-            : settings.value("RealESRGAN_TTA", false).toBool();
-
-    m_realesrgan_GPUID = ui->comboBox_GPUID_RealsrNCNNVulkan
-            ? ui->comboBox_GPUID_RealsrNCNNVulkan->currentText()
-            : settings.value("RealESRGAN_GPUID", "0").toString();
-
-    settings.endGroup();
-    qDebug() << "[MW::RealESRGAN_ReadSettings]" << m_realesrgan_ModelName
-             << m_realesrgan_TileSize << m_realesrgan_TTA << m_realesrgan_GPUID;
-}
-
-void MainWindow::RealESRGAN_NCNN_Vulkan_ReadSettings_Video_GIF(int threadNum)
-{
-    Q_UNUSED(threadNum);
-    RealESRGAN_NCNN_Vulkan_ReadSettings();
-}
-
-void MainWindow::RealESRGAN_NCNN_Vulkan_PreLoad_Settings()
-{
-}
-
-void MainWindow::RealESRGAN_NCNN_Vulkan_CleanupTempFiles(const QString&, int, bool, const QString&)
-{
+    m_realEsrganProcessor->processImage(file_list_row_number, sourceFile, destFile, settings);
 }
 
 static QStringList parseVulkanDeviceList(const QString &output)
@@ -343,30 +96,5 @@ static QStringList parseVulkanDeviceList(const QString &output)
         list << QStringLiteral("%1: %2").arg(m.captured(1).trimmed(), m.captured(2).trimmed());
     }
     return list;
-}
-
-void MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU()
-{
-    if (!pushButton_DetectGPU_RealsrNCNNVulkan)
-        return;
-
-    pushButton_DetectGPU_RealsrNCNNVulkan->setEnabled(false);
-    pushButton_DetectGPU_RealsrNCNNVulkan->setText(tr("Detecting..."));
-
-    QString exePath = Current_Path + "/Engines/realesrgan-ncnn-vulkan/realesrgan-ncnn-vulkan";
-#ifdef Q_OS_WIN
-    exePath += ".exe";
-#endif
-    QProcess proc;
-    QByteArray out, err;
-    runProcess(&proc, QString("\"%1\" -h").arg(exePath), &out, &err);
-    QString text = QString::fromLocal8Bit(out + err);
-    Available_GPUID_RealESRGAN_ncnn_vulkan = parseVulkanDeviceList(text);
-
-    RealESRGAN_ncnn_vulkan_DetectGPU_finished();
-}
-
-void MainWindow::RealESRGAN_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError)
-{
 }
 

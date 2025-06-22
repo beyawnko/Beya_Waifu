@@ -101,6 +101,12 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
         ProcessNextFile();   // Trigger next file in the queue
     });
 
+    m_realEsrganProcessor = new RealEsrganProcessor(this);
+    connect(m_realEsrganProcessor, &RealEsrganProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
+    connect(m_realEsrganProcessor, &RealEsrganProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString); // Assuming image table for now, adapt if engine supports other types
+    connect(m_realEsrganProcessor, &RealEsrganProcessor::fileProgress, this, &MainWindow::onFileProgress); // Assuming onFileProgress is a suitable slot
+    connect(m_realEsrganProcessor, &RealEsrganProcessor::processingFinished, this, &MainWindow::onProcessingFinished); // Assuming onProcessingFinished is suitable
+
     // Initialize RealCUGAN pointers to ensure safe use when the
     // dedicated widgets are absent. Fallback to Frame Interpolation
     // widgets when available.
@@ -3057,6 +3063,57 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
     (void)QtConcurrent::run([this, urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set]() {
         this->Read_urls(urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
     });
+}
+
+// Slot implementations for generic processor signals
+void MainWindow::onFileProgress(int rowNum, int percent)
+{
+    // This function needs to determine which table (image, gif, video) the rowNum belongs to.
+    // For now, we'll assume it's for the image table as a placeholder, or use current_File_Row_Number
+    // if the processor is only for one file at a time.
+    // A more robust solution would involve the processor signaling which table/type it's for,
+    // or MainWindow looking up the type based on rowNum if it maintains such a mapping.
+
+    // Example: Updating a specific progress bar for the file if one exists,
+    // or updating a column in the table.
+    // For now, let's use Set_Current_File_Progress_Bar_Value if rowNum matches current_File_Row_Number.
+    // This also implies that current_File_Row_Number is correctly set by the part of code that starts the processor.
+    if (rowNum == current_File_Row_Number) { // Ensure this is the file MainWindow thought was processing for detailed progress
+        Set_Current_File_Progress_Bar_Value(percent, 100);
+    }
+    // Generic update to a table column if the row matches any known processing item
+    // This part needs careful implementation based on how MainWindow tracks active items.
+    // For simplicity, we'll log and assume specific UI updates are handled elsewhere or via statusChanged.
+    qDebug() << "onFileProgress: Row" << rowNum << "Progress:" << percent << "%";
+}
+
+void MainWindow::onProcessingFinished(int rowNum, bool success)
+{
+    // This function is called when a processor finishes a file.
+    // It needs to update the overall progress, potentially change file status in the table,
+    // and trigger the next file in the queue.
+
+    qDebug() << "onProcessingFinished: Row" << rowNum << "Success:" << success;
+
+    // The processor itself should emit a statusChanged signal (e.g., "Finished", "Error")
+    // which is connected to Table_xxx_ChangeStatus_rowNumInt_statusQString.
+    // So, we don't need to explicitly set status here.
+
+    if (success) {
+        m_FinishedProc++;
+    } else {
+        m_ErrorProc++;
+    }
+
+    UpdateProgressBar(); // Update overall progress bar (e.g., X/Total files)
+
+    // CheckIfAllFinished() will determine if this was the last file overall and call Waifu2x_Finished() if so.
+    // ProcessNextFile() will attempt to start the next file.
+    // These are typically called in sequence after a file is done.
+    // The order might matter depending on their internal logic.
+
+    ProcessNextFile();    // Attempt to start the next file in the queue
+    CheckIfAllFinished(); // Check if this was the last file overall (might call Waifu2x_Finished)
 }
 
 void MainWindow::on_pushButton_CheckUpdate_clicked()
