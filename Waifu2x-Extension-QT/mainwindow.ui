@@ -2363,55 +2363,6 @@ be processed again when the processing process is started again.</string>
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
-               <widget class="QCheckBox" name="checkBox_FrameInterpolationOnly_Video">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="font">
-                 <font>
-                  <weight>50</weight>
-                  <bold>false</bold>
-                 </font>
-                </property>
-                <property name="toolTip">
-                 <string>Skip the super-resolution, only interpolate video frames.
-
-You can modify the settings of Frame Interpolation in the
-[Video settings] tab.
-
-*Only taken effect when processing video*</string>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>Frame Interpolation only(Video)</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QCheckBox" name="checkBox_EnableVFI_Home">
-                <property name="toolTip">
-                 <string>Interpolate frames after super-resolution of the video.
-(Increase the frame rate to the result video.)
-
-You can modify the settings of Frame Interpolation
-in the [Video settings] tab.
-
-You can enable [Frame Interpolation only(Video)] to skip
-the super-resolution, only interpolate video frames.
-
-*Only taken effect when processing video*</string>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">color: rgb(33, 85, 255);</string>
-                </property>
-                <property name="text">
-                 <string>Video Frame Interpolation</string>
-                </property>
-               </widget>
-              </item>
              </layout>
             </widget>
            </item>
@@ -6660,7 +6611,7 @@ Smaller Split size means waifu2x will use less GPU memory and run slower.</strin
                 </item>
                </layout>
               </widget>
-              <widget class="QWidget" name="tab_RealesrganNcnnVulkan">
+              <widget class="QWidget" name="tab_RealSRNcnnVulkan">
                <attribute name="title">
                 <string notr="true">RealSR-ncnn-vulkan</string>
                </attribute>

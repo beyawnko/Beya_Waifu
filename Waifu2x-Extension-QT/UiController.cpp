@@ -89,9 +89,9 @@ void UiController::updateEngineSettingsVisibility(Ui::MainWindow *ui, const QStr
     } else if (selectedEngineName.contains("waifu2x-caffe", Qt::CaseInsensitive)) {
         targetTab = ui->tab_W2xCaffe;
     } else if (selectedEngineName.contains("realsr-ncnn-vulkan", Qt::CaseInsensitive) || selectedEngineName.contains("RealSR-ncnn-vulkan", Qt::CaseInsensitive)) { // Original name from UI
-        targetTab = ui->tab_RealesrganNcnnVulkan; // The tab is named RealesrganNcnnVulkan
+        targetTab = ui->tab_RealSRNcnnVulkan; // The tab is named RealSRNcnnVulkan
     } else if (selectedEngineName.contains("RealESRGAN-NCNN-Vulkan", Qt::CaseInsensitive)) {
-        targetTab = ui->tab_RealesrganNcnnVulkan; // Assuming RealESRGAN uses the same tab as RealSR or has its own. UI shows tab_RealesrganNcnnVulkan.
+        targetTab = ui->tab_RealSRNcnnVulkan; // Assuming RealESRGAN uses the same tab as RealSR or has its own. UI shows tab_RealSRNcnnVulkan.
     } else if (selectedEngineName.contains("RealCUGAN-NCNN-Vulkan", Qt::CaseInsensitive)) {
         // RealCUGAN settings are in a hidden widget, not a main engine tab.
         // This function might not be the place to toggle its visibility,

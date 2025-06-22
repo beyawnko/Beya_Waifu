@@ -109,6 +109,7 @@ QString FileManager::getBaseName(const QString &path)
 bool FileManager::moveToTrash(const QString &file)
 {
 #ifdef Q_OS_WIN
+    // This function is Windows-specific.
     QFileInfo fileinfo(file);
     if (!fileinfo.exists())
         return false;
@@ -124,6 +125,8 @@ bool FileManager::moveToTrash(const QString &file)
     fileop.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
     return SHFileOperation(&fileop) == 0;
 #else
+    // On non-Windows systems, this function does nothing.
+    qWarning("file_MoveToTrash is only implemented on Windows.");
     QFileInfo fileInfo(file);
     if (!fileInfo.exists())
         return false;

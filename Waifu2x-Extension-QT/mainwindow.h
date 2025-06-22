@@ -16,10 +16,9 @@
 #include <QImageWriter>
 #include <QFile>
 #include <QVariant>
-#ifdef Q_OS_WIN
-#include <windows.h>
-#endif
 #include <QTime>
+// BUILD REQUIREMENT: Ensure the Qt Multimedia module is included in the project file.
+// e.g., in a .pro file: QT += multimedia
 #include <QMediaPlayer>
 #include <QDesktopServices>
 #include <QSize>
@@ -56,6 +55,7 @@
 #include "GpuManager.h"
 #include "UiController.h"
 #include "LiquidGlassWidget.h"
+#include "anime4kprocessor.h"
 
 
 #ifndef Q_DECLARE_METATYPE
@@ -253,19 +253,6 @@ public:
     void AddGPU_MultiGPU_RealesrganNcnnVulkan(QString GPUID);
 
 
-    int Anime4k_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
-    int Anime4k_GIF(int rowNum);
-    int Anime4k_GIF_scale(QMap<QString,QString> Sub_Thread_info,int *Sub_gif_ThreadNumRunning,bool *Frame_failed);
-    int Anime4k_Video(int rowNum);
-    int Anime4k_Video_BySegment(int rowNum);
-    int Anime4k_Video_scale(QMap<QString,QString> Sub_Thread_info,int *Sub_video_ThreadNumRunning,bool *Frame_failed);
-    QString Anime4k_ReadSettings(bool PreserveAlphaChannel);
-    void DenoiseLevelSpinboxSetting_Anime4k();
-    QString Anime4k_ProgramPath = Current_Path + "/Anime4K/Anime4K_waifu2xEX.exe";
-    int Get_NumOfGPU_Anime4k();
-    QString Anime4k_PreLoad_Settings_Str = "";
-    QString Anime4KCPP_PreLoad_Settings_Str = "";
-
     int Waifu2x_Converter_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int Waifu2x_Converter_GIF(int rowNum);
     int Waifu2x_Converter_GIF_scale(QMap<QString, QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed);
@@ -392,10 +379,6 @@ public:
     QStringList Available_GPUID_srmd;
     QString GPU_ID_STR_SRMD="";
     int Realsr_ncnn_vulkan_DetectGPU();
-    void ListGPUs_Anime4k();
-    int GPU_ID_Anime4k_GetGPUInfo = 0;
-    QString Anime4k_GetGPUInfo();
-    QMutex GetGPUInfo_QMutex_Anime4k;
     int GPU_ID_Waifu2xCaffe_GetGPUInfo = 0;
     QString Waifu2xCaffe_GetGPUInfo();
     QMutex GetGPUInfo_QMutex_Waifu2xCaffe;
@@ -447,9 +430,6 @@ public:
     QMutex MultiLine_ErrorOutput_QMutex;
     bool video_isNeedProcessBySegment(int rowNum);
     void DelVfiDir(QString VideoPath);
-    QString HDNDenoiseLevel_image;
-    QString HDNDenoiseLevel_gif;
-    QString HDNDenoiseLevel_video;
 
     FileMetadata getOrFetchMetadata(const QString &filePath);
     QMap<QString, FileMetadata> m_metadataCache;
@@ -859,7 +839,6 @@ public slots:
     // void toggleLiquidGlass(bool enabled); // Already added in private slots
 
     // Slots for VFI synchronization
-    void on_checkBox_EnableVFI_Home_toggled(bool checked);
     void on_groupBox_FrameInterpolation_toggled(bool checked);
 
 private slots:
@@ -941,6 +920,7 @@ private:
     bool m_isVFISyncing = false; // Flag to prevent signal recursion
     LiquidGlassWidget *glassWidget {nullptr};
     bool glassEnabled {false};
+    Anime4KProcessor *m_anime4kProcessor;
 
     Ui::MainWindow *ui;
 };
