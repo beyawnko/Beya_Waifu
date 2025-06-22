@@ -252,6 +252,7 @@ public:
     QMap<QString,QString> RealesrganNcnnVulkan_MultiGPU();
     void AddGPU_MultiGPU_RealesrganNcnnVulkan(QString GPUID);
 
+    // Removed Anime4k_Image, Anime4k_GIF, Anime4k_GIF_scale, Anime4k_Video, Anime4k_Video_BySegment, Anime4k_Video_scale, Anime4k_ReadSettings
 
     int Waifu2x_Converter_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int Waifu2x_Converter_GIF(int rowNum);
