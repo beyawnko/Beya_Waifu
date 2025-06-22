@@ -190,6 +190,13 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
         ProcessNextFile();
     });
 
+    m_waifu2xProcessor = new Waifu2xNcnnVulkanProcessor(this);
+    connect(m_waifu2xProcessor, &Waifu2xNcnnVulkanProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
+    connect(m_waifu2xProcessor, &Waifu2xNcnnVulkanProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString);
+    connect(m_waifu2xProcessor, &Waifu2xNcnnVulkanProcessor::fileProgress, this, &MainWindow::onFileProgress);
+    connect(m_waifu2xProcessor, &Waifu2xNcnnVulkanProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
+    // The statusChanged connect was already correct and the other two were duplicates with old lambdas.
+
     videoProcessor = new VideoProcessor(this);
     qRegisterMetaType<FileMetadata>("FileMetadata");
 
@@ -249,6 +256,26 @@ void MainWindow::toggleLiquidGlass(bool enabled)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+// --- Generic Slot Implementations for Processors ---
+void MainWindow::onProcessingFinished(int rowNum, bool success)
+{
+    qDebug() << "A processor finished its job for row" << rowNum << "Success:" << success;
+    if (success) {
+        m_FinishedProc++;
+    } else {
+        m_ErrorProc++;
+    }
+    UpdateProgressBar();
+    ProcessNextFile();
+}
+
+void MainWindow::onFileProgress(int rowNum, int percent)
+{
+    if (rowNum == current_File_Row_Number) {
+        Set_Current_File_Progress_Bar_Value(percent, 100);
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)

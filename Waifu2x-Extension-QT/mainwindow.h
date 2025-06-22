@@ -56,6 +56,7 @@
 #include "UiController.h"
 #include "LiquidGlassWidget.h"
 #include "anime4kprocessor.h"
+#include "waifu2xncnnvulkanprocessor.h"
 
 
 #ifndef Q_DECLARE_METATYPE
@@ -132,6 +133,7 @@ public:
     ProcessRunner processRunner;
     GpuManager gpuManager;
     UiController uiController;
+    Waifu2xNcnnVulkanProcessor *m_waifu2xProcessor;
 
     //======================= Missing Member Variables (Stubs for realcugan_ncnn_vulkan.cpp) =======================
     bool isProcessing;
@@ -226,18 +228,6 @@ public:
     void Restore_SplitFramesFolderPath(QString SplitFramesFolderPath, QStringList GPU_SplitFramesFolderPath_List);
     bool isForceRetryEnabled=true;
     bool KILL_TASK_QStringList(QStringList TaskNameList,bool RequestAdmin);
-
-    QString Waifu2x_ncnn_vulkan_FolderPath = "";
-    QString Waifu2x_ncnn_vulkan_ProgramPath = "";
-    int Waifu2x_NCNN_Vulkan_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
-    int Waifu2x_NCNN_Vulkan_GIF(int rowNum);
-    int Waifu2x_NCNN_Vulkan_Video(int rowNum);
-    int Waifu2x_NCNN_Vulkan_Video_BySegment(int rowNum);
-    QString Waifu2x_NCNN_Vulkan_ReadSettings();
-    QString Waifu2x_NCNN_Vulkan_ReadSettings_Video_GIF(int ThreadNum);
-    QString Waifu2x_NCNN_Vulkan_PreLoad_Settings_Str = "";
-    QStringList Available_GPUID_Waifu2xNcnnVulkan;
-    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan;
 
     int Realsr_NCNN_Vulkan_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int Realsr_NCNN_Vulkan_GIF(int rowNum);
@@ -451,7 +441,6 @@ public:
     QVariant Settings_Read_value(const QString &key, const QVariant &defaultValue);
     bool isReadOldSettings = false;
     void PreLoad_Engines_Settings();
-    int Calculate_Temporary_ScaleRatio_W2xNCNNVulkan(int ScaleRatio);
 
     QString Generate_Output_Path(const QString& original_fileName, const QString& suffix);
     void Set_Progress_Bar_Value(int val, int max_val);
