@@ -1,58 +1,76 @@
-#pragma once
-/*
-    Copyright (C) 2025  beyawnko
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+// file: realcuganprocessor.h
+#ifndef REALCUGANPROCESSOR_H
+#define REALCUGANPROCESSOR_H
 
 #include <QObject>
-#include <QStringList>
-#include "RealcuganJobManager.h"
-
-class MainWindow;
+#include <QProcess>
+#include <QQueue>
+#include "realcugan_settings.h" // Assuming this file exists from a previous refactor
 
 class RealCuganProcessor : public QObject
 {
     Q_OBJECT
 public:
-    explicit RealCuganProcessor(MainWindow *parent);
-    virtual ~RealCuganProcessor();
+    explicit RealCuganProcessor(QObject *parent = nullptr);
+    ~RealCuganProcessor();
 
-    void preLoadSettings();
-    void readSettings();
-    void readSettingsVideoGif(int threadNum);
-    QString executablePath(bool experimental) const;
-    QString modelPath(const QString &modelName, bool experimental) const;
-    QStringList prepareArguments(const QString &inputFile,
-                                 const QString &outputFile,
-                                 int currentPassScale,
-                                 const QString &modelName,
-                                 int denoiseLevel,
-                                 int tileSize,
-                                 const QString &gpuId,
-                                 bool ttaEnabled,
-                                 const QString &outputFormat,
-                                 bool isMultiGPU,
-                                 const QString &multiGpuJobArgs,
-                                 bool experimental,
-                                 // New parameters with defaults
-                                 const QString &jobsStr = QString(),
-                                 const QString &syncGapStr = "3",
-                                 bool verboseLog = false);
+    // --- Public Methods ---
+    void processImage(int rowNum, const QString &sourceFile, const QString &destinationFile, const RealCuganSettings &settings);
+    void processVideo(int rowNum, const QString &sourceFile, const QString &destinationFile, const RealCuganSettings &settings);
+
+signals:
+    // --- Standard Signals ---
+    void logMessage(const QString &message);
+    void processingFinished(int rowNum, bool success);
+    void statusChanged(int rowNum, const QString &status);
+    void fileProgress(int rowNum, int percent);
+
+private slots:
+    // --- Slots for RealCUGAN process ---
+    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onProcessError(QProcess::ProcessError error);
+    void onReadyReadStandardOutput();
+
+    // --- Slots for FFmpeg process (video tasks) ---
+    void onFfmpegFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onFfmpegError(QProcess::ProcessError error);
+    void onFfmpegStdErr();
 
 private:
-    MainWindow *m_mainWindow;
-    RealcuganJobManager m_jobManager;
+    // --- State Management ---
+    enum class State {
+        Idle,
+        ProcessingImage,
+        SplittingVideo,
+        ProcessingVideoFrames,
+        AssemblingVideo
+    };
+    State m_state = State::Idle;
+    void cleanup();
+
+    // --- Core Processes ---
+    QProcess* m_process = nullptr;       // For the RealCUGAN executable
+    QProcess* m_ffmpegProcess = nullptr; // For splitting/assembling video
+
+    // --- Job State ---
+    int m_currentRowNum = -1;
+    QString m_finalDestinationFile;
+    RealCuganSettings m_settings;
+
+    // --- Video Processing State ---
+    QString m_video_tempPath;
+    QString m_video_inputFramesPath;
+    QString m_video_outputFramesPath;
+    QString m_video_audioPath;
+    QQueue<QString> m_video_frameQueue;
+    int m_video_totalFrames = 0;
+    int m_video_processedFrames = 0;
+    void cleanupVideo();
+
+    // --- Helper Methods ---
+    QStringList buildArguments(const QString &inputFile, const QString &outputFile);
+    void startNextVideoFrame();
+    void startVideoAssembly();
 };
 
+#endif // REALCUGANPROCESSOR_H

@@ -178,6 +178,11 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     TempDir_Path = Current_Path + "/temp"; // Initialize here
     FFMPEG_EXE_PATH_Waifu2xEX = Current_Path + "/ffmpeg/ffmpeg.exe";
     realCuganProcessor = new RealCuganProcessor(this);
+    connect(realCuganProcessor, &RealCuganProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
+    connect(realCuganProcessor, &RealCuganProcessor::statusChanged, this, &MainWindow::Table_video_ChangeStatus_rowNumInt_statusQString);
+    connect(realCuganProcessor, &RealCuganProcessor::fileProgress, this, &MainWindow::onFileProgress);
+    connect(realCuganProcessor, &RealCuganProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
+
     videoProcessor = new VideoProcessor(this);
     qRegisterMetaType<FileMetadata>("FileMetadata");
 
@@ -1561,6 +1566,29 @@ void MainWindow::on_pushButton_SplitSize_Add_Waifu2xCaffe_clicked()
     int currentSize = ui->spinBox_SplitSize_Waifu2xCaffe->value();
     ui->spinBox_SplitSize_Waifu2xCaffe->setValue(currentSize + 128); // Example increment
     Settings_Save();
+}
+
+void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
+{
+    /*******************************************************
+    *       RealCUGAN Video (Refactored Async Wrapper)
+    *******************************************************/
+
+    QString sourceFile = Table_model_video->item(rowNum, 2)->text();
+    QString destFile = Generate_Output_Path(sourceFile, "realcugan-video.mp4");
+
+    RealCuganSettings settings;
+    // Populate settings directly from the UI
+    settings.programPath = Current_Path + "/realcugan-ncnn-vulkan/realcugan-ncnn-vulkan.exe"; // Adjust path if needed
+    settings.modelName = ui->comboBox_Model_RealCUGAN->currentText();
+    settings.targetScale = ui->doubleSpinBox_ScaleRatio_video->value();
+    settings.denoiseLevel = ui->spinBox_DenoiseLevel_video->value();
+    settings.tileSize = ui->spinBox_TileSize_RealCUGAN->value();
+    settings.ttaEnabled = ui->checkBox_TTA_RealCUGAN->isChecked();
+    settings.singleGpuId = ui->comboBox_GPUID_RealCUGAN->currentText();
+
+    // Call the newly implemented video processing method
+    realCuganProcessor->processVideo(rowNum, sourceFile, destFile, settings);
 }
 
 void MainWindow::on_pushButton_SplitSize_Minus_Waifu2xCaffe_clicked()
