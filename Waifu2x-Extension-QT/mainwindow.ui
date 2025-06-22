@@ -189,9 +189,6 @@ height:35
              <property name="toolTip">
               <string>Donate to the developer through PayPal.</string>
              </property>
-             <dynamicProperty name="cssClass">
-              <string>blue</string>
-             </dynamicProperty>
              <property name="text">
               <string notr="true"> PayPal</string>
              </property>
@@ -225,9 +222,6 @@ height:35
              <property name="toolTip">
               <string>Support this project on Patreon and get Premium version.</string>
              </property>
-             <dynamicProperty name="cssClass">
-              <string>red</string>
-             </dynamicProperty>
              <property name="text">
               <string> Get Premium version on Patreon</string>
              </property>
@@ -491,9 +485,6 @@ height:35
               <property name="toolTip">
                <string/>
               </property>
-              <dynamicProperty name="cssClass">
-               <string>green</string>
-              </dynamicProperty>
               <property name="text">
                <string>Start</string>
               </property>
@@ -523,9 +514,6 @@ height:35
                 <height>16777215</height>
                </size>
               </property>
-              <dynamicProperty name="cssClass">
-               <string>orange</string>
-              </dynamicProperty>
               <property name="text">
                <string>Pause</string>
               </property>
@@ -563,9 +551,6 @@ You can try using [Force Retry] to end the Engine process
 and restart it, and the entire [Scale and denoise] process 
 will not be interrupted and will continue.</string>
               </property>
-              <dynamicProperty name="cssClass">
-               <string>purple</string>
-              </dynamicProperty>
               <property name="text">
                <string>Force retry</string>
               </property>
@@ -1601,9 +1586,6 @@ padding:0px;
                <property name="toolTip">
                 <string/>
                </property>
-               <dynamicProperty name="cssClass">
-                <string>blue</string>
-               </dynamicProperty>
                <property name="text">
                 <string>Hide settings</string>
                </property>
@@ -1617,9 +1599,6 @@ padding:0px;
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <dynamicProperty name="cssClass">
-                <string>purple</string>
-               </dynamicProperty>
                <property name="text">
                 <string>Hide Text Browser</string>
                </property>
@@ -1823,9 +1802,6 @@ padding:0px;
 ★Scale ratio will not be applied to files which
 already have custom resolution applied.★</string>
                   </property>
-                  <dynamicProperty name="cssClass">
-                   <string>green</string>
-                  </dynamicProperty>
                   <property name="text">
                    <string>Apply</string>
                   </property>
@@ -1837,9 +1813,6 @@ already have custom resolution applied.★</string>
                    <string>1.Select a file in the file list.
 2.Click the Cancel button to cancel the custom resolution.</string>
                   </property>
-                  <dynamicProperty name="cssClass">
-                   <string>orange</string>
-                  </dynamicProperty>
                   <property name="text">
                    <string>Cancel</string>
                   </property>
@@ -3828,9 +3801,6 @@ same time, you need to change [Image style] settings at [Home] tab.
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <dynamicProperty name="cssClass">
-                     <string>purple</string>
-                    </dynamicProperty>
                     <property name="text">
                      <string>Detect available GPU ID</string>
                     </property>
@@ -4105,9 +4075,6 @@ Smaller Tile size means waifu2x will use less GPU memory and run slower.</string
                        <property name="toolTip">
                         <string>Show current Multi-GPU settings.</string>
                        </property>
-                       <dynamicProperty name="cssClass">
-                        <string>orange</string>
-                       </dynamicProperty>
                        <property name="text">
                         <string>Show GPUs Settings</string>
                        </property>
@@ -4697,9 +4664,6 @@ Smaller Block size means waifu2x will use less GPU memory and run slower.</strin
                        <property name="toolTip">
                         <string>Show current Multi-Processor settings.</string>
                        </property>
-                       <dynamicProperty name="cssClass">
-                        <string>orange</string>
-                       </dynamicProperty>
                        <property name="text">
                         <string>Show Processor Settings</string>
                        </property>
@@ -5738,9 +5702,6 @@ utilize the capabilities of your PC.
                        <property name="toolTip">
                         <string>Show current Multi-GPU settings.</string>
                        </property>
-                       <dynamicProperty name="cssClass">
-                        <string>orange</string>
-                       </dynamicProperty>
                        <property name="text">
                         <string>Show GPUs Settings</string>
                        </property>
@@ -5847,9 +5808,6 @@ utilize the capabilities of your PC.
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <dynamicProperty name="cssClass">
-                     <string>blue</string>
-                    </dynamicProperty>
                     <property name="text">
                      <string>Detect available GPU ID</string>
                     </property>
@@ -6324,9 +6282,6 @@ the number of threads must = the number of GPUs.</string>
                     <property name="toolTip">
                      <string>Verify your GPUs configuration.</string>
                     </property>
-                    <property name="cssClass">
-                     <string>purple</string>
-                    </property>
                     <property name="text">
                      <string>Verify</string>
                     </property>
@@ -6763,9 +6718,6 @@ but the effect may not be obvious. It is not recommended to enable it.</string>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <dynamicProperty name="cssClass">
-                     <string>blue</string>
-                    </dynamicProperty>
                     <property name="text">
                      <string>Detect available GPU ID</string>
                     </property>
@@ -7575,9 +7527,6 @@ interpolate high res frames.</string>
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
-                <dynamicProperty name="cssClass">
-                 <string>blue</string>
-                </dynamicProperty>
                 <property name="text">
                  <string>Detect available GPU ID</string>
                 </property>
@@ -7628,9 +7577,6 @@ You must follow the format,otherwise the software may crash.</string>
                 <property name="toolTip">
                  <string>Verify your Multi GPU configuration.</string>
                 </property>
-                 <dynamicProperty name="cssClass">
-                 <string>purple</string>
-                 </dynamicProperty>
                 <property name="text">
                  <string>Verify</string>
                 </property>
@@ -8289,9 +8235,6 @@ Might cause ERROR.</string>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <dynamicProperty name="cssClass">
-              <string>blue</string>
-             </dynamicProperty>
              <property name="text">
               <string>List Available Encoders</string>
              </property>
