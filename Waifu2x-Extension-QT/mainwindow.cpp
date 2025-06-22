@@ -25,9 +25,11 @@ Copyright (C) 2025  beyawnko
 #include "GpuManager.h"
 #include "UiController.h"
 #include "LiquidGlassWidget.h"
+
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
+
 #include <QGridLayout>
 #include <QCheckBox>
 #include <QApplication>
@@ -55,6 +57,7 @@ Copyright (C) 2025  beyawnko
 #include <QLabel>
 #include <QInputDialog>
 #include <QDebug>
+#include "anime4kprocessor.h" // Ensure this is included
 // QWidget and QTableView are pulled in by mainwindow.h or ui_mainwindow.h
 
 MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
@@ -77,8 +80,26 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     connect(this, &MainWindow::Send_Batch_Table_Update, this, &MainWindow::Batch_Table_Update_slots);
 
     // Connect VFI synchronization signals
-    connect(ui->checkBox_EnableVFI_Home, &QCheckBox::toggled, this, &MainWindow::on_checkBox_EnableVFI_Home_toggled);
     connect(ui->groupBox_FrameInterpolation, &QGroupBox::toggled, this, &MainWindow::on_groupBox_FrameInterpolation_toggled);
+
+    m_anime4kProcessor = new Anime4KProcessor(this);
+    connect(m_anime4kProcessor, &Anime4KProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
+    connect(m_anime4kProcessor, &Anime4KProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString); // Assuming image table for now
+    connect(m_anime4kProcessor, &Anime4KProcessor::processingFinished, this, [this](int rowNum, bool success){
+        qInfo() << "Anime4K processing finished for row" << rowNum << "Success:" << success;
+        // Note: This simplified finished logic might need adjustment
+        // depending on how MainWindow manages its overall processing state,
+        // especially if it differentiates between success/failure for retries, etc.
+        // The original Anime4k_Image directly manipulated m_FinishedProc/m_ErrorProc.
+        // For now, incrementing m_FinishedProc as a placeholder.
+        if (success) {
+            m_FinishedProc++;
+        } else {
+            m_ErrorProc++; // It's important to also handle errors for progress tracking
+        }
+        UpdateProgressBar(); // Update overall progress
+        ProcessNextFile();   // Trigger next file in the queue
+    });
 
     // Initialize RealCUGAN pointers to ensure safe use when the
     // dedicated widgets are absent. Fallback to Frame Interpolation
@@ -504,62 +525,35 @@ void MainWindow::Delay_msec_sleep(int time)
  */
 void MainWindow::ExecuteCMD_batFile(QString cmd_str, bool requestAdmin)
 {
-    Q_UNUSED(requestAdmin);
 #ifdef Q_OS_WIN
+    // This function is Windows-specific.
+    Q_UNUSED(requestAdmin);
     QStringList args;
     args << "/c" << cmd_str;
     QProcess::startDetached(QStringLiteral("cmd.exe"), args);
 #else
-    QProcess::startDetached(QStringLiteral("/bin/sh"), {"-c", cmd_str});
+    // On non-Windows systems, this function does nothing.
+    Q_UNUSED(cmd_str);
+    Q_UNUSED(requestAdmin);
+    qWarning("ExecuteCMD_batFile is only implemented on Windows.");
 #endif
-}
-
-void MainWindow::on_checkBox_EnableVFI_Home_toggled(bool checked)
-{
-    if (m_isVFISyncing) return; // Prevent recursion
-    m_isVFISyncing = true;
-
-    if (ui->groupBox_FrameInterpolation) {
-        ui->groupBox_FrameInterpolation->setChecked(checked);
-    }
-    // The groupBox_FrameInterpolation being checkable will automatically
-    // enable/disable its children.
-
-    // Update the FrameInterpolationOnly_Video checkbox state based on VFI_Home
-    if (ui->checkBox_FrameInterpolationOnly_Video) {
-        ui->checkBox_FrameInterpolationOnly_Video->setEnabled(checked);
-        if (!checked) {
-            // If VFI is disabled, "VFI Only" should also be unchecked and disabled.
-            ui->checkBox_FrameInterpolationOnly_Video->setChecked(false);
-        }
-    }
-
-    Settings_Save(); // Save the master VFI state
-    m_isVFISyncing = false;
 }
 
 void MainWindow::on_groupBox_FrameInterpolation_toggled(bool checked)
 {
-    if (m_isVFISyncing) return; // Prevent recursion
-    m_isVFISyncing = true;
-
-    if (ui->checkBox_EnableVFI_Home) {
-        ui->checkBox_EnableVFI_Home->setChecked(checked);
-    }
-
-    // If FrameInterpolation groupbox is unchecked, ensure "VFI Only" is also unchecked and disabled.
-    // If FrameInterpolation groupbox is checked, "VFI Only" becomes enabled (its checked state is independent then).
-    if (ui->checkBox_FrameInterpolationOnly_Video) {
-         ui->checkBox_FrameInterpolationOnly_Video->setEnabled(checked);
-        if (!checked) {
-            ui->checkBox_FrameInterpolationOnly_Video->setChecked(false);
-        }
-    }
-    // No need to call Settings_Save() here as on_checkBox_EnableVFI_Home_toggled will handle it.
-    // Or, if this can be the primary initiator, then Settings_Save() could be called here too,
-    // but it's better to have one source of truth for saving. The checkBox_EnableVFI_Home
-    // is the more prominent control.
-    m_isVFISyncing = false;
+    // This is now the single source of truth for VFI toggle.
+    // Its direct children are automatically enabled/disabled by Qt if the groupbox is checkable.
+    // If there were other UI elements outside this groupbox that depended on VFI state,
+    // their logic would be updated here.
+    // For example, if 'checkBox_FrameInterpolationOnly_Video' was moved outside and still needed:
+    // if (ui->checkBox_FrameInterpolationOnly_Video) { // Assuming it exists elsewhere
+    //     ui->checkBox_FrameInterpolationOnly_Video->setEnabled(checked);
+    //     if (!checked) {
+    //         ui->checkBox_FrameInterpolationOnly_Video->setChecked(false);
+    //     }
+    // }
+    Settings_Save(); // Save the VFI state
+    qDebug() << "Frame Interpolation toggled:" << checked;
 }
 
 // Stubs for _finished signals/slots and other functions expected in mainwindow.cpp (not causing multiple defs)
@@ -2922,12 +2916,14 @@ void MainWindow::Finish_progressBar_CompatibilityTest()
 
 void MainWindow::TurnOffScreen()
 {
-    qDebug() << "MainWindow::TurnOffScreen() called.";
 #ifdef Q_OS_WIN
+    // This function is Windows-specific.
+    qDebug() << "MainWindow::TurnOffScreen() called.";
     // Turn off the monitor by broadcasting the SC_MONITORPOWER command
     SendMessage(HWND_BROADCAST, WM_SYSCOMMAND, SC_MONITORPOWER, 2);
 #else
-    qDebug() << "Turn off screen feature is not available on this platform.";
+    // On non-Windows systems, this function does nothing.
+    qWarning("TurnOffScreen is only implemented on Windows.");
 #endif
 }
 
