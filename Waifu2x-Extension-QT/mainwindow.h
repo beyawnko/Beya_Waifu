@@ -95,6 +95,18 @@ struct FileLoadInfo {
 };
 Q_DECLARE_METATYPE(FileLoadInfo)
 
+enum class ProcessingState {
+    Idle,
+    Processing,
+    Stopping,
+    Error
+};
+
+struct ProcessJob {
+    int rowNum;
+    ProcessingType type;
+};
+
 // Enum for processing status
 enum ProcessingType {
     PROCESS_TYPE_NONE = 0,
@@ -141,7 +153,6 @@ public:
     UiController uiController;
 
     //======================= Missing Member Variables (Stubs for realcugan_ncnn_vulkan.cpp) =======================
-    bool isProcessing;
     QProcess* currentProcess; // Should be initialized (e.g., to nullptr) in constructor
     QStringList table_image_item_fullpath;
     QStringList table_image_item_fileName;
@@ -294,9 +305,6 @@ public:
     int FrameInterpolation_Video_BySegment(int rowNum);
 
     void Wait_waifu2x_stop();
-    std::atomic<bool> waifu2x_STOP{false};
-    std::atomic<bool> waifu2x_STOP_confirm{false};
-    std::atomic<bool> Stopping{false};
     int ThreadNumMax = 0;
     std::atomic<int> ThreadNumRunning{0};
     QMutex mutex_ThreadNumRunning;
@@ -831,7 +839,7 @@ private:
     int m_FinishedProc = 0;
     void LoadScaledImageToLabel(const QString &imagePath, QLabel *label);
     void UpdateTotalProcessedFilesCount();
-    void ProcessNextFile();
+    void tryStartNextFile();
     void RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
     void CheckIfAllFinished();
     void UpdateNumberOfActiveThreads();
@@ -845,7 +853,10 @@ private:
     Anime4KProcessor *m_anime4kProcessor;
     SrmdProcessor *m_srmdProcessor;
     Waifu2xConverterProcessor *m_converterProcessor = nullptr;
-    Waifu2xCaffeProcessor *m_caffeProcessor = nullptr; // Add this member pointer, initialized to nullptr
+    Waifu2xCaffeProcessor *m_caffeProcessor = nullptr;
+
+    ProcessingState m_currentState;
+    QQueue<ProcessJob> m_jobQueue;
 
     Ui::MainWindow *ui;
 };

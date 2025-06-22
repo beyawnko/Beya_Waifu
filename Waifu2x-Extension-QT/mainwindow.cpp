@@ -85,21 +85,7 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     m_anime4kProcessor = new Anime4KProcessor(this);
     connect(m_anime4kProcessor, &Anime4KProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
     connect(m_anime4kProcessor, &Anime4KProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString); // Assuming image table for now
-    connect(m_anime4kProcessor, &Anime4KProcessor::processingFinished, this, [this](int rowNum, bool success){
-        qInfo() << "Anime4K processing finished for row" << rowNum << "Success:" << success;
-        // Note: This simplified finished logic might need adjustment
-        // depending on how MainWindow manages its overall processing state,
-        // especially if it differentiates between success/failure for retries, etc.
-        // The original Anime4k_Image directly manipulated m_FinishedProc/m_ErrorProc.
-        // For now, incrementing m_FinishedProc as a placeholder.
-        if (success) {
-            m_FinishedProc++;
-        } else {
-            m_ErrorProc++; // It's important to also handle errors for progress tracking
-        }
-        UpdateProgressBar(); // Update overall progress
-        ProcessNextFile();   // Trigger next file in the queue
-    });
+    connect(m_anime4kProcessor, &Anime4KProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
 
     m_realEsrganProcessor = new RealEsrganProcessor(this);
     connect(m_realEsrganProcessor, &RealEsrganProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
@@ -297,6 +283,24 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::onProcessingFinished(int rowNum, bool success)
+{
+    if (m_currentState == ProcessingState::Idle) return; // Ignore signals if we've already finished/stopped
+
+    if (success) { m_FinishedProc++; } else { m_ErrorProc++; }
+
+    ThreadNumRunning--;
+    UpdateProgressBar();
+    tryStartNextFile(); // This now calls the correctly renamed function
+}
+
+void MainWindow::onFileProgress(int rowNum, int percent)
+{
+    if (rowNum == current_File_Row_Number) {
+        Set_Current_File_Progress_Bar_Value(percent, 100);
+    }
+}
+
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     if (glassWidget) {
@@ -441,6 +445,89 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 // Stubs for general utility functions that should be in mainwindow.cpp
 // FileMetadataCache MainWindow::getOrFetchMetadata(const QString &filePath) { qDebug() << "STUB: MainWindow::getOrFetchMetadata called for" << filePath; return FileMetadataCache(); } // Already replaced
+
+void MainWindow::on_pushButton_Start_clicked()
+{
+    if (m_currentState != ProcessingState::Idle) {
+        TextBrowser_NewMessage(tr("Already processing. Please stop the current job first."));
+        return;
+    }
+
+    m_currentState = ProcessingState::Processing;
+    pushButton_Start_setEnabled_self(false);
+    pushButton_Stop_setEnabled_self(true);
+
+    m_jobQueue.clear();
+    m_FinishedProc = 0;
+    m_ErrorProc = 0;
+
+    for (int i = 0; i < Table_model_image->rowCount(); ++i) {
+        if (Table_model_image->item(i, 1)->text() == tr("Waiting")) {
+            m_jobQueue.enqueue({i, PROCESS_TYPE_IMAGE});
+        }
+    }
+    // TODO: Add loops for GIF and Video tables
+
+    m_TotalNumProc = m_jobQueue.count();
+    UpdateProgressBar();
+
+    if (m_jobQueue.isEmpty()) {
+        TextBrowser_NewMessage(tr("No files are waiting for processing."));
+        m_currentState = ProcessingState::Idle;
+        pushButton_Start_setEnabled_self(true);
+        pushButton_Stop_setEnabled_self(false);
+        return;
+    }
+
+    TextBrowser_NewMessage(tr("Starting processing for %1 file(s)...").arg(m_TotalNumProc));
+
+    int maxThreads = ui->spinBox_ThreadNum_image->value();
+    for (int i = 0; i < maxThreads; ++i) {
+        tryStartNextFile();
+    }
+}
+
+void MainWindow::startNextFileProcessing()
+{
+    static QMutex queueMutex;
+    QMutexLocker locker(&queueMutex);
+
+    if (m_currentState != ProcessingState::Processing || m_jobQueue.isEmpty()) {
+        return;
+    }
+
+    ProcessJob job = m_jobQueue.dequeue();
+    ThreadNumRunning++;
+
+    current_File_Row_Number = job.rowNum; // Legacy UI update
+    Table_image_ChangeStatus_rowNumInt_statusQString(job.rowNum, tr("Processing..."));
+
+    if (job.type == PROCESS_TYPE_IMAGE) {
+        QString engine = ui->comboBox_Engine_Image->currentText();
+
+        // --- THIS IS THE ENGINE DISPATCH LOGIC ---
+        if (engine == "srmd-ncnn-vulkan") {
+            SRMD_NCNN_Vulkan_Image(job.rowNum, false);
+        } else if (engine == "realsr-ncnn-vulkan") {
+            RealESRGAN_NCNN_Vulkan_Image(job.rowNum, false);
+        } else if (engine == "waifu2x-ncnn-vulkan") {
+            Waifu2x_NCNN_Vulkan_Image(job.rowNum, false);
+        } else if (engine == "RealCUGAN-NCNN-Vulkan") {
+            Realcugan_NCNN_Vulkan_Image(job.rowNum, false, false);
+        } else if (engine == "waifu2x-caffe") {
+            Waifu2x_Caffe_Image(job.rowNum, false);
+        } else if (engine == "waifu2x-converter") {
+            Waifu2x_Converter_Image(job.rowNum, false);
+        } else if (engine == "Anime4K") {
+            Anime4k_Image(job.rowNum, false);
+        } else {
+            TextBrowser_NewMessage(tr("Error: Unknown image processing engine selected."));
+            onProcessingFinished(job.rowNum, false);
+        }
+    }
+    // TODO: else if for GIF and Video jobs
+}
+
 bool MainWindow::ReplaceOriginalFile(QString original_fullpath, QString output_fullpath)
 {
     // Ensure output file exists
