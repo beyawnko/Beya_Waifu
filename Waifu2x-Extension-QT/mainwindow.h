@@ -48,6 +48,7 @@
 #include <QGroupBox>
 #include <QComboBox>
 #include <QPushButton>
+#include <QQueue>
 #include <atomic>
 #include "topsupporterslist.h"
 #include "FileManager.h"
@@ -57,6 +58,12 @@
 #include "LiquidGlassWidget.h"
 #include "anime4kprocessor.h"
 
+enum class ProcessingState {
+    Idle,
+    Processing,
+    Stopping,
+    Error
+};
 
 #ifndef Q_DECLARE_METATYPE
 #define Q_DECLARE_METATYPE(Type)
@@ -90,6 +97,11 @@ struct FileLoadInfo {
     QString customResolutionHeight; // From INI
 };
 Q_DECLARE_METATYPE(FileLoadInfo)
+
+struct ProcessJob {
+    int rowNum;
+    ProcessingType type;
+};
 
 // Enum for processing status
 enum ProcessingType {
@@ -134,12 +146,7 @@ public:
     UiController uiController;
 
     //======================= Missing Member Variables (Stubs for realcugan_ncnn_vulkan.cpp) =======================
-    bool isProcessing;
-    QProcess* currentProcess; // Should be initialized (e.g., to nullptr) in constructor
-    QStringList table_image_item_fullpath;
-    QStringList table_image_item_fileName;
-    QStringList table_video_item_fileName;
-    QStringList table_gif_item_fileName;
+    ProcessingState m_currentState = ProcessingState::Idle;
     ProcessingType Processing_Status; // Changed from int
     int current_File_Row_Number;
     QString TempDir_Path; // Should be initialized
@@ -220,7 +227,7 @@ public:
     //================================= Main Processing Logic (Waifu2x & Others) ====================================
     void ShowFileProcessSummary();
     QString OutPutFolder_main="";
-    int Waifu2xMainThread();
+    void startNextFileProcessing();
     QStringList WaitForEngineIO(QStringList OutPutFilesFullPathList);
     QStringList WaitForEngineIO_NcnnVulkan(QString OutputFolderFullPath);
     void Restore_SplitFramesFolderPath(QString SplitFramesFolderPath, QStringList GPU_SplitFramesFolderPath_List);
@@ -322,7 +329,6 @@ public:
     QStringList Realcugan_NCNN_Vulkan_PrepareArguments(const QString &inputFile, const QString &outputFile, int currentPassScale, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuId, bool ttaEnabled, const QString &outputFormat, bool isMultiGPU, const QString &multiGpuJobArgs, bool experimental);
     void StartNextRealCUGANPass(QProcess *process);
     void Realcugan_NCNN_Vulkan_CleanupTempFiles(const QString &tempPathBase, int maxPassIndex, bool keepFinal = false, const QString& finalFile = "");
-    bool Realcugan_ProcessSingleFileIteratively(const QString &inputFile, const QString &outputFile, int targetScale, int originalWidth, int originalHeight, const QString &modelName, int denoiseLevel, int tileSize, const QString &gpuIdOrJobConfig, bool isMultiGPUJob, bool ttaEnabled, const QString &outputFormat, bool experimental, int rowNumForStatusUpdate = -1);
 
     QString m_realesrgan_ModelName;
     int m_realesrgan_ModelNativeScale;
@@ -363,9 +369,6 @@ public:
     int FrameInterpolation_Video_BySegment(int rowNum);
 
     void Wait_waifu2x_stop();
-    std::atomic<bool> waifu2x_STOP{false};
-    std::atomic<bool> waifu2x_STOP_confirm{false};
-    std::atomic<bool> Stopping{false};
     int ThreadNumMax = 0;
     std::atomic<int> ThreadNumRunning{0};
     QMutex mutex_ThreadNumRunning;
@@ -503,7 +506,6 @@ public:
     int ForceRetryCount = 1;
     void OutputSettingsArea_setEnabled(bool isEnabled);
     bool isFirstTimeStart=false;
-    bool isForceRetryClicked=false;
     QMutex isForceRetryClicked_QMutex;
     void DelTrash_ForceRetry_Anime4k(QString OutPut_Path);
     void isForceRetryClicked_SetTrue_Block_Anime4k();
@@ -517,9 +519,9 @@ public:
     QTimer *TimeCostTimer;
     long unsigned int TimeCost = 0;
     QString Seconds2hms(long unsigned int seconds);
-    long unsigned int TaskNumTotal=0;
-    long unsigned int TaskNumFinished=0;
-    bool NewTaskFinished=false;
+    // long unsigned int TaskNumTotal=0; // Replaced by m_TotalNumProc for job counting
+    // long unsigned int TaskNumFinished=0; // Role covered by m_FinishedProc + m_ErrorProc
+    bool NewTaskFinished=false; // Used by TimeSlot for ETA calculation
     long unsigned int ETA=0;
     long unsigned int Progressbar_MaxVal = 0;
     long unsigned int Progressbar_CurrentVal = 0;
@@ -537,7 +539,7 @@ public:
     int Auto_Save_Settings_Watchdog(bool isWaitForSave);
     QFuture<int> AutoUpdate;
     QFuture<int> DownloadOnlineQRCode;
-    QFuture<int> Waifu2xMain;
+    // QFuture<int> Waifu2xMain; // Removed as Waifu2xMainThread is replaced by job queue system
     QFuture<void> compatibilityTestFuture;
     int Force_close();
     std::atomic<bool> isAlreadyClosed{false};
@@ -545,7 +547,6 @@ public:
     long unsigned int TaskNumTotal_CurrentFile=0;
     long unsigned int TaskNumFinished_CurrentFile=0;
     bool NewTaskFinished_CurrentFile=false;
-    bool runProcess(QProcess *process, const QString &cmd, QByteArray *stdOut = nullptr, QByteArray *stdErr = nullptr);
     long unsigned int ETA_CurrentFile=0;
     bool isStart_CurrentFile=false;
     void Tip_FirstTimeStart();
@@ -910,7 +911,7 @@ private:
     int m_FinishedProc = 0;
     void LoadScaledImageToLabel(const QString &imagePath, QLabel *label);
     void UpdateTotalProcessedFilesCount();
-    void ProcessNextFile();
+    void tryStartNextFile();
     void RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
     void CheckIfAllFinished();
     void UpdateNumberOfActiveThreads();
@@ -922,6 +923,7 @@ private:
     LiquidGlassWidget *glassWidget {nullptr};
     bool glassEnabled {false};
     Anime4KProcessor *m_anime4kProcessor;
+    QQueue<ProcessJob> m_jobQueue;
 
     Ui::MainWindow *ui;
 };
