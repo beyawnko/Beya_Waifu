@@ -58,6 +58,7 @@
 #include "anime4kprocessor.h"
 #include "realesrganprocessor.h"
 #include "srmdprocessor.h"
+#include "waifu2xconverterprocessor.h"
 
 
 #ifndef Q_DECLARE_METATYPE
@@ -244,21 +245,6 @@ public:
     QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan;
 
     // Anime4K related members are handled by Anime4KProcessor
-
-    int Waifu2x_Converter_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
-    int Waifu2x_Converter_GIF(int rowNum);
-    int Waifu2x_Converter_GIF_scale(QMap<QString, QString> Sub_Thread_info, int *Sub_gif_ThreadNumRunning, bool *Frame_failed);
-    int Waifu2x_Converter_Video(int rowNum);
-    int Waifu2x_Converter_Video_BySegment(int rowNum);
-    int Waifu2x_Converter_Video_scale( QMap<QString,QString> Sub_Thread_info, int *Sub_video_ThreadNumRunning, bool *Frame_failed);
-    QString Waifu2xConverter_ReadSettings();
-    QString Waifu2xConverter_PreLoad_Settings_Str = "";
-    int GPU_ID_Waifu2xConverter_MultiGPU = 0;
-    QMap<QString,QString> Waifu2xConverter_MultiGPU();
-    QMutex MultiGPU_QMutex_Waifu2xConverter;
-    QList<QMap<QString, QString>> GPUIDs_List_MultiGPU_Waifu2xConverter;
-    void AddGPU_MultiGPU_Waifu2xConverter(QString GPUID);
-
 
     int Waifu2x_Caffe_Image(int rowNum,bool ReProcess_MissingAlphaChannel);
     int Waifu2x_Caffe_GIF(int rowNum);
@@ -871,6 +857,7 @@ private:
     bool glassEnabled {false};
     Anime4KProcessor *m_anime4kProcessor;
     SrmdProcessor *m_srmdProcessor;
+    Waifu2xConverterProcessor *m_converterProcessor = nullptr;
 
     Ui::MainWindow *ui;
 };
