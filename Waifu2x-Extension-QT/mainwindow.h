@@ -780,6 +780,7 @@ private slots:
     void on_pushButton_Start_clicked();
 
 private:
+    void RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
     void Anime4k_Image(int rowNum, bool useTTA);
     void RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool useTTA);
     void RealESRGAN_NCNN_Vulkan_Video(int rowNum);
