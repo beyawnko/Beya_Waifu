@@ -221,12 +221,39 @@ void MainWindow::onFileProgress(int rowNum, int percent)
 // --- WRAPPER IMPLEMENTATIONS FOR REFACtORED ENGINES ---
 void MainWindow::Anime4k_Image(int rowNum, bool){
     // This is a wrapper. The actual logic is in Anime4KProcessor.
-    // Assuming m_anime4kProcessor is initialized in constructor.
-    // Settings would be gathered from UI and passed to the processor.
-    // m_anime4kProcessor->processImage(...);
-    // For now, just a stub to allow compilation.
-    qDebug() << "STUB: Anime4k_Image called for row" << rowNum;
-    onProcessingFinished(rowNum, false); // Fail the job to prevent hanging
+    Anime4kSettings settings;
+    settings.programPath = Current_Path + "/anime4k-cli/Anime4KCPP_CLI.exe"; // Example path
+    // Populate settings from UI:
+    settings.passes = ui->spinBox_Passes_Anime4k->value();
+    settings.pushColorCount = ui->spinBox_PushColorCount_Anime4k->value();
+    settings.pushColorStrength = ui->doubleSpinBox_PushColorStrength_Anime4k->value();
+    settings.pushGradientStrength = ui->doubleSpinBox_PushGradientStrength_Anime4k->value();
+    settings.fastMode = ui->checkBox_FastMode_Anime4k->isChecked();
+    settings.hdnMode = ui->checkBox_HDNMode_Anime4k->isChecked();
+    settings.acNet = ui->checkBox_ACNet_Anime4K->isChecked(); // Ensure this matches UI
+    settings.gpuMode = ui->checkBox_GPUMode_Anime4K->isChecked();
+    settings.gpgpuModel = ui->comboBox_GPGPUModel_A4k->currentText(); // Ensure this matches UI
+
+    settings.preProcessing = ui->checkBox_EnablePreProcessing_Anime4k->isChecked();
+    if(settings.preProcessing) {
+        settings.preFilters = ui->lineEdit_PreFilters_Anime4k->text();
+    }
+    settings.postProcessing = ui->checkBox_EnablePostProcessing_Anime4k->isChecked();
+    if(settings.postProcessing) {
+        settings.postFilters = ui->lineEdit_PostFilters_Anime4k->text();
+    }
+
+    settings.specifyGpu = ui->checkBox_SpecifyGPU_Anime4k->isChecked();
+    if(settings.specifyGpu) {
+        settings.gpuString = ui->lineEdit_SpecifyGPU_Anime4k->text(); // Or however GPU is specified
+    }
+    // settings.commandQueues = ui->spinBox_CommandQueues_Anime4k->value(); // If such UI exists
+    // settings.parallelIo = ui->checkBox_ParallelIO_Anime4k->isChecked(); // If such UI exists
+
+    QString sourceFile = Table_model_image->item(rowNum, 2)->text();
+    QString destFile = Generate_Output_Path(sourceFile, "anime4k");
+
+    m_anime4kProcessor->processImage(rowNum, sourceFile, destFile, settings);
 }
 
 void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool)
@@ -264,7 +291,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Image(int rowNum, bool, bool)
 void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int rowNum)
 {
     QString sourceFile = Table_model_video->item(rowNum, 2)->text();
-    QString destFile = Generate_Output_Path(sourceFile, "realesrgan-video.mp4");
+    QString destFile = Generate_Output_Path(sourceFile, "realesrgan_video");
     RealEsrganSettings settings;
     settings.programPath = Current_Path + "/realesrgan-ncnn-vulkan/realesrgan-ncnn-vulkan.exe";
     settings.modelName = ui->comboBox_Model_RealsrNCNNVulkan->currentText();
@@ -281,7 +308,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int rowNum)
 void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
 {
     QString sourceFile = Table_model_video->item(rowNum, 2)->text();
-    QString destFile = Generate_Output_Path(sourceFile, "realcugan-video.mp4");
+    QString destFile = Generate_Output_Path(sourceFile, "realcugan_video");
     RealCuganSettings settings;
     settings.programPath = Current_Path + "/realcugan-ncnn-vulkan/realcugan-ncnn-vulkan.exe";
     settings.modelName = ui->comboBox_Model_RealCUGAN->currentText();
@@ -293,10 +320,74 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
     realCuganProcessor->processVideo(rowNum, sourceFile, destFile, settings);
 }
 
-// --- START OF STUB IMPLEMENTATION SECTION ---
-// This section contains all necessary stubs to achieve a clean build.
-// They will be implemented properly in subsequent tasks.
+// --- Moved from CompatibilityTest.cpp ---
+int MainWindow::Simple_Compatibility_Test()
+{
+    QString realcuganExe = Current_Path + "/realcugan-ncnn-vulkan/realcugan-ncnn-vulkan.exe";
+    QString realesrganExe = Current_Path + "/realesrgan-ncnn-vulkan/realesrgan-ncnn-vulkan.exe";
 
+    isCompatible_RealCUGAN_NCNN_Vulkan = QFile::exists(realcuganExe);
+    emit Send_Add_progressBar_CompatibilityTest();
+
+    isCompatible_RealESRGAN_NCNN_Vulkan = QFile::exists(realesrganExe);
+    emit Send_Add_progressBar_CompatibilityTest();
+
+    QMetaObject::invokeMethod(this, "Finish_progressBar_CompatibilityTest", Qt::QueuedConnection);
+    emit Send_Waifu2x_Compatibility_Test_finished();
+    return 0;
+}
+
+void MainWindow::waitForCompatibilityTest()
+{
+    if (compatibilityTestFuture.isRunning())
+    {
+        compatibilityTestFuture.waitForFinished();
+    }
+}
+
+// --- Implementation for Generate_Output_Path ---
+QString MainWindow::Generate_Output_Path(const QString& original_filePath, const QString& suffix)
+{
+    QFileInfo originalFileInfo(original_filePath);
+    QString baseName = originalFileInfo.completeBaseName();
+    QString originalExt = originalFileInfo.suffix().toLower();
+    QString newBaseName = baseName + "_" + suffix;
+
+    QString outputDir;
+    if (ui->checkBox_OutPath_isEnabled->isChecked() && !ui->lineEdit_outputPath->text().isEmpty()) {
+        outputDir = ui->lineEdit_outputPath->text();
+        QDir dir(outputDir);
+        if (!dir.exists()) {
+            dir.mkpath(".");
+        }
+    } else {
+        outputDir = originalFileInfo.absolutePath();
+    }
+
+    QString newExt = originalExt;
+
+    const QStringList imageExts = {"png", "jpg", "jpeg", "bmp", "webp", "tif", "tiff"};
+    const QStringList videoExts = {"mp4", "mkv", "mov", "avi", "webm", "flv", "mpg", "mpeg", "wmv", "3gp", "vob"};
+    const QStringList gifExts = {"gif"};
+
+    bool isOriginalImage = imageExts.contains(originalExt);
+    bool isOriginalVideo = videoExts.contains(originalExt);
+    bool isOriginalGif = gifExts.contains(originalExt);
+
+    if (isOriginalImage && !isOriginalGif) {
+        newExt = ui->comboBox_ImageSaveFormat->currentText().toLower();
+        if (newExt.isEmpty() || newExt.length() > 5) {
+            newExt = originalExt;
+        }
+    } else if (isOriginalGif) {
+        newExt = "gif";
+    } else if (isOriginalVideo) {
+        // Keep originalExt
+    }
+    return QDir(outputDir).filePath(newBaseName + "." + newExt);
+}
+
+// --- START OF STUB IMPLEMENTATION SECTION ---
 void MainWindow::resizeEvent(QResizeEvent *event) { QMainWindow::resizeEvent(event); /* STUB */ }
 void MainWindow::toggleLiquidGlass(bool enabled) { if (glassWidget) glassWidget->setVisible(enabled); /* STUB */ }
 int MainWindow::Waifu2x_Caffe_Image(int r, bool) { qDebug() << "STUB: Waifu2x_Caffe_Image"; onProcessingFinished(r, false); return 0; }
@@ -505,5 +596,6 @@ void MainWindow::Table_gif_ChangeStatus_rowNumInt_statusQString(int, QString) { 
 void MainWindow::TextBrowser_NewMessage(QString msg) { if (ui) ui->textBrowser->append(msg); }
 
 int MainWindow::FrameInterpolation_DetectGPU_finished() { /* STUB */ return 0; }
+void MainWindow::Finish_progressBar_CompatibilityTest() { /* STUB */ }
 
 // --- END OF STUB IMPLEMENTATION SECTION ---
