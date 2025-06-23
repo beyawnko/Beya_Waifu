@@ -994,7 +994,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
                     else
                     {
                         file_DelDir(VFI_FolderPath_tmp);
-                        if(waifu2x_STOP==false)emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames of video:[")+VideoPath+tr("]. Gonna generate a video without frame Interpolation."));
+                        if(this->waifu2x_STOP==false)emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames of video:[")+VideoPath+tr("]. Gonna generate a video without frame Interpolation."));
                     }
                 }
             }
