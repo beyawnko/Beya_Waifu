@@ -611,7 +611,7 @@ int MainWindow::Settings_Read_Apply()
     }
     {
         QVariant tmp = Settings_Read_value("/settings/checkBox_OutPath_KeepOriginalFileName");
-        if (tmp.isValid()) ui->checkBox_OutPath_KeepOriginalFileName->setChecked(tmp.toBool());
+        // if (tmp.isValid()) ui->checkBox_OutPath_KeepOriginalFileName->setChecked(tmp.toBool()); // Commented out: checkBox_OutPath_KeepOriginalFileName does not exist in UI
     }
     {
         QVariant tmp = Settings_Read_value("/settings/checkBox_OutPath_Overwrite");

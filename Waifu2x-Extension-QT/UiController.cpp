@@ -66,7 +66,7 @@ void UiController::applyDarkStyle(int mode)
 
 void UiController::outputSettingsAreaSetEnabled(Ui::MainWindow *ui, bool enabled)
 {
-    ui->scrollArea_outputPathSettings->setEnabled(enabled);
+    // ui->scrollArea_outputPathSettings->setEnabled(enabled); // Commented out: scrollArea_outputPathSettings does not exist in UI
     ui->lineEdit_outputPath->setClearButtonEnabled(enabled);
     ui->lineEdit_outputPath->setFocusPolicy(enabled ? Qt::StrongFocus : Qt::NoFocus);
 }
