@@ -359,9 +359,9 @@ void RealEsrganProcessor::onFfmpegFinished(int exitCode, QProcess::ExitStatus ex
         m_state = State::ProcessingVideoFrames;
 
         QDir inputDir(m_video_inputFramesPath);
-        inputDir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
+        inputDir.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
         inputDir.setSorting(QDir::Name); // Process frames in order
-        m_video_frameQueue = inputDir.entryList();
+        m_video_frameQueue = QQueue<QString>::fromList(inputDir.entryList());
         m_video_totalFrames = m_video_frameQueue.size();
         m_video_processedFrames = 0;
 
@@ -461,7 +461,6 @@ QStringList RealEsrganProcessor::buildArguments(const QString &inputFile, const 
     arguments << "-i" << QDir::toNativeSeparators(inputFile);
     arguments << "-o" << QDir::toNativeSeparators(outputFile);
 
-    int scaleForThisPass = m_settings.modelNativeScale > 0 ? m_settings.modelNativeScale : 2; // Default if not set
     // If multi-pass is active, scaleForThisPass would be determined by m_scaleSequence.head()
     // This function is generic for one pass; processImage/startNextPass determines actual scale factor for the pass.
     // Here, we use m_settings.targetScale if it's a single pass conceptually, or current pass's scale.
