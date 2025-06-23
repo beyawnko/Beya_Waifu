@@ -394,7 +394,11 @@ void RealEsrganProcessor::onFfmpegFinished(int exitCode, QProcess::ExitStatus ex
         QDir inputDir(m_video_inputFramesPath);
         inputDir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
         inputDir.setSorting(QDir::Name); // Ensure frames are processed in order
-        m_video_frameQueue = inputDir.entryList();
+        QStringList files = inputDir.entryList();
+        m_video_frameQueue.clear();
+        for (const QString &file : files) {
+            m_video_frameQueue.enqueue(file);
+        }
 
         m_video_totalFrames = m_video_frameQueue.size();
         m_video_processedFrames = 0;

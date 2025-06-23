@@ -21,8 +21,8 @@ cmake_minimum_required(VERSION 3.9)
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -march=native" CACHE STRING "Release flags" FORCE)
 
-option(USE_SYSTEM_NCNN "build with system libncnn" OFF)
-option(USE_SYSTEM_WEBP "build with system libwebp" OFF)
+option(USE_SYSTEM_NCNN "build with system libncnn" ON) # Changed to ON
+option(USE_SYSTEM_WEBP "build with system libwebp" ON) # Changed to ON
 option(USE_STATIC_MOLTENVK "link moltenvk static library" OFF)
 
 find_package(Threads)
@@ -228,7 +228,7 @@ if(NOT USE_SYSTEM_NCNN)
     option(WITH_LAYER_layernorm "" OFF)
     option(WITH_LAYER_softplus "" OFF)
 
-    add_subdirectory(ncnn)
+    # add_subdirectory(ncnn) # No longer build ncnn as a submodule
 endif()
 
 if(USE_SYSTEM_WEBP)
@@ -260,9 +260,9 @@ if(NOT USE_SYSTEM_WEBP)
     option(WEBP_NEAR_LOSSLESS "" OFF)
     option(WEBP_ENABLE_SWAP_16BIT_CSP "" OFF)
 
-    add_subdirectory(libwebp)
+    # add_subdirectory(libwebp) # No longer build libwebp as a submodule
 
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libwebp/src)
+    # include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libwebp/src) # Not needed if using system libwebp
 endif()
 
 # look for vulkan compute shader and compile

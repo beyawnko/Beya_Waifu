@@ -246,7 +246,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
         video_images2video(video_mp4_fullpath,video_mp4_scaled_clip_fullpath,SplitFramesFolderPath,"",false,1,1,false);
         if(!QFile::exists(video_mp4_scaled_clip_fullpath))//Check if video was successfully generated
         {
-            if(waifu2x_STOP)
+            if(QProcess_stop) // Replaced waifu2x_STOP
             {
                 emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted");
                 return 0;//If stop bit is enabled, return directly
@@ -279,7 +279,7 @@ int MainWindow::FrameInterpolation_Video_BySegment(int rowNum)
     video_AssembleVideoClips(VideoClipsFolderPath,VideoClipsFolderName,video_mp4_scaled_fullpath,AudioPath);
     if(QFile::exists(video_mp4_scaled_fullpath)==false)//Check if video was successfully generated
     {
-        if(waifu2x_STOP)
+        if(QProcess_stop) // Replaced waifu2x_STOP
         {
             emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted");
             return 0;//If stop bit is enabled, return directly
@@ -389,7 +389,7 @@ int MainWindow::FrameInterpolation_Video(int rowNum)
     video_images2video(video_mp4_fullpath,video_mp4_scaled_fullpath,SplitFramesFolderPath,AudioPath,false,1,1,false);
     if(QFile::exists(video_mp4_scaled_fullpath)==false)//Check if video was successfully generated
     {
-        if(waifu2x_STOP)
+        if(QProcess_stop) // Replaced waifu2x_STOP
         {
             emit Send_Table_video_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted");
             return 0;//If stop bit is enabled, return directly
@@ -567,7 +567,7 @@ bool MainWindow::FrameInterpolation(QString SourcePath,QString OutputPath)
             QTimer timer;
             timer.setInterval(200);
             connect(&timer,&QTimer::timeout,[&](){
-                if(waifu2x_STOP){
+                if(QProcess_stop){ // Replaced waifu2x_STOP
                     FrameInterpolation_QProcess.kill();
                     loop.quit();
                     return;
@@ -966,28 +966,28 @@ void MainWindow::on_groupBox_FrameInterpolation_clicked()
     ui->pushButton_MultipleOfFPS_VFI_MIN->setEnabled(ui->groupBox_FrameInterpolation->isChecked());
     on_comboBox_Engine_VFI_currentIndexChanged(0);
     on_checkBox_MultiGPU_VFI_stateChanged(0);
-    if(ui->groupBox_FrameInterpolation->isChecked()==false)
-    {
-        ui->checkBox_FrameInterpolationOnly_Video->setEnabled(0);
-        ui->checkBox_FrameInterpolationOnly_Video->setChecked(0);
-    }
-    else
-    {
-        ui->checkBox_FrameInterpolationOnly_Video->setEnabled(1);
-    }
-    if(ui->checkBox_EnableVFI_Home->isChecked() != ui->groupBox_FrameInterpolation->isChecked())
-    {
-        ui->checkBox_EnableVFI_Home->setChecked(ui->groupBox_FrameInterpolation->isChecked());
-    }
+    // if(ui->groupBox_FrameInterpolation->isChecked()==false) // Missing checkBox_FrameInterpolationOnly_Video
+    // {
+    //     ui->checkBox_FrameInterpolationOnly_Video->setEnabled(0);
+    //     ui->checkBox_FrameInterpolationOnly_Video->setChecked(0);
+    // }
+    // else
+    // {
+    //     ui->checkBox_FrameInterpolationOnly_Video->setEnabled(1);
+    // }
+    // if(ui->checkBox_EnableVFI_Home->isChecked() != ui->groupBox_FrameInterpolation->isChecked()) // Missing checkBox_EnableVFI_Home
+    // {
+    //     ui->checkBox_EnableVFI_Home->setChecked(ui->groupBox_FrameInterpolation->isChecked());
+    // }
 }
 
 void MainWindow::on_checkBox_EnableVFI_Home_clicked()
 {
-    if(ui->checkBox_EnableVFI_Home->isChecked() != ui->groupBox_FrameInterpolation->isChecked())
-    {
-        ui->groupBox_FrameInterpolation->setChecked(ui->checkBox_EnableVFI_Home->isChecked());
-        on_groupBox_FrameInterpolation_clicked();
-    }
+    // if(ui->checkBox_EnableVFI_Home->isChecked() != ui->groupBox_FrameInterpolation->isChecked()) // Missing checkBox_EnableVFI_Home
+    // {
+    //     ui->groupBox_FrameInterpolation->setChecked(ui->checkBox_EnableVFI_Home->isChecked());
+    //     on_groupBox_FrameInterpolation_clicked();
+    // }
 }
 
 
