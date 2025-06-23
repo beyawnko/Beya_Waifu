@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e # Exit immediately if a command exits with a non-zero status.
 
+# Get the directory where the script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+# Change to that directory
+cd "$SCRIPT_DIR"
+
 # Test PySide6 import
 echo "Testing PySide6 import..."
 python3 -c "import PySide6"
@@ -16,7 +21,7 @@ QTDIR=/usr/lib/qt6
 export PATH="$QTDIR/bin:$PATH"
 
 git submodule update --init --recursive
-cd Waifu2x-Extension-QT
+cd Waifu2x-Extension-QT # <<< CD into project dir
 
 # Run qmake to generate the Makefile
 # Try qmake6 first, then qmake
@@ -31,6 +36,17 @@ else
     exit 1
 fi
 
+rm -f Makefile # <<< NOW remove Makefile from Waifu2x-Extension-QT
+
+echo "Attempting basic qmake parse..."
+$QMAKE_EXECUTABLE Waifu2x-Extension-QT.pro
+if [ $? -ne 0 ]; then
+    echo "Basic qmake parse FAILED. Error is likely fundamental in the .pro file."
+    exit 1
+fi
+echo "Basic qmake parse successful."
+
+echo "Attempting qmake with full arguments..."
 $QMAKE_EXECUTABLE Waifu2x-Extension-QT.pro -spec linux-g++ CONFIG+=debug
 
 # Clean specific previous build artifacts to ensure shader is rebuilt

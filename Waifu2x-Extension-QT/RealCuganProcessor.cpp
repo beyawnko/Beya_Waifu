@@ -1,5 +1,5 @@
 // file: realcuganprocessor.cpp
-#include "realcuganprocessor.h"
+#include "RealCuganProcessor.h" // Changed to correct case
 #include <QFileInfo>
 #include <QDir>
 #include <QDebug>
@@ -141,7 +141,11 @@ void RealCuganProcessor::onFfmpegFinished(int exitCode, QProcess::ExitStatus exi
         m_state = State::ProcessingVideoFrames;
 
         QDir inputDir(m_video_inputFramesPath);
-        m_video_frameQueue = inputDir.entryList(QStringList() << "*.png", QDir::Files, QDir::Name);
+        QStringList frameFiles = inputDir.entryList(QStringList() << "*.png", QDir::Files, QDir::Name);
+        m_video_frameQueue.clear();
+        for (const QString &file : frameFiles) {
+            m_video_frameQueue.enqueue(file);
+        }
         m_video_totalFrames = m_video_frameQueue.size();
         m_video_processedFrames = 0;
 

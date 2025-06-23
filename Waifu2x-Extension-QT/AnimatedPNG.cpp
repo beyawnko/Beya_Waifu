@@ -52,7 +52,7 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
 
     if((CustRes_isContained(sourceFileFullPath) == false) && (double_ScaleRatio_gif != qRound(double_ScaleRatio_gif)))
     {
-        FileMetadataCache metadata = getOrFetchMetadata(sourceFileFullPath);
+        FileMetadata metadata = getOrFetchMetadata(sourceFileFullPath); // Corrected type
         if (!metadata.isValid || metadata.width == 0 || metadata.height == 0) {
             emit Send_TextBrowser_NewMessage(tr("Warning! Unable to read the resolution of [") + sourceFileFullPath + tr("]. This file will only be scaled to ") + QString::number((int)double_ScaleRatio_gif,10) + "X.");
             if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Failed"); }
@@ -105,7 +105,7 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
 
     APNG_Split2Frames(sourceFileFullPath,splitFramesFolder);
 
-    if(waifu2x_STOP)
+    if(QProcess_stop) // Replaced waifu2x_STOP
     {
         if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted"); }
         else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted"); }
@@ -146,7 +146,7 @@ void MainWindow::APNG_Main(int rowNum,bool isFromImageList)
     file_DelDir(scaledFramesFolder);
     if(isNeedRemoveFromCustResList)CustRes_remove(sourceFileFullPath);
 
-    if(waifu2x_STOP)
+    if(QProcess_stop) // Replaced waifu2x_STOP
     {
         if(isFromImageList) { emit Send_Table_image_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted"); }
         else { emit Send_Table_gif_ChangeStatus_rowNumInt_statusQString(rowNum, "Interrupted"); }
@@ -205,7 +205,7 @@ void MainWindow::APNG_Split2Frames(QString sourceFileFullPath,QString splitFrame
     QString cmd = "\""+program+"\" \""+splitCopy+"\" \"0\"";
     QProcess SplitAPNG;
     bool ok = runProcess(&SplitAPNG, cmd);
-    if(waifu2x_STOP || !ok)
+    if(QProcess_stop || !ok) // Replaced waifu2x_STOP
     {
         SplitAPNG.close();
         return;
@@ -224,7 +224,7 @@ void MainWindow::APNG_Frames2APNG(QString sourceFileFullPath,QString scaledFrame
 {
     emit Send_TextBrowser_NewMessage(tr("Start assembling APNG:[")+sourceFileFullPath+"]");
 
-    FileMetadataCache metadata = getOrFetchMetadata(sourceFileFullPath);
+    FileMetadata metadata = getOrFetchMetadata(sourceFileFullPath); // Corrected type
     if(!metadata.isValid)
     {
         emit Send_TextBrowser_NewMessage(tr("ERROR! Unable to read metadata for APNG: [") + sourceFileFullPath + tr("]. Failed to assemble APNG.") );
@@ -295,7 +295,7 @@ void MainWindow::APNG_Frames2APNG(QString sourceFileFullPath,QString scaledFrame
     QString cmd ="\""+program+"\" \""+resultFileFullPath+"\" \""+scaledFramesFolder.replace("%","%%")+"/*.png\" -kp -kc -z1 1 "+QString::number(fps_int,10)+" -l0";
     QProcess AssembleAPNG;
     bool ok = runProcess(&AssembleAPNG, cmd);
-    if(waifu2x_STOP || !ok)
+    if(QProcess_stop || !ok) // Replaced waifu2x_STOP
     {
         AssembleAPNG.close();
         QFile::remove(resultFileFullPath);
@@ -307,7 +307,7 @@ void MainWindow::APNG_Frames2APNG(QString sourceFileFullPath,QString scaledFrame
 bool MainWindow::APNG_isAnimatedPNG(int rowNum)
 {
     QString sourceFileFullPath = Table_model_image->item(rowNum,2)->text();
-    FileMetadataCache metadata = getOrFetchMetadata(sourceFileFullPath);
+    FileMetadata metadata = getOrFetchMetadata(sourceFileFullPath); // Corrected type
     return metadata.isValid && metadata.isAnimated && metadata.fileFormat == "apng";
 }
 

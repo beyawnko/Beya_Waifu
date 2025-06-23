@@ -57,9 +57,9 @@
 #include "LiquidGlassWidget.h"
 #include "anime4kprocessor.h"
 #include "realesrganprocessor.h"
-#include "srmdprocessor.h"
-#include "waifu2xconverterprocessor.h"
-#include "waifu2xcaffeprocessor.h" // Add this with the other processor includes
+// #include "srmdprocessor.h" // File not found
+// #include "waifu2xconverterprocessor.h" // File not found
+// #include "waifu2xcaffeprocessor.h" // File not found
 
 
 #ifndef Q_DECLARE_METATYPE
@@ -95,6 +95,15 @@ struct FileLoadInfo {
 };
 Q_DECLARE_METATYPE(FileLoadInfo)
 
+// Enum for processing status - MOVED EARLIER
+enum ProcessingType {
+    PROCESS_TYPE_NONE = 0,
+    PROCESS_TYPE_IMAGE,
+    PROCESS_TYPE_VIDEO,
+    PROCESS_TYPE_GIF
+    // Add other types if they appear elsewhere
+};
+
 enum class ProcessingState {
     Idle,
     Processing,
@@ -104,17 +113,17 @@ enum class ProcessingState {
 
 struct ProcessJob {
     int rowNum;
-    ProcessingType type;
+    ProcessingType type; // Should now be found
 };
 
 // Enum for processing status
-enum ProcessingType {
-    PROCESS_TYPE_NONE = 0,
-    PROCESS_TYPE_IMAGE,
-    PROCESS_TYPE_VIDEO,
-    PROCESS_TYPE_GIF
+// enum ProcessingType { // MOVED
+// PROCESS_TYPE_NONE = 0,
+// PROCESS_TYPE_IMAGE,
+// PROCESS_TYPE_VIDEO, // Properly commented out
+// PROCESS_TYPE_GIF // Properly commented out
     // Add other types if they appear elsewhere
-};
+// }; // Properly commented out
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -126,7 +135,7 @@ QT_END_NAMESPACE
 class RealCuganProcessor;
 class VideoProcessor;
 class RealEsrganProcessor; // Forward declaration
-class Waifu2xCaffeProcessor; // Forward-declare
+// class Waifu2xCaffeProcessor; // Forward-declare, commented out as header is missing
 
 class MainWindow : public QMainWindow
 {
@@ -136,6 +145,7 @@ public:
     explicit MainWindow(int maxThreadsOverride = 0, QWidget *parent = nullptr);
     void changeEvent(QEvent *e);
     void resizeEvent(QResizeEvent *event) override;
+    void startNextFileProcessing(); // Moved to public for QtConcurrent
 
     //======================= Version Info =======================
     QString VERSION = "v3.41.02-beta";
@@ -775,6 +785,27 @@ public slots:
 private slots:
     void TextBrowser_StartMes(); // Single declaration in private slots
     void toggleLiquidGlass(bool enabled);
+    void on_pushButton_Start_clicked(); // Ensuring this is present
+
+    // The on_... slots that were causing "cannot be overloaded" errors were removed here.
+    // The compiler output indicates they are already declared elsewhere in the public slots section.
+
+private: // Added for non-slot private member functions
+    // ... any existing private members ...
+    void Anime4k_Image(int rowNum, bool useTTA);
+    void RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool useTTA);
+    // Realcugan_NCNN_Vulkan_Image is already declared as a public slot or member
+    void RealESRGAN_NCNN_Vulkan_Video(int rowNum);
+    // Realcugan_NCNN_Vulkan_Video is already declared as a public slot or member
+
+    // Stubs from mainwindow.cpp that need declaration
+    int Waifu2x_Caffe_Image(int r, bool flag);
+    int Waifu2x_Converter_Image(int r, bool flag);
+    // Many other stubs are already correctly declared in public/private slots or as public members.
+    // Adding only those specifically mentioned in recent errors or clearly missing.
+    int Realsr_ncnn_vulkan_DetectGPU_finished();
+    int RealESRGAN_ncnn_vulkan_DetectGPU_finished();
+
 
 signals:
     void Send_Table_EnableSorting(bool EnableSorting);
@@ -850,12 +881,15 @@ private:
     LiquidGlassWidget *glassWidget {nullptr};
     bool glassEnabled {false};
     Anime4KProcessor *m_anime4kProcessor;
-    SrmdProcessor *m_srmdProcessor;
-    Waifu2xConverterProcessor *m_converterProcessor = nullptr;
-    Waifu2xCaffeProcessor *m_caffeProcessor = nullptr;
+    // SrmdProcessor *m_srmdProcessor; // Class definition missing
+    // Waifu2xConverterProcessor *m_converterProcessor = nullptr; // Class definition missing
+    // Waifu2xCaffeProcessor *m_caffeProcessor = nullptr; // Class definition missing
 
     ProcessingState m_currentState;
     QQueue<ProcessJob> m_jobQueue;
+    bool isProcessing = false; // Added
+    bool waifu2x_STOP_confirm = false; // Added
+
 
     Ui::MainWindow *ui;
 };
