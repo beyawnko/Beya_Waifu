@@ -40,6 +40,7 @@ These protocols define the mandatory algorithms for your reasoning and task exec
 
 
 - Plan: Decompose the task into a sequence of steps, explicitly referencing the protocols in this document that will guide your execution. For Jules, this is your primary plan submission.
+    - *UI-Related Bug Diagnosis*: When planning to address bugs involving UI elements (e.g., `ui->someElement` errors, signal/slot issues that might originate from UI definitions), the plan should include a step to inspect the relevant Qt User Interface files (`.ui` files) for element definitions, properties, and signal/slot connections. This is in addition to checking C++ source code.
 - Do: Execute the plan, following the ReAct protocol for each step.
 - Check: Upon completion of the implementation, run all relevant project tests (see Section 6.1). Then, invoke the LLM-as-a-Judge protocol (Section 5.2) to score the quality and coherence of the output on a scale of 1-100.
 - Act: If all tests pass and the quality score is >= 95, finalize the task and proceed to the Self-Modification Mandate (Section 2.0). If any test fails or the score is < 95, the task is considered failed. You must analyze the failure and immediately trigger the Self-Modification Mandate to improve the protocol that led to the failure.

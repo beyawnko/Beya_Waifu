@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    My Github homepage: https://github.com/AaronFeng753
+    My Github homepage: https://github.com/beyawnko
 */
 #include <QtCore/qglobal.h>
 
@@ -366,12 +366,12 @@ void MainWindow::video_video2images_ProcessBySegment(QString VideoPath,QString F
     //=====================
     QProcess video_splitFrame;
     QString splitCmd = "\""+ffmpeg_path+"\" -y"+fps_video_cmd+"-i \""+video_mp4_fullpath+"\" -ss "+QString::number(StartTime,10)+" -t "+QString::number(SegmentDuration,10)+fps_video_cmd+" \""+FrameFolderPath.replace("%","%%")+"/%0"+QString::number(FrameNumDigits,10)+"d.png\"";
-    runProcess(&video_splitFrame, splitCmd);
+    (void)runProcess(&video_splitFrame, splitCmd);
     //============== Attempt commands that might work on Win7 ================================
     if(file_isDirEmpty(FrameFolderPath))
     {
         splitCmd = "\""+ffmpeg_path+"\" -y"+fps_video_cmd+"-i \""+video_mp4_fullpath+"\" -ss "+QString::number(StartTime,10)+" -t "+QString::number(SegmentDuration,10)+fps_video_cmd+" \""+FrameFolderPath.replace("%","%%")+"/%%0"+QString::number(FrameNumDigits,10)+"d.png\"";
-        runProcess(&video_splitFrame, splitCmd);
+        (void)runProcess(&video_splitFrame, splitCmd);
     }
     //======== Frame interpolation =========
     QFileInfo vfinfo(VideoPath);
@@ -424,7 +424,7 @@ void MainWindow::video_get_audio(QString VideoPath,QString AudioPath)
     QFile::remove(AudioPath);
     QProcess video_splitSound;
     QString sndCmd = "\""+ffmpeg_path+"\" -y -i \""+VideoPath+"\" \""+AudioPath+"\"";
-    runProcess(&video_splitSound, sndCmd);
+    (void)runProcess(&video_splitSound, sndCmd);
     if(QFile::exists(AudioPath))
     {
         emit Send_TextBrowser_NewMessage(tr("Successfully extracted audio from video: [")+VideoPath+"]");
@@ -509,7 +509,7 @@ QString MainWindow::video_To_CFRMp4(QString VideoPath)
     //=====
     QProcess video_tomp4;
     QString mp4Cmd = "\""+ffmpeg_path+"\" -y -i \""+VideoPath+"\""+vsync_1+vcodec_copy_cmd+acodec_copy_cmd+bitrate_vid_cmd+bitrate_audio_cmd+bitrate_FromOG+" "+Extra_command+" \""+video_mp4_fullpath+"\"";
-    runProcess(&video_tomp4, mp4Cmd);
+    (void)runProcess(&video_tomp4, mp4Cmd);
     //======
     if(QFile::exists(video_mp4_fullpath))
     {
@@ -553,9 +553,9 @@ QString MainWindow::video_AudioDenoise(QString OriginalAudioPath)
     double DenoiseLevel = ui->doubleSpinBox_AudioDenoiseLevel->value();
     //================
     QProcess vid;
-    runProcess(&vid, "\""+program+"\" \""+OriginalAudioPath+"\" -n noiseprof \""+DenoiseProfile+"\"");
+    (void)runProcess(&vid, "\""+program+"\" \""+OriginalAudioPath+"\" -n noiseprof \""+DenoiseProfile+"\"");
     //================
-    runProcess(&vid, "\""+program+"\" \""+OriginalAudioPath+"\" \""+DenoisedAudio+"\" noisered \""+DenoiseProfile+"\" "+QString("%1").arg(DenoiseLevel));
+    (void)runProcess(&vid, "\""+program+"\" \""+OriginalAudioPath+"\" \""+DenoisedAudio+"\" noisered \""+DenoiseProfile+"\" "+QString("%1").arg(DenoiseLevel));
     //================
     if(QFile::exists(DenoisedAudio))
     {
@@ -1024,7 +1024,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
     }
     QProcess images2video;
     QFile::remove(video_mp4_scaled_fullpath);//Delete old file
-    runProcess(&images2video, CMD);
+    (void)runProcess(&images2video, CMD);
     if(this->waifu2x_STOP)
     {
         images2video.close();
@@ -1045,7 +1045,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
             CMD = "\""+ffmpeg_path+"\" -y -f image2 -framerate "+fps+" -r "+fps+" -i \""+ScaledFrameFolderPath.replace("%","%%")+"/%%0"+QString::number(FrameNumDigits,10)+"d.png\" -r "+fps+bitrate_video_cmd+resize_cmd+video_ReadSettings_OutputVid(AudioPath)+" -r "+fps+" \""+video_mp4_scaled_fullpath+"\"";
         }
         QProcess images2video_retry;
-        runProcess(&images2video_retry, CMD);
+        (void)runProcess(&images2video_retry, CMD);
         if(this->waifu2x_STOP)
         {
             images2video_retry.close();
