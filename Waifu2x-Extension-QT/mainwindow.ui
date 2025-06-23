@@ -8246,6 +8246,13 @@ padding:10px;
              </property>
             </widget>
            </item>
+                   <item>
+                    <widget class="QCheckBox" name="checkBox_OutPath_KeepOriginalFileName">
+                     <property name="text">
+                      <string>Keep original file name</string>
+                     </property>
+                    </widget>
+                   </item>
           </layout>
          </item>
         </layout>

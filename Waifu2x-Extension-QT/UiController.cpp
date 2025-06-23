@@ -66,9 +66,12 @@ void UiController::applyDarkStyle(int mode)
 
 void UiController::outputSettingsAreaSetEnabled(Ui::MainWindow *ui, bool enabled)
 {
-    ui->scrollArea_outputPathSettings->setEnabled(enabled);
-    ui->lineEdit_outputPath->setClearButtonEnabled(enabled);
-    ui->lineEdit_outputPath->setFocusPolicy(enabled ? Qt::StrongFocus : Qt::NoFocus);
+    // Original code used ui->scrollArea_outputPathSettings->setEnabled(enabled);
+    // Replacing with groupBox_OutPut as it's the current container for these settings.
+    // Child widgets like lineEdit_outputPath will inherit the enabled state.
+    ui->groupBox_OutPut->setEnabled(enabled);
+    ui->lineEdit_outputPath->setClearButtonEnabled(enabled); // Keep this line as it's specific to the line edit
+    ui->lineEdit_outputPath->setFocusPolicy(enabled ? Qt::StrongFocus : Qt::NoFocus); // Keep this line
 }
 
 void UiController::updateEngineSettingsVisibility(Ui::MainWindow *ui, const QString& selectedEngineName)
