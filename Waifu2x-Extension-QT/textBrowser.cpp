@@ -22,33 +22,9 @@
 /*
 Output a new message in the text box
 */
-void MainWindow::TextBrowser_NewMessage(QString message)
-{
-    QString Current_Time = QDateTime::currentDateTime().toString("[yyyy-MM-dd hh:mm:ss]");
-    QString OutPutStr = Current_Time+" "+message;
-    ui->textBrowser->append(OutPutStr);
-    ui->textBrowser->moveCursor(QTextCursor::End);
-}
+// void MainWindow::TextBrowser_NewMessage(QString message) -> Definition is now a stub in mainwindow.cpp
 /*
 Output the welcome message in the text box
 Displayed on startup
 */
-void MainWindow::TextBrowser_StartMes()
-{
-    QString CurrentVerState="";
-    if(isBetaVer)
-    {
-        CurrentVerState=tr("[Beta]");
-    }
-    else
-    {
-        CurrentVerState=tr("[Stable]");
-    }
-    //====
-    ui->textBrowser->append("Beya_Waifu by beyawnko");
-    ui->textBrowser->append(tr("Version:")+" "+VERSION+" "+CurrentVerState);
-    ui->textBrowser->append("Github: https://github.com/beyawnko/Beya_Waifu");
-    ui->textBrowser->append("Gitee: https://gitee.com/beyawnko/Beya_Waifu");
-    ui->textBrowser->append(tr("Please donate to support the developers, so we can bring further updates for this software, thank you! (^_^)/"));
-    ui->textBrowser->moveCursor(QTextCursor::End);
-}
+// void MainWindow::TextBrowser_StartMes() -> Definition is now a stub in mainwindow.cpp

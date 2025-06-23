@@ -170,15 +170,7 @@ void MainWindow::Read_urls(QList<QUrl> urls,
 Read urls
 Aftermath/Cleanup
 */
-void MainWindow::Read_urls_finfished()
-{
-    // This function's primary responsibilities (re-enabling UI, showing messages, updating tables)
-    // have been moved to Batch_Table_Update_slots, which is called in the main thread
-    // after the worker thread (Read_urls) finishes collecting all file information.
-    // The progress bar reset for the "loading files" phase is also handled there.
-    // Global AddNew_image flags are also handled by the new slot based on info from worker.
-    qDebug() << "Read_urls_finfished() called - its responsibilities are now in Batch_Table_Update_slots.";
-}
+// void MainWindow::Read_urls_finfished() -> Definition is now a stub in mainwindow.cpp
 
 
 /*

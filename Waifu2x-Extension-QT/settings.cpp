@@ -13,8 +13,6 @@
 
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-    My Github homepage: https://github.com/AaronFeng753
 */
 
 #include "mainwindow.h"
@@ -28,256 +26,7 @@
 Save settings
 Remove the original settings file before saving
 */
-int MainWindow::Settings_Save()
-{
-    QString settings_ini = Current_Path+"/settings.ini";
-    QFile::remove(settings_ini);
-    //=================
-    QSettings *configIniWrite = new QSettings(settings_ini, QSettings::IniFormat);
-#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
-    configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8"));
-#endif
-    //================= Add warning =========================
-    configIniWrite->setValue("/Warning/.", "Do not modify this file! It may cause the program to crash! If problems occur after the modification, delete this file and restart the program.");
-    //==================== Save version identifier ==================================
-    configIniWrite->setValue("/settings/VERSION", VERSION);
-    //===== UI style settings =====
-    configIniWrite->setValue("/settings/DarkMode", 1); // 0=light,1=dark,2=auto
-    //======= Save scale and denoise values  =================================
-    configIniWrite->setValue("/settings/ImageScaleRatio", ui->doubleSpinBox_ScaleRatio_image->value());
-    configIniWrite->setValue("/settings/GIFScaleRatio", ui->doubleSpinBox_ScaleRatio_gif->value());
-    configIniWrite->setValue("/settings/VideoScaleRatio", ui->doubleSpinBox_ScaleRatio_video->value());
-    configIniWrite->setValue("/settings/ImageDenoiseLevel", ui->spinBox_DenoiseLevel_image->value());
-    configIniWrite->setValue("/settings/GIFDenoiseLevel", ui->spinBox_DenoiseLevel_gif->value());
-    configIniWrite->setValue("/settings/VideoDenoiseLevel", ui->spinBox_DenoiseLevel_video->value());
-    //============ Save custom width, height and settings ============================
-    configIniWrite->setValue("/settings/CustResWidth", ui->spinBox_CustRes_width->value());
-    configIniWrite->setValue("/settings/CustResHeight", ui->spinBox_CustRes_height->value());
-    configIniWrite->setValue("/settings/CustResAspectRatioMode", ui->comboBox_AspectRatio_custRes->currentIndex());
-    //============ Save thread count ====================================
-    configIniWrite->setValue("/settings/ImageThreadNum", ui->spinBox_ThreadNum_image->value());
-    configIniWrite->setValue("/settings/GIFThreadNumInternal", ui->spinBox_ThreadNum_gif_internal->value());
-    configIniWrite->setValue("/settings/VideoThreadNumInternal", ui->spinBox_ThreadNum_video_internal->value());
-    configIniWrite->setValue("/settings/MaxThreadCount", globalMaxThreadCount);
-    //================== Save engine settings =========================
-    configIniWrite->setValue("/settings/ImageEngine", ui->comboBox_Engine_Image->currentIndex());
-    configIniWrite->setValue("/settings/GIFEngine", ui->comboBox_Engine_GIF->currentIndex());
-    configIniWrite->setValue("/settings/VideoEngine", ui->comboBox_Engine_Video->currentIndex());
-    configIniWrite->setValue("/settings/ImageStyle", ui->comboBox_ImageStyle->currentIndex());
-    configIniWrite->setValue("/settings/ModelVulkan", ui->comboBox_model_vulkan->currentIndex());
-    configIniWrite->setValue("/settings/TileSize", ui->spinBox_TileSize->value());
-    configIniWrite->setValue("/settings/BlockSizeConverter", ui->spinBox_BlockSize_converter->value());
-    configIniWrite->setValue("/settings/DisableGPUConverter", ui->checkBox_DisableGPU_converter->isChecked());
-    configIniWrite->setValue("/settings/ForceOpenCLConverter", ui->checkBox_ForceOpenCL_converter->isChecked());
-    configIniWrite->setValue("/settings/TTAVulkan", ui->checkBox_TTA_vulkan->isChecked());
-    configIniWrite->setValue("/settings/TTAConverter", ui->checkBox_TTA_converter->isChecked());
-    configIniWrite->setValue("/settings/TTA_SRMD", ui->checkBox_TTA_srmd->isChecked());
-    configIniWrite->setValue("/settings/TileSize_SRMD", ui->spinBox_TileSize_srmd->value());
-    configIniWrite->setValue("/settings/Version_Waifu2xNCNNVulkan", ui->comboBox_version_Waifu2xNCNNVulkan->currentIndex());
-    //===
-    configIniWrite->setValue("/settings/TTA_Waifu2xCaffe", ui->checkBox_TTA_Waifu2xCaffe->isChecked());
-    configIniWrite->setValue("/settings/Model_2D_Waifu2xCaffe", ui->comboBox_Model_2D_Waifu2xCaffe->currentIndex());
-    configIniWrite->setValue("/settings/Model_3D_Waifu2xCaffe", ui->comboBox_Model_3D_Waifu2xCaffe->currentIndex());
-    configIniWrite->setValue("/settings/ProcessMode_Waifu2xCaffe", ui->comboBox_ProcessMode_Waifu2xCaffe->currentIndex());
-    configIniWrite->setValue("/settings/BatchSize_Waifu2xCaffe", ui->spinBox_BatchSize_Waifu2xCaffe->value());
-    configIniWrite->setValue("/settings/GPUID_Waifu2xCaffe", ui->spinBox_GPUID_Waifu2xCaffe->value());
-    configIniWrite->setValue("/settings/SplitSize_Waifu2xCaffe", ui->spinBox_SplitSize_Waifu2xCaffe->value());
-    configIniWrite->setValue("/settings/checkBox_EnableMultiGPU_Waifu2xCaffe", ui->checkBox_EnableMultiGPU_Waifu2xCaffe->isChecked());
-    configIniWrite->setValue("/settings/lineEdit_MultiGPUInfo_Waifu2xCaffe", ui->lineEdit_MultiGPUInfo_Waifu2xCaffe->text());
-    //===
-    configIniWrite->setValue("/settings/checkBox_TTA_RealsrNCNNVulkan", ui->checkBox_TTA_RealsrNCNNVulkan->isChecked());
-    configIniWrite->setValue("/settings/comboBox_Model_RealsrNCNNVulkan", ui->comboBox_Model_RealsrNCNNVulkan->currentIndex());
-    configIniWrite->setValue("/settings/spinBox_TileSize_RealsrNCNNVulkan", ui->spinBox_TileSize_RealsrNCNNVulkan->value());
-    //GPU ID List
-    configIniWrite->setValue("/settings/CurrentGPUID_Waifu2xNCNNVulkan", ui->comboBox_GPUID->currentIndex());
-    configIniWrite->setValue("/settings/Available_GPUID_Waifu2xNCNNVulkan", Available_GPUID_Waifu2xNcnnVulkan);
-    configIniWrite->setValue("/settings/GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan", QVariant::fromValue(GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan));
-    configIniWrite->setValue("/settings/checkBox_MultiGPU_Waifu2xNCNNVulkan", ui->checkBox_MultiGPU_Waifu2xNCNNVulkan->isChecked());
-    //==
-    configIniWrite->setValue("/settings/comboBox_GPUID_RealsrNCNNVulkan", ui->comboBox_GPUID_RealsrNCNNVulkan->currentIndex());
-    //configIniWrite->setValue("/settings/Available_GPUID_Realsr_ncnn_vulkan", Available_GPUID_Realsr_ncnn_vulkan); // Error: Available_GPUID_Realsr_ncnn_vulkan not declared
-    //configIniWrite->setValue("/settings/GPUIDs_List_MultiGPU_RealsrganNcnnVulkan", QVariant::fromValue(GPUIDs_List_MultiGPU_RealesrganNcnnVulkan)); // Error: GPUIDs_List_MultiGPU_RealesrganNcnnVulkan not declared
-    configIniWrite->setValue("/settings/checkBox_MultiGPU_RealesrganNcnnVulkan", ui->checkBox_MultiGPU_RealesrganNcnnVulkan->isChecked());
-    //==
-    configIniWrite->setValue("/settings/comboBox_TargetProcessor_converter", ui->comboBox_TargetProcessor_converter->currentIndex());
-    configIniWrite->setValue("/settings/Available_ProcessorList_converter", Available_ProcessorList_converter);
-    //configIniWrite->setValue("/settings/GPUIDs_List_MultiGPU_Waifu2xConverter", QVariant::fromValue(GPUIDs_List_MultiGPU_Waifu2xConverter)); // Error: GPUIDs_List_MultiGPU_Waifu2xConverter not declared
-    configIniWrite->setValue("/settings/checkBox_MultiGPU_Waifu2xConverter", ui->checkBox_MultiGPU_Waifu2xConverter->isChecked());
-    //==
-    configIniWrite->setValue("/settings/comboBox_GPUID_srmd", ui->comboBox_GPUID_srmd->currentIndex());
-    configIniWrite->setValue("/settings/Available_GPUID_srmd", Available_GPUID_srmd);
-    //configIniWrite->setValue("/settings/GPUIDs_List_MultiGPU_SrmdNcnnVulkan", QVariant::fromValue(GPUIDs_List_MultiGPU_SrmdNcnnVulkan)); // Error: GPUIDs_List_MultiGPU_SrmdNcnnVulkan not declared
-    configIniWrite->setValue("/settings/checkBox_MultiGPU_SrmdNCNNVulkan", ui->checkBox_MultiGPU_SrmdNCNNVulkan->isChecked());
-    //== RealCUGAN
-    if(ui->comboBox_Model_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_Model", ui->comboBox_Model_RealCUGAN->currentIndex());
-    if(ui->spinBox_Scale_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_Scale", ui->spinBox_Scale_RealCUGAN->value());
-    if(ui->spinBox_DenoiseLevel_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_DenoiseLevel", ui->spinBox_DenoiseLevel_RealCUGAN->value());
-    if(ui->spinBox_TileSize_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_TileSize", ui->spinBox_TileSize_RealCUGAN->value());
-    if(ui->checkBox_TTA_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_TTA", ui->checkBox_TTA_RealCUGAN->isChecked());
-    if(ui->comboBox_GPUID_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_GPUID", ui->comboBox_GPUID_RealCUGAN->currentIndex());
-    configIniWrite->setValue("/settings/RealCUGAN_Available_GPUID", Available_GPUID_RealCUGAN);
-    if(ui->checkBox_MultiGPU_RealCUGAN) configIniWrite->setValue("/settings/RealCUGAN_MultiGPU_Enabled", ui->checkBox_MultiGPU_RealCUGAN->isChecked());
-    configIniWrite->setValue("/settings/RealCUGAN_GPUJobConfig_MultiGPU", QVariant::fromValue(m_realcugan_gpuJobConfig_temp));
-    //== RealESRGAN
-    if(ui->comboBox_Model_RealsrNCNNVulkan) configIniWrite->setValue("/settings/RealESRGAN_ModelName", ui->comboBox_Model_RealsrNCNNVulkan->currentText());
-    if(ui->spinBox_TileSize_RealsrNCNNVulkan) configIniWrite->setValue("/settings/RealESRGAN_TileSize", ui->spinBox_TileSize_RealsrNCNNVulkan->value());
-    if(ui->checkBox_TTA_RealsrNCNNVulkan) configIniWrite->setValue("/settings/RealESRGAN_TTA", ui->checkBox_TTA_RealsrNCNNVulkan->isChecked());
-    if(ui->comboBox_GPUID_RealsrNCNNVulkan) configIniWrite->setValue("/settings/RealESRGAN_GPUID", ui->comboBox_GPUID_RealsrNCNNVulkan->currentIndex());
-    //configIniWrite->setValue("/settings/RealESRGAN_Available_GPUID", Available_GPUID_RealESRGAN_ncnn_vulkan); // Error: Available_GPUID_RealESRGAN_ncnn_vulkan not declared
-    if(ui->checkBox_MultiGPU_RealesrganNcnnVulkan) configIniWrite->setValue("/settings/RealESRGAN_MultiGPU_Enabled", ui->checkBox_MultiGPU_RealesrganNcnnVulkan->isChecked());
-    //configIniWrite->setValue("/settings/RealESRGAN_GPUJobConfig_MultiGPU", QVariant::fromValue(m_realesrgan_gpuJobConfig_temp)); // Error: m_realesrgan_gpuJobConfig_temp not declared
-    //================== Save file extensions =================================
-    configIniWrite->setValue("/settings/ImageEXT", ui->Ext_image->text());
-    configIniWrite->setValue("/settings/VideoEXT", ui->Ext_video->text());
-    //=================== Save miscellaneous settings =================================
-    configIniWrite->setValue("/settings/checkBox_SummaryPopup", ui->checkBox_SummaryPopup->isChecked());
-    configIniWrite->setValue("/settings/checkBox_DisableResize_gif", ui->checkBox_DisableResize_gif->isChecked());
-    configIniWrite->setValue("/settings/checkBox_AutoSkip_CustomRes", ui->checkBox_AutoSkip_CustomRes->isChecked());
-    configIniWrite->setValue("/settings/checkBox_AlwaysPreProcessAlphaPNG", ui->checkBox_AlwaysPreProcessAlphaPNG->isChecked());
-    configIniWrite->setValue("/settings/spinBox_ImageQualityLevel", ui->spinBox_ImageQualityLevel->value());
-    configIniWrite->setValue("/settings/comboBox_ImageSaveFormat", ui->comboBox_ImageSaveFormat->currentIndex());
-    //configIniWrite->setValue("/settings/checkBox_KeepParentFolder", ui->checkBox_KeepParentFolder->isChecked()); // Error: ui->checkBox_KeepParentFolder not a member
-    configIniWrite->setValue("/settings/checkBox_BanGitee", ui->checkBox_BanGitee->isChecked());
-    //configIniWrite->setValue("/settings/comboBox_UpdateChannel", ui->comboBox_UpdateChannel->currentIndex()); // Error: ui->comboBox_UpdateChannel not a member
-    configIniWrite->setValue("/settings/checkBox_MinimizeToTaskbar", ui->checkBox_MinimizeToTaskbar->isChecked());
-    configIniWrite->setValue("/settings/checkBox_custres_isAll", ui->checkBox_custres_isAll->isChecked());
-    configIniWrite->setValue("/settings/DelOriginal", ui->checkBox_DelOriginal->isChecked());
-    configIniWrite->setValue("/settings/OptGIF", ui->checkBox_OptGIF->isChecked());
-    configIniWrite->setValue("/settings/NFSound", ui->checkBox_NfSound->isChecked());
-    configIniWrite->setValue("/settings/ReProFinFiles", ui->checkBox_ReProcFinFiles->isChecked());
-    configIniWrite->setValue("/settings/ShowInterPro", ui->checkBox_ShowInterPro->isChecked());
-    configIniWrite->setValue("/settings/UpdatePopup", ui->checkBox_UpdatePopup->isChecked());
-    configIniWrite->setValue("/settings/FileListAutoScroll", ui->checkBox_FileListAutoSlide->isChecked());
-    configIniWrite->setValue("/settings/AutoSaveSettings", ui->checkBox_AutoSaveSettings->isChecked());
-    configIniWrite->setValue("/settings/AlwaysHideSettings", ui->checkBox_AlwaysHideSettings->isChecked());
-    configIniWrite->setValue("/settings/AlwaysHideTextBrowser", ui->checkBox_AlwaysHideTextBrowser->isChecked());
-    configIniWrite->setValue("/settings/ScanSubFolders", ui->checkBox_ScanSubFolders->isChecked());
-    configIniWrite->setValue("/settings/InteractiveFileList", ui->checkBox_FileList_Interactive->isChecked());
-//     configIniWrite->setValue("/settings/RetryTimes", ui->spinBox_retry->value());
-    configIniWrite->setValue("/settings/AutoDetectAlphaChannel", ui->checkBox_AutoDetectAlphaChannel->isChecked());
-    configIniWrite->setValue("/settings/PromptWhenExit", ui->checkBox_PromptWhenExit->isChecked());
-    configIniWrite->setValue("/settings/KeepVideoCache", ui->checkBox_KeepVideoCache->isChecked());
-    configIniWrite->setValue("/settings/checkBox_ReplaceOriginalFile", ui->checkBox_ReplaceOriginalFile->isChecked());
-    //===
-    configIniWrite->setValue("/settings/QAction_checkBox_MoveToRecycleBin_checkBox_ReplaceOriginalFile", QAction_checkBox_MoveToRecycleBin_checkBox_ReplaceOriginalFile->isChecked());
-    //===
-    configIniWrite->setValue("/settings/QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal", QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal->isChecked());
-    //===
-    configIniWrite->setValue("/settings/ProcessVideoBySegment", ui->checkBox_ProcessVideoBySegment->isChecked());
-    configIniWrite->setValue("/settings/SegmentDuration", ui->spinBox_VideoSplitDuration->value());
-    //=====
-    configIniWrite->setValue("/settings/AudioDenoise", ui->checkBox_AudioDenoise->isChecked());
-    configIniWrite->setValue("/settings/AudioDenoiseLevel", ui->doubleSpinBox_AudioDenoiseLevel->value());
-    //=====
-    configIniWrite->setValue("/settings/checkBox_PreProcessImage", ui->checkBox_PreProcessImage->isChecked());
-    //===================== Save text browser settings =====================
-    configIniWrite->setValue("/settings/TextBrowserFontSize", ui->spinBox_textbrowser_fontsize->value());
-    //===================== Save language settings ================================
-//     configIniWrite->setValue("/settings/Language", ui->comboBox_language->currentIndex());
-    //================== Save global font settings =========================
-    configIniWrite->setValue("/settings/GlobalFontSize", ui->spinBox_GlobalFontSize->value());
-    configIniWrite->setValue("/settings/CustFont", ui->fontComboBox_CustFont->currentFont());
-    configIniWrite->setValue("/settings/CustFont_isEnabled", ui->checkBox_isCustFontEnable->isChecked());
-    //=================== Save video settings ===========================
-    configIniWrite->setValue("/settings/VideoSettingsIsEnabled", ui->groupBox_video_settings->isChecked());
-    configIniWrite->setValue("/settings/EncoderVideo", ui->lineEdit_encoder_vid->text());
-    configIniWrite->setValue("/settings/EncoderAudio", ui->lineEdit_encoder_audio->text());
-    configIniWrite->setValue("/settings/PixelFormat", ui->lineEdit_pixformat->text());
-    configIniWrite->setValue("/settings/BitrateVideo", ui->spinBox_bitrate_vid->value());
-    configIniWrite->setValue("/settings/BitrateAudio", ui->spinBox_bitrate_audio->value());
-    configIniWrite->setValue("/settings/ExtraCommandOutput", ui->lineEdit_ExCommand_output->text());
-    //===
-    configIniWrite->setValue("/settings/BitrateVideo2mp4", ui->spinBox_bitrate_vid_2mp4->value());
-    configIniWrite->setValue("/settings/BitrateAudio2mp4", ui->spinBox_bitrate_audio_2mp4->value());
-    configIniWrite->setValue("/settings/vcodecCopy", ui->checkBox_vcodec_copy_2mp4->isChecked());
-    configIniWrite->setValue("/settings/acodecCopy", ui->checkBox_acodec_copy_2mp4->isChecked());
-    configIniWrite->setValue("/settings/checkBox_IgnoreFrameRateMode", ui->checkBox_IgnoreFrameRateMode->isChecked());
-    configIniWrite->setValue("/settings/ExtraCommand2mp4", ui->lineEdit_ExCommand_2mp4->text());
-    //==================== Save output path settings ========================
-    configIniWrite->setValue("/settings/OutPutPath", ui->lineEdit_outputPath->text());
-    configIniWrite->setValue("/settings/OutPutPathIsEnabled", ui->checkBox_OutPath_isEnabled->isChecked());
-    configIniWrite->setValue("/settings/checkBox_OutPath_KeepOriginalFileName", ui->checkBox_OutPath_KeepOriginalFileName->isChecked());
-    configIniWrite->setValue("/settings/checkBox_OutPath_Overwrite", ui->checkBox_OutPath_Overwrite->isChecked());
-    configIniWrite->setValue("/settings/checkBox_AutoOpenOutputPath", ui->checkBox_AutoOpenOutputPath->isChecked());
-    //=================== Save Anime4k settings =============================
-    configIniWrite->setValue("/settings/spinBox_OpenCLCommandQueues_A4k", ui->spinBox_OpenCLCommandQueues_A4k->value());
-    configIniWrite->setValue("/settings/checkBox_OpenCLParallelIO_A4k", ui->checkBox_OpenCLParallelIO_A4k->isChecked());
-    configIniWrite->setValue("/settings/comboBox_GPGPUModel_A4k", ui->comboBox_GPGPUModel_A4k->currentIndex());
-    configIniWrite->setValue("/settings/checkBox_HDNMode_Anime4k", ui->checkBox_HDNMode_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_FastMode_Anime4K", ui->checkBox_FastMode_Anime4K->isChecked());
-    configIniWrite->setValue("/settings/checkBox_ACNet_Anime4K", ui->checkBox_ACNet_Anime4K->isChecked());
-    configIniWrite->setValue("/settings/checkBox_GPUMode_Anime4K", ui->checkBox_GPUMode_Anime4K->isChecked());
-    configIniWrite->setValue("/settings/spinBox_Passes_Anime4K", ui->spinBox_Passes_Anime4K->value());
-    configIniWrite->setValue("/settings/spinBox_PushColorCount_Anime4K", ui->spinBox_PushColorCount_Anime4K->value());
-    configIniWrite->setValue("/settings/doubleSpinBox_PushColorStrength_Anime4K", ui->doubleSpinBox_PushColorStrength_Anime4K->value());
-    configIniWrite->setValue("/settings/doubleSpinBox_PushGradientStrength_Anime4K", ui->doubleSpinBox_PushGradientStrength_Anime4K->value());
-    configIniWrite->setValue("/settings/checkBox_SpecifyGPU_Anime4k", ui->checkBox_SpecifyGPU_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/lineEdit_GPUs_Anime4k", ui->lineEdit_GPUs_Anime4k->text());
-    //Pre-Processing
-    configIniWrite->setValue("/settings/checkBox_EnablePreProcessing_Anime4k", ui->checkBox_EnablePreProcessing_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_MedianBlur_Pre_Anime4k", ui->checkBox_MedianBlur_Pre_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_MeanBlur_Pre_Anime4k", ui->checkBox_MeanBlur_Pre_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_CASSharping_Pre_Anime4k", ui->checkBox_CASSharping_Pre_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_GaussianBlurWeak_Pre_Anime4k", ui->checkBox_GaussianBlurWeak_Pre_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_GaussianBlur_Pre_Anime4k", ui->checkBox_GaussianBlur_Pre_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_BilateralFilter_Pre_Anime4k", ui->checkBox_BilateralFilter_Pre_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_BilateralFilterFaster_Pre_Anime4k", ui->checkBox_BilateralFilterFaster_Pre_Anime4k->isChecked());
-    //Post-Processing
-    configIniWrite->setValue("/settings/checkBox_EnablePostProcessing_Anime4k", ui->checkBox_EnablePostProcessing_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_MedianBlur_Post_Anime4k", ui->checkBox_MedianBlur_Post_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_MeanBlur_Post_Anime4k", ui->checkBox_MeanBlur_Post_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_CASSharping_Post_Anime4k", ui->checkBox_CASSharping_Post_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_GaussianBlurWeak_Post_Anime4k", ui->checkBox_GaussianBlurWeak_Post_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_GaussianBlur_Post_Anime4k", ui->checkBox_GaussianBlur_Post_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_BilateralFilter_Post_Anime4k", ui->checkBox_BilateralFilter_Post_Anime4k->isChecked());
-    configIniWrite->setValue("/settings/checkBox_BilateralFilterFaster_Post_Anime4k", ui->checkBox_BilateralFilterFaster_Post_Anime4k->isChecked());
-    //========================= Save compatibility test results ================
-    configIniWrite->setValue("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW", ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P", ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD", ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_Waifu2x_Converter", ui->checkBox_isCompatible_Waifu2x_Converter->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_SRMD_NCNN_Vulkan", ui->checkBox_isCompatible_SRMD_NCNN_Vulkan->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_SRMD_CUDA", ui->checkBox_isCompatible_SRMD_CUDA->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_Anime4k_CPU", ui->checkBox_isCompatible_Anime4k_CPU->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_Anime4k_GPU", ui->checkBox_isCompatible_Anime4k_GPU->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_FFmpeg", ui->checkBox_isCompatible_FFmpeg->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_FFprobe", ui->checkBox_isCompatible_FFprobe->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_ImageMagick", ui->checkBox_isCompatible_ImageMagick->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_Gifsicle", ui->checkBox_isCompatible_Gifsicle->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_SoX", ui->checkBox_isCompatible_SoX->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_Waifu2x_Caffe_CPU", ui->checkBox_isCompatible_Waifu2x_Caffe_CPU->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_Waifu2x_Caffe_GPU", ui->checkBox_isCompatible_Waifu2x_Caffe_GPU->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_Waifu2x_Caffe_cuDNN", ui->checkBox_isCompatible_Waifu2x_Caffe_cuDNN->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_Realsr_NCNN_Vulkan", ui->checkBox_isCompatible_Realsr_NCNN_Vulkan->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_RifeNcnnVulkan", ui->checkBox_isCompatible_RifeNcnnVulkan->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_CainNcnnVulkan", ui->checkBox_isCompatible_CainNcnnVulkan->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_DainNcnnVulkan", ui->checkBox_isCompatible_DainNcnnVulkan->isChecked());
-    configIniWrite->setValue("/settings/checkBox_isCompatible_RealCUGAN_NCNN_Vulkan", isCompatible_RealCUGAN_NCNN_Vulkan);
-    if(ui->checkBox_isCompatible_Realsr_NCNN_Vulkan) configIniWrite->setValue("/settings/checkBox_isCompatible_RealESRGAN_NCNN_Vulkan", isCompatible_RealESRGAN_NCNN_Vulkan);
-    //======================== Save VFI settings ========================
-    configIniWrite->setValue("/settings/checkBox_VfiAfterScale_VFI", ui->checkBox_VfiAfterScale_VFI->isChecked());
-    configIniWrite->setValue("/settings/checkBox_MultiThread_VFI", ui->checkBox_MultiThread_VFI->isChecked());
-    configIniWrite->setValue("/settings/checkBox_AutoAdjustNumOfThreads_VFI", ui->checkBox_AutoAdjustNumOfThreads_VFI->isChecked());
-    // Save the master VFI state from checkBox_EnableVFI_Home
-    //configIniWrite->setValue("/settings/EnableVFI_Home", ui->checkBox_EnableVFI_Home->isChecked()); // Error: ui->checkBox_EnableVFI_Home not a member
-    // Save FrameInterpolationOnly_Video state (its enabled state is derived, but checked state is independent when VFI is on)
-    //configIniWrite->setValue("/settings/checkBox_FrameInterpolationOnly_Video", ui->checkBox_FrameInterpolationOnly_Video->isChecked()); // Error: ui->checkBox_FrameInterpolationOnly_Video not a member
-    // No longer save groupBox_FrameInterpolation's state separately as it's synced with checkBox_EnableVFI_Home
-    // configIniWrite->setValue("/settings/groupBox_FrameInterpolation", ui->groupBox_FrameInterpolation->isChecked());
-    configIniWrite->setValue("/settings/checkBox_MultiGPU_VFI", ui->checkBox_MultiGPU_VFI->isChecked());
-    configIniWrite->setValue("/settings/checkBox_TTA_VFI", ui->checkBox_TTA_VFI->isChecked());
-    configIniWrite->setValue("/settings/checkBox_UHD_VFI", ui->checkBox_UHD_VFI->isChecked());
-    configIniWrite->setValue("/settings/comboBox_Model_VFI", ui->comboBox_Model_VFI->currentIndex());
-    configIniWrite->setValue("/settings/comboBox_GPUID_VFI", ui->comboBox_GPUID_VFI->currentIndex());
-    configIniWrite->setValue("/settings/Available_GPUID_FrameInterpolation", Available_GPUID_FrameInterpolation);
-    configIniWrite->setValue("/settings/lineEdit_MultiGPU_IDs_VFI", ui->lineEdit_MultiGPU_IDs_VFI->text());
-    configIniWrite->setValue("/settings/spinBox_NumOfThreads_VFI", ui->spinBox_NumOfThreads_VFI->value());
-    configIniWrite->setValue("/settings/comboBox_Engine_VFI", ui->comboBox_Engine_VFI->currentIndex());
-    configIniWrite->setValue("/settings/spinBox_MultipleOfFPS_VFI", ui->spinBox_MultipleOfFPS_VFI->value());
-    configIniWrite->setValue("/settings/spinBox_TileSize_VFI", ui->spinBox_TileSize_VFI->value());
-    //========
-    return 0;
-}
+// int MainWindow::Settings_Save() -> Definition is now a stub in mainwindow.cpp
 /*
 Read and apply settings
 If the settings file does not exist, create a default one, then read and apply settings
@@ -508,26 +257,11 @@ int MainWindow::Settings_Read_Apply()
         if (tmp.isValid()) if(ui->checkBox_MultiGPU_Waifu2xNCNNVulkan) ui->checkBox_MultiGPU_Waifu2xNCNNVulkan->setChecked(tmp.toBool());
     }
     //Realsr_ncnn_vulkan
-    //{ // Error: Available_GPUID_Realsr_ncnn_vulkan not declared
-    //    QVariant tmp = Settings_Read_value("/settings/Available_GPUID_Realsr_ncnn_vulkan");
-    //    if (tmp.isValid()) Available_GPUID_Realsr_ncnn_vulkan = tmp.toStringList();
-    //}
     Realsr_ncnn_vulkan_DetectGPU_finished();
     {
         QVariant tmp = Settings_Read_value("/settings/comboBox_GPUID_RealsrNCNNVulkan");
         if (tmp.isValid()) if(ui->comboBox_GPUID_RealsrNCNNVulkan) ui->comboBox_GPUID_RealsrNCNNVulkan->setCurrentIndex(tmp.toInt());
     }
-    // Load multi-GPU settings
-    //{ // Error: GPUIDs_List_MultiGPU_RealesrganNcnnVulkan not declared
-    //    QVariant tmp = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_RealsrganNcnnVulkan");
-    //    if (tmp.isValid()) GPUIDs_List_MultiGPU_RealesrganNcnnVulkan = tmp.value<QList<QMap<QString, QString>> >();
-    //}
-    //if(GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan)
-    //{
-    //    QMap<QString,QString> GPUInfo_RealesrganNcnnVulkan = GPUIDs_List_MultiGPU_RealesrganNcnnVulkan.at(ui->comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan->currentIndex());
-    //    if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan) ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setChecked(GPUInfo_RealesrganNcnnVulkan["isEnabled"] == "true");
-    //    if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan) ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setValue(GPUInfo_RealesrganNcnnVulkan["TileSize"].toInt());
-    //}
     {
         QVariant tmp = Settings_Read_value("/settings/checkBox_MultiGPU_RealesrganNcnnVulkan");
         if (tmp.isValid()) if(ui->checkBox_MultiGPU_RealesrganNcnnVulkan) ui->checkBox_MultiGPU_RealesrganNcnnVulkan->setChecked(tmp.toBool());
@@ -545,17 +279,6 @@ int MainWindow::Settings_Read_Apply()
         }
     }
     this->on_comboBox_TargetProcessor_converter_currentIndexChanged(0);
-    // Load multi-GPU settings
-    //{ // Error: GPUIDs_List_MultiGPU_Waifu2xConverter not declared
-    //    QVariant tmp = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_Waifu2xConverter");
-    //    if (tmp.isValid()) GPUIDs_List_MultiGPU_Waifu2xConverter = tmp.value<QList<QMap<QString, QString>> >();
-    //}
-    //if(GPUIDs_List_MultiGPU_Waifu2xConverter.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_Waifu2xConverter)
-    //{
-    //    QMap<QString,QString> GPUInfo_Waifu2xConverter = GPUIDs_List_MultiGPU_Waifu2xConverter.at(ui->comboBox_GPUIDs_MultiGPU_Waifu2xConverter->currentIndex());
-    //    if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xConverter) ui->checkBox_isEnable_CurrentGPU_MultiGPU_Waifu2xConverter->setChecked(GPUInfo_Waifu2xConverter["isEnabled"] == "true");
-    //    if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xConverter) ui->spinBox_TileSize_CurrentGPU_MultiGPU_Waifu2xConverter->setValue(GPUInfo_Waifu2xConverter["TileSize"].toInt());
-    //}
     {
         QVariant tmp = Settings_Read_value("/settings/checkBox_MultiGPU_Waifu2xConverter");
         if (tmp.isValid()) if(ui->checkBox_MultiGPU_Waifu2xConverter) ui->checkBox_MultiGPU_Waifu2xConverter->setChecked(tmp.toBool());
@@ -570,17 +293,6 @@ int MainWindow::Settings_Read_Apply()
         QVariant tmp = Settings_Read_value("/settings/comboBox_GPUID_srmd");
         if (tmp.isValid()) if(ui->comboBox_GPUID_srmd) ui->comboBox_GPUID_srmd->setCurrentIndex(tmp.toInt());
     }
-    // Load multi-GPU settings
-    //{ // Error: GPUIDs_List_MultiGPU_SrmdNcnnVulkan not declared
-    //    QVariant tmp = Settings_Read_value("/settings/GPUIDs_List_MultiGPU_SrmdNcnnVulkan");
-    //    if (tmp.isValid()) GPUIDs_List_MultiGPU_SrmdNcnnVulkan = tmp.value<QList<QMap<QString, QString>> >();
-    //}
-    //if(GPUIDs_List_MultiGPU_SrmdNcnnVulkan.isEmpty()==false && ui->comboBox_GPUIDs_MultiGPU_SrmdNCNNVulkan)
-    //{
-    //    QMap<QString,QString> GPUInfo_SrmdNcnnVulkan = GPUIDs_List_MultiGPU_SrmdNcnnVulkan.at(ui->comboBox_GPUIDs_MultiGPU_SrmdNCNNVulkan->currentIndex());
-    //    if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_SrmdNCNNVulkan) ui->checkBox_isEnable_CurrentGPU_MultiGPU_SrmdNCNNVulkan->setChecked(GPUInfo_SrmdNcnnVulkan["isEnabled"] == "true");
-    //    if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_SrmdNCNNVulkan) ui->spinBox_TileSize_CurrentGPU_MultiGPU_SrmdNCNNVulkan->setValue(GPUInfo_SrmdNcnnVulkan["TileSize"].toInt());
-    //}
     {
         QVariant tmp = Settings_Read_value("/settings/checkBox_MultiGPU_SrmdNCNNVulkan");
         if (tmp.isValid()) if(ui->checkBox_MultiGPU_SrmdNCNNVulkan) ui->checkBox_MultiGPU_SrmdNCNNVulkan->setChecked(tmp.toBool());
@@ -665,10 +377,6 @@ int MainWindow::Settings_Read_Apply()
         QVariant tmp = Settings_Read_value("/settings/RealESRGAN_TTA");
         if (tmp.isValid()) if(ui->checkBox_TTA_RealsrNCNNVulkan) ui->checkBox_TTA_RealsrNCNNVulkan->setChecked(tmp.toBool());
     }
-    //{ // Error: Available_GPUID_RealESRGAN_ncnn_vulkan not declared
-    //    QVariant tmp = Settings_Read_value("/settings/RealESRGAN_Available_GPUID");
-    //    if (tmp.isValid()) Available_GPUID_RealESRGAN_ncnn_vulkan = tmp.toStringList();
-    //}
     RealESRGAN_ncnn_vulkan_DetectGPU_finished();
 
     QVariant gpuIDEsrgan = Settings_Read_value("/settings/RealESRGAN_GPUID");
@@ -677,10 +385,6 @@ int MainWindow::Settings_Read_Apply()
     QVariant multiGpuEsrgan = Settings_Read_value("/settings/RealESRGAN_MultiGPU_Enabled");
     if(ui->checkBox_MultiGPU_RealesrganNcnnVulkan && multiGpuEsrgan.isValid()) ui->checkBox_MultiGPU_RealesrganNcnnVulkan->setChecked(multiGpuEsrgan.toBool());
     
-    //{ // Error: m_realesrgan_gpuJobConfig_temp not declared
-    //    QVariant tmp = Settings_Read_value("/settings/RealESRGAN_GPUJobConfig_MultiGPU");
-    //    if (tmp.isValid()) m_realesrgan_gpuJobConfig_temp = tmp.value<QList<QMap<QString, QString>>>();
-    //}
     if (ui->checkBox_MultiGPU_RealesrganNcnnVulkan && ui->checkBox_MultiGPU_RealesrganNcnnVulkan->isChecked()) {
         RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
     }
@@ -728,10 +432,6 @@ int MainWindow::Settings_Read_Apply()
         QVariant tmp = Settings_Read_value("/settings/checkBox_BanGitee");
         if (tmp.isValid()) ui->checkBox_BanGitee->setChecked(tmp.toBool());
     }
-    //{ // Error: ui->comboBox_UpdateChannel not a member
-    //    QVariant tmp = Settings_Read_value("/settings/comboBox_UpdateChannel");
-//         if (tmp.isValid()) comboBox_UpdateChannel_setCurrentIndex_self(tmp.toInt());
-// //     }
     {
         QVariant tmp = Settings_Read_value("/settings/checkBox_MinimizeToTaskbar");
         if (tmp.isValid()) ui->checkBox_MinimizeToTaskbar->setChecked(tmp.toBool());
@@ -1173,7 +873,6 @@ int MainWindow::Settings_Read_Apply()
     // 2. ui->checkBox_FrameInterpolationOnly_Video->setEnabled()
     // 3. ui->checkBox_FrameInterpolationOnly_Video->setChecked() (if VFI is disabled)
     bool vfiEnabled = Settings_Read_value("/settings/EnableVFI_Home", false).toBool();
-    // ui->checkBox_EnableVFI_Home->setChecked(vfiEnabled); // Error: ui->checkBox_EnableVFI_Home not a member
 
     // We still need to load the independent checked state of FrameInterpolationOnly_Video for when VFI *is* enabled.
     // The enabled state and the forced unchecked state (when VFI is off) are handled by the slot.
@@ -1183,9 +882,6 @@ int MainWindow::Settings_Read_Apply()
             // Temporarily disable signals to prevent its toggled signal from firing if it has one,
             // or to avoid recursive calls if it were part of the same sync chain directly.
             // However, checkBox_FrameInterpolationOnly_Video does not have its own sync slot in this refactor.
-            // bool oldSignalsBlocked = ui->checkBox_FrameInterpolationOnly_Video->blockSignals(true); // Error: ui->checkBox_FrameInterpolationOnly_Video not a member
-            // ui->checkBox_FrameInterpolationOnly_Video->setChecked(tmpVfiOnly.toBool()); // Error: ui->checkBox_FrameInterpolationOnly_Video not a member
-            // ui->checkBox_FrameInterpolationOnly_Video->blockSignals(oldSignalsBlocked); // Error: ui->checkBox_FrameInterpolationOnly_Video not a member
         }
     }
     // Note: The state of groupBox_FrameInterpolation itself is no longer directly loaded from a separate setting.

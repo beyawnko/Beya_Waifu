@@ -1,18 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-void MainWindow::on_pushButton_compatibilityTest_clicked()
-{
-    ui->pushButton_compatibilityTest->setEnabled(false);
-    if (ui->progressBar_CompatibilityTest) {
-        ui->progressBar_CompatibilityTest->setRange(0, 2);
-        ui->progressBar_CompatibilityTest->setValue(0);
-        ui->progressBar_CompatibilityTest->setVisible(true);
-    }
-    compatibilityTestFuture = QtConcurrent::run([this]() {
-        this->Simple_Compatibility_Test();
-    });
-}
+// Removed definition for MainWindow::on_pushButton_compatibilityTest_clicked()
+// Its body is now a stub in mainwindow.cpp
 
 int MainWindow::Simple_Compatibility_Test()
 {

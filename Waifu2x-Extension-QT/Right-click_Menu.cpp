@@ -54,74 +54,15 @@ void MainWindow::Init_ActionsMenu_pushButton_RemoveItem()
     ui->pushButton_RemoveItem->addAction(RemoveALL_video);
 }
 
-void MainWindow::RemoveALL_image_slot()
-{
-    ui->pushButton_RemoveItem->setEnabled(0);
-    int rowCount_image = Table_model_image->rowCount();
-    if(rowCount_image>0)
-    {
-        for( int i = 0; i < rowCount_image; i++ )
-        {
-            CustRes_remove(Table_model_image->item(i,2)->text());
-        }
-        Table_model_image->clear();
-        Init_Table();
-        curRow_image = -1;
-        ui->tableView_image->clearSelection();
-        ui->tableView_image->setVisible(0);
-    }
-    Table_FileCount_reload();
-    if(Table_model_gif->rowCount()==0&&Table_model_image->rowCount()==0&&Table_model_video->rowCount()==0)
-    {
-        on_pushButton_ClearList_clicked();
-    }
-}
-
-void MainWindow::RemoveALL_gif_slot()
-{
-    ui->pushButton_RemoveItem->setEnabled(0);
-    int rowCount_gif = Table_model_gif->rowCount();
-    if(rowCount_gif>0)
-    {
-        for( int i = 0; i < rowCount_gif; i++ )
-        {
-            CustRes_remove(Table_model_gif->item(i,2)->text());
-        }
-        Table_model_gif->clear();
-        Init_Table();
-        curRow_gif = -1;
-        ui->tableView_gif->clearSelection();
-        ui->tableView_gif->setVisible(0);
-    }
-    Table_FileCount_reload();
-    if(Table_model_gif->rowCount()==0&&Table_model_image->rowCount()==0&&Table_model_video->rowCount()==0)
-    {
-        on_pushButton_ClearList_clicked();
-    }
-}
-
-void MainWindow::RemoveALL_video_slot()
-{
-    ui->pushButton_RemoveItem->setEnabled(0);
-    int rowCount_video = Table_model_video->rowCount();
-    if(rowCount_video>0)
-    {
-        for( int i = 0; i < rowCount_video; i++ )
-        {
-            CustRes_remove(Table_model_video->item(i,2)->text());
-        }
-        Table_model_video->clear();
-        Init_Table();
-        curRow_video = -1;
-        ui->tableView_video->clearSelection();
-        ui->tableView_video->setVisible(0);
-    }
-    Table_FileCount_reload();
-    if(Table_model_gif->rowCount()==0&&Table_model_image->rowCount()==0&&Table_model_video->rowCount()==0)
-    {
-        on_pushButton_ClearList_clicked();
-    }
-}
+// Definitions for functions below are now stubs in mainwindow.cpp
+// void MainWindow::RemoveALL_image_slot()
+// void MainWindow::RemoveALL_gif_slot()
+// void MainWindow::RemoveALL_video_slot()
+// void MainWindow::OpenOutputFolder()
+// void MainWindow::Apply_CustRes_QAction_FileList_slot()
+// void MainWindow::Cancel_CustRes_QAction_FileList_slot()
+// void MainWindow::OpenSelectedFile_FilesList()
+// void MainWindow::OpenSelectedFilesFolder_FilesList()
 
 void MainWindow::Init_ActionsMenu_lineEdit_outputPath()
 {
@@ -131,19 +72,6 @@ void MainWindow::Init_ActionsMenu_lineEdit_outputPath()
     ui->lineEdit_outputPath->addAction(OpenFolder_lineEdit_outputPath);
 }
 
-void MainWindow::OpenOutputFolder()
-{
-    QString OutPutPath=ui->lineEdit_outputPath->text();
-    if(file_OpenFolder(OutPutPath)==false)
-    {
-        QMessageBox *MSG = new QMessageBox();
-        MSG->setWindowTitle(tr("Error"));
-        MSG->setText(tr("Output path doesn\'t exists!"));
-        MSG->setIcon(QMessageBox::Warning);
-        MSG->setModal(false);
-        MSG->show();
-    }
-}
 
 void MainWindow::Init_ActionsMenu_FilesList()
 {
@@ -181,109 +109,6 @@ void MainWindow::Init_ActionsMenu_FilesList()
     ui->tableView_image->addAction(Cancel_CustRes_QAction_FileList);
     ui->tableView_gif->addAction(Cancel_CustRes_QAction_FileList);
     ui->tableView_video->addAction(Cancel_CustRes_QAction_FileList);
-}
-void MainWindow::Apply_CustRes_QAction_FileList_slot()
-{
-    EnableApply2All_CustRes=false;
-    on_pushButton_CustRes_apply_clicked();
-    EnableApply2All_CustRes=true;
-}
-void MainWindow::Cancel_CustRes_QAction_FileList_slot()
-{
-    EnableApply2All_CustRes=false;
-    on_pushButton_CustRes_cancel_clicked();
-    EnableApply2All_CustRes=true;
-}
-void MainWindow::OpenSelectedFile_FilesList()
-{
-    if(curRow_image==-1&&curRow_video==-1&&curRow_gif==-1)
-    {
-        ui->tableView_image->clearSelection();
-        ui->tableView_gif->clearSelection();
-        ui->tableView_video->clearSelection();
-        //=====
-        QMessageBox *MSG = new QMessageBox();
-        MSG->setWindowTitle(tr("Warning"));
-        MSG->setText(tr("No items are currently selected."));
-        MSG->setIcon(QMessageBox::Warning);
-        MSG->setModal(true);
-        MSG->show();
-        //====
-        return;
-    }
-    //==========================
-    if(curRow_image >= 0)
-    {
-        if(file_OpenFile(Table_model_image->item(curRow_image,2)->text())==false)
-        {
-            OpenSelectedFile_FailedWarning_FilesList();
-        }
-        return;
-    }
-    //============================================================
-    if(curRow_video >= 0)
-    {
-        if(file_OpenFile(Table_model_video->item(curRow_video,2)->text())==false)
-        {
-            OpenSelectedFile_FailedWarning_FilesList();
-        }
-        return;
-    }
-    //============================================================
-    if(curRow_gif >= 0)
-    {
-        if(file_OpenFile(Table_model_gif->item(curRow_gif,2)->text())==false)
-        {
-            OpenSelectedFile_FailedWarning_FilesList();
-        }
-        return;
-    }
-}
-
-void MainWindow::OpenSelectedFilesFolder_FilesList()
-{
-    if(curRow_image==-1&&curRow_video==-1&&curRow_gif==-1)
-    {
-        ui->tableView_image->clearSelection();
-        ui->tableView_gif->clearSelection();
-        ui->tableView_video->clearSelection();
-        //=====
-        QMessageBox *MSG = new QMessageBox();
-        MSG->setWindowTitle(tr("Warning"));
-        MSG->setText(tr("No items are currently selected."));
-        MSG->setIcon(QMessageBox::Warning);
-        MSG->setModal(true);
-        MSG->show();
-        //====
-        return;
-    }
-    //==========================
-    if(curRow_image >= 0)
-    {
-        if(file_OpenFilesFolder(Table_model_image->item(curRow_image,2)->text())==false)
-        {
-            OpenSelectedFile_FailedWarning_FilesList();
-        }
-        return;
-    }
-    //============================================================
-    if(curRow_video >= 0)
-    {
-        if(file_OpenFilesFolder(Table_model_video->item(curRow_video,2)->text())==false)
-        {
-            OpenSelectedFile_FailedWarning_FilesList();
-        }
-        return;
-    }
-    //============================================================
-    if(curRow_gif >= 0)
-    {
-        if(file_OpenFilesFolder(Table_model_gif->item(curRow_gif,2)->text())==false)
-        {
-            OpenSelectedFile_FailedWarning_FilesList();
-        }
-        return;
-    }
 }
 
 void MainWindow::OpenSelectedFile_FailedWarning_FilesList()
