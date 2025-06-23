@@ -83,6 +83,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int file_list_row_number, bool /*i
     m_realEsrganProcessor->processImage(file_list_row_number, sourceFile, destFile, settings);
 }
 
+/*
 static QStringList parseVulkanDeviceList(const QString &output)
 {
     QStringList list;
@@ -97,4 +98,5 @@ static QStringList parseVulkanDeviceList(const QString &output)
     }
     return list;
 }
+*/
 
