@@ -114,6 +114,15 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
 
     setWindowTitle(QStringLiteral("Beya_Waifu %1 by beyawnko").arg(VERSION));
     translator = new QTranslator(this);
+
+    // Hide the clutter panel below the text browser
+    ui->widget_RealCUGAN_Hidden->setVisible(false);
+
+    // Configure the main splitter for better resizing behavior
+    ui->homeMainSplitter->setStretchFactor(0, 1); // Give file list side priority on expanding
+    ui->homeMainSplitter->setStretchFactor(1, 0); // Keep settings side a more fixed size
+    ui->homeMainSplitter->setSizes(QList<int>() << this->width() * 0.6 << this->width() * 0.4); // Set initial sizes relative to window width
+
     ApplyDarkStyle();
     setAcceptDrops(true);
 }
@@ -522,7 +531,6 @@ void MainWindow::on_checkBox_ACNet_Anime4K_stateChanged(int) { /* STUB */ }
 void MainWindow::on_checkBox_HDNMode_Anime4k_stateChanged(int) { /* STUB */ }
 void MainWindow::on_checkBox_ReplaceOriginalFile_stateChanged(int) { /* STUB */ }
 void MainWindow::on_checkBox_isCustFontEnable_stateChanged(int) { /* STUB */ }
-void MainWindow::on_pushButton_ResizeFilesListSplitter_clicked() { /* STUB */ }
 void MainWindow::on_comboBox_GPGPUModel_A4k_currentIndexChanged(int) { /* STUB */ }
 void MainWindow::on_checkBox_DisableGPU_converter_stateChanged(int) { /* STUB */ }
 void MainWindow::on_pushButton_TurnOffScreen_clicked() { /* STUB */ }

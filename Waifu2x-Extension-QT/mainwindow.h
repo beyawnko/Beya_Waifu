@@ -719,7 +719,6 @@ public slots:
     void on_checkBox_HDNMode_Anime4k_stateChanged(int arg1);
     void on_checkBox_ReplaceOriginalFile_stateChanged(int arg1);
     void on_checkBox_isCustFontEnable_stateChanged(int arg1);
-    void on_pushButton_ResizeFilesListSplitter_clicked();
     void on_comboBox_GPGPUModel_A4k_currentIndexChanged(int index);
     void on_checkBox_DisableGPU_converter_stateChanged(int arg1);
     void on_groupBox_video_settings_clicked();
