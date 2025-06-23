@@ -14,8 +14,9 @@ def patch_ui_file(input_file, output_file):
         sys.exit(1)
 
     # Find the QSplitter widget block
-    # Use a greedy match for the content of splitter_FilesList
-    splitter_regex = re.compile(r'<widget class="QSplitter" name="splitter_FilesList">.*</widget>', re.DOTALL)
+    # This regex is very specific to the structure of splitter_FilesList and its children
+    splitter_regex_str = r'<widget class="QSplitter" name="splitter_FilesList">\s*(?:<property[\s\S]*?</property>\s*)*<widget class="QTableView" name="tableView_image">[\s\S]*?</widget>\s*<widget class="QTableView" name="tableView_gif">[\s\S]*?</widget>\s*<widget class="QTableView" name="tableView_video">[\s\S]*?</widget>\s*</widget>'
+    splitter_regex = re.compile(splitter_regex_str, re.DOTALL)
     splitter_match = splitter_regex.search(content)
 
     if not splitter_match:
