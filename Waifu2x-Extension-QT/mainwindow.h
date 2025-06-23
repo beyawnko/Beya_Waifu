@@ -773,6 +773,9 @@ public slots:
     void onFileProgress(int rowNum, int percent);
     void onProcessingFinished(int rowNum, bool success);
 
+    // Compatibility Test Slots
+    void StartFullCompatibilityTest();
+
 private slots:
     void TextBrowser_StartMes();
     void toggleLiquidGlass(bool enabled);
@@ -796,6 +799,10 @@ private:
     void ShellMessageBox(const QString &title, const QString &text, QMessageBox::Icon icon);
     bool Deduplicate_filelist_worker(const QString& SourceFile_fullPath, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
     void ProcessFileListWorker(QString file_list_Path, const QSet<QString>& existingImagePaths, const QSet<QString>& existingGifPaths, const QSet<QString>& existingVideoPaths);
+
+    // Compatibility Test methods
+    void ExecuteCompatibilityTests();
+    bool TestEngineCommand(const QString& engineName, const QString& executablePath, const QStringList& arguments, QCheckBox* checkBox);
 
     bool m_isVFISyncing = false;
     LiquidGlassWidget *glassWidget {nullptr};

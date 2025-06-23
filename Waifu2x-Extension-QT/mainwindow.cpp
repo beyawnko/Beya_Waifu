@@ -116,7 +116,9 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     translator = new QTranslator(this);
 
     // Hide the clutter panel below the text browser
-    ui->widget_RealCUGAN_Hidden->setVisible(false);
+    if (widget_RealCUGAN_Hidden) { // Add null check for safety
+        widget_RealCUGAN_Hidden->setVisible(false);
+    }
 
     // Configure the main splitter for better resizing behavior
     ui->homeMainSplitter->setStretchFactor(0, 1); // Give file list side priority on expanding
