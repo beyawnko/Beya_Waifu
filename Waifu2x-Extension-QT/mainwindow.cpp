@@ -223,12 +223,12 @@ void MainWindow::Anime4k_Image(int rowNum, bool){
     // This is a wrapper. The actual logic is in Anime4KProcessor.
     Anime4kSettings settings;
     settings.programPath = Current_Path + "/anime4k-cli/Anime4KCPP_CLI.exe"; // Example path
-    // Populate settings from UI:
-    settings.passes = ui->spinBox_Passes_Anime4k->value();
-    settings.pushColorCount = ui->spinBox_PushColorCount_Anime4k->value();
-    settings.pushColorStrength = ui->doubleSpinBox_PushColorStrength_Anime4k->value();
-    settings.pushGradientStrength = ui->doubleSpinBox_PushGradientStrength_Anime4k->value();
-    settings.fastMode = ui->checkBox_FastMode_Anime4k->isChecked();
+    // Populate settings from UI: Note: Corrected widget names from _Anime4k to _Anime4K
+    settings.passes = ui->spinBox_Passes_Anime4K->value();
+    settings.pushColorCount = ui->spinBox_PushColorCount_Anime4K->value();
+    settings.pushColorStrength = ui->doubleSpinBox_PushColorStrength_Anime4K->value();
+    settings.pushGradientStrength = ui->doubleSpinBox_PushGradientStrength_Anime4K->value();
+    settings.fastMode = ui->checkBox_FastMode_Anime4K->isChecked();
     settings.hdnMode = ui->checkBox_HDNMode_Anime4k->isChecked();
     settings.acNet = ui->checkBox_ACNet_Anime4K->isChecked(); // Ensure this matches UI
     settings.gpuMode = ui->checkBox_GPUMode_Anime4K->isChecked();
@@ -236,16 +236,16 @@ void MainWindow::Anime4k_Image(int rowNum, bool){
 
     settings.preProcessing = ui->checkBox_EnablePreProcessing_Anime4k->isChecked();
     if(settings.preProcessing) {
-        settings.preFilters = ui->lineEdit_PreFilters_Anime4k->text();
+        settings.preFilters = ui->lineEdit_PreFilters_Anime4K->text();
     }
     settings.postProcessing = ui->checkBox_EnablePostProcessing_Anime4k->isChecked();
     if(settings.postProcessing) {
-        settings.postFilters = ui->lineEdit_PostFilters_Anime4k->text();
+        settings.postFilters = ui->lineEdit_PostFilters_Anime4K->text();
     }
 
     settings.specifyGpu = ui->checkBox_SpecifyGPU_Anime4k->isChecked();
     if(settings.specifyGpu) {
-        settings.gpuString = ui->lineEdit_SpecifyGPU_Anime4k->text(); // Or however GPU is specified
+        settings.gpuString = ui->lineEdit_SpecifyGPU_Anime4K->text(); // Or however GPU is specified
     }
     // settings.commandQueues = ui->spinBox_CommandQueues_Anime4k->value(); // If such UI exists
     // settings.parallelIo = ui->checkBox_ParallelIO_Anime4k->isChecked(); // If such UI exists
