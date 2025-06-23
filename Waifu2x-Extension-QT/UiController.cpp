@@ -94,16 +94,9 @@ void UiController::updateEngineSettingsVisibility(Ui::MainWindow *ui, const QStr
     } else if (selectedEngineName.contains("realsr-ncnn-vulkan", Qt::CaseInsensitive) || selectedEngineName.contains("RealSR-ncnn-vulkan", Qt::CaseInsensitive)) { // Original name from UI
         targetTab = ui->tab_RealSRNcnnVulkan; // The tab is named RealSRNcnnVulkan
     } else if (selectedEngineName.contains("RealESRGAN-NCNN-Vulkan", Qt::CaseInsensitive)) {
-        targetTab = ui->tab_RealSRNcnnVulkan; // Assuming RealESRGAN uses the same tab as RealSR or has its own. UI shows tab_RealSRNcnnVulkan.
+        targetTab = ui->tab_RealESRGAN; // Corrected: Point to the new RealESRGAN tab
     } else if (selectedEngineName.contains("RealCUGAN-NCNN-Vulkan", Qt::CaseInsensitive)) {
-        // RealCUGAN settings are in a hidden widget, not a main engine tab.
-        // This function might not be the place to toggle its visibility,
-        // or it needs a different mechanism. For now, do nothing or log.
-        qDebug() << "UiController: RealCUGAN selected, settings are not in a dedicated tab in tabWidget_Engines.";
-        // Potentially, if RealCUGAN has its own tab, map it here.
-        // Based on UI, it does not. It uses a hidden group box.
-        // Let's assume for now it should default to a general tab or do nothing.
-        // targetTab = ui->tab_W2xNcnnVulkan; // Fallback example
+        targetTab = ui->tab_RealCUGAN; // Corrected: Point to the new RealCUGAN tab
     }
     // Add other mappings as necessary
 

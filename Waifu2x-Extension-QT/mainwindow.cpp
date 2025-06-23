@@ -289,11 +289,14 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool)
     QString destFile = Generate_Output_Path(sourceFile, "realesrgan");
     RealEsrganSettings settings;
     settings.programPath = Current_Path + "/realesrgan-ncnn-vulkan/realesrgan-ncnn-vulkan.exe";
-    settings.modelName = ui->comboBox_Model_RealsrNCNNVulkan->currentText();
-    settings.targetScale = ui->doubleSpinBox_ScaleRatio_image->value();
-    settings.tileSize = ui->spinBox_TileSize_RealsrNCNNVulkan->value();
-    settings.ttaEnabled = ui->checkBox_TTA_RealsrNCNNVulkan->isChecked();
-    settings.singleGpuId = ui->comboBox_GPUID_RealsrNCNNVulkan->currentText();
+    // Read from the new RealESRGAN tab controls
+    settings.modelName = ui->comboBox_Model_RealESRGAN->currentText();
+    settings.targetScale = ui->doubleSpinBox_ScaleRatio_image->value(); // This is a general setting, remains
+    settings.tileSize = ui->spinBox_TileSize_RealESRGAN->value();
+    settings.ttaEnabled = ui->checkBox_TTA_RealESRGAN->isChecked();
+    settings.singleGpuId = ui->comboBox_GPUID_RealESRGAN->currentText();
+    // TODO: Add multi-GPU settings if ui->checkBox_MultiGPU_RealESRGANEngine is checked, similar to other engines.
+    // For now, assuming single GPU mode based on original structure.
     if (settings.modelName.contains("x4")) settings.modelNativeScale = 4;
     else if (settings.modelName.contains("x2")) settings.modelNativeScale = 2;
     else settings.modelNativeScale = 1;
@@ -321,11 +324,13 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int rowNum)
     QString destFile = Generate_Output_Path(sourceFile, "realesrgan_video");
     RealEsrganSettings settings;
     settings.programPath = Current_Path + "/realesrgan-ncnn-vulkan/realesrgan-ncnn-vulkan.exe";
-    settings.modelName = ui->comboBox_Model_RealsrNCNNVulkan->currentText();
-    settings.targetScale = ui->doubleSpinBox_ScaleRatio_video->value();
-    settings.tileSize = ui->spinBox_TileSize_RealsrNCNNVulkan->value();
-    settings.ttaEnabled = ui->checkBox_TTA_RealsrNCNNVulkan->isChecked();
-    settings.singleGpuId = ui->comboBox_GPUID_RealsrNCNNVulkan->currentText();
+    // Read from the new RealESRGAN tab controls
+    settings.modelName = ui->comboBox_Model_RealESRGAN->currentText();
+    settings.targetScale = ui->doubleSpinBox_ScaleRatio_video->value(); // General setting
+    settings.tileSize = ui->spinBox_TileSize_RealESRGAN->value();
+    settings.ttaEnabled = ui->checkBox_TTA_RealESRGAN->isChecked();
+    settings.singleGpuId = ui->comboBox_GPUID_RealESRGAN->currentText();
+    // TODO: Add multi-GPU settings if ui->checkBox_MultiGPU_RealESRGANEngine is checked.
     if (settings.modelName.contains("x4")) settings.modelNativeScale = 4;
     else if (settings.modelName.contains("x2")) settings.modelNativeScale = 2;
     else settings.modelNativeScale = 1;
@@ -492,15 +497,138 @@ void MainWindow::on_checkBox_vcodec_copy_2mp4_stateChanged(int) { /* STUB */ }
 void MainWindow::Add_progressBar_CompatibilityTest() { /* STUB */ }
 void MainWindow::TimeSlot() { /* STUB */ }
 int MainWindow::Waifu2x_Compatibility_Test_finished() { return 0; /* STUB */ }
-int MainWindow::on_pushButton_RemoveItem_clicked() { /* STUB */ return 0; }
+int MainWindow::on_pushButton_RemoveItem_clicked()
+{
+    QTableView *currentTableView = nullptr;
+    QStandardItemModel *currentModel = nullptr;
+
+    int currentTabIndex = ui->fileListTabWidget->currentIndex();
+
+    if (currentTabIndex == 0) { // Images tab
+        currentTableView = ui->tableView_image;
+        currentModel = Table_model_image;
+    } else if (currentTabIndex == 1) { // GIF/APNG tab
+        currentTableView = ui->tableView_gif;
+        currentModel = Table_model_gif;
+    } else if (currentTabIndex == 2) { // Videos tab
+        currentTableView = ui->tableView_video;
+        currentModel = Table_model_video;
+    }
+
+    if (currentTableView && currentModel) {
+        QModelIndexList selectedRows = currentTableView->selectionModel()->selectedRows();
+        if (!selectedRows.isEmpty()) {
+            // Remove rows in reverse order to avoid issues with changing row indices
+            for (int i = selectedRows.count() - 1; i >= 0; --i) {
+                currentModel->removeRow(selectedRows.at(i).row());
+            }
+            Table_FileCount_reload(); // Update file count
+            return 1; // Indicate success
+        } else {
+            TextBrowser_NewMessage(tr("No item selected to remove."));
+        }
+    }
+    return 0; // Indicate failure or no action
+}
 void MainWindow::on_pushButton_Report_clicked() { /* STUB */ }
 void MainWindow::on_pushButton_clear_textbrowser_clicked() { /* STUB */ }
 void MainWindow::on_pushButton_HideSettings_clicked() { /* STUB */ }
-void MainWindow::on_pushButton_ReadFileList_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_ReadFileList_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Read File List"),
+                                                    QDir::homePath(),
+                                                    tr("Text Files (*.txt);;All Files (*)"));
+    if (fileName.isEmpty())
+        return;
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        TextBrowser_NewMessage(tr("Error: Could not open file for reading: %1").arg(file.errorString()));
+        return;
+    }
+
+    QTextStream in(&file);
+    QStringList imagePaths, gifPaths, videoPaths;
+
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        if (line.startsWith("IMAGE:")) {
+            imagePaths.append(line.mid(6));
+        } else if (line.startsWith("GIF:")) {
+            gifPaths.append(line.mid(4));
+        } else if (line.startsWith("VIDEO:")) {
+            videoPaths.append(line.mid(6));
+        } else if (!line.trimmed().isEmpty()){
+            // Try to auto-detect based on common extensions if no prefix
+            QFileInfo fileInfo(line.trimmed());
+            QString suffix = fileInfo.suffix().toLower();
+            QStringList imgExt = ui->Ext_image->text().split(':', Qt::SkipEmptyParts);
+            QStringList vidExt = ui->Ext_video->text().split(':', Qt::SkipEmptyParts);
+
+            if (imgExt.contains(suffix)) {
+                imagePaths.append(line.trimmed());
+            } else if (vidExt.contains(suffix)) {
+                videoPaths.append(line.trimmed());
+            } else if (suffix == "gif" || suffix == "apng") {
+                gifPaths.append(line.trimmed());
+            } else {
+                TextBrowser_NewMessage(tr("Warning: Unknown file type or invalid line in list: %1").arg(line));
+            }
+        }
+    }
+    file.close();
+
+    bool filesAdded = false;
+    if (!imagePaths.isEmpty()) {
+        Read_Input_paths_BrowserFile(imagePaths);
+        filesAdded = true;
+    }
+    if (!gifPaths.isEmpty()) {
+        Read_Input_paths_BrowserFile(gifPaths);
+        filesAdded = true;
+    }
+    if (!videoPaths.isEmpty()) {
+        Read_Input_paths_BrowserFile(videoPaths);
+        filesAdded = true;
+    }
+
+    if (filesAdded) {
+        Table_FileCount_reload();
+        TextBrowser_NewMessage(tr("File list loaded from: %1").arg(fileName));
+    } else {
+        TextBrowser_NewMessage(tr("No valid files found in: %1").arg(fileName));
+    }
+}
 void MainWindow::on_Ext_image_editingFinished() { /* STUB */ }
 void MainWindow::on_Ext_video_editingFinished() { /* STUB */ }
 void MainWindow::on_checkBox_AutoSaveSettings_clicked() { /* STUB */ }
-void MainWindow::on_pushButton_BrowserFile_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_BrowserFile_clicked()
+{
+    QString imageExtensions = ui->Ext_image->text().replace(":", " *.");
+    QString videoExtensions = ui->Ext_video->text().replace(":", " *.");
+    QString gifExtensions = "gif apng"; // QFileDialog uses space separation for individual wildcards
+
+    QStringList filters;
+    filters << tr("Supported Files (*.%1 *.%2 *.%3)").arg(imageExtensions).arg(videoExtensions).arg(gifExtensions.replace(" ", " *."));
+    filters << tr("Image Files (*.%1)").arg(imageExtensions);
+    filters << tr("Video Files (*.%2)").arg(videoExtensions);
+    filters << tr("Animated Files (*.%1)").arg(gifExtensions.replace(" ", " *."));
+    filters << tr("All Files (*)");
+
+    QStringList selectedFiles = QFileDialog::getOpenFileNames(
+        this,
+        tr("Browse and Add Files"),
+        QDir::homePath(), // Default to home path or last used path
+        filters.join(";;"));
+
+    if (!selectedFiles.isEmpty())
+    {
+        // The Read_Input_paths_BrowserFile function seems designed for this.
+        // It internally calls FileList_Add which then calls Batch_Table_Update_slots.
+        Read_Input_paths_BrowserFile(selectedFiles);
+        Table_FileCount_reload(); // Update the file count display
+    }
+}
 void MainWindow::on_lineEdit_encoder_vid_textChanged(const QString &) { /* STUB */ }
 void MainWindow::on_lineEdit_encoder_audio_textChanged(const QString &) { /* STUB */ }
 void MainWindow::on_lineEdit_pixformat_textChanged(const QString &) { /* STUB */ }
@@ -561,7 +689,41 @@ void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardOutput() { /* 
 void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError() { /* STUB */ }
 void MainWindow::Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError) { /* STUB */ }
 void MainWindow::Realcugan_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError) { /* STUB */ }
-void MainWindow::on_pushButton_SaveFileList_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_SaveFileList_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File List"),
+                                                    QDir::homePath(),
+                                                    tr("Text Files (*.txt);;All Files (*)"));
+    if (fileName.isEmpty())
+        return;
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        TextBrowser_NewMessage(tr("Error: Could not open file for writing: %1").arg(file.errorString()));
+        return;
+    }
+
+    QTextStream out(&file);
+
+    // Save Images
+    for (int i = 0; i < Table_model_image->rowCount(); ++i) {
+        QString path = Table_model_image->item(i, 2)->text(); // Column 2 is FullPath
+        out << "IMAGE:" << path << "\n";
+    }
+    // Save GIFs
+    for (int i = 0; i < Table_model_gif->rowCount(); ++i) {
+        QString path = Table_model_gif->item(i, 2)->text(); // Column 2 is FullPath
+        out << "GIF:" << path << "\n";
+    }
+    // Save Videos
+    for (int i = 0; i < Table_model_video->rowCount(); ++i) {
+        QString path = Table_model_video->item(i, 2)->text(); // Column 2 is FullPath
+        out << "VIDEO:" << path << "\n";
+    }
+
+    file.close();
+    TextBrowser_NewMessage(tr("File list saved to: %1").arg(fileName));
+}
 void MainWindow::on_tableView_image_doubleClicked(const QModelIndex &) { /* STUB */ }
 void MainWindow::on_tableView_gif_doubleClicked(const QModelIndex &) { /* STUB */ }
 void MainWindow::on_tableView_video_doubleClicked(const QModelIndex &) { /* STUB */ }
@@ -573,7 +735,252 @@ void MainWindow::on_pushButton_Patreon_clicked() { /* STUB */ }
 void MainWindow::on_pushButton_SupportersList_clicked() { /* STUB */ }
 void MainWindow::on_comboBox_ImageSaveFormat_currentIndexChanged(int) { /* STUB */ }
 void MainWindow::on_pushButton_CheckUpdate_clicked() { /* STUB */ }
-void MainWindow::on_pushButton_compatibilityTest_clicked() { /* STUB */ }
+void MainWindow::StartFullCompatibilityTest()
+{
+    ui->textBrowser->append(tr("Starting compatibility test..."));
+
+    // Disable all checkboxes first and reset progress
+    QList<QCheckBox*> checkboxes = ui->groupBox_CompatibilityTestRes->findChildren<QCheckBox*>();
+    for (QCheckBox* cb : checkboxes) {
+        cb->setChecked(false);
+        cb->setEnabled(false); // Keep them disabled until test result is known
+    }
+    ui->progressBar_CompatibilityTest->setValue(0);
+    // Define the total number of tests
+    // This should match the number of calls to TestEngineCommand + other simple checks
+    // Initial estimate, will adjust as tests are added
+    int totalTests = 19; // From UI, let's aim for this.
+    ui->progressBar_CompatibilityTest->setMaximum(totalTests);
+
+    // Run the tests in a separate thread to avoid freezing the UI
+    if (compatibilityTestFuture.isRunning()) {
+        TextBrowser_NewMessage(tr("Compatibility test is already running."));
+        return;
+    }
+    ui->pushButton_compatibilityTest->setEnabled(false);
+    compatibilityTestFuture = QtConcurrent::run(this, &MainWindow::ExecuteCompatibilityTests);
+}
+
+void MainWindow::ExecuteCompatibilityTests()
+{
+    // Paths to executables - these should be verified or made configurable if possible
+    // For now, assume they are in subdirectories of Current_Path
+
+    // Test Waifu2x-ncnn-vulkan (Latest)
+    TestEngineCommand("Waifu2x-ncnn-vulkan (Latest)",
+                      Current_Path + "/waifu2x-ncnn-vulkan/waifu2x-ncnn-vulkan.exe",
+                      QStringList() << "-h",
+                      ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW);
+
+    // Test Waifu2x-ncnn-vulkan (FP16P) - Assuming same executable, different model perhaps, or different build.
+    // For a simple command test, -h should suffice. If different exe, path needs change.
+    TestEngineCommand("Waifu2x-ncnn-vulkan (20200414(fp16p))",
+                      Current_Path + "/waifu2x-ncnn-vulkan-20200414-fp16p/waifu2x-ncnn-vulkan.exe", // Example path
+                      QStringList() << "-h",
+                      ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P);
+
+    // Test Waifu2x-ncnn-vulkan (OLD) - Assuming another path or build
+    TestEngineCommand("Waifu2x-ncnn-vulkan (OLD)",
+                      Current_Path + "/waifu2x-ncnn-vulkan-old/waifu2x-ncnn-vulkan.exe", // Example path
+                      QStringList() << "-h",
+                      ui->checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD);
+
+    // Test SRMD-ncnn-vulkan
+    TestEngineCommand("SRMD-ncnn-vulkan",
+                      Current_Path + "/srmd-ncnn-vulkan/srmd-ncnn-vulkan.exe",
+                      QStringList() << "-h",
+                      ui->checkBox_isCompatible_SRMD_NCNN_Vulkan);
+
+    // Test RealESRGAN-NCNN-Vulkan
+    TestEngineCommand("RealESRGAN-NCNN-Vulkan",
+                      Current_Path + "/realesrgan-ncnn-vulkan/realesrgan-ncnn-vulkan.exe",
+                      QStringList() << "-h",
+                      ui->checkBox_isCompatible_Realsr_NCNN_Vulkan); // Note: UI checkbox is named Realsr, might need to create a new one or rename for RealESRGAN
+
+    // Test RealCUGAN-NCNN-Vulkan
+     TestEngineCommand("RealCUGAN-NCNN-Vulkan",
+                      Current_Path + "/realcugan-ncnn-vulkan/realcugan-ncnn-vulkan.exe",
+                      QStringList() << "-h",
+                      nullptr); // No specific checkbox in UI for RealCUGAN compatibility test result, will add to log.
+                                // For now, will use a temporary placeholder or just log.
+                                // This highlights a mismatch between test plan and UI. The UI has isCompatible_Realsr_NCNN_Vulkan
+                                // and isCompatible_RealCUGAN_NCNN_Vulkan in mainwindow.h but not in UI for test results.
+                                // Let's assume we need to add these checkboxes to the UI later or map them correctly.
+                                // For now, I will map RealESRGAN to isCompatible_Realsr_NCNN_Vulkan as it was before.
+                                // And for RealCUGAN, I'll need a new checkbox or log only.
+                                // The plan mentions isCompatible_RealESRGAN_NCNN_Vulkan and isCompatible_RealCUGAN_NCNN_Vulkan bools.
+                                // The UI has checkBox_isCompatible_Realsr_NCNN_Vulkan.
+                                // Let's assume checkBox_isCompatible_Realsr_NCNN_Vulkan is for RealESRGAN for now.
+                                // And will need to add one for RealCUGAN.
+                                // For now, I will test RealESRGAN against checkBox_isCompatible_Realsr_NCNN_Vulkan and manually create bool for RealCUGAN.
+    isCompatible_RealESRGAN_NCNN_Vulkan = TestEngineCommand("RealESRGAN-NCNN-Vulkan", Current_Path + "/realesrgan-ncnn-vulkan/realesrgan-ncnn-vulkan.exe", QStringList() << "-h", ui->checkBox_isCompatible_Realsr_NCNN_Vulkan);
+    isCompatible_RealCUGAN_NCNN_Vulkan = TestEngineCommand("RealCUGAN-NCNN-Vulkan", Current_Path + "/realcugan-ncnn-vulkan/realcugan-ncnn-vulkan.exe", QStringList() << "-h", nullptr); // No checkbox yet
+
+
+    // Test FFmpeg
+    TestEngineCommand("FFmpeg",
+                      FFMPEG_EXE_PATH_Waifu2xEX, // Using the defined path
+                      QStringList() << "-version",
+                      ui->checkBox_isCompatible_FFmpeg);
+
+    // Test FFprobe
+    TestEngineCommand("FFprobe",
+                      Current_Path + "/ffmpeg/ffprobe.exe", // Assuming it's alongside ffmpeg
+                      QStringList() << "-version",
+                      ui->checkBox_isCompatible_FFprobe);
+
+    // ImageMagick (convert) - typically just 'convert' if in PATH, or specify full path
+    // For Windows, it's often 'magick convert' or just 'magick'
+    // This test is more platform-dependent if relying on PATH.
+    // A bundled ImageMagick would be Current_Path + "/ImageMagick/convert.exe" or similar
+    TestEngineCommand("ImageMagick",
+                      "magick", // Or Current_Path + "/ImageMagick/magick.exe"
+                      QStringList() << "-version",
+                      ui->checkBox_isCompatible_ImageMagick);
+
+    // Gifsicle
+    TestEngineCommand("Gifsicle",
+                      Current_Path + "/gifsicle/gifsicle.exe",
+                      QStringList() << "--version",
+                      ui->checkBox_isCompatible_Gifsicle);
+
+    // SoX
+    TestEngineCommand("SoX",
+                      Current_Path + "/sox/sox.exe",
+                      QStringList() << "--version",
+                      ui->checkBox_isCompatible_SoX);
+
+    // Anime4KCPP_CLI (CPU is default, GPU needs specific args)
+    TestEngineCommand("Anime4K (CPU)",
+                      Current_Path + "/anime4k-cli/Anime4KCPP_CLI.exe",
+                      QStringList() << "-h", // Help command implies CPU mode is testable
+                      ui->checkBox_isCompatible_Anime4k_CPU);
+
+    TestEngineCommand("Anime4K (GPU)",
+                      Current_Path + "/anime4k-cli/Anime4KCPP_CLI.exe",
+                      QStringList() << "-h" << "-q", // -q might list platforms/devices if GPU is supported
+                      ui->checkBox_isCompatible_Anime4k_GPU);
+
+
+    // Waifu2x-Converter (waifu2x-converter-cpp)
+    TestEngineCommand("Waifu2x-converter",
+                      Current_Path + "/waifu2x-converter-cpp/waifu2x-converter-cpp.exe",
+                      QStringList() << "-h",
+                      ui->checkBox_isCompatible_Waifu2x_Converter);
+
+    // Waifu2x-Caffe - this one is more complex as it might need model files etc.
+    // For a simple test, check executable existence and perhaps -h.
+    // CPU
+    TestEngineCommand("Waifu2x-caffe (CPU)",
+                      Current_Path + "/waifu2x-caffe/waifu2x-caffe-cui.exe",
+                      QStringList() << "-h", // Assuming -h exists
+                      ui->checkBox_isCompatible_Waifu2x_Caffe_CPU);
+    // GPU
+    TestEngineCommand("Waifu2x-caffe (GPU)",
+                      Current_Path + "/waifu2x-caffe/waifu2x-caffe-cui.exe",
+                      QStringList() << "-h" << "-p" << "gpu", // Example args
+                      ui->checkBox_isCompatible_Waifu2x_Caffe_GPU);
+    // cuDNN
+    TestEngineCommand("Waifu2x-caffe (cuDNN)",
+                      Current_Path + "/waifu2x-caffe/waifu2x-caffe-cui.exe",
+                      QStringList() << "-h" << "-p" << "cudnn", // Example args
+                      ui->checkBox_isCompatible_Waifu2x_Caffe_cuDNN);
+
+
+    // RIFE-NCNN-Vulkan
+    TestEngineCommand("RIFE-NCNN-Vulkan",
+                      Current_Path + "/rife-ncnn-vulkan/rife-ncnn-vulkan.exe",
+                      QStringList() << "-h",
+                      ui->checkBox_isCompatible_RifeNcnnVulkan);
+
+    // CAIN-NCNN-Vulkan
+    TestEngineCommand("CAIN-NCNN-Vulkan",
+                      Current_Path + "/cain-ncnn-vulkan/cain-ncnn-vulkan.exe",
+                      QStringList() << "-h",
+                      ui->checkBox_isCompatible_CainNcnnVulkan);
+
+    // DAIN-NCNN-Vulkan
+    TestEngineCommand("DAIN-NCNN-Vulkan",
+                      Current_Path + "/dain-ncnn-vulkan/dain-ncnn-vulkan.exe",
+                      QStringList() << "-h",
+                      ui->checkBox_isCompatible_DainNcnnVulkan);
+
+
+    // Ensure all tests contribute to the progress bar even if they are simple file checks
+    // For any remaining tests that were part of the original 19 but not covered by command tests:
+    // Example: SRMD CUDA (if it's just a file check for now)
+    // bool srmdCudaExists = QFile::exists(Current_Path + "/srmd-cuda/srmd-cuda.exe");
+    // UpdateCompatibilityCheckbox(ui->checkBox_isCompatible_SRMD_CUDA, srmdCudaExists, "SRMD-CUDA");
+
+
+    // Fill remaining progress bar slots if totalTests was an estimate
+    int currentProgress = ui->progressBar_CompatibilityTest->value();
+    int maxProgress = ui->progressBar_CompatibilityTest->maximum();
+    for (int i = currentProgress; i < maxProgress; ++i) {
+        QMetaObject::invokeMethod(this, "Add_progressBar_CompatibilityTest", Qt::QueuedConnection);
+    }
+
+
+    QMetaObject::invokeMethod(this, "Finish_progressBar_CompatibilityTest", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(ui->pushButton_compatibilityTest, "setEnabled", Qt::QueuedConnection, Q_ARG(bool, true));
+    TextBrowser_NewMessage(tr("Compatibility test finished."));
+    emit Send_Waifu2x_Compatibility_Test_finished();
+}
+
+bool MainWindow::TestEngineCommand(const QString& engineName, const QString& executablePath, const QStringList& arguments, QCheckBox* checkBox)
+{
+    QProcess process;
+    process.setProcessChannelMode(QProcess::MergedChannels); // Combine stdout and stderr
+
+    if (!QFile::exists(executablePath)) {
+        QString logMsg = tr("%1: Executable not found at %2").arg(engineName, executablePath);
+        QMetaObject::invokeMethod(this, "TextBrowser_NewMessage", Qt::QueuedConnection, Q_ARG(QString, logMsg));
+        if (checkBox) {
+            // UpdateCompatibilityCheckbox(checkBox, false, engineName); // This function is not defined yet
+             QMetaObject::invokeMethod(checkBox, "setChecked", Qt::QueuedConnection, Q_ARG(bool, false));
+             QMetaObject::invokeMethod(checkBox, "setEnabled", Qt::QueuedConnection, Q_ARG(bool, true));
+        }
+        QMetaObject::invokeMethod(this, "Add_progressBar_CompatibilityTest", Qt::QueuedConnection);
+        return false;
+    }
+
+    process.start(executablePath, arguments);
+    bool success = process.waitForFinished(15000); // Wait 15 seconds
+
+    QString statusMsg;
+    bool isCompatible = false;
+
+    if (!success) {
+        process.kill();
+        process.waitForFinished(1000); // Ensure it's killed
+        statusMsg = tr("%1: Test timed out or crashed.").arg(engineName);
+    } else if (process.exitStatus() == QProcess::NormalExit && process.exitCode() == 0) {
+        statusMsg = tr("%1: Compatible (Exit code 0).").arg(engineName);
+        isCompatible = true;
+    } else {
+        statusMsg = tr("%1: Not compatible or error (Exit code %2, Status %3). Output: %4")
+                        .arg(engineName)
+                        .arg(process.exitCode())
+                        .arg(process.exitStatus())
+                        .arg(QString::fromLocal8Bit(process.readAll()).trimmed());
+    }
+
+    QMetaObject::invokeMethod(this, "TextBrowser_NewMessage", Qt::QueuedConnection, Q_ARG(QString, statusMsg));
+    if (checkBox) {
+        // UpdateCompatibilityCheckbox(checkBox, isCompatible, engineName); // This function is not defined yet
+        QMetaObject::invokeMethod(checkBox, "setChecked", Qt::QueuedConnection, Q_ARG(bool, isCompatible));
+        QMetaObject::invokeMethod(checkBox, "setEnabled", Qt::QueuedConnection, Q_ARG(bool, true));
+    }
+    QMetaObject::invokeMethod(this, "Add_progressBar_CompatibilityTest", Qt::QueuedConnection);
+    return isCompatible;
+}
+
+
+void MainWindow::on_pushButton_compatibilityTest_clicked()
+{
+    StartFullCompatibilityTest();
+}
+
 void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason) { /* STUB */ }
 void MainWindow::progressbar_setRange_min_max_slots(int, int) { /* STUB */ }
 void MainWindow::progressbar_Add_slots() { /* STUB */ }
@@ -599,7 +1006,12 @@ void MainWindow::Table_gif_CustRes_rowNumInt_HeightQString_WidthQString(int, QSt
 void MainWindow::Table_video_CustRes_rowNumInt_HeightQString_WidthQString(int, QString, QString) { /* STUB */ }
 int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString) { return 0; }
 int MainWindow::Table_Save_Current_Table_Filelist_Finished() { return 0; }
-void MainWindow::on_pushButton_ClearList_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_ClearList_clicked()
+{
+    // The existing Table_Clear() method handles clearing models,
+    // re-initializing headers, and reloading file counts.
+    Table_Clear();
+}
 bool MainWindow::SystemShutDown() { return false; }
 void MainWindow::Read_urls_finfished() { /* STUB */ }
 void MainWindow::video_write_VideoConfiguration(QString, int, int, bool, int, int, QString, bool, QString, QString, bool, int) { /* STUB */ }

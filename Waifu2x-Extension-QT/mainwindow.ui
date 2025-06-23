@@ -5503,6 +5503,486 @@ Smaller tile size means Realsr will use less GPU memory and run slower.</string>
                 </item>
                </layout>
               </widget>
+              <widget class="QWidget" name="tab_RealESRGAN">
+               <attribute name="title">
+                <string notr="true">RealESRGAN-NCNN-Vulkan</string>
+               </attribute>
+               <layout class="QGridLayout" name="gridLayout_RealESRGAN">
+                <item row="1" column="0" colspan="2">
+                 <layout class="QHBoxLayout" name="horizontalLayout_RealESRGAN_Model">
+                  <item>
+                   <widget class="QLabel" name="label_Model_RealESRGAN">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Model:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="comboBox_Model_RealESRGAN">
+                    <item>
+                     <property name="text">
+                      <string>realesr-animevideov3 (Supports denoise, video)</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>realesrgan-x4plus (Supports denoise)</string>
+                     </property>
+                    </item>
+                    <item>
+                     <property name="text">
+                      <string>realesrgan-x4plus-anime (Supports denoise, anime)</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkBox_TTA_RealESRGAN">
+                    <property name="toolTip">
+                     <string>TTA(Test-Time Augmentation):
+The processing time is eight times longer than when unchecked,
+and the peak signal-to-noise ratio (PSNR) is increased by 0.15,
+but the effect may not be obvious. It is not recommended to enable it.</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true">TTA</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_RealESRGAN_Model">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item row="3" column="0" colspan="2">
+                 <layout class="QHBoxLayout" name="horizontalLayout_RealESRGAN_TileSize">
+                  <item>
+                   <widget class="QLabel" name="label_TileSize_RealESRGAN">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Tile size:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QFrame" name="frame_TileSize_RealESRGAN">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Raised</enum>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_TileSize_RealESRGAN">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item row="0" column="0">
+                      <widget class="QPushButton" name="pushButton_Minus_TileSize_RealESRGAN">
+                       <property name="maximumSize">
+                        <size>
+                         <width>30</width>
+                         <height>30</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string notr="true">-</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QSpinBox" name="spinBox_TileSize_RealESRGAN">
+                       <property name="toolTip">
+                        <string>Tile size: This value will affects GPU memory usage.
+Larger tile size means RealESRGAN will use more GPU memory and run faster.
+Smaller tile size means RealESRGAN will use less GPU memory and run slower.</string>
+                       </property>
+                       <property name="minimum">
+                        <number>32</number>
+                       </property>
+                       <property name="maximum">
+                        <number>999999999</number>
+                       </property>
+                       <property name="singleStep">
+                        <number>10</number>
+                       </property>
+                       <property name="value">
+                        <number>128</number>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="2">
+                      <widget class="QPushButton" name="pushButton_Add_TileSize_RealESRGAN">
+                       <property name="maximumSize">
+                        <size>
+                         <width>30</width>
+                         <height>30</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string notr="true">+</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_TileSize_RealESRGAN">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item row="5" column="0" colspan="2">
+                 <layout class="QHBoxLayout" name="horizontalLayout_GPU_RealESRGAN">
+                  <item>
+                   <widget class="QLabel" name="label_GPUID_RealESRGAN">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>GPU ID:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="comboBox_GPUID_RealESRGAN">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>180</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Select the GPU to use when enabling the RealESRGAN-ncnn-vulkan engine.</string>
+                    </property>
+                    <property name="currentText">
+                     <string notr="true">auto</string>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string notr="true">auto</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButton_DetectGPU_RealESRGAN">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Detect available GPU ID</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="checkBox_MultiGPU_RealESRGANEngine">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="toolTip">
+                     <string>1.You need at least 2 available GPUs.
+
+2.If you wanna get all GPUs running together,
+the number of threads must = the number of GPUs.
+
+3.You need to [Detect available GPU ID] first.</string>
+                    </property>
+                    <property name="text">
+                     <string>Enable Multi-GPU</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_GPU_RealESRGAN">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item row="6" column="0" colspan="2">
+                 <layout class="QHBoxLayout" name="horizontalLayout_MultiGPUConfig_RealESRGAN" stretch="1,2">
+                  <item>
+                   <widget class="QGroupBox" name="groupBox_GPUSettings_MultiGPU_RealESRGAN">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="title">
+                     <string>GPU Settings(Multi-GPU)</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="flat">
+                     <bool>true</bool>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_MultiGPUConfigBox_RealESRGAN">
+                     <property name="leftMargin">
+                      <number>6</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>6</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>6</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>6</number>
+                     </property>
+                     <item row="0" column="2">
+                      <widget class="QCheckBox" name="checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="text">
+                        <string>Enable</string>
+                       </property>
+                       <property name="checked">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_MultiGPUID_RealESRGAN">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="text">
+                        <string>GPU ID:</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="4">
+                      <widget class="QLabel" name="label_MultiGPUTile_RealESRGAN">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="text">
+                        <string>Tile size:</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="6">
+                      <widget class="QPushButton" name="pushButton_ShowMultiGPUSettings_RealESRGAN">
+                       <property name="toolTip">
+                        <string>Show current Multi-GPU settings.</string>
+                       </property>
+                       <property name="text">
+                        <string>Show GPUs Settings</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QComboBox" name="comboBox_GPUIDs_MultiGPU_RealESRGAN">
+                       <property name="currentText">
+                        <string notr="true"/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="5">
+                      <widget class="QSpinBox" name="spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN">
+                       <property name="minimum">
+                        <number>32</number>
+                       </property>
+                       <property name="maximum">
+                        <number>999999999</number>
+                       </property>
+                       <property name="singleStep">
+                        <number>10</number>
+                       </property>
+                       <property name="value">
+                        <number>128</number>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="3">
+                      <widget class="Line" name="line_MultiGPUSeparator_RealESRGAN">
+                       <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <spacer name="horizontalSpacer_MultiGPUConfig_RealESRGAN">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                 </layout>
+                </item>
+                <item row="2" column="0" colspan="2"><widget class="Line" name="line_RealESRGAN_Sep1"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget></item>
+                <item row="4" column="0" colspan="2"><widget class="Line" name="line_RealESRGAN_Sep2"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget></item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="tab_RealCUGAN">
+               <attribute name="title">
+                <string notr="true">RealCUGAN-NCNN-Vulkan</string>
+               </attribute>
+               <layout class="QGridLayout" name="gridLayout_RealCUGAN">
+                <item row="0" column="0">
+                 <widget class="QComboBox" name="comboBox_Model_RealCUGAN"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QSpinBox" name="spinBox_Scale_RealCUGAN"/>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QSpinBox" name="spinBox_DenoiseLevel_RealCUGAN"/>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QSpinBox" name="spinBox_TileSize_RealCUGAN"/>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QCheckBox" name="checkBox_TTA_RealCUGAN"/>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QComboBox" name="comboBox_GPUID_RealCUGAN"/>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QPushButton" name="pushButton_DetectGPU_RealCUGAN"/>
+                </item>
+                <item row="7" column="0">
+                 <widget class="QCheckBox" name="checkBox_MultiGPU_RealCUGAN"/>
+                </item>
+                <item row="8" column="0">
+                 <widget class="QGroupBox" name="groupBox_GPUSettings_MultiGPU_RealCUGAN"/>
+                </item>
+                <item row="9" column="0">
+                 <widget class="QComboBox" name="comboBox_GPUIDs_MultiGPU_RealCUGAN"/>
+                </item>
+                <item row="10" column="0">
+                 <widget class="QListWidget" name="listWidget_GPUList_MultiGPU_RealCUGAN"/>
+                </item>
+                <item row="11" column="0">
+                 <widget class="QPushButton" name="pushButton_AddGPU_MultiGPU_RealCUGAN"/>
+                </item>
+                <item row="12" column="0">
+                 <widget class="QPushButton" name="pushButton_RemoveGPU_MultiGPU_RealCUGAN"/>
+                </item>
+                <item row="13" column="0">
+                 <widget class="QPushButton" name="pushButton_ClearGPU_MultiGPU_RealCUGAN"/>
+                </item>
+                <item row="14" column="0">
+                 <widget class="QPushButton" name="pushButton_TileSize_Add_RealCUGAN"/>
+                </item>
+                <item row="15" column="0">
+                 <widget class="QPushButton" name="pushButton_TileSize_Minus_RealCUGAN"/>
+                </item>
+               </layout>
+              </widget>
              </widget>
             </item>
            </layout>
@@ -8281,7 +8761,7 @@ padding:10px;
       </widget>
      </widget>
     </item>
-    <item row="1" column="0">
+    <!-- <item row="1" column="0">
      <widget class="QWidget" name="widget_RealCUGAN_Hidden">
       <layout class="QGridLayout" name="gridLayout_hidden_RealCUGAN">
        <item row="0" column="0">
@@ -8334,7 +8814,7 @@ padding:10px;
        </item>
       </layout>
      </widget>
-    </item>
+    </item> -->
    </layout>
   </widget>
  </widget>
