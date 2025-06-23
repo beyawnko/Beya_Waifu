@@ -159,6 +159,7 @@ public:
     RealEsrganProcessor *m_realEsrganProcessor;
     FileManager fileManager;
     ProcessRunner processRunner;
+    bool waifu2x_STOP = false;
     GpuManager gpuManager;
     UiController uiController;
 

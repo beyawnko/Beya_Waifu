@@ -41,7 +41,7 @@ If the video has no custom resolution and the scale ratio is double, compute one
 bool MainWindow::video_DoubleScaleRatioPrep(int RowNumber)
 {
     QString SourceFile_fullPath = Table_model_video->item(RowNumber,2)->text();
-    if(CustRes_isContained(SourceFile_fullPath) == true || ui->checkBox_FrameInterpolationOnly_Video->isChecked())
+    if(CustRes_isContained(SourceFile_fullPath) == true)
     {
         // If a custom resolution already exists or frame interpolation only is enabled
         return false;
@@ -101,7 +101,7 @@ true = skip
 */
 bool MainWindow::Video_AutoSkip_CustRes(int rowNum)
 {
-    if(ui->checkBox_AutoSkip_CustomRes->isChecked()==false || ui->checkBox_FrameInterpolationOnly_Video->isChecked()==true)return false;
+    if(ui->checkBox_AutoSkip_CustomRes->isChecked()==false)return false;
     QString SourceFile_fullPath = Table_model_video->item(rowNum,2)->text();
     if(CustRes_isContained(SourceFile_fullPath))
     {
@@ -317,7 +317,7 @@ void MainWindow::video_AssembleVideoClips(QString VideoClipsFolderPath,QString V
     }
     QProcess AssembleVideo;
     bool ok = runProcess(&AssembleVideo, CMD);
-    if(waifu2x_STOP || !ok)
+    if(this->waifu2x_STOP || !ok)
     {
         AssembleVideo.close();
         QFile::remove(video_mp4_scaled_fullpath);
@@ -378,7 +378,7 @@ void MainWindow::video_video2images_ProcessBySegment(QString VideoPath,QString F
     QString video_dir = file_getFolderPath(vfinfo);
     QString video_filename = file_getBaseName(VideoPath);
     QString VFI_FolderPath_tmp = video_dir+"/"+video_filename+"_PreVFI_W2xEX";
-    if(ui->checkBox_VfiAfterScale_VFI->isChecked()==false && ui->groupBox_FrameInterpolation->isChecked()==true && ui->checkBox_FrameInterpolationOnly_Video->isChecked()==false) //If frame interpolation is enabled
+    if(ui->checkBox_VfiAfterScale_VFI->isChecked()==false && ui->groupBox_FrameInterpolation->isChecked()==true) //If frame interpolation is enabled
     {
         //If complete interpolated frame cache is detected
         if(file_isDirExist(VFI_FolderPath_tmp) && (file_getFileNames_in_Folder_nofilter(FrameFolderPath).size() * ui->spinBox_MultipleOfFPS_VFI->value() == file_getFileNames_in_Folder_nofilter(VFI_FolderPath_tmp).size()))
@@ -404,7 +404,7 @@ void MainWindow::video_video2images_ProcessBySegment(QString VideoPath,QString F
                 file_DelDir(FrameFolderPath);
                 file_mkDir(FrameFolderPath);
                 file_DelDir(VFI_FolderPath_tmp);
-                if(waifu2x_STOP==false)emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames of video:[")+VideoPath+"]");
+                if(this->waifu2x_STOP==false)emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames of video:[")+VideoPath+"]");
                 return;
             }
         }
@@ -813,7 +813,7 @@ void MainWindow::video_video2images(QString VideoPath,QString FrameFolderPath,QS
     QString video_dir = file_getFolderPath(vfinfo);
     QString video_filename = file_getBaseName(VideoPath);
     QString VFI_FolderPath_tmp = video_dir+"/"+video_filename+"_PreVFI_W2xEX";
-    if(ui->checkBox_VfiAfterScale_VFI->isChecked()==false && ui->groupBox_FrameInterpolation->isChecked()==true && ui->checkBox_FrameInterpolationOnly_Video->isChecked()==false) //If frame interpolation is enabled
+    if(ui->checkBox_VfiAfterScale_VFI->isChecked()==false && ui->groupBox_FrameInterpolation->isChecked()==true) //If frame interpolation is enabled
     {
         //If complete interpolated frame cache is detected
         if(file_isDirExist(VFI_FolderPath_tmp) && (file_getFileNames_in_Folder_nofilter(FrameFolderPath).size() * ui->spinBox_MultipleOfFPS_VFI->value() == file_getFileNames_in_Folder_nofilter(VFI_FolderPath_tmp).size()))
@@ -836,21 +836,9 @@ void MainWindow::video_video2images(QString VideoPath,QString FrameFolderPath,QS
             }
             else
             {
-                //If interpolation fails and frame-interpolation-only mode is enabled
-                if(ui->checkBox_FrameInterpolationOnly_Video->isChecked()==true)
-                {
-                    file_DelDir(FrameFolderPath);
-                    file_mkDir(FrameFolderPath);
-                    file_DelDir(VFI_FolderPath_tmp);
-                    if(waifu2x_STOP==false)emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames of video:[")+VideoPath+"]");
-                    return;
-                }
                 //If interpolation fails but upscaling already done
-                else
-                {
-                    file_DelDir(VFI_FolderPath_tmp);
-                    if(waifu2x_STOP==false)emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames of video:[")+VideoPath+tr("]. Gonna generate a video without frame Interpolation."));
-                }
+                file_DelDir(VFI_FolderPath_tmp);
+                if(this->waifu2x_STOP==false)emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames of video:[")+VideoPath+tr("]. Gonna generate a video without frame Interpolation."));
             }
         }
     }
@@ -949,7 +937,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
     if(ui->groupBox_FrameInterpolation->isChecked()==true)
     {
         bool isPreVFIDone = QFile::exists(isPreVFIDone_MarkFilePath(VideoPath));
-        if((ui->checkBox_VfiAfterScale_VFI->isChecked()==false && ui->checkBox_FrameInterpolationOnly_Video->isChecked()==false) || isPreVFIDone==true)
+        if((ui->checkBox_VfiAfterScale_VFI->isChecked()==false) || isPreVFIDone==true)
         {
             if(isPreVFIDone==true)
             {
@@ -996,17 +984,17 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
                 else
                 {
                     //If interpolation fails and segmented processing or frame-interpolation-only mode is enabled
-                    if(ui->checkBox_ProcessVideoBySegment->isChecked()==true || ui->checkBox_FrameInterpolationOnly_Video->isChecked()==true)
+                    if(ui->checkBox_ProcessVideoBySegment->isChecked()==true)
                     {
                         file_DelDir(VFI_FolderPath_tmp);
-                        if(waifu2x_STOP==false)emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames of video:[")+VideoPath+"]");
+                        if(this->waifu2x_STOP==false)emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames of video:[")+VideoPath+"]");
                         return 0;
                     }
                     //If interpolation fails but upscaling was done and not segmented
                     else
                     {
                         file_DelDir(VFI_FolderPath_tmp);
-                        if(waifu2x_STOP==false)emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames of video:[")+VideoPath+tr("]. Gonna generate a video without frame Interpolation."));
+                        if(this->waifu2x_STOP==false)emit Send_TextBrowser_NewMessage(tr("Failed to interpolate frames of video:[")+VideoPath+tr("]. Gonna generate a video without frame Interpolation."));
                     }
                 }
             }
@@ -1037,7 +1025,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
     QProcess images2video;
     QFile::remove(video_mp4_scaled_fullpath);//Delete old file
     runProcess(&images2video, CMD);
-    if(waifu2x_STOP)
+    if(this->waifu2x_STOP)
     {
         images2video.close();
         QFile::remove(video_mp4_scaled_fullpath);
@@ -1058,7 +1046,7 @@ int MainWindow::video_images2video(QString VideoPath,QString video_mp4_scaled_fu
         }
         QProcess images2video_retry;
         runProcess(&images2video_retry, CMD);
-        if(waifu2x_STOP)
+        if(this->waifu2x_STOP)
         {
             images2video_retry.close();
             QFile::remove(video_mp4_scaled_fullpath);

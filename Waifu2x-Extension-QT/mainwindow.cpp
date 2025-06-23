@@ -168,7 +168,7 @@ void MainWindow::tryStartNextFile()
         if (ThreadNumRunning == 0 && m_currentState == ProcessingState::Processing) Waifu2x_Finished();
         return;
     }
-    QtConcurrent::run([this]() { this->startNextFileProcessing(); });
+    (void)QtConcurrent::run([this]() { this->startNextFileProcessing(); });
 }
 
 void MainWindow::startNextFileProcessing()
@@ -202,7 +202,7 @@ void MainWindow::startNextFileProcessing()
     // TODO: else if for GIF and Video jobs
 }
 
-void MainWindow::onProcessingFinished(int rowNum, bool success)
+void MainWindow::onProcessingFinished(int /*rowNum*/, bool success)
 {
     if (m_currentState == ProcessingState::Idle) return;
     if (success) { m_FinishedProc++; } else { m_ErrorProc++; }
