@@ -427,7 +427,7 @@ public:
 
     QString Generate_Output_Path(const QString& original_fileName, const QString& suffix);
     void Set_Progress_Bar_Value(int val, int max_val);
-    void Set_Current_File_Progress_Bar_Value(int val, int max_val);
+    void SetCurrentFileProgressBarValue(int val, int max_val);
 
     void APNG_Main(int rowNum,bool isFromImageList);
     void APNG_Split2Frames(QString sourceFileFullPath,QString splitFramesFolder);
@@ -763,8 +763,8 @@ public slots:
     // as the processor handles its own QProcess signals internally.
     // The generic onProcessingFinished, onFileProgress, etc. will handle updates from the new processor.
 
-    void progressbar_clear();
-    void progressbar_SetToMax(int maxval);
+    void ProgressBarClear();
+    void ProgressBarSetToMax(int maxval);
     void on_pushButton_SaveFileList_clicked();
     void on_tableView_image_doubleClicked(const QModelIndex &index);
     void on_tableView_gif_doubleClicked(const QModelIndex &index);
@@ -874,7 +874,7 @@ private:
     void RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
     void CheckIfAllFinished();
     void UpdateNumberOfActiveThreads();
-    void UpdateProgressBar();
+    void UpdateProgressBar(); // Already PascalCase
     void ShellMessageBox(const QString &title, const QString &text, QMessageBox::Icon icon);
     bool Deduplicate_filelist_worker(const QString& SourceFile_fullPath, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
     void ProcessFileListWorker(QString file_list_Path, const QSet<QString>& existingImagePaths, const QSet<QString>& existingGifPaths, const QSet<QString>& existingVideoPaths);

@@ -214,7 +214,7 @@ void MainWindow::onProcessingFinished(int /*rowNum*/, bool success)
 void MainWindow::onFileProgress(int rowNum, int percent)
 {
     if (rowNum == current_File_Row_Number) {
-        Set_Current_File_Progress_Bar_Value(percent, 100);
+        SetCurrentFileProgressBarValue(percent, 100);
     }
 }
 
@@ -357,3 +357,5 @@ void MainWindow::on_pushButton_wiki_clicked() { /* STUB */ }
 void MainWindow::TextBrowser_NewMessage(QString msg) { if (ui) ui->textBrowser->append(msg); } // Matched to header QString by value
 void MainWindow::on_pushButton_SaveSettings_clicked() { /* STUB */ }
 void MainWindow::on_pushButton_ResetSettings_clicked() { /* STUB */ }
+void MainWindow::SetCurrentFileProgressBarValue(int val, int max_val) { if(ui && ui->progressBar_CurrentFile) { ui->progressBar_CurrentFile->setMaximum(max_val); ui->progressBar_CurrentFile->setValue(val); } }
+void MainWindow::UpdateProgressBar() { /* STUB */ }

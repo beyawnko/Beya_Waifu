@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021  Aaron Feng
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -22,7 +22,7 @@
 /*
 Fill the progress bar directly
 */
-void MainWindow::progressbar_SetToMax(int maxval)
+void MainWindow::ProgressBarSetToMax(int maxval)
 {
     // This function sets the progress to 100% for a given total (maxval).
     // It implies that all items up to maxval are considered "finished".
@@ -44,7 +44,7 @@ void MainWindow::progressbar_SetToMax(int maxval)
 /*
 Clear progress bar
 */
-void MainWindow::progressbar_clear()
+void MainWindow::ProgressBarClear()
 {
     // Resets all primary progress counters and updates the UI.
     m_TotalNumProc = 0;
