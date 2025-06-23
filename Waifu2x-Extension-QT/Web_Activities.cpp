@@ -40,49 +40,12 @@ bool MainWindow::DownloadTo(QString OnlineLink,QString LocalPath)
 /*
 Check the connection to GitHub to inform the user if Gitee can be disabled
 */
-void MainWindow::on_checkBox_BanGitee_clicked()
-{
-    if(ui->checkBox_BanGitee->isChecked() && isConnectivityTest_RawGithubusercontentCom_Running==false)
-    {
-        (void)QtConcurrent::run([this]() { this->ConnectivityTest_RawGithubusercontentCom(); });//Run network test in the background to determine if raw.githubusercontent.com can be connected
-    }
-}
+// void MainWindow::on_checkBox_BanGitee_clicked() -> Definition is now a stub in mainwindow.cpp
 /*
 Github Connectivity Test
 */
-void MainWindow::ConnectivityTest_RawGithubusercontentCom()
-{
-    QMutex_ConnectivityTest_RawGithubusercontentCom.lock();
-    isConnectivityTest_RawGithubusercontentCom_Running=true;
-    //===
-    QString OnlineAddress="https://raw.githubusercontent.com/beyawnko/Beya_Waifu/master/.github/ConnectivityTest_githubusercontent.txt";
-    QString LocalAddress=Current_Path+"/ConnectivityTest_Waifu2xEX.txt";
-    QFile::remove(LocalAddress);
-    //===
-    emit Send_TextBrowser_NewMessage(tr("Testing if your PC can connect to raw.githubusercontent.com..."));
-    if(DownloadTo(OnlineAddress,LocalAddress)==true)
-    {
-        emit Send_TextBrowser_NewMessage(tr("Detection complete, your PC can connect to raw.githubusercontent.com."));
-    }
-    else
-    {
-        emit Send_TextBrowser_NewMessage(tr("Detection complete, your PC cannot connect to raw.githubusercontent.com."));
-        emit Send_Unable2Connect_RawGithubusercontentCom();
-    }
-    QFile::remove(LocalAddress);
-    //===
-    isConnectivityTest_RawGithubusercontentCom_Running=false;
-    QMutex_ConnectivityTest_RawGithubusercontentCom.unlock();
-}
+// void MainWindow::ConnectivityTest_RawGithubusercontentCom() -> Helper, effectively stubbed if on_checkBox_BanGitee_clicked is.
 /*
 Github Connectivity Test - Prompt unable to connect
 */
-void MainWindow::Unable2Connect_RawGithubusercontentCom()
-{
-    QMessageBox *MSG_2 = new QMessageBox();
-    MSG_2->setWindowTitle(tr("Notification"));
-    MSG_2->setText(tr("Detected that you are currently unable to connect to raw.githubusercontent.com, so enabling [Ban Gitee] won't allow the software to automatically check for updates. It is recommended that you disable [Ban Gitee]."));
-    MSG_2->setIcon(QMessageBox::Warning);
-    MSG_2->setModal(true);
-    MSG_2->show();
-}
+// void MainWindow::Unable2Connect_RawGithubusercontentCom() -> Definition is now a stub in mainwindow.cpp

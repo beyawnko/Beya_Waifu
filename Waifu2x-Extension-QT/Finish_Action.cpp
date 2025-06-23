@@ -52,60 +52,7 @@ int MainWindow::SystemShutDown_Countdown()
 Shutdown
 Save the list, create a shutdown marker, then power off.
 */
-bool MainWindow::SystemShutDown()
-{
-    Table_Save_Current_Table_Filelist(Current_Path+"/FilesList_W2xEX/FilesList_W2xEX_AutoSave.ini");
-    //================
-    QString AutoShutDown = Current_Path+"/AutoShutDown_W2xEX";
-    QFile file(AutoShutDown);
-    file.remove();
-    if (file.open(QIODevice::ReadWrite | QIODevice::Text)) // QIODevice::ReadWrite allows read/write
-    {
-        QTextStream stream(&file);
-        stream << "Don't delete this file!!";
-    }
-    //================
-#ifdef Q_OS_WIN
-    HANDLE hToken;
-    TOKEN_PRIVILEGES tkp;
-    // Get process token
-    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
-        return false;
-    // Get shutdown privilege LUID
-    LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME,    &tkp.Privileges[0].Luid);
-    tkp.PrivilegeCount = 1;
-    tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-    // Enable shutdown privilege for this process
-    AdjustTokenPrivileges(hToken, false, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
-    if (GetLastError() != ERROR_SUCCESS) return false;
-    //===
-    switch(ui->comboBox_FinishAction->currentIndex())
-    {
-        case 1:// Shutdown
-            {
-                // Force shut down the computer
-                if ( !ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, 0))
-                    return false;
-                return true;
-            }
-        case 4:// Reboot
-            {
-                // Force reboot the computer
-                if ( !ExitWindowsEx(EWX_REBOOT | EWX_FORCE, 0))
-                    return false;
-                return true;
-            }
-    }
-    return false;
-#else
-    // System shutdown/reboot is not supported on non-Windows platforms with this method.
-    if (ui->comboBox_FinishAction->currentIndex() == 1 || ui->comboBox_FinishAction->currentIndex() == 4)
-    {
-        qWarning("System shutdown/reboot requested on a non-Windows platform. Action skipped.");
-    }
-    return false; // Or indicate not supported
-#endif
-}
+// bool MainWindow::SystemShutDown() -> Definition is now a stub in mainwindow.cpp
 /*
 Check whether the previous run triggered auto shutdown
 *

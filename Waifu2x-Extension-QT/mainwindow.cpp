@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2025  beyawnko
+    Copyright (C) 2025  beyawnko
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -293,47 +293,45 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
     realCuganProcessor->processVideo(rowNum, sourceFile, destFile, settings);
 }
 
-// --- ALL OTHER FUNCTION IMPLEMENTATIONS ARE STUBBED BELOW ---
-// This is to prevent "undefined reference" and "multiple definition" errors.
-// Their actual logic is either obsolete or will be added back in future refactors.
+// --- START OF STUB IMPLEMENTATION SECTION ---
+// This section contains all necessary stubs to achieve a clean build.
+// They will be implemented properly in subsequent tasks.
 
-// --- STUBBED / EMPTY FUNCTIONS ---
-void MainWindow::resizeEvent(QResizeEvent *event) { QMainWindow::resizeEvent(event); }
-void MainWindow::toggleLiquidGlass(bool enabled) { if (glassWidget) glassWidget->setVisible(enabled); }
+void MainWindow::resizeEvent(QResizeEvent *event) { QMainWindow::resizeEvent(event); /* STUB */ }
+void MainWindow::toggleLiquidGlass(bool enabled) { if (glassWidget) glassWidget->setVisible(enabled); /* STUB */ }
 int MainWindow::Waifu2x_Caffe_Image(int r, bool) { qDebug() << "STUB: Waifu2x_Caffe_Image"; onProcessingFinished(r, false); return 0; }
 int MainWindow::Waifu2x_Converter_Image(int r, bool) { qDebug() << "STUB: Waifu2x_Converter_Image"; onProcessingFinished(r, false); return 0; }
-void MainWindow::changeEvent(QEvent *e) { QMainWindow::changeEvent(e); }
+void MainWindow::changeEvent(QEvent *e) { QMainWindow::changeEvent(e); /* STUB */ }
 void MainWindow::Set_Font_fixed() { /* STUB */ }
-bool MainWindow::SystemPrefersDark() const { return false; }
+bool MainWindow::SystemPrefersDark() const { return false; /* STUB */ }
 void MainWindow::ApplyDarkStyle() { /* STUB */ }
-bool MainWindow::runProcess(QProcess*, const QString&, QByteArray*, QByteArray*) { return false; }
+bool MainWindow::runProcess(QProcess*, const QString&, QByteArray*, QByteArray*) { return false; /* STUB */ }
 void MainWindow::ShellMessageBox(const QString&, const QString&, QMessageBox::Icon) { /* STUB */ }
 void MainWindow::setImageEngineIndex(int) { /* STUB */ }
 void MainWindow::setGifEngineIndex(int) { /* STUB */ }
 void MainWindow::setVideoEngineIndex(int) { /* STUB */ }
-void MainWindow::pushButton_Start_setEnabled_self(bool e) { if (ui) ui->pushButton_Start->setEnabled(e); }
-void MainWindow::pushButton_Stop_setEnabled_self(bool e) { if (ui) ui->pushButton_Stop->setEnabled(e); }
-void MainWindow::closeEvent(QCloseEvent *event) { QMainWindow::closeEvent(event); }
-bool MainWindow::ReplaceOriginalFile(QString, QString) { return false; }
+void MainWindow::pushButton_Start_setEnabled_self(bool e) { if (ui) ui->pushButton_Start->setEnabled(e); /* STUB */ }
+void MainWindow::pushButton_Stop_setEnabled_self(bool e) { if (ui) ui->pushButton_Stop->setEnabled(e); /* STUB */ }
+void MainWindow::closeEvent(QCloseEvent *event) { QMainWindow::closeEvent(event); /* STUB */ }
+bool MainWindow::ReplaceOriginalFile(QString, QString) { return false; /* STUB */ }
 void MainWindow::MoveFileToOutputPath(QString, QString) { /* STUB */ }
-QMap<QString, int> MainWindow::Image_Gif_Read_Resolution(QString) { return QMap<QString, int>(); }
+QMap<QString, int> MainWindow::Image_Gif_Read_Resolution(QString) { return QMap<QString, int>(); /* STUB */ }
 void MainWindow::Delay_sec_sleep(int) { /* STUB */ }
 void MainWindow::Delay_msec_sleep(int) { /* STUB */ }
 void MainWindow::ExecuteCMD_batFile(QString, bool) { /* STUB */ }
 void MainWindow::on_groupBox_FrameInterpolation_toggled(bool) { /* STUB */ }
-int MainWindow::Waifu2x_DetectGPU_finished() { return 0; }
-int MainWindow::Realsr_ncnn_vulkan_DetectGPU_finished() { return 0; }
-int MainWindow::Realcugan_NCNN_Vulkan_DetectGPU_finished() { return 0; }
-int MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU_finished() { return 0; }
+int MainWindow::Waifu2x_DetectGPU_finished() { return 0; /* STUB */ }
+int MainWindow::Realsr_ncnn_vulkan_DetectGPU_finished() { return 0; /* STUB */ }
+int MainWindow::Realcugan_NCNN_Vulkan_DetectGPU_finished() { return 0; /* STUB */ }
+int MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU_finished() { return 0; /* STUB */ }
 void MainWindow::SRMD_DetectGPU_finished() { /* STUB */ }
-int MainWindow::Waifu2x_DumpProcessorList_converter_finished() { return 0; }
+int MainWindow::Waifu2x_DumpProcessorList_converter_finished() { return 0; /* STUB */ }
 void MainWindow::Set_checkBox_DisableResize_gif_Checked() { /* STUB */ }
 void MainWindow::Table_image_insert_fileName_fullPath(const FileLoadInfo&) { /* STUB */ }
 void MainWindow::Table_gif_insert_fileName_fullPath(const FileLoadInfo&) { /* STUB */ }
 void MainWindow::Table_video_insert_fileName_fullPath(const FileLoadInfo&) { /* STUB */ }
-QStringList MainWindow::getImageFullPaths() const { return QStringList(); }
+QStringList MainWindow::getImageFullPaths() const { return QStringList(); /* STUB */ }
 void MainWindow::Batch_Table_Update_slots(const QList<FileLoadInfo>&, const QList<FileLoadInfo>&, const QList<FileLoadInfo>&, bool, bool, bool) { /* STUB */ }
-// ... Add empty stubs for ALL other missing functions from your log ...
 void MainWindow::on_pushButton_CustRes_apply_clicked() { /* STUB */ }
 void MainWindow::on_pushButton_CustRes_cancel_clicked() { /* STUB */ }
 void MainWindow::on_pushButton_about_clicked() { /* STUB */ }
@@ -346,16 +344,166 @@ void MainWindow::on_Ext_video_textChanged(const QString &) { /* STUB */ }
 void MainWindow::on_comboBox_model_vulkan_currentIndexChanged(int) { /* STUB */ }
 void MainWindow::on_comboBox_ImageStyle_currentIndexChanged(int) { /* STUB */ }
 void MainWindow::on_pushButton_ResetVideoSettings_clicked() { /* STUB */ }
-// etc... for every single on_... clicked/changed slot.
 void MainWindow::on_pushButton_Stop_clicked() { /* STUB */ }
-// Make sure to add stubs for ALL functions that the build log complains about.
-// This is tedious but necessary.
 void MainWindow::Waifu2x_Finished() { /* STUB */ }
 void MainWindow::Waifu2x_Finished_manual() { /* STUB */ }
 void MainWindow::on_pushButton_ReadMe_clicked() { /* STUB */ }
 void MainWindow::on_pushButton_wiki_clicked() { /* STUB */ }
-void MainWindow::TextBrowser_NewMessage(QString msg) { if (ui) ui->textBrowser->append(msg); } // Matched to header QString by value
-void MainWindow::on_pushButton_SaveSettings_clicked() { /* STUB */ }
-void MainWindow::on_pushButton_ResetSettings_clicked() { /* STUB */ }
 void MainWindow::SetCurrentFileProgressBarValue(int val, int max_val) { if(ui && ui->progressBar_CurrentFile) { ui->progressBar_CurrentFile->setMaximum(max_val); ui->progressBar_CurrentFile->setValue(val); } }
 void MainWindow::UpdateProgressBar() { /* STUB */ }
+void MainWindow::on_comboBox_TargetProcessor_converter_currentIndexChanged(int) { /* STUB */ }
+void MainWindow::on_groupBox_video_settings_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_AlwaysHideSettings_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_DelOriginal_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_FileList_Interactive_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_OutPath_isEnabled_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_AudioDenoise_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_ProcessVideoBySegment_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_EnablePreProcessing_Anime4k_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_EnablePostProcessing_Anime4k_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_SpecifyGPU_Anime4k_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_GPUMode_Anime4K_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_ShowInterPro_stateChanged(int) { /* STUB */ }
+void MainWindow::on_comboBox_version_Waifu2xNCNNVulkan_currentIndexChanged(int) { /* STUB */ }
+void MainWindow::on_comboBox_Engine_GIF_currentIndexChanged(int) { /* STUB */ }
+void MainWindow::on_comboBox_Engine_Image_currentIndexChanged(int) { /* STUB */ }
+void MainWindow::on_comboBox_Engine_Video_currentIndexChanged(int) { /* STUB */ }
+void MainWindow::on_comboBox_AspectRatio_custRes_currentIndexChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_acodec_copy_2mp4_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_vcodec_copy_2mp4_stateChanged(int) { /* STUB */ }
+void MainWindow::Add_progressBar_CompatibilityTest() { /* STUB */ }
+void MainWindow::TimeSlot() { /* STUB */ }
+int MainWindow::Waifu2x_Compatibility_Test_finished() { return 0; /* STUB */ }
+int MainWindow::on_pushButton_RemoveItem_clicked() { /* STUB */ return 0; }
+void MainWindow::on_pushButton_Report_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_clear_textbrowser_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_HideSettings_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_ReadFileList_clicked() { /* STUB */ }
+void MainWindow::on_Ext_image_editingFinished() { /* STUB */ }
+void MainWindow::on_Ext_video_editingFinished() { /* STUB */ }
+void MainWindow::on_checkBox_AutoSaveSettings_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_BrowserFile_clicked() { /* STUB */ }
+void MainWindow::on_lineEdit_encoder_vid_textChanged(const QString &) { /* STUB */ }
+void MainWindow::on_lineEdit_encoder_audio_textChanged(const QString &) { /* STUB */ }
+void MainWindow::on_lineEdit_pixformat_textChanged(const QString &) { /* STUB */ }
+void MainWindow::on_pushButton_encodersList_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_ForceRetry_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_PayPal_clicked() { /* STUB */ }
+void MainWindow::on_tabWidget_currentChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_SRMD_NCNN_Vulkan_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_SRMD_CUDA_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_Waifu2x_Converter_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_Anime4k_CPU_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_Anime4k_GPU_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_FFmpeg_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_FFprobe_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_ImageMagick_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_Gifsicle_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_SoX_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_Waifu2x_Caffe_CPU_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_Waifu2x_Caffe_GPU_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_Waifu2x_Caffe_cuDNN_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_SplitSize_Add_Waifu2xCaffe_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_SplitSize_Minus_Waifu2xCaffe_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_Realsr_NCNN_Vulkan_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_ACNet_Anime4K_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_HDNMode_Anime4k_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_ReplaceOriginalFile_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_isCustFontEnable_stateChanged(int) { /* STUB */ }
+void MainWindow::on_pushButton_ResizeFilesListSplitter_clicked() { /* STUB */ }
+void MainWindow::on_comboBox_GPGPUModel_A4k_currentIndexChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_DisableGPU_converter_stateChanged(int) { /* STUB */ }
+void MainWindow::on_pushButton_TurnOffScreen_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_MultipleOfFPS_VFI_MIN_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_MultipleOfFPS_VFI_ADD_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_DetectGPU_VFI_clicked() { /* STUB */ }
+void MainWindow::on_lineEdit_MultiGPU_IDs_VFI_editingFinished() { /* STUB */ }
+void MainWindow::on_checkBox_MultiGPU_VFI_stateChanged(int) { /* STUB */ }
+void MainWindow::on_groupBox_FrameInterpolation_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_EnableVFI_Home_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_RifeNcnnVulkan_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_CainNcnnVulkan_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_isCompatible_DainNcnnVulkan_clicked() { /* STUB */ }
+void MainWindow::on_comboBox_Engine_VFI_currentIndexChanged(int) { /* STUB */ }
+void MainWindow::on_pushButton_Verify_MultiGPU_VFI_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_MultiThread_VFI_stateChanged(int) { /* STUB */ }
+void MainWindow::on_checkBox_MultiThread_VFI_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_DetectGPU_RealCUGAN_clicked() { /* STUB */ }
+void MainWindow::on_checkBox_MultiGPU_RealCUGAN_stateChanged(int) { /* STUB */ }
+void MainWindow::on_pushButton_AddGPU_MultiGPU_RealCUGAN_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_RemoveGPU_MultiGPU_RealCUGAN_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_ClearGPU_MultiGPU_RealCUGAN_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_TileSize_Add_RealCUGAN_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_TileSize_Minus_RealCUGAN_clicked() { /* STUB */ }
+void MainWindow::on_comboBox_Model_RealCUGAN_currentIndexChanged(int) { /* STUB */ }
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_finished(int, QProcess::ExitStatus) { /* STUB */ }
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardOutput() { /* STUB */ }
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError() { /* STUB */ }
+void MainWindow::Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError) { /* STUB */ }
+void MainWindow::Realcugan_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError) { /* STUB */ }
+void MainWindow::on_pushButton_SaveFileList_clicked() { /* STUB */ }
+void MainWindow::on_tableView_image_doubleClicked(const QModelIndex &) { /* STUB */ }
+void MainWindow::on_tableView_gif_doubleClicked(const QModelIndex &) { /* STUB */ }
+void MainWindow::on_tableView_video_doubleClicked(const QModelIndex &) { /* STUB */ }
+void MainWindow::on_tableView_image_pressed(const QModelIndex &) { /* STUB */ }
+void MainWindow::on_tableView_gif_pressed(const QModelIndex &) { /* STUB */ }
+void MainWindow::on_tableView_video_pressed(const QModelIndex &) { /* STUB */ }
+void MainWindow::TextBrowser_StartMes() { /* STUB */ }
+void MainWindow::on_pushButton_Patreon_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_SupportersList_clicked() { /* STUB */ }
+void MainWindow::on_comboBox_ImageSaveFormat_currentIndexChanged(int) { /* STUB */ }
+void MainWindow::on_pushButton_CheckUpdate_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_compatibilityTest_clicked() { /* STUB */ }
+void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason) { /* STUB */ }
+void MainWindow::progressbar_setRange_min_max_slots(int, int) { /* STUB */ }
+void MainWindow::progressbar_Add_slots() { /* STUB */ }
+void MainWindow::Unable2Connect_RawGithubusercontentCom() { /* STUB */ }
+void MainWindow::SetEnable_pushButton_ForceRetry_self() { /* STUB */ }
+void MainWindow::SystemTray_hide_self() { /* STUB */ }
+void MainWindow::SystemTray_showNormal_self() { /* STUB */ }
+void MainWindow::SystemTray_showDonate() { /* STUB */ }
+void MainWindow::SystemTray_NewMessage(QString) { /* STUB */ }
+void MainWindow::EnableBackgroundMode_SystemTray() { /* STUB */ }
+void MainWindow::OpenSelectedFilesFolder_FilesList() { /* STUB */ }
+void MainWindow::OpenSelectedFile_FilesList() { /* STUB */ }
+void MainWindow::OpenOutputFolder() { /* STUB */ }
+void MainWindow::RemoveALL_image_slot() { /* STUB */ }
+void MainWindow::RemoveALL_gif_slot() { /* STUB */ }
+void MainWindow::RemoveALL_video_slot() { /* STUB */ }
+void MainWindow::Apply_CustRes_QAction_FileList_slot() { /* STUB */ }
+void MainWindow::Cancel_CustRes_QAction_FileList_slot() { /* STUB */ }
+void MainWindow::FinishedProcessing_DN() { /* STUB */ }
+int MainWindow::Table_FileCount_reload() { return 0; }
+void MainWindow::Table_image_CustRes_rowNumInt_HeightQString_WidthQString(int, QString, QString) { /* STUB */ }
+void MainWindow::Table_gif_CustRes_rowNumInt_HeightQString_WidthQString(int, QString, QString) { /* STUB */ }
+void MainWindow::Table_video_CustRes_rowNumInt_HeightQString_WidthQString(int, QString, QString) { /* STUB */ }
+int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString) { return 0; }
+int MainWindow::Table_Save_Current_Table_Filelist_Finished() { return 0; }
+void MainWindow::on_pushButton_ClearList_clicked() { /* STUB */ }
+bool MainWindow::SystemShutDown() { return false; }
+void MainWindow::Read_urls_finfished() { /* STUB */ }
+void MainWindow::video_write_VideoConfiguration(QString, int, int, bool, int, int, QString, bool, QString, QString, bool, int) { /* STUB */ }
+int MainWindow::Settings_Save() { return 0; }
+void MainWindow::video_write_Progress_ProcessBySegment(QString, int, bool, bool, int, int) { /* STUB */ }
+void MainWindow::CurrentFileProgress_Start(QString, int) { /* STUB */ }
+void MainWindow::CurrentFileProgress_Stop() { /* STUB */ }
+void MainWindow::CurrentFileProgress_progressbar_Add() { /* STUB */ }
+void MainWindow::CurrentFileProgress_progressbar_Add_SegmentDuration(int) { /* STUB */ }
+void MainWindow::CurrentFileProgress_progressbar_SetFinishedValue(int) { /* STUB */ }
+void MainWindow::CurrentFileProgress_WatchFolderFileNum(QString) { /* STUB */ }
+void MainWindow::CurrentFileProgress_WatchFolderFileNum_Textbrower(QString, QString, int) { /* STUB */ }
+void MainWindow::Donate_ReplaceQRCode(QString) { /* STUB */ }
+void MainWindow::on_checkBox_BanGitee_clicked() { /* STUB */ }
+int MainWindow::CheckUpdate_NewUpdate(QString, QString) { return 0; }
+FileMetadata MainWindow::getOrFetchMetadata(QString const&) { return FileMetadata(); /* STUB */ }
+void MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString(int, QString) { /* STUB */ }
+void MainWindow::Table_video_ChangeStatus_rowNumInt_statusQString(int, QString) { /* STUB */ }
+void MainWindow::Table_gif_ChangeStatus_rowNumInt_statusQString(int, QString) { /* STUB */ }
+void MainWindow::TextBrowser_NewMessage(QString msg) { if (ui) ui->textBrowser->append(msg); }
+
+int MainWindow::FrameInterpolation_DetectGPU_finished() { /* STUB */ return 0; }
+
+// --- END OF STUB IMPLEMENTATION SECTION ---

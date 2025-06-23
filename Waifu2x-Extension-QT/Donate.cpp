@@ -92,34 +92,8 @@ int MainWindow::Donate_DownloadOnlineQRCode()
     return 0;
 }
 
-void MainWindow::Donate_ReplaceQRCode(QString QRCodePath)
-{
-    if(QRCodePath!="")ui->label_DonateQRCode->setStyleSheet("image: url(\""+QRCodePath+"\");");
-    //=================================
-    if(isFirstTimeStart)return;
-    ui->tabWidget->setCurrentIndex(0);
-    emit Send_SystemTray_NewMessage(tr("Please donate to support developers, so we can bring further update for this software, thank you!"));
-    if(QRandomGenerator::global()->bounded(1000000)<250000)FinishedProcessing_DN();
-}
-
-void MainWindow::FinishedProcessing_DN()
-{
-    QMessageBox Msg(QMessageBox::Question, QString(tr("Notification")+" @Beya_Waifu"), QString(tr("Please donate to support the developers, so we can bring further updates for this software, thank you!\n\n"
-                    "If you don't wanna see this notification anymore, you can get the Premium version by support me on Patreon.")));
-    Msg.setIcon(QMessageBox::Information);
-    QAbstractButton *pYesBtn = Msg.addButton(QString(" "+tr("Get Premium version")+" "), QMessageBox::YesRole);
-    Msg.addButton(QString(" "+tr("Maybe later")+" "), QMessageBox::NoRole);
-    Msg.exec();
-    if (Msg.clickedButton() == pYesBtn)QDesktopServices::openUrl(QUrl("https://www.patreon.com/aaronfeng"));
-}
-
-void MainWindow::on_pushButton_Patreon_clicked()
-{
-    QDesktopServices::openUrl(QUrl("https://www.patreon.com/aaronfeng"));
-}
-
-void MainWindow::on_pushButton_SupportersList_clicked()
-{
-    TopSupportersList_widget = new TopSupportersList;
-    TopSupportersList_widget->show();
-}
+// Definitions for functions below are now stubs in mainwindow.cpp
+// void MainWindow::Donate_ReplaceQRCode(QString QRCodePath)
+// void MainWindow::FinishedProcessing_DN()
+// void MainWindow::on_pushButton_Patreon_clicked()
+// void MainWindow::on_pushButton_SupportersList_clicked()

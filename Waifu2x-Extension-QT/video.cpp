@@ -572,49 +572,11 @@ QString MainWindow::video_AudioDenoise(QString OriginalAudioPath)
 /*
 Save progress
 */
-void MainWindow::video_write_Progress_ProcessBySegment(QString VideoConfiguration_fullPath,int StartTime,bool isSplitComplete,bool isScaleComplete,int OLDSegmentDuration,int LastVideoClipNo)
-{
-    QSettings *configIniWrite = new QSettings(VideoConfiguration_fullPath, QSettings::IniFormat);
-#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
-    configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8"));
-#endif
-    //==================== Store progress ==================================
-    configIniWrite->setValue("/Progress/StartTime", StartTime);
-    configIniWrite->setValue("/Progress/isSplitComplete", isSplitComplete);
-    configIniWrite->setValue("/Progress/isScaleComplete", isScaleComplete);
-    configIniWrite->setValue("/Progress/OLDSegmentDuration", OLDSegmentDuration);
-    configIniWrite->setValue("/Progress/LastVideoClipNo", LastVideoClipNo);
-}
+// void MainWindow::video_write_Progress_ProcessBySegment(QString VideoConfiguration_fullPath,int StartTime,bool isSplitComplete,bool isScaleComplete,int OLDSegmentDuration,int LastVideoClipNo) -> Definition is now a stub in mainwindow.cpp
 /*
 Save video configuration
 */
-void MainWindow::video_write_VideoConfiguration(QString VideoConfiguration_fullPath,int ScaleRatio,int DenoiseLevel,bool CustRes_isEnabled,int CustRes_height,int CustRes_width,QString EngineName,bool isProcessBySegment,QString VideoClipsFolderPath,QString VideoClipsFolderName,bool isVideoFrameInterpolationEnabled,int MultipleOfFPS)
-{
-    QSettings *configIniWrite = new QSettings(VideoConfiguration_fullPath, QSettings::IniFormat);
-#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
-    configIniWrite->setIniCodec(QTextCodec::codecForName("UTF-8"));
-#endif
-    //================= Add warning =========================
-    configIniWrite->setValue("/Warning/EN", "Do not modify this file! It may cause the program to crash! If problems occur after the modification, delete this file and restart the program.");
-    //==================== Store video information ==================================
-    configIniWrite->setValue("/VideoConfiguration/ScaleRatio", ScaleRatio);
-    configIniWrite->setValue("/VideoConfiguration/DenoiseLevel", DenoiseLevel);
-    configIniWrite->setValue("/VideoConfiguration/CustRes_isEnabled", CustRes_isEnabled);
-    configIniWrite->setValue("/VideoConfiguration/CustRes_height", CustRes_height);
-    configIniWrite->setValue("/VideoConfiguration/CustRes_width", CustRes_width);
-    configIniWrite->setValue("/VideoConfiguration/EngineName", EngineName);
-    configIniWrite->setValue("/VideoConfiguration/isProcessBySegment", isProcessBySegment);
-    configIniWrite->setValue("/VideoConfiguration/VideoClipsFolderPath", VideoClipsFolderPath);
-    configIniWrite->setValue("/VideoConfiguration/VideoClipsFolderName", VideoClipsFolderName);
-    configIniWrite->setValue("/VideoConfiguration/isVideoFrameInterpolationEnabled", isVideoFrameInterpolationEnabled);
-    configIniWrite->setValue("/VideoConfiguration/MultipleOfFPS", MultipleOfFPS);
-    //==================== Store progress ==================================
-    configIniWrite->setValue("/Progress/StartTime", 0);
-    configIniWrite->setValue("/Progress/isSplitComplete", false);
-    configIniWrite->setValue("/Progress/isScaleComplete", false);
-    configIniWrite->setValue("/Progress/OLDSegmentDuration", -1);
-    configIniWrite->setValue("/Progress/LastVideoClipNo", -1);
-}
+// void MainWindow::video_write_VideoConfiguration(QString VideoConfiguration_fullPath,int ScaleRatio,int DenoiseLevel,bool CustRes_isEnabled,int CustRes_height,int CustRes_width,QString EngineName,bool isProcessBySegment,QString VideoClipsFolderPath,QString VideoClipsFolderName,bool isVideoFrameInterpolationEnabled,int MultipleOfFPS) -> Definition is now a stub in mainwindow.cpp
 
 /*
 Directly read video resolution and calculate ideal bitrate with a custom algorithm

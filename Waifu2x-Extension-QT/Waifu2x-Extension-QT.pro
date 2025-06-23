@@ -30,9 +30,7 @@ SOURCES += \
     gif.cpp \
     image.cpp \
     progressBar.cpp \
-    realcugan_ncnn_vulkan.cpp \
     RealCuganProcessor.cpp \
-    realesrgan_ncnn_vulkan.cpp \
     realesrganprocessor.cpp \
     settings.cpp \
     table.cpp \
@@ -46,7 +44,8 @@ SOURCES += \
     LiquidGlassWidget.cpp \
     GpuManager.cpp \
     UiController.cpp \
-    Logger.cpp
+    Logger.cpp \
+    anime4kprocessor.cpp
 
 HEADERS += \
     Logger.h \

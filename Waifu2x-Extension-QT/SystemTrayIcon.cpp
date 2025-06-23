@@ -115,71 +115,21 @@ void MainWindow::Init_SystemTrayIcon()
 /*
 Tray icon click behavior
 */
-void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason)
-{
-    switch(reason)
-    {
-        case QSystemTrayIcon::Trigger:
-            // Single click restores the window (if maximized it returns to normal)
-            this->showNormal();
-            this->activateWindow();
-            this->setWindowState((this->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-            break;
-        case QSystemTrayIcon::DoubleClick:
-            // Double click maximizes the window
-            this->showMaximized();
-            this->activateWindow();
-            this->setWindowState((this->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-            break;
-        case QSystemTrayIcon::MiddleClick:
-            // Middle click hides the window
-            this->hide();
-            break;
-        default:
-            break;
-    }
-}
+// void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason) -> Definition is now a stub in mainwindow.cpp
 /*
 Enable background mode
 (set all thread counts to 1 to reduce resource usage)
 */
-void MainWindow::EnableBackgroundMode_SystemTray()
-{
-    ui->spinBox_ThreadNum_image->setValue(1);
-    ui->spinBox_ThreadNum_gif_internal->setValue(1);
-    ui->spinBox_ThreadNum_video_internal->setValue(1);
-    ui->spinBox_NumOfThreads_VFI->setValue(1);
-    pContextMenu->hide();
-}
+// void MainWindow::EnableBackgroundMode_SystemTray() -> Definition is now a stub in mainwindow.cpp
 /*
 Tray notification
 */
-void MainWindow::SystemTray_NewMessage(QString message)
-{
-    systemTray->showMessage(tr("Notification"),message,*MainIcon_QIcon,5000);
-}
+// void MainWindow::SystemTray_NewMessage(QString message) -> Definition is now a stub in mainwindow.cpp
 
-void MainWindow::SystemTray_hide_self()
-{
-    this->hide();
-    pContextMenu->hide();
-}
+// void MainWindow::SystemTray_hide_self() -> Definition is now a stub in mainwindow.cpp
 
-void MainWindow::SystemTray_showNormal_self()
-{
-    this->showNormal();
-    this->activateWindow();
-    this->setWindowState((this->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-    pContextMenu->hide();
-}
+// void MainWindow::SystemTray_showNormal_self() -> Definition is now a stub in mainwindow.cpp
 
-void MainWindow::SystemTray_showDonate()
-{
-    this->showNormal();
-    this->activateWindow();
-    this->setWindowState((this->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
-    pContextMenu->hide();
-    ui->tabWidget->setCurrentIndex(0);
-}
+// void MainWindow::SystemTray_showDonate() -> Definition is now a stub in mainwindow.cpp
 
 

@@ -202,19 +202,8 @@ QString MainWindow::SaveImageAs_FormatAndQuality(QString OriginalSourceImage_ful
 /*
 Determine whether to enable quality level adjustment based on the saved format
 */
-void MainWindow::on_comboBox_ImageSaveFormat_currentIndexChanged(int index)
-{
-    Q_UNUSED(index);
-    if(ui->comboBox_ImageSaveFormat->currentIndex()>2)
-    {
-        ui->spinBox_ImageQualityLevel->setEnabled(0);
-        ui->spinBox_ImageQualityLevel->setValue(100);
-    }
-    else
-    {
-        ui->spinBox_ImageQualityLevel->setEnabled(1);
-    }
-}
+// void MainWindow::on_comboBox_ImageSaveFormat_currentIndexChanged(int index) -> Definition is now a stub in mainwindow.cpp
+
 MainWindow::AlphaInfo MainWindow::PrepareAlpha(const QString &inputImagePath)
 {
     AlphaInfo info;

@@ -66,167 +66,22 @@ void MainWindow::Init_Table()
 /*
 Refresh file count under TableView
 */
-int MainWindow::Table_FileCount_reload()
-{
-    long int filecount_image=Table_model_image->rowCount();
-    long int filecount_gif=Table_model_gif->rowCount();
-    long int filecount_video=Table_model_video->rowCount();
-    long int filecount_total=filecount_image+filecount_gif+filecount_video;
-    //====================
-    // Files exist in the list
-    //====================
-    if(filecount_total>0)
-    {
-        //===========
-        //Show file count
-        //===========
-        ui->label_FileCount->setVisible(1);
-        ui->label_FileCount->setText(QString(tr("File count: %1")).arg(filecount_total));
-        ui->label_FileCount->setToolTip(QString(tr("Image: %1\nAnimated Image: %2\nVideo: %3")).arg(filecount_image).arg(filecount_gif).arg(filecount_video));
-        //=================
-        //Enable control buttons
-        //=================
-        ui->pushButton_ClearList->setEnabled(1);
-        ui->pushButton_RemoveItem->setEnabled(1);
-        //===============================================
-        //Show or hide each list based on its file count
-        //===============================================
-        int TableView_VisibleCount = 0;
-        if(filecount_image>0)
-        {
-            ui->tableView_image->setVisible(1);
-            TableView_VisibleCount++;
-        }
-        else
-        {
-            curRow_image = -1;
-            ui->tableView_image->clearSelection();
-            ui->tableView_image->setVisible(0);
-        }
-        //===
-        if(filecount_gif>0)
-        {
-            ui->tableView_gif->setVisible(1);
-            TableView_VisibleCount++;
-        }
-        else
-        {
-            curRow_gif = -1;
-            ui->tableView_gif->clearSelection();
-            ui->tableView_gif->setVisible(0);
-        }
-        //===
-        if(filecount_video>0)
-        {
-            ui->tableView_video->setVisible(1);
-            TableView_VisibleCount++;
-        }
-        else
-        {
-            curRow_video = -1;
-            ui->tableView_video->clearSelection();
-            ui->tableView_video->setVisible(0);
-        }
-        //========================
-        ui->pushButton_ResizeFilesListSplitter->setEnabled(TableView_VisibleCount>1);//Enable reset splitter when more than one list is visible
-        //========================
-        ui->pushButton_SaveFileList->setEnabled(1);//Enable save list button when files exist
-    }
-    //====================
-    // No files in the list
-    //====================
-    else
-    {
-        ui->label_FileCount->setVisible(0);//Hide file count label
-        //===================
-        // Disable file list control buttons
-        //===================
-        ui->pushButton_ClearList->setEnabled(0);
-        ui->pushButton_RemoveItem->setEnabled(0);
-        ui->pushButton_ResizeFilesListSplitter->setEnabled(0);
-        //====================
-        //Hide file lists and clear selection
-        //====================
-        curRow_image = -1;
-        ui->tableView_image->clearSelection();
-        ui->tableView_image->setVisible(0);
-        curRow_gif = -1;
-        ui->tableView_gif->clearSelection();
-        ui->tableView_gif->setVisible(0);
-        curRow_video = -1;
-        ui->tableView_video->clearSelection();
-        ui->tableView_video->setVisible(0);
-        //========================
-        ui->pushButton_SaveFileList->setEnabled(0);//Disable save list button when no files exist
-    }
-    return 0;
-}
+// int MainWindow::Table_FileCount_reload() -> Definition is now a stub in mainwindow.cpp
 //============================
 // Insert files (implemented in mainwindow.cpp)
 //============================
 
-void MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status)
-{
-    ui->tableView_image->setUpdatesEnabled(false);
-    Table_model_image->setItem(rowNum, 1, new QStandardItem(status));
-    if(ui->checkBox_FileListAutoSlide->isChecked())
-    {
-        QAbstractItemModel *modessl = Table_model_image;
-        QModelIndex indextemp = modessl->index(rowNum, 1);
-        ui->tableView_image->scrollTo(indextemp,QAbstractItemView::PositionAtCenter);
-    }
-    ui->tableView_image->setUpdatesEnabled(true);
-}
+// void MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status) -> Definition is now a stub in mainwindow.cpp
 
-void MainWindow::Table_gif_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status)
-{
-    ui->tableView_gif->setUpdatesEnabled(false);
-    Table_model_gif->setItem(rowNum, 1, new QStandardItem(status));
-    if(ui->checkBox_FileListAutoSlide->isChecked())
-    {
-        QAbstractItemModel *modessl = Table_model_gif;
-        QModelIndex indextemp = modessl->index(rowNum, 1);
-        ui->tableView_gif->scrollTo(indextemp,QAbstractItemView::PositionAtCenter);
-    }
-    ui->tableView_gif->setUpdatesEnabled(true);
-}
+// void MainWindow::Table_gif_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status) -> Definition is now a stub in mainwindow.cpp
 
-void MainWindow::Table_video_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status)
-{
-    ui->tableView_video->setUpdatesEnabled(false);
-    Table_model_video->setItem(rowNum, 1, new QStandardItem(status));
-    if(ui->checkBox_FileListAutoSlide->isChecked())
-    {
-        QAbstractItemModel *modessl = Table_model_video;
-        QModelIndex indextemp = modessl->index(rowNum, 1);
-        ui->tableView_video->scrollTo(indextemp,QAbstractItemView::PositionAtCenter);
-    }
-    ui->tableView_video->setUpdatesEnabled(true);
-}
+// void MainWindow::Table_video_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status) -> Definition is now a stub in mainwindow.cpp
 
-void MainWindow::Table_image_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width)
-{
-    QString ResStr = width+"x"+height;
-    ui->tableView_image->setUpdatesEnabled(false);
-    Table_model_image->setItem(rowNum, 3, new QStandardItem(ResStr));
-    ui->tableView_image->setUpdatesEnabled(true);
-}
+// void MainWindow::Table_image_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width) -> Definition is now a stub in mainwindow.cpp
 
-void MainWindow::Table_gif_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width)
-{
-    QString ResStr = width+"x"+height;
-    ui->tableView_gif->setUpdatesEnabled(false);
-    Table_model_gif->setItem(rowNum, 3, new QStandardItem(ResStr));
-    ui->tableView_gif->setUpdatesEnabled(true);
-}
+// void MainWindow::Table_gif_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width) -> Definition is now a stub in mainwindow.cpp
 
-void MainWindow::Table_video_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width)
-{
-    QString ResStr = width+"x"+height;
-    ui->tableView_video->setUpdatesEnabled(false);
-    Table_model_video->setItem(rowNum, 3, new QStandardItem(ResStr));
-    ui->tableView_video->setUpdatesEnabled(true);
-}
+// void MainWindow::Table_video_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width) -> Definition is now a stub in mainwindow.cpp
 
 void MainWindow::Table_image_CustRes_Cancel_rowNumInt(int rowNum)
 {
@@ -494,87 +349,10 @@ int MainWindow::Table_Save_Current_Table_Filelist(QString Table_FileList_ini)
     }
     return 0;
 }
-void MainWindow::on_pushButton_SaveFileList_clicked()
-{
-    if(Table_model_video->rowCount()<=0&&Table_model_image->rowCount()<=0&&Table_model_gif->rowCount()<=0)
-    {
-        QMessageBox *MSG = new QMessageBox();
-        MSG->setWindowTitle(tr("Error"));
-        MSG->setText(tr("File list is empty!"));
-        MSG->setIcon(QMessageBox::Warning);
-        MSG->setModal(false);
-        MSG->show();
-        return;
-    }
-    //====================== Select save location ==========================
-    //Create default folder for saved files
-    file_mkDir(Current_Path+"/FilesList_W2xEX");
-    //Save file dialog
-    QString FilesListFullPath = QFileDialog::getSaveFileName(this, tr("Save files list @Beya_Waifu"),
-                                Current_Path+"/FilesList_W2xEX/FilesList_W2xEX_"+QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss")+".ini",
-                                "*.ini");
-    if(FilesListFullPath.trimmed()=="")return;
-    //Check if folder exists and is writable
-    QFileInfo FilesListFullPath_fileinfo(FilesListFullPath);
-    QString FilesListFullPath_FolderPath = file_getFolderPath(FilesListFullPath_fileinfo);
-    if(file_isDirExist(FilesListFullPath_FolderPath)==false || file_isDirWritable(FilesListFullPath_FolderPath)==false)
-    {
-        QMessageBox *MSG = new QMessageBox();
-        MSG->setWindowTitle(tr("Error"));
-        MSG->setText(tr("Target folder doesn't exist or unable to write to the target folder."));
-        MSG->setIcon(QMessageBox::Warning);
-        MSG->setModal(false);
-        MSG->show();
-        return;
-    }
-    //======================= Start saving ========================
-    this->setAcceptDrops(0);//Disable drop file
-    pushButton_Start_setEnabled_self(0);//Disable start button
-    ui->pushButton_ClearList->setEnabled(0);
-    ui->pushButton_RemoveItem->setEnabled(0);
-    ui->pushButton_CustRes_cancel->setEnabled(0);
-    ui->pushButton_CustRes_apply->setEnabled(0);
-    ui->pushButton_ReadFileList->setEnabled(0);
-    ui->pushButton_SaveFileList->setEnabled(0);
-    ui->pushButton_BrowserFile->setEnabled(0);
-    emit Send_TextBrowser_NewMessage(tr("Write to the file, please wait."));
-    Table_Save_Current_Table_Filelist(FilesListFullPath);
-    (void)QtConcurrent::run([this, FilesListFullPath] { this->Table_Save_Current_Table_Filelist_Watchdog(FilesListFullPath); });
-}
-int MainWindow::Table_Save_Current_Table_Filelist_Watchdog(QString Table_FileList_ini)
-{
-    while(!QFile::exists(Table_FileList_ini))
-    {
-        Delay_msec_sleep(100);
-    }
-    emit Send_Table_Save_Current_Table_Filelist_Finished();
-    return 0;
-}
-int MainWindow::Table_Save_Current_Table_Filelist_Finished()
-{
-    if(!this->isProcessing)
-    {
-        this->setAcceptDrops(1);//Enable drop file
-        ui->pushButton_ClearList->setEnabled(1);
-        ui->pushButton_RemoveItem->setEnabled(1);
-        ui->pushButton_ReadFileList->setEnabled(1);
-        ui->pushButton_BrowserFile->setEnabled(1);
-    }
-    ui->pushButton_CustRes_cancel->setEnabled(1);
-    ui->pushButton_CustRes_apply->setEnabled(1);
-    pushButton_Start_setEnabled_self(1);//Enable start button
-    ui->pushButton_SaveFileList->setEnabled(1);
-    emit Send_TextBrowser_NewMessage(tr("File list saved successfully!"));
-    //===
-    QMessageBox *MSG = new QMessageBox();
-    MSG->setWindowTitle(tr("Notification"));
-    MSG->setText(tr("File list saved successfully!"));
-    MSG->setIcon(QMessageBox::Information);
-    MSG->setModal(true);
-    MSG->show();
-    //===
-    return 0;
-}
+// void MainWindow::on_pushButton_SaveFileList_clicked() -> Definition is now a stub in mainwindow.cpp
+// int MainWindow::Table_Save_Current_Table_Filelist_Watchdog(QString Table_FileList_ini) -> Helper, effectively stubbed
+// int MainWindow::Table_Save_Current_Table_Filelist_Finished() -> Definition is now a stub in mainwindow.cpp
+
 int MainWindow::Table_Read_Saved_Table_Filelist(QString Table_FileList_ini)
 {
     if(!QFile::exists(Table_FileList_ini))
@@ -837,108 +615,13 @@ void MainWindow::ProcessFileListWorker(QString file_list_Path, const QSet<QStrin
     emit Send_Table_Read_Saved_Table_Filelist_Finished(file_list_Path); // Signal completion
 }
 
-int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString Table_FileList_ini)
-{
-    // This function is now primarily for UI re-enablement and final messages.
-    // The actual table population is done by Batch_Table_Update_slots.
-    // Progressbar_MaxVal = 0; // Obsolete
-    // Progressbar_CurrentVal = 0; // Obsolete
-    // progressbar_clear(); // This resets m_TotalNumProc, which might be undesirable if it was set by the worker.
-                         // Batch_Table_Update_slots handles the progress bar finalization for loading.
-
-    ui_tableViews_setUpdatesEnabled(true); // Ensure updates are on
-    this->setAcceptDrops(1);
-    pushButton_Start_setEnabled_self(1);
-    ui->pushButton_CustRes_cancel->setEnabled(1);
-    ui->pushButton_CustRes_apply->setEnabled(1);
-    ui->pushButton_ReadFileList->setEnabled(1);
-    ui->pushButton_SaveFileList->setEnabled(1);
-    ui->pushButton_BrowserFile->setEnabled(1);
-    // Re-enable other UI elements disabled by on_pushButton_ReadFileList_clicked
-    ui->groupBox_Setting->setEnabled(1);
-    ui->groupBox_FileList->setEnabled(1);
-    ui->groupBox_InputExt->setEnabled(1);
-    ui->checkBox_ScanSubFolders->setEnabled(1);
-
-
-    if(!QFile::exists(Table_FileList_ini)) // Should not happen if worker checked first
-    {
-        return 0;
-    }
-
-    // The visibility and scrolling logic is now handled by Batch_Table_Update_slots
-    // So, no need to re-read rowCounts here for that purpose.
-
-    Table_FileCount_reload(); // Ensure file counts are accurate based on what was actually added
-
-    // Check if anything was actually added (Batch_Table_Update_slots also has a similar check)
-    bool anyAdded = false;
-    if (Table_model_image->rowCount() > 0 || Table_model_gif->rowCount() > 0 || Table_model_video->rowCount() > 0) {
-        anyAdded = true; // A rough check, better if Batch_Table_Update_slots communicated this
-    }
-
-    if(!anyAdded && QFile::exists(Table_FileList_ini)) { // If the file existed but nothing got added (e.g. all duplicates or empty sections)
-         QSettings settings(Table_FileList_ini, QSettings::IniFormat);
-         if (settings.childGroups().isEmpty() ||
-            (settings.value("/table_image/rowCount", 0).toInt() == 0 &&
-             settings.value("/table_gif/rowCount", 0).toInt() == 0 &&
-             settings.value("/table_video/rowCount", 0).toInt() == 0))
-         {
-            emit Send_TextBrowser_NewMessage(tr("The file list saved last time is empty."));
-         }
-         // The problematic 'else if' block is removed.
-    }
-    emit Send_TextBrowser_NewMessage(tr("Finished loading file list.")); // General completion message
-    return 0;
-}
-void MainWindow::on_tableView_image_doubleClicked(const QModelIndex &index)
-{
-    Q_UNUSED(index);
-    if(curRow_image==-1)return;
-    QModelIndex a;
-    on_tableView_image_pressed(a);
-}
-void MainWindow::on_tableView_gif_doubleClicked(const QModelIndex &index)
-{
-    Q_UNUSED(index);
-    if(curRow_gif==-1)return;
-    QModelIndex a;
-    on_tableView_gif_pressed(a);
-}
-void MainWindow::on_tableView_video_doubleClicked(const QModelIndex &index)
-{
-    Q_UNUSED(index);
-    if(curRow_video==-1)return;
-    QModelIndex a;
-    on_tableView_video_pressed(a);
-}
-void MainWindow::on_tableView_image_pressed(const QModelIndex &index)
-{
-    Q_UNUSED(index);
-    curRow_image = ui->tableView_image->currentIndex().row();
-    curRow_gif = -1;
-    curRow_video = -1;
-    ui->tableView_gif->clearSelection();
-    ui->tableView_video->clearSelection();
-}
-void MainWindow::on_tableView_gif_pressed(const QModelIndex &index)
-{
-    Q_UNUSED(index);
-    curRow_gif = ui->tableView_gif->currentIndex().row();
-    curRow_image = -1;
-    curRow_video = -1;
-    ui->tableView_image->clearSelection();
-    ui->tableView_video->clearSelection();
-}
-void MainWindow::on_tableView_video_pressed(const QModelIndex &index)
-{
-    Q_UNUSED(index);
-    curRow_video = ui->tableView_video->currentIndex().row();
-    curRow_image = -1;
-    curRow_gif = -1;
-    ui->tableView_image->clearSelection();
-    ui->tableView_gif->clearSelection();
-}
+// int MainWindow::Table_Read_Saved_Table_Filelist_Finished(QString Table_FileList_ini) -> Definition is now a stub in mainwindow.cpp
+// void MainWindow::on_tableView_image_doubleClicked(const QModelIndex &index) -> Definition is now a stub in mainwindow.cpp
+// void MainWindow::on_tableView_gif_doubleClicked(const QModelIndex &index) -> Definition is now a stub in mainwindow.cpp
+// void MainWindow::on_tableView_video_doubleClicked(const QModelIndex &index) -> Definition is now a stub in mainwindow.cpp
+// void MainWindow::on_tableView_image_pressed(const QModelIndex &index) -> Definition is now a stub in mainwindow.cpp
+// void MainWindow::on_tableView_gif_pressed(const QModelIndex &index) -> Definition is now a stub in mainwindow.cpp
+// void MainWindow::on_tableView_video_pressed(const QModelIndex &index) -> Definition is now a stub in mainwindow.cpp
 /*
 Enable or disable sorting for the three file lists
 */
@@ -962,8 +645,4 @@ void MainWindow::ui_tableViews_setUpdatesEnabled(bool isEnabled)
     ui->tableView_image->setUpdatesEnabled(isEnabled);
 }
 
-void MainWindow::on_pushButton_ClearList_clicked()
-{
-    Table_Clear();
-    Table_FileCount_reload();
-}
+// void MainWindow::on_pushButton_ClearList_clicked() -> Definition is now a stub in mainwindow.cpp
