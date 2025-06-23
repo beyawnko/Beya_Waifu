@@ -1,29 +1,24 @@
+/*
+    Copyright (C) 2025  beyawnko
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+    My Github homepage: https://github.com/beyawnko
+*/
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-// Removed definition for MainWindow::on_pushButton_compatibilityTest_clicked()
-// Its body is now a stub in mainwindow.cpp
-
-int MainWindow::Simple_Compatibility_Test()
-{
-    QString realcuganExe = Current_Path + "/realcugan-ncnn-vulkan/realcugan-ncnn-vulkan.exe";
-    QString realesrganExe = Current_Path + "/realesrgan-ncnn-vulkan/realesrgan-ncnn-vulkan.exe";
-
-    isCompatible_RealCUGAN_NCNN_Vulkan = QFile::exists(realcuganExe);
-    emit Send_Add_progressBar_CompatibilityTest();
-
-    isCompatible_RealESRGAN_NCNN_Vulkan = QFile::exists(realesrganExe);
-    emit Send_Add_progressBar_CompatibilityTest();
-
-    QMetaObject::invokeMethod(this, "Finish_progressBar_CompatibilityTest", Qt::QueuedConnection);
-    emit Send_Waifu2x_Compatibility_Test_finished();
-    return 0;
-}
-
-void MainWindow::waitForCompatibilityTest()
-{
-    if (compatibilityTestFuture.isRunning())
-    {
-        compatibilityTestFuture.waitForFinished();
-    }
-}
+// All function definitions from this file have been moved to mainwindow.cpp
+// to centralize logic and resolve linker errors.

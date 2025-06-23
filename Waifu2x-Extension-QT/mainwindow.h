@@ -1,3 +1,22 @@
+/*
+    Copyright (C) 2025  beyawnko
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+    My Github homepage: https://github.com/beyawnko
+*/
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -57,9 +76,6 @@
 #include "LiquidGlassWidget.h"
 #include "anime4kprocessor.h"
 #include "realesrganprocessor.h"
-// #include "srmdprocessor.h" // File not found
-// #include "waifu2xconverterprocessor.h" // File not found
-// #include "waifu2xcaffeprocessor.h" // File not found
 
 
 #ifndef Q_DECLARE_METATYPE
@@ -95,13 +111,12 @@ struct FileLoadInfo {
 };
 Q_DECLARE_METATYPE(FileLoadInfo)
 
-// Enum for processing status - MOVED EARLIER
+// Enum for processing status
 enum ProcessingType {
     PROCESS_TYPE_NONE = 0,
     PROCESS_TYPE_IMAGE,
     PROCESS_TYPE_VIDEO,
     PROCESS_TYPE_GIF
-    // Add other types if they appear elsewhere
 };
 
 enum class ProcessingState {
@@ -113,17 +128,8 @@ enum class ProcessingState {
 
 struct ProcessJob {
     int rowNum;
-    ProcessingType type; // Should now be found
+    ProcessingType type;
 };
-
-// Enum for processing status
-// enum ProcessingType { // MOVED
-// PROCESS_TYPE_NONE = 0,
-// PROCESS_TYPE_IMAGE,
-// PROCESS_TYPE_VIDEO, // Properly commented out
-// PROCESS_TYPE_GIF // Properly commented out
-    // Add other types if they appear elsewhere
-// }; // Properly commented out
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -134,8 +140,7 @@ QT_END_NAMESPACE
 
 class RealCuganProcessor;
 class VideoProcessor;
-class RealEsrganProcessor; // Forward declaration
-// class Waifu2xCaffeProcessor; // Forward-declare, commented out as header is missing
+class RealEsrganProcessor;
 
 class MainWindow : public QMainWindow
 {
@@ -157,6 +162,7 @@ public:
     RealCuganProcessor *realCuganProcessor;
     VideoProcessor *videoProcessor;
     RealEsrganProcessor *m_realEsrganProcessor;
+    Anime4KProcessor *m_anime4kProcessor;
     FileManager fileManager;
     ProcessRunner processRunner;
     std::atomic<bool> waifu2x_STOP{false};
@@ -425,7 +431,7 @@ public:
     void PreLoad_Engines_Settings();
     int Calculate_Temporary_ScaleRatio_W2xNCNNVulkan(int ScaleRatio);
 
-    QString Generate_Output_Path(const QString& original_fileName, const QString& suffix);
+    QString Generate_Output_Path(const QString& original_filePath, const QString& suffix);
     void Set_Progress_Bar_Value(int val, int max_val);
     void SetCurrentFileProgressBarValue(int val, int max_val);
 
@@ -613,9 +619,9 @@ public slots:
     int CheckUpdate_NewUpdate(QString update_str, QString Change_log);
     void FinishedProcessing_DN();
     int Table_FileCount_reload();
-    void Table_image_insert_fileName_fullPath(const FileLoadInfo& fileInfo); // Corrected Signature
-    void Table_gif_insert_fileName_fullPath(const FileLoadInfo& fileInfo);   // Corrected Signature
-    void Table_video_insert_fileName_fullPath(const FileLoadInfo& fileInfo); // Corrected Signature
+    void Table_image_insert_fileName_fullPath(const FileLoadInfo& fileInfo);
+    void Table_gif_insert_fileName_fullPath(const FileLoadInfo& fileInfo);
+    void Table_video_insert_fileName_fullPath(const FileLoadInfo& fileInfo);
     void Table_image_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width);
     void Table_gif_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width);
     void Table_video_CustRes_rowNumInt_HeightQString_WidthQString(int rowNum, QString height, QString width);
@@ -660,8 +666,8 @@ public slots:
     void on_checkBox_AlwaysHideSettings_stateChanged(int arg1);
     void on_pushButton_Save_GlobalFontSize_clicked();
     void on_pushButton_BrowserFile_clicked();
-    void on_pushButton_CheckUpdate_clicked(); // Correctly declared
-    void on_pushButton_compatibilityTest_clicked(); // Correctly declared
+    void on_pushButton_CheckUpdate_clicked();
+    void on_pushButton_compatibilityTest_clicked();
     void on_pushButton_wiki_clicked();
     void on_pushButton_HideTextBro_clicked();
     void on_checkBox_AlwaysHideTextBrowser_stateChanged(int arg1);
@@ -748,20 +754,6 @@ public slots:
     void Realcugan_NCNN_Vulkan_Iterative_readyReadStandardError();
     void Realcugan_NCNN_Vulkan_Iterative_errorOccurred(QProcess::ProcessError error);
     void Realcugan_NCNN_Vulkan_DetectGPU_errorOccurred(QProcess::ProcessError error);
-    // void on_pushButton_DetectGPU_RealsrNCNNVulkan_clicked(); // Slot for old UI element, might be removed later if UI is also changing
-    // void on_comboBox_Model_RealsrNCNNVulkan_currentIndexChanged(int index); // Slot for old UI element
-    // void on_pushButton_Add_TileSize_RealsrNCNNVulkan_clicked(); // Slot for old UI element
-    // void on_pushButton_Minus_TileSize_RealsrNCNNVulkan_clicked(); // Slot for old UI element
-    // void on_checkBox_MultiGPU_RealesrganNcnnVulkan_stateChanged(int arg1); // Slot for old UI element
-    // void on_comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan_currentIndexChanged(int index); // Slot for old UI element
-    // void on_checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan_clicked(); // Slot for old UI element
-    // void on_spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan_valueChanged(int arg1); // Slot for old UI element
-    // void on_pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan_clicked(); // Slot for old UI element
-
-    // Slots for the new RealEsrganProcessor will be connected in mainwindow.cpp
-    // No specific individual slots like RealESRGAN_NCNN_Vulkan_Iterative_finished needed here anymore for RealESRGAN
-    // as the processor handles its own QProcess signals internally.
-    // The generic onProcessingFinished, onFileProgress, etc. will handle updates from the new processor.
 
     void ProgressBarClear();
     void ProgressBarSetToMax(int maxval);
@@ -774,7 +766,6 @@ public slots:
     void on_tableView_video_pressed(const QModelIndex &index);
     void on_pushButton_SaveSettings_clicked();
     void on_pushButton_ResetSettings_clicked();
-    // void toggleLiquidGlass(bool enabled); // Already added in private slots
 
     // Slots for VFI synchronization
     void on_groupBox_FrameInterpolation_toggled(bool checked);
@@ -784,29 +775,43 @@ public slots:
     void onProcessingFinished(int rowNum, bool success);
 
 private slots:
-    void TextBrowser_StartMes(); // Single declaration in private slots
+    void TextBrowser_StartMes();
     void toggleLiquidGlass(bool enabled);
-    void on_pushButton_Start_clicked(); // Ensuring this is present
+    void on_pushButton_Start_clicked();
 
-    // The on_... slots that were causing "cannot be overloaded" errors were removed here.
-    // The compiler output indicates they are already declared elsewhere in the public slots section.
-
-private: // Added for non-slot private member functions
-    // ... any existing private members ...
+private:
     void Anime4k_Image(int rowNum, bool useTTA);
     void RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool useTTA);
-    // Realcugan_NCNN_Vulkan_Image is already declared as a public slot or member
     void RealESRGAN_NCNN_Vulkan_Video(int rowNum);
-    // Realcugan_NCNN_Vulkan_Video is already declared as a public slot or member
 
-    // Stubs from mainwindow.cpp that need declaration
     int Waifu2x_Caffe_Image(int r, bool flag);
     int Waifu2x_Converter_Image(int r, bool flag);
-    // Many other stubs are already correctly declared in public/private slots or as public members.
-    // Adding only those specifically mentioned in recent errors or clearly missing.
     int Realsr_ncnn_vulkan_DetectGPU_finished();
     int RealESRGAN_ncnn_vulkan_DetectGPU_finished();
 
+    void tryStartNextFile();
+    void CheckIfAllFinished();
+    void UpdateNumberOfActiveThreads();
+    void UpdateProgressBar();
+    void ShellMessageBox(const QString &title, const QString &text, QMessageBox::Icon icon);
+    bool Deduplicate_filelist_worker(const QString& SourceFile_fullPath, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
+    void ProcessFileListWorker(QString file_list_Path, const QSet<QString>& existingImagePaths, const QSet<QString>& existingGifPaths, const QSet<QString>& existingVideoPaths);
+
+    bool m_isVFISyncing = false;
+    LiquidGlassWidget *glassWidget {nullptr};
+    bool glassEnabled {false};
+
+    ProcessingState m_currentState;
+    QQueue<ProcessJob> m_jobQueue;
+    bool isProcessing = false;
+    bool waifu2x_STOP_confirm = false;
+    int m_NumProc = 0;
+    int m_ErrorProc = 0;
+    int m_TotalNumProc = 0;
+    int m_StartedProc = 0;
+    int m_FinishedProc = 0;
+
+    Ui::MainWindow *ui;
 
 signals:
     void Send_Table_EnableSorting(bool EnableSorting);
@@ -816,7 +821,7 @@ signals:
     void Send_SystemTray_NewMessage(QString message);
     void Send_PrograssBar_Range_min_max_slots(int min, int max_val);
     void Send_progressbar_Add_slots();
-    void Send_progressbar_Add(); // Correct signal
+    void Send_progressbar_Add();
     void Send_Table_image_ChangeStatus_rowNumInt_statusQString(int rowNum, QString status);
     void Send_Table_gif_ChangeStatus_rowNumInt_statusQString(int, QString);
     void Send_Table_video_ChangeStatus_rowNumInt_statusQString(int, QString);
@@ -829,7 +834,6 @@ signals:
     void Send_FrameInterpolation_DetectGPU_finished();
     void Send_CheckUpdate_NewUpdate(QString, QString);
     void Send_Table_FileCount_reload();
-    // Keep old signals for Table_..._insert if they are used by other connections, though Batch_Table_Update is preferred
     void Send_Table_image_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
     void Send_Table_gif_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
     void Send_Table_video_insert_fileName_fullPath(QString fileName, QString SourceFile_fullPath);
@@ -858,40 +862,7 @@ signals:
     void Send_CurrentFileProgress_progressbar_SetFinishedValue(int FinishedValue);
     void Send_Donate_ReplaceQRCode(QString QRCodePath);
     void Send_Set_checkBox_DisableResize_gif_Checked();
-
     void Send_Realcugan_ncnn_vulkan_DetectGPU_finished();
 
-
-private:
-    int m_NumProc = 0;
-    int m_ErrorProc = 0;
-    int m_TotalNumProc = 0;
-    int m_StartedProc = 0;
-    int m_FinishedProc = 0;
-    void LoadScaledImageToLabel(const QString &imagePath, QLabel *label);
-    void UpdateTotalProcessedFilesCount();
-    void tryStartNextFile();
-    void RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
-    void CheckIfAllFinished();
-    void UpdateNumberOfActiveThreads();
-    void UpdateProgressBar(); // Already PascalCase
-    void ShellMessageBox(const QString &title, const QString &text, QMessageBox::Icon icon);
-    bool Deduplicate_filelist_worker(const QString& SourceFile_fullPath, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
-    void ProcessFileListWorker(QString file_list_Path, const QSet<QString>& existingImagePaths, const QSet<QString>& existingGifPaths, const QSet<QString>& existingVideoPaths);
-    bool m_isVFISyncing = false; // Flag to prevent signal recursion
-    LiquidGlassWidget *glassWidget {nullptr};
-    bool glassEnabled {false};
-    Anime4KProcessor *m_anime4kProcessor;
-    // SrmdProcessor *m_srmdProcessor; // Class definition missing
-    // Waifu2xConverterProcessor *m_converterProcessor = nullptr; // Class definition missing
-    // Waifu2xCaffeProcessor *m_caffeProcessor = nullptr; // Class definition missing
-
-    ProcessingState m_currentState;
-    QQueue<ProcessJob> m_jobQueue;
-    bool isProcessing = false; // Added
-    bool waifu2x_STOP_confirm = false; // Added
-
-
-    Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
