@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QRegularExpression>
 #include <QTranslator> // For tr()
+#include <QTime>       // For temporary file naming during multi-pass
 
 RealEsrganProcessor::RealEsrganProcessor(QObject *parent) : QObject(parent)
 {
@@ -15,7 +16,8 @@ RealEsrganProcessor::RealEsrganProcessor(QObject *parent) : QObject(parent)
     connect(m_process, &QProcess::errorOccurred, this, &RealEsrganProcessor::onProcessError);
     connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealEsrganProcessor::onProcessFinished);
     connect(m_process, &QProcess::readyReadStandardOutput, this, &RealEsrganProcessor::onReadyReadStandardOutput);
-    // connect(m_process, &QProcess::readyReadStandardError, this, &RealEsrganProcessor::onProcessStdErr); // If needed
+    // If RealESRGAN has specific error messages on stderr that aren't captured by exit code:
+    // connect(m_process, &QProcess::readyReadStandardError, this, &RealEsrganProcessor::onProcessStdErr);
 
     connect(m_ffmpegProcess, &QProcess::errorOccurred, this, &RealEsrganProcessor::onFfmpegError);
     connect(m_ffmpegProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealEsrganProcessor::onFfmpegFinished);
@@ -26,7 +28,7 @@ RealEsrganProcessor::~RealEsrganProcessor()
 {
     if (m_process->state() != QProcess::NotRunning) {
         m_process->kill();
-        m_process->waitForFinished(1000);
+        m_process->waitForFinished(1000); // Wait a bit for clean exit
     }
     if (m_ffmpegProcess->state() != QProcess::NotRunning) {
         m_ffmpegProcess->kill();
@@ -40,8 +42,11 @@ void RealEsrganProcessor::cleanup()
     m_currentRowNum = -1;
     m_scaleSequence.clear();
 
-    if (!m_currentPassInputFile.isEmpty() && m_currentPassInputFile != m_originalSourceFile) {
-        QFile::remove(m_currentPassInputFile);
+    // Clean up temporary file from multi-pass if it exists and isn't the final output
+    if (!m_currentPassInputFile.isEmpty() && m_currentPassInputFile != m_originalSourceFile && m_currentPassInputFile != m_finalDestinationFile) {
+        if (QFile::exists(m_currentPassInputFile)) {
+            QFile::remove(m_currentPassInputFile);
+        }
     }
 
     m_originalSourceFile.clear();
@@ -53,174 +58,174 @@ void RealEsrganProcessor::cleanup()
 
 void RealEsrganProcessor::processImage(int rowNum, const QString &sourceFile, const QString &destinationFile, const RealEsrganSettings &settings)
 {
-    // If m_state is not Idle, it could be called from processVideo for a frame.
-    // Only block if it's an external call and the processor is truly busy with another top-level task.
-    if (m_state != State::Idle && m_state != State::ProcessingVideoFrames) {
-        emit logMessage("[ERROR] RealEsrganProcessor is already busy with a different task.");
+    if (m_state != State::Idle && m_state != State::ProcessingVideoFrames) { // Allow if processing video frames
+        emit logMessage(tr("[ERROR] RealEsrganProcessor is already busy with a different task."));
         return;
     }
-    // If called for a frame, m_process might be busy with the *previous* frame.
-    // The startNextPass logic already handles m_process state.
 
-    if (m_state == State::Idle) { // This is a top-level image processing request
-      m_state = State::ProcessingImage;
-      m_currentRowNum = rowNum; // Only set for top-level tasks
-      m_settings = settings;
-      m_originalSourceFile = sourceFile;
-      m_finalDestinationFile = destinationFile;
-      emit statusChanged(m_currentRowNum, tr("Processing..."));
-      emit logMessage(QString("Real-ESRGAN: Starting image job for %1...").arg(QFileInfo(sourceFile).fileName()));
-    } else if (m_state == State::ProcessingVideoFrames) {
-      // This is a call for a video frame.
-      // m_currentRowNum, m_settings are already set by processVideo.
-      // m_originalSourceFile for a frame is its input path.
-      // m_finalDestinationFile for a frame is its output path.
-      m_originalSourceFile = sourceFile; // For this frame
-      m_finalDestinationFile = destinationFile; // For this frame
-      // emit logMessage(QString("Real-ESRGAN: Starting frame processing for %1...").arg(QFileInfo(sourceFile).fileName()));
+    if (m_state == State::Idle) { // Top-level image task
+        m_state = State::ProcessingImage;
+        m_currentRowNum = rowNum;
+        m_settings = settings;
+        m_originalSourceFile = sourceFile;
+        m_finalDestinationFile = destinationFile;
+        emit statusChanged(m_currentRowNum, tr("Processing..."));
+        emit logMessage(QString("Real-ESRGAN: Starting image job for %1...").arg(QFileInfo(sourceFile).fileName()));
+    } else if (m_state == State::ProcessingVideoFrames) { // Called for a video frame
+        // m_currentRowNum and m_settings are already set by processVideo
+        m_originalSourceFile = sourceFile; // For this frame
+        m_finalDestinationFile = destinationFile; // For this frame
+        // No status change here, video status is "Processing frames..."
     }
-
 
     m_currentPassInputFile = sourceFile;
+    m_scaleSequence.clear();
 
-    // --- Determine scaling sequence ---
-    m_scaleSequence.clear(); // Clear for each new image/frame
-    int remainingScale = m_settings.targetScale;
-    int nativeScale = m_settings.modelNativeScale > 1 ? m_settings.modelNativeScale : 2; // Safeguard
-    while (remainingScale >= nativeScale) {
-        m_scaleSequence.enqueue(nativeScale);
-        remainingScale /= nativeScale;
+    if (m_settings.targetScale <= 0 || m_settings.modelNativeScale <= 0) {
+         emit logMessage(tr("[ERROR] Target scale and model native scale must be positive."));
+         emit processingFinished(m_currentRowNum, false);
+         cleanup();
+         return;
     }
-    // If targetScale is less than nativeScale (e.g. target x1 with x4 model), or if it's not perfectly divisible.
-    // We still need at least one pass using the nativeScale. The executable should handle downscaling if -s is larger.
-    // Or, more simply, if after division there's still scaling to do (e.g. target x3, model x2 -> one pass x2, then what?)
-    // The current logic assumes targetScale is a multiple of modelNativeScale or smaller.
-    // For simplicity, if scaleSequence is empty, it means targetScale < nativeScale.
-    // We'll just run one pass with nativeScale.
-    if (m_scaleSequence.isEmpty()) {
-        m_scaleSequence.enqueue(nativeScale); // At least one pass with the model's scale
+
+    if (m_settings.targetScale == 1) { // No upscaling, but might denoise if model supports it (pass through)
+        m_scaleSequence.enqueue(m_settings.modelNativeScale); // Run one pass with native model scale, let -s handle it.
+    } else if (m_settings.targetScale < m_settings.modelNativeScale) {
+        // Target scale is less than model's native scale (e.g., x2 target with x4 model)
+        // Run one pass with model's native scale; the executable should handle downscaling.
+        m_scaleSequence.enqueue(m_settings.modelNativeScale);
+    } else {
+        // Multi-pass scaling: targetScale >= modelNativeScale
+        int remainingScale = m_settings.targetScale;
+        while (remainingScale >= m_settings.modelNativeScale) {
+            m_scaleSequence.enqueue(m_settings.modelNativeScale);
+            remainingScale /= m_settings.modelNativeScale;
+        }
+        if (remainingScale > 1) { // If there's a remaining factor (e.g. target x6, model x4 -> one x4 pass, remaining x1.5)
+            // This scenario is tricky. For now, we'll just do the whole number passes.
+            // Or, one could do an additional pass with native scale and then downscale, but that's complex.
+            // Current logic: if target is x6, model x4: queue one x4. Remaining x1.5 ignored.
+            // If target x3, model x2: queue one x2. Remaining x1.5 ignored.
+            // This means effective scale might be less than target if not a direct multiple.
+            // For simplicity, we only chain full native scale passes.
+            // User should choose targetScale that's a multiple of modelNativeScale for best results.
+             emit logMessage(QString(tr("Warning: Target scale %1 is not a full multiple of model native scale %2. Effective scale might differ."))
+                            .arg(m_settings.targetScale).arg(m_settings.modelNativeScale));
+        }
+    }
+     if (m_scaleSequence.isEmpty()){ // Should only happen if targetscale was 1 and modelnative was 1.
+        m_scaleSequence.enqueue(m_settings.modelNativeScale); // Ensure at least one pass
     }
 
 
     startNextPass();
 }
 
-void RealEsrganProcessor::startNextPass()
-{
+void RealEsrganProcessor::startNextPass() {
     if (m_process->state() != QProcess::NotRunning) {
-        // This can happen if startNextPass is called rapidly, e.g. from onProcessFinished -> startNextPass
-        // before the QProcess state has fully transitioned.
-        // A small delay or a single shot timer might be needed if this becomes an issue,
-        // but usually QProcess handles sequential calls fine once the previous one has emitted finished().
-        emit logMessage("[WARNING] Real-ESRGAN process was asked to start a new pass while still running. This might indicate an issue.");
-        // For now, we'll let it try, but this is a point of attention.
-    }
-
-    if (m_scaleSequence.isEmpty()) {
-        // This means all passes for the current image/frame are done.
-        // The onProcessFinished handler will take care of what's next (another frame, assembly, or finishing).
-        // We call it with success state, assuming the last pass was successful.
-        // The actual success/failure of the last pass is determined by its exit code in onProcessFinished.
-        // This call path is typically from processImage -> startNextPass (when scaleSequence was already empty, e.g. target x1)
-        // OR from onProcessFinished -> startNextPass (when the queue becomes empty after a successful pass).
-        // To avoid recursive signaling or complex state, let onProcessFinished handle the final step of a scale sequence.
-        // If we got here because the queue was *initially* empty for a new image/frame,
-        // it means targetScale was < modelNativeScale. The single pass (setup in processImage) will run.
-        // If we got here *after* a pass, onProcessFinished will handle it.
-        // The critical thing is that onProcessFinished is the sole decider for the *end* of a multi-pass sequence.
-        // So, if m_scaleSequence is empty HERE, it implies the sequence completed.
-        // Let onProcessFinished (which is connected to m_process->finished()) handle the logic.
-        // This condition might be hit if processImage is called with a scale sequence that resolves to empty
-        // immediately (e.g. targetScale=1, modelNativeScale=4, resulting in one pass).
-        // In that case, the single pass is started below. When it finishes, onProcessFinished is called.
-        // If m_scaleSequence becomes empty *after* a pass, onProcessFinished is also the one to react.
-        // This function's main job is to start *one* pass.
-        return; // Let onProcessFinished handle completion.
-    }
-
-    int currentPassScaleFactor = m_scaleSequence.head(); // Peek, don't dequeue until pass starts successfully.
-
-    // Determine output file for this pass
-    m_currentPassOutputFile = (m_scaleSequence.size() == 1) // Is this the last pass in the sequence?
-        ? m_finalDestinationFile // Output to the final destination for this image/frame
-        : QDir(QFileInfo(m_finalDestinationFile).path()).filePath(QString("%1_pass_tmp_%2.%3")
-          .arg(QFileInfo(m_finalDestinationFile).completeBaseName())
-          .arg(QTime::currentTime().toString("hhmmsszzz")) // Add timestamp to avoid collision
-          .arg(m_settings.outputFormat));
-
-
-    emit logMessage(QString("Real-ESRGAN: Starting scaling pass (target scale factor for this pass: %1)... Input: %2, Output: %3").arg(currentPassScaleFactor).arg(m_currentPassInputFile).arg(m_currentPassOutputFile));
-    QStringList arguments = buildArguments(m_currentPassInputFile, m_currentPassOutputFile);
-
-    m_process->start(m_settings.programPath, arguments);
-    if (m_process->waitForStarted(1000)) { // Check if process started
-        m_scaleSequence.dequeue(); // Successfully started, now dequeue
-    } else {
-        emit logMessage(QString("Real-ESRGAN: Failed to start process for pass. Input: %1").arg(m_currentPassInputFile));
-        // Treat as an error for this image/frame.
-        if (m_state == State::ProcessingVideoFrames) {
-            cleanupVideo(); // Clean up video processing attempt
-        }
-        emit statusChanged(m_currentRowNum, tr("Error starting process"));
-        emit processingFinished(m_currentRowNum, false);
-        cleanup(); // General cleanup
-    }
-}
-
-void RealEsrganProcessor::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
-{
-    if (m_state == State::Idle) return; // Should not happen if processing was started
-
-    if (exitStatus != QProcess::NormalExit || exitCode != 0) {
-        QString stdErr = m_process->readAllStandardError();
-        QString stdOut = m_process->readAllStandardOutput();
-        emit logMessage(QString("Real-ESRGAN Pass STDOUT:\n%1").arg(stdOut));
-        emit logMessage(QString("Real-ESRGAN Pass STDERR:\n%1").arg(stdErr));
-        emit logMessage(QString("Real-ESRGAN: A process failed. State: %1, File: %2, Exit code: %3")
-                        .arg((int)m_state)
-                        .arg(QFileInfo(m_originalSourceFile).fileName()) // originalSourceFile here might be a frame
-                        .arg(exitCode));
-
-        if (m_currentPassOutputFile != m_finalDestinationFile) { // If temp output was created for this failed pass
-            QFile::remove(m_currentPassOutputFile);
-        }
-
-        if (m_state == State::ProcessingVideoFrames) {
-             emit logMessage("Real-ESRGAN: Frame processing failed. Aborting video operation.");
-             cleanupVideo(); // Cleans up all video temp files and resets video state
-        }
-        emit statusChanged(m_currentRowNum, tr("Error"));
-        emit processingFinished(m_currentRowNum, false); // Signal overall failure for the job
-        cleanup(); // General cleanup (resets state to Idle)
+        emit logMessage(tr("[WARNING] Real-ESRGAN process was asked to start a new pass while still running."));
+        // QTimer::singleShot(100, this, &RealEsrganProcessor::startNextPass); // Optional: retry after a short delay
         return;
     }
 
-    // A pass (or whole image if single pass) finished successfully.
-    // Delete previous pass's input if it was a temporary file
-    // Note: m_originalSourceFile is the true original (video or image path)
-    // m_currentPassInputFile is the input to the just-finished pass
-    if (m_currentPassInputFile != m_originalSourceFile && !(m_state == State::ProcessingVideoFrames && m_currentPassInputFile.startsWith(m_video_inputFramesPath))) {
-         // Don't delete original video frames from inputFramesPath
-        if (QFile::exists(m_currentPassInputFile)) { // Check existence before removing
+    if (m_scaleSequence.isEmpty()) {
+        // This state is handled by onProcessFinished after the last pass successfully completes.
+        // If called when sequence is already empty, it means something went wrong or it's a no-op.
+        return;
+    }
+
+    int currentPassScaleFactor = m_scaleSequence.head(); // Actual scale factor for this specific pass
+
+    // Determine output file for this pass
+    // If it's the last pass in the sequence, output to the final destination.
+    // Otherwise, create a temporary file.
+    bool isLastPass = (m_scaleSequence.size() == 1);
+    if (isLastPass) {
+        m_currentPassOutputFile = m_finalDestinationFile;
+    } else {
+        QString tempName = QString("%1_pass_tmp_%2.%3")
+                               .arg(QFileInfo(m_finalDestinationFile).completeBaseName())
+                               .arg(QTime::currentTime().toString("hhmmsszzzms")) // More unique temp name
+                               .arg(m_settings.outputFormat);
+        m_currentPassOutputFile = QDir(QFileInfo(m_finalDestinationFile).path()).filePath(tempName);
+    }
+
+    emit logMessage(QString("Real-ESRGAN: Starting pass (scale factor: %1). Input: '%2', Output: '%3'")
+                    .arg(currentPassScaleFactor)
+                    .arg(QFileInfo(m_currentPassInputFile).fileName())
+                    .arg(QFileInfo(m_currentPassOutputFile).fileName()));
+
+    QStringList arguments = buildArguments(m_currentPassInputFile, m_currentPassOutputFile);
+
+    m_process->start(m_settings.programPath, arguments);
+
+    if (!m_process->waitForStarted(2000)) { // Increased timeout
+        emit logMessage(QString(tr("[ERROR] Real-ESRGAN process failed to start for pass. Input: %1. Executable: %2. Args: %3"))
+                        .arg(m_currentPassInputFile).arg(m_settings.programPath).arg(arguments.join(" ")));
+        if (m_state == State::ProcessingVideoFrames) {
+            cleanupVideo();
+        }
+        emit statusChanged(m_currentRowNum, tr("Error starting process"));
+        emit processingFinished(m_currentRowNum, false);
+        cleanup();
+        return;
+    }
+    // Dequeue only after successful start attempt. ErrorOccurred might fire if it fails.
+    m_scaleSequence.dequeue();
+}
+
+
+void RealEsrganProcessor::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    if (m_state == State::Idle) return;
+
+    if (exitStatus != QProcess::NormalExit || exitCode != 0) {
+        QString stdErr = m_process->readAllStandardError();
+        QString stdOut = m_process->readAllStandardOutput(); // Capture stdout too for errors
+        emit logMessage(QString("Real-ESRGAN STDOUT (Error):\n%1").arg(stdOut.trimmed()));
+        emit logMessage(QString("Real-ESRGAN STDERR:\n%1").arg(stdErr.trimmed()));
+        emit logMessage(QString(tr("Real-ESRGAN: A processing pass failed. File: %1, Exit code: %2"))
+                        .arg(QFileInfo(m_currentPassInputFile).fileName())
+                        .arg(exitCode));
+
+        if (QFile::exists(m_currentPassOutputFile) && m_currentPassOutputFile != m_finalDestinationFile) {
+            QFile::remove(m_currentPassOutputFile); // Clean up temp output of failed pass
+        }
+
+        if (m_state == State::ProcessingVideoFrames) {
+             emit logMessage(tr("Real-ESRGAN: Frame processing failed. Aborting video operation."));
+             cleanupVideo();
+        }
+        emit statusChanged(m_currentRowNum, tr("Error"));
+        emit processingFinished(m_currentRowNum, false);
+        cleanup();
+        return;
+    }
+
+    // Current pass finished successfully.
+    // Delete previous pass's input if it was a temporary file.
+    if (m_currentPassInputFile != m_originalSourceFile &&
+        !(m_state == State::ProcessingVideoFrames && m_currentPassInputFile.startsWith(m_video_inputFramesPath))) {
+        if (QFile::exists(m_currentPassInputFile)) {
             QFile::remove(m_currentPassInputFile);
         }
     }
-    m_currentPassInputFile = m_currentPassOutputFile; // Output of this pass is input for the next
+    m_currentPassInputFile = m_currentPassOutputFile; // Output of this pass is input for the next.
 
     if (m_scaleSequence.isEmpty()) {
-        // This means a full image/frame has been completely scaled.
+        // All passes for the current image/frame are complete.
         if (m_state == State::ProcessingImage) {
-            emit logMessage(QString("Real-ESRGAN: Successfully processed image %1. Output: %2")
-                            .arg(QFileInfo(m_originalSourceFile).fileName()) // originalSourceFile is the image path
+            emit logMessage(QString(tr("Real-ESRGAN: Successfully processed image %1. Output: %2"))
+                            .arg(QFileInfo(m_originalSourceFile).fileName())
                             .arg(m_finalDestinationFile));
             emit statusChanged(m_currentRowNum, tr("Finished"));
             emit fileProgress(m_currentRowNum, 100);
             emit processingFinished(m_currentRowNum, true);
-            cleanup(); // Resets state to Idle
+            cleanup();
         } else if (m_state == State::ProcessingVideoFrames) {
             m_video_processedFrames++;
-            emit logMessage(QString("Real-ESRGAN: Successfully processed frame %1 (%2/%3)")
-                .arg(QFileInfo(m_originalSourceFile).fileName()) // originalSourceFile is the frame input path
+            emit logMessage(QString(tr("Real-ESRGAN: Successfully processed frame %1 (%2/%3)"))
+                .arg(QFileInfo(m_originalSourceFile).fileName()) // originalSourceFile is the current frame's input path
                 .arg(m_video_processedFrames)
                 .arg(m_video_totalFrames));
 
@@ -230,45 +235,48 @@ void RealEsrganProcessor::onProcessFinished(int exitCode, QProcess::ExitStatus e
 
             if (m_video_frameQueue.isEmpty() && m_video_processedFrames == m_video_totalFrames) {
                 startVideoAssembly();
-            } else {
+            } else if (!m_video_frameQueue.isEmpty()){
                 startNextVideoFrame();
+            } else {
+                // Queue is empty, but not all frames processed - discrepancy
+                emit logMessage(tr("[ERROR] Real-ESRGAN: Video frame queue empty but not all frames processed."));
+                cleanupVideo();
+                emit processingFinished(m_currentRowNum, false);
+                cleanup();
             }
         }
     } else {
         // More scaling passes are needed for the current image/frame.
-        emit logMessage(QString("Real-ESRGAN: Pass completed for %1. Next pass...").arg(QFileInfo(m_originalSourceFile).fileName()));
+        emit logMessage(QString(tr("Real-ESRGAN: Pass completed for %1. Starting next pass..."))
+                        .arg(QFileInfo(m_originalSourceFile).fileName())); // originalSourceFile here is the initial input to the multi-pass sequence
         startNextPass();
     }
 }
 
 void RealEsrganProcessor::onProcessError(QProcess::ProcessError error)
 {
-    // This slot is for errors that prevent the process from starting.
-    // Only relevant if m_state is ProcessingImage or ProcessingVideoFrames.
     if (m_state == State::Idle) return;
 
-    emit logMessage(QString("[FATAL] Real-ESRGAN process failed to start. State: %1, File: %2, Error: %3 (Code: %4)")
-                    .arg((int)m_state)
-                    .arg(QFileInfo(m_originalSourceFile).fileName()) // This could be an image or a frame
+    emit logMessage(QString(tr("[FATAL] Real-ESRGAN process failed to start or crashed. File: %1, Error: %2 (Code: %3)"))
+                    .arg(QFileInfo(m_currentPassInputFile).fileName()) // Input to the failing pass
                     .arg(m_process->errorString())
                     .arg(error));
 
     if (m_state == State::ProcessingVideoFrames) {
-        emit logMessage("Real-ESRGAN: Frame processing failed to start. Aborting video operation.");
+        emit logMessage(tr("Real-ESRGAN: Frame processing failed critically. Aborting video operation."));
         cleanupVideo();
     }
     emit statusChanged(m_currentRowNum, tr("Fatal Error"));
     emit processingFinished(m_currentRowNum, false);
-    cleanup(); // Resets state to Idle
+    cleanup();
 }
 
 void RealEsrganProcessor::onReadyReadStandardOutput()
 {
-    if(m_state == State::Idle) return; // Don't process output if not actively working
-
+    if(m_state == State::Idle) return;
     QString output = m_process->readAllStandardOutput();
-    // emit logMessage(QString("Real-ESRGAN STDOUT chunk: %1").arg(output)); // Debug
-
+    // Real-ESRGAN (nihui's version) usually outputs progress like "12%" on a single line,
+    // or nothing until it's done.
     QRegularExpression re("(\\d+)%");
     QRegularExpressionMatchIterator i = re.globalMatch(output);
     int lastProgress = -1;
@@ -278,76 +286,39 @@ void RealEsrganProcessor::onReadyReadStandardOutput()
     }
 
     if (lastProgress != -1) {
-        if (m_state == State::ProcessingImage) {
+        if (m_state == State::ProcessingImage) { // Top-level image task
             emit fileProgress(m_currentRowNum, lastProgress);
-        } else if (m_state == State::ProcessingVideoFrames) {
-            // For video frames, progress is more complex.
-            // This 'lastProgress' is for the current frame. We need overall video progress.
-            // Let onProcessFinished update overall video progress when a frame *completes*.
-            // However, we can emit a sub-progress if needed, e.g. for a status tip.
-            // For now, let's stick to updating main progress on frame completion.
         }
+        // For video frames, progress is handled when a frame finishes.
+        // Individual frame progress from stdout might be too noisy for overall UI.
     }
+    // Optionally, log all stdout for debugging if needed:
+    // emit logMessage("Real-ESRGAN STDOUT: " + output.trimmed());
 }
 
-QStringList RealEsrganProcessor::buildArguments(const QString &inputFile, const QString &outputFile)
-{
-    QStringList arguments;
-    arguments << "-i" << QDir::toNativeSeparators(inputFile);
-    arguments << "-o" << QDir::toNativeSeparators(outputFile);
 
-    // When m_scaleSequence is not empty, head() gives the scale for the current pass.
-    // If it's somehow empty here (should be guarded before calling), default to modelNativeScale.
-    int scaleForThisPass = m_settings.modelNativeScale; // Default
-    if (!m_scaleSequence.isEmpty()) {
-         scaleForThisPass = m_scaleSequence.head(); // This is the scale factor for *this specific pass*
-    } else if (m_settings.targetScale < m_settings.modelNativeScale) {
-        // If overall target is smaller, but we run one pass, use model's native scale.
-        // The executable might downscale or this might be an edge case.
-        scaleForThisPass = m_settings.modelNativeScale;
-    }
-
-
-    arguments << "-s" << QString::number(scaleForThisPass);
-    arguments << "-m" << m_settings.modelName;
-    arguments << "-t" << QString::number(m_settings.tileSize);
-    arguments << "-f" << m_settings.outputFormat;
-
-    if (!m_settings.singleGpuId.trimmed().isEmpty() && m_settings.singleGpuId.toLower() != "auto") {
-        arguments << "-g" << m_settings.singleGpuId;
-    }
-
-    if (m_settings.ttaEnabled) {
-        arguments << "-x";
-    }
-
-    return arguments;
-}
-
-// --- Video Processing Methods ---
-
+// --- VIDEO PROCESSING ---
 void RealEsrganProcessor::processVideo(int rowNum, const QString &sourceFile, const QString &destinationFile, const RealEsrganSettings &settings)
 {
     if (m_state != State::Idle) {
-        emit logMessage("[ERROR] RealEsrganProcessor is already busy.");
+        emit logMessage(tr("[ERROR] RealEsrganProcessor is already busy."));
         return;
     }
 
     m_state = State::SplittingVideo;
     m_currentRowNum = rowNum;
-    m_settings = settings; // Store settings for frame processing
-    m_originalSourceFile = sourceFile; // Store original video source path
-    m_finalDestinationFile = destinationFile; // Store final video output path
+    m_settings = settings;
+    m_originalSourceFile = sourceFile; // Original video file
+    m_finalDestinationFile = destinationFile; // Final output video file
 
-    // Create temporary directories for video processing
     m_video_tempPath = QDir(QFileInfo(destinationFile).path()).filePath("temp_video_realesrgan_" + QFileInfo(sourceFile).completeBaseName() + "_" + QTime::currentTime().toString("hhmmsszzz"));
     m_video_inputFramesPath = QDir(m_video_tempPath).filePath("input_frames");
     m_video_outputFramesPath = QDir(m_video_tempPath).filePath("output_frames");
-    m_video_audioPath = QDir(m_video_tempPath).filePath("audio.m4a"); // Assuming m4a, check ffmpeg output
+    m_video_audioPath = QDir(m_video_tempPath).filePath("audio.m4a"); // Common format
 
     if (!QDir().mkpath(m_video_inputFramesPath) || !QDir().mkpath(m_video_outputFramesPath)) {
-        emit logMessage("[ERROR] Could not create temporary directories for video processing.");
-        cleanup(); // Reset state to Idle
+        emit logMessage(tr("[ERROR] Could not create temporary directories for video processing."));
+        cleanup();
         emit processingFinished(m_currentRowNum, false);
         return;
     }
@@ -355,148 +326,184 @@ void RealEsrganProcessor::processVideo(int rowNum, const QString &sourceFile, co
     emit statusChanged(rowNum, tr("Splitting video..."));
     emit logMessage(QString("Real-ESRGAN Video: Splitting '%1' into frames...").arg(QFileInfo(sourceFile).fileName()));
 
-    // Use FFmpeg to extract frames and audio
     QStringList args;
-    // TODO: Get fps from source video for assembly. For now, hardcode or make it a setting.
-    // Example: ffmpeg -i source.mp4 -q:a 0 -ac 2 -vn audio.m4a -vsync 0 input_frames/frame%08d.png
     args << "-i" << sourceFile
-         << "-qscale:v" << "1" // Try to get high quality PNGs
-         << "-vsync" << "0" // Or "cfr" if issues with frame numbering/timing
+         << "-qscale:v" << "1" // High quality PNGs
+         << "-vsync" << "0"    // As fast as possible, ensure frame numbering
          << QDir(m_video_inputFramesPath).filePath("frame%08d.png")
-         << "-vn" // No video for this output stream
-         << "-c:a" << "aac" // Common audio codec
-         << "-b:a" << "192k" // Decent audio bitrate
+         << "-vn" // No video for this audio extraction stream
+         << "-c:a" << "aac" << "-b:a" << "192k" // Or copy if original audio is fine
          << m_video_audioPath;
-
 
     m_ffmpegProcess->start("ffmpeg", args);
 }
 
 void RealEsrganProcessor::onFfmpegFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    if (m_state == State::Idle) return; // Not expecting FFmpeg signals if idle
+    if (m_state == State::Idle && !(m_state == State::SplittingVideo || m_state == State::AssemblingVideo) ) return;
+
 
     if (exitStatus != QProcess::NormalExit || exitCode != 0) {
-        emit logMessage(QString("FFmpeg task failed. State: %1, Exit Code: %2, Exit Status: %3")
+        emit logMessage(QString(tr("FFmpeg task failed. State: %1, Exit Code: %2, Status: %3"))
                         .arg((int)m_state).arg(exitCode).arg(exitStatus));
-        cleanupVideo(); // Clean up any video temp files created
+        cleanupVideo();
         emit statusChanged(m_currentRowNum, tr("FFmpeg Error"));
         emit processingFinished(m_currentRowNum, false);
-        cleanup(); // General cleanup, reset state to Idle
+        cleanup();
         return;
     }
 
     if (m_state == State::SplittingVideo) {
-        emit logMessage("Real-ESRGAN Video: Splitting complete. Starting frame processing...");
+        emit logMessage(tr("Real-ESRGAN Video: Splitting complete. Starting frame processing..."));
         emit statusChanged(m_currentRowNum, tr("Processing frames..."));
         m_state = State::ProcessingVideoFrames;
 
         QDir inputDir(m_video_inputFramesPath);
         inputDir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
-        inputDir.setSorting(QDir::Name); // Ensure frames are processed in order
-        QStringList files = inputDir.entryList();
-        m_video_frameQueue.clear();
-        for (const QString &file : files) {
-            m_video_frameQueue.enqueue(file);
-        }
-
+        inputDir.setSorting(QDir::Name); // Process frames in order
+        m_video_frameQueue = inputDir.entryList();
         m_video_totalFrames = m_video_frameQueue.size();
         m_video_processedFrames = 0;
 
         if (m_video_totalFrames > 0) {
             emit fileProgress(m_currentRowNum, 0); // Initial progress
-            startNextVideoFrame(); // Kick off the first frame
+            startNextVideoFrame();
         } else {
-            emit logMessage("Real-ESRGAN Video: No frames found after splitting. Aborting.");
+            emit logMessage(tr("Real-ESRGAN Video: No frames found after splitting. Aborting."));
             cleanupVideo();
             emit statusChanged(m_currentRowNum, tr("No frames found"));
             emit processingFinished(m_currentRowNum, false);
             cleanup();
         }
-
     } else if (m_state == State::AssemblingVideo) {
-        emit logMessage(QString("Real-ESRGAN Video: Assembly complete. Output: %1").arg(m_finalDestinationFile));
+        emit logMessage(QString(tr("Real-ESRGAN Video: Assembly complete. Output: %1")).arg(m_finalDestinationFile));
         emit statusChanged(m_currentRowNum, tr("Finished"));
         emit fileProgress(m_currentRowNum, 100);
-        cleanupVideo(); // Success, clean up temp video files
+        cleanupVideo();
         emit processingFinished(m_currentRowNum, true);
-        cleanup(); // General cleanup, reset state to Idle
+        cleanup();
     }
 }
 
 void RealEsrganProcessor::startNextVideoFrame()
 {
     if (m_video_frameQueue.isEmpty()) {
-        // This might mean all frames are processed, or the queue was empty to begin with.
-        // onProcessFinished for the last frame will handle transition to assembly.
-        if (m_video_processedFrames == m_video_totalFrames && m_video_totalFrames > 0) {
-             emit logMessage("Real-ESRGAN Video: All frames processed from queue. Assembly should start if not already.");
-             // The logic in onProcessFinished should trigger assembly.
-        } else if (m_video_totalFrames == 0) {
-            // This case should be handled after splitting.
-            emit logMessage("Real-ESRGAN Video: Frame queue is empty and no frames were processed. Aborting.");
-            cleanupVideo();
-            emit statusChanged(m_currentRowNum, tr("Error"));
-            emit processingFinished(m_currentRowNum, false);
-            cleanup();
+        // This should ideally be caught by onProcessFinished logic for the last frame.
+        // If queue is empty and not all frames processed, it's an error.
+        if (m_video_processedFrames != m_video_totalFrames || m_video_totalFrames == 0) {
+             emit logMessage(tr("[ERROR] Real-ESRGAN: Video frame queue empty prematurely or no frames to process."));
+             cleanupVideo();
+             emit statusChanged(m_currentRowNum, tr("Error processing frames"));
+             emit processingFinished(m_currentRowNum, false);
+             cleanup();
         }
+        // If all processed, onProcessFinished would have called startVideoAssembly.
         return;
     }
 
-    QString frameFile = m_video_frameQueue.dequeue();
+    QString frameFile = m_video_frameQueue.head(); // Peek, don't dequeue until processImage starts its part
     QString inputFramePath = QDir(m_video_inputFramesPath).filePath(frameFile);
-    QString outputFramePath = QDir(m_video_outputFramesPath).filePath(frameFile); // Save with same name in output dir
+    QString outputFramePath = QDir(m_video_outputFramesPath).filePath(frameFile);
 
-    // Use the existing processImage logic for the frame.
-    // processImage will set its own m_originalSourceFile and m_finalDestinationFile for the frame.
-    // It also sets up m_scaleSequence based on m_settings.
+    // Use processImage for the actual frame scaling. It will handle multi-pass if needed.
+    // It will set m_state to ProcessingImage internally for the duration of the frame.
+    // When the frame is done, its onProcessFinished will trigger the next video frame or assembly.
     processImage(m_currentRowNum, inputFramePath, outputFramePath, m_settings);
+    // Dequeue after *successfully* starting the processing for this frame in processImage->startNextPass
+    // However, processImage itself calls startNextPass, which calls QProcess::start.
+    // The current design of processImage might need adjustment if it's to be purely synchronous for this call.
+    // For now, let's assume processImage sets up and starts. The dequeue should happen in onProcessFinished (of the frame)
+    // *before* it calls startNextVideoFrame again OR in startNextVideoFrame *after* a successful launch.
+    // To simplify, let's dequeue here, assuming processImage will attempt to start.
+    // If processImage fails to start its process, that's an error handled by its own logic.
+    m_video_frameQueue.dequeue();
 }
 
 void RealEsrganProcessor::startVideoAssembly()
 {
-    if (m_state != State::ProcessingVideoFrames) {
-        emit logMessage(QString("Real-ESRGAN Video: Assembly called in unexpected state: %1. Aborting assembly.").arg((int)m_state));
+    // Ensure this is only called when all frames are truly done.
+    if (m_state != State::ProcessingVideoFrames && m_state != State::AssemblingVideo) { // Allow re-entry if already assembling (e.g. retry?)
+        emit logMessage(QString(tr("Real-ESRGAN Video: Assembly called in unexpected state: %1. Aborting assembly.")).arg((int)m_state));
         return;
     }
-
-    emit logMessage(QString("Real-ESRGAN Video: All %1 frames processed. Assembling final video...").arg(m_video_totalFrames));
-    emit statusChanged(m_currentRowNum, tr("Assembling video..."));
+     if (m_state == State::ProcessingVideoFrames) { // First time entering assembly
+        emit logMessage(QString(tr("Real-ESRGAN Video: All %1 frames processed. Assembling final video...")).arg(m_video_totalFrames));
+        emit statusChanged(m_currentRowNum, tr("Assembling video..."));
+    }
     m_state = State::AssemblingVideo;
 
+
     QStringList args;
-    // TODO: Get framerate from original video. For now, assume 25 or make it configurable.
-    // A more robust way would be to use ffprobe on the original video during splitting.
-    QString framerate = "25"; // Placeholder
+    // TODO: Get framerate from original video (e.g. via ffprobe during splitting).
+    QString framerate = "25"; // Placeholder - make this configurable or detect
 
     args << "-framerate" << framerate
-         << "-i" << QDir(m_video_outputFramesPath).filePath("frame%08d.png")
-         << "-i" << m_video_audioPath; // Add audio stream
+         << "-i" << QDir(m_video_outputFramesPath).filePath("frame%08d.png");
 
-    // Check if audio file exists, if not, don't try to map it.
-    if (!QFile::exists(m_video_audioPath)) {
-        emit logMessage("Real-ESRGAN Video: No audio file found. Assembling video without audio.");
-        args.removeLast(); // Remove the -i m_video_audioPath
-        args << "-c:v" << "libx264" << "-pix_fmt" << "yuv420p"; // Video codec only
+    if (QFile::exists(m_video_audioPath)) {
+        args << "-i" << m_video_audioPath
+             << "-c:v" << "libx264" << "-pix_fmt" << "yuv420p" // Common video settings
+             << "-c:a" << "aac" // Or "copy" if audio doesn't need re-encoding
+             << "-shortest"; // Finish when shortest input (video/audio frames) ends
     } else {
-        args << "-c:v" << "libx264" << "-pix_fmt" << "yuv420p" // Video codec
-             << "-c:a" << "aac" // Or "copy" if audio was just extracted and not re-encoded
-             << "-shortest"; // Finish encoding when the shortest input stream ends (video or audio)
+        emit logMessage(tr("Real-ESRGAN Video: No audio file found. Assembling video without audio."));
+        args << "-c:v" << "libx264" << "-pix_fmt" << "yuv420p";
     }
-    args << "-y" << m_finalDestinationFile; // Output file, overwrite if exists
+    args << "-y" << m_finalDestinationFile; // Output file, overwrite
 
     m_ffmpegProcess->start("ffmpeg", args);
+}
+
+
+QStringList RealEsrganProcessor::buildArguments(const QString &inputFile, const QString &outputFile)
+{
+    QStringList arguments;
+    arguments << "-i" << QDir::toNativeSeparators(inputFile);
+    arguments << "-o" << QDir::toNativeSeparators(outputFile);
+
+    int scaleForThisPass = m_settings.modelNativeScale > 0 ? m_settings.modelNativeScale : 2; // Default if not set
+    // If multi-pass is active, scaleForThisPass would be determined by m_scaleSequence.head()
+    // This function is generic for one pass; processImage/startNextPass determines actual scale factor for the pass.
+    // Here, we use m_settings.targetScale if it's a single pass conceptually, or current pass's scale.
+    // The -s parameter for realesrgan-ncnn-vulkan means the target scale for *that run*.
+    // For multi-pass, each run uses the model's native scale.
+
+    // This logic is tricky because buildArguments is called by startNextPass,
+    // which already knows the current pass's scale factor.
+    // Let's assume startNextPass sets a member variable for current pass scale, or passes it.
+    // For now, using m_settings.modelNativeScale as the pass scale.
+    // This is because each pass of a multi-stage upscale (e.g. x2 then x2 for a x4 target)
+    // will use the model's native scale.
+    if (m_settings.modelNativeScale > 0) {
+         arguments << "-s" << QString::number(m_settings.modelNativeScale);
+    } else { // Fallback if modelNativeScale isn't set, try targetScale (might not be ideal for multi-pass)
+         arguments << "-s" << QString::number(m_settings.targetScale);
+    }
+
+    arguments << "-m" << m_settings.modelName;
+    if (m_settings.tileSize > 0) {
+        arguments << "-t" << QString::number(m_settings.tileSize);
+    }
+    arguments << "-f" << m_settings.outputFormat;
+
+    if (!m_settings.singleGpuId.trimmed().isEmpty() && m_settings.singleGpuId.toLower() != "auto") {
+        arguments << "-g" << m_settings.singleGpuId;
+    }
+    if (m_settings.ttaEnabled) {
+        arguments << "-x";
+    }
+    return arguments;
 }
 
 void RealEsrganProcessor::cleanupVideo() {
     if (m_ffmpegProcess->state() != QProcess::NotRunning) {
         m_ffmpegProcess->kill();
-        m_ffmpegProcess->waitForFinished(500); // Brief wait
+        m_ffmpegProcess->waitForFinished(500);
     }
     if (!m_video_tempPath.isEmpty()) {
         QDir dir(m_video_tempPath);
         if (dir.exists()) {
-            emit logMessage(QString("Real-ESRGAN Video: Cleaning up temporary video path: %1").arg(m_video_tempPath));
+            emit logMessage(QString(tr("Real-ESRGAN Video: Cleaning up temporary video path: %1")).arg(m_video_tempPath));
             dir.removeRecursively();
         }
         m_video_tempPath.clear();
@@ -507,25 +514,25 @@ void RealEsrganProcessor::cleanupVideo() {
     m_video_frameQueue.clear();
     m_video_totalFrames = 0;
     m_video_processedFrames = 0;
-    // Do not reset m_state here, let cleanup() or successful completion do it.
+    // m_state is reset by the calling function (e.g. cleanup() or when processing finishes)
 }
 
 void RealEsrganProcessor::onFfmpegError(QProcess::ProcessError error) {
-    // This is for errors starting ffmpeg itself. Runtime errors are in onFfmpegFinished.
     if (m_state == State::Idle) return;
-
-    emit logMessage(QString("FFmpeg process failed to start. State: %1, Error: %2 (Code: %3)")
+    emit logMessage(QString(tr("FFmpeg process failed to start. State: %1, Error: %2 (Code: %3)"))
                     .arg((int)m_state)
                     .arg(m_ffmpegProcess->errorString())
                     .arg(error));
     cleanupVideo();
     emit statusChanged(m_currentRowNum, tr("FFmpeg Start Error"));
     emit processingFinished(m_currentRowNum, false);
-    cleanup(); // General cleanup, sets state to Idle
+    cleanup();
 }
 
 void RealEsrganProcessor::onFfmpegStdErr() {
     if (m_state == State::Idle) return;
     QByteArray data = m_ffmpegProcess->readAllStandardError();
+    // FFmpeg often outputs verbose info to stderr, even on success.
+    // May need filtering if it's too noisy for general logs.
     emit logMessage("FFmpeg: " + QString::fromLocal8Bit(data).trimmed());
 }
