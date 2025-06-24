@@ -9,6 +9,8 @@ realcugan-ncnn-vulkan/build_linux/
 
 # Waifu2x-Extension-QT build outputs
 Waifu2x-Extension-QT/Makefile
+Waifu2x-Extension-QT/Makefile.Release
+Waifu2x-Extension-QT/Makefile.Debug
 Waifu2x-Extension-QT/.qmake.stash
 Waifu2x-Extension-QT/moc_*.cpp
 Waifu2x-Extension-QT/moc_*.h

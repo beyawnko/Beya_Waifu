@@ -32,7 +32,6 @@ sudo apt-get install -y --no-install-recommends \
   qt6-base-dev \
   qt6-base-dev-tools \
   qt6-multimedia-dev \
-  qt6-5compat-dev \
   qt6-shadertools-dev \
   cppcheck \
   pkg-config \
