@@ -12,6 +12,14 @@ struct RealEsrganSettings {
     bool ttaEnabled;
     QString outputFormat = "png";
 
+    // Logging and general paths
+    bool verboseLog = false;
+    QString sourceFile;
+    QString ffmpegPath;
+    QString ffprobePath;
+    QString modelPath;
+    double videoFps = 0.0;
+
     // GPU Settings
     QString singleGpuId;
 };
