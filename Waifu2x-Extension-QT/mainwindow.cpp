@@ -760,7 +760,7 @@ void MainWindow::StartFullCompatibilityTest()
         return;
     }
     ui->pushButton_compatibilityTest->setEnabled(false);
-    compatibilityTestFuture = QtConcurrent::run(this, &MainWindow::ExecuteCompatibilityTests);
+    compatibilityTestFuture = QtConcurrent::run([this] { this->ExecuteCompatibilityTests(); });
 }
 
 void MainWindow::ExecuteCompatibilityTests()
