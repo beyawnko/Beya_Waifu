@@ -5,8 +5,8 @@
 # (at your option) any later version.
 
 QT       += core gui concurrent multimedia opengl openglwidgets
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += shadertools
 
 CONFIG += c++17
 
@@ -100,15 +100,8 @@ RESOURCES += \
     style.qrc \
     shaders.qrc
 
-# compile GLSL shader to QSB
-liquidglass_frag.input = SHADER
-liquidglass_frag.files = $$PWD/shaders/liquidglass.frag
-liquidglass_frag.output = $$PWD/shaders/liquidglass.frag.qsb
-liquidglass_frag.commands = \
-    mkdir -p $$PWD/shaders && \
-    qsb "$$PWD/shaders/liquidglass.frag" -o "$$PWD/shaders/liquidglass.frag.qsb"
-liquidglass_frag.CONFIG = no_link
-QMAKE_EXTRA_TARGETS += liquidglass_frag
-PRE_TARGETDEPS += $$liquidglass_frag.output
+# shaders compiled automatically by qmake
+SHADERS += \
+    shaders/liquidglass.frag
 
 RC_ICONS = icon/icon.ico
