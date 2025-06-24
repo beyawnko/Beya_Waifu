@@ -8,6 +8,7 @@
 #include <QTime>       // For temporary file naming during multi-pass
 #include <QStandardPaths> // For temporary paths (new)
 #include <QFile>          // For QFile::remove (new)
+#include <QTimer>
 
 
 RealEsrganProcessor::RealEsrganProcessor(QObject *parent) : QObject(parent)

@@ -7,6 +7,7 @@
 #include <QStandardPaths> // For temporary paths
 #include <QDateTime>      // For unique temp folder names
 #include <QFile>          // For QFile::remove
+#include <QTimer>
 
 RealCuganProcessor::RealCuganProcessor(QObject *parent) : QObject(parent)
 {
