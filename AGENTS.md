@@ -44,7 +44,10 @@ These protocols define the mandatory algorithms for your reasoning and task exec
         - *Linker Error Diagnosis (Undefined Reference for Class Method)*: When an "undefined reference" linker error occurs for a class method:
             1. Verify the exact method declaration in the class header.
             2. Systematically verify the presence and exact signature of the method's definition in the corresponding `.cpp` source file (e.g., using `grep "ClassName::MethodName"` and careful manual inspection).
-            3. If the definition is missing or the signature mismatched, address this first. Only if both declaration and definition are confirmed present and matching should investigation proceed to stale build artifacts, moc issues, or `.pro` file configurations.
+            3. If the definition is missing or the signature mismatched, address this first. Only if both declaration and definition are confirmed present and matching should investigation proceed to stale build artifacts, moc issues, or build system configurations (e.g., `.pro` or `CMakeLists.txt` files).
+    - *Build System and Dependency Analysis*: When planning tasks related to version migrations (e.g., Qt5 to Qt6), dependency updates, or troubleshooting build-level errors:
+        - The plan must include a specific step to thoroughly inspect and analyze the project's build system files (e.g., `.pro`, `CMakeLists.txt`, `setup.py`).
+        - This inspection should verify correct library versions, module inclusions, compiler flags (like `QT_DEPRECATED_WARNINGS`), and absence of conflicting or obsolete dependencies.
     - *Inter-Process Communication (IPC) via Pipes*: When planning tasks involving the development or modification of features using IPC via pipes (e.g., chaining `QProcess` instances or similar):
         - The plan should include steps to verify robust error handling and propagation across all stages of the pipe.
         - Explicitly check for mechanisms to manage data buffering between processes to prevent excessive memory usage (e.g., backpressure, buffer limits).

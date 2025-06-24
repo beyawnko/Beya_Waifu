@@ -36,7 +36,7 @@ $QMAKE_CMD --version || (echo "qmake version check failed"; exit 1)
 # Verify required Qt development packages are installed
 echo "Checking Qt dependencies..."
 MISSING_PKGS=()
-for pkg in qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-5compat-dev qt6-shadertools-dev; do
+for pkg in qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-shadertools-dev; do
     if ! dpkg -s "$pkg" >/dev/null 2>&1; then
         MISSING_PKGS+=("$pkg")
     fi
@@ -61,7 +61,7 @@ if [ $QMAKE_STATUS -ne 0 ]; then
     echo "$QMAKE_OUTPUT"
     if echo "$QMAKE_OUTPUT" | grep -q "Unknown module(s) in QT"; then
         echo "Unknown Qt modules detected. Install the Qt 6 development packages as described in README, e.g.:"
-        echo "sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-5compat-dev qt6-shadertools-dev"
+        echo "sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-shadertools-dev"
         exit 2
     fi
     echo "Retrying qmake without additional CONFIG options..."
@@ -73,7 +73,7 @@ if [ $QMAKE_STATUS -ne 0 ]; then
         echo "$QMAKE_OUTPUT"
         if echo "$QMAKE_OUTPUT" | grep -q "Unknown module(s) in QT"; then
             echo "Unknown Qt modules detected. Install the Qt 6 development packages as described in README, e.g.:"
-            echo "sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-5compat-dev qt6-shadertools-dev"
+            echo "sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-shadertools-dev"
             exit 2
         fi
         exit $QMAKE_STATUS
