@@ -452,3 +452,28 @@ Run cppcheck from the repository root:
 The helper script automatically applies the arguments listed in `tools/cppcheck.cfg`. This file defines the Qt keywords
 (`slots`, `signals`, `Q_OBJECT`, …) so that cppcheck does not warn about them. The results are written to
 `cppcheck.log`. A GitHub Actions workflow runs cppcheck on each push and pull request.
+
+[![clazy]][clazy-link]
+
+`clazy` provides Qt-focused checks powered by clang. The helper script requires
+`clazy`, `bear` and the Qt development headers. Install them on Debian-based
+systems with:
+
+```bash
+sudo apt-get update
+sudo apt-get install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev \
+    qt6-shadertools-dev clazy bear
+```
+
+Run clazy from the repository root:
+
+```bash
+./tools/run_clazy.sh
+```
+
+The script builds the project with clang under `bear` to capture compile
+commands and then runs `clazy-standalone`. The results are written to
+`clazy.log`. A GitHub Actions workflow executes clazy on each push and pull
+request.
+
+[clazy-link]: https://github.com/beyawnko/Beya_Waifu/actions/workflows/clazy.yml
