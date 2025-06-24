@@ -89,7 +89,8 @@ private:
 
     QSize m_outputFrameSize; // After scaling by SR engine
 
-    QString m_tempAudioPath; // Path to extracted audio file
+    QString m_tempVideoJobPath; // Path to the unique temporary directory for a video job (contains audio, etc.)
+    QString m_tempAudioPath;    // Path to extracted audio file (inside m_tempVideoJobPath)
 
     int m_framesProcessedPipe = 0;
     int m_totalFramesEstimatePipe = 0; // From ffprobe initially
@@ -127,6 +128,9 @@ private:
     void pipeFrameToEncoder();
     void finalizePipedVideoProcessing(bool success);
 
+    // Constants for buffer limits
+    static const qint64 MAX_DECODED_BUFFER_SIZE = 100 * 1024 * 1024; // 100MB limit for decoded frames buffer
+    static const qint64 MAX_UPSCALED_BUFFER_SIZE = 100 * 1024 * 1024; // 100MB limit for upscaled frames buffer
 };
 
 #endif // REALCUGANPROCESSOR_H

@@ -4,14 +4,28 @@
 #include <QString>
 
 struct RealCuganSettings {
+    QString sourceFile; // Source file path, used for logging & context
     QString programPath;
-    QString modelName;
-    double targetScale = 2.0; // Default value
-    int denoiseLevel = 1;     // Default value
-    int tileSize = 0;         // Default value (0 often means auto)
-    bool ttaEnabled = false;  // Default value
-    QString singleGpuId = "0"; // Default value
-    QString outputFormat = "png"; // Default value
+    QString ffprobePath;
+    QString ffmpegPath;
+    QString modelName;    // Used for -m in image mode (model directory)
+    QString modelPath;    // Used for -m in pipe mode (direct model files like up2x-conservative)
+    int targetScale = 2;  // Changed from double to int as SR engines usually take int
+    int denoiseLevel = -1; // Common default for "auto" or "conservative"
+    int tileSize = 0;
+    bool ttaEnabled = false;
+    QString singleGpuId = "auto"; // Changed default to "auto"
+    QString outputFormat = "png";
+    bool verboseLog = false;
+
+    // Video specific settings
+    double videoFps = 0; // 0 for auto from source, or user override
+
+    // New FFmpeg encoder settings
+    QString videoEncoderCodec = "libx264";
+    QString videoEncoderPreset = "medium";
+    int videoEncoderCRF = 23;
+    QString videoOutputPixFmt = "yuv420p";
 };
 
 #endif // REALCUGAN_SETTINGS_H

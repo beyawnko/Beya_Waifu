@@ -95,9 +95,22 @@ void RealCuganProcessor::cleanupPipeProcesses()
     }
 
     if (!m_tempAudioPath.isEmpty()) {
-        QFile::remove(m_tempAudioPath);
+        QFile::remove(m_tempAudioPath); // Remove the audio file
         m_tempAudioPath.clear();
     }
+
+    if (!m_tempVideoJobPath.isEmpty()) { // Now remove the job directory itself
+        QDir jobDir(m_tempVideoJobPath);
+        if (jobDir.exists()) { // Check if it exists before trying to remove
+            if (jobDir.removeRecursively()) {
+                if (m_settings.verboseLog) qDebug() << "Successfully removed temp job directory:" << m_tempVideoJobPath;
+            } else {
+                emit logMessage(tr("Warning: Could not remove temporary job directory: %1").arg(m_tempVideoJobPath));
+            }
+        }
+        m_tempVideoJobPath.clear();
+    }
+
     m_currentDecodedFrameBuffer.clear();
     m_currentUpscaledFrameBuffer.clear();
     m_framesProcessedPipe = 0;
@@ -363,18 +376,131 @@ QStringList RealCuganProcessor::buildArguments(const QString &inputFile, const Q
     return arguments;
 }
 
-void RealCuganProcessor::onProcessError(QProcess::ProcessError) { /* Stub */ }
+void RealCuganProcessor::onProcessError(QProcess::ProcessError error) {
+    if (m_state == State::Idle && m_currentRowNum == -1) {
+        // Process might have been killed during cleanup of a previous failed job,
+        // and errorOccurred is emitted after 'finished'. Or it's an unexpected error.
+        // If no active job (m_currentRowNum == -1), probably safe to ignore or just log verbosely.
+        if (m_settings.verboseLog) {
+            qDebug() << "RealCuganProcessor::onProcessError received in Idle state with no active job. Error:" << error << m_process->errorString();
+        }
+        return;
+    }
+
+    QString logMsgOwner = "RealCUGAN";
+    if (m_state == State::ProcessingImage) logMsgOwner = "RealCUGAN (Image)";
+    else if (m_state == State::PipeProcessingSR) logMsgOwner = "RealCUGAN (SR Pipe)";
+    else if (m_state == State::ProcessingVideoFrames) logMsgOwner = "RealCUGAN (Old Video Frame)";
+
+
+    QString errorUserMsg = tr("%1 process error: %2. Code: %3").arg(logMsgOwner).arg(m_process->errorString()).arg(error);
+    emit logMessage(errorUserMsg);
+    if (m_settings.verboseLog) { // Also log to qDebug for more detailed debugging if enabled
+        qDebug() << errorUserMsg;
+    }
+
+
+    // Determine how to finalize based on state
+    if (m_state == State::ProcessingImage) {
+        m_state = State::Idle;
+        emit processingFinished(m_currentRowNum, false);
+    } else if (m_state == State::PipeProcessingSR || m_state == State::PipeDecodingVideo || m_state == State::PipeEncodingVideo) {
+        // finalizePipedVideoProcessing calls cleanup() which sets state to Idle and processingFinished
+        finalizePipedVideoProcessing(false);
+    } else if (m_state == State::ProcessingVideoFrames) { // Old video method
+        cleanupVideo(); // Specific cleanup for old method's temp files
+        m_state = State::Idle;
+        emit processingFinished(m_currentRowNum, false);
+    } else {
+        // Fallback for any other unexpected state, ensure cleanup and signal failure if a job was active
+        State oldState = m_state;
+        cleanup(); // General cleanup sets state to Idle
+        if (m_currentRowNum != -1) {
+            emit logMessage(tr("Error occurred in an unexpected state (%1) for job %2.").arg(static_cast<int>(oldState)).arg(m_currentRowNum));
+            emit processingFinished(m_currentRowNum, false);
+        }
+    }
+    // m_currentRowNum is reset by finalizePipedVideoProcessing or explicitly after emitting processingFinished
+}
+
 void RealCuganProcessor::onReadyReadStandardOutput() {
-    QString output = m_process->readAllStandardOutput();
-    QRegularExpression re("(\\d+)%");
-    QRegularExpressionMatch match = re.match(output);
-    if (match.hasMatch()) {
-        if(m_state == State::ProcessingImage) {
-             emit fileProgress(m_currentRowNum, match.captured(1).toInt());
+    if (m_state == State::PipeProcessingSR) {
+        // SR engine in pipe mode outputs raw frame data to stdout
+        qint64 bytesAvailableInSRProcess = m_process->bytesAvailable();
+        bool readData = true;
+
+        if (m_currentUpscaledFrameBuffer.size() + bytesAvailableInSRProcess > MAX_UPSCALED_BUFFER_SIZE && m_currentUpscaledFrameBuffer.size() > MAX_UPSCALED_BUFFER_SIZE / 2) {
+            if (m_settings.verboseLog) {
+                qDebug() << "Approaching MAX_UPSCALED_BUFFER_SIZE (" << MAX_UPSCALED_BUFFER_SIZE
+                         << "bytes). Current upscaled buffer size:" << m_currentUpscaledFrameBuffer.size()
+                         << ". Available from SR process:" << bytesAvailableInSRProcess
+                         << ". Delaying read from SR process to allow encoder to catch up.";
+            }
+            // Don't read more from SR process for now if buffer is getting too full,
+            // allow pipeToEncoder to drain it. OS pipe will exert backpressure on SR engine.
+            readData = false;
+        }
+
+        if (readData && bytesAvailableInSRProcess > 0) {
+            m_currentUpscaledFrameBuffer.append(m_process->readAllStandardOutput());
+        }
+
+        // Always try to pipe whatever is in the buffer.
+        // pipeFrameToEncoder should ideally handle partial frames if that's possible,
+        // or this assumes SR engine sends data in meaningful chunks (e.g., full frames).
+        if (!m_currentUpscaledFrameBuffer.isEmpty()) {
+            pipeFrameToEncoder(m_currentUpscaledFrameBuffer);
+            m_currentUpscaledFrameBuffer.clear(); // Clear after attempting to send.
+                                                 // If pipeFrameToEncoder buffers internally or blocks, this is fine.
+        }
+        // No percentage progress for piped video frames from SR engine stdout.
+    } else if (m_state == State::ProcessingImage) {
+        // Image processing outputs percentage progress
+        QString output = QString::fromLocal8Bit(m_process->readAllStandardOutput());
+        QRegularExpression re("(\\d+)%");
+        QRegularExpressionMatch match = re.match(output);
+        if (match.hasMatch()) {
+            emit fileProgress(m_currentRowNum, match.captured(1).toInt());
+        }
+         // Optionally log other output if verbose and not matched as progress
+        else if (m_settings.verboseLog && !output.trimmed().isEmpty()) {
+            qDebug() << "RealCUGAN (Image) stdout:" << output.trimmed();
+        }
+    } else {
+        // Output from m_process in other states? Log if verbose.
+        if (m_settings.verboseLog) {
+            QByteArray unexpectedData = m_process->readAllStandardOutput();
+            if (!unexpectedData.isEmpty()) {
+                qDebug() << "RealCUGAN m_process sent stdout data in unexpected state" << (int)m_state << ":" << QString::fromLocal8Bit(unexpectedData);
+            }
         }
     }
 }
-void RealCuganProcessor::onFfmpegError(QProcess::ProcessError) { /* Stub */ }
+
+void RealCuganProcessor::onFfmpegError(QProcess::ProcessError error) {
+    // This is for the OLD video processing method (m_ffmpegProcess)
+    if (m_state == State::Idle && m_currentRowNum == -1) {
+        if (m_settings.verboseLog) {
+            qDebug() << "RealCuganProcessor::onFfmpegError received in Idle state with no active job. Error:" << error << m_ffmpegProcess->errorString();
+        }
+        return;
+    }
+    // Check if it's one of the states that uses m_ffmpegProcess
+    if (m_state == State::SplittingVideo || m_state == State::AssemblingVideo) {
+        QString errorUserMsg = tr("FFmpeg (old video method) process error: %1. Code: %2").arg(m_ffmpegProcess->errorString()).arg(error);
+        emit logMessage(errorUserMsg);
+        if (m_settings.verboseLog) {
+            qDebug() << errorUserMsg;
+        }
+        cleanupVideo();
+        m_state = State::Idle;
+        emit processingFinished(m_currentRowNum, false);
+    } else if (m_settings.verboseLog) {
+        // Log if error occurs in an unexpected state for m_ffmpegProcess
+        qDebug() << "onFfmpegError called for m_ffmpegProcess in unexpected state:" << (int)m_state << "Error:" << error << m_ffmpegProcess->errorString();
+    }
+}
+
 void RealCuganProcessor::onFfmpegStdErr() {
     emit logMessage("FFmpeg: " + QString::fromLocal8Bit(m_ffmpegProcess->readAllStandardError()).trimmed());
 }
@@ -466,13 +592,13 @@ bool RealCuganProcessor::getVideoInfo(const QString& inputFile) {
 
     // Extract audio to a temporary path
     // Create a unique temp directory for this job if it doesn't exist for audio
-    QString tempVideoJobPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) +
+    m_tempVideoJobPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) +
                            QString("/realcugan_pipe_job_%1").arg(QDateTime::currentMSecsSinceEpoch());
-    QDir tempJobDir(tempVideoJobPath);
+    QDir tempJobDir(m_tempVideoJobPath);
     if (!tempJobDir.mkpath(".")) {
-        emit logMessage(tr("Error: Could not create temporary directory for audio: %1").arg(tempVideoJobPath));
-        // Decide if proceeding without audio is acceptable or return false
-        m_tempAudioPath.clear(); // No audio path
+        emit logMessage(tr("Error: Could not create temporary directory for audio: %1").arg(m_tempVideoJobPath));
+        m_tempAudioPath.clear();
+        m_tempVideoJobPath.clear(); // Clear if path creation failed
     } else {
         m_tempAudioPath = tempJobDir.filePath("audio.aac"); // Standardize to aac for simplicity
     }
@@ -545,7 +671,20 @@ void RealCuganProcessor::onPipeDecoderReadyReadStandardOutput() {
         if (m_settings.verboseLog) qDebug() << "Decoder output received in state: " << (int)m_state;
     }
 
-    m_currentDecodedFrameBuffer.append(m_ffmpegDecoderProcess->readAllStandardOutput());
+    qint64 bytesAvailableInProcess = m_ffmpegDecoderProcess->bytesAvailable();
+    if (m_currentDecodedFrameBuffer.size() + bytesAvailableInProcess > MAX_DECODED_BUFFER_SIZE && m_currentDecodedFrameBuffer.size() > MAX_DECODED_BUFFER_SIZE / 2) {
+        if (m_settings.verboseLog) {
+            qDebug() << "Approaching MAX_DECODED_BUFFER_SIZE (" << MAX_DECODED_BUFFER_SIZE
+                     << "bytes). Current size:" << m_currentDecodedFrameBuffer.size()
+                     << ". Available from process:" << bytesAvailableInProcess
+                     << ". Delaying read from decoder to exert backpressure.";
+        }
+        // Don't read from process an
+        // OS pipe buffer will fill up, exerting backpressure on ffmpeg.
+        // We still need to try processing what we have.
+    } else {
+        m_currentDecodedFrameBuffer.append(m_ffmpegDecoderProcess->readAllStandardOutput());
+    }
 
     // Only try to process if we are in decoding or waiting for SR state.
     // If we are already in encoding video state, it means all frames sent to SR.
@@ -714,10 +853,10 @@ void RealCuganProcessor::startPipeEncoder() {
         encoderArgs << "-an";
     }
 
-    encoderArgs << "-c:v" << "libx264"
-                << "-preset" << "medium"
-                << "-crf" << "23"
-                << "-pix_fmt" << "yuv420p"
+    encoderArgs << "-c:v" << m_settings.videoEncoderCodec
+                << "-preset" << m_settings.videoEncoderPreset // Preset might not apply to all codecs, but common for x264/x265
+                << "-crf" << QString::number(m_settings.videoEncoderCRF) // CRF applies to x264/x265, others might use -b:v
+                << "-pix_fmt" << m_settings.videoOutputPixFmt
                 << QDir::toNativeSeparators(m_finalDestinationFile);
 
     QString ffmpegPath = m_settings.ffmpegPath.isEmpty() ? "ffmpeg" : m_settings.ffmpegPath;
