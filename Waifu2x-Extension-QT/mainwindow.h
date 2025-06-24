@@ -112,7 +112,8 @@ struct FileLoadInfo {
 Q_DECLARE_METATYPE(FileLoadInfo)
 
 // Enum for processing status
-enum ProcessingType {
+// Enum for processing status - Renamed to avoid conflict
+enum ProcessJobType { // Renamed from ProcessingType
     PROCESS_TYPE_NONE = 0,
     PROCESS_TYPE_IMAGE,
     PROCESS_TYPE_VIDEO,
@@ -123,12 +124,12 @@ enum class ProcessingState {
     Idle,
     Processing,
     Stopping,
-    Error
+    Error // Added for completeness, might not be used if errors are handled per-file
 };
 
 struct ProcessJob {
     int rowNum;
-    ProcessingType type;
+    ProcessJobType type; // Changed from ProcessingType
 };
 
 QT_BEGIN_NAMESPACE
@@ -175,7 +176,7 @@ public:
     QStringList table_image_item_fileName;
     QStringList table_video_item_fileName;
     QStringList table_gif_item_fileName;
-    ProcessingType Processing_Status; // Changed from int
+    ProcessJobType Processing_Status; // Changed from ProcessingType to ProcessJobType
     int current_File_Row_Number;
     QString TempDir_Path; // Should be initialized
 
