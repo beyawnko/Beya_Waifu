@@ -20,5 +20,6 @@ Thank you for considering a contribution! Please follow these steps when prepari
    ```
    The suite relies on `PySide6` and other packages from `requirements.txt`. Tests that
    depend on PySide6 will be skipped automatically if it is not available.
+5. Header files under `Waifu2x-Extension-QT` should use `#pragma once` for include guards.
 
 See the `README.md` for build instructions and additional details.

@@ -1,6 +1,5 @@
 // file: realcuganprocessor.h
-#ifndef REALCUGANPROCESSOR_H
-#define REALCUGANPROCESSOR_H
+#pragma once
 
 #include <QObject>
 #include <QProcess>
@@ -153,5 +152,3 @@ private:
     static const qint64 MAX_DECODED_BUFFER_SIZE = 100 * 1024 * 1024; // 100MB limit for decoded frames buffer
     static const qint64 MAX_UPSCALED_BUFFER_SIZE = 100 * 1024 * 1024; // 100MB limit for upscaled frames buffer
 };
-
-#endif // REALCUGANPROCESSOR_H

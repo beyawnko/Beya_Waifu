@@ -17,8 +17,7 @@
     My Github homepage: https://github.com/beyawnko
 */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
 #include <QDragEnterEvent>
@@ -872,4 +871,3 @@ signals:
   void Send_Realcugan_ncnn_vulkan_DetectGPU_finished();
 
 };
-#endif // MAINWINDOW_H
