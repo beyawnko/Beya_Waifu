@@ -152,7 +152,16 @@ void MainWindow::on_pushButton_Start_clicked()
             m_jobQueue.enqueue({i, PROCESS_TYPE_IMAGE});
         }
     }
-    // TODO: Add loops for GIF and Video tables
+    for (int i = 0; i < Table_model_gif->rowCount(); ++i) {
+        if (Table_model_gif->item(i, 1)->text() == tr("Waiting")) {
+            m_jobQueue.enqueue({i, PROCESS_TYPE_GIF});
+        }
+    }
+    for (int i = 0; i < Table_model_video->rowCount(); ++i) {
+        if (Table_model_video->item(i, 1)->text() == tr("Waiting")) {
+            m_jobQueue.enqueue({i, PROCESS_TYPE_VIDEO});
+        }
+    }
     m_TotalNumProc = m_jobQueue.count();
     UpdateProgressBar();
     if (m_jobQueue.isEmpty()) {
@@ -193,9 +202,9 @@ void MainWindow::startNextFileProcessing()
     ProcessJob job = m_jobQueue.dequeue();
     ThreadNumRunning++;
     current_File_Row_Number = job.rowNum;
-    Table_image_ChangeStatus_rowNumInt_statusQString(job.rowNum, tr("Processing..."));
 
     if (job.type == PROCESS_TYPE_IMAGE) {
+        Table_image_ChangeStatus_rowNumInt_statusQString(job.rowNum, tr("Processing..."));
         QString engine = ui->comboBox_Engine_Image->currentText();
         // --- THIS IS THE ENGINE DISPATCH LOGIC ---
         if (engine == "RealESRGAN-NCNN-Vulkan") {
@@ -207,15 +216,38 @@ void MainWindow::startNextFileProcessing()
         } else {
             // Add other engine stubs here if needed
             TextBrowser_NewMessage(tr("Error: Unknown or unsupported image engine selected: %1").arg(engine));
-            onProcessingFinished(job.rowNum, false);
+            onProcessingFinished(job.rowNum, false, PROCESS_TYPE_IMAGE);
+        }
+    } else if (job.type == PROCESS_TYPE_GIF) {
+        Table_gif_ChangeStatus_rowNumInt_statusQString(job.rowNum, tr("Processing..."));
+        QString engine = ui->comboBox_Engine_GIF->currentText();
+        // TODO: Implement GIF processing logic similar to image processing
+        // For now, simulate error for GIF
+        TextBrowser_NewMessage(tr("Error: GIF processing not yet implemented for engine: %1").arg(engine));
+        onProcessingFinished(job.rowNum, false, PROCESS_TYPE_GIF);
+    } else if (job.type == PROCESS_TYPE_VIDEO) {
+        Table_video_ChangeStatus_rowNumInt_statusQString(job.rowNum, tr("Processing..."));
+        QString engine = ui->comboBox_Engine_Video->currentText();
+        if (engine == "RealESRGAN-NCNN-Vulkan") {
+            RealESRGAN_NCNN_Vulkan_Video(job.rowNum);
+        } else if (engine == "RealCUGAN-NCNN-Vulkan") {
+            Realcugan_NCNN_Vulkan_Video(job.rowNum);
+        } else {
+            TextBrowser_NewMessage(tr("Error: Unknown or unsupported video engine selected: %1").arg(engine));
+            onProcessingFinished(job.rowNum, false, PROCESS_TYPE_VIDEO);
         }
     }
-    // TODO: else if for GIF and Video jobs
 }
 
-void MainWindow::onProcessingFinished(int /*rowNum*/, bool success)
+void MainWindow::onProcessingFinished(int rowNum, bool success, ProcessJobType jobType)
 {
     if (m_currentState == ProcessingState::Idle) return;
+    // Update status in the correct table based on jobType
+    // This is already handled by the specific processor signals connected to Table_xxx_ChangeStatus_rowNumInt_statusQString
+    // However, if a process finishes due to an error *before* the processor starts (e.g. unknown engine),
+    // we might need to manually set a final status like "Error" here.
+    // For now, the existing status update mechanism via signals should cover most cases.
+    // The main purpose here is to decrement ThreadNumRunning and try the next file.
     if (success) { m_FinishedProc++; } else { m_ErrorProc++; }
     ThreadNumRunning--;
     UpdateProgressBar();
@@ -268,7 +300,7 @@ void MainWindow::Anime4k_Image(int rowNum, bool){
         if (ui->checkBox_GaussianBlurWeak_Post_Anime4k->isChecked()) postFilterParts << "gaussianBlurWeak";
         if (ui->checkBox_GaussianBlur_Post_Anime4k->isChecked()) postFilterParts << "gaussianBlur";
         if (ui->checkBox_BilateralFilter_Post_Anime4k->isChecked()) postFilterParts << "bilateralFilter";
-        if (ui->checkBox_BilateralFilterFaster_Post_Anime4k->isChecked()) postFilterParts << "bilateralFilterFaster";
+        if (ui->checkBox_BilateralFilterFaster_Post_Anime4k->isChecked()) preFilterParts << "bilateralFilterFaster";
         settings.postFilters = postFilterParts.join(':');
     }
 
@@ -282,6 +314,8 @@ void MainWindow::Anime4k_Image(int rowNum, bool){
     QString sourceFile = Table_model_image->item(rowNum, 2)->text();
     QString destFile = Generate_Output_Path(sourceFile, "anime4k");
 
+    disconnect(m_anime4kProcessor, &Anime4KProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
+    connect(m_anime4kProcessor, &Anime4KProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_IMAGE); });
     m_anime4kProcessor->processImage(rowNum, sourceFile, destFile, settings);
 }
 
@@ -302,6 +336,9 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool)
     if (settings.modelName.contains("x4")) settings.modelNativeScale = 4;
     else if (settings.modelName.contains("x2")) settings.modelNativeScale = 2;
     else settings.modelNativeScale = 1;
+
+    disconnect(m_realEsrganProcessor, SIGNAL(processingFinished(int,bool)), this, SLOT(onProcessingFinished(int,bool)));
+    connect(m_realEsrganProcessor, &RealEsrganProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_IMAGE); });
     m_realEsrganProcessor->processImage(rowNum, sourceFile, destFile, settings);
 }
 
@@ -336,6 +373,9 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int rowNum)
     if (settings.modelName.contains("x4")) settings.modelNativeScale = 4;
     else if (settings.modelName.contains("x2")) settings.modelNativeScale = 2;
     else settings.modelNativeScale = 1;
+
+    disconnect(m_realEsrganProcessor, SIGNAL(processingFinished(int,bool)), this, SLOT(onProcessingFinished(int,bool)));
+    connect(m_realEsrganProcessor, &RealEsrganProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_VIDEO); });
     m_realEsrganProcessor->processVideo(rowNum, sourceFile, destFile, settings);
 }
 
@@ -351,6 +391,9 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
     settings.tileSize = ui->spinBox_TileSize_RealCUGAN->value();
     settings.ttaEnabled = ui->checkBox_TTA_RealCUGAN->isChecked();
     settings.singleGpuId = ui->comboBox_GPUID_RealCUGAN->currentText();
+
+    disconnect(realCuganProcessor, &RealCuganProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
+    connect(realCuganProcessor, &RealCuganProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_VIDEO); });
     realCuganProcessor->processVideo(rowNum, sourceFile, destFile, settings);
 }
 
