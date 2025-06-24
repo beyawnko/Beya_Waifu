@@ -403,6 +403,15 @@ If `tests/test_qml_liquidglass.py` warns that `shaders/liquidglass.frag.qsb` is 
 automatically downloads the Linux releases of both upscalers if the executables are not present and places them in
 `tests/bin/`.
 
+The tests under `ncnn/tools/pnnx/tests` rely on the PyTorch ecosystem. Install `torch`,
+`torchaudio` and `torchvision` with:
+
+```bash
+pip install torch torchaudio torchvision
+```
+
+If these packages are missing the entire pnnx test suite is skipped.
+
 To execute the tests from the repository root simply run:
 
 ```bash
