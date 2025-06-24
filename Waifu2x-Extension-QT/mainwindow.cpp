@@ -452,11 +452,75 @@ int MainWindow::RealESRGAN_ncnn_vulkan_DetectGPU_finished() { return 0; /* STUB 
 void MainWindow::SRMD_DetectGPU_finished() { /* STUB */ }
 int MainWindow::Waifu2x_DumpProcessorList_converter_finished() { return 0; /* STUB */ }
 void MainWindow::Set_checkBox_DisableResize_gif_Checked() { /* STUB */ }
-void MainWindow::Table_image_insert_fileName_fullPath(const FileLoadInfo&) { /* STUB */ }
-void MainWindow::Table_gif_insert_fileName_fullPath(const FileLoadInfo&) { /* STUB */ }
-void MainWindow::Table_video_insert_fileName_fullPath(const FileLoadInfo&) { /* STUB */ }
-QStringList MainWindow::getImageFullPaths() const { return QStringList(); /* STUB */ }
-void MainWindow::Batch_Table_Update_slots(const QList<FileLoadInfo>&, const QList<FileLoadInfo>&, const QList<FileLoadInfo>&, bool, bool, bool) { /* STUB */ }
+void MainWindow::Table_image_insert_fileName_fullPath(const FileLoadInfo& fileInfo) {
+    QList<QStandardItem *> rowItems;
+    rowItems << new QStandardItem(fileInfo.fileName);
+    rowItems << new QStandardItem(fileInfo.status.isEmpty() ? tr("Waiting") : fileInfo.status);
+    rowItems << new QStandardItem(fileInfo.fullPath);
+    rowItems << new QStandardItem(fileInfo.customResolutionWidth);
+    rowItems << new QStandardItem(fileInfo.customResolutionHeight);
+    // Add empty items for other columns if they exist, e.g., for progress, ETA
+    Table_model_image->appendRow(rowItems);
+}
+
+void MainWindow::Table_gif_insert_fileName_fullPath(const FileLoadInfo& fileInfo) {
+    QList<QStandardItem *> rowItems;
+    rowItems << new QStandardItem(fileInfo.fileName);
+    rowItems << new QStandardItem(fileInfo.status.isEmpty() ? tr("Waiting") : fileInfo.status);
+    rowItems << new QStandardItem(fileInfo.fullPath);
+    rowItems << new QStandardItem(fileInfo.customResolutionWidth);
+    rowItems << new QStandardItem(fileInfo.customResolutionHeight);
+    Table_model_gif->appendRow(rowItems);
+}
+
+void MainWindow::Table_video_insert_fileName_fullPath(const FileLoadInfo& fileInfo) {
+    QList<QStandardItem *> rowItems;
+    rowItems << new QStandardItem(fileInfo.fileName);
+    rowItems << new QStandardItem(fileInfo.status.isEmpty() ? tr("Waiting") : fileInfo.status);
+    rowItems << new QStandardItem(fileInfo.fullPath);
+    rowItems << new QStandardItem(fileInfo.customResolutionWidth);
+    rowItems << new QStandardItem(fileInfo.customResolutionHeight);
+    Table_model_video->appendRow(rowItems);
+}
+
+QStringList MainWindow::getImageFullPaths() const {
+    QStringList paths;
+    for (int i = 0; i < Table_model_image->rowCount(); ++i) {
+        paths.append(Table_model_image->item(i, 2)->text()); // Assuming column 2 is full path
+    }
+    return paths;
+}
+
+void MainWindow::Batch_Table_Update_slots(const QList<FileLoadInfo>& imagesToAdd, const QList<FileLoadInfo>& gifsToAdd, const QList<FileLoadInfo>& videosToAdd, bool doAddNewImage, bool doAddNewGif, bool doAddNewVideo)
+{
+    ui_tableViews_setUpdatesEnabled(false); // Disable updates for performance
+
+    if (doAddNewImage) {
+        for (const auto& fileInfo : imagesToAdd) {
+            Table_image_insert_fileName_fullPath(fileInfo);
+        }
+    }
+    if (doAddNewGif) {
+        for (const auto& fileInfo : gifsToAdd) {
+            Table_gif_insert_fileName_fullPath(fileInfo);
+        }
+    }
+    if (doAddNewVideo) {
+        for (const auto& fileInfo : videosToAdd) {
+            Table_video_insert_fileName_fullPath(fileInfo);
+        }
+    }
+
+    ui_tableViews_setUpdatesEnabled(true); // Re-enable updates
+
+    // Optionally, refresh table views if not done automatically by model changes
+    // ui->tableView_image->viewport()->update();
+    // ui->tableView_gif->viewport()->update();
+    // ui->tableView_video->viewport()->update();
+
+    Table_FileCount_reload(); // Update file counts displayed in UI
+}
+
 void MainWindow::on_pushButton_CustRes_apply_clicked() { /* STUB */ }
 void MainWindow::on_pushButton_CustRes_cancel_clicked() { /* STUB */ }
 void MainWindow::on_pushButton_about_clicked() { /* STUB */ }
@@ -586,6 +650,10 @@ int MainWindow::on_pushButton_RemoveItem_clicked()
     }
 
     if (currentTableView && currentModel) {
+        if (currentModel->rowCount() == 0) {
+            TextBrowser_NewMessage(tr("File list is empty. Nothing to remove."));
+            return 0; // Indicate no action
+        }
         QModelIndexList selectedRows = currentTableView->selectionModel()->selectedRows();
         if (!selectedRows.isEmpty()) {
             // Remove rows in reverse order to avoid issues with changing row indices
