@@ -461,6 +461,7 @@ void MainWindow::Table_image_insert_fileName_fullPath(const FileLoadInfo& fileIn
     rowItems << new QStandardItem(fileInfo.customResolutionHeight);
     // Add empty items for other columns if they exist, e.g., for progress, ETA
     Table_model_image->appendRow(rowItems);
+    qDebug() << "[Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount:" << Table_model_image->rowCount() << "columnCount:" << Table_model_image->columnCount();
 }
 
 void MainWindow::Table_gif_insert_fileName_fullPath(const FileLoadInfo& fileInfo) {
@@ -471,6 +472,7 @@ void MainWindow::Table_gif_insert_fileName_fullPath(const FileLoadInfo& fileInfo
     rowItems << new QStandardItem(fileInfo.customResolutionWidth);
     rowItems << new QStandardItem(fileInfo.customResolutionHeight);
     Table_model_gif->appendRow(rowItems);
+    qDebug() << "[Debug] Table_gif_insert_fileName_fullPath: Appended. New rowCount:" << Table_model_gif->rowCount() << "columnCount:" << Table_model_gif->columnCount();
 }
 
 void MainWindow::Table_video_insert_fileName_fullPath(const FileLoadInfo& fileInfo) {
@@ -481,6 +483,7 @@ void MainWindow::Table_video_insert_fileName_fullPath(const FileLoadInfo& fileIn
     rowItems << new QStandardItem(fileInfo.customResolutionWidth);
     rowItems << new QStandardItem(fileInfo.customResolutionHeight);
     Table_model_video->appendRow(rowItems);
+    qDebug() << "[Debug] Table_video_insert_fileName_fullPath: Appended. New rowCount:" << Table_model_video->rowCount() << "columnCount:" << Table_model_video->columnCount();
 }
 
 QStringList MainWindow::getImageFullPaths() const {
@@ -493,20 +496,31 @@ QStringList MainWindow::getImageFullPaths() const {
 
 void MainWindow::Batch_Table_Update_slots(const QList<FileLoadInfo>& imagesToAdd, const QList<FileLoadInfo>& gifsToAdd, const QList<FileLoadInfo>& videosToAdd, bool doAddNewImage, bool doAddNewGif, bool doAddNewVideo)
 {
+    qDebug() << "[Debug] Batch_Table_Update_slots: Called with";
+    qDebug() << "[Debug]   doAddNewImage:" << doAddNewImage << "imagesToAdd count:" << imagesToAdd.count();
+    qDebug() << "[Debug]   doAddNewGif:" << doAddNewGif << "gifsToAdd count:" << gifsToAdd.count();
+    qDebug() << "[Debug]   doAddNewVideo:" << doAddNewVideo << "videosToAdd count:" << videosToAdd.count();
+
     // ui_tableViews_setUpdatesEnabled(false); // This was a STUB, removing call
 
     if (doAddNewImage && Table_model_image) {
+        qDebug() << "[Debug] Batch_Table_Update_slots: Processing" << imagesToAdd.count() << "images.";
         for (const auto& fileInfo : imagesToAdd) {
+            qDebug() << "[Debug] Batch_Table_Update_slots: Adding image - Name:" << fileInfo.fileName << "Path:" << fileInfo.fullPath;
             Table_image_insert_fileName_fullPath(fileInfo);
         }
     }
     if (doAddNewGif && Table_model_gif) {
+        qDebug() << "[Debug] Batch_Table_Update_slots: Processing" << gifsToAdd.count() << "GIFs.";
         for (const auto& fileInfo : gifsToAdd) {
+            qDebug() << "[Debug] Batch_Table_Update_slots: Adding GIF - Name:" << fileInfo.fileName << "Path:" << fileInfo.fullPath;
             Table_gif_insert_fileName_fullPath(fileInfo);
         }
     }
     if (doAddNewVideo && Table_model_video) {
+        qDebug() << "[Debug] Batch_Table_Update_slots: Processing" << videosToAdd.count() << "videos.";
         for (const auto& fileInfo : videosToAdd) {
+            qDebug() << "[Debug] Batch_Table_Update_slots: Adding video - Name:" << fileInfo.fileName << "Path:" << fileInfo.fullPath;
             Table_video_insert_fileName_fullPath(fileInfo);
         }
     }
@@ -596,38 +610,79 @@ void MainWindow::Read_Input_paths_BrowserFile(QStringList Input_path_List)
     bool localAddNewGif = false;
     bool localAddNewVideo = false;
 
+    qDebug() << "[Debug] Read_Input_paths_BrowserFile: Processing" << Input_path_List.count() << "input paths.";
+
     for (const QString &path : Input_path_List)
     {
+        qDebug() << "[Debug] Read_Input_paths_BrowserFile: Current path:" << path;
         QFileInfo fileInfo(path);
         if (fileInfo.isDir())
         {
+            qDebug() << "[Debug] Read_Input_paths_BrowserFile: Path is a directory:" << path;
             QDir dir(path);
             QStringList fileEntries = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
+            qDebug() << "[Debug] Read_Input_paths_BrowserFile: Found" << fileEntries.count() << "files in directory.";
             for (const QString &fileName : fileEntries) {
                 QString fullPath = dir.filePath(fileName);
+                qDebug() << "[Debug] Read_Input_paths_BrowserFile: Processing file from dir:" << fullPath;
                 if (!Deduplicate_filelist_worker(fullPath, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set)) {
-                     QList<QPair<QString, QString>> img_tmp, gif_tmp, vid_tmp;
-                     bool laImg, laGif, laVid;
+                     QList<QPair<QString, QString>> img_tmp, gif_tmp, vid_tmp; // These are unused by FileList_Add's current signature
+                     bool laImg = false, laGif = false, laVid = false; // Initialize local flags for FileList_Add
                      FileList_Add(fileName, fullPath, img_tmp, gif_tmp, vid_tmp, laImg, laGif, laVid, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
-                     if (laImg) { imagesToAdd_info.append({fileName, fullPath, tr("Waiting"), "", ""}); localAddNewImage = true; }
-                     if (laGif) { gifsToAdd_info.append({fileName, fullPath, tr("Waiting"), "", ""}); localAddNewGif = true; }
-                     if (laVid) { videosToAdd_info.append({fileName, fullPath, tr("Waiting"), "", ""}); localAddNewVideo = true; }
+                     qDebug() << "[Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg=" << laImg << "laGif=" << laGif << "laVid=" << laVid << "for" << fullPath;
+                     if (laImg) {
+                         imagesToAdd_info.append({fileName, fullPath, tr("Waiting"), "", ""});
+                         localAddNewImage = true;
+                         qDebug() << "[Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info:" << fullPath;
+                     }
+                     if (laGif) {
+                         gifsToAdd_info.append({fileName, fullPath, tr("Waiting"), "", ""});
+                         localAddNewGif = true;
+                         qDebug() << "[Debug] Read_Input_paths_BrowserFile: Added to gifsToAdd_info:" << fullPath;
+                     }
+                     if (laVid) {
+                         videosToAdd_info.append({fileName, fullPath, tr("Waiting"), "", ""});
+                         localAddNewVideo = true;
+                         qDebug() << "[Debug] Read_Input_paths_BrowserFile: Added to videosToAdd_info:" << fullPath;
+                     }
+                } else {
+                    qDebug() << "[Debug] Read_Input_paths_BrowserFile: Skipped (duplicate):" << fullPath;
                 }
             }
         }
         else if (fileInfo.isFile())
         {
+            qDebug() << "[Debug] Read_Input_paths_BrowserFile: Path is a file:" << path;
             if (!Deduplicate_filelist_worker(path, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set)) {
-                QList<QPair<QString, QString>> img_tmp, gif_tmp, vid_tmp;
-                bool laImg, laGif, laVid;
+                QList<QPair<QString, QString>> img_tmp, gif_tmp, vid_tmp; // Unused
+                bool laImg = false, laGif = false, laVid = false; // Initialize
                 FileList_Add(fileInfo.fileName(), path, img_tmp, gif_tmp, vid_tmp, laImg, laGif, laVid, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
-                if (laImg) { imagesToAdd_info.append({fileInfo.fileName(), path, tr("Waiting"), "", ""}); localAddNewImage = true; }
-                if (laGif) { gifsToAdd_info.append({fileInfo.fileName(), path, tr("Waiting"), "", ""}); localAddNewGif = true; }
-                if (laVid) { videosToAdd_info.append({fileInfo.fileName(), path, tr("Waiting"), "", ""}); localAddNewVideo = true; }
+                qDebug() << "[Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg=" << laImg << "laGif=" << laGif << "laVid=" << laVid << "for" << path;
+                if (laImg) {
+                    imagesToAdd_info.append({fileInfo.fileName(), path, tr("Waiting"), "", ""});
+                    localAddNewImage = true;
+                    qDebug() << "[Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info:" << path;
+                }
+                if (laGif) {
+                    gifsToAdd_info.append({fileInfo.fileName(), path, tr("Waiting"), "", ""});
+                    localAddNewGif = true;
+                    qDebug() << "[Debug] Read_Input_paths_BrowserFile: Added to gifsToAdd_info:" << path;
+                }
+                if (laVid) {
+                    videosToAdd_info.append({fileInfo.fileName(), path, tr("Waiting"), "", ""});
+                    localAddNewVideo = true;
+                    qDebug() << "[Debug] Read_Input_paths_BrowserFile: Added to videosToAdd_info:" << path;
+                }
+            } else {
+                qDebug() << "[Debug] Read_Input_paths_BrowserFile: Skipped (duplicate):" << path;
             }
         }
     }
 
+    qDebug() << "[Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:";
+    qDebug() << "[Debug]   imagesToAdd_info count:" << imagesToAdd_info.count() << "localAddNewImage:" << localAddNewImage;
+    qDebug() << "[Debug]   gifsToAdd_info count:" << gifsToAdd_info.count() << "localAddNewGif:" << localAddNewGif;
+    qDebug() << "[Debug]   videosToAdd_info count:" << videosToAdd_info.count() << "localAddNewVideo:" << localAddNewVideo;
     Batch_Table_Update_slots(imagesToAdd_info, gifsToAdd_info, videosToAdd_info, localAddNewImage, localAddNewGif, localAddNewVideo);
 
     if (localAddNewImage) AddNew_image = true;
