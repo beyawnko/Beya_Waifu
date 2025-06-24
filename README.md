@@ -368,7 +368,7 @@ Below is the start-up screen of the optional launcher:
 
 Early WIP Main Menu layout:
 
-![GUI screenshot](Waifu2x-Extension-QT-Launcher/MainScreenGUI.png)
+![GUI screenshot](Waifu2x-Extension-QT/MainScreenGUI.png)
 
 ### Troubleshooting
 
