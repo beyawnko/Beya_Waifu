@@ -17,7 +17,7 @@ RealCUGAN and RealESRGAN are currently the only supported upscaling engines.
 
 ## Dependencies
 
-- **Qt5compat/Qt 6** development environment (Core, GUI, Widgets, Multimedia, OpenGL, OpenGLWidgets, Qt5Compat modules)
+ - **Qt 6** development environment (Core, GUI, Widgets, Multimedia, OpenGL, OpenGLWidgets modules)
 - **C++17** compatible compiler (I am currently in the process of working on experimental refactoring to C++20 for
   coroutines)
 - **FFmpeg** for handling video input/output
@@ -34,7 +34,7 @@ menus. Detected IDs are saved to `settings.ini` so that subsequent launches rest
 
 ### Quick Build (Linux & Windows)
 
-1. Install **Qt 6.5** with the Widgets, Multimedia, OpenGL and Qt5Compat modules. A C++17 compiler is required (GCC 7+
+1. Install **Qt 6.5** with the Widgets, Multimedia, and OpenGL modules. A C++17 compiler is required (GCC 7+
    on Linux or the MSYS2 MinGW-w64 toolchain on Windows).
 1. Clone the repository and its submodules:
    ```bash
@@ -134,11 +134,11 @@ git submodule update --init --recursive
 
 1. **Qt Development Libraries**:
 
-   - Qt 6 (e.g., version 6.5.2). You'll need the `core`, `gui`, `widgets`, and `multimedia` components, plus the
-     `opengl`, `openglwidgets`, and `qt5compat` modules.
+  - Qt 6 (e.g., version 6.5.2). You'll need the `core`, `gui`, `widgets`, and `multimedia` components,
+    along with the `opengl` and `openglwidgets` modules.
    - Installation example for Debian/Ubuntu systems:
      ```bash
-     sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-5compat-dev qt6-shadertools-dev
+    sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-shadertools-dev
      ```
    - If you are using a specific Qt version manager (like `aqtinstall`), ensure that the chosen Qt version's `bin`
      directory is in your system's `PATH`.
@@ -148,10 +148,9 @@ git submodule update --init --recursive
 For a Qt6 environment (preferred) you can install the following packages on Debian/Ubuntu systems:
 
 ```bash
-sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-5compat-dev qt6-shadertools-dev
+sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-shadertools-dev
 ```
-
-These packages supply `qmake6`, `qsb`, and the Multimedia and Qt5Compat modules.
+These packages supply `qmake6`, `qsb`, and the Multimedia modules.
 
 3. **Upscaler Dependencies (Vulkan)**:
    - The upscaler engines (RealCUGAN, RealESRGAN) are based on ncnn and use Vulkan for GPU acceleration.
@@ -188,7 +187,7 @@ These packages supply `qmake6`, `qsb`, and the Multimedia and Qt5Compat modules.
      `bin` directory (e.g., `C:\msys64\mingw64\bin`) are added to your system's `PATH` environment variable, especially
      within the MSYS2 MinGW terminal environment.
    - Include the **qtshadertools** module so the Liquid Glass shader can be built.
-   - Install the `opengl`, `openglwidgets`, and `qt5compat` modules.
+    - Install the `opengl` and `openglwidgets` modules.
 
 1. **Upscaler Dependencies (Vulkan for Windows)**:
 
@@ -441,7 +440,7 @@ distributions install them with:
 ```bash
 sudo apt-get update
 sudo apt-get install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev \
-    qt6-5compat-dev qt6-shadertools-dev cppcheck pkg-config
+    qt6-shadertools-dev cppcheck pkg-config
 ```
 
 Run cppcheck from the repository root:

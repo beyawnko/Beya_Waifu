@@ -50,7 +50,6 @@
 #include <QMovie>
 #include <QMediaPlayer>
 #include <QMediaMetaData>
-#include <QTextCodec>
 #include <QDesktopServices>
 #include <QUrl>
 #include <QStandardItem>

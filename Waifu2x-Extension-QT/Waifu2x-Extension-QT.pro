@@ -4,7 +4,7 @@
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
-QT       += core gui concurrent multimedia opengl openglwidgets core5compat
+QT       += core gui concurrent multimedia opengl openglwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
