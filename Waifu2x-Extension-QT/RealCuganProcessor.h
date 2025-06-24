@@ -145,7 +145,7 @@ private:
     void startRealCuganPipe(const QByteArray& frameData);
     void processSROutputBuffer();
     void startPipeEncoder();
-    void pipeFrameToEncoder();
+    void pipeFrameToEncoder(const QByteArray& upscaledFrameData);
     void finalizePipedVideoProcessing(bool success);
 
     // Constants for buffer limits
