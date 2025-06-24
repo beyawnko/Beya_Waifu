@@ -45,6 +45,11 @@ These protocols define the mandatory algorithms for your reasoning and task exec
             1. Verify the exact method declaration in the class header.
             2. Systematically verify the presence and exact signature of the method's definition in the corresponding `.cpp` source file (e.g., using `grep "ClassName::MethodName"` and careful manual inspection).
             3. If the definition is missing or the signature mismatched, address this first. Only if both declaration and definition are confirmed present and matching should investigation proceed to stale build artifacts, moc issues, or `.pro` file configurations.
+    - *Inter-Process Communication (IPC) via Pipes*: When planning tasks involving the development or modification of features using IPC via pipes (e.g., chaining `QProcess` instances or similar):
+        - The plan should include steps to verify robust error handling and propagation across all stages of the pipe.
+        - Explicitly check for mechanisms to manage data buffering between processes to prevent excessive memory usage (e.g., backpressure, buffer limits).
+        - Ensure graceful termination and cleanup of all processes in the chain under normal and error conditions.
+        - Confirm that data integrity (e.g., binary mode, complete reads/writes) is maintained through the pipes.
 - Do: Execute the plan, following the ReAct protocol for each step.
 - Check: Upon completion of the implementation, run all relevant project tests (see Section 6.1). Then, invoke the LLM-as-a-Judge protocol (Section 5.2) to score the quality and coherence of the output on a scale of 1-100.
 - Act: If all tests pass and the quality score is >= 95, finalize the task and proceed to the Self-Modification Mandate (Section 2.0). If any test fails or the score is < 95, the task is considered failed. You must analyze the failure and immediately trigger the Self-Modification Mandate to improve the protocol that led to the failure.
