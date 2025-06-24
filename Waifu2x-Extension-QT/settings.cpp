@@ -40,6 +40,8 @@ int MainWindow::Settings_Read_Apply()
         QAction_checkBox_MoveToRecycleBin_checkBox_DelOriginal->setChecked(1);// 
 //         if(isBetaVer)comboBox_UpdateChannel_setCurrentIndex_self(1);
         Settings_Save();
+        Init_Table();
+        Table_FileCount_reload();
 //         Settings_Read_Apply();
         return 0;
     }
