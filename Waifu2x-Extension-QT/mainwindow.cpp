@@ -225,10 +225,18 @@ void MainWindow::startNextFileProcessing()
   } else if (job.type == PROCESS_TYPE_GIF) {
     Table_gif_ChangeStatus_rowNumInt_statusQString(job.rowNum, tr("Processing..."));
     QString engine = ui->comboBox_Engine_GIF->currentText();
-    // TODO: Implement GIF processing logic similar to image processing
-    // For now, simulate error for GIF
-    TextBrowser_NewMessage(tr("Error: GIF processing not yet implemented for engine: %1").arg(engine));
-    onProcessingFinished(job.rowNum, false, PROCESS_TYPE_GIF);
+    if (engine == "RealESRGAN-NCNN-Vulkan") {
+      // GIFs are treated like videos for the SR engines
+      RealESRGAN_NCNN_Vulkan_Video(job.rowNum);
+    } else if (engine == "RealCUGAN-NCNN-Vulkan") {
+      Realcugan_NCNN_Vulkan_Video(job.rowNum);
+    } else if (engine == "Anime4K") {
+      TextBrowser_NewMessage(tr("Anime4K does not support GIF processing yet."));
+      onProcessingFinished(job.rowNum, false, PROCESS_TYPE_GIF);
+    } else {
+      TextBrowser_NewMessage(tr("Error: Unknown or unsupported GIF engine selected: %1").arg(engine));
+      onProcessingFinished(job.rowNum, false, PROCESS_TYPE_GIF);
+    }
   } else if (job.type == PROCESS_TYPE_VIDEO) {
     Table_video_ChangeStatus_rowNumInt_statusQString(job.rowNum, tr("Processing..."));
     QString engine = ui->comboBox_Engine_Video->currentText();

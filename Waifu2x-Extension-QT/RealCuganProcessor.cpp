@@ -404,7 +404,10 @@ void RealCuganProcessor::startVideoAssembly() // OLD VIDEO METHOD
     } else {
         args << "-an"; // No audio input
     }
-    args << "-c:v" << "libx264" << "-pix_fmt" << "yuv420p" // TODO: Make video codec/params configurable
+    args << "-c:v" << m_settings.videoEncoderCodec
+         << "-preset" << m_settings.videoEncoderPreset
+         << "-crf" << QString::number(m_settings.videoEncoderCRF)
+         << "-pix_fmt" << m_settings.videoOutputPixFmt
          << "-shortest" << QDir::toNativeSeparators(m_finalDestinationFile);
 
     QString ffmpegPath = m_settings.ffmpegPath.isEmpty() ? "ffmpeg" : m_settings.ffmpegPath;
