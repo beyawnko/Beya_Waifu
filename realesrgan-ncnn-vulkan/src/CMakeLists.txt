@@ -21,7 +21,7 @@ cmake_minimum_required(VERSION 3.9)
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -march=native" CACHE STRING "Release flags" FORCE)
 
-option(USE_SYSTEM_NCNN "build with system libncnn" ON) # Changed to ON
+option(USE_SYSTEM_NCNN "build with system libncnn" OFF)
 option(USE_SYSTEM_WEBP "build with system libwebp" ON) # Changed to ON
 option(USE_STATIC_MOLTENVK "link moltenvk static library" OFF)
 
@@ -124,18 +124,18 @@ if(USE_SYSTEM_NCNN)
     endif()
 endif()
 
-if(USE_SYSTEM_NCNN)
-    find_package(ncnn)
-    if(NOT TARGET ncnn)
-        message(WARNING "ncnn target not found! USE_SYSTEM_NCNN will be turned off.")
-        set(USE_SYSTEM_NCNN OFF)
-    endif()
-endif()
+# if(USE_SYSTEM_NCNN) # Section removed as USE_SYSTEM_NCNN is now OFF by default for this path
+#     find_package(ncnn)
+#     if(NOT TARGET ncnn)
+#         message(WARNING "ncnn target not found! USE_SYSTEM_NCNN will be turned off.")
+#         set(USE_SYSTEM_NCNN OFF)
+#     endif()
+# endif()
 
 if(NOT USE_SYSTEM_NCNN)
     # build ncnn library
-    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ncnn/CMakeLists.txt")
-        message(WARNING "NCNN submodule not found at ${CMAKE_CURRENT_SOURCE_DIR}/ncnn/CMakeLists.txt. Continuing, but build may fail if system NCNN is not found or not used.")
+    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../ncnn/CMakeLists.txt")
+        message(FATAL_ERROR "NCNN root directory not found at ${CMAKE_CURRENT_SOURCE_DIR}/../../ncnn/CMakeLists.txt. This is required when USE_SYSTEM_NCNN is OFF.")
     endif()
 
     option(NCNN_INSTALL_SDK "" OFF)
@@ -228,7 +228,7 @@ if(NOT USE_SYSTEM_NCNN)
     option(WITH_LAYER_layernorm "" OFF)
     option(WITH_LAYER_softplus "" OFF)
 
-    # add_subdirectory(ncnn) # No longer build ncnn as a submodule
+    add_subdirectory(../../ncnn ${CMAKE_BINARY_DIR}/ncnn_build_realesrgan)
 endif()
 
 if(USE_SYSTEM_WEBP)
