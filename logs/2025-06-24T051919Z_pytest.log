@@ -1,0 +1,8 @@
+ssssssssssssssssssssssssssssssssssssss.............s........sss.         [100%]
+=============================== warnings summary ===============================
+tests/__init__.py:23
+  /workspace/Beya_Waifu/tests/__init__.py:23: UserWarning: Missing shaders/liquidglass.frag.qsb. Liquid Glass tests will be skipped.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+22 passed, 43 skipped, 1 warning in 10.31s
