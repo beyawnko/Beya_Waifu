@@ -13,7 +13,10 @@ jobs:
       - name: Install Qt and clazy
         run: |
           sudo apt-get update
-          sudo apt-get install -y qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-shadertools-dev clazy bear
+          sudo apt-get install -y \
+            qtchooser qmake6 \
+            qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-shadertools-dev \
+            clazy bear
       - name: Run clazy
         run: |
           ./tools/run_clazy.sh
