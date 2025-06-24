@@ -9,6 +9,12 @@
 #include <QTime> // For temporary file naming
 #include "realesrgan_settings.h" // Assuming this file exists or will be created
 
+// Qt Multimedia includes for QVideoSink-based decoding
+#include <QMediaPlayer>
+#include <QVideoSink>
+#include <QVideoFrame>
+#include <QUrl> // For QMediaPlayer source
+
 class RealEsrganProcessor : public QObject
 {
     Q_OBJECT
@@ -56,6 +62,11 @@ private slots:
     void onPipeEncoderFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void onPipeEncoderError(QProcess::ProcessError error);
 
+    // --- New slots for QMediaPlayer/QVideoSink based decoding ---
+    void onMediaPlayerStatusChanged(QMediaPlayer::MediaStatus status);
+    void onMediaPlayerError(QMediaPlayer::Error error, const QString &errorString);
+    void onQtVideoFrameChanged(const QVideoFrame &frame);
+
 private:
     // --- State Management ---
     enum class State {
@@ -71,17 +82,26 @@ private:
     State m_state = State::Idle;
     void cleanup(); // General cleanup for the processor state
     void cleanupPipeProcesses(); // Cleanup for new pipe-related processes and temp files
+    void cleanupQtMediaPlayer(); // New method to specifically clean up QMediaPlayer and QVideoSink
 
     // --- Core Processes ---
     QProcess* m_process = nullptr;       // For the Real-ESRGAN executable (image or piped video frame)
     QProcess* m_ffmpegProcess = nullptr; // For splitting/assembling video (old file-based method)
 
-    // --- New members for piped video processing ---
-    QProcess* m_ffmpegDecoderProcess = nullptr;
-    QProcess* m_ffmpegEncoderProcess = nullptr;
+    // --- Members for piped video processing (some will be reused/adapted for QVideoSink) ---
+    QProcess* m_ffmpegDecoderProcess = nullptr; // This will be replaced by QMediaPlayer/QVideoSink
+    QProcess* m_ffmpegEncoderProcess = nullptr; // This remains for final encoding
     // m_process will be reused for SR engine in pipe mode.
 
-    QByteArray m_currentDecodedFrameBuffer;
+    // --- New members for QMediaPlayer/QVideoSink based decoding ---
+    QMediaPlayer* m_mediaPlayer = nullptr;
+    QVideoSink* m_videoSink = nullptr;
+    QQueue<QVideoFrame> m_qtVideoFrameBuffer; // Buffer for frames from QVideoSink if SR is busy
+    bool m_mediaPlayerPausedByBackpressure = false;
+    int m_framesDeliveredBySink = 0;
+    int m_framesAcceptedBySR = 0;
+
+    QByteArray m_currentDecodedFrameBuffer; // Will hold data from QVideoFrame for piping
     QByteArray m_currentUpscaledFrameBuffer;
 
     QSize m_inputFrameSize;
