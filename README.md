@@ -366,6 +366,10 @@ Below is the start-up screen of the optional launcher:
 
 ![GUI screenshot](Waifu2x-Extension-QT-Launcher/NuTitleImageDark.png)
 
+Early WIP Main Menu layout:
+
+![GUI screenshot](Waifu2x-Extension-QT-Launcher/MainScreenGUI.png)
+
 ### Troubleshooting
 
 - Ensure your GPU drivers are up to date if Vulkan initialization fails.
