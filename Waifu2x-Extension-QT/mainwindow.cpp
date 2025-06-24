@@ -499,6 +499,74 @@ void MainWindow::on_checkBox_vcodec_copy_2mp4_stateChanged(int) { /* STUB */ }
 void MainWindow::Add_progressBar_CompatibilityTest() { /* STUB */ }
 void MainWindow::TimeSlot() { /* STUB */ }
 int MainWindow::Waifu2x_Compatibility_Test_finished() { return 0; /* STUB */ }
+void MainWindow::Read_Input_paths_BrowserFile(QStringList Input_path_List)
+{
+    // Clear AddNew flags before processing
+    AddNew_image = false;
+    AddNew_video = false;
+    AddNew_gif = false;
+
+    // Get current items in tables to avoid duplicates efficiently
+    QSet<QString> existingImagePaths_set;
+    for (int i = 0; i < Table_model_image->rowCount(); ++i) {
+        existingImagePaths_set.insert(Table_model_image->item(i, 2)->text());
+    }
+    QSet<QString> existingGifPaths_set;
+    for (int i = 0; i < Table_model_gif->rowCount(); ++i) {
+        existingGifPaths_set.insert(Table_model_gif->item(i, 2)->text());
+    }
+    QSet<QString> existingVideoPaths_set;
+    for (int i = 0; i < Table_model_video->rowCount(); ++i) {
+        existingVideoPaths_set.insert(Table_model_video->item(i, 2)->text());
+    }
+
+    QList<FileLoadInfo> imagesToAdd_info;
+    QList<FileLoadInfo> gifsToAdd_info;
+    QList<FileLoadInfo> videosToAdd_info;
+
+    bool localAddNewImage = false;
+    bool localAddNewGif = false;
+    bool localAddNewVideo = false;
+
+    for (const QString &path : Input_path_List)
+    {
+        QFileInfo fileInfo(path);
+        if (fileInfo.isDir())
+        {
+            QDir dir(path);
+            QStringList fileEntries = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
+            for (const QString &fileName : fileEntries) {
+                QString fullPath = dir.filePath(fileName);
+                if (!Deduplicate_filelist_worker(fullPath, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set)) {
+                     QList<QPair<QString, QString>> img_tmp, gif_tmp, vid_tmp;
+                     bool laImg, laGif, laVid;
+                     FileList_Add(fileName, fullPath, img_tmp, gif_tmp, vid_tmp, laImg, laGif, laVid, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+                     if (laImg) { imagesToAdd_info.append({fileName, fullPath, tr("Waiting"), "", ""}); localAddNewImage = true; }
+                     if (laGif) { gifsToAdd_info.append({fileName, fullPath, tr("Waiting"), "", ""}); localAddNewGif = true; }
+                     if (laVid) { videosToAdd_info.append({fileName, fullPath, tr("Waiting"), "", ""}); localAddNewVideo = true; }
+                }
+            }
+        }
+        else if (fileInfo.isFile())
+        {
+            if (!Deduplicate_filelist_worker(path, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set)) {
+                QList<QPair<QString, QString>> img_tmp, gif_tmp, vid_tmp;
+                bool laImg, laGif, laVid;
+                FileList_Add(fileInfo.fileName(), path, img_tmp, gif_tmp, vid_tmp, laImg, laGif, laVid, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+                if (laImg) { imagesToAdd_info.append({fileInfo.fileName(), path, tr("Waiting"), "", ""}); localAddNewImage = true; }
+                if (laGif) { gifsToAdd_info.append({fileInfo.fileName(), path, tr("Waiting"), "", ""}); localAddNewGif = true; }
+                if (laVid) { videosToAdd_info.append({fileInfo.fileName(), path, tr("Waiting"), "", ""}); localAddNewVideo = true; }
+            }
+        }
+    }
+
+    Batch_Table_Update_slots(imagesToAdd_info, gifsToAdd_info, videosToAdd_info, localAddNewImage, localAddNewGif, localAddNewVideo);
+
+    if (localAddNewImage) AddNew_image = true;
+    if (localAddNewGif) AddNew_gif = true;
+    if (localAddNewVideo) AddNew_video = true;
+}
+
 int MainWindow::on_pushButton_RemoveItem_clicked()
 {
     QTableView *currentTableView = nullptr;
