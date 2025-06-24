@@ -13,7 +13,7 @@ jobs:
       - name: Install Qt and cppcheck
         run: |
           sudo apt-get update
-          sudo apt-get install -y qtbase5-dev cppcheck
+          sudo apt-get install -y qt6-base-dev cppcheck
       - name: Run cppcheck
         run: |
           ./tools/run_cppcheck.sh
