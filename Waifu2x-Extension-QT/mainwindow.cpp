@@ -493,32 +493,36 @@ QStringList MainWindow::getImageFullPaths() const {
 
 void MainWindow::Batch_Table_Update_slots(const QList<FileLoadInfo>& imagesToAdd, const QList<FileLoadInfo>& gifsToAdd, const QList<FileLoadInfo>& videosToAdd, bool doAddNewImage, bool doAddNewGif, bool doAddNewVideo)
 {
-    ui_tableViews_setUpdatesEnabled(false); // Disable updates for performance
+    // ui_tableViews_setUpdatesEnabled(false); // This was a STUB, removing call
 
-    if (doAddNewImage) {
+    if (doAddNewImage && Table_model_image) {
         for (const auto& fileInfo : imagesToAdd) {
             Table_image_insert_fileName_fullPath(fileInfo);
         }
     }
-    if (doAddNewGif) {
+    if (doAddNewGif && Table_model_gif) {
         for (const auto& fileInfo : gifsToAdd) {
             Table_gif_insert_fileName_fullPath(fileInfo);
         }
     }
-    if (doAddNewVideo) {
+    if (doAddNewVideo && Table_model_video) {
         for (const auto& fileInfo : videosToAdd) {
             Table_video_insert_fileName_fullPath(fileInfo);
         }
     }
 
-    ui_tableViews_setUpdatesEnabled(true); // Re-enable updates
+    // ui_tableViews_setUpdatesEnabled(true); // This was a STUB, removing call
 
-    // Optionally, refresh table views if not done automatically by model changes
-    // ui->tableView_image->viewport()->update();
-    // ui->tableView_gif->viewport()->update();
-    // ui->tableView_video->viewport()->update();
+    // Explicitly tell views that layout might have changed, though rowsInserted should cover it.
+    // This is more of a "just in case" or if updates were somehow suppressed.
+    // However, QStandardItemModel::appendRow should correctly notify the view.
+    // Forcing viewport update is usually not necessary if model/view is set up correctly.
+    // If issues persist, this might indicate a deeper problem with view updates.
+    // if (doAddNewImage && ui && ui->tableView_image) ui->tableView_image->viewport()->update();
+    // if (doAddNewGif && ui && ui->tableView_gif) ui->tableView_gif->viewport()->update();
+    // if (doAddNewVideo && ui && ui->tableView_video) ui->tableView_video->viewport()->update();
 
-    Table_FileCount_reload(); // Update file counts displayed in UI
+    Table_FileCount_reload(); // This is a STUB but called as per original logic flow
 }
 
 void MainWindow::on_pushButton_CustRes_apply_clicked() { /* STUB */ }
