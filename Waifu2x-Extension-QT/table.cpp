@@ -62,6 +62,19 @@ void MainWindow::Init_Table()
     ui->tableView_image->horizontalHeader()->setVisible(1);
     //=============================================
     emit Send_Table_EnableSorting(1);//Enable sorting for file lists
+
+    qDebug() << "[Debug] Init_Table: Finished Initializing Tables (in table.cpp).";
+    qDebug() << "[Debug] Init_Table: ui->tableView_image exists:" << (ui->tableView_image != nullptr);
+    if (Table_model_image) qDebug() << "[Debug] Init_Table: Table_model_image initial rowCount:" << Table_model_image->rowCount() << "columnCount:" << Table_model_image->columnCount();
+    else qDebug() << "[Debug] Init_Table: Table_model_image is NULL";
+
+    qDebug() << "[Debug] Init_Table: ui->tableView_gif exists:" << (ui->tableView_gif != nullptr);
+    if (Table_model_gif) qDebug() << "[Debug] Init_Table: Table_model_gif initial rowCount:" << Table_model_gif->rowCount() << "columnCount:" << Table_model_gif->columnCount();
+    else qDebug() << "[Debug] Init_Table: Table_model_gif is NULL";
+
+    qDebug() << "[Debug] Init_Table: ui->tableView_video exists:" << (ui->tableView_video != nullptr);
+    if (Table_model_video) qDebug() << "[Debug] Init_Table: Table_model_video initial rowCount:" << Table_model_video->rowCount() << "columnCount:" << Table_model_video->columnCount();
+    else qDebug() << "[Debug] Init_Table: Table_model_video is NULL";
 }
 /*
 Refresh file count under TableView
