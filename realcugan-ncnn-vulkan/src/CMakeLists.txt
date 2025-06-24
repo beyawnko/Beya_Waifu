@@ -21,7 +21,7 @@ endif()
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -march=native" CACHE STRING "Release flags" FORCE)
 
 option(USE_SYSTEM_NCNN "build with system libncnn" OFF)
-option(USE_SYSTEM_WEBP "build with system libwebp" OFF)
+option(USE_SYSTEM_WEBP "build with system libwebp" ON)
 option(USE_STATIC_MOLTENVK "link moltenvk static library" OFF)
 
 find_package(Threads)
@@ -89,18 +89,19 @@ if(USE_SYSTEM_NCNN)
     endif()
 endif()
 
-if(USE_SYSTEM_NCNN)
-    find_package(ncnn)
-    if(NOT TARGET ncnn)
-        message(WARNING "ncnn target not found! USE_SYSTEM_NCNN will be turned off.")
-        set(USE_SYSTEM_NCNN OFF)
-    endif()
-endif()
+# if(USE_SYSTEM_NCNN) # Section removed as USE_SYSTEM_NCNN is OFF by default
+#     find_package(ncnn)
+#     if(NOT TARGET ncnn)
+#         message(WARNING "ncnn target not found! USE_SYSTEM_NCNN will be turned off.")
+#         set(USE_SYSTEM_NCNN OFF)
+#     endif()
+# endif()
 
 if(NOT USE_SYSTEM_NCNN)
     # build ncnn library
-    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ncnn/CMakeLists.txt")
-        message(FATAL_ERROR "The submodules were not downloaded! Please update submodules with \"git submodule update --init --recursive\" and try again.")
+    # When USE_SYSTEM_NCNN is OFF (default), we expect to find ncnn at the root.
+    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../ncnn/CMakeLists.txt")
+        message(FATAL_ERROR "NCNN root directory not found at ${CMAKE_CURRENT_SOURCE_DIR}/../../ncnn/CMakeLists.txt. This is required when USE_SYSTEM_NCNN is OFF.")
     endif()
 
     option(NCNN_INSTALL_SDK "" OFF)
@@ -212,12 +213,19 @@ if(NOT USE_SYSTEM_NCNN)
     option(WITH_LAYER_einsum "" OFF)
     option(WITH_LAYER_deformableconv2d "" OFF)
 
-    add_subdirectory(ncnn)
+    add_subdirectory(../../ncnn ${CMAKE_BINARY_DIR}/ncnn_build_realcugan)
 endif()
 
 if(USE_SYSTEM_WEBP)
     set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
+    find_package(PkgConfig REQUIRED) # Ensure PkgConfig is found
     find_package(WebP)
+    message(STATUS "WebP_FOUND: ${WebP_FOUND}")
+    if(TARGET webp)
+        message(STATUS "Target webp IS defined.")
+    else()
+        message(STATUS "Target webp IS NOT defined.")
+    endif()
     if(NOT TARGET webp)
         message(WARNING "webp target not found! USE_SYSTEM_WEBP will be turned off.")
         set(USE_SYSTEM_WEBP OFF)

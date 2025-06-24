@@ -1,0 +1,9 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform:
+
+/app/realcugan-ncnn-vulkan/build/CMakeFiles/_CMakeLTOTest-C/src/main.c
