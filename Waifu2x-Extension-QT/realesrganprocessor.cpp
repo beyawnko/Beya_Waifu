@@ -12,12 +12,14 @@
 
 RealEsrganProcessor::RealEsrganProcessor(QObject *parent) : QObject(parent)
 {
-    m_process = new QProcess(this);
-    m_ffmpegProcess = new QProcess(this); // For old video method
+    m_process = new QProcess(this); // For RealESRGAN CLI
+    m_ffmpegProcess = new QProcess(this); // For old video method (split/assemble)
+    m_ffmpegEncoderProcess = new QProcess(this); // For new pipe method (final encoding)
 
-    // New processes for piped video
-    m_ffmpegDecoderProcess = new QProcess(this);
-    m_ffmpegEncoderProcess = new QProcess(this);
+    // Initialize QMediaPlayer and QVideoSink
+    m_mediaPlayer = new QMediaPlayer(this);
+    m_videoSink = new QVideoSink(this);
+    m_mediaPlayer->setVideoSink(m_videoSink);
 
     cleanup(); // Initialize state, including m_state = State::Idle
 
@@ -25,23 +27,23 @@ RealEsrganProcessor::RealEsrganProcessor(QObject *parent) : QObject(parent)
     connect(m_process, &QProcess::errorOccurred, this, &RealEsrganProcessor::onProcessError);
     connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealEsrganProcessor::onProcessFinished);
     connect(m_process, &QProcess::readyReadStandardOutput, this, &RealEsrganProcessor::onReadyReadStandardOutput);
-    // connect(m_process, &QProcess::readyReadStandardError, this, &RealEsrganProcessor::onProcessStdErr); // Optional: if SR engine uses stderr for progress/errors
 
     // Connections for m_ffmpegProcess (old video method)
     connect(m_ffmpegProcess, &QProcess::errorOccurred, this, &RealEsrganProcessor::onFfmpegError);
     connect(m_ffmpegProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealEsrganProcessor::onFfmpegFinished);
     connect(m_ffmpegProcess, &QProcess::readyReadStandardError, this, &RealEsrganProcessor::onFfmpegStdErr);
 
-    // Connections for m_ffmpegDecoderProcess (new piped video)
-    connect(m_ffmpegDecoderProcess, &QProcess::readyReadStandardOutput, this, &RealEsrganProcessor::onPipeDecoderReadyReadStandardOutput);
-    connect(m_ffmpegDecoderProcess, &QProcess::readyReadStandardError, this, &RealEsrganProcessor::onPipeDecoderReadyReadStandardError);
-    connect(m_ffmpegDecoderProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealEsrganProcessor::onPipeDecoderFinished);
-    connect(m_ffmpegDecoderProcess, &QProcess::errorOccurred, this, &RealEsrganProcessor::onPipeDecoderError);
+    // Connections for QMediaPlayer/QVideoSink
+    connect(m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, &RealEsrganProcessor::onMediaPlayerStatusChanged);
+    connect(m_mediaPlayer, static_cast<void(QMediaPlayer::*)(QMediaPlayer::Error, const QString &)>(&QMediaPlayer::errorOccurred), this, &RealEsrganProcessor::onMediaPlayerError);
+    connect(m_videoSink, &QVideoSink::videoFrameChanged, this, &RealEsrganProcessor::onQtVideoFrameChanged);
 
     // Connections for m_ffmpegEncoderProcess (new piped video)
     connect(m_ffmpegEncoderProcess, &QProcess::readyReadStandardError, this, &RealEsrganProcessor::onPipeEncoderReadyReadStandardError);
     connect(m_ffmpegEncoderProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealEsrganProcessor::onPipeEncoderFinished);
     connect(m_ffmpegEncoderProcess, &QProcess::errorOccurred, this, &RealEsrganProcessor::onPipeEncoderError);
+
+    // m_ffmpegDecoderProcess is removed, its connections are no longer needed.
 }
 
 RealEsrganProcessor::~RealEsrganProcessor()
@@ -55,16 +57,13 @@ RealEsrganProcessor::~RealEsrganProcessor()
         m_ffmpegProcess->kill();
         m_ffmpegProcess->waitForFinished(500);
     }
-    if (m_ffmpegDecoderProcess && m_ffmpegDecoderProcess->state() != QProcess::NotRunning) {
-        m_ffmpegDecoderProcess->kill();
-        m_ffmpegDecoderProcess->waitForFinished(500);
-    }
+    cleanupQtMediaPlayer(); // Stop player and release QMediaPlayer resources
     if (m_ffmpegEncoderProcess && m_ffmpegEncoderProcess->state() != QProcess::NotRunning) {
         m_ffmpegEncoderProcess->kill();
         m_ffmpegEncoderProcess->waitForFinished(500);
     }
-    cleanupVideo();
-    cleanupPipeProcesses();
+    cleanupVideo(); // Old method temps
+    cleanupPipeProcesses(); // New method temps (audio, job dir)
 }
 
 void RealEsrganProcessor::cleanup()
@@ -88,23 +87,44 @@ void RealEsrganProcessor::cleanup()
     if (m_process && m_process->state() != QProcess::NotRunning) {
         m_process->kill();
     }
-    if (m_ffmpegProcess && m_ffmpegProcess->state() != QProcess::NotRunning) { // Old method ffmpeg
+    if (m_ffmpegProcess && m_ffmpegProcess->state() != QProcess::NotRunning) { // Old method ffmpeg for split/assemble
         m_ffmpegProcess->kill();
     }
 
-    cleanupPipeProcesses(); // Clean new pipe processes and associated temp files
+    cleanupQtMediaPlayer();   // Clean up QMediaPlayer related resources
+    cleanupPipeProcesses(); // Clean new pipe processes (SR engine, encoder) and associated temp files
     cleanupVideo();         // Clean old method temp files
 
     m_state = State::Idle;
 }
 
+void RealEsrganProcessor::cleanupQtMediaPlayer()
+{
+    if (m_mediaPlayer) {
+        if (m_mediaPlayer->playbackState() != QMediaPlayer::StoppedState) {
+            m_mediaPlayer->stop();
+        }
+        m_mediaPlayer->setSource(QUrl()); // Release media source
+    }
+    m_qtVideoFrameBuffer.clear();
+    m_mediaPlayerPausedByBackpressure = false;
+    m_framesDeliveredBySink = 0;
+    m_framesAcceptedBySR = 0;
+}
+
 void RealEsrganProcessor::cleanupPipeProcesses()
 {
-    if (m_ffmpegDecoderProcess && m_ffmpegDecoderProcess->state() != QProcess::NotRunning) {
-        m_ffmpegDecoderProcess->kill();
-        m_ffmpegDecoderProcess->waitForFinished(500);
-    }
+    // m_ffmpegDecoderProcess is replaced by QtMultimedia, so no need to kill it here.
+    // cleanupQtMediaPlayer() handles QMediaPlayer.
+
     // m_process (SR engine) is handled by general cleanup() if it was used for pipe mode and got stuck.
+    // This check is already in cleanup(), so this might be redundant if cleanup() is always called.
+    // However, if cleanupPipeProcesses is called independently:
+    if (m_process && m_process->state() != QProcess::NotRunning) { // Ensure SR process is stopped
+        m_process->kill();
+        m_process->waitForFinished(100); // Shorter wait as main cleanup might also try
+    }
+
     if (m_ffmpegEncoderProcess && m_ffmpegEncoderProcess->state() != QProcess::NotRunning) {
         m_ffmpegEncoderProcess->kill();
         m_ffmpegEncoderProcess->waitForFinished(500);
@@ -114,11 +134,11 @@ void RealEsrganProcessor::cleanupPipeProcesses()
         QFile::remove(m_tempAudioPathPipe);
         m_tempAudioPathPipe.clear();
     }
-    m_currentDecodedFrameBuffer.clear();
+    m_currentDecodedFrameBuffer.clear(); // This will store data from QVideoFrame
     m_currentUpscaledFrameBuffer.clear();
     m_framesProcessedPipe = 0;
     m_totalFramesEstimatePipe = 0;
-    m_allFramesDecoded = false;
+    m_allFramesDecoded = false;          // This will be set by QMediaPlayer::EndOfMedia
     m_allFramesSentToEncoder = false;
 }
 
@@ -150,11 +170,56 @@ void RealEsrganProcessor::processImage(int rowNum, const QString &sourceFile, co
     m_currentPassInputFile = sourceFile;
     m_scaleSequence.clear();
     // ... (existing multi-pass logic from processImage) ...
-    if (m_settings.targetScale <= 0 || m_settings.modelNativeScale <= 0) { /* ... error ... */ return;}
-    if (m_settings.targetScale == 1) { m_scaleSequence.enqueue(m_settings.modelNativeScale); }
-    else if (m_settings.targetScale < m_settings.modelNativeScale) { m_scaleSequence.enqueue(m_settings.modelNativeScale); }
-    else { /* ... multi-pass enqueue logic ... */ }
-    if (m_scaleSequence.isEmpty()){ m_scaleSequence.enqueue(m_settings.modelNativeScale); }
+    // This part handles the logic for multi-pass upscaling for single images
+    // or frames from the old video method. It is complex and not directly
+    // affected by the QMediaPlayer change for *new* video processing.
+    // For brevity, assuming the existing complex logic for multi-pass image scaling is here.
+    // Example:
+    if (m_settings.targetScale <= 0 || m_settings.modelNativeScale <= 0) {
+        emit logMessage(tr("Error: Invalid scale settings for RealESRGAN."));
+        finalizePipedVideoProcessing(false); // Or a more general error path
+        return;
+    }
+
+    // Build scale sequence
+    m_scaleSequence.clear();
+    double currentOverallScale = 1.0;
+    double targetOverallScale = static_cast<double>(m_settings.targetScale);
+    int nativeModelScale = m_settings.modelNativeScale;
+
+    if (targetOverallScale == 1.0 && nativeModelScale > 1) { // Denoise only or same size with a specific model
+        m_scaleSequence.enqueue(nativeModelScale);
+    } else {
+        while (currentOverallScale < targetOverallScale) {
+            if (currentOverallScale * nativeModelScale > targetOverallScale && currentOverallScale < targetOverallScale) {
+                // If next full step overshoots, but we are not there yet,
+                // and if there's a smaller model that could get closer, this logic would be more complex.
+                // For now, just use the native scale. The last step might produce a larger image than target,
+                // which then might need a downscale (handled outside this processor or by user).
+                // Or, the user should pick a model sequence that achieves the target scale.
+                // This simple loop just applies the nativeModelScale until target is met or exceeded.
+                m_scaleSequence.enqueue(nativeModelScale);
+                currentOverallScale *= nativeModelScale;
+            } else if (currentOverallScale * nativeModelScale <= targetOverallScale) {
+                m_scaleSequence.enqueue(nativeModelScale);
+                currentOverallScale *= nativeModelScale;
+            } else { // currentOverallScale * nativeModelScale > targetOverallScale AND currentOverallScale >= targetOverallScale
+                break; // Already met or exceeded target
+            }
+            if (m_scaleSequence.size() > 5) break; // Safety break for too many passes
+        }
+    }
+    if (m_scaleSequence.isEmpty() && targetOverallScale >= 1.0) { // Ensure at least one pass if target scale is >= 1
+        m_scaleSequence.enqueue(nativeModelScale);
+    }
+
+
+    if (m_scaleSequence.isEmpty()) {
+         emit logMessage(tr("RealESRGAN: No scaling passes determined for image. Using native model scale."));
+         m_scaleSequence.enqueue(nativeModelScale); // Default to one pass with native scale
+    }
+    // End of example multi-pass logic setup
+
     startNextPass(); // This eventually calls m_process->start() with buildArguments()
 }
 
@@ -163,12 +228,46 @@ void RealEsrganProcessor::startNextPass() {
     // This method is used by the file-based processImage.
     // For brevity, not repeating it fully. It uses buildArguments() and m_process.
     if (m_process->state() != QProcess::NotRunning) { return; }
-    if (m_scaleSequence.isEmpty()) { return; }
-    // ... logic to determine m_currentPassOutputFile ...
+    if (m_scaleSequence.isEmpty()) {
+        // This means all passes for the current m_originalSourceFile (image or old video frame) are done.
+        // If m_originalSourceFile was an intermediate file from a previous pass, rename it to m_finalDestinationFile.
+        if (m_currentPassInputFile != m_originalSourceFile && m_currentPassInputFile == m_finalDestinationFile) {
+            // All good, final output is already named correctly.
+        } else if (m_currentPassInputFile != m_finalDestinationFile) {
+            // This implies the last output (m_currentPassInputFile) needs to be moved/renamed to m_finalDestinationFile
+            // This case needs careful handling of m_currentPassOutputFile vs m_finalDestinationFile
+            // The current logic in onProcessFinished for single images handles the final move.
+        }
+        // The actual finalization of image processing or moving to next video frame (old method) happens in onProcessFinished.
+        return;
+    }
+
+    int scaleForThisPass = m_scaleSequence.head(); // Don't dequeue yet, onProcessFinished will.
+                                                 // Actually, buildArguments uses m_settings.modelNativeScale.
+                                                 // The m_scaleSequence is more for tracking how many passes.
+                                                 // The actual -s parameter to the EXE is always modelNativeScale for multi-pass.
+
+    // Determine output file for this pass
+    if (m_scaleSequence.size() == 1) { // Last pass
+        m_currentPassOutputFile = m_finalDestinationFile;
+    } else { // Intermediate pass
+        QString tempPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+        m_currentPassOutputFile = QDir(tempPath).filePath(QString("realesrgan_pass_%1_%2.png")
+                                                          .arg(QFileInfo(m_originalSourceFile).completeBaseName())
+                                                          .arg(QTime::currentTime().toString("hhmmsszzz")));
+    }
+
+
     QStringList arguments = buildArguments(m_currentPassInputFile, m_currentPassOutputFile);
+    if (m_settings.verboseLog) qDebug() << "RealESRGAN Starting Pass:" << m_settings.programPath << arguments.join(" ");
     m_process->start(m_settings.programPath, arguments);
-    if (!m_process->waitForStarted(2000)) { /* ... error handling ... */ }
-    m_scaleSequence.dequeue();
+    if (!m_process->waitForStarted(5000)) { // Increased timeout for starting
+        emit logMessage(tr("RealESRGAN process failed to start for pass. Path: %1").arg(m_settings.programPath));
+        processingFinished(m_currentRowNum, false); // Signal failure for the whole job
+        cleanup();
+        return;
+    }
+    // m_scaleSequence.dequeue(); // Dequeue in onProcessFinished after successful completion of the pass
 }
 
 
@@ -181,7 +280,8 @@ void RealEsrganProcessor::processVideo(int rowNum, const QString &sourceFile, co
     }
 
     cleanupPipeProcesses(); // Clean up from any previous pipe attempt
-    cleanupVideo();         // Clean up old method's temp files
+    cleanupVideo();         // Clean up old method's temp files (though this path won't use it)
+    cleanupQtMediaPlayer(); // Ensure player is clean before new use
 
     m_state = State::PipeDecodingVideo;
     m_currentRowNum = rowNum;
@@ -189,23 +289,33 @@ void RealEsrganProcessor::processVideo(int rowNum, const QString &sourceFile, co
     m_settings = settings; // Store current settings
     m_settings.sourceFile = sourceFile; // Ensure sourceFile is in settings for helpers
 
-    m_framesProcessedPipe = 0;
-    m_totalFramesEstimatePipe = 0;
-    m_currentDecodedFrameBuffer.clear();
-    m_currentUpscaledFrameBuffer.clear();
-    m_allFramesDecoded = false;
+    // Initialize QMediaPlayer related states
+    m_framesDeliveredBySink = 0;
+    m_framesAcceptedBySR = 0;
+    m_mediaPlayerPausedByBackpressure = false;
+    m_qtVideoFrameBuffer.clear();
+    m_allFramesDecoded = false; // Reset for the new video
+
+    m_currentDecodedFrameBuffer.clear(); // For data from QVideoFrame to SR
+    m_currentUpscaledFrameBuffer.clear(); // For data from SR to Encoder
     m_allFramesSentToEncoder = false;
     m_inputPixelFormat = "bgr24"; // Default for FFmpeg raw output, matches what SR engine expects
 
     emit statusChanged(m_currentRowNum, tr("Starting video processing (pipe)..."));
     emit logMessage(tr("Real-ESRGAN Video (pipe) started for: %1").arg(QFileInfo(sourceFile).fileName()));
 
-    if (!getVideoInfoPipe(sourceFile)) {
+    if (!getVideoInfoPipe(sourceFile)) { // This extracts audio and gets video metadata
         finalizePipedVideoProcessing(false);
         return;
     }
 
-    startPipeDecoder();
+    // Set QMediaPlayer source. Playback starts when LoadedMedia status is received.
+    m_mediaPlayer->setSource(QUrl::fromLocalFile(m_settings.sourceFile));
+    if (m_settings.verboseLog) qDebug() << "RealESRGAN QMediaPlayer: Source set to" << m_settings.sourceFile << ". Waiting for LoadedMedia status.";
+    emit statusChanged(m_currentRowNum, tr("Loading video (Qt)..."));
+
+
+    // Start the FFmpeg encoder process; it will wait for piped input.
     startPipeEncoder();
 }
 
@@ -214,35 +324,63 @@ void RealEsrganProcessor::onProcessFinished(int exitCode, QProcess::ExitStatus e
 {
     // This slot now needs to handle finishes for:
     // 1. Image processing (single or multi-pass for a single image)
-    // 2. Old file-based video frame processing
+    // 2. Old file-based video frame processing (routed through image processing logic for frames)
     // 3. New pipe-based SR engine processing for a single video frame
 
     if (m_state == State::Idle) return;
 
     bool success = (exitStatus == QProcess::NormalExit && exitCode == 0);
 
-    if (m_state == State::ProcessingImage) { // Handles single image and individual frames from old video method
-        // ... (existing logic for image and old video frame multi-pass completion) ...
-        // This part is complex due to multi-pass. Assuming it correctly calls finalize for single image
-        // or startNextVideoFrame/startVideoAssembly for old video method.
-        // For brevity, the full multi-pass logic is not duplicated here again.
-        // Key is that it eventually calls emit processingFinished() or starts next video step.
-        if (!success) { /* ... log error ... */ }
-        if (m_scaleSequence.isEmpty()) { // All passes for this image/frame done
-            if (QFileInfo(m_originalSourceFile).suffix().isEmpty()) { // Heuristic: if originalSourceFile was a frame (no suffix)
-                 // This was a frame for the old video method
+    if (m_state == State::ProcessingImage) {
+        // This handles single images AND frames from the old video method.
+        if (!success) {
+            emit logMessage(tr("RealESRGAN: Pass failed for %1. Exit code: %2").arg(m_currentPassInputFile).arg(exitCode));
+            if (!QFileInfo(m_originalSourceFile).suffix().isEmpty()) {
+                 emit processingFinished(m_currentRowNum, false);
+            } else {
+                 emit logMessage(tr("RealESRGAN: Frame processing failed for old video method. Aborting video."));
+                 emit processingFinished(m_currentRowNum, false);
+            }
+            cleanup();
+            return;
+        }
+
+        if (!m_scaleSequence.isEmpty()) {
+             m_scaleSequence.dequeue();
+        }
+
+        if (m_scaleSequence.isEmpty()) {
+            if (m_currentPassOutputFile != m_finalDestinationFile) {
+                if (QFile::exists(m_finalDestinationFile)) QFile::remove(m_finalDestinationFile);
+                if (!QFile::rename(m_currentPassOutputFile, m_finalDestinationFile)) {
+                    emit logMessage(tr("RealESRGAN: Failed to rename temp file %1 to %2.")
+                                    .arg(m_currentPassOutputFile).arg(m_finalDestinationFile));
+                    success = false;
+                } else {
+                     if (m_settings.verboseLog) qDebug() << "RealESRGAN: Renamed" << m_currentPassOutputFile << "to" << m_finalDestinationFile;
+                }
+            }
+            if (m_currentPassInputFile != m_originalSourceFile && m_currentPassInputFile != m_finalDestinationFile) {
+                 if (QFile::exists(m_currentPassInputFile)) QFile::remove(m_currentPassInputFile);
+            }
+
+            if (QFileInfo(m_originalSourceFile).suffix().isEmpty()) {
                 m_video_processedFrames++;
                 if (m_video_totalFrames > 0) emit fileProgress(m_currentRowNum, (100 * m_video_processedFrames) / m_video_totalFrames);
-                if (m_video_frameQueue.isEmpty()) startVideoAssembly(); else startNextVideoFrame();
-            } else { // This was a single image task
+                if (m_video_frameQueue.isEmpty()) {
+                    startVideoAssembly();
+                } else {
+                    startNextVideoFrame();
+                }
+            } else {
                 emit processingFinished(m_currentRowNum, success);
                 cleanup();
             }
         } else {
-            startNextPass(); // More passes for current image/frame
+            m_currentPassInputFile = m_currentPassOutputFile;
+            startNextPass();
         }
-        // --- End of adapted existing logic snippet ---
-    } else if (m_state == State::PipeProcessingSR) { // SR engine (m_process) finished for a piped frame
+    } else if (m_state == State::PipeProcessingSR) { // SR engine (m_process) finished for a NEW piped video frame
         if (!success) {
             emit logMessage(tr("RealESRGAN pipe processing for a frame failed. Exit code: %1, Status: %2").arg(exitCode).arg(exitStatus));
             QByteArray errorMsg = m_process->readAllStandardError();
@@ -251,29 +389,15 @@ void RealEsrganProcessor::onProcessFinished(int exitCode, QProcess::ExitStatus e
             return;
         }
 
-        if (m_settings.verboseLog) qDebug() << "RealESRGAN (pipe) finished for one frame. Output should have been read.";
+        if (m_settings.verboseLog) qDebug() << "RealESRGAN (pipe) finished one frame for SR. Accepted by SR:" << m_framesAcceptedBySR;
 
-        if (m_allFramesDecoded && m_currentDecodedFrameBuffer.isEmpty()) {
-            if (m_ffmpegEncoderProcess && m_ffmpegEncoderProcess->state() == QProcess::Running && !m_allFramesSentToEncoder) {
-                 m_ffmpegEncoderProcess->closeWriteChannel();
-                 if (m_settings.verboseLog) qDebug() << "All frames processed by SR, closing encoder stdin.";
-                 m_allFramesSentToEncoder = true;
-            }
-            m_state = State::PipeEncodingVideo;
-        } else {
-            m_state = State::PipeDecodingVideo;
-            if (!m_currentDecodedFrameBuffer.isEmpty()){
-                processDecodedFrameBuffer();
-            } else if (m_allFramesDecoded && m_ffmpegEncoderProcess && m_ffmpegEncoderProcess->state() == QProcess::Running && !m_allFramesSentToEncoder) {
-                // All decoded, buffer empty, SR finished, ensure encoder stdin is closed
-                m_ffmpegEncoderProcess->closeWriteChannel();
-                m_allFramesSentToEncoder = true;
-                 if (m_settings.verboseLog) qDebug() << "Safeguard (SR Finish): All frames SR'd, closing encoder stdin.";
-                m_state = State::PipeEncodingVideo;
-            }
+        if (m_totalFramesEstimatePipe > 0 && m_framesAcceptedBySR <= m_totalFramesEstimatePipe) {
+             emit fileProgress(m_currentRowNum, (100 * m_framesAcceptedBySR) / m_totalFramesEstimatePipe);
         }
+
+        m_state = State::PipeDecodingVideo;
+        processDecodedFrameBuffer();
     }
-    // Note: The old State::ProcessingVideoFrames is handled within State::ProcessingImage block's multi-pass logic
 }
 
 
@@ -731,21 +855,243 @@ void RealEsrganProcessor::cleanupVideo() {
 }
 
 void RealEsrganProcessor::onFfmpegError(QProcess::ProcessError error) {
-    if (m_state == State::Idle) return;
-    emit logMessage(QString(tr("FFmpeg process failed to start. State: %1, Error: %2 (Code: %3)"))
-                    .arg((int)m_state)
-                    .arg(m_ffmpegProcess->errorString())
-                    .arg(error));
-    cleanupVideo();
-    emit statusChanged(m_currentRowNum, tr("FFmpeg Start Error"));
-    emit processingFinished(m_currentRowNum, false);
-    cleanup();
+    // This slot is for the m_ffmpegProcess (OLD video method for splitting/assembly)
+    if (m_state == State::SplittingVideo || m_state == State::AssemblingVideo) {
+        emit logMessage(QString(tr("FFmpeg (old video method) process error: %1. Code: %2"))
+                        .arg(m_ffmpegProcess->errorString())
+                        .arg(error));
+        cleanupVideo(); // Clean up specific video temp files
+        emit statusChanged(m_currentRowNum, tr("FFmpeg Error (Old Vid)"));
+        finalizePipedVideoProcessing(false); // Use this for consistent cleanup and finish signal
+    } else if (m_settings.verboseLog && m_state != State::Idle) {
+         qDebug() << "onFfmpegError called for m_ffmpegProcess in unexpected state:" << (int)m_state << "Error:" << error;
+    }
 }
 
 void RealEsrganProcessor::onFfmpegStdErr() {
-    if (m_state == State::Idle) return;
-    QByteArray data = m_ffmpegProcess->readAllStandardError();
-    // FFmpeg often outputs verbose info to stderr, even on success.
-    // May need filtering if it's too noisy for general logs.
-    emit logMessage("FFmpeg: " + QString::fromLocal8Bit(data).trimmed());
+    // This slot is for the m_ffmpegProcess (OLD video method for splitting/assembly)
+    if (m_state == State::SplittingVideo || m_state == State::AssemblingVideo) {
+        QByteArray data = m_ffmpegProcess->readAllStandardError();
+        emit logMessage("FFmpeg (Old Vid): " + QString::fromLocal8Bit(data).trimmed());
+    }
+}
+
+// --- Slots for QMediaPlayer/QVideoSink based decoding ---
+
+void RealEsrganProcessor::onMediaPlayerStatusChanged(QMediaPlayer::MediaStatus status)
+{
+    if (m_state != State::PipeDecodingVideo) {
+        // If not in active decoding, only log critical errors or ignore.
+        if (status == QMediaPlayer::InvalidMedia && m_currentRowNum != -1) { // Check if a job was active
+             emit logMessage(tr("QMediaPlayer Error: Invalid media - %1").arg(m_settings.sourceFile));
+             finalizePipedVideoProcessing(false);
+        }
+        return;
+    }
+
+    switch (status) {
+    case QMediaPlayer::LoadedMedia:
+        if (m_settings.verboseLog) qDebug() << "RealESRGAN QMediaPlayer: Media loaded. Total frames estimate:" << m_totalFramesEstimatePipe;
+        m_mediaPlayer->play();
+        emit statusChanged(m_currentRowNum, tr("Decoding (Qt)..."));
+        break;
+    case QMediaPlayer::EndOfMedia:
+        if (m_settings.verboseLog) qDebug() << "RealESRGAN QMediaPlayer: EndOfMedia. Delivered:" << m_framesDeliveredBySink << "Accepted by SR:" << m_framesAcceptedBySR;
+        m_allFramesDecoded = true;
+        processDecodedFrameBuffer(); // Process any remaining buffered QVideoFrames
+        // Further checks for closing encoder pipe are handled within processDecodedFrameBuffer when m_allFramesDecoded is true
+        break;
+    case QMediaPlayer::InvalidMedia:
+        emit logMessage(tr("QMediaPlayer Error: Invalid media - %1").arg(m_settings.sourceFile));
+        finalizePipedVideoProcessing(false);
+        break;
+    case QMediaPlayer::NoMedia:
+        if (m_settings.verboseLog) qDebug() << "RealESRGAN QMediaPlayer: NoMedia status.";
+        if (m_state == State::PipeDecodingVideo) { // If we expected media
+            emit logMessage(tr("QMediaPlayer Error: No media present during decoding for %1.").arg(m_settings.sourceFile));
+            finalizePipedVideoProcessing(false);
+        }
+        break;
+    case QMediaPlayer::BufferingMedia:
+        if (m_settings.verboseLog) qDebug() << "RealESRGAN QMediaPlayer: Buffering media...";
+        emit statusChanged(m_currentRowNum, tr("Buffering (Qt)..."));
+        break;
+    case QMediaPlayer::BufferedMedia:
+        if (m_settings.verboseLog) qDebug() << "RealESRGAN QMediaPlayer: Media buffered.";
+        if (m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState && !m_mediaPlayerPausedByBackpressure) {
+            if (m_settings.verboseLog) qDebug() << "RealESRGAN QMediaPlayer: Media buffered, resuming playback.";
+            m_mediaPlayer->play();
+        }
+        break;
+    case QMediaPlayer::LoadingMedia:
+         // Status already set in processVideo to "Loading video (Qt)..."
+         if (m_settings.verboseLog) qDebug() << "RealESRGAN QMediaPlayer: Loading media status confirmed.";
+        break;
+    default:
+        if (m_settings.verboseLog) qDebug() << "RealESRGAN QMediaPlayer: Unhandled media status:" << status;
+        break;
+    }
+}
+
+void RealEsrganProcessor::onMediaPlayerError(QMediaPlayer::Error error, const QString &errorString)
+{
+    if (m_state == State::Idle && error == QMediaPlayer::NoError) return; // Ignore NoError if idle
+
+    emit logMessage(tr("RealESRGAN QMediaPlayer Error: %1 (Code: %2). Source: %3").arg(errorString).arg(error).arg(m_settings.sourceFile));
+    finalizePipedVideoProcessing(false);
+}
+
+void RealEsrganProcessor::onQtVideoFrameChanged(const QVideoFrame &frame)
+{
+    if (m_state != State::PipeDecodingVideo && m_state != State::PipeProcessingSR) {
+        if (frame.isValid() && m_settings.verboseLog) {
+            qDebug() << "RealESRGAN QVideoSink: Frame received in non-processing state" << (int)m_state << "- dropping.";
+        }
+        return;
+    }
+
+    if (!frame.isValid()) {
+        if (m_settings.verboseLog) qDebug() << "RealESRGAN QVideoSink: Invalid frame received.";
+        return;
+    }
+
+    m_framesDeliveredBySink++;
+    if (m_settings.verboseLog && m_framesDeliveredBySink % 100 == 0) {
+        qDebug() << "RealESRGAN QVideoSink: Frame" << m_framesDeliveredBySink << "received. Format:" << frame.pixelFormat();
+    }
+
+    if ((m_process && m_process->state() == QProcess::Running) || m_qtVideoFrameBuffer.size() > 5) {
+        if (m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PlayingState && !m_mediaPlayerPausedByBackpressure) {
+            m_mediaPlayer->pause();
+            m_mediaPlayerPausedByBackpressure = true;
+            if (m_settings.verboseLog) qDebug() << "RealESRGAN QVideoSink: Pausing QMediaPlayer (backpressure). Buffered QFrames:" << m_qtVideoFrameBuffer.size();
+        }
+        m_qtVideoFrameBuffer.enqueue(frame);
+        return;
+    }
+
+    QVideoFrame frameToProcess;
+    if (!m_qtVideoFrameBuffer.isEmpty()) {
+        frameToProcess = m_qtVideoFrameBuffer.dequeue();
+    } else {
+        frameToProcess = frame;
+    }
+
+    QVideoFrame mappedFrame = frameToProcess;
+    if (!mappedFrame.map(QVideoFrame::ReadOnly)) {
+        emit logMessage(tr("RealESRGAN Error: Could not map QVideoFrame."));
+        if (m_mediaPlayerPausedByBackpressure && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState) {
+             m_mediaPlayer->play(); m_mediaPlayerPausedByBackpressure = false;
+        }
+        return;
+    }
+
+    QImage::Format targetFormat = (m_inputPixelFormat == "rgb24") ? QImage::Format_RGB888 : QImage::Format_BGR888;
+    QImage image = mappedFrame.toImage().convertToFormat(targetFormat);
+    mappedFrame.unmap();
+
+    if (image.isNull()) {
+        emit logMessage(tr("RealESRGAN Error: Failed to convert QVideoFrame to QImage."));
+        if (m_mediaPlayerPausedByBackpressure && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState) {
+             m_mediaPlayer->play(); m_mediaPlayerPausedByBackpressure = false;
+        }
+        return;
+    }
+
+    m_currentDecodedFrameBuffer = QByteArray(reinterpret_cast<const char*>(image.constBits()), imagesize_t(image.sizeInBytes()));
+    m_framesAcceptedBySR++;
+    if (m_settings.verboseLog && m_framesAcceptedBySR % 100 == 0) {
+         qDebug() << "RealESRGAN QVideoSink: Frame" << m_framesAcceptedBySR << "being sent to SR.";
+    }
+    startRealEsrganPipe(m_currentDecodedFrameBuffer); // This sets state to PipeProcessingSR if successful
+    m_currentDecodedFrameBuffer.clear();
+
+    if (m_mediaPlayerPausedByBackpressure && m_qtVideoFrameBuffer.size() < 2 && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState) {
+        m_mediaPlayer->play();
+        m_mediaPlayerPausedByBackpressure = false;
+        if (m_settings.verboseLog) qDebug() << "RealESRGAN QVideoSink: Resuming QMediaPlayer. Buffer low.";
+    }
+    // Try to process next from buffer if SR is free (e.g. if current frame was small and SR finished quickly)
+    if (m_process && m_process->state() == QProcess::NotRunning && !m_qtVideoFrameBuffer.isEmpty()) {
+        processDecodedFrameBuffer();
+    }
+}
+
+// --- Adapted processDecodedFrameBuffer for QVideoFrame from m_qtVideoFrameBuffer ---
+void RealEsrganProcessor::processDecodedFrameBuffer() {
+    if (m_process && m_process->state() == QProcess::Running) {
+        return; // SR engine busy
+    }
+
+    if (m_qtVideoFrameBuffer.isEmpty()) {
+        if (m_allFramesDecoded && m_currentDecodedFrameBuffer.isEmpty()) { // Ensure no lingering byte array data either
+            if (m_ffmpegEncoderProcess && m_ffmpegEncoderProcess->state() == QProcess::Running && !m_allFramesSentToEncoder) {
+                m_ffmpegEncoderProcess->closeWriteChannel();
+                m_allFramesSentToEncoder = true;
+                if (m_settings.verboseLog) qDebug() << "RealESRGAN processDecodedFrameBuffer: All frames processed, closing encoder input.";
+            }
+            if (m_state != State::Idle) m_state = State::PipeEncodingVideo;
+        }
+        return; // No QVideoFrames to process from buffer
+    }
+
+    QVideoFrame frame = m_qtVideoFrameBuffer.dequeue();
+    m_framesAcceptedBySR++;
+     if (m_settings.verboseLog && m_framesAcceptedBySR % 100 == 0) {
+        qDebug() << "RealESRGAN processDecodedFrameBuffer: Processing buffered QVideoFrame " << m_framesAcceptedBySR << ". " << m_qtVideoFrameBuffer.size() << " remaining in QBuffer.";
+    }
+
+    QVideoFrame mappedFrame = frame;
+    if (!mappedFrame.map(QVideoFrame::ReadOnly)) {
+        emit logMessage(tr("RealESRGAN Error: Could not map buffered QVideoFrame. Skipping."));
+        if (m_mediaPlayerPausedByBackpressure && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState && m_qtVideoFrameBuffer.size() < 2) {
+            m_mediaPlayer->play(); m_mediaPlayerPausedByBackpressure = false;
+        }
+        QTimer::singleShot(0, this, &RealEsrganProcessor::processDecodedFrameBuffer); // Try next
+        return;
+    }
+
+    QImage::Format targetFormat = (m_inputPixelFormat == "rgb24") ? QImage::Format_RGB888 : QImage::Format_BGR888;
+    QImage image = mappedFrame.toImage().convertToFormat(targetFormat);
+    mappedFrame.unmap();
+
+    if (image.isNull()) {
+        emit logMessage(tr("RealESRGAN Error: Failed to convert buffered QVideoFrame to QImage. Skipping."));
+         if (m_mediaPlayerPausedByBackpressure && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState && m_qtVideoFrameBuffer.size() < 2) {
+            m_mediaPlayer->play(); m_mediaPlayerPausedByBackpressure = false;
+        }
+        QTimer::singleShot(0, this, &RealEsrganProcessor::processDecodedFrameBuffer); // Try next
+        return;
+    }
+
+    m_currentDecodedFrameBuffer = QByteArray(reinterpret_cast<const char*>(image.constBits()), imagesize_t(image.sizeInBytes()));
+    if (m_currentDecodedFrameBuffer.isEmpty()) {
+        emit logMessage(tr("RealESRGAN Error: Converted QImage to QByteArray is empty. Skipping."));
+        if (m_mediaPlayerPausedByBackpressure && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState && m_qtVideoFrameBuffer.size() < 2) {
+            m_mediaPlayer->play(); m_mediaPlayerPausedByBackpressure = false;
+        }
+        QTimer::singleShot(0, this, &RealEsrganProcessor::processDecodedFrameBuffer); // Try next
+        return;
+    }
+
+    m_state = State::PipeProcessingSR;
+    startRealEsrganPipe(m_currentDecodedFrameBuffer);
+    m_currentDecodedFrameBuffer.clear();
+
+    if (m_mediaPlayerPausedByBackpressure && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState && m_qtVideoFrameBuffer.size() < 2) {
+        m_mediaPlayer->play();
+        m_mediaPlayerPausedByBackpressure = false;
+        if (m_settings.verboseLog) qDebug() << "RealESRGAN processDecodedFrameBuffer: Resuming QMediaPlayer. QBuffer low.";
+    }
+}
+
+// --- Comment out old FFmpeg Decoder Pipe Slots ---
+void RealEsrganProcessor::onPipeDecoderReadyReadStandardOutput() {
+    if (m_settings.verboseLog) qDebug() << "RealESRGAN onPipeDecoderReadyReadStandardOutput called - this should NOT happen in QMediaPlayer flow.";
+}
+void RealEsrganProcessor::onPipeDecoderFinished(int, QProcess::ExitStatus) {
+    if (m_settings.verboseLog) qDebug() << "RealESRGAN onPipeDecoderFinished called - this should NOT happen in QMediaPlayer flow.";
+}
+void RealEsrganProcessor::onPipeDecoderError(QProcess::ProcessError) {
+    if (m_settings.verboseLog) qDebug() << "RealESRGAN onPipeDecoderError called - this should NOT happen in QMediaPlayer flow.";
 }

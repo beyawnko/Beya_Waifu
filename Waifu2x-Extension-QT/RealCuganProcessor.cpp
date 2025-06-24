@@ -14,26 +14,35 @@ RealCuganProcessor::RealCuganProcessor(QObject *parent) : QObject(parent)
     connect(m_process, &QProcess::errorOccurred, this, &RealCuganProcessor::onProcessError);
     connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealCuganProcessor::onProcessFinished);
     connect(m_process, &QProcess::readyReadStandardOutput, this, &RealCuganProcessor::onReadyReadStandardOutput);
-    // It's good practice to also connect readyReadStandardError for m_process if not done elsewhere or for debugging
-    // connect(m_process, &QProcess::readyReadStandardError, this, &SomeSlotForSRErrorOutput);
 
-
-    m_ffmpegProcess = new QProcess(this); // For old video method
+    m_ffmpegProcess = new QProcess(this); // For old video method (splitting/assembly)
     connect(m_ffmpegProcess, &QProcess::errorOccurred, this, &RealCuganProcessor::onFfmpegError);
     connect(m_ffmpegProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealCuganProcessor::onFfmpegFinished);
     connect(m_ffmpegProcess, &QProcess::readyReadStandardError, this, &RealCuganProcessor::onFfmpegStdErr);
 
-    // New processes for piped video
-    m_ffmpegDecoderProcess = new QProcess(this);
-    connect(m_ffmpegDecoderProcess, &QProcess::readyReadStandardOutput, this, &RealCuganProcessor::onPipeDecoderReadyReadStandardOutput);
-    connect(m_ffmpegDecoderProcess, &QProcess::readyReadStandardError, this, &RealCuganProcessor::onPipeDecoderReadyReadStandardError);
-    connect(m_ffmpegDecoderProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealCuganProcessor::onPipeDecoderFinished);
-    connect(m_ffmpegDecoderProcess, &QProcess::errorOccurred, this, &RealCuganProcessor::onPipeDecoderError);
+    // m_ffmpegDecoderProcess is being replaced by QMediaPlayer/QVideoSink
+    // Initialize QMediaPlayer and QVideoSink
+    m_mediaPlayer = new QMediaPlayer(this);
+    m_videoSink = new QVideoSink(this);
+    m_mediaPlayer->setVideoSink(m_videoSink); // Crucial: Set sink before connecting signals related to sink
 
+    connect(m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, &RealCuganProcessor::onMediaPlayerStatusChanged);
+    // QOverload<QMediaPlayer::Error, const QString &>::of is C++14, ensure compatibility or use static_cast
+    connect(m_mediaPlayer, static_cast<void(QMediaPlayer::*)(QMediaPlayer::Error, const QString &)>(&QMediaPlayer::errorOccurred), this, &RealCuganProcessor::onMediaPlayerError);
+    connect(m_videoSink, &QVideoSink::videoFrameChanged, this, &RealCuganProcessor::onQtVideoFrameChanged);
+
+
+    // FFmpeg Encoder process for final video assembly (remains)
     m_ffmpegEncoderProcess = new QProcess(this);
     connect(m_ffmpegEncoderProcess, &QProcess::readyReadStandardError, this, &RealCuganProcessor::onPipeEncoderReadyReadStandardError);
     connect(m_ffmpegEncoderProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealCuganProcessor::onPipeEncoderFinished);
     connect(m_ffmpegEncoderProcess, &QProcess::errorOccurred, this, &RealCuganProcessor::onPipeEncoderError);
+
+    // Old m_ffmpegDecoderProcess connections are removed
+    // connect(m_ffmpegDecoderProcess, &QProcess::readyReadStandardOutput, this, &RealCuganProcessor::onPipeDecoderReadyReadStandardOutput);
+    // connect(m_ffmpegDecoderProcess, &QProcess::readyReadStandardError, this, &RealCuganProcessor::onPipeDecoderReadyReadStandardError);
+    // connect(m_ffmpegDecoderProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealCuganProcessor::onPipeDecoderFinished);
+    // connect(m_ffmpegDecoderProcess, &QProcess::errorOccurred, this, &RealCuganProcessor::onPipeDecoderError);
 
     cleanup(); // Initial cleanup to set state
 }
@@ -49,16 +58,18 @@ RealCuganProcessor::~RealCuganProcessor()
         m_ffmpegProcess->kill();
         m_ffmpegProcess->waitForFinished(500);
     }
-    if (m_ffmpegDecoderProcess && m_ffmpegDecoderProcess->state() != QProcess::NotRunning) {
-        m_ffmpegDecoderProcess->kill();
-        m_ffmpegDecoderProcess->waitForFinished(500);
-    }
+    // m_ffmpegDecoderProcess is removed, m_mediaPlayer/m_videoSink handled by Qt parent/child or explicit delete if needed
+    // No, QMediaPlayer needs explicit stop. QVideoSink is fine.
+    cleanupQtMediaPlayer(); // Stop player and release resources
+
     if (m_ffmpegEncoderProcess && m_ffmpegEncoderProcess->state() != QProcess::NotRunning) {
         m_ffmpegEncoderProcess->kill();
         m_ffmpegEncoderProcess->waitForFinished(500);
     }
     cleanupVideo(); // Clean up temp files for old method
     cleanupPipeProcesses(); // Clean up temp files for new method (e.g. audio)
+    // m_mediaPlayer and m_videoSink are QObjects with `this` as parent, Qt should handle their deletion.
+    // However, explicit deletion or reset can be done if needed, e.g. m_mediaPlayer->setMedia(QMediaContent());
 }
 
 void RealCuganProcessor::cleanup()
@@ -77,17 +88,21 @@ void RealCuganProcessor::cleanup()
         m_ffmpegProcess->kill();
     }
     // New pipe processes will be cleaned in cleanupPipeProcesses which should be called too
-    cleanupPipeProcesses();
+    cleanupQtMediaPlayer(); // Ensure QMediaPlayer is stopped and cleaned
+    cleanupPipeProcesses(); // Clean SR and Encoder processes
     cleanupVideo(); // For old method temp files
 }
 
 
 void RealCuganProcessor::cleanupPipeProcesses()
 {
-    if (m_ffmpegDecoderProcess && m_ffmpegDecoderProcess->state() != QProcess::NotRunning) {
-        m_ffmpegDecoderProcess->kill();
-        m_ffmpegDecoderProcess->waitForFinished(500);
-    }
+    // m_ffmpegDecoderProcess is replaced by QtMultimedia, so no need to kill it here.
+    // cleanupQtMediaPlayer() will handle QMediaPlayer.
+    // if (m_ffmpegDecoderProcess && m_ffmpegDecoderProcess->state() != QProcess::NotRunning) {
+    //    m_ffmpegDecoderProcess->kill();
+    //    m_ffmpegDecoderProcess->waitForFinished(500);
+    // }
+
     // m_process (SR engine) is handled by general cleanup() if it was used for pipe mode and got stuck.
     if (m_ffmpegEncoderProcess && m_ffmpegEncoderProcess->state() != QProcess::NotRunning) {
         m_ffmpegEncoderProcess->kill();
@@ -111,12 +126,34 @@ void RealCuganProcessor::cleanupPipeProcesses()
         m_tempVideoJobPath.clear();
     }
 
-    m_currentDecodedFrameBuffer.clear();
+    m_currentDecodedFrameBuffer.clear(); // This will store data from QVideoFrame
+    m_qtVideoFrameBuffer.clear();        // Clear the QVideoFrame queue
     m_currentUpscaledFrameBuffer.clear();
     m_framesProcessedPipe = 0;
     m_totalFramesEstimatePipe = 0;
-    m_allFramesDecoded = false;
+    m_allFramesDecoded = false;          // This will be set by QMediaPlayer::EndOfMedia
     m_allFramesSentToEncoder = false;
+    m_framesDeliveredBySink = 0;
+    m_framesAcceptedBySR = 0;
+    m_mediaPlayerPausedByBackpressure = false;
+}
+
+void RealCuganProcessor::cleanupQtMediaPlayer()
+{
+    if (m_mediaPlayer) {
+        if (m_mediaPlayer->playbackState() != QMediaPlayer::StoppedState) {
+            m_mediaPlayer->stop();
+        }
+        // Reset source to release file handles if any are held
+        // m_mediaPlayer->setMedia(QMediaContent()); // setMedia is for Qt5, use setSource(QUrl()) for Qt6
+        m_mediaPlayer->setSource(QUrl());
+    }
+    // m_videoSink is a child of m_mediaPlayer or this, and its resources are managed by Qt mostly.
+    // No specific QVideoSink cleanup seems necessary beyond what QMediaPlayer::setVideoSink(nullptr) or player destruction does.
+    // If m_videoSink was created with `this` as parent and not set to player, it's fine.
+    // If it was set to player, player handles it. If it was `new QVideoSink(nullptr)`, then manual delete would be needed if not parented.
+    // Here, it's `new QVideoSink(this)`, so Qt handles it.
+    m_qtVideoFrameBuffer.clear();
 }
 
 
@@ -191,11 +228,28 @@ void RealCuganProcessor::processVideo(int rowNum, const QString &sourceFile, con
     // m_tempAudioPath
     // It also calculates m_outputFrameSize.
 
-    // Now start the actual pipeline
-    startPipeDecoder(); // This will start FFmpeg to decode frames to its stdout
-    startPipeEncoder(); // Start FFmpeg encoder, waiting for input on its stdin
+    m_settings.sourceFile = sourceFile; // Store for use by QMediaPlayer (and other functions)
+
+    // Initialize QMediaPlayer related states
+    m_framesDeliveredBySink = 0;
+    m_framesAcceptedBySR = 0;
+    m_mediaPlayerPausedByBackpressure = false;
+    m_qtVideoFrameBuffer.clear();
+    m_allFramesDecoded = false; // Reset for the new video
+
+    // Set connections and sink in constructor. Here, just set source.
+    // The onMediaPlayerStatusChanged slot will handle QMediaPlayer::LoadedMedia to call m_mediaPlayer->play().
+    m_mediaPlayer->setSource(QUrl::fromLocalFile(m_settings.sourceFile));
+    if (m_settings.verboseLog) qDebug() << "QMediaPlayer: Source set to" << m_settings.sourceFile << ". Waiting for LoadedMedia status.";
+    emit statusChanged(m_currentRowNum, tr("Loading video (Qt)..."));
+
+
+    // Encoder is started, but will wait for data.
+    startPipeEncoder();
 }
 
+// Removed startQtMediaPlayerDecoder() as it's now effectively inlined in processVideo()
+// and onMediaPlayerStatusChanged() handles the play().
 
 // --- SLOTS AND HELPERS ---
 void RealCuganProcessor::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
@@ -260,19 +314,16 @@ void RealCuganProcessor::onProcessFinished(int exitCode, QProcess::ExitStatus ex
         } else {
              // If not all frames decoded, or some still buffered, go back to decoding state
              // to await next frame or process buffer.
-            m_state = State::PipeDecodingVideo;
-            if (!m_currentDecodedFrameBuffer.isEmpty()){ // Process next available decoded frame
-                processDecodedFrameBuffer();
-            } else if (m_allFramesDecoded) {
-                // This case should ideally be caught by the above if block (all decoded and buffer empty)
-                // but as a safeguard:
-                if (m_ffmpegEncoderProcess && m_ffmpegEncoderProcess->state() == QProcess::Running && !m_allFramesSentToEncoder) {
-                    m_ffmpegEncoderProcess->closeWriteChannel();
-                    m_allFramesSentToEncoder = true;
-                     if (m_settings.verboseLog) qDebug() << "Safeguard: All frames SR'd, closing encoder stdin.";
-                }
-                m_state = State::PipeEncodingVideo;
+            m_state = State::PipeDecodingVideo; // Ready for next frame from QVideoSink or buffer
+
+            // Update progress based on frames accepted by SR vs total estimated
+            if (m_totalFramesEstimatePipe > 0) {
+                emit fileProgress(m_currentRowNum, (100 * m_framesAcceptedBySR) / m_totalFramesEstimatePipe);
             }
+
+            // Call processDecodedFrameBuffer to handle the next frame from m_qtVideoFrameBuffer
+            // or to finalize if all frames are done.
+            processDecodedFrameBuffer();
         }
     }
 }
@@ -665,36 +716,22 @@ void RealCuganProcessor::startPipeDecoder() {
 }
 
 void RealCuganProcessor::onPipeDecoderReadyReadStandardOutput() {
+    // This slot is for the old m_ffmpegDecoderProcess.
+    // It's not used when QMediaPlayer/QVideoSink provides frames.
+    // Kept for now in case of fallback or other uses, but should not be active in QMediaPlayer flow.
+    if (m_settings.verboseLog) qDebug() << "onPipeDecoderReadyReadStandardOutput called - this should NOT happen in QMediaPlayer flow.";
+    /*
     if (m_state != State::PipeDecodingVideo && m_state != State::PipeProcessingSR && m_state != State::PipeEncodingVideo) {
-        // Allow reading if we are waiting for SR or Encoder to finish last frame, but decoder still sends data
-        if (m_state == State::Idle) return; // If completely idle, something is wrong
-        if (m_settings.verboseLog) qDebug() << "Decoder output received in state: " << (int)m_state;
+        if (m_state == State::Idle) return;
+        if (m_settings.verboseLog) qDebug() << "Old Decoder output received in state: " << (int)m_state;
     }
-
-    qint64 bytesAvailableInProcess = m_ffmpegDecoderProcess->bytesAvailable();
-    if (m_currentDecodedFrameBuffer.size() + bytesAvailableInProcess > MAX_DECODED_BUFFER_SIZE && m_currentDecodedFrameBuffer.size() > MAX_DECODED_BUFFER_SIZE / 2) {
-        if (m_settings.verboseLog) {
-            qDebug() << "Approaching MAX_DECODED_BUFFER_SIZE (" << MAX_DECODED_BUFFER_SIZE
-                     << "bytes). Current size:" << m_currentDecodedFrameBuffer.size()
-                     << ". Available from process:" << bytesAvailableInProcess
-                     << ". Delaying read from decoder to exert backpressure.";
-        }
-        // Don't read from process an
-        // OS pipe buffer will fill up, exerting backpressure on ffmpeg.
-        // We still need to try processing what we have.
-    } else {
-        m_currentDecodedFrameBuffer.append(m_ffmpegDecoderProcess->readAllStandardOutput());
-    }
-
-    // Only try to process if we are in decoding or waiting for SR state.
-    // If we are already in encoding video state, it means all frames sent to SR.
-    if (m_state == State::PipeDecodingVideo || m_state == State::PipeProcessingSR) {
-         processDecodedFrameBuffer();
-    }
+    // ... (original body commented out as it pertains to m_ffmpegDecoderProcess) ...
+    */
 }
 
 void RealCuganProcessor::processDecodedFrameBuffer() {
-    // This function is called when new data arrives from decoder, or when SR engine becomes free.
+    // This function is now primarily driven by QVideoFrames from m_qtVideoFrameBuffer
+    // or by SR process finishing, triggering the next frame.
     if (m_state == State::PipeEncodingVideo && m_allFramesDecoded) {
         // All frames decoded and sent to SR, now just waiting for encoder.
         // No new frames to process from decoder.
@@ -736,6 +773,88 @@ void RealCuganProcessor::processDecodedFrameBuffer() {
     }
     // If buffer has data but less than a full frame, and decoder is not finished, wait for more data.
     // If decoder is finished and buffer has partial data, it's an error. (Handled in onPipeDecoderFinished)
+
+    // This was the old logic for m_currentDecodedFrameBuffer (QByteArray from ffmpeg pipe).
+    // The new logic for QVideoFrame based decoding is primarily in onQtVideoFrameChanged and
+    // this function will now pull from m_qtVideoFrameBuffer.
+
+    if (m_process && m_process->state() == QProcess::Running) {
+        // SR engine is busy, cannot process another frame now.
+        return;
+    }
+
+    if (m_qtVideoFrameBuffer.isEmpty()) {
+        // No buffered QVideoFrames to process.
+        // Check if all frames have been decoded and if it's time to close the encoder.
+        if (m_allFramesDecoded && m_currentDecodedFrameBuffer.isEmpty() && (m_process == nullptr || m_process->state() == QProcess::NotRunning)) {
+            if (m_ffmpegEncoderProcess && m_ffmpegEncoderProcess->state() == QProcess::Running && !m_allFramesSentToEncoder) {
+                m_ffmpegEncoderProcess->closeWriteChannel();
+                m_allFramesSentToEncoder = true;
+                if (m_settings.verboseLog) qDebug() << "processDecodedFrameBuffer: All frames processed, closing encoder input.";
+            }
+            if (m_state != State::PipeEncodingVideo && m_state != State::Idle) m_state = State::PipeEncodingVideo;
+        }
+        return;
+    }
+
+    // Dequeue a QVideoFrame
+    QVideoFrame frame = m_qtVideoFrameBuffer.dequeue();
+    m_framesAcceptedBySR++; // Increment here as we are about to process it for SR
+    if (m_settings.verboseLog && m_framesAcceptedBySR % 100 == 0) {
+        qDebug() << "processDecodedFrameBuffer: Processing buffered QVideoFrame " << m_framesAcceptedBySR << ". " << m_qtVideoFrameBuffer.size() << " remaining in QBuffer.";
+    }
+
+
+    QVideoFrame mappedFrame = frame;
+    if (!mappedFrame.map(QVideoFrame::ReadOnly)) {
+        emit logMessage(tr("Error: Could not map buffered QVideoFrame. Skipping frame."));
+        // Try to resume player if it was paused for backpressure, as we've cleared one item.
+        if (m_mediaPlayerPausedByBackpressure && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState && m_qtVideoFrameBuffer.size() < 2) {
+            m_mediaPlayer->play();
+            m_mediaPlayerPausedByBackpressure = false;
+        }
+        // Attempt to process next frame if any
+        QTimer::singleShot(0, this, &RealCuganProcessor::processDecodedFrameBuffer); // Try next frame
+        return;
+    }
+
+    QImage::Format targetFormat = (m_inputPixelFormat == "rgb24") ? QImage::Format_RGB888 : QImage::Format_BGR888;
+    QImage image = mappedFrame.toImage().convertToFormat(targetFormat);
+    mappedFrame.unmap();
+
+    if (image.isNull()) {
+        emit logMessage(tr("Error: Failed to convert buffered QVideoFrame to QImage. Skipping frame."));
+        if (m_mediaPlayerPausedByBackpressure && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState && m_qtVideoFrameBuffer.size() < 2) {
+            m_mediaPlayer->play();
+            m_mediaPlayerPausedByBackpressure = false;
+        }
+        QTimer::singleShot(0, this, &RealCuganProcessor::processDecodedFrameBuffer); // Try next frame
+        return;
+    }
+
+    m_currentDecodedFrameBuffer = QByteArray(reinterpret_cast<const char*>(image.constBits()), imagesize_t(image.sizeInBytes()));
+
+    if (m_currentDecodedFrameBuffer.isEmpty()) {
+         emit logMessage(tr("Error: Converted QImage to QByteArray is empty. Skipping frame."));
+         if (m_mediaPlayerPausedByBackpressure && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState && m_qtVideoFrameBuffer.size() < 2) {
+            m_mediaPlayer->play();
+            m_mediaPlayerPausedByBackpressure = false;
+        }
+        QTimer::singleShot(0, this, &RealCuganProcessor::processDecodedFrameBuffer); // Try next frame
+        return;
+    }
+
+    // Now that m_currentDecodedFrameBuffer has data, send it to SR
+    m_state = State::PipeProcessingSR; // Set state before starting SR
+    startRealCuganPipe(m_currentDecodedFrameBuffer);
+    m_currentDecodedFrameBuffer.clear(); // Clear after passing to startRealCuganPipe
+
+    // If player was paused due to backpressure and the QVideoFrame buffer is now getting low, resume it.
+    if (m_mediaPlayerPausedByBackpressure && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState && m_qtVideoFrameBuffer.size() < 2) {
+        m_mediaPlayer->play();
+        m_mediaPlayerPausedByBackpressure = false;
+        if (m_settings.verboseLog) qDebug() << "processDecodedFrameBuffer: Resuming QMediaPlayer. QBuffer low.";
+    }
 }
 
 
@@ -743,7 +862,12 @@ void RealCuganProcessor::startRealCuganPipe(const QByteArray& frameData) {
     // State should be PipeProcessingSR, set by caller (processDecodedFrameBuffer)
      if (m_process->state() == QProcess::Running) {
         emit logMessage(tr("Error: Attempted to start RealCUGAN pipe while SR process is already running."));
-        return; // Should not happen if logic in processDecodedFrameBuffer is correct
+        // This should ideally not happen if processDecodedFrameBuffer checks m_process->state()
+        // However, if it does, we should probably re-queue or handle.
+        // For now, just log and return. The frame data might be lost or overwritten if not handled.
+        // A robust way would be to re-enqueue to m_qtVideoFrameBuffer if frameData came from QVideoFrame.
+        // But frameData is QByteArray here. This indicates a logic flaw if this path is hit.
+        return;
     }
 
     QStringList srArgs;
@@ -796,39 +920,23 @@ void RealCuganProcessor::onPipeDecoderReadyReadStandardError() {
 }
 
 void RealCuganProcessor::onPipeDecoderFinished(int exitCode, QProcess::ExitStatus exitStatus) {
+    // This slot is for the old m_ffmpegDecoderProcess.
+    // Not used in QMediaPlayer flow. EndOfMedia from QMediaPlayer handles this.
+    if (m_settings.verboseLog) qDebug() << "onPipeDecoderFinished called - this should NOT happen in QMediaPlayer flow. ExitCode:" << exitCode << "Status:" << exitStatus;
+    /*
     if (m_state == State::Idle) return;
-
-    if (m_settings.verboseLog) qDebug() << "FFmpeg Decoder finished. ExitCode:" << exitCode << "Status:" << exitStatus;
-    m_allFramesDecoded = true;
-
-    if (exitStatus != QProcess::NormalExit || exitCode != 0) {
-        emit logMessage(tr("FFmpeg Decoder failed. Exit: %1, Status: %2").arg(exitCode).arg(exitStatus));
-        // Error output already read by onPipeDecoderReadyReadStandardError
-        finalizePipedVideoProcessing(false);
-        return;
-    }
-
-    // Process any remaining data in the buffer from the last readyRead
-    if (!m_currentDecodedFrameBuffer.isEmpty()) {
-        processDecodedFrameBuffer();
-    }
-
-    // If buffer is now empty, and SR isn't running, all decoded frames have been passed to SR.
-    // (This logic is duplicated/similar in processDecodedFrameBuffer, ensure consistency)
-    if (m_currentDecodedFrameBuffer.isEmpty() && (m_process->state() == QProcess::NotRunning)) {
-        if (m_ffmpegEncoderProcess && m_ffmpegEncoderProcess->state() == QProcess::Running && !m_allFramesSentToEncoder) {
-            m_ffmpegEncoderProcess->closeWriteChannel();
-            m_allFramesSentToEncoder = true;
-            if (m_settings.verboseLog) qDebug() << "Decoder finished, buffer empty, SR not running. Closing encoder input.";
-        }
-        if (m_state != State::PipeEncodingVideo) m_state = State::PipeEncodingVideo;
-    }
+    // ... (original body commented out) ...
+    */
 }
 
 void RealCuganProcessor::onPipeDecoderError(QProcess::ProcessError error) {
+    // This slot is for the old m_ffmpegDecoderProcess.
+    // Not used in QMediaPlayer flow. onMediaPlayerError handles this.
+    if (m_settings.verboseLog) qDebug() << "onPipeDecoderError called - this should NOT happen in QMediaPlayer flow. Error:" << error;
+    /*
     if (m_state == State::Idle) return;
-    emit logMessage(tr("FFmpeg Decoder process error: %1. Error code: %2").arg(m_ffmpegDecoderProcess->errorString()).arg(error));
-    finalizePipedVideoProcessing(false);
+    // ... (original body commented out) ...
+    */
 }
 
 
@@ -936,8 +1044,9 @@ void RealCuganProcessor::finalizePipedVideoProcessing(bool success) {
     if (m_settings.verboseLog) qDebug() << "Finalizing piped video processing. Success:" << success << "Current State:" << (int)currentState;
 
     // Ensure all pipe-related processes are stopped.
-    // cleanup() will call cleanupPipeProcesses().
-    cleanup(); // This sets state to Idle, kills processes, and cleans general vars.
+    cleanupQtMediaPlayer(); // Stop QMediaPlayer if it was used
+    // cleanup() will call cleanupPipeProcesses() for SR and Encoder.
+    cleanup(); // This sets state to Idle, kills QProcess members, and cleans general vars.
 
     if (currentState != State::Idle) { // Only emit processingFinished if we weren't already idle.
         if (success) {
@@ -955,11 +1064,203 @@ void RealCuganProcessor::finalizePipedVideoProcessing(bool success) {
             }
         }
         emit processingFinished(m_currentRowNum, success);
-    } else if (!success && m_currentRowNum != -1) {
+    } else if (!success && m_currentRowNum != -1 && currentState != State::Idle) { // ensure not already idle when this is called
         // If it was already idle but an error callback is trying to finalize,
         // ensure the finish signal for that job is emitted as error if not already.
         // This is a safeguard.
         emit processingFinished(m_currentRowNum, false);
-        m_currentRowNum = -1; // Reset after emitting.
+        // m_currentRowNum is reset by cleanup()
+    }
+    // m_currentRowNum is reset by cleanup()
+}
+
+// --- New slots for QMediaPlayer/QVideoSink ---
+void RealCuganProcessor::onMediaPlayerStatusChanged(QMediaPlayer::MediaStatus status)
+{
+    if (m_state != State::PipeDecodingVideo) return; // Only act if we are in the relevant state
+
+    switch (status) {
+    case QMediaPlayer::LoadedMedia:
+        if (m_settings.verboseLog) qDebug() << "QMediaPlayer: Media loaded. Total frames estimate (from ffprobe):" << m_totalFramesEstimatePipe;
+        m_mediaPlayer->play();
+        emit statusChanged(m_currentRowNum, tr("Decoding (Qt)..."));
+        break;
+    case QMediaPlayer::EndOfMedia:
+        if (m_settings.verboseLog) qDebug() << "QMediaPlayer: EndOfMedia reached. Frames delivered by sink:" << m_framesDeliveredBySink << "Frames accepted by SR:" << m_framesAcceptedBySR;
+        m_allFramesDecoded = true; // Signal that QMediaPlayer has finished sending frames.
+        // Process any remaining frames in m_qtVideoFrameBuffer or m_currentDecodedFrameBuffer
+        processDecodedFrameBuffer(); // This will try to send any last buffered QVideoFrame
+                                     // and then if m_currentDecodedFrameBuffer is also empty, it will close encoder.
+        // If after processDecodedFrameBuffer, everything is truly empty and SR is not running:
+    // This check is now more robustly handled within processDecodedFrameBuffer itself when m_allFramesDecoded is true.
+    // No need to explicitly check m_process state here again as processDecodedFrameBuffer does that.
+    if (m_qtVideoFrameBuffer.isEmpty() && m_currentDecodedFrameBuffer.isEmpty()) {
+         // If processDecodedFrameBuffer didn't transition state (e.g. SR was still running one last frame)
+         // but now everything is clear, ensure we are in encoding state or let processDecodedFrameBuffer handle it.
+         // The crucial part is that processDecodedFrameBuffer is called. If it determines everything is done,
+         // it will close the encoder pipe and set state.
+        if (m_process == nullptr || m_process->state() == QProcess::NotRunning) {
+            if (m_ffmpegEncoderProcess && m_ffmpegEncoderProcess->state() == QProcess::Running && !m_allFramesSentToEncoder) {
+                 m_ffmpegEncoderProcess->closeWriteChannel();
+                 m_allFramesSentToEncoder = true;
+                 if (m_settings.verboseLog) qDebug() << "QMediaPlayer EndOfMedia: All frames processed by SR, closing encoder input.";
+            }
+            if (m_state != State::Idle) m_state = State::PipeEncodingVideo; // Transition to waiting for encoder if not already idle
+            }
+    } // else: processDecodedFrameBuffer will continue to be called as SR finishes frames.
+        break;
+    case QMediaPlayer::InvalidMedia:
+        emit logMessage(tr("QMediaPlayer Error: Invalid media - %1").arg(m_settings.sourceFile));
+        finalizePipedVideoProcessing(false);
+        break;
+    case QMediaPlayer::NoMedia:
+    if (m_settings.verboseLog) qDebug() << "QMediaPlayer: NoMedia status (possibly after stop/cleanup or error).";
+    // If this happens during active processing, it might be an issue.
+    if (m_state == State::PipeDecodingVideo) {
+        emit logMessage(tr("QMediaPlayer Error: No media present during decoding. Source: %1").arg(m_settings.sourceFile));
+        finalizePipedVideoProcessing(false);
+    }
+        break;
+    case QMediaPlayer::BufferingMedia:
+        if (m_settings.verboseLog) qDebug() << "QMediaPlayer: Buffering media...";
+        emit statusChanged(m_currentRowNum, tr("Buffering (Qt)..."));
+        break;
+    case QMediaPlayer::BufferedMedia:
+        if (m_settings.verboseLog) qDebug() << "QMediaPlayer: Media buffered.";
+    if (m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState && !m_mediaPlayerPausedByBackpressure) {
+        if (m_settings.verboseLog) qDebug() << "QMediaPlayer: Media buffered, resuming playback.";
+        m_mediaPlayer->play(); // Resume if it was paused for buffering, not by backpressure
+    }
+        break;
+    case QMediaPlayer::LoadingMedia:
+         if (m_settings.verboseLog) qDebug() << "QMediaPlayer: Loading media...";
+     // Status already set in processVideo
+        break;
+    default:
+        if (m_settings.verboseLog) qDebug() << "QMediaPlayer: Unhandled media status:" << status;
+        break;
+    }
+}
+
+void RealCuganProcessor::onMediaPlayerError(QMediaPlayer::Error error, const QString &errorString)
+{
+    // Avoid acting on errors if we're already idle (e.g., after a successful cleanup or previous error)
+    // unless it's a new error that wasn't the cause of idling.
+    if (m_state == State::Idle && error == QMediaPlayer::NoError) return; // Player might emit NoError after stop.
+
+    emit logMessage(tr("QMediaPlayer Error: %1 (Code: %2). Source: %3").arg(errorString).arg(error).arg(m_settings.sourceFile));
+    finalizePipedVideoProcessing(false);
+}
+
+void RealCuganProcessor::onQtVideoFrameChanged(const QVideoFrame &frame)
+{
+    if (m_state != State::PipeDecodingVideo && m_state != State::PipeProcessingSR) {
+        // If not in active decoding/processing state, just drop the frame.
+        // This can happen if EndOfMedia was reached and this signal arrives late.
+        if (frame.isValid() && m_settings.verboseLog) {
+            qDebug() << "QVideoSink: Frame received in non-processing state" << (int)m_state << "- dropping.";
+        }
+        return;
+    }
+
+    if (!frame.isValid()) {
+        if (m_settings.verboseLog) qDebug() << "QVideoSink: Invalid frame received.";
+        return;
+    }
+
+    m_framesDeliveredBySink++;
+    if (m_settings.verboseLog && m_framesDeliveredBySink % 100 == 0) { // Log every 100 frames
+        qDebug() << "QVideoSink: Frame" << m_framesDeliveredBySink << "received. Format:" << frame.pixelFormat();
+    }
+
+
+    // Backpressure mechanism: If SR process is busy OR qtVideoFrameBuffer is large, pause QMediaPlayer
+    if ( (m_process && m_process->state() == QProcess::Running) || m_qtVideoFrameBuffer.size() > 5) { // Buffer 5 frames max from QVideoSink
+        if (m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PlayingState && !m_mediaPlayerPausedByBackpressure) {
+            m_mediaPlayer->pause();
+            m_mediaPlayerPausedByBackpressure = true;
+            if (m_settings.verboseLog) qDebug() << "QVideoSink: Pausing QMediaPlayer due to backpressure. SR Busy or Frame Buffer Full. Buffered QVideoFrames:" << m_qtVideoFrameBuffer.size();
+        }
+        // Enqueue the frame for later processing
+        m_qtVideoFrameBuffer.enqueue(frame); // QVideoFrame is implicitly shared
+        return; // Don't process immediately if backpressure applied
+    }
+
+    // If no backpressure or it was just released, try to process this frame or a buffered one.
+    QVideoFrame frameToProcess;
+    if (!m_qtVideoFrameBuffer.isEmpty()) {
+        frameToProcess = m_qtVideoFrameBuffer.dequeue();
+         if (m_settings.verboseLog) qDebug() << "QVideoSink: Processing a buffered QVideoFrame. " << m_qtVideoFrameBuffer.size() << "remaining in buffer.";
+    } else {
+        frameToProcess = frame; // Process current frame directly
+    }
+
+    QVideoFrame mappedFrame = frameToProcess; // Make a copy for mapping
+    if (!mappedFrame.map(QVideoFrame::ReadOnly)) {
+        emit logMessage(tr("Error: Could not map QVideoFrame."));
+        // This is a problem. Can't get data. Maybe try to continue for other frames or abort?
+        // For now, let's try to continue, but log it.
+        if (m_mediaPlayerPausedByBackpressure && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState) {
+             m_mediaPlayer->play(); // Try to resume if paused
+             m_mediaPlayerPausedByBackpressure = false;
+        }
+        return;
+    }
+
+    // Ensure pixel format is suitable for RealCUGAN (e.g. BGR24 or RGB24)
+    // RealCUGAN pipe input expects raw BGR typically.
+    // QVideoFrame::pixelFormat() can be complex (YUV formats etc.)
+    // For simplicity, convert to a QImage in a known format like Format_RGB888 or Format_BGR888
+    // Then get bits from QImage. This adds a conversion step but ensures correct format.
+    QImage::Format targetFormat = QImage::Format_BGR888; // RealCUGAN often prefers BGR.
+    if (m_inputPixelFormat == "rgb24") targetFormat = QImage::Format_RGB888;
+
+
+    QImage image = mappedFrame.toImage().convertToFormat(targetFormat);
+    mappedFrame.unmap(); // Unmap original as soon as possible
+
+    if (image.isNull()) {
+        emit logMessage(tr("Error: Failed to convert QVideoFrame to QImage or target format."));
+        if (m_mediaPlayerPausedByBackpressure && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState) {
+             m_mediaPlayer->play(); // Try to resume if paused
+             m_mediaPlayerPausedByBackpressure = false;
+        }
+        return;
+    }
+
+    // Now m_currentDecodedFrameBuffer holds the raw pixels in BGR888 or RGB888 format
+    m_currentDecodedFrameBuffer = QByteArray(reinterpret_cast<const char*>(image.constBits()), imagesize_t(image.sizeInBytes()));
+
+
+    // At this point, m_currentDecodedFrameBuffer has one frame.
+    // The existing processDecodedFrameBuffer will take this and send it to SR engine.
+    // It checks if SR is busy. If it is, this frame data will just sit in m_currentDecodedFrameBuffer.
+    // This is a potential issue: onQtVideoFrameChanged might be called again before SR is free,
+    // overwriting m_currentDecodedFrameBuffer.
+    // SOLUTION: processDecodedFrameBuffer must now handle the m_qtVideoFrameBuffer directly,
+    // or this function should only add to m_currentDecodedFrameBuffer if it's empty and SR is free.
+
+    // Revised logic: this function just prepares data in m_currentDecodedFrameBuffer if SR is free.
+    // If SR is busy, the frame was already enqueued to m_qtVideoFrameBuffer.
+    // The call to processDecodedFrameBuffer will happen when SR finishes.
+
+    m_framesAcceptedBySR++;
+    if (m_settings.verboseLog && m_framesAcceptedBySR % 100 == 0) {
+         qDebug() << "QVideoSink: Frame" << m_framesAcceptedBySR << "being sent to SR processing logic.";
+    }
+    startRealCuganPipe(m_currentDecodedFrameBuffer); // This starts the SR engine if not busy
+    m_currentDecodedFrameBuffer.clear(); // Clear after sending to SR pipe.
+
+    // If player was paused for backpressure and now the buffer is low, resume
+    if (m_mediaPlayerPausedByBackpressure && m_qtVideoFrameBuffer.size() < 2 && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState) {
+        m_mediaPlayer->play();
+        m_mediaPlayerPausedByBackpressure = false;
+        if (m_settings.verboseLog) qDebug() << "QVideoSink: Resuming QMediaPlayer. Buffer low.";
+    }
+
+    // After processing current frame (or enqueuing it), try to process from buffer if SR is free.
+    // This ensures buffered frames are processed if SR becomes available.
+    if (m_process && m_process->state() == QProcess::NotRunning && !m_qtVideoFrameBuffer.isEmpty()) {
+        processDecodedFrameBuffer(); // This will now try to take from m_qtVideoFrameBuffer
     }
 }
