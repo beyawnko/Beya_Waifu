@@ -64,7 +64,6 @@ echo "Running moc for anime4kprocessor.h..."
     -DQT_GUI_LIB \
     -DQT_CONCURRENT_LIB \
     -DQT_NETWORK_LIB \
-    -DQT_CORE5COMPAT_LIB \
     -DQT_CORE_LIB \
     -I"$SCRIPT_DIR/Waifu2x-Extension-QT" \
     -I/usr/include/x86_64-linux-gnu/qt6 \
@@ -75,7 +74,6 @@ echo "Running moc for anime4kprocessor.h..."
     -I/usr/include/x86_64-linux-gnu/qt6/QtGui \
     -I/usr/include/x86_64-linux-gnu/qt6/QtConcurrent \
     -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork \
-    -I/usr/include/x86_64-linux-gnu/qt6/QtCore5Compat \
     -I/usr/include/x86_64-linux-gnu/qt6/QtCore \
     -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ \
     "$SCRIPT_DIR/Waifu2x-Extension-QT/anime4kprocessor.h" -o "$SCRIPT_DIR/Waifu2x-Extension-QT/moc_anime4kprocessor.cpp"
