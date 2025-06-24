@@ -1,6 +1,5 @@
 // file: realesrganprocessor.h
-#ifndef REALESRGANPROCESSOR_H
-#define REALESRGANPROCESSOR_H
+#pragma once
 
 #include <QObject>
 #include <QProcess>
@@ -154,5 +153,3 @@ private:
     void pipeFrameToEncoder(const QByteArray& upscaledFrameData); // Common method, could be base class
     void finalizePipedVideoProcessing(bool success); // Common method, could be base class
 };
-
-#endif // REALESRGANPROCESSOR_H

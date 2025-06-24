@@ -1,5 +1,4 @@
-#ifndef REALCUGAN_SETTINGS_H
-#define REALCUGAN_SETTINGS_H
+#pragma once
 
 #include <QString>
 
@@ -27,5 +26,3 @@ struct RealCuganSettings {
     int videoEncoderCRF = 23;
     QString videoOutputPixFmt = "yuv420p";
 };
-
-#endif // REALCUGAN_SETTINGS_H

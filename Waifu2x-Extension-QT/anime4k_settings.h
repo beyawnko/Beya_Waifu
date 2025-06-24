@@ -16,8 +16,7 @@
 */
 
 // file: anime4k_settings.h
-#ifndef ANIME4K_SETTINGS_H
-#define ANIME4K_SETTINGS_H
+#pragma once
 
 #include <QString>
 
@@ -50,5 +49,3 @@ struct Anime4kSettings {
     int commandQueues;
     bool parallelIo;
 };
-
-#endif // ANIME4K_SETTINGS_H

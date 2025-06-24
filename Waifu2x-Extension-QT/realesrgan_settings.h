@@ -1,6 +1,5 @@
 // file: realesrgan_settings.h
-#ifndef REALESRGAN_SETTINGS_H
-#define REALESRGAN_SETTINGS_H
+#pragma once
 
 #include <QString>
 
@@ -16,5 +15,3 @@ struct RealEsrganSettings {
     // GPU Settings
     QString singleGpuId;
 };
-
-#endif // REALESRGAN_SETTINGS_H

@@ -16,8 +16,7 @@
 */
 
 // file: anime4kprocessor.h
-#ifndef ANIME4KPROCESSOR_H
-#define ANIME4KPROCESSOR_H
+#pragma once
 
 #include <QObject>
 #include <QProcess> // <-- Add include
@@ -51,5 +50,3 @@ private:
     int m_currentRowNum;
     QString m_destinationFile;
 };
-
-#endif // ANIME4KPROCESSOR_H
