@@ -454,34 +454,44 @@ int MainWindow::Waifu2x_DumpProcessorList_converter_finished() { return 0; /* ST
 void MainWindow::Set_checkBox_DisableResize_gif_Checked() { /* STUB */ }
 void MainWindow::Table_image_insert_fileName_fullPath(const FileLoadInfo& fileInfo) {
     QList<QStandardItem *> rowItems;
-    rowItems << new QStandardItem(fileInfo.fileName);
-    rowItems << new QStandardItem(fileInfo.status.isEmpty() ? tr("Waiting") : fileInfo.status);
-    rowItems << new QStandardItem(fileInfo.fullPath);
-    rowItems << new QStandardItem(fileInfo.customResolutionWidth);
-    rowItems << new QStandardItem(fileInfo.customResolutionHeight);
-    // Add empty items for other columns if they exist, e.g., for progress, ETA
+    rowItems << new QStandardItem(fileInfo.fileName); // Col 0: File Name
+    rowItems << new QStandardItem(fileInfo.status.isEmpty() ? tr("Waiting") : fileInfo.status); // Col 1: Status
+    rowItems << new QStandardItem(fileInfo.fullPath); // Col 2: Full Path
+    QString resolution = (!fileInfo.customResolutionWidth.isEmpty() || !fileInfo.customResolutionHeight.isEmpty()) ?
+                         fileInfo.customResolutionWidth + "x" + fileInfo.customResolutionHeight : "";
+    rowItems << new QStandardItem(resolution); // Col 3: Resolution
+    rowItems << new QStandardItem(""); // Col 4: Output Path (empty for now)
+    rowItems << new QStandardItem(""); // Col 5: Engine Settings (empty for now)
     Table_model_image->appendRow(rowItems);
     qDebug() << "[Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount:" << Table_model_image->rowCount() << "columnCount:" << Table_model_image->columnCount();
 }
 
 void MainWindow::Table_gif_insert_fileName_fullPath(const FileLoadInfo& fileInfo) {
     QList<QStandardItem *> rowItems;
-    rowItems << new QStandardItem(fileInfo.fileName);
-    rowItems << new QStandardItem(fileInfo.status.isEmpty() ? tr("Waiting") : fileInfo.status);
-    rowItems << new QStandardItem(fileInfo.fullPath);
-    rowItems << new QStandardItem(fileInfo.customResolutionWidth);
-    rowItems << new QStandardItem(fileInfo.customResolutionHeight);
+    rowItems << new QStandardItem(fileInfo.fileName); // Col 0: File Name
+    rowItems << new QStandardItem(fileInfo.status.isEmpty() ? tr("Waiting") : fileInfo.status); // Col 1: Status
+    rowItems << new QStandardItem(fileInfo.fullPath); // Col 2: Full Path
+    QString resolution = (!fileInfo.customResolutionWidth.isEmpty() || !fileInfo.customResolutionHeight.isEmpty()) ?
+                         fileInfo.customResolutionWidth + "x" + fileInfo.customResolutionHeight : "";
+    rowItems << new QStandardItem(resolution); // Col 3: Resolution
+    rowItems << new QStandardItem(""); // Col 4: Output Path (empty for now)
+    rowItems << new QStandardItem(""); // Col 5: Engine Settings (empty for now)
     Table_model_gif->appendRow(rowItems);
     qDebug() << "[Debug] Table_gif_insert_fileName_fullPath: Appended. New rowCount:" << Table_model_gif->rowCount() << "columnCount:" << Table_model_gif->columnCount();
 }
 
 void MainWindow::Table_video_insert_fileName_fullPath(const FileLoadInfo& fileInfo) {
     QList<QStandardItem *> rowItems;
-    rowItems << new QStandardItem(fileInfo.fileName);
-    rowItems << new QStandardItem(fileInfo.status.isEmpty() ? tr("Waiting") : fileInfo.status);
-    rowItems << new QStandardItem(fileInfo.fullPath);
-    rowItems << new QStandardItem(fileInfo.customResolutionWidth);
-    rowItems << new QStandardItem(fileInfo.customResolutionHeight);
+    rowItems << new QStandardItem(fileInfo.fileName); // Col 0: File Name
+    rowItems << new QStandardItem(fileInfo.status.isEmpty() ? tr("Waiting") : fileInfo.status); // Col 1: Status
+    rowItems << new QStandardItem(fileInfo.fullPath); // Col 2: Full Path
+    QString resolution = (!fileInfo.customResolutionWidth.isEmpty() || !fileInfo.customResolutionHeight.isEmpty()) ?
+                         fileInfo.customResolutionWidth + "x" + fileInfo.customResolutionHeight : "";
+    rowItems << new QStandardItem(resolution); // Col 3: Resolution
+    rowItems << new QStandardItem(""); // Col 4: FPS (empty for now)
+    rowItems << new QStandardItem(""); // Col 5: Duration (empty for now)
+    rowItems << new QStandardItem(""); // Col 6: Output Path (empty for now)
+    rowItems << new QStandardItem(""); // Col 7: Engine Settings (empty for now)
     Table_model_video->appendRow(rowItems);
     qDebug() << "[Debug] Table_video_insert_fileName_fullPath: Appended. New rowCount:" << Table_model_video->rowCount() << "columnCount:" << Table_model_video->columnCount();
 }

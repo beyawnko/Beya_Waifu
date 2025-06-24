@@ -23,11 +23,23 @@
 #include <QApplication>
 #include <QCoreApplication>
 #include <QCommandLineParser>
+#include <QFile>
+#include <QTextStream>
+#include <QDateTime>
 #include <QStyleFactory>
 #include <QDir>
 
 int main(int argc, char *argv[])
 {
+    // Early file log for debugging purposes
+    QFile debugFile("debug_trace.log");
+    if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&debugFile);
+        out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+            << " : Application main() started. Waifu2x-Extension-QT. Debugging file list population.\n";
+        debugFile.close();
+    }
+
     QApplication a(argc, argv);
     QStyle *style = QStyleFactory::create("macos");
     if (!style)
