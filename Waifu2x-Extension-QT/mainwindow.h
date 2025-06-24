@@ -50,7 +50,6 @@
 #include <QScreen>
 #include <QCloseEvent>
 #include <QFileDialog>
-#include <QtCore5Compat/QTextCodec>
 #include <cmath>
 #include <QSystemTrayIcon>
 #include <QMenu>

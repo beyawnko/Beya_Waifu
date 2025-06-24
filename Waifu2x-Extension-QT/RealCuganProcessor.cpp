@@ -145,7 +145,7 @@ void RealCuganProcessor::cleanupQtMediaPlayer()
             m_mediaPlayer->stop();
         }
         // Reset source to release file handles if any are held
-        // m_mediaPlayer->setMedia(QMediaContent()); // setMedia is for Qt5, use setSource(QUrl()) for Qt6
+        // m_mediaPlayer->setMedia(QMediaContent()); // use setSource(QUrl()) with Qt6
         m_mediaPlayer->setSource(QUrl());
     }
     // m_videoSink is a child of m_mediaPlayer or this, and its resources are managed by Qt mostly.

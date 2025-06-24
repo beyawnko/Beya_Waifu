@@ -22,7 +22,7 @@
 
 /*
 Implementation of the tray icon follows guidance from the Jianshu article
-"Qt5 application system tray" by XiaoQ_wang:
+"Qt application system tray" by XiaoQ_wang:
 https://www.jianshu.com/p/a000044f1f4a
 
 The tutorial explains how to use QSystemTrayIcon to show the application's

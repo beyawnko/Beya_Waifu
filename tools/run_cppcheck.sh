@@ -6,13 +6,9 @@ if ! command -v pkg-config >/dev/null; then
     exit 1
 fi
 
-QT_PKG=""
-if pkg-config --exists Qt5Core; then
-    QT_PKG=Qt5Core
-elif pkg-config --exists Qt6Core; then
-    QT_PKG=Qt6Core
-else
-    echo "Error: Qt development packages not found. Install qtbase5-dev or qtbase6-dev." >&2
+QT_PKG="Qt6Core"
+if ! pkg-config --exists "$QT_PKG"; then
+    echo "Error: Qt 6 development packages not found." >&2
     exit 1
 fi
 
