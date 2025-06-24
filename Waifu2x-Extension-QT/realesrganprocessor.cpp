@@ -999,7 +999,7 @@ void RealEsrganProcessor::onQtVideoFrameChanged(const QVideoFrame &frame)
         return;
     }
 
-    m_currentDecodedFrameBuffer = QByteArray(reinterpret_cast<const char*>(image.constBits()), imagesize_t(image.sizeInBytes()));
+    m_currentDecodedFrameBuffer = QByteArray(reinterpret_cast<const char*>(image.constBits()), qsizetype(image.sizeInBytes()));
     m_framesAcceptedBySR++;
     if (m_settings.verboseLog && m_framesAcceptedBySR % 100 == 0) {
          qDebug() << "RealESRGAN QVideoSink: Frame" << m_framesAcceptedBySR << "being sent to SR.";
@@ -1065,7 +1065,7 @@ void RealEsrganProcessor::processDecodedFrameBuffer() {
         return;
     }
 
-    m_currentDecodedFrameBuffer = QByteArray(reinterpret_cast<const char*>(image.constBits()), imagesize_t(image.sizeInBytes()));
+    m_currentDecodedFrameBuffer = QByteArray(reinterpret_cast<const char*>(image.constBits()), qsizetype(image.sizeInBytes()));
     if (m_currentDecodedFrameBuffer.isEmpty()) {
         emit logMessage(tr("RealESRGAN Error: Converted QImage to QByteArray is empty. Skipping."));
         if (m_mediaPlayerPausedByBackpressure && m_mediaPlayer && m_mediaPlayer->playbackState() == QMediaPlayer::PausedState && m_qtVideoFrameBuffer.size() < 2) {

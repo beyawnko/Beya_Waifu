@@ -48,6 +48,7 @@ These protocols define the mandatory algorithms for your reasoning and task exec
     - *Build System and Dependency Analysis*: When planning tasks related to version migrations (e.g., Qt5 to Qt6), dependency updates, or troubleshooting build-level errors:
         - The plan must include a specific step to thoroughly inspect and analyze the project's build system files (e.g., `.pro`, `CMakeLists.txt`, `setup.py`).
         - This inspection should verify correct library versions, module inclusions, compiler flags (like `QT_DEPRECATED_WARNINGS`), and absence of conflicting or obsolete dependencies.
+        - When migrating between Qt versions, check source files for removed types (e.g., `imagesize_t`) and update them to their Qt 6 replacements (e.g., `qsizetype`).
     - *Inter-Process Communication (IPC) via Pipes*: When planning tasks involving the development or modification of features using IPC via pipes (e.g., chaining `QProcess` instances or similar):
         - The plan should include steps to verify robust error handling and propagation across all stages of the pipe.
         - Explicitly check for mechanisms to manage data buffering between processes to prevent excessive memory usage (e.g., backpressure, buffer limits).

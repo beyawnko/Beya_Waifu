@@ -836,7 +836,7 @@ void RealCuganProcessor::processDecodedFrameBuffer() {
         return;
     }
 
-    m_currentDecodedFrameBuffer = QByteArray(reinterpret_cast<const char*>(image.constBits()), imagesize_t(image.sizeInBytes()));
+    m_currentDecodedFrameBuffer = QByteArray(reinterpret_cast<const char*>(image.constBits()), qsizetype(image.sizeInBytes()));
 
     if (m_currentDecodedFrameBuffer.isEmpty()) {
          emit logMessage(tr("Error: Converted QImage to QByteArray is empty. Skipping frame."));
@@ -1233,7 +1233,7 @@ void RealCuganProcessor::onQtVideoFrameChanged(const QVideoFrame &frame)
     }
 
     // Now m_currentDecodedFrameBuffer holds the raw pixels in BGR888 or RGB888 format
-    m_currentDecodedFrameBuffer = QByteArray(reinterpret_cast<const char*>(image.constBits()), imagesize_t(image.sizeInBytes()));
+    m_currentDecodedFrameBuffer = QByteArray(reinterpret_cast<const char*>(image.constBits()), qsizetype(image.sizeInBytes()));
 
 
     // At this point, m_currentDecodedFrameBuffer has one frame.
