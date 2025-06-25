@@ -16,28 +16,30 @@ MainWindow::MainWindow(QWidget *parent)
     // For this specific case, signals are already used for UI updates from the worker.
     // If RUN_Concurrent_Worker handles its own errors and emits signals,
     // a .then() might primarily be for logging the future's state if needed.
-    m_runConcurrentFuture.then(this, [this](bool result){
-        if (m_runConcurrentFuture.isCanceled()) {
-            // Handle cancellation if applicable
-            qDebug() << "RUN_Concurrent was canceled.";
-        } else if (m_runConcurrentFuture.isFaulted()) {
-            // Handle error
-            qDebug() << "RUN_Concurrent failed:" << m_runConcurrentFuture.exception().what();
-        } else {
-            qDebug() << "RUN_Concurrent finished. Result:" << result;
-            // The worker already emits signals Send_Duplicate or Send_RUN
-            // and may call this->close().
-            // If the worker calls this->close(), this MainWindow instance might be
-            // deleted by the time this continuation runs.
-            // Care must be taken if this continuation needs to access `this`.
-            // In this specific case, RUN_Concurrent_Worker calls this->close()
-            // which might lead to issues if this lambda tries to access `this` afterwards.
-            // However, the signals should have already been processed.
-            // If `this->close()` in the worker is problematic for the future's continuation,
-            // the closing logic might need to be deferred or handled differently.
-            // For now, we assume the signals are sufficient and the main concern is
-            // the potential deletion of `this`.
+    // m_runConcurrentFuture.then(this, [this](bool result){ // Old .then() logic removed
+
+    m_runWatcher = new QFutureWatcher<bool>(this);
+    m_runWatcher->setFuture(m_runConcurrentFuture);
+    connect(m_runWatcher, &QFutureWatcher<bool>::finished, this, [this]() {
+        try {
+            // bool success = m_runWatcher->future().result(); // Call result to potentially re-throw exceptions
+            // The result itself is not strictly needed here as RUN_Concurrent_Worker emits signals
+            // and calls this->close(). The main purpose is to catch exceptions if any were thrown
+            // by the worker and not caught internally.
+            m_runWatcher->future().result(); // Call to check for exceptions from worker.
+
+            // The worker (RUN_Concurrent_Worker) already emits Send_Duplicate or Send_RUN
+            // and calls this->close(). If `this` is deleted by the time this runs,
+            // further actions on `this` would be unsafe.
+            // Logging the fact that it finished (without an exception being caught here) is okay.
+            qDebug() << "RUN_Concurrent_Worker completed (QFutureWatcher).";
+
+        } catch (const std::exception &e) {
+            qDebug() << "RUN_Concurrent_Worker exception caught by QFutureWatcher:" << e.what();
+        } catch (...) {
+            qWarning() << "RUN_Concurrent_Worker unknown exception caught by QFutureWatcher.";
         }
+        m_runWatcher->deleteLater(); // Clean up watcher
     });
 }
 

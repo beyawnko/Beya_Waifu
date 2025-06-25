@@ -18,9 +18,10 @@ find_package(Qt6 COMPONENTS Core Gui Concurrent Multimedia OpenGL OpenGLWidgets 
 # Determine if RHI should be enabled (Qt >= 6.6.0)
 if (Qt6_VERSION VERSION_GREATER_EQUAL "6.6.0")
   set(ENABLE_RHI TRUE)
-  message(STATUS "Qt6 >= 6.6 detected: enabling RHI integration")
-  # Find RHI component separately if Qt version is sufficient
-  find_package(Qt6 COMPONENTS RHI REQUIRED)
+  message(STATUS "Qt6 >= 6.6 detected: enabling RHI integration via Quick3D (and linking GuiPrivate for headers)")
+  # Find Quick3D component if Qt version is sufficient, as it provides RHI
+  # GuiPrivate is not found this way, but the Qt6::GuiPrivate target should be available if Gui is found.
+  find_package(Qt6 COMPONENTS Quick3D REQUIRED)
 else()
   set(ENABLE_RHI FALSE)
   message(STATUS "Qt6 < 6.6 detected: building without RHI support (RHI available publicly since Qt 6.6). Will attempt to use private API if available and explicitly enabled.")
@@ -169,21 +170,22 @@ file(WRITE ${TRANSLATIONS_QRC_FILE_STATIC} "${TRANSLATIONS_QRC_FILE_CONTENT_STAT
 list(APPEND PROJECT_RESOURCES ${TRANSLATIONS_QRC_FILE_STATIC})
 # End Translation handling
 
-# Shader handling with qt_add_shaders
-qt_add_shaders(${PROJECT_NAME} ShadersGenerated
-    FILES ${PROJECT_SHADERS}
-    PREFIX "/com.waifu2x.effects/shaders"
-)
-# The qt_add_shaders function should handle adding the compiled shaders to the target.
-# So, PROJECT_SHADERS should not be listed in qt_add_executable directly.
-
+# Define the executable target first
 qt_add_executable(${PROJECT_NAME}
     ${PROJECT_SOURCES}
     ${PROJECT_HEADERS}
     ${PROJECT_FORMS}
     ${PROJECT_RESOURCES}
-    # PROJECT_SHADERS # Removed from here, handled by qt_add_shaders
+    # PROJECT_SHADERS # Will be handled by qt_add_shaders linking to this target
 )
+
+# Shader handling with qt_add_shaders
+# This should come AFTER qt_add_executable so that ${PROJECT_NAME} target exists
+qt_add_shaders(${PROJECT_NAME} ShadersGenerated
+    FILES ${PROJECT_SHADERS}
+    PREFIX "/com.waifu2x.effects/shaders"
+)
+# The qt_add_shaders function should handle adding the compiled shaders to the target.
 
 # Also list TS files as sources for the target to help with dependency tracking (REMOVED - caused issues)
 # foreach(TS_FILE ${PROJECT_TRANSLATIONS_TS})
@@ -203,9 +205,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Widgets
     Qt6::ShaderTools
     Qt6::Quick
-    # Conditionally link RHI using generator expression
-    "$<$<BOOL:${ENABLE_RHI}>:Qt6::RHI>"
-    # Qt6::GuiPrivate # Not needed if using public RHI for >= 6.6 and RHI disabled for < 6.6
+    # Conditionally link Quick3D (which includes RHI) and GuiPrivate (for rhi headers) using generator expression
+    "$<$<BOOL:${ENABLE_RHI}>:Qt6::Quick3D>"
+    "$<$<BOOL:${ENABLE_RHI}>:Qt6::GuiPrivate>"
 )
 
 # Add defines

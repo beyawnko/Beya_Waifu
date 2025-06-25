@@ -130,13 +130,17 @@ bool FileManager::moveToTrash(const QString &file)
     QFileInfo fileInfo(file);
     if (!fileInfo.exists())
         return false;
-#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
-    if (QDesktopServices::moveToTrash(QUrl::fromLocalFile(fileInfo.absoluteFilePath())))
-        return true;
-#elif QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+// For Qt 6.0 and later, QFile::moveToTrash is the standard way.
+// QDesktopServices::moveToTrash was available in Qt 6.5 but QFile::moveToTrash is preferred.
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     if (QFile::moveToTrash(fileInfo.absoluteFilePath()))
         return true;
+#else
+    // Fallback for Qt5 or if QFile::moveToTrash somehow fails or wasn't available (though it should be in Qt6)
+    // This part of the original code using gio/xdg-trash might still be relevant for non-Windows, non-Qt6 if that was a target.
+    // However, for this specific build targeting Qt 6.6.3, QFile::moveToTrash is the primary method.
 #endif
+    // Fallback for Linux if Qt methods fail or are unavailable (e.g. older Qt or specific Linux setups)
     QString absPath = fileInfo.absoluteFilePath();
     if (QProcess::startDetached("gio", QStringList() << "trash" << absPath))
         return true;

@@ -16,6 +16,7 @@ Copyright (C) 2025  beyawnko
 #include <QApplication>
 #include <QtConcurrent>
 #include <QEventLoop>
+#include <QFutureWatcher> // Added for QFutureWatcher
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -49,5 +50,6 @@ private:
                     QByteArray *stdOut = nullptr,
                     QByteArray *stdErr = nullptr);
     QFuture<bool> m_runConcurrentFuture; // Declare the future member
+    QFutureWatcher<bool> *m_runWatcher;   // Added QFutureWatcher member
     bool RUN_Concurrent_Worker();      // Declare the worker method
 };

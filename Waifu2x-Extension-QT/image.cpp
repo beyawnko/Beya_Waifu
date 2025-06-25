@@ -77,7 +77,7 @@ void MainWindow::ImagesResize_Folder_MultiThread(int New_width,int New_height,QS
     }
 
     // Wait for all tasks (including their .then() continuations that release the semaphore) to complete
-    for(const QFuture<void>& f : futures) {
+    for(QFuture<void> f : futures) { // Iterate by value to get a non-const QFuture
         f.waitForFinished();
     }
 

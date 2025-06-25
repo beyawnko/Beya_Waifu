@@ -1,7 +1,8 @@
 #pragma once
 
 #include <QSGRenderNode>
-#include <qrhi.h> // Main RHI header
+#include <rhi/qrhi.h> // Main RHI header - Changed to rhi/qrhi.h
+#include <QShader>    // Added for QShader
 #include "RhiLiquidGlassItem.h" // For LiquidGlassParams struct
 
 // Forward declarations
