@@ -24,7 +24,7 @@ Copyright (C) 2025  beyawnko
 [CmdletBinding()]
 param (
     # The version of Qt to install.
-    [string]$QtVersion = '6.5.2',
+    [string]$QtVersion = '6.6.3', # Updated to ensure RHI headers are publicly available
 
     # The base directory for the Qt installation.
     [string]$QtDir = '/tmp/Qt'

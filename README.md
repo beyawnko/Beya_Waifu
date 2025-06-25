@@ -17,7 +17,7 @@ RealCUGAN and RealESRGAN are currently the only supported upscaling engines.
 
 ## Dependencies
 
- - **Qt 6** development environment (Core, GUI, Widgets, Multimedia, OpenGL, OpenGLWidgets modules)
+ - **Qt 6** development environment (Core, GUI, Widgets, Multimedia, OpenGL, OpenGLWidgets, ShaderTools, Quick, Quick3D modules). For full RHI support including the Liquid Glass effect, Qt 6.6.0 or newer is recommended.
 - **C++17** compatible compiler (I am currently in the process of working on experimental refactoring to C++20 for
   coroutines)
 - **FFmpeg** for handling video input/output
@@ -34,8 +34,7 @@ menus. Detected IDs are saved to `settings.ini` so that subsequent launches rest
 
 ### Quick Build (Linux & Windows)
 
-1. Install **Qt 6.5** with the Widgets, Multimedia, and OpenGL modules. A C++17 compiler is required (GCC 7+
-   on Linux or the MSYS2 MinGW-w64 toolchain on Windows).
+1. Install **Qt 6.6.3 or newer** with the Core, Gui, Widgets, Multimedia, OpenGL, OpenGLWidgets, ShaderTools, Quick, and Quick3D modules. A C++17 compiler is required (GCC 7+ on Linux or the MSYS2 MinGW-w64 toolchain on Windows).
 1. Clone the repository and its submodules:
    ```bash
    git clone --recursive https://github.com/beyawnko/Beya_Waifu.git
@@ -90,7 +89,7 @@ The `build_windows.ps1` script will perform the following:
 - Install necessary tools via Chocolatey, including MSYS2 (for a Unix-like environment on Windows), CMake, Git (if not
   already fully available), and Python.
 - Set up the MSYS2/MinGW64 build environment.
-- Install the required version of Qt (currently 6.5.2 for MinGW) using `aqtinstall`.
+- Install the required version of Qt (currently 6.6.3 for MinGW, matching the `build_windows.ps1` script) using `aqtinstall`.
 - Execute the main build script (`build_projects.sh`) which compiles the Waifu2x Extension QT application and the
   Launcher.
 - **Deployment:** After a successful compilation, the script automatically bundles the necessary Qt runtime DLLs (using
@@ -134,8 +133,8 @@ git submodule update --init --recursive
 
 1. **Qt Development Libraries**:
 
-  - Qt 6 (e.g., version 6.5.2). You'll need the `core`, `gui`, `widgets`, and `multimedia` components,
-    along with the `opengl` and `openglwidgets` modules.
+  - Qt 6 (e.g., version 6.6.3 or newer). You'll need the `core`, `gui`, `widgets`, `multimedia`, `quick`, `quick3d` components,
+    along with the `opengl`, `openglwidgets`, and `shadertools` modules. For RHI-based features like LiquidGlass, Qt 6.6.0+ is necessary.
    - Installation example for Debian/Ubuntu systems:
      ```bash
     sudo apt install qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-shadertools-dev
@@ -179,14 +178,14 @@ These packages supply `qmake6`, `qsb`, and the Multimedia modules.
 
 1. **Qt for MinGW**:
 
-   - Install a MinGW-compatible version of Qt 6 (e.g., Qt 6.5.2). You can get this via the Qt Online Installer available
-     from the [official Qt website](https://www.qt.io/download-qt-installer).
-   - During the Qt installation, ensure you select a Qt version built for MinGW (e.g., `mingw81_64` for Qt 6.5.2 if you
+   - Install a MinGW-compatible version of Qt 6 (e.g., Qt 6.6.3 or newer, matching the `build_windows.ps1` script). You can get this via the Qt Online Installer available
+     from the [official Qt website](https://www.qt.io/download-qt-installer) or use `aqtinstall` as done by the `build_windows.ps1` script.
+   - During the Qt installation (if manual), ensure you select a Qt version built for MinGW (e.g., `mingw_64` for Qt 6.6.3 if you
      installed the `mingw-w64-x86_64` toolchain).
-   - Ensure that the `bin` directory of your Qt installation (e.g., `C:\Qt\6.5.2\mingw81_64\bin`) and the MinGW compiler
+   - Ensure that the `bin` directory of your Qt installation (e.g., `C:\Qt\6.6.3\mingw_64\bin`) and the MinGW compiler
      `bin` directory (e.g., `C:\msys64\mingw64\bin`) are added to your system's `PATH` environment variable, especially
      within the MSYS2 MinGW terminal environment.
-   - Include the **qtshadertools** module so the Liquid Glass shader can be built.
+   - Include the **qtshadertools**, **qtquick**, and **qtquick3d** modules. For RHI-based features like LiquidGlass, Qt 6.6.0+ is necessary.
     - Install the `opengl` and `openglwidgets` modules.
 
 1. **Upscaler Dependencies (Vulkan for Windows)**:
@@ -277,9 +276,13 @@ Run the application with `--verbose` to capture detailed logs in `logs/waifu.log
 ## Liquid Glass
 
 The application ships with an experimental Liquid Glass shader that creates a refractive glass sphere from the scene
-behind it. Building this effect requires the `qsb` tool provided by Qt 6. The `Waifu2x-Extension-QT.pro` file runs `qsb`
-automatically and writes `shaders/liquidglass.frag.qsb`. Ensure the tool is available in `PATH` when invoking `qmake`.
-If you cloned the repository without build artifacts, create this file manually using `qsb`:
+behind it. Building this effect requires the `qsb` tool provided by Qt 6's ShaderTools module. The CMake build system
+(`Waifu2x-Extension-QT/CMakeLists.txt`) uses the `qt_add_shaders` function to compile the `shaders/liquidglass.frag`
+shader into `shaders/liquidglass.frag.qsb` and embed it into the application resources.
+Ensure that Qt (version 6.6.0 or newer for RHI features) is correctly installed and its ShaderTools (including `qsb`)
+are available in your build environment. If you encounter issues with missing shader files, ensure your CMake configuration
+can find your Qt installation and that the ShaderTools component was installed.
+If you cloned the repository without build artifacts and need to manually build the shader (though CMake should handle this):
 
 ```bash
 ./tools/build_liquidglass_shader.sh

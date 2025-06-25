@@ -2,7 +2,7 @@
 
 #include <QSGRenderNode>
 #include <rhi/qrhi.h> // Main RHI header - Changed to rhi/qrhi.h
-#include <QShader>    // Added for QShader
+#include <rhi/qshader.h> // Added for QShader - Corrected include path for Qt 6
 #include "RhiLiquidGlassItem.h" // For LiquidGlassParams struct
 
 // Forward declarations
