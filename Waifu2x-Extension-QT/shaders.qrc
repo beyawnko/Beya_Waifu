@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/shaders">
-        <file>shaders/liquidglass.frag.qsb</file>
-        <file>shaders/liquidglass.frag</file>
+        <!-- qmake should populate this based on the SHADERS variable -->
+        <!-- If shaders are not found at runtime, verify .qsb files are generated -->
+        <!-- and correctly embedded. Manually list .qsb files here if needed. -->
     </qresource>
 </RCC>
