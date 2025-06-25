@@ -501,6 +501,7 @@ public:
   QFuture<int> DownloadOnlineQRCode;
   QFuture<int> Waifu2xMain;
   QFuture<void> compatibilityTestFuture;
+  QFutureWatcher<void> *m_compatWatcher; // Added QFutureWatcher member
   int Force_close();
   std::atomic<bool> isAlreadyClosed{false};
   long unsigned int TimeCost_CurrentFile =0;

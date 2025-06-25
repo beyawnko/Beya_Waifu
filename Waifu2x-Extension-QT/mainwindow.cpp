@@ -1043,23 +1043,31 @@ void MainWindow::StartFullCompatibilityTest()
     // UI updates within TestEngineCommand are handled by QMetaObject::invokeMethod.
   });
 
-  compatibilityTestFuture.then(this, [this]() {
-    // This continuation runs on the main thread after ExecuteCompatibilityTests completes.
-    if (compatibilityTestFuture.isCanceled()) {
-        TextBrowser_NewMessage(tr("Compatibility test was canceled."));
-        // Perform any cleanup specific to cancellation if needed
-    } else if (compatibilityTestFuture.isFaulted()) {
-        TextBrowser_NewMessage(tr("Compatibility test failed with an exception: %1").arg(compatibilityTestFuture.exception().what()));
-        // Perform any cleanup specific to failure if needed
-    } else {
-        TextBrowser_NewMessage(tr("Compatibility test finished."));
-        // This was previously at the end of ExecuteCompatibilityTests, called via invokeMethod
-    }
+  // compatibilityTestFuture.then(this, [this]() { // Old .then() logic removed
 
-    // Final UI updates and signals, ensuring they run on the main thread.
-    this->Finish_progressBar_CompatibilityTest(); // Call directly
-    ui->pushButton_compatibilityTest->setEnabled(true); // Call directly
-    emit this->Send_Waifu2x_Compatibility_Test_finished(); // Emit directly
+  m_compatWatcher = new QFutureWatcher<void>(this);
+  m_compatWatcher->setFuture(compatibilityTestFuture);
+  connect(m_compatWatcher, &QFutureWatcher<void>::finished, this, [this]() {
+      try {
+          if (m_compatWatcher->future().isCanceled()) { // Check for cancellation first
+              TextBrowser_NewMessage(tr("Compatibility test was canceled."));
+          } else {
+              m_compatWatcher->future().waitForFinished(); // Re-throws exceptions from worker
+              TextBrowser_NewMessage(tr("Compatibility test finished successfully."));
+          }
+      } catch (const std::exception &e) {
+          TextBrowser_NewMessage(tr("Compatibility test failed with std::exception: %1").arg(QString::fromUtf8(e.what())));
+      } catch (const QException &e) { // QException might not be caught if std::exception is broader and first
+          TextBrowser_NewMessage(tr("Compatibility test failed with QException: %1").arg(QString::fromUtf8(e.what())));
+      } catch (...) {
+          TextBrowser_NewMessage(tr("Compatibility test failed with an unknown exception."));
+      }
+
+      // Final UI updates and signals, ensuring they run on the main thread.
+      this->Finish_progressBar_CompatibilityTest(); // Call directly
+      ui->pushButton_compatibilityTest->setEnabled(true); // Call directly
+      emit this->Send_Waifu2x_Compatibility_Test_finished(); // Emit directly
+      m_compatWatcher->deleteLater(); // Clean up watcher
   });
 }
 
