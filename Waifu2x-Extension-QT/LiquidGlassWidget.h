@@ -26,27 +26,7 @@
 #include <QPointF>
 #include <QTimer>
 #include <QMouseEvent>
-
-// C++ struct mirroring the GLSL UBO structure with std140 layout
-// GLSL:
-// layout(std140, binding = 1) uniform SettingsBlock {
-//     vec2 resolution;
-//     float time;
-//     vec2 mouse;
-//     float ior;
-//     float borderRadius;
-//     float chromaticAberrationOffset;
-// } Settings;
-struct LiquidGlassParams {
-    QVector2D resolution; // Base alignment 8. Offset 0. Size 8.
-    float time;           // Base alignment 4. Offset 8. Size 4.
-    float padding1[1];    // Add 4 bytes padding. Offset of mouse becomes 16. Size 4.
-    QVector2D mouse;      // Base alignment 8. Offset 16. Size 8.
-    float ior;            // Base alignment 4. Offset 24. Size 4.
-    float borderRadius;   // Base alignment 4. Offset 28. Size 4.
-    float chromaticAberrationOffset; // Base alignment 4. Offset 32. Size 4.
-    float padding2[3];    // Add 12 bytes padding (3 floats). Offset 36. Size 12.
-}; // Total size: 48 bytes.
+#include "LiquidGlassParams.h" // Include the new header
 
 class LiquidGlassWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
 {

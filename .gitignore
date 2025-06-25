@@ -29,6 +29,7 @@ Waifu2x-Extension-QT-Launcher/moc_*.cpp
 Waifu2x-Extension-QT-Launcher/moc_*.h
 Waifu2x-Extension-QT-Launcher/qrc_*.cpp
 Waifu2x-Extension-QT-Launcher/ui_*.h
+build/
 Waifu2x-Extension-QT-Launcher/*.o
 Waifu2x-Extension-QT-Launcher/Waifu2x-Extension-QT-Launcher
 
