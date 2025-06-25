@@ -47,7 +47,7 @@ private slots:
     // --- New slots for piped video processing ---
     // Decoder (FFmpeg)
     void onPipeDecoderReadyReadStandardOutput();
-    void onPipeDecoderReadyReadStandardError();
+    // void onPipeDecoderReadyReadStandardError(); // Slot for removed m_ffmpegDecoderProcess - Ensuring it's commented
     void onPipeDecoderFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void onPipeDecoderError(QProcess::ProcessError error);
 

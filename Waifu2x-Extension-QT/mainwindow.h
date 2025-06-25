@@ -770,7 +770,7 @@ public slots:
 
   // Slots for generic processor signals
   void onFileProgress(int rowNum, int percent);
-  void onProcessingFinished(int rowNum, bool success);
+  void onProcessingFinished(int rowNum, bool success, ProcessJobType jobType);
 
   // Compatibility Test Slots
   void StartFullCompatibilityTest();

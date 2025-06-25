@@ -82,19 +82,19 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
   m_anime4kProcessor = new Anime4KProcessor(this);
   connect(m_anime4kProcessor, &Anime4KProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
   connect(m_anime4kProcessor, &Anime4KProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString);
-  connect(m_anime4kProcessor, &Anime4KProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
+  connect(m_anime4kProcessor, &Anime4KProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_IMAGE); });
 
   m_realEsrganProcessor = new RealEsrganProcessor(this);
   connect(m_realEsrganProcessor, &RealEsrganProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
   connect(m_realEsrganProcessor, &RealEsrganProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString);
   connect(m_realEsrganProcessor, &RealEsrganProcessor::fileProgress, this, &MainWindow::onFileProgress);
-  connect(m_realEsrganProcessor, &RealEsrganProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
+  connect(m_realEsrganProcessor, &RealEsrganProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_IMAGE); });
 
   realCuganProcessor = new RealCuganProcessor(this);
   connect(realCuganProcessor, &RealCuganProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
   connect(realCuganProcessor, &RealCuganProcessor::statusChanged, this, &MainWindow::Table_video_ChangeStatus_rowNumInt_statusQString);
   connect(realCuganProcessor, &RealCuganProcessor::fileProgress, this, &MainWindow::onFileProgress);
-  connect(realCuganProcessor, &RealCuganProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
+  connect(realCuganProcessor, &RealCuganProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_IMAGE); });
 
   // Setup other components
   videoProcessor = new VideoProcessor(this);
@@ -299,7 +299,7 @@ void MainWindow::Anime4k_Image(int rowNum, bool){
     if (ui->checkBox_GaussianBlurWeak_Pre_Anime4k->isChecked()) preFilterParts << "gaussianBlurWeak";
     if (ui->checkBox_GaussianBlur_Pre_Anime4k->isChecked()) preFilterParts << "gaussianBlur";
     if (ui->checkBox_BilateralFilter_Pre_Anime4k->isChecked()) preFilterParts << "bilateralFilter";
-    if (ui->checkBox_BilateralFilterFaster_Pre_Anime4k->isChecked()) preFilterParts << "bilateralFilterFaster";
+    if (ui->checkBox_BilateralFilterFaster_Pre_Anime4k->isChecked()) preFilterParts << "bilateralFilterFaster"; // Corrected to preFilterParts
     settings.preFilters = preFilterParts.join(':');
   }
   settings.postProcessing = ui->checkBox_EnablePostProcessing_Anime4k->isChecked();
@@ -312,7 +312,7 @@ void MainWindow::Anime4k_Image(int rowNum, bool){
     if (ui->checkBox_GaussianBlurWeak_Post_Anime4k->isChecked()) postFilterParts << "gaussianBlurWeak";
     if (ui->checkBox_GaussianBlur_Post_Anime4k->isChecked()) postFilterParts << "gaussianBlur";
     if (ui->checkBox_BilateralFilter_Post_Anime4k->isChecked()) postFilterParts << "bilateralFilter";
-    if (ui->checkBox_BilateralFilterFaster_Post_Anime4k->isChecked()) preFilterParts << "bilateralFilterFaster";
+    if (ui->checkBox_BilateralFilterFaster_Post_Anime4k->isChecked()) postFilterParts << "bilateralFilterFaster";
     settings.postFilters = postFilterParts.join(':');
   }
 
@@ -326,7 +326,7 @@ void MainWindow::Anime4k_Image(int rowNum, bool){
   QString sourceFile = Table_model_image->item(rowNum, 2)->text();
   QString destFile = Generate_Output_Path(sourceFile, "anime4k");
 
-  disconnect(m_anime4kProcessor, &Anime4KProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
+  // disconnect(m_anime4kProcessor, &Anime4KProcessor::processingFinished, this, &MainWindow::onProcessingFinished); // Commented out: incompatible with 3-arg slot / lambda connect
   connect(m_anime4kProcessor, &Anime4KProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_IMAGE); });
   m_anime4kProcessor->processImage(rowNum, sourceFile, destFile, settings);
 }
@@ -349,7 +349,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Image(int rowNum, bool)
   else if (settings.modelName.contains("x2")) settings.modelNativeScale = 2;
   else settings.modelNativeScale = 1;
 
-  disconnect(m_realEsrganProcessor, SIGNAL(processingFinished(int,bool)), this, SLOT(onProcessingFinished(int,bool)));
+  // disconnect(m_realEsrganProcessor, SIGNAL(processingFinished(int,bool)), this, SLOT(onProcessingFinished(int,bool))); // Old Qt4 style, and incompatible
   connect(m_realEsrganProcessor, &RealEsrganProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_IMAGE); });
   m_realEsrganProcessor->processImage(rowNum, sourceFile, destFile, settings);
 }
@@ -386,7 +386,7 @@ void MainWindow::RealESRGAN_NCNN_Vulkan_Video(int rowNum)
   else if (settings.modelName.contains("x2")) settings.modelNativeScale = 2;
   else settings.modelNativeScale = 1;
 
-  disconnect(m_realEsrganProcessor, SIGNAL(processingFinished(int,bool)), this, SLOT(onProcessingFinished(int,bool)));
+  // disconnect(m_realEsrganProcessor, SIGNAL(processingFinished(int,bool)), this, SLOT(onProcessingFinished(int,bool))); // Old Qt4 style, and incompatible
   connect(m_realEsrganProcessor, &RealEsrganProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_VIDEO); });
   m_realEsrganProcessor->processVideo(rowNum, sourceFile, destFile, settings);
 }
@@ -404,7 +404,7 @@ void MainWindow::Realcugan_NCNN_Vulkan_Video(int rowNum)
   settings.ttaEnabled = ui->checkBox_TTA_RealCUGAN->isChecked();
   settings.singleGpuId = ui->comboBox_GPUID_RealCUGAN->currentText();
 
-  disconnect(realCuganProcessor, &RealCuganProcessor::processingFinished, this, &MainWindow::onProcessingFinished);
+  // disconnect(realCuganProcessor, &RealCuganProcessor::processingFinished, this, &MainWindow::onProcessingFinished); // Commented out: incompatible with 3-arg slot / lambda connect
   connect(realCuganProcessor, &RealCuganProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_VIDEO); });
   realCuganProcessor->processVideo(rowNum, sourceFile, destFile, settings);
 }
@@ -479,8 +479,8 @@ QString MainWindow::Generate_Output_Path(const QString& original_filePath, const
 // --- START OF STUB IMPLEMENTATION SECTION ---
 void MainWindow::resizeEvent(QResizeEvent *event) { QMainWindow::resizeEvent(event); /* STUB */ }
 void MainWindow::toggleLiquidGlass(bool enabled) { if (glassWidget) glassWidget->setVisible(enabled); /* STUB */ }
-int MainWindow::Waifu2x_Caffe_Image(int r, bool) { qDebug() << "STUB: Waifu2x_Caffe_Image"; onProcessingFinished(r, false); return 0; }
-int MainWindow::Waifu2x_Converter_Image(int r, bool) { qDebug() << "STUB: Waifu2x_Converter_Image"; onProcessingFinished(r, false); return 0; }
+int MainWindow::Waifu2x_Caffe_Image(int r, bool) { qDebug() << "STUB: Waifu2x_Caffe_Image"; onProcessingFinished(r, false, PROCESS_TYPE_IMAGE); return 0; }
+int MainWindow::Waifu2x_Converter_Image(int r, bool) { qDebug() << "STUB: Waifu2x_Converter_Image"; onProcessingFinished(r, false, PROCESS_TYPE_IMAGE); return 0; }
 void MainWindow::changeEvent(QEvent *e) { QMainWindow::changeEvent(e); /* STUB */ }
 void MainWindow::Set_Font_fixed() { /* STUB */ }
 bool MainWindow::SystemPrefersDark() const { return false; /* STUB */ }
