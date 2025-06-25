@@ -192,7 +192,22 @@ void MainWindow::tryStartNextFile()
     if (ThreadNumRunning == 0 && m_currentState == ProcessingState::Processing) Waifu2x_Finished();
     return;
   }
-  (void)QtConcurrent::run([this]() { this->startNextFileProcessing(); });
+
+  QFuture<void> future = QtConcurrent::run([this]() {
+    this->startNextFileProcessing();
+  });
+
+  // Minimal .then() continuation for logging or simple cleanup if needed.
+  // The primary mechanism for continuing the processing chain is through
+  // onProcessingFinished -> tryStartNextFile.
+  future.then(this, [this] {
+    // This block executes after the QtConcurrent::run task (which calls startNextFileProcessing) completes.
+    // Note: startNextFileProcessing itself launches a blocking engine call. So this .then()
+    // effectively runs after one file processing cycle initiated by this specific tryStartNextFile call
+    // has finished its dispatch (but not necessarily the external process).
+    // The actual "processing finished" signal for a file comes from the processor objects.
+    // qDebug() << "A startNextFileProcessing task slot has completed its synchronous part.";
+  });
 }
 
 void MainWindow::startNextFileProcessing()
@@ -1020,7 +1035,32 @@ void MainWindow::StartFullCompatibilityTest()
     return;
   }
   ui->pushButton_compatibilityTest->setEnabled(false);
-  compatibilityTestFuture = QtConcurrent::run([this] { this->ExecuteCompatibilityTests(); });
+  // compatibilityTestFuture is already a QFuture<void> member
+
+  compatibilityTestFuture = QtConcurrent::run([this] {
+    this->ExecuteCompatibilityTests();
+    // The actual work of ExecuteCompatibilityTests is done here.
+    // UI updates within TestEngineCommand are handled by QMetaObject::invokeMethod.
+  });
+
+  compatibilityTestFuture.then(this, [this]() {
+    // This continuation runs on the main thread after ExecuteCompatibilityTests completes.
+    if (compatibilityTestFuture.isCanceled()) {
+        TextBrowser_NewMessage(tr("Compatibility test was canceled."));
+        // Perform any cleanup specific to cancellation if needed
+    } else if (compatibilityTestFuture.isFaulted()) {
+        TextBrowser_NewMessage(tr("Compatibility test failed with an exception: %1").arg(compatibilityTestFuture.exception().what()));
+        // Perform any cleanup specific to failure if needed
+    } else {
+        TextBrowser_NewMessage(tr("Compatibility test finished."));
+        // This was previously at the end of ExecuteCompatibilityTests, called via invokeMethod
+    }
+
+    // Final UI updates and signals, ensuring they run on the main thread.
+    this->Finish_progressBar_CompatibilityTest(); // Call directly
+    ui->pushButton_compatibilityTest->setEnabled(true); // Call directly
+    emit this->Send_Waifu2x_Compatibility_Test_finished(); // Emit directly
+  });
 }
 
 void MainWindow::ExecuteCompatibilityTests()
@@ -1176,17 +1216,22 @@ void MainWindow::ExecuteCompatibilityTests()
 
 
   // Fill remaining progress bar slots if totalTests was an estimate
+  // This logic might still be useful if TestEngineCommand calls are not exactly matching totalTests
   int currentProgress = ui->progressBar_CompatibilityTest->value();
   int maxProgress = ui->progressBar_CompatibilityTest->maximum();
   for (int i = currentProgress; i < maxProgress; ++i) {
+    // Ensure Add_progressBar_CompatibilityTest is callable directly or via invokeMethod if it touches UI from worker.
+    // Given its name, it likely updates UI, so invokeMethod is safer if ExecuteCompatibilityTests is complex.
+    // However, individual TestEngineCommand calls already use invokeMethod for their progress updates.
+    // This loop is more of a final catch-all.
     QMetaObject::invokeMethod(this, "Add_progressBar_CompatibilityTest", Qt::QueuedConnection);
   }
 
-
-  QMetaObject::invokeMethod(this, "Finish_progressBar_CompatibilityTest", Qt::QueuedConnection);
-  QMetaObject::invokeMethod(ui->pushButton_compatibilityTest, "setEnabled", Qt::QueuedConnection, Q_ARG(bool, true));
-  TextBrowser_NewMessage(tr("Compatibility test finished."));
-  emit Send_Waifu2x_Compatibility_Test_finished();
+  // The following lines are moved to the .then() continuation of compatibilityTestFuture
+  // QMetaObject::invokeMethod(this, "Finish_progressBar_CompatibilityTest", Qt::QueuedConnection);
+  // QMetaObject::invokeMethod(ui->pushButton_compatibilityTest, "setEnabled", Qt::QueuedConnection, Q_ARG(bool, true));
+  // TextBrowser_NewMessage(tr("Compatibility test finished.")); // Moved to .then()
+  // emit Send_Waifu2x_Compatibility_Test_finished(); // Moved to .then()
 }
 
 bool MainWindow::TestEngineCommand(const QString& engineName, const QString& executablePath, const QStringList& arguments, QCheckBox* checkBox)
@@ -1275,7 +1320,7 @@ void MainWindow::on_pushButton_ClearList_clicked()
   Table_Clear();
 }
 bool MainWindow::SystemShutDown() { return false; }
-void MainWindow::Read_urls_finfished() { /* STUB */ }
+// void MainWindow::Read_urls_finfished() { /* STUB */ } // Obsolete: Replaced by .then() in dropEvent
 void MainWindow::video_write_VideoConfiguration(QString, int, int, bool, int, int, QString, bool, QString, QString, bool, int) { /* STUB */ }
 int MainWindow::Settings_Save() { return 0; }
 void MainWindow::video_write_Progress_ProcessBySegment(QString, int, bool, bool, int, int) { /* STUB */ }

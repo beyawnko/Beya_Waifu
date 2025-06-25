@@ -29,7 +29,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    void RUN_Concurrent();
+    // QFuture<bool> RUN_Concurrent(); // This will be initiated in constructor directly
     void closeEvent( QCloseEvent * event );
     QString Current_Path = qApp->applicationDirPath();// current application path
     bool file_isDirWritable(QString DirPath);
@@ -48,4 +48,6 @@ private:
     bool runProcess(QProcess *process, const QString &cmd,
                     QByteArray *stdOut = nullptr,
                     QByteArray *stdErr = nullptr);
+    QFuture<bool> m_runConcurrentFuture; // Declare the future member
+    bool RUN_Concurrent_Worker();      // Declare the worker method
 };

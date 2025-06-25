@@ -23,55 +23,93 @@ Multi-threaded adjustment of image size in folder
 */
 void MainWindow::ImagesResize_Folder_MultiThread(int New_width,int New_height,QString ImagesFolderPath)
 {
-    if(file_isDirExist(ImagesFolderPath)==false)return;
-    //====
-    QMutex_ResizeImage_MultiThread.lock();
-    //=====
-    TotalNumOfThreads_ImagesResize_Folder_MultiThread = QThread::idealThreadCount()/2;
-    if(TotalNumOfThreads_ImagesResize_Folder_MultiThread>32)TotalNumOfThreads_ImagesResize_Folder_MultiThread=32;
-    if(TotalNumOfThreads_ImagesResize_Folder_MultiThread<1)TotalNumOfThreads_ImagesResize_Folder_MultiThread=1;
-    RunningNumOfThreads_ImagesResize_Folder_MultiThread=0;
-    //=====
-    QMutex_ResizeImage_MultiThread.unlock();
-    //================
+    if(!file_isDirExist(ImagesFolderPath)) {
+        qDebug() << "ImagesResize_Folder_MultiThread: Folder does not exist -" << ImagesFolderPath;
+        return;
+    }
+
+    // Determine the number of concurrent tasks
+    int maxConcurrentTasks = QThread::idealThreadCount() / 2;
+    if(maxConcurrentTasks > 32) maxConcurrentTasks = 32;
+    if(maxConcurrentTasks < 1) maxConcurrentTasks = 1;
+
+    QSemaphore semaphore(maxConcurrentTasks); // Semaphore to limit concurrent tasks
+    QList<QFuture<void>> futures; // Store futures to wait for them
+
     QStringList Frames_QStringList = file_getFileNames_in_Folder_nofilter(ImagesFolderPath);
-    if(Frames_QStringList.isEmpty())return;
-    for(int i=0; i<Frames_QStringList.size(); i++)
-    {
-        QString OutPut_Path = ImagesFolderPath+"/"+Frames_QStringList.at(i);
-        //====
-        QMutex_ResizeImage_MultiThread.lock();
-        RunningNumOfThreads_ImagesResize_Folder_MultiThread++;
-        QMutex_ResizeImage_MultiThread.unlock();
-        //====
-        (void)QtConcurrent::run([this, New_width, New_height, OutPut_Path]() { this->ResizeImage_MultiThread(New_width, New_height, OutPut_Path); });
-        while(RunningNumOfThreads_ImagesResize_Folder_MultiThread>=TotalNumOfThreads_ImagesResize_Folder_MultiThread)
-        {
-            Delay_msec_sleep(300);
-        }
+    if(Frames_QStringList.isEmpty()) {
+        qDebug() << "ImagesResize_Folder_MultiThread: No files found in folder -" << ImagesFolderPath;
+        return;
     }
-    while(RunningNumOfThreads_ImagesResize_Folder_MultiThread>0)
+
+    qDebug() << "ImagesResize_Folder_MultiThread: Starting resize for" << Frames_QStringList.size()
+             << "images in" << ImagesFolderPath << "with max" << maxConcurrentTasks << "concurrent tasks.";
+
+    for(const QString &fileName : Frames_QStringList)
     {
-        Delay_msec_sleep(300);
+        QString OutPut_Path = ImagesFolderPath + "/" + fileName;
+
+        semaphore.acquire(); // Acquire a permit, blocks if none available
+
+        QFuture<bool> workerFuture = QtConcurrent::run([this, New_width, New_height, OutPut_Path]() {
+            return this->ResizeImage_MultiThread_Worker(New_width, New_height, OutPut_Path);
+        });
+
+        // Use a context object for .then() to manage lifetime if `this` is problematic,
+        // but for releasing a semaphore, it's often fine as semaphore outlives.
+        // To ensure the lambda for .then() is managed correctly and semaphore is valid:
+        // Pass semaphore by shared pointer or ensure ImagesResize_Folder_MultiThread waits.
+        // Here, since we will wait for futures, stack-based semaphore is okay.
+        QFuture<void> resultFuture = workerFuture.then(QThreadPool::globalInstance(), // Run continuation on a pool thread
+            // Capture necessary variables by value for safety if original context is lost
+            // Pass semaphore by raw pointer is okay here because we wait for futures.
+            [OutPut_Path, &semaphore] (QFuture<bool> completedWorkerFuture) {
+            bool success = completedWorkerFuture.result();
+            if (!success) {
+                qDebug() << "Failed to resize image (async):" << OutPut_Path;
+                // Handle error, e.g., emit signal (must be thread-safe or queued)
+            } else {
+                // qDebug() << "Successfully resized image (async):" << OutPut_Path;
+            }
+            semaphore.release();
+        });
+        futures.append(resultFuture);
     }
-    return;
+
+    // Wait for all tasks (including their .then() continuations that release the semaphore) to complete
+    for(const QFuture<void>& f : futures) {
+        f.waitForFinished();
+    }
+
+    qDebug() << "ImagesResize_Folder_MultiThread: All image resize tasks completed for" << ImagesFolderPath;
 }
 
-void MainWindow::ResizeImage_MultiThread(int New_width,int New_height,QString ImagesPath)
+bool MainWindow::ResizeImage_MultiThread_Worker(int New_width,int New_height,QString ImagesPath)
 {
     QImage qimage_adj(ImagesPath);
+    if (qimage_adj.isNull()) {
+        qDebug() << "Failed to load image:" << ImagesPath;
+        return false;
+    }
     QImage qimage_adj_scaled = qimage_adj.scaled(New_width,New_height,CustRes_AspectRatioMode,Qt::SmoothTransformation);
     QImageWriter qimageW_adj;
-    qimageW_adj.setFormat("png");
-    qimageW_adj.setFileName(ImagesPath);
+    qimageW_adj.setFormat("png"); // Consider making format configurable or deriving from source
+    qimageW_adj.setFileName(ImagesPath); // Overwrites original, ensure this is intended
     if(qimageW_adj.canWrite())
     {
-        qimageW_adj.write(qimage_adj_scaled);
+        if (qimageW_adj.write(qimage_adj_scaled)) {
+            return true;
+        } else {
+            qDebug() << "Failed to write image:" << ImagesPath << "Error:" << qimageW_adj.errorString();
+            return false;
+        }
+    } else {
+        qDebug() << "QImageWriter cannot write to path:" << ImagesPath;
+        return false;
     }
-    QMutex_ResizeImage_MultiThread.lock();
-    RunningNumOfThreads_ImagesResize_Folder_MultiThread--;
-    QMutex_ResizeImage_MultiThread.unlock();
-    return;
+    // The original function's logic for decrementing RunningNumOfThreads_ImagesResize_Folder_MultiThread
+    // and using QMutex_ResizeImage_MultiThread is removed from here.
+    // It will be handled by the QSemaphore and .then() continuation in the calling function.
 }
 
 /*

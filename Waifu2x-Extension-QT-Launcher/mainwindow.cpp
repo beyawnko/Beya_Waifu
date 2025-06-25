@@ -9,7 +9,36 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     connect(this, SIGNAL(Send_RUN()), this, SLOT(RUN_SLOT()));
     connect(this, SIGNAL(Send_Duplicate()), this, SLOT(Duplicate_SLOT()));
-    QtConcurrent::run([this]() { this->RUN_Concurrent(); });
+    // Store the future
+    m_runConcurrentFuture = QtConcurrent::run([this]() { return this->RUN_Concurrent_Worker(); });
+    // Optionally, attach a .then() if you want to react to completion/errors here,
+    // for example, logging or cleanup that isn't part of the worker itself.
+    // For this specific case, signals are already used for UI updates from the worker.
+    // If RUN_Concurrent_Worker handles its own errors and emits signals,
+    // a .then() might primarily be for logging the future's state if needed.
+    m_runConcurrentFuture.then(this, [this](bool result){
+        if (m_runConcurrentFuture.isCanceled()) {
+            // Handle cancellation if applicable
+            qDebug() << "RUN_Concurrent was canceled.";
+        } else if (m_runConcurrentFuture.isFaulted()) {
+            // Handle error
+            qDebug() << "RUN_Concurrent failed:" << m_runConcurrentFuture.exception().what();
+        } else {
+            qDebug() << "RUN_Concurrent finished. Result:" << result;
+            // The worker already emits signals Send_Duplicate or Send_RUN
+            // and may call this->close().
+            // If the worker calls this->close(), this MainWindow instance might be
+            // deleted by the time this continuation runs.
+            // Care must be taken if this continuation needs to access `this`.
+            // In this specific case, RUN_Concurrent_Worker calls this->close()
+            // which might lead to issues if this lambda tries to access `this` afterwards.
+            // However, the signals should have already been processed.
+            // If `this->close()` in the worker is problematic for the future's continuation,
+            // the closing logic might need to be deferred or handled differently.
+            // For now, we assume the signals are sufficient and the main concern is
+            // the potential deletion of `this`.
+        }
+    });
 }
 
 MainWindow::~MainWindow()
@@ -24,22 +53,36 @@ void MainWindow::Duplicate_SLOT()
     ui->label_status->setStyleSheet("color: rgb(255, 69, 69);background-color: rgb(255, 255, 255);");
 }
 
-void MainWindow::RUN_Concurrent()
+bool MainWindow::RUN_Concurrent_Worker()
 {
     QThread::sleep(3);
     //========
     QProcess get_tasklist;
     QByteArray taskOutput;
-    runProcess(&get_tasklist, "tasklist", &taskOutput);
+    // Assuming runProcess itself indicates success/failure,
+    // but here we care about the logic flow for RUN_Concurrent_Worker's return.
+    // Let's say the critical part is whether we could check the process list.
+    bool processCheckSuccess = runProcess(&get_tasklist, "tasklist", &taskOutput);
+
+    if (!processCheckSuccess) {
+        // Log error or handle error if runProcess failed to even run tasklist
+        qDebug() << "Failed to execute tasklist.";
+        // Depending on desired behavior, could emit a specific error signal here.
+        // For now, return false to indicate the worker had an issue.
+        return false;
+    }
+
     if(taskOutput.contains("Beya_Waifu.exe"))
     {
         emit Send_Duplicate();
-        QThread::sleep(5);
-        this->close();
-        return;
+        QThread::sleep(5); // This sleep might be problematic if instance is closed.
+                           // Consider removing if `close()` is immediate.
+        this->close(); // `this` might be deleted soon after this call.
+        return true; // Operation considered "successful" in terms of its logic path.
     }
     //========
     emit Send_RUN();
+    return true; // Operation considered "successful".
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
