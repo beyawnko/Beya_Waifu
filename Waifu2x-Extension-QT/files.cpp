@@ -82,29 +82,56 @@ void MainWindow::dropEvent(QDropEvent *event)
         existingVideoPaths_set.insert(path);
     }
 
-    (void)QtConcurrent::run([this, urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set]() {
-        this->Read_urls(urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+    QFuture<ReadUrlsResult> future = QtConcurrent::run([this, urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set]() {
+        return this->Read_urls_Worker(urls, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+    });
+
+    future.then(this, [this](ReadUrlsResult result){
+        // This continuation runs on the main thread (due to `this` context for .then)
+        // Call the original slot that updates the tables.
+        // The slot Batch_Table_Update_slots is already designed to be called from the main thread.
+        this->Batch_Table_Update_slots(result.imagesToAdd, result.gifsToAdd, result.videosToAdd,
+                                       result.newImageAdded, result.newGifAdded, result.newVideoAdded);
+
+        // Re-enable UI elements that were disabled at the start of dropEvent
+        ui->groupBox_Setting->setEnabled(true);
+        ui->groupBox_FileList->setEnabled(true);
+        ui->groupBox_InputExt->setEnabled(true);
+        pushButton_Start_setEnabled_self(true); // Assuming this correctly re-enables the start button
+        ui->checkBox_ScanSubFolders->setEnabled(true);
+        this->setAcceptDrops(true);
+        // Optionally, emit a signal or log that file adding is complete
+        emit Send_TextBrowser_NewMessage(tr("Finished adding files."));
+        // Reset progress bar or indicate completion
+        emit Send_PrograssBar_Range_min_max_slots(0, 1); // Reset progress
+        emit Send_progressbar_Add_slots(); // Set to complete
     });
 }
 /*
 Read urls (this is the implementation for the signature in mainwindow.h called by QtConcurrent::run)
 */
-void MainWindow::Read_urls(QList<QUrl> urls,
-                           const QSet<QString>& existingImagePaths_set,
-                           const QSet<QString>& existingGifPaths_set,
-                           const QSet<QString>& existingVideoPaths_set)
+ReadUrlsResult MainWindow::Read_urls_Worker(QList<QUrl> urls,
+                                           const QSet<QString>& existingImagePaths_set,
+                                           const QSet<QString>& existingGifPaths_set,
+                                           const QSet<QString>& existingVideoPaths_set)
 {
-    // Data collection lists
-    QList<QPair<QString, QString>> imagesToAdd_pair;
+    ReadUrlsResult result; // Initialize the result struct
+
+    // Data collection lists (these are now part of the 'result' struct indirectly via FileLoadInfo)
+    QList<QPair<QString, QString>> imagesToAdd_pair; // Keep local for now, convert to FileLoadInfo later
     QList<QPair<QString, QString>> gifsToAdd_pair;
     QList<QPair<QString, QString>> videosToAdd_pair;
-    bool localAddNewImage = false;
-    bool localAddNewGif = false;
-    bool localAddNewVideo = false;
+    // bool localAddNewImage = false; // Will use result.newImageAdded
+    // bool localAddNewGif = false;   // Will use result.newGifAdded
+    // bool localAddNewVideo = false; // Will use result.newVideoAdded
 
     // Note: existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set are now passed in directly.
 
-    emit Send_PrograssBar_Range_min_max_slots(0, urls.size()); // For scanning progress
+    // Emit progress signals directly from the worker thread
+    // Ensure these signals are connected via Qt::QueuedConnection or safe for direct call
+    QMetaObject::invokeMethod(this, "Send_PrograssBar_Range_min_max_slots", Qt::QueuedConnection,
+                              Q_ARG(int, 0), Q_ARG(int, urls.size()));
+
 
     if(ui->checkBox_ScanSubFolders->isChecked())
     {
@@ -112,9 +139,9 @@ void MainWindow::Read_urls(QList<QUrl> urls,
         {
             Add_File_Folder_IncludeSubFolder(url.toLocalFile(),
                                              imagesToAdd_pair, gifsToAdd_pair, videosToAdd_pair,
-                                             localAddNewImage, localAddNewGif, localAddNewVideo,
+                                             result.newImageAdded, result.newGifAdded, result.newVideoAdded, // Use result fields
                                              existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
-            emit Send_progressbar_Add_slots(); // Progress for each URL scanned
+             QMetaObject::invokeMethod(this, "Send_progressbar_Add_slots", Qt::QueuedConnection); // Progress for each URL scanned
         }
     }
     else
@@ -123,24 +150,24 @@ void MainWindow::Read_urls(QList<QUrl> urls,
         {
             Add_File_Folder(url.toLocalFile(),
                             imagesToAdd_pair, gifsToAdd_pair, videosToAdd_pair,
-                            localAddNewImage, localAddNewGif, localAddNewVideo,
+                            result.newImageAdded, result.newGifAdded, result.newVideoAdded, // Use result fields
                             existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
-            emit Send_progressbar_Add_slots(); // Progress for each URL scanned
+            QMetaObject::invokeMethod(this, "Send_progressbar_Add_slots", Qt::QueuedConnection); // Progress for each URL scanned
         }
     }
 
-    QList<FileLoadInfo> imageFileLoadInfoList;
+    // Populate result.imagesToAdd, result.gifsToAdd, result.videosToAdd
     for (const auto& pair : imagesToAdd_pair) {
         FileLoadInfo info;
         info.fileName = pair.first;
         info.fullPath = pair.second;
-        info.status = "Waiting";
+        info.status = "Waiting"; // Default status
+        // Custom resolution fields can be populated if known here, otherwise leave empty
         info.customResolutionWidth = "";
         info.customResolutionHeight = "";
-        imageFileLoadInfoList.append(info);
+        result.imagesToAdd.append(info);
     }
 
-    QList<FileLoadInfo> gifFileLoadInfoList;
     for (const auto& pair : gifsToAdd_pair) {
         FileLoadInfo info;
         info.fileName = pair.first;
@@ -148,10 +175,9 @@ void MainWindow::Read_urls(QList<QUrl> urls,
         info.status = "Waiting";
         info.customResolutionWidth = "";
         info.customResolutionHeight = "";
-        gifFileLoadInfoList.append(info);
+        result.gifsToAdd.append(info);
     }
 
-    QList<FileLoadInfo> videoFileLoadInfoList;
     for (const auto& pair : videosToAdd_pair) {
         FileLoadInfo info;
         info.fileName = pair.first;
@@ -159,11 +185,12 @@ void MainWindow::Read_urls(QList<QUrl> urls,
         info.status = "Waiting";
         info.customResolutionWidth = "";
         info.customResolutionHeight = "";
-        videoFileLoadInfoList.append(info);
+        result.videosToAdd.append(info);
     }
 
-    // After processing all URLs, emit one signal to update the tables in the main thread.
-    emit Send_Batch_Table_Update(imageFileLoadInfoList, gifFileLoadInfoList, videoFileLoadInfoList, localAddNewImage, localAddNewGif, localAddNewVideo);
+    // The signal Send_Batch_Table_Update is no longer emitted here.
+    // The data is returned in the 'result' object.
+    return result;
 }
 
 /*

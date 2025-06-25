@@ -57,6 +57,7 @@
 #include <QScrollBar>
 #include <QThread>
 #include <QThreadPool>
+#include <QSemaphore> // Added for QSemaphore
 #include <QFileSystemWatcher>
 #include <QListWidget>
 #include <QLabel>
@@ -108,6 +109,18 @@ struct FileLoadInfo {
   QString customResolutionHeight; // From INI
 };
 Q_DECLARE_METATYPE(FileLoadInfo)
+
+// Struct for Read_urls return type
+struct ReadUrlsResult {
+    QList<FileLoadInfo> imagesToAdd;
+    QList<FileLoadInfo> gifsToAdd;
+    QList<FileLoadInfo> videosToAdd;
+    bool newImageAdded {false};
+    bool newGifAdded {false};
+    bool newVideoAdded {false};
+};
+Q_DECLARE_METATYPE(ReadUrlsResult)
+
 
 // Enum for processing status
 // Enum for processing status - Renamed to avoid conflict
@@ -197,7 +210,7 @@ public:
   //======================= File Handling & Processing =======================
   void dragEnterEvent(QDragEnterEvent *event);
   void dropEvent(QDropEvent *event);
-  void Read_urls(QList<QUrl> urls, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
+  ReadUrlsResult Read_urls_Worker(QList<QUrl> urls, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set); // Renamed and return type changed
   void Read_Input_paths_BrowserFile(QStringList Input_path_List);
   bool AddNew_gif=false;
   bool AddNew_image=false;
@@ -542,7 +555,7 @@ public:
   int TotalNumOfThreads_ImagesResize_Folder_MultiThread;
   int RunningNumOfThreads_ImagesResize_Folder_MultiThread;
   QMutex QMutex_ResizeImage_MultiThread;
-  void ResizeImage_MultiThread(int New_width,int New_height,QString ImagesPath);
+  bool ResizeImage_MultiThread_Worker(int New_width,int New_height,QString ImagesPath); // Renamed and return type changed
   ~MainWindow();
   int Waifu2x();
   bool Check_PreLoad_Settings();
@@ -629,7 +642,7 @@ public slots:
   void on_pushButton_ClearList_clicked();
   bool SystemShutDown();
   int Waifu2x_DumpProcessorList_converter_finished();
-  void Read_urls_finfished();
+  // void Read_urls_finfished(); // Obsolete: Replaced by .then() in dropEvent
   void SRMD_DetectGPU_finished();
   void video_write_VideoConfiguration(QString VideoConfiguration_fullPath, int ScaleRatio, int DenoiseLevel, bool CustRes_isEnabled, int CustRes_height, int CustRes_width, QString EngineName, bool isProcessBySegment, QString VideoClipsFolderPath, QString VideoClipsFolderName, bool isVideoFrameInterpolationEnabled, int MultipleOfFPS);
   int Settings_Save();
@@ -856,7 +869,7 @@ signals:
   void Send_Table_Save_Current_Table_Filelist_Finished();
   void Send_SystemShutDown();
   void Send_Waifu2x_DumpProcessorList_converter_finished();
-  void Send_Read_urls_finfished();
+  // void Send_Read_urls_finfished(); // Obsolete: Slot Read_urls_finfished was removed
   void Send_SRMD_DetectGPU_finished();
   void Send_video_write_VideoConfiguration(QString VideoConfiguration_fullPath, int ScaleRatio, int DenoiseLevel, bool CustRes_isEnabled, int CustRes_height, int CustRes_width, QString EngineName, bool isProcessBySegment, QString VideoClipsFolderPath, QString VideoClipsFolderName, bool isVideoFrameInterpolationEnabled, int MultipleOfFPS);
   void Send_Settings_Save();
