@@ -8,9 +8,25 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+# Find base Qt6 components required by the project
 find_package(Qt6 COMPONENTS Core Gui Concurrent Multimedia OpenGL OpenGLWidgets Widgets ShaderTools LinguistTools Quick REQUIRED)
 
-set(CMAKE_PREFIX_PATH ${Qt6_PREFIX_PATH})
+# CMAKE_PREFIX_PATH will be set on the command line if using a non-system Qt.
+# The line below is commented out as per previous decisions.
+# set(CMAKE_PREFIX_PATH ${Qt6_PREFIX_PATH})
+
+# Determine if RHI should be enabled (Qt >= 6.6.0)
+if (Qt6_VERSION VERSION_GREATER_EQUAL "6.6.0")
+  set(ENABLE_RHI TRUE)
+  message(STATUS "Qt6 >= 6.6 detected: enabling RHI integration")
+  # Find RHI component separately if Qt version is sufficient
+  find_package(Qt6 COMPONENTS RHI REQUIRED)
+else()
+  set(ENABLE_RHI FALSE)
+  message(STATUS "Qt6 < 6.6 detected: building without RHI support (RHI available publicly since Qt 6.6). Will attempt to use private API if available and explicitly enabled.")
+  # Note: The previous attempt to use Qt6::GuiPrivate for < 6.6 failed due to missing headers in system packages.
+  # For < 6.6, RHI features will effectively be disabled if RhiLiquidGlassItem.cpp is conditionally compiled out.
+endif()
 
 # Define sources, headers, and UI forms
 set(PROJECT_SOURCES
@@ -48,8 +64,13 @@ set(PROJECT_SOURCES
     UiController.cpp
     Logger.cpp
     anime4kprocessor.cpp
-    # RhiLiquidGlassItem.cpp # Temporarily commented out due to RHI issues
+    # RhiLiquidGlassItem.cpp will be added conditionally
 )
+
+if (ENABLE_RHI)
+  list(APPEND PROJECT_SOURCES RhiLiquidGlassItem.cpp)
+  # Add any other RHI-specific sources here if needed
+endif()
 
 set(PROJECT_HEADERS
     Logger.h
@@ -182,6 +203,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Widgets
     Qt6::ShaderTools
     Qt6::Quick
+    # Conditionally link RHI using generator expression
+    "$<$<BOOL:${ENABLE_RHI}>:Qt6::RHI>"
+    # Qt6::GuiPrivate # Not needed if using public RHI for >= 6.6 and RHI disabled for < 6.6
 )
 
 # Add defines

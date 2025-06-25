@@ -19,9 +19,15 @@
 
 #include "mainwindow.h"
 #include "Logger.h"
-// #include "RhiLiquidGlassItem.h" // Temporarily commented out due to RHI issues
+
+// RHI_ENABLED will be defined by CMake if RHI is to be compiled
+#ifdef RHI_ENABLED
+#include "RhiLiquidGlassItem.h"
+#endif
 
 #include <QApplication>
+// For QT_VERSION_CHECK if needed elsewhere, though RHI logic now uses RHI_ENABLED
+#include <QtGlobal>
 #include <QQmlApplicationEngine> // For QML
 #include <QtQml> // For qmlRegisterType
 #include <QCoreApplication>
@@ -74,7 +80,9 @@ int main(int argc, char *argv[])
     // Register RhiLiquidGlassItem for QML
     // Usage: import com.waifu2x.effects 1.0
     //        RhiLiquidGlass { ... }
-    // qmlRegisterType<RhiLiquidGlassItem>("com.waifu2x.effects", 1, 0, "RhiLiquidGlass"); // Temporarily commented out due to RHI issues
+#ifdef RHI_ENABLED
+    qmlRegisterType<RhiLiquidGlassItem>("com.waifu2x.effects", 1, 0, "RhiLiquidGlass");
+#endif
 
     // a.setQuitOnLastWindowClosed(true); // For testing, maybe don't quit on last window close if only QML test window
 
