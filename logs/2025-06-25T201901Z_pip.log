@@ -1,0 +1,37 @@
+Collecting Pillow>=10.0 (from -r requirements.txt (line 1))
+  Downloading pillow-11.2.1-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (8.9 kB)
+Requirement already satisfied: pytest in /root/.pyenv/versions/3.11.12/lib/python3.11/site-packages (from -r requirements.txt (line 2)) (8.4.0)
+Collecting pytest-subtests (from -r requirements.txt (line 3))
+  Downloading pytest_subtests-0.14.2-py3-none-any.whl.metadata (6.0 kB)
+Collecting PySide6 (from -r requirements.txt (line 4))
+  Downloading PySide6-6.9.1-cp39-abi3-manylinux_2_28_x86_64.whl.metadata (5.3 kB)
+Collecting lxml (from -r requirements.txt (line 5))
+  Downloading lxml-5.4.0-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (3.5 kB)
+Requirement already satisfied: iniconfig>=1 in /root/.pyenv/versions/3.11.12/lib/python3.11/site-packages (from pytest->-r requirements.txt (line 2)) (2.1.0)
+Requirement already satisfied: packaging>=20 in /root/.pyenv/versions/3.11.12/lib/python3.11/site-packages (from pytest->-r requirements.txt (line 2)) (25.0)
+Requirement already satisfied: pluggy<2,>=1.5 in /root/.pyenv/versions/3.11.12/lib/python3.11/site-packages (from pytest->-r requirements.txt (line 2)) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in /root/.pyenv/versions/3.11.12/lib/python3.11/site-packages (from pytest->-r requirements.txt (line 2)) (2.19.1)
+Collecting attrs>=19.2.0 (from pytest-subtests->-r requirements.txt (line 3))
+  Downloading attrs-25.3.0-py3-none-any.whl.metadata (10 kB)
+Collecting shiboken6==6.9.1 (from PySide6->-r requirements.txt (line 4))
+  Downloading shiboken6-6.9.1-cp39-abi3-manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+Collecting PySide6-Essentials==6.9.1 (from PySide6->-r requirements.txt (line 4))
+  Downloading PySide6_Essentials-6.9.1-cp39-abi3-manylinux_2_28_x86_64.whl.metadata (3.6 kB)
+Collecting PySide6-Addons==6.9.1 (from PySide6->-r requirements.txt (line 4))
+  Downloading PySide6_Addons-6.9.1-cp39-abi3-manylinux_2_28_x86_64.whl.metadata (4.0 kB)
+Downloading pillow-11.2.1-cp311-cp311-manylinux_2_28_x86_64.whl (4.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.6/4.6 MB 32.4 MB/s eta 0:00:00
+Downloading pytest_subtests-0.14.2-py3-none-any.whl (9.1 kB)
+Downloading PySide6-6.9.1-cp39-abi3-manylinux_2_28_x86_64.whl (558 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 558.2/558.2 kB 43.8 MB/s eta 0:00:00
+Downloading PySide6_Addons-6.9.1-cp39-abi3-manylinux_2_28_x86_64.whl (166.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 166.7/166.7 MB 34.9 MB/s eta 0:00:00
+Downloading PySide6_Essentials-6.9.1-cp39-abi3-manylinux_2_28_x86_64.whl (96.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 96.4/96.4 MB 36.9 MB/s eta 0:00:00
+Downloading shiboken6-6.9.1-cp39-abi3-manylinux_2_28_x86_64.whl (206 kB)
+Downloading lxml-5.4.0-cp311-cp311-manylinux_2_28_x86_64.whl (4.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.9/4.9 MB 22.4 MB/s eta 0:00:00
+Downloading attrs-25.3.0-py3-none-any.whl (63 kB)
+Installing collected packages: shiboken6, Pillow, lxml, attrs, pytest-subtests, PySide6-Essentials, PySide6-Addons, PySide6
+
+Successfully installed Pillow-11.2.1 PySide6-6.9.1 PySide6-Addons-6.9.1 PySide6-Essentials-6.9.1 attrs-25.3.0 lxml-5.4.0 pytest-subtests-0.14.2 shiboken6-6.9.1
