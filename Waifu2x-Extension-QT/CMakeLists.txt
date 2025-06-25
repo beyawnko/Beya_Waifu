@@ -9,7 +9,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 # Find base Qt6 components required by the project
-find_package(Qt6 COMPONENTS Core Gui Concurrent Multimedia OpenGL OpenGLWidgets Widgets ShaderTools LinguistTools Quick REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Concurrent Multimedia OpenGL OpenGLWidgets Widgets ShaderTools LinguistTools Quick Quick3D REQUIRED)
 
 # CMAKE_PREFIX_PATH will be set on the command line if using a non-system Qt.
 # The line below is commented out as per previous decisions.
@@ -20,7 +20,7 @@ if (Qt6_VERSION VERSION_GREATER_EQUAL "6.6.0")
   set(ENABLE_RHI TRUE)
   message(STATUS "Qt6 >= 6.6 detected: enabling RHI integration")
   # Find RHI component separately if Qt version is sufficient
-  find_package(Qt6 COMPONENTS RHI REQUIRED)
+  # find_package(Qt6 COMPONENTS RHI REQUIRED) # Try commenting this out, RHI target might be available via Gui
 else()
   set(ENABLE_RHI FALSE)
   message(STATUS "Qt6 < 6.6 detected: building without RHI support (RHI available publicly since Qt 6.6). Will attempt to use private API if available and explicitly enabled.")
@@ -169,11 +169,6 @@ file(WRITE ${TRANSLATIONS_QRC_FILE_STATIC} "${TRANSLATIONS_QRC_FILE_CONTENT_STAT
 list(APPEND PROJECT_RESOURCES ${TRANSLATIONS_QRC_FILE_STATIC})
 # End Translation handling
 
-# Shader handling with qt_add_shaders
-qt_add_shaders(${PROJECT_NAME} ShadersGenerated
-    FILES ${PROJECT_SHADERS}
-    PREFIX "/com.waifu2x.effects/shaders"
-)
 # The qt_add_shaders function should handle adding the compiled shaders to the target.
 # So, PROJECT_SHADERS should not be listed in qt_add_executable directly.
 
@@ -183,6 +178,12 @@ qt_add_executable(${PROJECT_NAME}
     ${PROJECT_FORMS}
     ${PROJECT_RESOURCES}
     # PROJECT_SHADERS # Removed from here, handled by qt_add_shaders
+)
+
+# Shader handling with qt_add_shaders - MOVED HERE
+qt_add_shaders(${PROJECT_NAME} ShadersGenerated
+    FILES ${PROJECT_SHADERS}
+    PREFIX "/com.waifu2x.effects/shaders"
 )
 
 # Also list TS files as sources for the target to help with dependency tracking (REMOVED - caused issues)
@@ -203,6 +204,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Widgets
     Qt6::ShaderTools
     Qt6::Quick
+    Qt6::Quick3D # Added Quick3D
     # Conditionally link RHI using generator expression
     "$<$<BOOL:${ENABLE_RHI}>:Qt6::RHI>"
     # Qt6::GuiPrivate # Not needed if using public RHI for >= 6.6 and RHI disabled for < 6.6
