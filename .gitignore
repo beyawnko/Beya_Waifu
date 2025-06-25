@@ -20,6 +20,7 @@ Waifu2x-Extension-QT/*.o
 Waifu2x-Extension-QT/Beya_Waifu
 Waifu2x-Extension-QT/shaders/*.qsb
 Waifu2x-Extension-QT/shaders/
+Waifu2x-Extension-QT/*.pro.user*
 
 # Waifu2x-Extension-QT-Launcher build outputs
 Waifu2x-Extension-QT-Launcher/Makefile

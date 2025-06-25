@@ -14,7 +14,7 @@ fi
 
 QT_INCLUDE_DIR=$(pkg-config --variable=includedir "$QT_PKG")
 
-cppcheck --enable=all --library=qt --template=gcc --force --std=c++11 \
+cppcheck --enable=all --library=qt --template=gcc --force --std=c++17 \
     @tools/cppcheck.cfg \
     -I "$QT_INCLUDE_DIR" \
     -I "$QT_INCLUDE_DIR/QtCore" \

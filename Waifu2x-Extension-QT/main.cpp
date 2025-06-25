@@ -19,8 +19,11 @@
 
 #include "mainwindow.h"
 #include "Logger.h"
+#include "RhiLiquidGlassItem.h" // Added for QML registration
 
 #include <QApplication>
+#include <QQmlApplicationEngine> // For QML
+#include <QtQml> // For qmlRegisterType
 #include <QCoreApplication>
 #include <QCommandLineParser>
 #include <QFile>
@@ -67,10 +70,26 @@ int main(int argc, char *argv[])
     int overrideThreads = 0;
     if(parser.isSet(maxThreadsOpt))
         overrideThreads = parser.value(maxThreadsOpt).toInt();
-    a.setQuitOnLastWindowClosed(true);
-    MainWindow *w = new MainWindow(overrideThreads);
-    w->show();
-    return a.exec();
+
+    // Register RhiLiquidGlassItem for QML
+    // Usage: import com.waifu2x.effects 1.0
+    //        RhiLiquidGlass { ... }
+    qmlRegisterType<RhiLiquidGlassItem>("com.waifu2x.effects", 1, 0, "RhiLiquidGlass");
+
+    // a.setQuitOnLastWindowClosed(true); // For testing, maybe don't quit on last window close if only QML test window
+    // MainWindow *w = new MainWindow(overrideThreads); // Don't show main window for this specific test
+    // w->show();
+
+    // --- Load the test QML file directly for RhiLiquidGlassItem ---
+    QQmlApplicationEngine engine;
+    engine.load(QUrl(QStringLiteral("qrc:/TestRhiLiquidGlass.qml"))); // Path from test_assets.qrc
+    if (engine.rootObjects().isEmpty()) {
+        qWarning("Failed to load TestRhiLiquidGlass.qml");
+        return -1;
+    }
+    // --- End Test ---
+
+    return a.exec(); // This will show the QML window
 }
 
 /*

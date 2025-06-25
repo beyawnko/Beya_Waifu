@@ -1,11 +1,14 @@
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h:45:0: warning: Include file: <type_traits> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qglobal.h:9:0: warning: Include file: <type_traits> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
 #  include <type_traits>
 ^
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h:46:0: warning: Include file: <cstddef> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qglobal.h:10:0: warning: Include file: <cstddef> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
 #  include <cstddef>
 ^
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h:47:0: warning: Include file: <utility> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qglobal.h:11:0: warning: Include file: <utility> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
 #  include <utility>
+^
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qglobal.h:12:0: warning: Include file: <cstdint> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#  include <cstdint>
 ^
 /usr/include/features-time64.h:20:0: warning: Include file: <bits/wordsize.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
 #include <bits/wordsize.h>
@@ -19,24 +22,139 @@
 /usr/include/features.h:526:0: warning: Include file: <gnu/stubs.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
 #include <gnu/stubs.h>
 ^
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h:51:0: warning: Include file: <stddef.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qglobal.h:16:0: warning: Include file: <stdbool.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#  include <stdbool.h>
+^
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qglobal.h:17:0: warning: Include file: <stddef.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
 #  include <stddef.h>
 ^
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qsystemdetection.h:87:0: warning: Include file: <TargetConditionals.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsystemdetection.h:50:0: warning: Include file: <TargetConditionals.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
 #  include <TargetConditionals.h>
 ^
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qsystemdetection.h:220:0: warning: Include file: <Availability.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsystemdetection.h:168:0: warning: Include file: <Availability.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
 #  include <Availability.h>
 ^
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qsystemdetection.h:221:0: warning: Include file: <AvailabilityMacros.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsystemdetection.h:169:0: warning: Include file: <AvailabilityMacros.h> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
 #  include <AvailabilityMacros.h>
 ^
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qcompilerdetection.h:1023:0: warning: Include file: <utility> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
-# include <utility>
+/usr/include/x86_64-linux-gnu/qt6/QtCore/qsystemdetection.h:134:4: warning: #error "Qt has not been ported to this OS - see http://www.qt-project.org/" [preprocessorErrorDirective]
+#  error "Qt has not been ported to this OS - see http://www.qt-project.org/"
+   ^
+Waifu2x-Extension-QT/AnimatedPNG.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
 ^
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h:142:0: warning: Include file: <algorithm> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
-#include <algorithm>
+Waifu2x-Extension-QT/CompatibilityTest.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
 ^
-/usr/include/x86_64-linux-gnu/qt5/QtCore/qflags.h:45:0: warning: Include file: <initializer_list> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
-#include <initializer_list>
+Waifu2x-Extension-QT/Current_File_Progress.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
 ^
+Waifu2x-Extension-QT/CustomResolution.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/Donate.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/FileManager.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/Finish_Action.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/Frame_Interpolation.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/GpuManager.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/LiquidGlassWidget.h:19:0: warning: Include file: <QOpenGLWidget> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <QOpenGLWidget>
+^
+Waifu2x-Extension-QT/LiquidGlassWidget.h:20:0: warning: Include file: <QOpenGLFunctions_3_3_Core> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <QOpenGLFunctions_3_3_Core> // Use a specific version
+^
+Waifu2x-Extension-QT/LiquidGlassWidget.h:21:0: warning: Include file: <QOpenGLShaderProgram> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <QOpenGLShaderProgram>
+^
+Waifu2x-Extension-QT/LiquidGlassWidget.h:22:0: warning: Include file: <QOpenGLBuffer> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <QOpenGLBuffer> // Added for UBO
+^
+Waifu2x-Extension-QT/LiquidGlassWidget.h:23:0: warning: Include file: <QOpenGLTexture> not found. Please note: Cppcheck does not need standard library headers to get proper results. [missingIncludeSystem]
+#include <QOpenGLTexture>
+^
+Waifu2x-Extension-QT/LiquidGlassWidget.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/Logger.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/ProcessRunner.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/RealCuganProcessor.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/RealcuganJobManager.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/RealesrganJobManager.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/Right-click_Menu.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/SystemTrayIcon.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/UiController.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/VideoProcessor.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/Web_Activities.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/anime4kprocessor.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/checkupdate.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/files.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/gif.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/image.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/main.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/mainwindow.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/progressBar.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/realesrganprocessor.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/settings.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/table.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/textBrowser.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/topsupporterslist.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+Waifu2x-Extension-QT/video.cpp:0:0: warning: This file is not analyzed. Cppcheck failed to extract a valid configuration. Use -v for more details. [noValidConfiguration]
+
+^
+nofile:0:0: warning: Active checkers: There was critical errors (use --checkers-report=<filename> to see details) [checkersReport]
