@@ -1,0 +1,4 @@
+Installed Python dependencies via pip and system libraries via apt-get.
+Executed full test suite with QT_QPA_PLATFORM=offscreen.
+Tests initially failed due to missing libEGL and Qt pkg-config. Installed libegl1 and qt6 base packages.
+All tests passed: 23 passed, 47 skipped.
