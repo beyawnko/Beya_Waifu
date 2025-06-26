@@ -275,8 +275,17 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         pushd "$RESRGAN_SRC_DIR" >/dev/null
         git submodule update --init --recursive || { echo "Submodule update failed for $RESRGAN_SRC_DIR"; popd >/dev/null; exit 1; }
         rm -rf build_linux && mkdir -p build_linux && cd build_linux
-        cmake ../src || { echo "Real-ESRGAN CMake configuration failed."; popd >/dev/null; exit 1; }
-        $MAKE -j$(nproc) || { echo "Real-ESRGAN make failed."; popd >/dev/null; exit 1; }
+        # Add NCNN specific flags here. These will be picked up by NCNN's CMakeLists.txt when processed as a subdirectory.
+        # NCNN_VULKAN is expected to be ON for realesrgan-ncnn-vulkan.
+        # NCNN_OPENMP is also generally desired.
+        cmake ../src \
+            -D NCNN_INT8=ON \
+            -D NCNN_X86=ON \
+            -D NCNN_AVX=ON \
+            -D NCNN_FMA=ON \
+            -D NCNN_AVX512=ON \
+            || { echo "Real-ESRGAN CMake configuration failed."; popd >/dev/null; exit 1; }
+        $MAKE VERBOSE=1 -j$(nproc) || { echo "Real-ESRGAN make failed."; popd >/dev/null; exit 1; } # Added VERBOSE=1
         cp src/realesrgan-ncnn-vulkan "../../$TARGET_APP_DIR/" 2>/dev/null || cp realesrgan-ncnn-vulkan "../../$TARGET_APP_DIR/" 2>/dev/null || { echo "Failed to find/copy built realesrgan-ncnn-vulkan"; popd >/dev/null; exit 1; }
         popd >/dev/null
 
@@ -289,8 +298,15 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         pushd "$RCUGAN_SRC_DIR" >/dev/null
         git submodule update --init --recursive || { echo "Submodule update failed for $RCUGAN_SRC_DIR"; popd >/dev/null; exit 1; }
         rm -rf build_linux && mkdir -p build_linux && cd build_linux
-        cmake ../src || { echo "Real-CUGAN CMake configuration failed."; popd >/dev/null; exit 1; }
-        $MAKE -j$(nproc) || { echo "Real-CUGAN make failed."; popd >/dev/null; exit 1; }
+        # Add NCNN specific flags here as well for Real-CUGAN's NCNN build
+        cmake ../src \
+            -D NCNN_INT8=ON \
+            -D NCNN_X86=ON \
+            -D NCNN_AVX=ON \
+            -D NCNN_FMA=ON \
+            -D NCNN_AVX512=ON \
+            || { echo "Real-CUGAN CMake configuration failed."; popd >/dev/null; exit 1; }
+        $MAKE VERBOSE=1 -j$(nproc) || { echo "Real-CUGAN make failed."; popd >/dev/null; exit 1; } # Added VERBOSE=1
         cp src/realcugan-ncnn-vulkan "../../$TARGET_APP_DIR/" 2>/dev/null || cp realcugan-ncnn-vulkan "../../$TARGET_APP_DIR/" 2>/dev/null || { echo "Failed to find/copy built realcugan-ncnn-vulkan"; popd >/dev/null; exit 1; }
         popd >/dev/null
 
