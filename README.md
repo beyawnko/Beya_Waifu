@@ -336,7 +336,8 @@ are handled by extracting frames with FFmpeg and merging them after upscaling.
 The `build_projects.sh` script handles acquiring and placing the upscaler executables and their models into the correct
 location (`Waifu2x-Extension-QT/`). For Windows, it prioritizes prebuilt binaries from the repository, and for Linux (or
 if Windows prebuilts are missing), it builds them from source. Models are also copied from the respective submodule's
-`models` directory or prebuilt directories.
+`models` directory or prebuilt directories. If these model folders are absent or empty, the script prints a warning and
+skips the copy step so the build can still succeed.
 
 ### Command line examples
 

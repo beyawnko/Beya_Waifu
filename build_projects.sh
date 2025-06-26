@@ -141,8 +141,12 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
 
             # Models are copied from the source submodule directory after a source build.
             echo "Copying Real-ESRGAN models from source for Windows build..."
-            mkdir -p "$TARGET_APP_DIR/models"
-            cp -R "$RESRGAN_SRC_DIR/models/"* "$TARGET_APP_DIR/models/"
+            if [ -d "$RESRGAN_SRC_DIR/models" ] && [ "$(ls -A "$RESRGAN_SRC_DIR/models")" ]; then
+                mkdir -p "$TARGET_APP_DIR/models"
+                cp -R "$RESRGAN_SRC_DIR/models/"* "$TARGET_APP_DIR/models/"
+            else
+                echo "No Real-ESRGAN models found; skipping copy."
+            fi
         fi
 
         # --- Real-CUGAN (Windows) ---
@@ -163,13 +167,13 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
             # Copy Real-CUGAN models from prebuilt directory.
             echo "Copying Real-CUGAN models from Windows prebuilt..."
             for model_subdir in $RCUGAN_MODEL_SUBDIRS; do
-                if [ -d "$RCUGAN_PREBUILT_DIR/$model_subdir" ]; then
+                if [ -d "$RCUGAN_PREBUILT_DIR/$model_subdir" ] && [ "$(ls -A "$RCUGAN_PREBUILT_DIR/$model_subdir")" ]; then
                     mkdir -p "$TARGET_APP_DIR/$model_subdir"
                     cp -R "$RCUGAN_PREBUILT_DIR/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
                 else
-                    echo "Warning: Prebuilt Real-CUGAN model directory $RCUGAN_PREBUILT_DIR/$model_subdir not found. Trying source."
+                    echo "Warning: Prebuilt Real-CUGAN model directory $RCUGAN_PREBUILT_DIR/$model_subdir not found or empty. Trying source."
                     mkdir -p "$TARGET_APP_DIR/$model_subdir"
-                    if [ -d "$RCUGAN_SRC_DIR/models/$model_subdir" ]; then
+                    if [ -d "$RCUGAN_SRC_DIR/models/$model_subdir" ] && [ "$(ls -A "$RCUGAN_SRC_DIR/models/$model_subdir")" ]; then
                         cp -R "$RCUGAN_SRC_DIR/models/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
                     else
                         echo "Warning: No source models for Real-CUGAN subdir $model_subdir found."
@@ -202,7 +206,7 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
             echo "Copying Real-CUGAN models from source for Windows build..."
             for model_subdir in $RCUGAN_MODEL_SUBDIRS; do
                 mkdir -p "$TARGET_APP_DIR/$model_subdir"
-                if [ -d "$RCUGAN_SRC_DIR/models/$model_subdir" ]; then
+                if [ -d "$RCUGAN_SRC_DIR/models/$model_subdir" ] && [ "$(ls -A "$RCUGAN_SRC_DIR/models/$model_subdir")" ]; then
                     cp -R "$RCUGAN_SRC_DIR/models/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
                 else
                     echo "Warning: No source models for Real-CUGAN subdir $model_subdir found during build."
@@ -290,8 +294,12 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         popd >/dev/null
 
         echo "Copying Real-ESRGAN models for Linux..."
-        mkdir -p "$TARGET_APP_DIR/models"
-        cp -R "$RESRGAN_SRC_DIR/models/"* "$TARGET_APP_DIR/models/"
+        if [ -d "$RESRGAN_SRC_DIR/models" ] && [ "$(ls -A "$RESRGAN_SRC_DIR/models")" ]; then
+            mkdir -p "$TARGET_APP_DIR/models"
+            cp -R "$RESRGAN_SRC_DIR/models/"* "$TARGET_APP_DIR/models/"
+        else
+            echo "No Real-ESRGAN models found; skipping copy."
+        fi
 
         echo "Building Real-CUGAN for Linux..."
         RCUGAN_MODEL_SUBDIRS="models-se models-pro models-nose"
@@ -313,7 +321,11 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         echo "Copying Real-CUGAN models for Linux..."
         for model_subdir in $RCUGAN_MODEL_SUBDIRS; do
             mkdir -p "$TARGET_APP_DIR/$model_subdir"
-            cp -R "$RCUGAN_SRC_DIR/models/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
+            if [ -d "$RCUGAN_SRC_DIR/models/$model_subdir" ] && [ "$(ls -A "$RCUGAN_SRC_DIR/models/$model_subdir")" ]; then
+                cp -R "$RCUGAN_SRC_DIR/models/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
+            else
+                echo "No Real-CUGAN models for subdir $model_subdir found; skipping copy."
+            fi
         done
 
         # --- Qt Application Builds (Using CMake) ---
