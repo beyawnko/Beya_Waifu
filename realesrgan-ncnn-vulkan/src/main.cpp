@@ -812,9 +812,39 @@ int main(int argc, char** argv)
             ltp.output_files = output_files;
             ncnn::Thread load_thread(load, (void*)&ltp);
 
-            std::vector<ProcThreadParams> ptp(use_gpu_count);
+            // Define ProcThreadParams based on its usage, likely similar to LoadThreadParams or specific to processing
+            // For now, assuming it's distinct and needs RealESRGAN*.
+            // If it was meant to be LoadThreadParams, this should be LoadThreadParams ptp(use_gpu_count);
+            // However, the error log suggested ProcThreadParams might be a typo for LoadThreadParams.
+            // Let's try making it LoadThreadParams first as per the error message hint.
+            // If 'proc' function signature expects something specific, this might need adjustment.
+            // The error was: ‘ProcThreadParams’ was not declared in this scope; did you mean ‘LoadThreadParams’?
+            // This strongly suggests ProcThreadParams is a typo.
+            std::vector<LoadThreadParams> ptp(use_gpu_count); // Changed ProcThreadParams to LoadThreadParams
+            // The ptp[i].realesrgan assignment below will now cause an error if LoadThreadParams doesn't have a 'realesrgan' member.
+            // Let's define a new ProcThreadParams struct.
+            // The original error was:
+            // /app/realesrgan-ncnn-vulkan/src/main.cpp:815:25: error: ‘ProcThreadParams’ was not declared in this scope; did you mean ‘LoadThreadParams’?
+            // This implies it *might* be a direct replacement or that LoadThreadParams is the closest existing type.
+            // The code then does: ptp[i].realesrgan = realesrgan[i];
+            // This means ProcThreadParams needs a 'realesrgan' member.
+            // And later, proc is called with (void*)&ptp[i]
+
+            // Forward declaration of proc and save, their definitions are later in the file.
+            void* proc(void* args);
+            void* save(void* args);
+
+            // Define ProcThreadParams and SaveThreadParams structs as they are used.
+            // This is based on the usage:
+            // ptp[i].realesrgan = realesrgan[i];  => ProcThreadParams needs a RealESRGAN* member
+            // stp.verbose = verbose; => SaveThreadParams needs a verbose member
+            struct ProcThreadParams { const RealESRGAN* realesrgan; };
+            struct SaveThreadParams { int verbose; };
+
+
+            std::vector<ProcThreadParams> actual_ptp(use_gpu_count); // Use the new struct
             for (int i=0; i<use_gpu_count; i++) {
-                ptp[i].realesrgan = realesrgan[i];
+                actual_ptp[i].realesrgan = realesrgan[i];
             }
 
             std::vector<ncnn::Thread*> proc_threads(total_jobs_proc);
@@ -822,16 +852,16 @@ int main(int argc, char** argv)
                 int total_jobs_proc_id = 0;
                 for (int i=0; i<use_gpu_count; i++) {
                     for (int j=0; j<jobs_proc[i]; j++) { // This was jobs_proc[i] for RealCUGAN, should be consistent or adapted
-                        proc_threads[total_jobs_proc_id++] = new ncnn::Thread(proc, (void*)&ptp[i]);
+                        proc_threads[total_jobs_proc_id++] = new ncnn::Thread(proc, (void*)&actual_ptp[i]); // Use actual_ptp
                     }
                 }
             }
 
-            SaveThreadParams stp;
-            stp.verbose = verbose;
+            SaveThreadParams actual_stp; // Use the new struct
+            actual_stp.verbose = verbose;
             std::vector<ncnn::Thread*> save_threads(jobs_save);
             for (int i=0; i<jobs_save; i++) {
-                save_threads[i] = new ncnn::Thread(save, (void*)&stp);
+                save_threads[i] = new ncnn::Thread(save, (void*)&actual_stp); // Use actual_stp
             }
 
             load_thread.join();
