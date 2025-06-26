@@ -23,7 +23,7 @@ def run_build(tmp_path: Path, uname_output: str, make_cmd: str = 'make') -> None
         f.write_text('#!/bin/sh\nexit 0\n')
         f.chmod(0o755)
 
-    for name in ('bash', 'cp', 'find', 'mkdir', 'nproc', 'tr'):
+    for name in ('bash', 'cp', 'find', 'mkdir', 'nproc', 'tr', 'ls', 'rm'):
         (bin_dir / name).symlink_to(Path('/usr/bin') / name)
     uname_stub = bin_dir / 'uname'
     uname_stub.write_text(f'#!/bin/sh\necho {uname_output}\n')
