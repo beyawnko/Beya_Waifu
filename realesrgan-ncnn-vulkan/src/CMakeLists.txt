@@ -147,20 +147,21 @@ if(NOT USE_SYSTEM_NCNN)
     option(NCNN_BUILD_TOOLS "" OFF)
     option(NCNN_BUILD_EXAMPLES "" OFF)
     # NCNN options are no longer set here as we are using find_package for a pre-built NCNN.
-    # The add_subdirectory call is also removed.
+    # The add_subdirectory call is also removed. # This comment is no longer accurate.
 
     # Set CMAKE_PREFIX_PATH to the directory where NCNN was installed.
     # The NCNN install prefix from previous step: /app/ncnn/install_dir/app/ncnn/build-for-realesrgan/install
     # CMake's find_package will look in <prefix>/lib/cmake/ncnn or <prefix>/ncnnConfig.cmake
     # So, CMAKE_PREFIX_PATH should be /app/ncnn/install_dir/app/ncnn/build-for-realesrgan/install
-    set(NCNN_INSTALL_DIR "/app/ncnn/install_dir/app/ncnn/build-for-realesrgan/install")
-    list(APPEND CMAKE_PREFIX_PATH "${NCNN_INSTALL_DIR}")
-    message(STATUS "Using CMAKE_PREFIX_PATH for NCNN: ${CMAKE_PREFIX_PATH}")
+    # set(NCNN_INSTALL_DIR "/app/ncnn/install_dir/app/ncnn/build-for-realesrgan/install") # Commented out
+    # list(APPEND CMAKE_PREFIX_PATH "${NCNN_INSTALL_DIR}") # Commented out
+    # message(STATUS "Using CMAKE_PREFIX_PATH for NCNN: ${CMAKE_PREFIX_PATH}") # Commented out
 
-    find_package(ncnn REQUIRED CONFIG)
-    message(STATUS "Found NCNN: ${ncnn_FOUND}, Version: ${ncnn_VERSION}")
+    # find_package(ncnn REQUIRED CONFIG) # Commented out - we will build from submodule
+    add_subdirectory(ncnn) # Added to build ncnn from submodule
+    message(STATUS "Building NCNN from submodule.") # Adjusted message
     if(TARGET ncnn::ncnn)
-        message(STATUS "NCNN target ncnn::ncnn found.")
+        message(STATUS "NCNN target ncnn::ncnn found after building submodule.")
     else()
         message(WARNING "NCNN target ncnn::ncnn NOT found. Will try linking against 'ncnn' if available.")
     endif()
