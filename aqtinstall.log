@@ -5761,3 +5761,33 @@ ia...
 2025-06-25 08:18:34,992 - aqt.updater - INFO - updater 140434959117184 Patching /home/jules/Qt/6.6.3/gcc_64/lib/libQt6Gui.prl
 2025-06-25 08:18:34,993 - aqt.main - INFO - installer 140434959117184 Finished installation
 2025-06-25 08:18:34,993 - aqt.main - INFO - installer 140434959117184 Time elapsed: 35.85520684 second
+2025-06-26 02:30:56,225 - aqt.main - INFO - installer 140102880217984 aqtinstall(aqt) v3.3.0 on Python 3.12.11 [CPython GCC 13.3.0]
+2025-06-26 02:30:56,226 - aqt.helper - DEBUG - helper 140102880217984 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_660/Updates.xml.sha256
+2025-06-26 02:30:57,540 - aqt.main - ERROR - installer 140102880217984 The packages ['qt_base', 'qtdeclarative', 'qtmultimedia', 'qtquick3d', 'qtshadertools'] were not found while parsing XML of package information!
+==============================Suggested follow-up:==============================
+* Please use 'aqt list-qt linux desktop --arch 6.6.0' to show architectures available.
+* Please use 'aqt list-qt linux desktop --modules 6.6.0 <arch>' to show modules available.
+2025-06-26 02:31:38,427 - aqt.main - INFO - installer 140658339175296 aqtinstall(aqt) v3.3.0 on Python 3.12.11 [CPython GCC 13.3.0]
+2025-06-26 02:31:38,428 - aqt.helper - DEBUG - helper 140658339175296 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_660/Updates.xml.sha256
+2025-06-26 02:31:39,734 - aqt.main - ERROR - installer 140658339175296 The packages ['qt_base', 'qtmultimedia', 'qtquick3d', 'qtshadertools'] were not found while parsing XML of package information!
+==============================Suggested follow-up:==============================
+* Please use 'aqt list-qt linux desktop --arch 6.6.0' to show architectures available.
+* Please use 'aqt list-qt linux desktop --modules 6.6.0 <arch>' to show modules available.
+2025-06-26 02:31:48,342 - aqt.helper - DEBUG - helper 139994899749760 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_660/Updates.xml.sha256
+2025-06-26 02:31:49,705 - aqt.main - ERROR - installer 139994899749760 No modules available for this request.
+==============================Suggested follow-up:==============================
+* Please use 'aqt list-qt linux desktop' to show versions of Qt available.
+* Please use 'aqt list-qt linux desktop --arch <QT_VERSION>' to list valid architectures.
+2025-06-26 02:32:32,265 - aqt.main - INFO - installer 140391939922816 aqtinstall(aqt) v3.3.0 on Python 3.12.11 [CPython GCC 13.3.0]
+2025-06-26 02:32:32,266 - aqt.helper - DEBUG - helper 140391939922816 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_660/Updates.xml.sha256
+2025-06-26 02:32:33,570 - aqt.main - ERROR - installer 140391939922816 The packages ['qt_base'] were not found while parsing XML of package information!
+==============================Suggested follow-up:==============================
+* Please use 'aqt list-qt linux desktop --arch 6.6.0' to show architectures available.
+2025-06-26 02:33:03,187 - aqt.helper - DEBUG - helper 140175417801600 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_660/Updates.xml.sha256
+2025-06-26 02:33:04,494 - aqt.helper - DEBUG - helper 140175417801600 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_660_wasm_singlethread/Updates.xml.sha256
+2025-06-26 02:33:05,798 - aqt.helper - DEBUG - helper 140175417801600 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_660_wasm_multithread/Updates.xml.sha256
+2025-06-26 02:33:32,237 - aqt.main - INFO - installer 140507667815296 aqtinstall(aqt) v3.3.0 on Python 3.12.11 [CPython GCC 13.3.0]
+2025-06-26 02:33:32,238 - aqt.helper - DEBUG - helper 140507667815296 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_663/Updates.xml.sha256
+2025-06-26 02:33:33,549 - aqt.main - ERROR - installer 140507667815296 The packages ['qt_base'] were not found while parsing XML of package information!
+==============================Suggested follow-up:==============================
+* Please use 'aqt list-qt linux desktop --arch 6.6.3' to show architectures available.
