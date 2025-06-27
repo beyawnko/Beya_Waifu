@@ -5,15 +5,13 @@
 #include <QTextStream>
 #include <QDebug>
 
-// RHI Includes
-#include <QRhi.h>
-#include <QRhiCommandBuffer>
-#include <QRhiGraphicsPipeline>
-#include <QRhiSampler>
-#include <QRhiShaderResourceBindings>
-#include <QRhiTexture>
-#include <QRhiBuffer>
+// RHI Includes - ensure these are sufficient and correct for the types used.
+// QShader (for m_vertexShader, m_fragmentShader members) is in rhi/qshader.h (included via LiquidGlassNode.h)
+// QRhi types (QRhiBuffer, QRhiTexture etc.) are in rhi/qrhi.h (included via LiquidGlassNode.h)
+// QRhiCommandBuffer, QRhiGraphicsPipeline etc. are also from rhi/qrhi.h or related headers.
+
 #include <QImage> // For texture creation
+#include <QtQuick/qquickrendertarget.h> // For QQuickRenderTarget definition
 
 // Define vertex data for a quad
 static float quadVertices[] = {
@@ -78,13 +76,17 @@ void LiquidGlassNode::releaseRhiResources()
     m_pipelineInitialized = false;
 }
 
-QRhiShader LiquidGlassNode_loadShader(const QString &resourcePath) {
+// Moved definition earlier and changed return type to QShader
+static QShader LiquidGlassNode_loadShader(const QString &resourcePath) {
     QFile f(resourcePath);
     if (!f.open(QIODevice::ReadOnly)) {
         qWarning() << "Failed to load shader:" << resourcePath << f.errorString();
-        return QRhiShader();
+        return QShader(); // Return default-constructed QShader
     }
-    return QRhiShader::fromSerialized(f.readAll());
+    // Assuming QRhiShader::fromSerialized was a typo and it should be QShader::fromSerialized
+    // Or, if loading raw SPIR-V, QShader has other ways to be initialized.
+    // For .qsb files (Qt Shader Bakery), QShader::fromSerialized is correct.
+    return QShader::fromSerialized(f.readAll());
 }
 
 
@@ -177,7 +179,7 @@ void LiquidGlassNode::updateBackgroundTexture(const QImage &image) {
             return;
         }
 
-        m_backgroundTexture = m_rhi->newTexture(QRhiTexture::RGBA8, compatibleImage.size(), 1, QRhiTexture::DontGenerateMips);
+        m_backgroundTexture = m_rhi->newTexture(QRhiTexture::RGBA8, compatibleImage.size(), 1, QRhiTexture::Flags(QRhiTexture::Flag::DontGenerateMips)); // Corrected flag usage
         if (!m_backgroundTexture) {
             qWarning("LiquidGlassNode: Failed to create RHI texture object.");
             return;
@@ -312,8 +314,8 @@ void LiquidGlassNode::render(const RenderState *state) {
         return;
     }
 
-
-    const QSize outputPixelSize = state->target()->pixelSize();
+    // Use state->rhiTarget() for RHI properties
+    const QSize outputPixelSize = state->rhiTarget()->pixelSize();
     cb->setViewport(QRhiViewport(0, 0, outputPixelSize.width(), outputPixelSize.height()));
     cb->setGraphicsPipeline(m_pipeline);
     cb->setShaderResources(m_srb); // Bind UBO and texture sampler
