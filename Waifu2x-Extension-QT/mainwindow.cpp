@@ -1055,10 +1055,10 @@ void MainWindow::StartFullCompatibilityTest()
               m_compatWatcher->future().waitForFinished(); // Re-throws exceptions from worker
               TextBrowser_NewMessage(tr("Compatibility test finished successfully."));
           }
-      } catch (const std::exception &e) {
-          TextBrowser_NewMessage(tr("Compatibility test failed with std::exception: %1").arg(QString::fromUtf8(e.what())));
-      } catch (const QException &e) { // QException might not be caught if std::exception is broader and first
+      } catch (const QException &e) { // Catch QException first
           TextBrowser_NewMessage(tr("Compatibility test failed with QException: %1").arg(QString::fromUtf8(e.what())));
+      } catch (const std::exception &e) { // Then catch std::exception
+          TextBrowser_NewMessage(tr("Compatibility test failed with std::exception: %1").arg(QString::fromUtf8(e.what())));
       } catch (...) {
           TextBrowser_NewMessage(tr("Compatibility test failed with an unknown exception."));
       }
