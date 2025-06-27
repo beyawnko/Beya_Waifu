@@ -33,22 +33,21 @@ find_package(Qt6 COMPONENTS Core Gui Concurrent Multimedia OpenGL OpenGLWidgets 
 # set(CMAKE_PREFIX_PATH ${Qt6_PREFIX_PATH})
 
 # Determine if RHI should be enabled (Qt >= 6.6.0)
-# Temporarily disabling RHI to get a baseline build
-set(ENABLE_RHI FALSE)
-message(WARNING "RHI support has been temporarily disabled for this build.")
+# set(ENABLE_RHI FALSE) # Keep this commented or remove
+# message(WARNING "RHI support has been temporarily disabled for this build.") # Keep this commented or remove
 
-# if (Qt6_VERSION VERSION_GREATER_EQUAL "6.6.0")
-#   set(ENABLE_RHI TRUE)
-#   message(STATUS "Qt6 >= 6.6 detected: enabling RHI integration via Quick3D (and linking GuiPrivate for headers)")
-#   # Find Quick3D component if Qt version is sufficient, as it provides RHI
-#   # GuiPrivate is not found this way, but the Qt6::GuiPrivate target should be available if Gui is found.
-#   find_package(Qt6 COMPONENTS Quick3D REQUIRED)
-# else()
-#   set(ENABLE_RHI FALSE)
-#   message(STATUS "Qt6 < 6.6 detected: building without RHI support (RHI available publicly since Qt 6.6). Will attempt to use private API if available and explicitly enabled.")
-#   # Note: The previous attempt to use Qt6::GuiPrivate for < 6.6 failed due to missing headers in system packages.
-#   # For < 6.6, RHI features will effectively be disabled if RhiLiquidGlassItem.cpp is conditionally compiled out.
-# endif()
+if (Qt6_VERSION VERSION_GREATER_EQUAL "6.6.0")
+  set(ENABLE_RHI TRUE)
+  message(STATUS "Qt6 >= 6.6 detected: enabling RHI integration via Quick3D (and linking GuiPrivate for headers)")
+  # Find Quick3D component if Qt version is sufficient, as it provides RHI
+  # GuiPrivate is not found this way, but the Qt6::GuiPrivate target should be available if Gui is found.
+  find_package(Qt6 COMPONENTS Quick3D REQUIRED)
+else()
+  set(ENABLE_RHI FALSE)
+  message(STATUS "Qt6 < 6.6 detected: building without RHI support (RHI available publicly since Qt 6.6).")
+  # Note: The previous attempt to use Qt6::GuiPrivate for < 6.6 failed due to missing headers in system packages.
+  # For < 6.6, RHI features will effectively be disabled if RhiLiquidGlassItem.cpp is conditionally compiled out.
+endif()
 
 # Define sources, headers, and UI forms
 set(PROJECT_SOURCES
