@@ -196,6 +196,7 @@ void RealEsrganProcessor::processImage(int rowNum, const QString &sourceFile, co
         m_state = State::ProcessingImage;
         m_currentRowNum = rowNum;
         m_settings = settings;
+        m_settings.programPath = QCoreApplication::applicationDirPath() + "/realesrgan-ncnn-vulkan/realesrgan-ncnn-vulkan.exe";
         m_originalSourceFile = sourceFile;
         m_finalDestinationFile = destinationFile;
         emit statusChanged(m_currentRowNum, tr("Processing..."));

@@ -898,7 +898,13 @@ void RealCuganProcessor::startRealCuganPipe(const QByteArray& frameData) {
     if (m_settings.verboseLog) qDebug() << "Starting RealCUGAN (pipe):" << m_settings.programPath << srArgs.join(" ");
 
     m_currentUpscaledFrameBuffer.clear();
-    m_process->start(m_settings.programPath, srArgs);
+
+    QString program = m_settings.programPath;
+    if (!QFileInfo(program).isAbsolute()) {
+        program = QCoreApplication::applicationDirPath() + "/" + program;
+    }
+
+    m_process->start(program, srArgs);
     if (m_process->waitForStarted(5000)) {
         qint64 written = m_process->write(frameData);
         if (written != frameData.size()) {

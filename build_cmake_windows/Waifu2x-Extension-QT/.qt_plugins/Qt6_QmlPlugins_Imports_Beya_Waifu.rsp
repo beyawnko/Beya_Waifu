@@ -1,0 +1,11 @@
+-rootPath
+C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT
+-cmake-output
+-output-file
+C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/.qt_plugins/Qt6_QmlPlugins_Imports_Beya_Waifu.cmake
+-importPath
+C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT
+-importPath
+C:/tmp/Qt/6.6.3/mingw_64/./qml
+-qrcFiles
+C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/.rcc/ShadersGenerated.qrc

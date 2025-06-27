@@ -214,7 +214,7 @@ function Ensure-QMake {
     }
     $QtDir = (Resolve-Path $QtDir).Path
 
-    $qtModules = @('qtmultimedia', 'qtshadertools')
+    $qtModules = @('qtmultimedia', 'qtshadertools', 'qtquick3d')
     $qtInstallArgs = @(
         '-m', 'aqt',
         'install-qt', 'windows', 'desktop', $QtVersion, 'win64_mingw',
@@ -262,21 +262,14 @@ function Build-Project {
     Write-Host "Running the main project build script..."
     
     $buildScriptName = './build_projects.sh'
-    $scriptFullPath = Join-Path -Path (Get-Location).Path -ChildPath $buildScriptName
+    $scriptFullPath = Join-Path -Path $PSScriptRoot -ChildPath $buildScriptName
     if (-not (Test-Path -LiteralPath $scriptFullPath)) {
         throw "Build script not found at '$scriptFullPath'"
     }
 
-    $currentDir = (Get-Location).Path
+    $currentDir = $PSScriptRoot
     $msysDir = Convert-PathToMsys $currentDir
 
-    # Explicitly update submodules within realesrgan-ncnn-vulkan
-    Write-Host "Ensuring nested submodules are updated in realesrgan-ncnn-vulkan..."
-    Invoke-Process 'git' @('-C', 'realesrgan-ncnn-vulkan', 'submodule', 'update', '--init', '--recursive')
-    # Explicitly update submodules within realcugan-ncnn-vulkan
-    Write-Host "Ensuring nested submodules are updated in realcugan-ncnn-vulkan..."
-    Invoke-Process 'git' @('-C', 'realcugan-ncnn-vulkan', 'submodule', 'update', '--init', '--recursive')
-    
     # Define paths to the necessary bin directories for the build environment
     $mingwBinPath = 'C:\tools\msys64\mingw64\bin'
     $msysBinPath = 'C:\tools\msys64\usr\bin'
@@ -348,7 +341,7 @@ echo "--- Finished executing inside temporary bash wrapper ---"
 "@ -f $pathPrefix, $msysDir, $buildScriptName, $msysQtPath
 
     $tempScriptName = "temp_build_wrapper.sh"
-    $tempScriptPath = Join-Path -Path (Get-Location).Path -ChildPath $tempScriptName
+    $tempScriptPath = Join-Path -Path $PSScriptRoot -ChildPath $tempScriptName
 
     try {
         # Write the script content to the temp file, ensuring LF line endings for bash.
@@ -359,9 +352,9 @@ echo "--- Finished executing inside temporary bash wrapper ---"
     }
     finally {
         # Clean up the temporary script
-        if (Test-Path $tempScriptPath) {
-            Remove-Item $tempScriptPath -Force -ErrorAction SilentlyContinue
-        }
+        # if (Test-Path $tempScriptPath) {
+        #     Remove-Item $tempScriptPath -Force -ErrorAction SilentlyContinue
+        # }
     }
 }
 
@@ -376,13 +369,15 @@ echo "--- Finished executing inside temporary bash wrapper ---"
 
 try {
     Write-Host "`n--- Starting Build Process ---`n"
-
+    Write-Host "Stage 1: Ensuring Chocolatey and core packages."
     # Step 1: Ensure core dependencies are installed with Chocolatey.
     Ensure-Chocolatey
     Ensure-ChocoPackage 'msys2'
     Ensure-ChocoPackage 'cmake'
     Ensure-ChocoPackage 'git'
+    Write-Host "Stage 1: Complete."
 
+    Write-Host "Stage 2: Ensuring Vulkan SDK."
     # Custom Vulkan SDK Installation
     $vulkanSdkInstalled = $false
     $vulkanVersion = "1.3.268.0" # Specify a known good version
@@ -455,22 +450,33 @@ try {
     } else {
         Write-Host "Vulkan SDK $vulkanVersion (or a usable version) is already present. Skipping installation."
     }
+    Write-Host "Stage 2: Complete."
     
+    Write-Host "Stage 3: Finding MSYS2."
     # Find MSYS2 after ensuring it's installed.
     $bashPath = Find-Msys2Bash
     # $bashPath = '/bin/bash' # Provide a dummy path
+    Write-Host "Stage 3: Complete."
 
+    Write-Host "Stage 4: Setting up MSYS2 environment."
     # Step 2: Set up the MSYS2 environment.
     Install-MSYS2Packages -Msys2BashPath $bashPath
+    Write-Host "Stage 4: Complete."
     
+    Write-Host "Stage 5: Setting up Qt environment."
     # Step 3: Set up the Qt environment.
     Ensure-QMake
+    Write-Host "Stage 5: Complete."
     
+    Write-Host "Stage 6: Preparing source code."
     # Step 4: Prepare the source code.
     Update-Submodules
+    Write-Host "Stage 6: Complete."
     
+    Write-Host "Stage 7: Running final build."
     # Step 5: Run the final build.
     Build-Project -Msys2BashPath $bashPath
+    Write-Host "Stage 7: Complete."
     
     Write-Host "`nBuild process completed successfully!" -ForegroundColor Green
 

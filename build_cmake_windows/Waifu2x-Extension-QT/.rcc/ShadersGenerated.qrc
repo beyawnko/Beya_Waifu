@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/com.waifu2x.effects/shaders">
+    <file alias="shaders/liquidglass.frag.qsb">C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/.qsb/shaders/liquidglass.frag.qsb</file>
+  </qresource>
+</RCC>
+

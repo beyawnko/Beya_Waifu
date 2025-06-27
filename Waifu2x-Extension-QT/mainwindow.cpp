@@ -62,12 +62,26 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
   : QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    QFile debugFile("debug_trace.log");
+    if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&debugFile);
+        out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+            << " : MainWindow constructor started.\n";
+        debugFile.close();
+    }
   ui->setupUi(this);
 
   // Initialize QStandardItemModel members with 'this' as parent
   Table_model_image = new QStandardItemModel(this);
   Table_model_video = new QStandardItemModel(this);
   Table_model_gif = new QStandardItemModel(this);
+
+    if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&debugFile);
+        out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+            << " : Models created.\n";
+        debugFile.close();
+    }
 
   // Initialize state and members
   m_currentState = ProcessingState::Idle;
@@ -77,6 +91,14 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
   current_File_Row_Number = -1;
   TempDir_Path = Current_Path + "/temp";
   FFMPEG_EXE_PATH_Waifu2xEX = Current_Path + "/ffmpeg/ffmpeg.exe";
+  widget_RealCUGAN_Hidden = nullptr;
+
+    if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&debugFile);
+        out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+            << " : State and members initialized.\n";
+        debugFile.close();
+    }
 
   // Setup Processors that actually exist
   m_anime4kProcessor = new Anime4KProcessor(this);
@@ -84,11 +106,25 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
   connect(m_anime4kProcessor, &Anime4KProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString);
   connect(m_anime4kProcessor, &Anime4KProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_IMAGE); });
 
+    if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&debugFile);
+        out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+            << " : Anime4KProcessor created and connected.\n";
+        debugFile.close();
+    }
+
   m_realEsrganProcessor = new RealEsrganProcessor(this);
   connect(m_realEsrganProcessor, &RealEsrganProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
   connect(m_realEsrganProcessor, &RealEsrganProcessor::statusChanged, this, &MainWindow::Table_image_ChangeStatus_rowNumInt_statusQString);
   connect(m_realEsrganProcessor, &RealEsrganProcessor::fileProgress, this, &MainWindow::onFileProgress);
   connect(m_realEsrganProcessor, &RealEsrganProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_IMAGE); });
+
+    if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&debugFile);
+        out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+            << " : RealEsrganProcessor created and connected.\n";
+        debugFile.close();
+    }
 
   realCuganProcessor = new RealCuganProcessor(this);
   connect(realCuganProcessor, &RealCuganProcessor::logMessage, this, &MainWindow::TextBrowser_NewMessage);
@@ -96,9 +132,23 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
   connect(realCuganProcessor, &RealCuganProcessor::fileProgress, this, &MainWindow::onFileProgress);
   connect(realCuganProcessor, &RealCuganProcessor::processingFinished, this, [this](int rN, bool suc){ this->onProcessingFinished(rN, suc, PROCESS_TYPE_IMAGE); });
 
+    if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&debugFile);
+        out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+            << " : RealCuganProcessor created and connected.\n";
+        debugFile.close();
+    }
+
   // Setup other components
   videoProcessor = new VideoProcessor(this);
   qRegisterMetaType<FileMetadata>("FileMetadata");
+
+    if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&debugFile);
+        out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+            << " : VideoProcessor created and metatype registered.\n";
+        debugFile.close();
+    }
 
   // Thread pool setup
   QVariant maxThreadCountSetting = Settings_Read_value("/settings/MaxThreadCount");
@@ -116,6 +166,13 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
     ui->spinBox_NumOfThreads_VFI->setMaximum(globalMaxThreadCount);
   }
 
+    if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&debugFile);
+        out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+            << " : Thread pool setup complete.\n";
+        debugFile.close();
+    }
+
   setWindowTitle(QStringLiteral("Beya_Waifu %1 by beyawnko").arg(VERSION));
   translator = new QTranslator(this);
 
@@ -131,6 +188,13 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
 
   ApplyDarkStyle();
   setAcceptDrops(true);
+  Init_Table();
+    if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&debugFile);
+        out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+            << " : MainWindow constructor finished.\n";
+        debugFile.close();
+    }
 }
 
 MainWindow::~MainWindow()

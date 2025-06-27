@@ -8,18 +8,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-# Manually define the OpenGL::GL target as FindOpenGL.cmake is not behaving as expected with Qt.
-if(NOT TARGET OpenGL::GL)
-    add_library(OpenGL::GL INTERFACE IMPORTED)
-    set_property(TARGET OpenGL::GL PROPERTY INTERFACE_INCLUDE_DIRECTORIES /usr/include)
-    # It's important to link to both libGL (for OpenGL functions) and libGLX (for X11 integration)
-    # However, the INTERFACE_LINK_LIBRARIES property expects target names or full paths to libraries.
-    # For system libraries without their own imported targets, we provide the full path.
-    set_property(TARGET OpenGL::GL PROPERTY INTERFACE_LINK_LIBRARIES "/usr/lib/x86_64-linux-gnu/libGL.so;/usr/lib/x86_64-linux-gnu/libGLX.so")
-    message(STATUS "Manually created OpenGL::GL target.")
-else()
-    message(STATUS "OpenGL::GL target already exists.")
-endif()
+# Find OpenGL using the standard CMake module.
+find_package(OpenGL REQUIRED)
 
 # Find Vulkan as well, for RHI.
 find_package(Vulkan REQUIRED)

@@ -12,7 +12,7 @@ fi
 # Install glslangValidator if missing
 if ! command -v glslangValidator >/dev/null 2>&1; then
     if command -v apt-get >/dev/null 2>&1; then
-        sudo apt-get update && sudo apt-get install -y glslang-tools
+        apt-get update && apt-get install -y glslang-tools
     else
         echo "glslangValidator not found and no package manager available"
     fi
@@ -92,29 +92,10 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         # For Windows, the script prefers using prebuilt upscaler binaries if available.
         # If prebuilt binaries are not found, it falls back to building from source using CMake.
         echo "Handling Real-ESRGAN for Windows..."
-        if [ -f "$RESRGAN_PREBUILT_DIR/realesrgan-ncnn-vulkan.exe" ]; then
-            echo "Found prebuilt Real-ESRGAN executable. Copying..."
-            cp "$RESRGAN_PREBUILT_DIR/realesrgan-ncnn-vulkan.exe" "$TARGET_APP_DIR/realesrgan.exe"
-            cp "$RESRGAN_PREBUILT_DIR/realesrgan-ncnn-vulkan.exe" "$TARGET_LAUNCHER_DIR/realesrgan.exe"
-        elif [ -f "$RESRGAN_PREBUILT_DIR/realesrgan.exe" ]; then
-            echo "Found prebuilt Real-ESRGAN executable. Copying..."
-            cp "$RESRGAN_PREBUILT_DIR/realesrgan.exe" "$TARGET_APP_DIR/realesrgan.exe"
-            cp "$RESRGAN_PREBUILT_DIR/realesrgan.exe" "$TARGET_LAUNCHER_DIR/realesrgan.exe"
-            # Copy known DLLs, be specific if possible, otherwise copy all from prebuilt dir
-            find "$RESRGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_APP_DIR/" \;
-            find "$RESRGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_LAUNCHER_DIR/" \;
-
-            # Models are copied from the prebuilt directory if available.
-            echo "Copying Real-ESRGAN models from Windows prebuilt..."
-            mkdir -p "$TARGET_APP_DIR/models"
-            if [ -d "$RESRGAN_PREBUILT_DIR/models" ]; then
-                cp -R "$RESRGAN_PREBUILT_DIR/models/"* "$TARGET_APP_DIR/models/"
-            elif [ -d "$RESRGAN_SRC_DIR/models" ]; then
-                echo "Warning: Prebuilt Real-ESRGAN models directory not found at $RESRGAN_PREBUILT_DIR/models. Trying source models."
-                cp -R "$RESRGAN_SRC_DIR/models/"* "$TARGET_APP_DIR/models/"
-            else
-                echo "Warning: No Real-ESRGAN models found. Skipping model copy."
-            fi
+        if [ -d "$RESRGAN_PREBUILT_DIR" ]; then
+            echo "Found prebuilt Real-ESRGAN directory. Copying..."
+            cp -R "$RESRGAN_PREBUILT_DIR" "$TARGET_APP_DIR/realesrgan-ncnn-vulkan"
+            cp -R "$RESRGAN_PREBUILT_DIR" "$TARGET_LAUNCHER_DIR/realesrgan-ncnn-vulkan"
         else
             # Fallback: Build Real-ESRGAN from source if prebuilt not found.
             echo "Prebuilt Real-ESRGAN not found. Attempting CMake build..."
@@ -153,33 +134,10 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         # Similar logic for Real-CUGAN: Prefer prebuilt, fallback to source build.
         echo "Handling Real-CUGAN for Windows..."
         RCUGAN_MODEL_SUBDIRS="models-se models-pro models-nose"
-        if [ -f "$RCUGAN_PREBUILT_DIR/realcugan-ncnn-vulkan.exe" ]; then
-            echo "Found prebuilt Real-CUGAN executable. Copying..."
-            cp "$RCUGAN_PREBUILT_DIR/realcugan-ncnn-vulkan.exe" "$TARGET_APP_DIR/realcugan.exe"
-            cp "$RCUGAN_PREBUILT_DIR/realcugan-ncnn-vulkan.exe" "$TARGET_LAUNCHER_DIR/realcugan.exe"
-        elif [ -f "$RCUGAN_PREBUILT_DIR/realcugan.exe" ]; then
-            echo "Found prebuilt Real-CUGAN executable. Copying..."
-            cp "$RCUGAN_PREBUILT_DIR/realcugan.exe" "$TARGET_APP_DIR/realcugan.exe"
-            cp "$RCUGAN_PREBUILT_DIR/realcugan.exe" "$TARGET_LAUNCHER_DIR/realcugan.exe"
-        find "$RCUGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_APP_DIR/" \;
-        find "$RCUGAN_PREBUILT_DIR" -maxdepth 1 -name "*.dll" -exec cp {} "$TARGET_LAUNCHER_DIR/" \;
-
-            # Copy Real-CUGAN models from prebuilt directory.
-            echo "Copying Real-CUGAN models from Windows prebuilt..."
-            for model_subdir in $RCUGAN_MODEL_SUBDIRS; do
-                if [ -d "$RCUGAN_PREBUILT_DIR/$model_subdir" ] && [ "$(ls -A "$RCUGAN_PREBUILT_DIR/$model_subdir")" ]; then
-                    mkdir -p "$TARGET_APP_DIR/$model_subdir"
-                    cp -R "$RCUGAN_PREBUILT_DIR/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
-                else
-                    echo "Warning: Prebuilt Real-CUGAN model directory $RCUGAN_PREBUILT_DIR/$model_subdir not found or empty. Trying source."
-                    mkdir -p "$TARGET_APP_DIR/$model_subdir"
-                    if [ -d "$RCUGAN_SRC_DIR/models/$model_subdir" ] && [ "$(ls -A "$RCUGAN_SRC_DIR/models/$model_subdir")" ]; then
-                        cp -R "$RCUGAN_SRC_DIR/models/$model_subdir/"* "$TARGET_APP_DIR/$model_subdir/"
-                    else
-                        echo "Warning: No source models for Real-CUGAN subdir $model_subdir found."
-                    fi
-                fi
-            done
+        if [ -d "$RCUGAN_PREBUILT_DIR" ]; then
+            echo "Found prebuilt Real-CUGAN directory. Copying..."
+            cp -R "$RCUGAN_PREBUILT_DIR" "$TARGET_APP_DIR/realcugan-ncnn-vulkan"
+            cp -R "$RCUGAN_PREBUILT_DIR" "$TARGET_LAUNCHER_DIR/realcugan-ncnn-vulkan"
         else
             # Fallback: Build Real-CUGAN from source.
             echo "Prebuilt Real-CUGAN not found. Attempting CMake build..."
@@ -223,8 +181,8 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         # This is more reliable than aqtinstall if specific recent versions are not strictly needed for the build system test.
         echo "Ensuring Qt6 development packages are installed via apt-get..."
         if command -v apt-get >/dev/null 2>&1; then
-            sudo apt-get update -qq
-            sudo apt-get install -y --no-install-recommends \
+            apt-get update -qq
+            apt-get install -y --no-install-recommends \
                 qt6-base-dev \
                 qt6-base-dev-tools \
                 qt6-multimedia-dev \
@@ -397,7 +355,7 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         cmake .. -G "MinGW Makefiles" $CMAKE_PREFIX_PATH_ARG_WIN -DCMAKE_BUILD_TYPE=Release || { echo "Top-level CMake configuration for Windows failed."; popd >/dev/null; exit 1; }
 
         # Build the entire project
-        $MAKE -j$(nproc) || { echo "Top-level CMake build for Windows failed."; popd >/dev/null; exit 1; }
+        $MAKE VERBOSE=1 -j$(nproc) || { echo "Top-level CMake build for Windows failed."; popd >/dev/null; exit 1; }
 
         # --- Deployment for Windows (after CMake build) ---
 

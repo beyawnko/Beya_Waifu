@@ -1,0 +1,145 @@
+2025-06-27T03:38:05 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-27T03:38:05 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-27T03:38:23 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-27T03:38:23 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-27T03:42:17 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-27T03:42:17 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-27T03:47:12 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-27T03:47:12 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-27T03:52:32 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-27T03:52:32 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-27T03:54:39 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-27T03:54:39 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-27T03:56:04 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-27T03:56:04 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-27T03:56:47 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
+2025-06-27T03:56:47 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T03:56:47 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T03:56:47 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T03:56:47 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T03:56:47 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
+2025-06-27T03:56:47 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
+2025-06-27T03:56:47 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
+2025-06-27T03:56:47 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
+2025-06-27T03:56:47 - [Debug] Batch_Table_Update_slots: Called with
+2025-06-27T03:56:47 - [Debug]   doAddNewImage: true imagesToAdd count: 1
+2025-06-27T03:56:47 - [Debug]   doAddNewGif: false gifsToAdd count: 0
+2025-06-27T03:56:47 - [Debug]   doAddNewVideo: false videosToAdd count: 0
+2025-06-27T03:56:47 - [Debug] Batch_Table_Update_slots: Processing 1 images.
+2025-06-27T03:56:47 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Untitled.png" Path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T03:56:47 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
+2025-06-27T04:01:22 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-27T04:01:22 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-27T04:01:22 - [Debug] Init_Table: Finished Initializing Tables (in table.cpp).
+2025-06-27T04:01:22 - [Debug] Init_Table: ui->tableView_image exists: true
+2025-06-27T04:01:22 - [Debug] Init_Table: Table_model_image initial rowCount: 0 columnCount: 6
+2025-06-27T04:01:22 - [Debug] Init_Table: ui->tableView_gif exists: true
+2025-06-27T04:01:22 - [Debug] Init_Table: Table_model_gif initial rowCount: 0 columnCount: 6
+2025-06-27T04:01:22 - [Debug] Init_Table: ui->tableView_video exists: true
+2025-06-27T04:01:22 - [Debug] Init_Table: Table_model_video initial rowCount: 0 columnCount: 8
+2025-06-27T04:01:31 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
+2025-06-27T04:01:31 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:01:31 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:01:31 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:01:31 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:01:31 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
+2025-06-27T04:01:31 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
+2025-06-27T04:01:31 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
+2025-06-27T04:01:31 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
+2025-06-27T04:01:31 - [Debug] Batch_Table_Update_slots: Called with
+2025-06-27T04:01:31 - [Debug]   doAddNewImage: true imagesToAdd count: 1
+2025-06-27T04:01:31 - [Debug]   doAddNewGif: false gifsToAdd count: 0
+2025-06-27T04:01:31 - [Debug]   doAddNewVideo: false videosToAdd count: 0
+2025-06-27T04:01:31 - [Debug] Batch_Table_Update_slots: Processing 1 images.
+2025-06-27T04:01:31 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Untitled.png" Path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:01:31 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
+2025-06-27T04:02:00 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x188825c22b0), parent's thread is QThread(0x188fa7b86b0), current thread is QThreadPoolThread(0x18882433380)
+2025-06-27T04:02:00 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x188825c22b0), parent's thread is QThread(0x188fa7b86b0), current thread is QThreadPoolThread(0x18882433380)
+2025-06-27T04:02:00 - RealEsrganProcessor::onProcessError occurred: QProcess::FailedToStart "Process failed to start: The system cannot find the file specified."
+2025-06-27T04:03:12 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
+2025-06-27T04:03:12 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:03:12 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:03:12 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:03:12 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:03:12 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
+2025-06-27T04:03:12 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
+2025-06-27T04:03:12 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
+2025-06-27T04:03:12 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
+2025-06-27T04:03:12 - [Debug] Batch_Table_Update_slots: Called with
+2025-06-27T04:03:12 - [Debug]   doAddNewImage: true imagesToAdd count: 1
+2025-06-27T04:03:12 - [Debug]   doAddNewGif: false gifsToAdd count: 0
+2025-06-27T04:03:12 - [Debug]   doAddNewVideo: false videosToAdd count: 0
+2025-06-27T04:03:12 - [Debug] Batch_Table_Update_slots: Processing 1 images.
+2025-06-27T04:03:12 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Untitled.png" Path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:03:12 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
+2025-06-27T04:04:15 - [Debug] Init_Table: Finished Initializing Tables (in table.cpp).
+2025-06-27T04:04:15 - [Debug] Init_Table: ui->tableView_image exists: true
+2025-06-27T04:04:15 - [Debug] Init_Table: Table_model_image initial rowCount: 0 columnCount: 6
+2025-06-27T04:04:15 - [Debug] Init_Table: ui->tableView_gif exists: true
+2025-06-27T04:04:15 - [Debug] Init_Table: Table_model_gif initial rowCount: 0 columnCount: 6
+2025-06-27T04:04:15 - [Debug] Init_Table: ui->tableView_video exists: true
+2025-06-27T04:04:15 - [Debug] Init_Table: Table_model_video initial rowCount: 0 columnCount: 8
+2025-06-27T04:06:13 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-27T04:06:13 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-27T04:06:13 - [Debug] Init_Table: Finished Initializing Tables (in table.cpp).
+2025-06-27T04:06:13 - [Debug] Init_Table: ui->tableView_image exists: true
+2025-06-27T04:06:13 - [Debug] Init_Table: Table_model_image initial rowCount: 0 columnCount: 6
+2025-06-27T04:06:13 - [Debug] Init_Table: ui->tableView_gif exists: true
+2025-06-27T04:06:13 - [Debug] Init_Table: Table_model_gif initial rowCount: 0 columnCount: 6
+2025-06-27T04:06:13 - [Debug] Init_Table: ui->tableView_video exists: true
+2025-06-27T04:06:13 - [Debug] Init_Table: Table_model_video initial rowCount: 0 columnCount: 8
+2025-06-27T04:06:21 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
+2025-06-27T04:06:21 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:06:21 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:06:21 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:06:21 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:06:21 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
+2025-06-27T04:06:21 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
+2025-06-27T04:06:21 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
+2025-06-27T04:06:21 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
+2025-06-27T04:06:21 - [Debug] Batch_Table_Update_slots: Called with
+2025-06-27T04:06:21 - [Debug]   doAddNewImage: true imagesToAdd count: 1
+2025-06-27T04:06:21 - [Debug]   doAddNewGif: false gifsToAdd count: 0
+2025-06-27T04:06:21 - [Debug]   doAddNewVideo: false videosToAdd count: 0
+2025-06-27T04:06:21 - [Debug] Batch_Table_Update_slots: Processing 1 images.
+2025-06-27T04:06:21 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Untitled.png" Path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:06:21 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
+2025-06-27T04:06:25 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x1cf956b9430), parent's thread is QThread(0x1cf8dca86b0), current thread is QThreadPoolThread(0x1cf956a1bc0)
+2025-06-27T04:06:25 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x1cf956b9430), parent's thread is QThread(0x1cf8dca86b0), current thread is QThreadPoolThread(0x1cf956a1bc0)
+2025-06-27T04:06:25 - RealEsrganProcessor::onProcessError occurred: QProcess::FailedToStart "Process failed to start: The system cannot find the file specified."
+2025-06-27T04:06:46 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
+2025-06-27T04:06:46 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:06:46 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:06:46 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:06:46 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:06:46 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
+2025-06-27T04:06:46 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
+2025-06-27T04:06:46 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
+2025-06-27T04:06:46 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
+2025-06-27T04:06:46 - [Debug] Batch_Table_Update_slots: Called with
+2025-06-27T04:06:46 - [Debug]   doAddNewImage: true imagesToAdd count: 1
+2025-06-27T04:06:46 - [Debug]   doAddNewGif: false gifsToAdd count: 0
+2025-06-27T04:06:46 - [Debug]   doAddNewVideo: false videosToAdd count: 0
+2025-06-27T04:06:46 - [Debug] Batch_Table_Update_slots: Processing 1 images.
+2025-06-27T04:06:46 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Untitled.png" Path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:06:46 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
+2025-06-27T04:07:01 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
+2025-06-27T04:07:01 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:07:01 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:07:01 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:07:01 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:07:01 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
+2025-06-27T04:07:01 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
+2025-06-27T04:07:01 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
+2025-06-27T04:07:01 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
+2025-06-27T04:07:01 - [Debug] Batch_Table_Update_slots: Called with
+2025-06-27T04:07:01 - [Debug]   doAddNewImage: true imagesToAdd count: 1
+2025-06-27T04:07:01 - [Debug]   doAddNewGif: false gifsToAdd count: 0
+2025-06-27T04:07:01 - [Debug]   doAddNewVideo: false videosToAdd count: 0
+2025-06-27T04:07:01 - [Debug] Batch_Table_Update_slots: Processing 1 images.
+2025-06-27T04:07:01 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Untitled.png" Path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
+2025-06-27T04:07:01 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6

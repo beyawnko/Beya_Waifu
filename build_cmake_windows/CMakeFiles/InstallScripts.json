@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/cmake_install.cmake",
+		"C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/cmake_install.cmake",
+		"C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
