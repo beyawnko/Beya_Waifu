@@ -5791,3 +5791,260 @@ ia...
 2025-06-26 02:33:33,549 - aqt.main - ERROR - installer 140507667815296 The packages ['qt_base'] were not found while parsing XML of package information!
 ==============================Suggested follow-up:==============================
 * Please use 'aqt list-qt linux desktop --arch 6.6.3' to show architectures available.
+2025-06-27 07:39:58,474 - aqt.main - INFO - installer 139740020554624 aqtinstall(aqt) v3.3.0 on Python 3.12.11 [CPython GCC 13.3.0]
+2025-06-27 07:39:58,475 - aqt.helper - DEBUG - helper 139740020554624 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/Updates.xml.sha256
+2025-06-27 07:39:59,824 - aqt.main - ERROR - installer 139740020554624 The packages ['qt_base', 'qtquick3d', 'qtshadertools'] were not found while parsing XML of package information!
+==============================Suggested follow-up:==============================
+* Please use 'aqt list-qt linux desktop --arch 6.6.2' to show architectures available.
+* Please use 'aqt list-qt linux desktop --modules 6.6.2 <arch>' to show modules available.
+2025-06-27 07:40:13,803 - aqt.helper - DEBUG - helper 140121028062080 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/Updates.xml.sha256
+2025-06-27 07:40:15,155 - aqt.helper - DEBUG - helper 140121028062080 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662_wasm_singlethread/Updates.xml.sha256
+2025-06-27 07:40:16,498 - aqt.helper - DEBUG - helper 140121028062080 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662_wasm_multithread/Updates.xml.sha256
+2025-06-27 07:40:31,343 - aqt.helper - DEBUG - helper 140052506012544 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/Updates.xml.sha256
+2025-06-27 07:40:45,893 - aqt.main - INFO - installer 139672062921600 aqtinstall(aqt) v3.3.0 on Python 3.12.11 [CPython GCC 13.3.0]
+2025-06-27 07:40:45,895 - aqt.helper - DEBUG - helper 139672062921600 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/Updates.xml.sha256
+2025-06-27 07:40:48,247 - aqt.helper - DEBUG - helper 140655121181568 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtbase-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:40:48,271 - aqt.helper - DEBUG - helper 139708163738496 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtsvg-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:40:48,347 - aqt.helper - DEBUG - helper 140620797766528 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtdeclarative-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:40:48,364 - aqt.helper - DEBUG - helper 140177589627776 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qttools-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:40:48,918 - aqt.helper - INFO - helper 140655121181568 Downloading qtbase...
+2025-06-27 07:40:48,918 - aqt.installer - DEBUG - installer 140655121181568 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtbase-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:48,946 - aqt.helper - INFO - helper 139708163738496 Downloading qtsvg...
+2025-06-27 07:40:48,947 - aqt.installer - DEBUG - installer 139708163738496 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtsvg-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:49,018 - aqt.helper - INFO - helper 140620797766528 Downloading qtdeclarative...
+2025-06-27 07:40:49,019 - aqt.installer - DEBUG - installer 140620797766528 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtdeclarative-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:49,049 - aqt.helper - INFO - helper 140177589627776 Downloading qttools...
+2025-06-27 07:40:49,049 - aqt.installer - DEBUG - installer 140177589627776 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qttools-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:49,593 - aqt.helper - DEBUG - helper 140655121181568 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtbase-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:49,593 - aqt.helper - INFO - helper 140655121181568 Redirected: qt.mirror.constant.com
+2025-06-27 07:40:49,615 - aqt.helper - DEBUG - helper 139708163738496 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtsvg-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:49,616 - aqt.helper - INFO - helper 139708163738496 Redirected: qt.mirror.constant.com
+2025-06-27 07:40:49,686 - aqt.helper - DEBUG - helper 140620797766528 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtdeclarative-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:49,687 - aqt.helper - INFO - helper 140620797766528 Redirected: qt.mirror.constant.com
+2025-06-27 07:40:49,720 - aqt.helper - DEBUG - helper 140177589627776 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qttools-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:49,721 - aqt.helper - INFO - helper 140177589627776 Redirected: qt.mirror.constant.com
+2025-06-27 07:40:49,962 - aqt.helper - DEBUG - helper 139708163738496 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qttranslations-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:40:50,635 - aqt.helper - INFO - helper 139708163738496 Downloading qttranslations...
+2025-06-27 07:40:50,635 - aqt.installer - DEBUG - installer 139708163738496 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qttranslations-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:50,960 - aqt.helper - DEBUG - helper 140655121181568 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtwayland-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:40:51,191 - aqt.helper - DEBUG - helper 140177589627776 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133icu-linux-Rhel7.2-x64.7z.sha256
+2025-06-27 07:40:51,309 - aqt.helper - DEBUG - helper 139708163738496 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qttranslations-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:51,309 - aqt.helper - INFO - helper 139708163738496 Redirected: qt.mirror.constant.com
+2025-06-27 07:40:51,628 - aqt.helper - INFO - helper 140655121181568 Downloading qtwayland...
+2025-06-27 07:40:51,629 - aqt.installer - DEBUG - installer 140655121181568 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtwayland-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:51,645 - aqt.helper - DEBUG - helper 139708163738496 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.qtquick3d.gcc_64/6.6.2-0-202402121133qtquick3d-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:40:51,858 - aqt.helper - INFO - helper 140177589627776 Downloading icu...
+2025-06-27 07:40:51,858 - aqt.installer - DEBUG - installer 140177589627776 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133icu-linux-Rhel7.2-x64.7z
+2025-06-27 07:40:52,303 - aqt.helper - DEBUG - helper 140655121181568 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtwayland-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:52,304 - aqt.helper - INFO - helper 140655121181568 Redirected: qt.mirror.constant.com
+2025-06-27 07:40:52,310 - aqt.helper - INFO - helper 139708163738496 Downloading qtquick3d...
+2025-06-27 07:40:52,310 - aqt.installer - DEBUG - installer 139708163738496 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.qtquick3d.gcc_64/6.6.2-0-202402121133qtquick3d-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:52,527 - aqt.helper - DEBUG - helper 140177589627776 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133icu-linux-Rhel7.2-x64.7z
+2025-06-27 07:40:52,527 - aqt.helper - INFO - helper 140177589627776 Redirected: qt.mirror.constant.com
+2025-06-27 07:40:52,587 - aqt.helper - DEBUG - helper 140655121181568 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.qtshadertools.gcc_64/6.6.2-0-202402121133qtshadertools-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:40:52,980 - aqt.helper - DEBUG - helper 139708163738496 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.qtquick3d.gcc_64/6.6.2-0-202402121133qtquick3d-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:52,980 - aqt.helper - INFO - helper 139708163738496 Redirected: qt.mirror.constant.com
+2025-06-27 07:40:53,252 - aqt.helper - INFO - helper 140655121181568 Downloading qtshadertools...
+2025-06-27 07:40:53,252 - aqt.installer - DEBUG - installer 140655121181568 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.qtshadertools.gcc_64/6.6.2-0-202402121133qtshadertools-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:53,919 - aqt.helper - DEBUG - helper 140655121181568 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.qtshadertools.gcc_64/6.6.2-0-202402121133qtshadertools-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:40:53,920 - aqt.helper - INFO - helper 140655121181568 Redirected: qt.mirror.constant.com
+2025-06-27 07:40:54,393 - aqt.installer - WARNING - installer 139672062921600 Caught PermissionError, terminating installer workers
+2025-06-27 07:40:54,435 - aqt.main - ERROR - installer 139672062921600 Failed to write to base directory at /opt/Qt6
+==============================Suggested follow-up:==============================
+* Check that the destination is writable and does not already contain files owned by another user.
+2025-06-27 07:44:39,297 - aqt.main - INFO - installer 140057613892480 aqtinstall(aqt) v3.3.0 on Python 3.12.11 [CPython GCC 13.3.0]
+2025-06-27 07:44:39,298 - aqt.helper - DEBUG - helper 140057613892480 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/Updates.xml.sha256
+2025-06-27 07:44:41,563 - aqt.helper - DEBUG - helper 140255559486336 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.addons.qtmultimedia.gcc_64/6.6.2-0-202402121133qtmultimedia-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:44:41,597 - aqt.helper - DEBUG - helper 139894320229248 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtbase-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:44:41,618 - aqt.helper - DEBUG - helper 140058708409216 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtsvg-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:44:41,636 - aqt.helper - DEBUG - helper 139916067085184 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtdeclarative-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:44:42,235 - aqt.helper - INFO - helper 140255559486336 Downloading qtmultimedia...
+2025-06-27 07:44:42,236 - aqt.installer - DEBUG - installer 140255559486336 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.addons.qtmultimedia.gcc_64/6.6.2-0-202402121133qtmultimedia-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:42,267 - aqt.helper - INFO - helper 139894320229248 Downloading qtbase...
+2025-06-27 07:44:42,267 - aqt.installer - DEBUG - installer 139894320229248 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtbase-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:42,287 - aqt.helper - INFO - helper 140058708409216 Downloading qtsvg...
+2025-06-27 07:44:42,288 - aqt.installer - DEBUG - installer 140058708409216 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtsvg-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:42,310 - aqt.helper - INFO - helper 139916067085184 Downloading qtdeclarative...
+2025-06-27 07:44:42,310 - aqt.installer - DEBUG - installer 139916067085184 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtdeclarative-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:42,903 - aqt.helper - DEBUG - helper 140255559486336 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.addons.qtmultimedia.gcc_64/6.6.2-0-202402121133qtmultimedia-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:42,903 - aqt.helper - INFO - helper 140255559486336 Redirected: qt.mirror.constant.com
+2025-06-27 07:44:42,937 - aqt.helper - DEBUG - helper 139894320229248 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtbase-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:42,937 - aqt.helper - INFO - helper 139894320229248 Redirected: qt.mirror.constant.com
+2025-06-27 07:44:42,953 - aqt.helper - DEBUG - helper 140058708409216 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtsvg-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:42,953 - aqt.helper - INFO - helper 140058708409216 Redirected: qt.mirror.constant.com
+2025-06-27 07:44:42,981 - aqt.helper - DEBUG - helper 139916067085184 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtdeclarative-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:42,981 - aqt.helper - INFO - helper 139916067085184 Redirected: qt.mirror.constant.com
+2025-06-27 07:44:43,289 - aqt.installer - INFO - installer 140058708409216 Finished installation of qtsvg-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z in 1.67439948
+2025-06-27 07:44:43,318 - aqt.helper - DEBUG - helper 140058708409216 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qttools-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:44:43,998 - aqt.helper - INFO - helper 140058708409216 Downloading qttools...
+2025-06-27 07:44:43,998 - aqt.installer - DEBUG - installer 140058708409216 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qttools-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:44,677 - aqt.helper - DEBUG - helper 140058708409216 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qttools-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:44,677 - aqt.helper - INFO - helper 140058708409216 Redirected: qt.mirror.constant.com
+2025-06-27 07:44:50,570 - aqt.installer - INFO - installer 140255559486336 Finished installation of qtmultimedia-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z in 9.01060536
+2025-06-27 07:44:50,594 - aqt.helper - DEBUG - helper 140255559486336 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qttranslations-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:44:51,286 - aqt.helper - INFO - helper 140255559486336 Downloading qttranslations...
+2025-06-27 07:44:51,286 - aqt.installer - DEBUG - installer 140255559486336 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qttranslations-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:51,805 - aqt.installer - INFO - installer 139894320229248 Finished installation of qtbase-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z in 10.21270026
+2025-06-27 07:44:51,836 - aqt.helper - DEBUG - helper 139894320229248 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtwayland-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z.sha256
+2025-06-27 07:44:51,966 - aqt.helper - DEBUG - helper 140255559486336 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qttranslations-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:51,966 - aqt.helper - INFO - helper 140255559486336 Redirected: qt.mirror.constant.com
+2025-06-27 07:44:52,514 - aqt.helper - INFO - helper 139894320229248 Downloading qtwayland...
+2025-06-27 07:44:52,514 - aqt.installer - DEBUG - installer 139894320229248 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtwayland-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:52,837 - aqt.installer - INFO - installer 140255559486336 Finished installation of qttranslations-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z in 2.24709245
+2025-06-27 07:44:52,863 - aqt.helper - DEBUG - helper 140255559486336 Attempt to download checksum at https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133icu-linux-Rhel7.2-x64.7z.sha256
+2025-06-27 07:44:52,888 - aqt.installer - INFO - installer 140058708409216 Finished installation of qttools-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z in 9.57306917
+2025-06-27 07:44:53,190 - aqt.helper - DEBUG - helper 139894320229248 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133qtwayland-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z
+2025-06-27 07:44:53,190 - aqt.helper - INFO - helper 139894320229248 Redirected: qt.mirror.constant.com
+2025-06-27 07:44:53,545 - aqt.helper - INFO - helper 140255559486336 Downloading icu...
+2025-06-27 07:44:53,546 - aqt.installer - DEBUG - installer 140255559486336 Download URL: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133icu-linux-Rhel7.2-x64.7z
+2025-06-27 07:44:53,723 - aqt.installer - INFO - installer 139894320229248 Finished installation of qtwayland-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z in 1.88900339
+2025-06-27 07:44:54,213 - aqt.helper - DEBUG - helper 140255559486336 Asked to redirect(302) to: https://qt.mirror.constant.com/online/qtsdkrepository/linux_x64/desktop/qt6_662/qt.qt6.662.gcc_64/6.6.2-0-202402121133icu-linux-Rhel7.2-x64.7z
+2025-06-27 07:44:54,213 - aqt.helper - INFO - helper 140255559486336 Redirected: qt.mirror.constant.com
+2025-06-27 07:44:55,755 - aqt.installer - INFO - installer 140255559486336 Finished installation of icu-linux-Rhel7.2-x64.7z in 2.89491319
+2025-06-27 07:45:10,733 - aqt.installer - INFO - installer 139916067085184 Finished installation of qtdeclarative-Linux-RHEL_8_8-GCC-Linux-RHEL_8_8-X86_64.7z in 29.09968483
+2025-06-27 07:45:10,859 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/bin/qmake
+2025-06-27 07:45:10,865 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6WaylandClient.pc
+2025-06-27 07:45:10,865 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Quick3DUtils.pc
+2025-06-27 07:45:10,866 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6UiTools.pc
+2025-06-27 07:45:10,866 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QuickDialogs2QuickImpl.pc
+2025-06-27 07:45:10,866 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QmlWorkerScript.pc
+2025-06-27 07:45:10,866 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Linguist.pc
+2025-06-27 07:45:10,867 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Widgets.pc
+2025-06-27 07:45:10,867 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Gui.pc
+2025-06-27 07:45:10,867 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Designer.pc
+2025-06-27 07:45:10,868 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QmlModels.pc
+2025-06-27 07:45:10,868 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6LabsFolderListModel.pc
+2025-06-27 07:45:10,868 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6UiPlugin.pc
+2025-06-27 07:45:10,868 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Quick3DHelpers.pc
+2025-06-27 07:45:10,869 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Core.pc
+2025-06-27 07:45:10,869 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QuickWidgets.pc
+2025-06-27 07:45:10,869 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Concurrent.pc
+2025-06-27 07:45:10,870 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QmlIntegration.pc
+2025-06-27 07:45:10,871 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QmlLocalStorage.pc
+2025-06-27 07:45:10,871 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QuickTemplates2.pc
+2025-06-27 07:45:10,871 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6LabsQmlModels.pc
+2025-06-27 07:45:10,872 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Qml.pc
+2025-06-27 07:45:10,872 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Quick3DRuntimeRender.pc
+2025-06-27 07:45:10,873 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6PrintSupport.pc
+2025-06-27 07:45:10,873 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QmlCompiler.pc
+2025-06-27 07:45:10,873 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Quick3DIblBaker.pc
+2025-06-27 07:45:10,874 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6LabsSettings.pc
+2025-06-27 07:45:10,874 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Network.pc
+2025-06-27 07:45:10,874 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QmlCore.pc
+2025-06-27 07:45:10,875 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QuickControls2.pc
+2025-06-27 07:45:10,875 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Quick3DHelpersImpl.pc
+2025-06-27 07:45:10,875 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6LabsSharedImage.pc
+2025-06-27 07:45:10,876 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QuickControls2Impl.pc
+2025-06-27 07:45:10,876 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QuickLayouts.pc
+2025-06-27 07:45:10,876 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6OpenGLWidgets.pc
+2025-06-27 07:45:10,877 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6MultimediaWidgets.pc
+2025-06-27 07:45:10,877 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6ShaderTools.pc
+2025-06-27 07:45:10,877 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Xml.pc
+2025-06-27 07:45:10,878 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Test.pc
+2025-06-27 07:45:10,878 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Quick3D.pc
+2025-06-27 07:45:10,879 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QuickTest.pc
+2025-06-27 07:45:10,879 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QDocCatchConversionsPrivate.pc
+2025-06-27 07:45:10,879 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Quick3DParticleEffects.pc
+2025-06-27 07:45:10,880 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QmlXmlListModel.pc
+2025-06-27 07:45:10,880 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6LabsWavefrontMesh.pc
+2025-06-27 07:45:10,880 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6LabsAnimation.pc
+2025-06-27 07:45:10,881 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Sql.pc
+2025-06-27 07:45:10,881 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6DBus.pc
+2025-06-27 07:45:10,881 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Help.pc
+2025-06-27 07:45:10,882 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Svg.pc
+2025-06-27 07:45:10,882 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QuickDialogs2Utils.pc
+2025-06-27 07:45:10,882 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Quick3DParticles.pc
+2025-06-27 07:45:10,883 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Quick3DAssetImport.pc
+2025-06-27 07:45:10,883 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6SpatialAudio.pc
+2025-06-27 07:45:10,883 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Multimedia.pc
+2025-06-27 07:45:10,884 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Quick3DEffects.pc
+2025-06-27 07:45:10,884 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6SvgWidgets.pc
+2025-06-27 07:45:10,884 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Platform.pc
+2025-06-27 07:45:10,885 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QuickDialogs2.pc
+2025-06-27 07:45:10,885 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6OpenGL.pc
+2025-06-27 07:45:10,885 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Quick3DAssetUtils.pc
+2025-06-27 07:45:10,886 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6Quick.pc
+2025-06-27 07:45:10,886 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/pkgconfig/Qt6QDocCatchGeneratorsPrivate.pc
+2025-06-27 07:45:10,888 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QmlCompiler.prl
+2025-06-27 07:45:10,888 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6OpenGL.prl
+2025-06-27 07:45:10,888 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick3DParticles.prl
+2025-06-27 07:45:10,889 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Xml.prl
+2025-06-27 07:45:10,889 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6DBus.prl
+2025-06-27 07:45:10,889 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Test.prl
+2025-06-27 07:45:10,890 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick3DHelpersImpl.prl
+2025-06-27 07:45:10,890 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Multimedia.prl
+2025-06-27 07:45:10,891 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6MultimediaWidgets.prl
+2025-06-27 07:45:10,891 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6LabsSettings.prl
+2025-06-27 07:45:10,891 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Widgets.prl
+2025-06-27 07:45:10,892 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QmlWorkerScript.prl
+2025-06-27 07:45:10,892 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6WaylandEglClientHwIntegration.prl
+2025-06-27 07:45:10,892 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickDialogs2.prl
+2025-06-27 07:45:10,893 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QmlDom.prl
+2025-06-27 07:45:10,893 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6FbSupport.prl
+2025-06-27 07:45:10,893 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6WlShellIntegration.prl
+2025-06-27 07:45:10,894 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick3DSpatialAudio.prl
+2025-06-27 07:45:10,894 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick3DAssetImport.prl
+2025-06-27 07:45:10,895 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6DesignerComponents.prl
+2025-06-27 07:45:10,895 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickDialogs2Utils.prl
+2025-06-27 07:45:10,895 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6EglFsKmsSupport.prl
+2025-06-27 07:45:10,896 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick3DHelpers.prl
+2025-06-27 07:45:10,896 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6LabsFolderListModel.prl
+2025-06-27 07:45:10,896 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickParticles.prl
+2025-06-27 07:45:10,897 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickEffects.prl
+2025-06-27 07:45:10,897 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Help.prl
+2025-06-27 07:45:10,898 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QmlModels.prl
+2025-06-27 07:45:10,898 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6WaylandClient.prl
+2025-06-27 07:45:10,899 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Designer.prl
+2025-06-27 07:45:10,899 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick3DGlslParser.prl
+2025-06-27 07:45:10,900 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Gui.prl
+2025-06-27 07:45:10,900 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QmlToolingSettings.prl
+2025-06-27 07:45:10,901 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QmlTypeRegistrar.prl
+2025-06-27 07:45:10,901 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickTestUtils.prl
+2025-06-27 07:45:10,901 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6ExampleIcons.prl
+2025-06-27 07:45:10,902 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickShapes.prl
+2025-06-27 07:45:10,902 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickControlsTestUtils.prl
+2025-06-27 07:45:10,902 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6MultimediaQuick.prl
+2025-06-27 07:45:10,903 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Concurrent.prl
+2025-06-27 07:45:10,903 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickDialogs2QuickImpl.prl
+2025-06-27 07:45:10,903 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6DeviceDiscoverySupport.prl
+2025-06-27 07:45:10,904 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Network.prl
+2025-06-27 07:45:10,904 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Qml.prl
+2025-06-27 07:45:10,904 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick3DAssetUtils.prl
+2025-06-27 07:45:10,905 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6SvgWidgets.prl
+2025-06-27 07:45:10,905 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick3DIblBaker.prl
+2025-06-27 07:45:10,905 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick3DParticleEffects.prl
+2025-06-27 07:45:10,906 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickTemplates2.prl
+2025-06-27 07:45:10,906 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6LabsWavefrontMesh.prl
+2025-06-27 07:45:10,906 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6OpenGLWidgets.prl
+2025-06-27 07:45:10,907 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6ShaderTools.prl
+2025-06-27 07:45:10,907 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QmlDebug.prl
+2025-06-27 07:45:10,908 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick3D.prl
+2025-06-27 07:45:10,908 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6PacketProtocol.prl
+2025-06-27 07:45:10,908 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6PrintSupport.prl
+2025-06-27 07:45:10,909 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QmlXmlListModel.prl
+2025-06-27 07:45:10,909 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickControls2Impl.prl
+2025-06-27 07:45:10,909 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick3DRuntimeRender.prl
+2025-06-27 07:45:10,910 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6KmsSupport.prl
+2025-06-27 07:45:10,910 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick3DUtils.prl
+2025-06-27 07:45:10,911 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QmlCore.prl
+2025-06-27 07:45:10,911 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QmlLS.prl
+2025-06-27 07:45:10,911 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickControls2.prl
+2025-06-27 07:45:10,912 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6LabsAnimation.prl
+2025-06-27 07:45:10,912 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6LabsSharedImage.prl
+2025-06-27 07:45:10,912 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Core.prl
+2025-06-27 07:45:10,913 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6UiTools.prl
+2025-06-27 07:45:10,913 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6EglFSDeviceIntegration.prl
+2025-06-27 07:45:10,913 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickWidgets.prl
+2025-06-27 07:45:10,914 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6XcbQpa.prl
+2025-06-27 07:45:10,914 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickTest.prl
+2025-06-27 07:45:10,914 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QuickLayouts.prl
+2025-06-27 07:45:10,915 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6InputSupport.prl
+2025-06-27 07:45:10,915 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6LabsQmlModels.prl
+2025-06-27 07:45:10,915 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Svg.prl
+2025-06-27 07:45:10,916 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6QmlLocalStorage.prl
+2025-06-27 07:45:10,916 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6SpatialAudio.prl
+2025-06-27 07:45:10,916 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick.prl
+2025-06-27 07:45:10,916 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Quick3DEffects.prl
+2025-06-27 07:45:10,917 - aqt.updater - INFO - updater 140057613892480 Patching /opt/Qt6/6.6.2/gcc_64/lib/libQt6Sql.prl
+2025-06-27 07:45:10,917 - aqt.main - INFO - installer 140057613892480 Finished installation
+2025-06-27 07:45:10,917 - aqt.main - INFO - installer 140057613892480 Time elapsed: 31.62024506 second

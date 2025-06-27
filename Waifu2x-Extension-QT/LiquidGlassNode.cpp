@@ -250,7 +250,9 @@ void LiquidGlassNode::sync(RhiLiquidGlassItem *item) {
     // If pipeline is not created, or depends on something that changed (e.g. render target format from window)
     // For this example, we assume render target format is stable enough once window is set.
     // Pipeline needs to be created after SRB and shaders are ready.
-    if (!m_pipelineInitialized && m_resourcesInitialized && m_rhi && m_window->renderTarget()) {
+    // Use renderTarget() from QSGRenderNode, which returns QRhiRenderTarget*
+    const QRhiRenderTarget *rt = renderTarget();
+    if (!m_pipelineInitialized && m_resourcesInitialized && rt) { // rt is a pointer, check directly
         QRhiVertexInputLayout inputLayout;
         inputLayout.setBindings({
             { 4 * sizeof(float) } // Stride: vec2 pos, vec2 texCoord
@@ -264,7 +266,7 @@ void LiquidGlassNode::sync(RhiLiquidGlassItem *item) {
         m_pipeline->setTopology(QRhiGraphicsPipeline::TriangleStrip);
         // Set any blending, depth test, stencil, cull mode etc. here if needed
         // For default opaque drawing:
-        m_pipeline->setSampleCount(m_window->renderTarget()->sampleCount()); // Match window's MSAA
+        m_pipeline->setSampleCount(rt->sampleCount()); // Use rt->
 
         // Example blend for transparency (if needed, adapt as per original GL widget)
         // QRhiGraphicsPipeline::TargetBlend blendState;
@@ -280,7 +282,7 @@ void LiquidGlassNode::sync(RhiLiquidGlassItem *item) {
         });
         m_pipeline->setVertexInputLayout(inputLayout);
         m_pipeline->setShaderResourceBindings(m_srb);
-        m_pipeline->setRenderPassDescriptor(m_window->renderTarget()->renderPassDescriptor());
+        m_pipeline->setRenderPassDescriptor(rt->renderPassDescriptor()); // Use rt->
 
         if (!m_pipeline->create()) {
             qWarning("LiquidGlassNode: Failed to create graphics pipeline.");
@@ -291,12 +293,12 @@ void LiquidGlassNode::sync(RhiLiquidGlassItem *item) {
     }
 }
 
-void LiquidGlassNode::render(const RenderState *state) {
+void LiquidGlassNode::render(const QSGRenderNode::RenderState *state) { // Added QSGRenderNode::
     if (!m_pipelineInitialized || !m_rhi || !m_pipeline || !state) {
         return;
     }
 
-    QRhiCommandBuffer *cb = state->commandBuffer();
+    QRhiCommandBuffer *cb = commandBuffer(); // Use QSGRenderNode::commandBuffer()
     if (!cb) return;
 
     // Process any pending resource updates (textures, UBO, VBO)
@@ -314,8 +316,10 @@ void LiquidGlassNode::render(const RenderState *state) {
         return;
     }
 
-    // Use state->rhiTarget() for RHI properties
-    const QSize outputPixelSize = state->rhiTarget()->pixelSize();
+    // Use renderTarget() for RHI properties like pixelSize
+    const QRhiRenderTarget *rt = renderTarget();
+    if (!rt) return; // Should not happen if pipeline is initialized
+    const QSize outputPixelSize = rt->pixelSize(); // Use rt->pixelSize()
     cb->setViewport(QRhiViewport(0, 0, outputPixelSize.width(), outputPixelSize.height()));
     cb->setGraphicsPipeline(m_pipeline);
     cb->setShaderResources(m_srb); // Bind UBO and texture sampler
@@ -337,4 +341,5 @@ void LiquidGlassNode::preprocess() {
     // if (m_resourcesInitialized) {
     //     markDirty(DirtyMaterial); // Or a more specific flag if available for uniform changes
     // }
+}
 }
