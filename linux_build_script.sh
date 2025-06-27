@@ -65,7 +65,7 @@ echo "Running moc for anime4kprocessor.h..."
     -DQT_CONCURRENT_LIB \
     -DQT_NETWORK_LIB \
     -DQT_CORE_LIB \
-    -I"$SCRIPT_DIR/Waifu2x-Extension-QT" \
+    -I. \
     -I/usr/include/x86_64-linux-gnu/qt6 \
     -I/usr/include/x86_64-linux-gnu/qt6/QtMultimedia \
     -I/usr/include/x86_64-linux-gnu/qt6/QtOpenGLWidgets \
@@ -76,7 +76,7 @@ echo "Running moc for anime4kprocessor.h..."
     -I/usr/include/x86_64-linux-gnu/qt6/QtNetwork \
     -I/usr/include/x86_64-linux-gnu/qt6/QtCore \
     -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ \
-    "$SCRIPT_DIR/Waifu2x-Extension-QT/anime4kprocessor.h" -o "$SCRIPT_DIR/Waifu2x-Extension-QT/moc_anime4kprocessor.cpp"
+    anime4kprocessor.h -o moc_anime4kprocessor.cpp
 
 # Run qmake to generate the Makefile AFTER moc files might have been generated
 # Try qmake6 first, then qmake

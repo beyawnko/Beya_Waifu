@@ -8,7 +8,24 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+# Manually define the OpenGL::GL target as FindOpenGL.cmake is not behaving as expected with Qt.
+if(NOT TARGET OpenGL::GL)
+    add_library(OpenGL::GL INTERFACE IMPORTED)
+    set_property(TARGET OpenGL::GL PROPERTY INTERFACE_INCLUDE_DIRECTORIES /usr/include)
+    # It's important to link to both libGL (for OpenGL functions) and libGLX (for X11 integration)
+    # However, the INTERFACE_LINK_LIBRARIES property expects target names or full paths to libraries.
+    # For system libraries without their own imported targets, we provide the full path.
+    set_property(TARGET OpenGL::GL PROPERTY INTERFACE_LINK_LIBRARIES "/usr/lib/x86_64-linux-gnu/libGL.so;/usr/lib/x86_64-linux-gnu/libGLX.so")
+    message(STATUS "Manually created OpenGL::GL target.")
+else()
+    message(STATUS "OpenGL::GL target already exists.")
+endif()
+
+# Find Vulkan as well, for RHI.
+find_package(Vulkan REQUIRED)
+
 # Find base Qt6 components required by the project
+# GuiPrivate will be linked conditionally, not listed as a primary component here.
 find_package(Qt6 COMPONENTS Core Gui Concurrent Multimedia OpenGL OpenGLWidgets Widgets ShaderTools LinguistTools Quick REQUIRED)
 
 # CMAKE_PREFIX_PATH will be set on the command line if using a non-system Qt.
@@ -16,18 +33,22 @@ find_package(Qt6 COMPONENTS Core Gui Concurrent Multimedia OpenGL OpenGLWidgets 
 # set(CMAKE_PREFIX_PATH ${Qt6_PREFIX_PATH})
 
 # Determine if RHI should be enabled (Qt >= 6.6.0)
-if (Qt6_VERSION VERSION_GREATER_EQUAL "6.6.0")
-  set(ENABLE_RHI TRUE)
-  message(STATUS "Qt6 >= 6.6 detected: enabling RHI integration via Quick3D (and linking GuiPrivate for headers)")
-  # Find Quick3D component if Qt version is sufficient, as it provides RHI
-  # GuiPrivate is not found this way, but the Qt6::GuiPrivate target should be available if Gui is found.
-  find_package(Qt6 COMPONENTS Quick3D REQUIRED)
-else()
-  set(ENABLE_RHI FALSE)
-  message(STATUS "Qt6 < 6.6 detected: building without RHI support (RHI available publicly since Qt 6.6). Will attempt to use private API if available and explicitly enabled.")
-  # Note: The previous attempt to use Qt6::GuiPrivate for < 6.6 failed due to missing headers in system packages.
-  # For < 6.6, RHI features will effectively be disabled if RhiLiquidGlassItem.cpp is conditionally compiled out.
-endif()
+# Temporarily disabling RHI to get a baseline build
+set(ENABLE_RHI FALSE)
+message(WARNING "RHI support has been temporarily disabled for this build.")
+
+# if (Qt6_VERSION VERSION_GREATER_EQUAL "6.6.0")
+#   set(ENABLE_RHI TRUE)
+#   message(STATUS "Qt6 >= 6.6 detected: enabling RHI integration via Quick3D (and linking GuiPrivate for headers)")
+#   # Find Quick3D component if Qt version is sufficient, as it provides RHI
+#   # GuiPrivate is not found this way, but the Qt6::GuiPrivate target should be available if Gui is found.
+#   find_package(Qt6 COMPONENTS Quick3D REQUIRED)
+# else()
+#   set(ENABLE_RHI FALSE)
+#   message(STATUS "Qt6 < 6.6 detected: building without RHI support (RHI available publicly since Qt 6.6). Will attempt to use private API if available and explicitly enabled.")
+#   # Note: The previous attempt to use Qt6::GuiPrivate for < 6.6 failed due to missing headers in system packages.
+#   # For < 6.6, RHI features will effectively be disabled if RhiLiquidGlassItem.cpp is conditionally compiled out.
+# endif()
 
 # Define sources, headers, and UI forms
 set(PROJECT_SOURCES
@@ -70,6 +91,7 @@ set(PROJECT_SOURCES
 
 if (ENABLE_RHI)
   list(APPEND PROJECT_SOURCES RhiLiquidGlassItem.cpp)
+  list(APPEND PROJECT_SOURCES LiquidGlassNode.cpp) # Added LiquidGlassNode.cpp
   # Add any other RHI-specific sources here if needed
 endif()
 
@@ -211,7 +233,31 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 # Add defines
-target_compile_definitions(${PROJECT_NAME} PRIVATE QT_DEPRECATED_WARNINGS)
+target_compile_definitions(${PROJECT_NAME} PRIVATE QT_DEPRECATED_WARNINGS QT_PRIVATE_HEADERS)
+
+# Explicitly add OpenGL include directory to the target
+target_include_directories(${PROJECT_NAME} PRIVATE /usr/include)
+
+# If RHI is enabled, explicitly add include directories from Quick3D and GuiPrivate
+if(ENABLE_RHI)
+    get_target_property(QT_QUICK3D_INCLUDE_DIRS Qt6::Quick3D INTERFACE_INCLUDE_DIRECTORIES)
+    get_target_property(QT_GUI_PRIVATE_INCLUDE_DIRS Qt6::GuiPrivate INTERFACE_INCLUDE_DIRECTORIES)
+    get_target_property(QT_GUI_HAS_PRIVATE_HEADERS Qt6::Gui _qt_module_has_private_headers)
+    message(STATUS "Qt6::Gui _qt_module_has_private_headers: ${QT_GUI_HAS_PRIVATE_HEADERS}")
+
+    # Removed forceful addition of /opt/Qt6/6.6.0/gcc_64/include/QtGui/6.6.0/QtGui
+    # as linking Qt6::GuiPrivate should handle this.
+    # message(STATUS "Forcefully added /opt/Qt6/6.6.0/gcc_64/include/QtGui/6.6.0/QtGui to includes for RHI.")
+
+    if(QT_QUICK3D_INCLUDE_DIRS)
+        target_include_directories(${PROJECT_NAME} PRIVATE ${QT_QUICK3D_INCLUDE_DIRS})
+        message(STATUS "Added Qt6::Quick3D include directories: ${QT_QUICK3D_INCLUDE_DIRS}")
+    endif()
+    if(QT_GUI_PRIVATE_INCLUDE_DIRS)
+        target_include_directories(${PROJECT_NAME} PRIVATE ${QT_GUI_PRIVATE_INCLUDE_DIRS})
+        message(STATUS "Added Qt6::GuiPrivate include directories: ${QT_GUI_PRIVATE_INCLUDE_DIRS}")
+    endif()
+endif()
 
 # Installation
 install(TARGETS ${PROJECT_NAME}

@@ -1,41 +1,36 @@
 #pragma once
 
 #include <QSGRenderNode>
-#include <rhi/qrhi.h> // Main RHI header - Changed to rhi/qrhi.h
-#include <rhi/qshader.h> // Added for QShader - Corrected include path for Qt 6
+// Includes for RHI, using QShader
+#include <rhi/qrhi.h>    // For QRhi, QRhiBuffer, QRhiShaderStage, etc.
+#include <rhi/qshader.h> // For QShader
+
 #include "RhiLiquidGlassItem.h" // For LiquidGlassParams struct
 
-// Forward declarations
-class QRhi;
-class QRhiBuffer;
-class QRhiTexture;
-class QRhiSampler;
-class QRhiGraphicsPipeline;
-class QRhiShaderResourceBindings;
+// Forward declarations for other types
 class QQuickWindow;
+// Other QRhi types are defined in rhi/qrhi.h or rhi/qshader.h
 
 class LiquidGlassNode : public QSGRenderNode
 {
 public:
-    LiquidGlassNode(QQuickWindow *window); // Pass window for RHI context
+    LiquidGlassNode(QQuickWindow *window);
     ~LiquidGlassNode() override;
 
     void render(const RenderState *state) override;
-    void preprocess() override; // For continuous updates like time
+    void preprocess() override;
 
-    // Called from RhiLiquidGlassItem::updatePaintNode to sync data
     void sync(RhiLiquidGlassItem *item);
 
 private:
-    void initializeRhiResources(); // Initialize RHI objects
-    void releaseRhiResources();    // Release RHI objects
-    void updateUniforms(RhiLiquidGlassItem *item); // Update UBO data
-    void updateBackgroundTexture(const QImage &image); // Update background texture
+    void initializeRhiResources();
+    void releaseRhiResources();
+    void updateUniforms(RhiLiquidGlassItem *item);
+    void updateBackgroundTexture(const QImage &image);
 
-    QQuickWindow *m_window; // Needed to get QRhi object
-    QRhi *m_rhi = nullptr;  // Cache RHI object
+    QQuickWindow *m_window;
+    QRhi *m_rhi = nullptr;
 
-    // RHI Resources
     QRhiBuffer *m_vertexBuffer = nullptr;
     QRhiBuffer *m_uniformBuffer = nullptr;
     QRhiTexture *m_backgroundTexture = nullptr;
@@ -43,19 +38,15 @@ private:
     QRhiShaderResourceBindings *m_srb = nullptr;
     QRhiGraphicsPipeline *m_pipeline = nullptr;
 
-    // Shader stages (owned by QRhiGraphicsPipeline after creation, but good to hold refs during setup)
-    QRhiShader m_vertexShader;
-    QRhiShader m_fragmentShader;
+    QShader m_vertexShader;   // Corrected type to QShader
+    QShader m_fragmentShader; // Corrected type to QShader
 
-    // Parameters
-    LiquidGlassParams m_params;
-    QImage m_currentBackground; // To detect changes
+    LiquidGlassParams m_params; // Requires RhiLiquidGlassItem.h
+    QImage m_currentBackground;
     bool m_resourcesInitialized = false;
     bool m_pipelineInitialized = false;
 
-    // To manage updates from sync to render
-    // These flags indicate if an update is needed in the render() call for QRhi resources
     bool m_uniformsDirty = true;
     bool m_backgroundTextureDirty = true;
-    QRhiResourceUpdateBatch *m_resourceUpdates = nullptr; // For batching updates
+    QRhiResourceUpdateBatch *m_resourceUpdates = nullptr;
 };
