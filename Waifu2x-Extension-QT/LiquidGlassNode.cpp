@@ -179,7 +179,7 @@ void LiquidGlassNode::updateBackgroundTexture(const QImage &image) {
             return;
         }
 
-        m_backgroundTexture = m_rhi->newTexture(QRhiTexture::RGBA8, compatibleImage.size(), 1, QRhiTexture::Flags(QRhiTexture::Flag::DontGenerateMips)); // Corrected flag usage
+        m_backgroundTexture = m_rhi->newTexture(QRhiTexture::RGBA8, compatibleImage.size(), 1, QRhiTexture::Flags{}); // Use empty flags as DontGenerateMips is not in Qt 6.6
         if (!m_backgroundTexture) {
             qWarning("LiquidGlassNode: Failed to create RHI texture object.");
             return;
@@ -341,5 +341,4 @@ void LiquidGlassNode::preprocess() {
     // if (m_resourcesInitialized) {
     //     markDirty(DirtyMaterial); // Or a more specific flag if available for uniform changes
     // }
-}
 }
