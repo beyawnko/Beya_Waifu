@@ -745,7 +745,7 @@ public slots:
   void on_lineEdit_MultiGPU_IDs_VFI_editingFinished();
   void on_checkBox_MultiGPU_VFI_stateChanged(int arg1);
   void on_groupBox_FrameInterpolation_clicked();
-  void on_checkBox_EnableVFI_Home_clicked();
+  void on_checkBox_EnableVFI_clicked();
   void on_checkBox_isCompatible_RifeNcnnVulkan_clicked();
   void on_checkBox_isCompatible_CainNcnnVulkan_clicked();
   void on_checkBox_isCompatible_DainNcnnVulkan_clicked();

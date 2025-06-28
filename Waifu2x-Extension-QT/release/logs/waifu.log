@@ -192,3 +192,59 @@
 (Parent is QProcess(0x1fe958697d0), parent's thread is QThread(0x1fe8ac37fb0), current thread is QThreadPoolThread(0x1fe958984f0)
 2025-06-28T01:49:16 - QWinEventNotifier: Event notifiers cannot be enabled or disabled from another thread
 2025-06-28T01:49:16 - ASSERT failure in MainWindow: "Called object is not of the correct type (class destructor may have already run)", file E:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobjectdefs_impl.h, line 129
+2025-06-28T04:09:59 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T04:09:59 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-28T04:11:11 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T04:11:11 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-28T04:11:27 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x70ea30), parent's thread is QThread(0x6c5af0), current thread is QThreadPoolThread(0x8ad5600)
+2025-06-28T04:11:27 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x70ea30), parent's thread is QThread(0x6c5af0), current thread is QThreadPoolThread(0x8ad5600)
+2025-06-28T04:11:27 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x70ea30), parent's thread is QThread(0x6c5af0), current thread is QThreadPoolThread(0x8ad5600)
+2025-06-28T04:11:56 - QWinEventNotifier: Event notifiers cannot be enabled or disabled from another thread
+2025-06-28T04:11:56 - ASSERT failure in MainWindow: "Called object is not of the correct type (class destructor may have already run)", file C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobjectdefs_impl.h, line 129
+2025-06-28T04:14:33 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T04:14:33 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-28T04:14:43 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x1cf77f4b470), parent's thread is QThread(0x1cf703768c0), current thread is QThreadPoolThread(0x1cf79501de0)
+2025-06-28T04:14:43 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x1cf77f4b470), parent's thread is QThread(0x1cf703768c0), current thread is QThreadPoolThread(0x1cf79501de0)
+2025-06-28T04:14:43 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x1cf77f4b470), parent's thread is QThread(0x1cf703768c0), current thread is QThreadPoolThread(0x1cf79501de0)
+2025-06-28T04:15:26 - QWinEventNotifier: Event notifiers cannot be enabled or disabled from another thread
+2025-06-28T04:15:26 - ASSERT failure in MainWindow: "Called object is not of the correct type (class destructor may have already run)", file C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobjectdefs_impl.h, line 129
+2025-06-28T04:16:02 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T04:16:02 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-28T04:16:45 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x2354f4a6f10), parent's thread is QThread(0x235478d68c0), current thread is QThreadPoolThread(0x23550a2f5e0)
+2025-06-28T04:16:45 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x2354f4a6f10), parent's thread is QThread(0x235478d68c0), current thread is QThreadPoolThread(0x23550a2f5e0)
+2025-06-28T04:16:45 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x2354f4a6f10), parent's thread is QThread(0x235478d68c0), current thread is QThreadPoolThread(0x23550a2f5e0)
+2025-06-28T04:17:04 - QWinEventNotifier: Event notifiers cannot be enabled or disabled from another thread
+2025-06-28T04:17:04 - ASSERT failure in MainWindow: "Called object is not of the correct type (class destructor may have already run)", file C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobjectdefs_impl.h, line 129
+2025-06-28T04:18:06 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T04:18:06 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-28T04:18:32 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x2098af27460), parent's thread is QThread(0x209832068c0), current thread is QThreadPoolThread(0x2098adb1350)
+2025-06-28T04:18:32 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x2098af27460), parent's thread is QThread(0x209832068c0), current thread is QThreadPoolThread(0x2098adb1350)
+2025-06-28T04:18:32 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x2098af27460), parent's thread is QThread(0x209832068c0), current thread is QThreadPoolThread(0x2098adb1350)
+2025-06-28T04:19:06 - QWinEventNotifier: Event notifiers cannot be enabled or disabled from another thread
+2025-06-28T04:19:06 - ASSERT failure in MainWindow: "Called object is not of the correct type (class destructor may have already run)", file C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobjectdefs_impl.h, line 129
+2025-06-28T04:20:37 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T04:20:37 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-28T04:20:46 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x22253a532f0), parent's thread is QThread(0x2224c0468f0), current thread is QThreadPoolThread(0x222550b8b30)
+2025-06-28T04:20:46 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x22253a532f0), parent's thread is QThread(0x2224c0468f0), current thread is QThreadPoolThread(0x222550b8b30)
+2025-06-28T04:20:46 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x22253a532f0), parent's thread is QThread(0x2224c0468f0), current thread is QThreadPoolThread(0x222550b8b30)
+2025-06-28T04:20:56 - QWinEventNotifier: Event notifiers cannot be enabled or disabled from another thread
+2025-06-28T04:20:56 - ASSERT failure in MainWindow: "Called object is not of the correct type (class destructor may have already run)", file C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobjectdefs_impl.h, line 129
+2025-06-28T04:22:01 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T04:22:01 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-28T04:41:56 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T04:41:56 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_clicked()

@@ -1,11 +1,11 @@
 -rootPath
-E:/GitHub/Beya_Waifu/Waifu2x-Extension-QT
+C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT
 -cmake-output
 -output-file
-E:/GitHub/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/.qt_plugins/Qt6_QmlPlugins_Imports_Beya_Waifu.cmake
+C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/.qt_plugins/Qt6_QmlPlugins_Imports_Beya_Waifu.cmake
 -importPath
-E:/GitHub/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT
+C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT
 -importPath
-E:/tmp/Qt/6.6.3/mingw_64/./qml
+C:/tmp/Qt/6.6.3/mingw_64/./qml
 -qrcFiles
-E:/GitHub/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/.rcc/ShadersGenerated.qrc
+C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/.rcc/ShadersGenerated.qrc

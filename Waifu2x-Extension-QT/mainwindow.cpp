@@ -1002,14 +1002,35 @@ void MainWindow::on_checkBox_ReplaceOriginalFile_stateChanged(int) { /* STUB */ 
 void MainWindow::on_checkBox_isCustFontEnable_stateChanged(int) { /* STUB */ }
 void MainWindow::on_comboBox_GPGPUModel_A4k_currentIndexChanged(int) { /* STUB */ }
 void MainWindow::on_checkBox_DisableGPU_converter_stateChanged(int) { /* STUB */ }
-void MainWindow::on_pushButton_TurnOffScreen_clicked() { /* STUB */ }
+void MainWindow::on_pushButton_TurnOffScreen_clicked()
+{
+  TurnOffScreen();
+}
+
+void MainWindow::TurnOffScreen()
+{
+  // STUB
+}
+
 void MainWindow::on_pushButton_MultipleOfFPS_VFI_MIN_clicked() { /* STUB */ }
 void MainWindow::on_pushButton_MultipleOfFPS_VFI_ADD_clicked() { /* STUB */ }
 void MainWindow::on_pushButton_DetectGPU_VFI_clicked() { /* STUB */ }
 void MainWindow::on_lineEdit_MultiGPU_IDs_VFI_editingFinished() { /* STUB */ }
 void MainWindow::on_checkBox_MultiGPU_VFI_stateChanged(int) { /* STUB */ }
 void MainWindow::on_groupBox_FrameInterpolation_clicked() { /* STUB */ }
-void MainWindow::on_checkBox_EnableVFI_Home_clicked() { /* STUB */ }
+
+void MainWindow::on_checkBox_EnableVFI_clicked()
+{
+  if (ui->checkBox_TTA_VFI->isChecked())
+  {
+    ui->groupBox_FrameInterpolation->setVisible(true);
+  }
+  else
+  {
+    ui->groupBox_FrameInterpolation->setVisible(false);
+  }
+}
+
 void MainWindow::on_checkBox_isCompatible_RifeNcnnVulkan_clicked() { /* STUB */ }
 void MainWindow::on_checkBox_isCompatible_CainNcnnVulkan_clicked() { /* STUB */ }
 void MainWindow::on_checkBox_isCompatible_DainNcnnVulkan_clicked() { /* STUB */ }

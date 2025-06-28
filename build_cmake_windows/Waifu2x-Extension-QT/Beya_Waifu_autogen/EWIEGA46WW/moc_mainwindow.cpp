@@ -282,7 +282,7 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "on_lineEdit_MultiGPU_IDs_VFI_editingFinished",
     "on_checkBox_MultiGPU_VFI_stateChanged",
     "on_groupBox_FrameInterpolation_clicked",
-    "on_checkBox_EnableVFI_Home_clicked",
+    "on_checkBox_EnableVFI_clicked",
     "on_checkBox_isCompatible_RifeNcnnVulkan_clicked",
     "on_checkBox_isCompatible_CainNcnnVulkan_clicked",
     "on_checkBox_isCompatible_DainNcnnVulkan_clicked",
@@ -580,7 +580,7 @@ struct qt_meta_stringdata_CLASSMainWindowENDCLASS_t {
     char stringdata239[45];
     char stringdata240[38];
     char stringdata241[39];
-    char stringdata242[35];
+    char stringdata242[30];
     char stringdata243[48];
     char stringdata244[48];
     char stringdata245[48];
@@ -879,58 +879,58 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_st
         QT_MOC_LITERAL(7730, 44),  // "on_lineEdit_MultiGPU_IDs_VFI_..."
         QT_MOC_LITERAL(7775, 37),  // "on_checkBox_MultiGPU_VFI_stat..."
         QT_MOC_LITERAL(7813, 38),  // "on_groupBox_FrameInterpolatio..."
-        QT_MOC_LITERAL(7852, 34),  // "on_checkBox_EnableVFI_Home_cl..."
-        QT_MOC_LITERAL(7887, 47),  // "on_checkBox_isCompatible_Rife..."
-        QT_MOC_LITERAL(7935, 47),  // "on_checkBox_isCompatible_Cain..."
-        QT_MOC_LITERAL(7983, 47),  // "on_checkBox_isCompatible_Dain..."
-        QT_MOC_LITERAL(8031, 42),  // "on_comboBox_Engine_VFI_curren..."
-        QT_MOC_LITERAL(8074, 41),  // "on_pushButton_Verify_MultiGPU..."
-        QT_MOC_LITERAL(8116, 40),  // "on_checkBox_MultiThread_VFI_s..."
-        QT_MOC_LITERAL(8157, 35),  // "on_checkBox_MultiThread_VFI_c..."
-        QT_MOC_LITERAL(8193, 41),  // "on_pushButton_DetectGPU_RealC..."
-        QT_MOC_LITERAL(8235, 43),  // "on_checkBox_MultiGPU_RealCUGA..."
-        QT_MOC_LITERAL(8279, 47),  // "on_pushButton_AddGPU_MultiGPU..."
-        QT_MOC_LITERAL(8327, 50),  // "on_pushButton_RemoveGPU_Multi..."
-        QT_MOC_LITERAL(8378, 49),  // "on_pushButton_ClearGPU_MultiG..."
-        QT_MOC_LITERAL(8428, 44),  // "on_pushButton_TileSize_Add_Re..."
-        QT_MOC_LITERAL(8473, 46),  // "on_pushButton_TileSize_Minus_..."
-        QT_MOC_LITERAL(8520, 47),  // "on_comboBox_Model_RealCUGAN_c..."
-        QT_MOC_LITERAL(8568, 40),  // "Realcugan_NCNN_Vulkan_Iterati..."
-        QT_MOC_LITERAL(8609, 8),  // "exitCode"
-        QT_MOC_LITERAL(8618, 20),  // "QProcess::ExitStatus"
-        QT_MOC_LITERAL(8639, 10),  // "exitStatus"
-        QT_MOC_LITERAL(8650, 55),  // "Realcugan_NCNN_Vulkan_Iterati..."
-        QT_MOC_LITERAL(8706, 54),  // "Realcugan_NCNN_Vulkan_Iterati..."
-        QT_MOC_LITERAL(8761, 45),  // "Realcugan_NCNN_Vulkan_Iterati..."
-        QT_MOC_LITERAL(8807, 22),  // "QProcess::ProcessError"
-        QT_MOC_LITERAL(8830, 5),  // "error"
-        QT_MOC_LITERAL(8836, 45),  // "Realcugan_NCNN_Vulkan_DetectG..."
-        QT_MOC_LITERAL(8882, 16),  // "ProgressBarClear"
-        QT_MOC_LITERAL(8899, 19),  // "ProgressBarSetToMax"
-        QT_MOC_LITERAL(8919, 6),  // "maxval"
-        QT_MOC_LITERAL(8926, 34),  // "on_pushButton_SaveFileList_cl..."
-        QT_MOC_LITERAL(8961, 32),  // "on_tableView_image_doubleClicked"
-        QT_MOC_LITERAL(8994, 11),  // "QModelIndex"
-        QT_MOC_LITERAL(9006, 30),  // "on_tableView_gif_doubleClicked"
-        QT_MOC_LITERAL(9037, 32),  // "on_tableView_video_doubleClicked"
-        QT_MOC_LITERAL(9070, 26),  // "on_tableView_image_pressed"
-        QT_MOC_LITERAL(9097, 24),  // "on_tableView_gif_pressed"
-        QT_MOC_LITERAL(9122, 26),  // "on_tableView_video_pressed"
-        QT_MOC_LITERAL(9149, 34),  // "on_pushButton_SaveSettings_cl..."
-        QT_MOC_LITERAL(9184, 35),  // "on_pushButton_ResetSettings_c..."
-        QT_MOC_LITERAL(9220, 38),  // "on_groupBox_FrameInterpolatio..."
-        QT_MOC_LITERAL(9259, 7),  // "checked"
-        QT_MOC_LITERAL(9267, 14),  // "onFileProgress"
-        QT_MOC_LITERAL(9282, 7),  // "percent"
-        QT_MOC_LITERAL(9290, 20),  // "onProcessingFinished"
-        QT_MOC_LITERAL(9311, 7),  // "success"
-        QT_MOC_LITERAL(9319, 14),  // "ProcessJobType"
-        QT_MOC_LITERAL(9334, 7),  // "jobType"
-        QT_MOC_LITERAL(9342, 26),  // "StartFullCompatibilityTest"
-        QT_MOC_LITERAL(9369, 20),  // "TextBrowser_StartMes"
-        QT_MOC_LITERAL(9390, 17),  // "toggleLiquidGlass"
-        QT_MOC_LITERAL(9408, 7),  // "enabled"
-        QT_MOC_LITERAL(9416, 27)   // "on_pushButton_Start_clicked"
+        QT_MOC_LITERAL(7852, 29),  // "on_checkBox_EnableVFI_clicked"
+        QT_MOC_LITERAL(7882, 47),  // "on_checkBox_isCompatible_Rife..."
+        QT_MOC_LITERAL(7930, 47),  // "on_checkBox_isCompatible_Cain..."
+        QT_MOC_LITERAL(7978, 47),  // "on_checkBox_isCompatible_Dain..."
+        QT_MOC_LITERAL(8026, 42),  // "on_comboBox_Engine_VFI_curren..."
+        QT_MOC_LITERAL(8069, 41),  // "on_pushButton_Verify_MultiGPU..."
+        QT_MOC_LITERAL(8111, 40),  // "on_checkBox_MultiThread_VFI_s..."
+        QT_MOC_LITERAL(8152, 35),  // "on_checkBox_MultiThread_VFI_c..."
+        QT_MOC_LITERAL(8188, 41),  // "on_pushButton_DetectGPU_RealC..."
+        QT_MOC_LITERAL(8230, 43),  // "on_checkBox_MultiGPU_RealCUGA..."
+        QT_MOC_LITERAL(8274, 47),  // "on_pushButton_AddGPU_MultiGPU..."
+        QT_MOC_LITERAL(8322, 50),  // "on_pushButton_RemoveGPU_Multi..."
+        QT_MOC_LITERAL(8373, 49),  // "on_pushButton_ClearGPU_MultiG..."
+        QT_MOC_LITERAL(8423, 44),  // "on_pushButton_TileSize_Add_Re..."
+        QT_MOC_LITERAL(8468, 46),  // "on_pushButton_TileSize_Minus_..."
+        QT_MOC_LITERAL(8515, 47),  // "on_comboBox_Model_RealCUGAN_c..."
+        QT_MOC_LITERAL(8563, 40),  // "Realcugan_NCNN_Vulkan_Iterati..."
+        QT_MOC_LITERAL(8604, 8),  // "exitCode"
+        QT_MOC_LITERAL(8613, 20),  // "QProcess::ExitStatus"
+        QT_MOC_LITERAL(8634, 10),  // "exitStatus"
+        QT_MOC_LITERAL(8645, 55),  // "Realcugan_NCNN_Vulkan_Iterati..."
+        QT_MOC_LITERAL(8701, 54),  // "Realcugan_NCNN_Vulkan_Iterati..."
+        QT_MOC_LITERAL(8756, 45),  // "Realcugan_NCNN_Vulkan_Iterati..."
+        QT_MOC_LITERAL(8802, 22),  // "QProcess::ProcessError"
+        QT_MOC_LITERAL(8825, 5),  // "error"
+        QT_MOC_LITERAL(8831, 45),  // "Realcugan_NCNN_Vulkan_DetectG..."
+        QT_MOC_LITERAL(8877, 16),  // "ProgressBarClear"
+        QT_MOC_LITERAL(8894, 19),  // "ProgressBarSetToMax"
+        QT_MOC_LITERAL(8914, 6),  // "maxval"
+        QT_MOC_LITERAL(8921, 34),  // "on_pushButton_SaveFileList_cl..."
+        QT_MOC_LITERAL(8956, 32),  // "on_tableView_image_doubleClicked"
+        QT_MOC_LITERAL(8989, 11),  // "QModelIndex"
+        QT_MOC_LITERAL(9001, 30),  // "on_tableView_gif_doubleClicked"
+        QT_MOC_LITERAL(9032, 32),  // "on_tableView_video_doubleClicked"
+        QT_MOC_LITERAL(9065, 26),  // "on_tableView_image_pressed"
+        QT_MOC_LITERAL(9092, 24),  // "on_tableView_gif_pressed"
+        QT_MOC_LITERAL(9117, 26),  // "on_tableView_video_pressed"
+        QT_MOC_LITERAL(9144, 34),  // "on_pushButton_SaveSettings_cl..."
+        QT_MOC_LITERAL(9179, 35),  // "on_pushButton_ResetSettings_c..."
+        QT_MOC_LITERAL(9215, 38),  // "on_groupBox_FrameInterpolatio..."
+        QT_MOC_LITERAL(9254, 7),  // "checked"
+        QT_MOC_LITERAL(9262, 14),  // "onFileProgress"
+        QT_MOC_LITERAL(9277, 7),  // "percent"
+        QT_MOC_LITERAL(9285, 20),  // "onProcessingFinished"
+        QT_MOC_LITERAL(9306, 7),  // "success"
+        QT_MOC_LITERAL(9314, 14),  // "ProcessJobType"
+        QT_MOC_LITERAL(9329, 7),  // "jobType"
+        QT_MOC_LITERAL(9337, 26),  // "StartFullCompatibilityTest"
+        QT_MOC_LITERAL(9364, 20),  // "TextBrowser_StartMes"
+        QT_MOC_LITERAL(9385, 17),  // "toggleLiquidGlass"
+        QT_MOC_LITERAL(9403, 7),  // "enabled"
+        QT_MOC_LITERAL(9411, 27)   // "on_pushButton_Start_clicked"
     },
     "MainWindow",
     "Send_Table_EnableSorting",
@@ -1174,7 +1174,7 @@ Q_CONSTINIT static const qt_meta_stringdata_CLASSMainWindowENDCLASS_t qt_meta_st
     "on_lineEdit_MultiGPU_IDs_VFI_editingFinished",
     "on_checkBox_MultiGPU_VFI_stateChanged",
     "on_groupBox_FrameInterpolation_clicked",
-    "on_checkBox_EnableVFI_Home_clicked",
+    "on_checkBox_EnableVFI_clicked",
     "on_checkBox_isCompatible_RifeNcnnVulkan_clicked",
     "on_checkBox_isCompatible_CainNcnnVulkan_clicked",
     "on_checkBox_isCompatible_DainNcnnVulkan_clicked",
@@ -2257,7 +2257,7 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'on_groupBox_FrameInterpolation_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_checkBox_EnableVFI_Home_clicked'
+        // method 'on_checkBox_EnableVFI_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_checkBox_isCompatible_RifeNcnnVulkan_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
@@ -2569,7 +2569,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 187: _t->on_lineEdit_MultiGPU_IDs_VFI_editingFinished(); break;
         case 188: _t->on_checkBox_MultiGPU_VFI_stateChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 189: _t->on_groupBox_FrameInterpolation_clicked(); break;
-        case 190: _t->on_checkBox_EnableVFI_Home_clicked(); break;
+        case 190: _t->on_checkBox_EnableVFI_clicked(); break;
         case 191: _t->on_checkBox_isCompatible_RifeNcnnVulkan_clicked(); break;
         case 192: _t->on_checkBox_isCompatible_CainNcnnVulkan_clicked(); break;
         case 193: _t->on_checkBox_isCompatible_DainNcnnVulkan_clicked(); break;

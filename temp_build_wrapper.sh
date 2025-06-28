@@ -10,9 +10,9 @@ echo $PATH | tr ':' '
 echo "-------------------------------------"
 
 # Path to Qt, as passed from PowerShell, converted by Convert-PathToMsys
-echo "Expected Qt bin directory (from PowerShell): /e/tmp/Qt/6.6.3/mingw_64/bin"
+echo "Expected Qt bin directory (from PowerShell): /c/tmp/Qt/6.6.3/mingw_64/bin"
 echo "Contents of expected Qt bin directory:"
-ls -al "/e/tmp/Qt/6.6.3/mingw_64/bin" || echo "Could not list contents of /e/tmp/Qt/6.6.3/mingw_64/bin"
+ls -al "/c/tmp/Qt/6.6.3/mingw_64/bin" || echo "Could not list contents of /c/tmp/Qt/6.6.3/mingw_64/bin"
 echo "-------------------------------------"
 
 echo "Attempting to find qmake with 'command -v qmake':"
@@ -32,10 +32,10 @@ unset MFLAGS
 
 # Set the path for the build environment. The dollar sign in $PATH is escaped with a backtick ( )
 # to prevent PowerShell from expanding it prematurely.
-export PATH='/c/tools/msys64/mingw64/bin:/c/tools/msys64/usr/bin:/e/tmp/Qt/6.6.3/mingw_64/bin':$PATH
+export PATH='/c/tools/msys64/mingw64/bin:/c/tools/msys64/usr/bin:/c/tmp/Qt/6.6.3/mingw_64/bin':$PATH
 
 # Change to the project directory.
-cd '/e/GitHub/Beya_Waifu'
+cd '/c/Users/Beyawnko/Beya_Waifu'
 
 # Execute the main build script.
 ././build_projects.sh

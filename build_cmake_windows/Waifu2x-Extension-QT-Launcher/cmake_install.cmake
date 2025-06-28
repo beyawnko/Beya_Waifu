@@ -1,4 +1,4 @@
-# Install script for directory: E:/GitHub/Beya_Waifu/Waifu2x-Extension-QT-Launcher
+# Install script for directory: C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,7 +38,7 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "E:/GitHub/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher.exe")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher.exe")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/Beya_Waifu-Launcher.exe" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/Beya_Waifu-Launcher.exe")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -50,6 +50,6 @@ endif()
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "E:/GitHub/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/install_local_manifest.txt"
+  file(WRITE "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()
