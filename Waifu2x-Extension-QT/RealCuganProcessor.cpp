@@ -1,5 +1,6 @@
 // file: realcuganprocessor.cpp
 #include "RealCuganProcessor.h"
+#include <QCoreApplication>
 #include <QFileInfo>
 #include <QDir>
 #include <QDebug>
@@ -11,12 +12,12 @@
 
 RealCuganProcessor::RealCuganProcessor(QObject *parent) : QObject(parent)
 {
-    m_process = new QProcess(this);
+    m_process = new QProcess(); // No parent
     connect(m_process, &QProcess::errorOccurred, this, &RealCuganProcessor::onProcessError);
     connect(m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealCuganProcessor::onProcessFinished);
     connect(m_process, &QProcess::readyReadStandardOutput, this, &RealCuganProcessor::onReadyReadStandardOutput);
 
-    m_ffmpegProcess = new QProcess(this); // For old video method (splitting/assembly)
+    m_ffmpegProcess = new QProcess(); // No parent // For old video method (splitting/assembly)
     connect(m_ffmpegProcess, &QProcess::errorOccurred, this, &RealCuganProcessor::onFfmpegError);
     connect(m_ffmpegProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealCuganProcessor::onFfmpegFinished);
     connect(m_ffmpegProcess, &QProcess::readyReadStandardError, this, &RealCuganProcessor::onFfmpegStdErr);
@@ -34,7 +35,7 @@ RealCuganProcessor::RealCuganProcessor(QObject *parent) : QObject(parent)
 
 
     // FFmpeg Encoder process for final video assembly (remains)
-    m_ffmpegEncoderProcess = new QProcess(this);
+    m_ffmpegEncoderProcess = new QProcess(); // No parent
     connect(m_ffmpegEncoderProcess, &QProcess::readyReadStandardError, this, &RealCuganProcessor::onPipeEncoderReadyReadStandardError);
     connect(m_ffmpegEncoderProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RealCuganProcessor::onPipeEncoderFinished);
     connect(m_ffmpegEncoderProcess, &QProcess::errorOccurred, this, &RealCuganProcessor::onPipeEncoderError);

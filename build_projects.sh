@@ -94,8 +94,6 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         echo "Handling Real-ESRGAN for Windows..."
         if [ -d "$RESRGAN_PREBUILT_DIR" ]; then
             echo "Found prebuilt Real-ESRGAN directory. Copying..."
-            cp -R "$RESRGAN_PREBUILT_DIR" "$TARGET_APP_DIR/realesrgan-ncnn-vulkan"
-            cp -R "$RESRGAN_PREBUILT_DIR" "$TARGET_LAUNCHER_DIR/realesrgan-ncnn-vulkan"
         else
             # Fallback: Build Real-ESRGAN from source if prebuilt not found.
             echo "Prebuilt Real-ESRGAN not found. Attempting CMake build..."
@@ -136,8 +134,7 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         RCUGAN_MODEL_SUBDIRS="models-se models-pro models-nose"
         if [ -d "$RCUGAN_PREBUILT_DIR" ]; then
             echo "Found prebuilt Real-CUGAN directory. Copying..."
-            cp -R "$RCUGAN_PREBUILT_DIR" "$TARGET_APP_DIR/realcugan-ncnn-vulkan"
-            cp -R "$RCUGAN_PREBUILT_DIR" "$TARGET_LAUNCHER_DIR/realcugan-ncnn-vulkan"
+            
         else
             # Fallback: Build Real-CUGAN from source.
             echo "Prebuilt Real-CUGAN not found. Attempting CMake build..."
@@ -207,7 +204,7 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         QMAKE_CMD=""
         if command -v qmake6 >/dev/null 2>&1; then
             QMAKE_CMD="qmake6"
-        elif command -v qmake >/dev/null 2>&1; then
+elif command -v qmake >/dev/null 2>&1; then
             QMAKE_CMD="qmake"
         fi
 
@@ -221,7 +218,7 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
         QSB_CMD=""
         if command -v qsb6 >/dev/null 2>&1; then
             QSB_CMD="qsb6"
-        elif command -v qsb >/dev/null 2>&1; then
+elif command -v qsb >/dev/null 2>&1; then
             QSB_CMD="qsb"
         fi
 
@@ -383,6 +380,9 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
                     echo "Warning: MinGW bin directory not found via 'which gcc'. Runtime DLLs may be missing."
                 fi
                 popd >/dev/null
+
+                # Copy Real-ESRGAN and Real-CUGAN after windeployqt
+                
             else
                 echo "Warning: windeployqt.exe not found in PATH. Skipping Qt deployment for Waifu2x-Extension-QT."
                 # As a fallback, copy the executable without full deployment
@@ -411,6 +411,7 @@ case $(uname -s | tr '[:upper:]' '[:lower:]') in
                     echo "Warning: MinGW bin directory not found via 'which gcc'. Runtime DLLs may be missing for Launcher."
                 fi
                 popd >/dev/null
+
             else
                 echo "Warning: windeployqt.exe not found in PATH. Skipping Qt deployment for Waifu2x-Extension-QT-Launcher."
                 cp "$BUILT_LAUNCHER_EXE_PATH" "../$TARGET_LAUNCHER_DIR/"

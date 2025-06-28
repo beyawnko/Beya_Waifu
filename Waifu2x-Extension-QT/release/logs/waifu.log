@@ -1,145 +1,194 @@
-2025-06-27T03:38:05 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
-2025-06-27T03:38:05 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
-2025-06-27T03:38:23 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
-2025-06-27T03:38:23 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
-2025-06-27T03:42:17 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
-2025-06-27T03:42:17 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
-2025-06-27T03:47:12 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
-2025-06-27T03:47:12 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
-2025-06-27T03:52:32 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
-2025-06-27T03:52:32 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
-2025-06-27T03:54:39 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
-2025-06-27T03:54:39 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
-2025-06-27T03:56:04 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
-2025-06-27T03:56:04 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
-2025-06-27T03:56:47 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
-2025-06-27T03:56:47 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T03:56:47 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T03:56:47 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T03:56:47 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T03:56:47 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
-2025-06-27T03:56:47 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
-2025-06-27T03:56:47 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
-2025-06-27T03:56:47 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
-2025-06-27T03:56:47 - [Debug] Batch_Table_Update_slots: Called with
-2025-06-27T03:56:47 - [Debug]   doAddNewImage: true imagesToAdd count: 1
-2025-06-27T03:56:47 - [Debug]   doAddNewGif: false gifsToAdd count: 0
-2025-06-27T03:56:47 - [Debug]   doAddNewVideo: false videosToAdd count: 0
-2025-06-27T03:56:47 - [Debug] Batch_Table_Update_slots: Processing 1 images.
-2025-06-27T03:56:47 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Untitled.png" Path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T03:56:47 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
-2025-06-27T04:01:22 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
-2025-06-27T04:01:22 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
-2025-06-27T04:01:22 - [Debug] Init_Table: Finished Initializing Tables (in table.cpp).
-2025-06-27T04:01:22 - [Debug] Init_Table: ui->tableView_image exists: true
-2025-06-27T04:01:22 - [Debug] Init_Table: Table_model_image initial rowCount: 0 columnCount: 6
-2025-06-27T04:01:22 - [Debug] Init_Table: ui->tableView_gif exists: true
-2025-06-27T04:01:22 - [Debug] Init_Table: Table_model_gif initial rowCount: 0 columnCount: 6
-2025-06-27T04:01:22 - [Debug] Init_Table: ui->tableView_video exists: true
-2025-06-27T04:01:22 - [Debug] Init_Table: Table_model_video initial rowCount: 0 columnCount: 8
-2025-06-27T04:01:31 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
-2025-06-27T04:01:31 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:01:31 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:01:31 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:01:31 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:01:31 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
-2025-06-27T04:01:31 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
-2025-06-27T04:01:31 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
-2025-06-27T04:01:31 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
-2025-06-27T04:01:31 - [Debug] Batch_Table_Update_slots: Called with
-2025-06-27T04:01:31 - [Debug]   doAddNewImage: true imagesToAdd count: 1
-2025-06-27T04:01:31 - [Debug]   doAddNewGif: false gifsToAdd count: 0
-2025-06-27T04:01:31 - [Debug]   doAddNewVideo: false videosToAdd count: 0
-2025-06-27T04:01:31 - [Debug] Batch_Table_Update_slots: Processing 1 images.
-2025-06-27T04:01:31 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Untitled.png" Path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:01:31 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
-2025-06-27T04:02:00 - QObject: Cannot create children for a parent that is in a different thread.
-(Parent is QProcess(0x188825c22b0), parent's thread is QThread(0x188fa7b86b0), current thread is QThreadPoolThread(0x18882433380)
-2025-06-27T04:02:00 - QObject: Cannot create children for a parent that is in a different thread.
-(Parent is QProcess(0x188825c22b0), parent's thread is QThread(0x188fa7b86b0), current thread is QThreadPoolThread(0x18882433380)
-2025-06-27T04:02:00 - RealEsrganProcessor::onProcessError occurred: QProcess::FailedToStart "Process failed to start: The system cannot find the file specified."
-2025-06-27T04:03:12 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
-2025-06-27T04:03:12 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:03:12 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:03:12 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:03:12 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:03:12 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
-2025-06-27T04:03:12 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
-2025-06-27T04:03:12 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
-2025-06-27T04:03:12 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
-2025-06-27T04:03:12 - [Debug] Batch_Table_Update_slots: Called with
-2025-06-27T04:03:12 - [Debug]   doAddNewImage: true imagesToAdd count: 1
-2025-06-27T04:03:12 - [Debug]   doAddNewGif: false gifsToAdd count: 0
-2025-06-27T04:03:12 - [Debug]   doAddNewVideo: false videosToAdd count: 0
-2025-06-27T04:03:12 - [Debug] Batch_Table_Update_slots: Processing 1 images.
-2025-06-27T04:03:12 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Untitled.png" Path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:03:12 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
-2025-06-27T04:04:15 - [Debug] Init_Table: Finished Initializing Tables (in table.cpp).
-2025-06-27T04:04:15 - [Debug] Init_Table: ui->tableView_image exists: true
-2025-06-27T04:04:15 - [Debug] Init_Table: Table_model_image initial rowCount: 0 columnCount: 6
-2025-06-27T04:04:15 - [Debug] Init_Table: ui->tableView_gif exists: true
-2025-06-27T04:04:15 - [Debug] Init_Table: Table_model_gif initial rowCount: 0 columnCount: 6
-2025-06-27T04:04:15 - [Debug] Init_Table: ui->tableView_video exists: true
-2025-06-27T04:04:15 - [Debug] Init_Table: Table_model_video initial rowCount: 0 columnCount: 8
-2025-06-27T04:06:13 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
-2025-06-27T04:06:13 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
-2025-06-27T04:06:13 - [Debug] Init_Table: Finished Initializing Tables (in table.cpp).
-2025-06-27T04:06:13 - [Debug] Init_Table: ui->tableView_image exists: true
-2025-06-27T04:06:13 - [Debug] Init_Table: Table_model_image initial rowCount: 0 columnCount: 6
-2025-06-27T04:06:13 - [Debug] Init_Table: ui->tableView_gif exists: true
-2025-06-27T04:06:13 - [Debug] Init_Table: Table_model_gif initial rowCount: 0 columnCount: 6
-2025-06-27T04:06:13 - [Debug] Init_Table: ui->tableView_video exists: true
-2025-06-27T04:06:13 - [Debug] Init_Table: Table_model_video initial rowCount: 0 columnCount: 8
-2025-06-27T04:06:21 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
-2025-06-27T04:06:21 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:06:21 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:06:21 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:06:21 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:06:21 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
-2025-06-27T04:06:21 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
-2025-06-27T04:06:21 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
-2025-06-27T04:06:21 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
-2025-06-27T04:06:21 - [Debug] Batch_Table_Update_slots: Called with
-2025-06-27T04:06:21 - [Debug]   doAddNewImage: true imagesToAdd count: 1
-2025-06-27T04:06:21 - [Debug]   doAddNewGif: false gifsToAdd count: 0
-2025-06-27T04:06:21 - [Debug]   doAddNewVideo: false videosToAdd count: 0
-2025-06-27T04:06:21 - [Debug] Batch_Table_Update_slots: Processing 1 images.
-2025-06-27T04:06:21 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Untitled.png" Path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:06:21 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
-2025-06-27T04:06:25 - QObject: Cannot create children for a parent that is in a different thread.
-(Parent is QProcess(0x1cf956b9430), parent's thread is QThread(0x1cf8dca86b0), current thread is QThreadPoolThread(0x1cf956a1bc0)
-2025-06-27T04:06:25 - QObject: Cannot create children for a parent that is in a different thread.
-(Parent is QProcess(0x1cf956b9430), parent's thread is QThread(0x1cf8dca86b0), current thread is QThreadPoolThread(0x1cf956a1bc0)
-2025-06-27T04:06:25 - RealEsrganProcessor::onProcessError occurred: QProcess::FailedToStart "Process failed to start: The system cannot find the file specified."
-2025-06-27T04:06:46 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
-2025-06-27T04:06:46 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:06:46 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:06:46 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:06:46 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:06:46 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
-2025-06-27T04:06:46 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
-2025-06-27T04:06:46 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
-2025-06-27T04:06:46 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
-2025-06-27T04:06:46 - [Debug] Batch_Table_Update_slots: Called with
-2025-06-27T04:06:46 - [Debug]   doAddNewImage: true imagesToAdd count: 1
-2025-06-27T04:06:46 - [Debug]   doAddNewGif: false gifsToAdd count: 0
-2025-06-27T04:06:46 - [Debug]   doAddNewVideo: false videosToAdd count: 0
-2025-06-27T04:06:46 - [Debug] Batch_Table_Update_slots: Processing 1 images.
-2025-06-27T04:06:46 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Untitled.png" Path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:06:46 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
-2025-06-27T04:07:01 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
-2025-06-27T04:07:01 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:07:01 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:07:01 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:07:01 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:07:01 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
-2025-06-27T04:07:01 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
-2025-06-27T04:07:01 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
-2025-06-27T04:07:01 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
-2025-06-27T04:07:01 - [Debug] Batch_Table_Update_slots: Called with
-2025-06-27T04:07:01 - [Debug]   doAddNewImage: true imagesToAdd count: 1
-2025-06-27T04:07:01 - [Debug]   doAddNewGif: false gifsToAdd count: 0
-2025-06-27T04:07:01 - [Debug]   doAddNewVideo: false videosToAdd count: 0
-2025-06-27T04:07:01 - [Debug] Batch_Table_Update_slots: Processing 1 images.
-2025-06-27T04:07:01 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Untitled.png" Path: "C:/Users/Beyawnko/Pictures/pAINT/Untitled.png"
-2025-06-27T04:07:01 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
+2025-06-28T01:33:41 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T01:33:41 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-28T01:33:42 - [Debug] Init_Table: Finished Initializing Tables (in table.cpp).
+2025-06-28T01:33:42 - [Debug] Init_Table: ui->tableView_image exists: true
+2025-06-28T01:33:42 - [Debug] Init_Table: Table_model_image initial rowCount: 0 columnCount: 6
+2025-06-28T01:33:42 - [Debug] Init_Table: ui->tableView_gif exists: true
+2025-06-28T01:33:42 - [Debug] Init_Table: Table_model_gif initial rowCount: 0 columnCount: 6
+2025-06-28T01:33:42 - [Debug] Init_Table: ui->tableView_video exists: true
+2025-06-28T01:33:42 - [Debug] Init_Table: Table_model_video initial rowCount: 0 columnCount: 8
+2025-06-28T01:33:54 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
+2025-06-28T01:33:54 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:33:54 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:33:54 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:33:54 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:33:54 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
+2025-06-28T01:33:54 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
+2025-06-28T01:33:54 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
+2025-06-28T01:33:54 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
+2025-06-28T01:33:54 - [Debug] Batch_Table_Update_slots: Called with
+2025-06-28T01:33:54 - [Debug]   doAddNewImage: true imagesToAdd count: 1
+2025-06-28T01:33:54 - [Debug]   doAddNewGif: false gifsToAdd count: 0
+2025-06-28T01:33:54 - [Debug]   doAddNewVideo: false videosToAdd count: 0
+2025-06-28T01:33:54 - [Debug] Batch_Table_Update_slots: Processing 1 images.
+2025-06-28T01:33:54 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Joy_After Lead Singer_FluxProUltra.jpg" Path: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:33:54 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
+2025-06-28T01:33:55 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x19032438f10), parent's thread is QThread(0x1902df07fb0), current thread is QThreadPoolThread(0x19038f7a120)
+2025-06-28T01:33:55 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x19032438f10), parent's thread is QThread(0x1902df07fb0), current thread is QThreadPoolThread(0x19038f7a120)
+2025-06-28T01:33:55 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x19032438f10), parent's thread is QThread(0x1902df07fb0), current thread is QThreadPoolThread(0x19038f7a120)
+2025-06-28T01:35:50 - QWinEventNotifier: Event notifiers cannot be enabled or disabled from another thread
+2025-06-28T01:38:07 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T01:38:07 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-28T01:38:07 - [Debug] Init_Table: Finished Initializing Tables (in table.cpp).
+2025-06-28T01:38:07 - [Debug] Init_Table: ui->tableView_image exists: true
+2025-06-28T01:38:07 - [Debug] Init_Table: Table_model_image initial rowCount: 0 columnCount: 6
+2025-06-28T01:38:07 - [Debug] Init_Table: ui->tableView_gif exists: true
+2025-06-28T01:38:07 - [Debug] Init_Table: Table_model_gif initial rowCount: 0 columnCount: 6
+2025-06-28T01:38:07 - [Debug] Init_Table: ui->tableView_video exists: true
+2025-06-28T01:38:07 - [Debug] Init_Table: Table_model_video initial rowCount: 0 columnCount: 8
+2025-06-28T01:38:14 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
+2025-06-28T01:38:14 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:38:14 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:38:14 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:38:14 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:38:14 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
+2025-06-28T01:38:14 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
+2025-06-28T01:38:14 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
+2025-06-28T01:38:14 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
+2025-06-28T01:38:14 - [Debug] Batch_Table_Update_slots: Called with
+2025-06-28T01:38:14 - [Debug]   doAddNewImage: true imagesToAdd count: 1
+2025-06-28T01:38:14 - [Debug]   doAddNewGif: false gifsToAdd count: 0
+2025-06-28T01:38:14 - [Debug]   doAddNewVideo: false videosToAdd count: 0
+2025-06-28T01:38:14 - [Debug] Batch_Table_Update_slots: Processing 1 images.
+2025-06-28T01:38:14 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Joy_After Lead Singer_FluxProUltra.jpg" Path: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:38:14 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
+2025-06-28T01:38:17 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x1be52f99a40), parent's thread is QThread(0x1be4fa97fb0), current thread is QThreadPoolThread(0x1be5a20a6c0)
+2025-06-28T01:38:17 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x1be52f99a40), parent's thread is QThread(0x1be4fa97fb0), current thread is QThreadPoolThread(0x1be5a20a6c0)
+2025-06-28T01:38:17 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x1be52f99a40), parent's thread is QThread(0x1be4fa97fb0), current thread is QThreadPoolThread(0x1be5a20a6c0)
+2025-06-28T01:38:30 - QWinEventNotifier: Event notifiers cannot be enabled or disabled from another thread
+2025-06-28T01:39:43 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T01:39:43 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-28T01:39:43 - [Debug] Init_Table: Finished Initializing Tables (in table.cpp).
+2025-06-28T01:39:43 - [Debug] Init_Table: ui->tableView_image exists: true
+2025-06-28T01:39:43 - [Debug] Init_Table: Table_model_image initial rowCount: 0 columnCount: 6
+2025-06-28T01:39:43 - [Debug] Init_Table: ui->tableView_gif exists: true
+2025-06-28T01:39:43 - [Debug] Init_Table: Table_model_gif initial rowCount: 0 columnCount: 6
+2025-06-28T01:39:43 - [Debug] Init_Table: ui->tableView_video exists: true
+2025-06-28T01:39:43 - [Debug] Init_Table: Table_model_video initial rowCount: 0 columnCount: 8
+2025-06-28T01:40:23 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
+2025-06-28T01:40:23 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:40:23 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:40:23 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:40:23 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:40:23 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
+2025-06-28T01:40:23 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
+2025-06-28T01:40:23 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
+2025-06-28T01:40:23 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
+2025-06-28T01:40:23 - [Debug] Batch_Table_Update_slots: Called with
+2025-06-28T01:40:23 - [Debug]   doAddNewImage: true imagesToAdd count: 1
+2025-06-28T01:40:23 - [Debug]   doAddNewGif: false gifsToAdd count: 0
+2025-06-28T01:40:23 - [Debug]   doAddNewVideo: false videosToAdd count: 0
+2025-06-28T01:40:23 - [Debug] Batch_Table_Update_slots: Processing 1 images.
+2025-06-28T01:40:23 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Joy_After Lead Singer_FluxProUltra.jpg" Path: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:40:23 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
+2025-06-28T01:40:24 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x2288b725940), parent's thread is QThread(0x228809f7fb0), current thread is QThreadPoolThread(0x2288b73eb90)
+2025-06-28T01:40:24 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x2288b725940), parent's thread is QThread(0x228809f7fb0), current thread is QThreadPoolThread(0x2288b73eb90)
+2025-06-28T01:40:24 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x2288b725940), parent's thread is QThread(0x228809f7fb0), current thread is QThreadPoolThread(0x2288b73eb90)
+2025-06-28T01:40:41 - QWinEventNotifier: Event notifiers cannot be enabled or disabled from another thread
+2025-06-28T01:45:44 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T01:45:44 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-28T01:45:44 - [Debug] Init_Table: Finished Initializing Tables (in table.cpp).
+2025-06-28T01:45:44 - [Debug] Init_Table: ui->tableView_image exists: true
+2025-06-28T01:45:44 - [Debug] Init_Table: Table_model_image initial rowCount: 0 columnCount: 6
+2025-06-28T01:45:44 - [Debug] Init_Table: ui->tableView_gif exists: true
+2025-06-28T01:45:44 - [Debug] Init_Table: Table_model_gif initial rowCount: 0 columnCount: 6
+2025-06-28T01:45:44 - [Debug] Init_Table: ui->tableView_video exists: true
+2025-06-28T01:45:44 - [Debug] Init_Table: Table_model_video initial rowCount: 0 columnCount: 8
+2025-06-28T01:45:53 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
+2025-06-28T01:45:53 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:45:53 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:45:53 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:45:53 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:45:53 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
+2025-06-28T01:45:53 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
+2025-06-28T01:45:53 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
+2025-06-28T01:45:53 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
+2025-06-28T01:45:53 - [Debug] Batch_Table_Update_slots: Called with
+2025-06-28T01:45:53 - [Debug]   doAddNewImage: true imagesToAdd count: 1
+2025-06-28T01:45:53 - [Debug]   doAddNewGif: false gifsToAdd count: 0
+2025-06-28T01:45:53 - [Debug]   doAddNewVideo: false videosToAdd count: 0
+2025-06-28T01:45:53 - [Debug] Batch_Table_Update_slots: Processing 1 images.
+2025-06-28T01:45:53 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Joy_After Lead Singer_FluxProUltra.jpg" Path: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:45:53 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
+2025-06-28T01:45:54 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x20bf82b4ba0), parent's thread is QThread(0x20bed667fb0), current thread is QThreadPoolThread(0x20bf84273a0)
+2025-06-28T01:45:54 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x20bf82b4ba0), parent's thread is QThread(0x20bed667fb0), current thread is QThreadPoolThread(0x20bf84273a0)
+2025-06-28T01:45:54 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x20bf82b4ba0), parent's thread is QThread(0x20bed667fb0), current thread is QThreadPoolThread(0x20bf84273a0)
+2025-06-28T01:46:26 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
+2025-06-28T01:46:26 - [Debug] Read_Input_paths_BrowserFile: Current path: "F:/Media/Video/Anime/2_5-jigen no Ririsa/[SubsPlease] 2.5-jigen no Ririsa - 21 (1080p) [F7D05F26].mkv"
+2025-06-28T01:46:26 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "F:/Media/Video/Anime/2_5-jigen no Ririsa/[SubsPlease] 2.5-jigen no Ririsa - 21 (1080p) [F7D05F26].mkv"
+2025-06-28T01:46:26 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= false laGif= false laVid= true for "F:/Media/Video/Anime/2_5-jigen no Ririsa/[SubsPlease] 2.5-jigen no Ririsa - 21 (1080p) [F7D05F26].mkv"
+2025-06-28T01:46:26 - [Debug] Read_Input_paths_BrowserFile: Added to videosToAdd_info: "F:/Media/Video/Anime/2_5-jigen no Ririsa/[SubsPlease] 2.5-jigen no Ririsa - 21 (1080p) [F7D05F26].mkv"
+2025-06-28T01:46:26 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
+2025-06-28T01:46:26 - [Debug]   imagesToAdd_info count: 0 localAddNewImage: false
+2025-06-28T01:46:26 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
+2025-06-28T01:46:26 - [Debug]   videosToAdd_info count: 1 localAddNewVideo: true
+2025-06-28T01:46:26 - [Debug] Batch_Table_Update_slots: Called with
+2025-06-28T01:46:26 - [Debug]   doAddNewImage: false imagesToAdd count: 0
+2025-06-28T01:46:26 - [Debug]   doAddNewGif: false gifsToAdd count: 0
+2025-06-28T01:46:26 - [Debug]   doAddNewVideo: true videosToAdd count: 1
+2025-06-28T01:46:26 - [Debug] Batch_Table_Update_slots: Processing 1 videos.
+2025-06-28T01:46:26 - [Debug] Batch_Table_Update_slots: Adding video - Name: "[SubsPlease] 2.5-jigen no Ririsa - 21 (1080p) [F7D05F26].mkv" Path: "F:/Media/Video/Anime/2_5-jigen no Ririsa/[SubsPlease] 2.5-jigen no Ririsa - 21 (1080p) [F7D05F26].mkv"
+2025-06-28T01:46:26 - [Debug] Table_video_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 8
+2025-06-28T01:47:12 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
+2025-06-28T01:47:12 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:47:12 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:47:12 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:47:12 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:47:12 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
+2025-06-28T01:47:12 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
+2025-06-28T01:47:12 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
+2025-06-28T01:47:12 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
+2025-06-28T01:47:12 - [Debug] Batch_Table_Update_slots: Called with
+2025-06-28T01:47:12 - [Debug]   doAddNewImage: true imagesToAdd count: 1
+2025-06-28T01:47:12 - [Debug]   doAddNewGif: false gifsToAdd count: 0
+2025-06-28T01:47:12 - [Debug]   doAddNewVideo: false videosToAdd count: 0
+2025-06-28T01:47:12 - [Debug] Batch_Table_Update_slots: Processing 1 images.
+2025-06-28T01:47:12 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Joy_After Lead Singer_FluxProUltra.jpg" Path: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:47:12 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
+2025-06-28T01:48:08 - QWinEventNotifier: Event notifiers cannot be enabled or disabled from another thread
+2025-06-28T01:48:08 - ASSERT failure in MainWindow: "Called object is not of the correct type (class destructor may have already run)", file E:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobjectdefs_impl.h, line 129
+2025-06-28T01:48:37 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T01:48:37 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
+2025-06-28T01:48:37 - [Debug] Init_Table: Finished Initializing Tables (in table.cpp).
+2025-06-28T01:48:37 - [Debug] Init_Table: ui->tableView_image exists: true
+2025-06-28T01:48:37 - [Debug] Init_Table: Table_model_image initial rowCount: 0 columnCount: 6
+2025-06-28T01:48:37 - [Debug] Init_Table: ui->tableView_gif exists: true
+2025-06-28T01:48:37 - [Debug] Init_Table: Table_model_gif initial rowCount: 0 columnCount: 6
+2025-06-28T01:48:37 - [Debug] Init_Table: ui->tableView_video exists: true
+2025-06-28T01:48:37 - [Debug] Init_Table: Table_model_video initial rowCount: 0 columnCount: 8
+2025-06-28T01:48:48 - [Debug] Read_Input_paths_BrowserFile: Processing 1 input paths.
+2025-06-28T01:48:48 - [Debug] Read_Input_paths_BrowserFile: Current path: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:48:48 - [Debug] Read_Input_paths_BrowserFile: Path is a file: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:48:48 - [Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg= true laGif= false laVid= false for "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:48:48 - [Debug] Read_Input_paths_BrowserFile: Added to imagesToAdd_info: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:48:48 - [Debug] Read_Input_paths_BrowserFile: Before calling Batch_Table_Update_slots:
+2025-06-28T01:48:48 - [Debug]   imagesToAdd_info count: 1 localAddNewImage: true
+2025-06-28T01:48:48 - [Debug]   gifsToAdd_info count: 0 localAddNewGif: false
+2025-06-28T01:48:48 - [Debug]   videosToAdd_info count: 0 localAddNewVideo: false
+2025-06-28T01:48:48 - [Debug] Batch_Table_Update_slots: Called with
+2025-06-28T01:48:48 - [Debug]   doAddNewImage: true imagesToAdd count: 1
+2025-06-28T01:48:48 - [Debug]   doAddNewGif: false gifsToAdd count: 0
+2025-06-28T01:48:48 - [Debug]   doAddNewVideo: false videosToAdd count: 0
+2025-06-28T01:48:48 - [Debug] Batch_Table_Update_slots: Processing 1 images.
+2025-06-28T01:48:48 - [Debug] Batch_Table_Update_slots: Adding image - Name: "Joy_After Lead Singer_FluxProUltra.jpg" Path: "C:/Users/beyaw/Pictures/Camera Roll/Joy_After Lead Singer_FluxProUltra.jpg"
+2025-06-28T01:48:48 - [Debug] Table_image_insert_fileName_fullPath: Appended. New rowCount: 1 columnCount: 6
+2025-06-28T01:48:49 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x1fe958697d0), parent's thread is QThread(0x1fe8ac37fb0), current thread is QThreadPoolThread(0x1fe958984f0)
+2025-06-28T01:48:49 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x1fe958697d0), parent's thread is QThread(0x1fe8ac37fb0), current thread is QThreadPoolThread(0x1fe958984f0)
+2025-06-28T01:48:49 - QObject: Cannot create children for a parent that is in a different thread.
+(Parent is QProcess(0x1fe958697d0), parent's thread is QThread(0x1fe8ac37fb0), current thread is QThreadPoolThread(0x1fe958984f0)
+2025-06-28T01:49:16 - QWinEventNotifier: Event notifiers cannot be enabled or disabled from another thread
+2025-06-28T01:49:16 - ASSERT failure in MainWindow: "Called object is not of the correct type (class destructor may have already run)", file E:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobjectdefs_impl.h, line 129

@@ -1,5 +1,6 @@
 // file: realesrganprocessor.cpp
 #include "realesrganprocessor.h"
+#include <QCoreApplication>
 #include <QFileInfo>
 #include <QDir>
 #include <QDebug>
@@ -13,10 +14,11 @@
 
 RealEsrganProcessor::RealEsrganProcessor(QObject *parent) : QObject(parent)
 {
-    m_process = new QProcess(this); // For RealESRGAN CLI
-    m_ffmpegProcess = new QProcess(this); // For old video method (split/assemble)
-    m_ffmpegEncoderProcess = new QProcess(this); // For new pipe method (final encoding)
+    m_process = new QProcess(); // No parent
+    m_ffmpegProcess = new QProcess(); // No parent // For old video method (split/assemble)
+    m_ffmpegEncoderProcess = new QProcess(); // No parent // For new pipe method (final encoding)
 
+    // m_ffmpegDecoderProcess is being replaced by QMediaPlayer/QVideoSink
     // Initialize QMediaPlayer and QVideoSink
     m_mediaPlayer = new QMediaPlayer(this);
     m_videoSink = new QVideoSink(this);

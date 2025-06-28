@@ -4,6 +4,7 @@ Copyright (C) 2025  beyawnko
 */
 
 #include <QMainWindow>
+#include <QCoreApplication>
 #include <QFile>
 #include <QTextStream>
 #include <QProcess>

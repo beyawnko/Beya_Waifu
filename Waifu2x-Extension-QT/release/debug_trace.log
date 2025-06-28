@@ -1,72 +1,80 @@
-2025-06-27 03:49:29.764 : Application main() started.
-2025-06-27 03:49:29.779 : QApplication object created.
-2025-06-27 03:52:32.163 : Application main() started. Waifu2x-Extension-QT. Debugging file list population.
-2025-06-27 03:52:32.178 : QApplication object created.
-2025-06-27 03:52:32.178 : Style created and set.
-2025-06-27 03:52:32.178 : Log directory created.
-2025-06-27 03:52:32.178 : Command line parser processed.
-2025-06-27 03:52:32.178 : Logger initialized.
-2025-06-27 03:52:32.178 : Creating main window.
-2025-06-27 03:54:38.710 : Application main() started. Waifu2x-Extension-QT. Debugging file list population.
-2025-06-27 03:54:38.710 : QApplication object created.
-2025-06-27 03:54:38.710 : Style created and set.
-2025-06-27 03:54:38.710 : Log directory created.
-2025-06-27 03:54:38.710 : Command line parser processed.
-2025-06-27 03:54:38.710 : Logger initialized.
-2025-06-27 03:54:38.710 : Creating main window.
-2025-06-27 03:54:38.725 : MainWindow constructor started.
-2025-06-27 03:54:39.168 : Models created.
-2025-06-27 03:54:39.168 : State and members initialized.
-2025-06-27 03:54:39.168 : Anime4KProcessor created and connected.
-2025-06-27 03:54:39.204 : RealEsrganProcessor created and connected.
-2025-06-27 03:54:39.204 : RealCuganProcessor created and connected.
-2025-06-27 03:54:39.204 : VideoProcessor created and metatype registered.
-2025-06-27 03:54:39.204 : Thread pool setup complete.
-2025-06-27 03:56:03.931 : Application main() started. Waifu2x-Extension-QT. Debugging file list population.
-2025-06-27 03:56:03.931 : QApplication object created.
-2025-06-27 03:56:03.931 : Style created and set.
-2025-06-27 03:56:03.931 : Log directory created.
-2025-06-27 03:56:03.931 : Command line parser processed.
-2025-06-27 03:56:03.931 : Logger initialized.
-2025-06-27 03:56:03.931 : Creating main window.
-2025-06-27 03:56:03.941 : MainWindow constructor started.
-2025-06-27 03:56:04.495 : Models created.
-2025-06-27 03:56:04.495 : State and members initialized.
-2025-06-27 03:56:04.496 : Anime4KProcessor created and connected.
-2025-06-27 03:56:04.531 : RealEsrganProcessor created and connected.
-2025-06-27 03:56:04.531 : RealCuganProcessor created and connected.
-2025-06-27 03:56:04.531 : VideoProcessor created and metatype registered.
-2025-06-27 03:56:04.532 : Thread pool setup complete.
-2025-06-27 03:56:04.532 : MainWindow constructor finished.
-2025-06-27 04:01:21.661 : Application main() started. Waifu2x-Extension-QT. Debugging file list population.
-2025-06-27 04:01:21.677 : QApplication object created.
-2025-06-27 04:01:21.677 : Style created and set.
-2025-06-27 04:01:21.677 : Log directory created.
-2025-06-27 04:01:21.677 : Command line parser processed.
-2025-06-27 04:01:21.677 : Logger initialized.
-2025-06-27 04:01:21.677 : Creating main window.
-2025-06-27 04:01:21.692 : MainWindow constructor started.
-2025-06-27 04:01:22.018 : Models created.
-2025-06-27 04:01:22.018 : State and members initialized.
-2025-06-27 04:01:22.019 : Anime4KProcessor created and connected.
-2025-06-27 04:01:22.053 : RealEsrganProcessor created and connected.
-2025-06-27 04:01:22.053 : RealCuganProcessor created and connected.
-2025-06-27 04:01:22.053 : VideoProcessor created and metatype registered.
-2025-06-27 04:01:22.053 : Thread pool setup complete.
-2025-06-27 04:01:22.058 : MainWindow constructor finished.
-2025-06-27 04:06:12.958 : Application main() started. Waifu2x-Extension-QT. Debugging file list population.
-2025-06-27 04:06:12.974 : QApplication object created.
-2025-06-27 04:06:12.974 : Style created and set.
-2025-06-27 04:06:12.974 : Log directory created.
-2025-06-27 04:06:12.974 : Command line parser processed.
-2025-06-27 04:06:12.974 : Logger initialized.
-2025-06-27 04:06:12.974 : Creating main window.
-2025-06-27 04:06:12.989 : MainWindow constructor started.
-2025-06-27 04:06:13.328 : Models created.
-2025-06-27 04:06:13.328 : State and members initialized.
-2025-06-27 04:06:13.328 : Anime4KProcessor created and connected.
-2025-06-27 04:06:13.363 : RealEsrganProcessor created and connected.
-2025-06-27 04:06:13.363 : RealCuganProcessor created and connected.
-2025-06-27 04:06:13.363 : VideoProcessor created and metatype registered.
-2025-06-27 04:06:13.363 : Thread pool setup complete.
-2025-06-27 04:06:13.367 : MainWindow constructor finished.
+2025-06-28 01:33:41.296 : Application main() started. Waifu2x-Extension-QT. Debugging file list population.
+2025-06-28 01:33:41.353 : QApplication object created.
+2025-06-28 01:33:41.353 : Style created and set.
+2025-06-28 01:33:41.353 : Log directory created.
+2025-06-28 01:33:41.353 : Command line parser processed.
+2025-06-28 01:33:41.367 : Logger initialized.
+2025-06-28 01:33:41.367 : Creating main window.
+2025-06-28 01:33:41.457 : MainWindow constructor started.
+2025-06-28 01:33:41.770 : Models created.
+2025-06-28 01:33:41.771 : State and members initialized.
+2025-06-28 01:33:41.771 : Anime4KProcessor created and connected.
+2025-06-28 01:33:42.007 : RealEsrganProcessor created and connected.
+2025-06-28 01:33:42.008 : RealCuganProcessor created and connected.
+2025-06-28 01:33:42.008 : VideoProcessor created and metatype registered.
+2025-06-28 01:33:42.009 : Thread pool setup complete.
+2025-06-28 01:33:42.011 : MainWindow constructor finished.
+2025-06-28 01:38:06.873 : Application main() started. Waifu2x-Extension-QT. Debugging file list population.
+2025-06-28 01:38:06.885 : QApplication object created.
+2025-06-28 01:38:06.885 : Style created and set.
+2025-06-28 01:38:06.885 : Log directory created.
+2025-06-28 01:38:06.885 : Command line parser processed.
+2025-06-28 01:38:06.885 : Logger initialized.
+2025-06-28 01:38:06.885 : Creating main window.
+2025-06-28 01:38:06.901 : MainWindow constructor started.
+2025-06-28 01:38:07.217 : Models created.
+2025-06-28 01:38:07.218 : State and members initialized.
+2025-06-28 01:38:07.218 : Anime4KProcessor created and connected.
+2025-06-28 01:38:07.248 : RealEsrganProcessor created and connected.
+2025-06-28 01:38:07.248 : RealCuganProcessor created and connected.
+2025-06-28 01:38:07.249 : VideoProcessor created and metatype registered.
+2025-06-28 01:38:07.249 : Thread pool setup complete.
+2025-06-28 01:38:07.251 : MainWindow constructor finished.
+2025-06-28 01:39:43.269 : Application main() started. Waifu2x-Extension-QT. Debugging file list population.
+2025-06-28 01:39:43.287 : QApplication object created.
+2025-06-28 01:39:43.289 : Style created and set.
+2025-06-28 01:39:43.289 : Log directory created.
+2025-06-28 01:39:43.289 : Command line parser processed.
+2025-06-28 01:39:43.291 : Logger initialized.
+2025-06-28 01:39:43.291 : Creating main window.
+2025-06-28 01:39:43.299 : MainWindow constructor started.
+2025-06-28 01:39:43.617 : Models created.
+2025-06-28 01:39:43.618 : State and members initialized.
+2025-06-28 01:39:43.618 : Anime4KProcessor created and connected.
+2025-06-28 01:39:43.644 : RealEsrganProcessor created and connected.
+2025-06-28 01:39:43.645 : RealCuganProcessor created and connected.
+2025-06-28 01:39:43.645 : VideoProcessor created and metatype registered.
+2025-06-28 01:39:43.645 : Thread pool setup complete.
+2025-06-28 01:39:43.647 : MainWindow constructor finished.
+2025-06-28 01:45:43.694 : Application main() started. Waifu2x-Extension-QT. Debugging file list population.
+2025-06-28 01:45:43.701 : QApplication object created.
+2025-06-28 01:45:43.701 : Style created and set.
+2025-06-28 01:45:43.701 : Log directory created.
+2025-06-28 01:45:43.701 : Command line parser processed.
+2025-06-28 01:45:43.701 : Logger initialized.
+2025-06-28 01:45:43.701 : Creating main window.
+2025-06-28 01:45:43.717 : MainWindow constructor started.
+2025-06-28 01:45:44.038 : Models created.
+2025-06-28 01:45:44.039 : State and members initialized.
+2025-06-28 01:45:44.039 : Anime4KProcessor created and connected.
+2025-06-28 01:45:44.086 : RealEsrganProcessor created and connected.
+2025-06-28 01:45:44.086 : RealCuganProcessor created and connected.
+2025-06-28 01:45:44.087 : VideoProcessor created and metatype registered.
+2025-06-28 01:45:44.087 : Thread pool setup complete.
+2025-06-28 01:45:44.089 : MainWindow constructor finished.
+2025-06-28 01:48:37.553 : Application main() started. Waifu2x-Extension-QT. Debugging file list population.
+2025-06-28 01:48:37.561 : QApplication object created.
+2025-06-28 01:48:37.561 : Style created and set.
+2025-06-28 01:48:37.561 : Log directory created.
+2025-06-28 01:48:37.561 : Command line parser processed.
+2025-06-28 01:48:37.570 : Logger initialized.
+2025-06-28 01:48:37.570 : Creating main window.
+2025-06-28 01:48:37.573 : MainWindow constructor started.
+2025-06-28 01:48:37.883 : Models created.
+2025-06-28 01:48:37.883 : State and members initialized.
+2025-06-28 01:48:37.884 : Anime4KProcessor created and connected.
+2025-06-28 01:48:37.912 : RealEsrganProcessor created and connected.
+2025-06-28 01:48:37.913 : RealCuganProcessor created and connected.
+2025-06-28 01:48:37.914 : VideoProcessor created and metatype registered.
+2025-06-28 01:48:37.914 : Thread pool setup complete.
+2025-06-28 01:48:37.917 : MainWindow constructor finished.

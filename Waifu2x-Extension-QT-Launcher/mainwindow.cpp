@@ -123,7 +123,7 @@ bool MainWindow::file_isDirWritable(QString DirPath)
 
 void MainWindow::RUN_SLOT()
 {
-    //Current_Path = "D:/workspace/Waifu2x-Extension-QT/Full_package/waifu2x-extension-gui";
+    Current_Path = QCoreApplication::applicationDirPath();
 #ifdef Q_OS_WIN
     if(file_isDirWritable(Current_Path)==false)
     {
@@ -134,6 +134,7 @@ void MainWindow::RUN_SLOT()
         return;
     }
     ShellExecuteW(NULL, QString("open").toStdWString().c_str(), QString(Current_Path+"/Beya_Waifu.exe").toStdWString().c_str(), NULL, NULL, 1);
+    QFile::copy("E:/GitHub/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher.exe", Current_Path + "/main_app_launched.log");
 #else
     // For non-Windows systems, try to launch directly or handle appropriately.
     // This simplified version might not fully replicate the intended Windows behavior.

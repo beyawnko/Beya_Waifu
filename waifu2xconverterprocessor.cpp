@@ -7,7 +7,7 @@
 
 Waifu2xConverterProcessor::Waifu2xConverterProcessor(QObject *parent) : QObject(parent)
 {
-    m_process = new QProcess(this);
+    m_process = new QProcess();
     cleanup();
 
     connect(m_process, &QProcess::errorOccurred, this, &Waifu2xConverterProcessor::onProcessError);

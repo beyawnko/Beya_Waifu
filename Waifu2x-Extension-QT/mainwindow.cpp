@@ -1308,49 +1308,49 @@ void MainWindow::ExecuteCompatibilityTests()
 
 bool MainWindow::TestEngineCommand(const QString& engineName, const QString& executablePath, const QStringList& arguments, QCheckBox* checkBox)
 {
-  QProcess process;
-  process.setProcessChannelMode(QProcess::MergedChannels); // Combine stdout and stderr
+  QProcess* process = new QProcess(); // Create on heap with no parent
+  process->setProcessChannelMode(QProcess::MergedChannels); // Combine stdout and stderr
 
   if (!QFile::exists(executablePath)) {
     QString logMsg = tr("%1: Executable not found at %2").arg(engineName, executablePath);
     QMetaObject::invokeMethod(this, "TextBrowser_NewMessage", Qt::QueuedConnection, Q_ARG(QString, logMsg));
     if (checkBox) {
-      // UpdateCompatibilityCheckbox(checkBox, false, engineName); // This function is not defined yet
       QMetaObject::invokeMethod(checkBox, "setChecked", Qt::QueuedConnection, Q_ARG(bool, false));
       QMetaObject::invokeMethod(checkBox, "setEnabled", Qt::QueuedConnection, Q_ARG(bool, true));
     }
     QMetaObject::invokeMethod(this, "Add_progressBar_CompatibilityTest", Qt::QueuedConnection);
+    process->deleteLater(); // Clean up the process object
     return false;
   }
 
-  process.start(executablePath, arguments);
-  bool success = process.waitForFinished(15000); // Wait 15 seconds
+  process->start(executablePath, arguments);
+  bool success = process->waitForFinished(15000); // Wait 15 seconds
 
   QString statusMsg;
   bool isCompatible = false;
 
   if (!success) {
-    process.kill();
-    process.waitForFinished(1000); // Ensure it's killed
+    process->kill();
+    process->waitForFinished(1000); // Ensure it's killed
     statusMsg = tr("%1: Test timed out or crashed.").arg(engineName);
-  } else if (process.exitStatus() == QProcess::NormalExit && process.exitCode() == 0) {
+  } else if (process->exitStatus() == QProcess::NormalExit && process->exitCode() == 0) {
     statusMsg = tr("%1: Compatible (Exit code 0).").arg(engineName);
     isCompatible = true;
   } else {
     statusMsg = tr("%1: Not compatible or error (Exit code %2, Status %3). Output: %4")
                   .arg(engineName)
-                  .arg(process.exitCode())
-                  .arg(process.exitStatus())
-                  .arg(QString::fromLocal8Bit(process.readAll()).trimmed());
+                  .arg(process->exitCode())
+                  .arg(process->exitStatus())
+                  .arg(QString::fromLocal8Bit(process->readAll()).trimmed());
   }
 
   QMetaObject::invokeMethod(this, "TextBrowser_NewMessage", Qt::QueuedConnection, Q_ARG(QString, statusMsg));
   if (checkBox) {
-    // UpdateCompatibilityCheckbox(checkBox, isCompatible, engineName); // This function is not defined yet
     QMetaObject::invokeMethod(checkBox, "setChecked", Qt::QueuedConnection, Q_ARG(bool, isCompatible));
     QMetaObject::invokeMethod(checkBox, "setEnabled", Qt::QueuedConnection, Q_ARG(bool, true));
   }
   QMetaObject::invokeMethod(this, "Add_progressBar_CompatibilityTest", Qt::QueuedConnection);
+  process->deleteLater(); // Clean up the process object
   return isCompatible;
 }
 

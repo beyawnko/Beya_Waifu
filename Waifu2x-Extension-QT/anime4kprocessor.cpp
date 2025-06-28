@@ -26,7 +26,7 @@
 
 Anime4KProcessor::Anime4KProcessor(QObject *parent) : QObject(parent)
 {
-    m_process = new QProcess(this);
+    m_process = new QProcess(); // No parent
     m_currentRowNum = -1;
 
     // Connect the process signals to our new slots

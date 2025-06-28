@@ -249,6 +249,7 @@ function Ensure-QMake {
 function Update-Submodules {
     $MyInvocation.MyCommand.Name | Write-Host -ForegroundColor Cyan
     Write-Host "Updating Git submodules..."
+    Set-Location $PSScriptRoot
     Invoke-Process 'git' @('submodule', 'update', '--init', '--recursive')
 }
 
@@ -477,6 +478,24 @@ try {
     # Step 5: Run the final build.
     Build-Project -Msys2BashPath $bashPath
     Write-Host "Stage 7: Complete."
+
+    Write-Host "Stage 8: Deploying external binaries."
+    # Define paths for external prebuilt binaries
+    $resrganDir = Join-Path -Path $PSScriptRoot -ChildPath 'Waifu2x-Extension-QT\realesrgan-ncnn-vulkan'
+    $rcuganDir = Join-Path -Path $PSScriptRoot -ChildPath 'Waifu2x-Extension-QT\realcugan-ncnn-vulkan'
+    $destDir = Join-Path -Path $PSScriptRoot -ChildPath 'Waifu2x-Extension-QT\release'
+
+    # Ensure the destination directory exists
+    if (-not (Test-Path -Path $destDir)) {
+        throw "The destination release directory does not exist: $destDir"
+    }
+
+    # Copy the directories
+    Write-Host "Copying realesrgan-ncnn-vulkan to release directory..."
+    Copy-Item -Path $resrganDir -Destination $destDir -Recurse -Force
+    Write-Host "Copying realcugan-ncnn-vulkan to release directory..."
+    Copy-Item -Path $rcuganDir -Destination $destDir -Recurse -Force
+    Write-Host "Stage 8: Complete."
     
     Write-Host "`nBuild process completed successfully!" -ForegroundColor Green
 

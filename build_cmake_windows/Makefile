@@ -56,10 +56,10 @@ RM = C:\tools\msys64\mingw64\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\Beyawnko\Beya_Waifu
+CMAKE_SOURCE_DIR = E:\GitHub\Beya_Waifu
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows
+CMAKE_BINARY_DIR = E:\GitHub\Beya_Waifu\build_cmake_windows
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -131,9 +131,9 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles E:\GitHub\Beya_Waifu\build_cmake_windows\\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 0
 .PHONY : all
 
 # The main clean target

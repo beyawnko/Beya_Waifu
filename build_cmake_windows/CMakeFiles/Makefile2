@@ -53,10 +53,10 @@ RM = C:\tools\msys64\mingw64\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\Beyawnko\Beya_Waifu
+CMAKE_SOURCE_DIR = E:\GitHub\Beya_Waifu
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows
+CMAKE_BINARY_DIR = E:\GitHub\Beya_Waifu\build_cmake_windows
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -129,18 +129,18 @@ Waifu2x-Extension-QT-Launcher/clean: Waifu2x-Extension-QT-Launcher/CMakeFiles/Be
 
 # All Build rule for target.
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/all: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/all
-Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/all: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/all
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/all: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/all
+Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/all: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/depend
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55 "Built target Beya_Waifu"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55 "Built target Beya_Waifu"
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/all
 
 # Build rule for subdir invocation for target.
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 57
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 57
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 0
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/rule
 
 # Convenience name for target.
@@ -149,10 +149,10 @@ Beya_Waifu: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/rule
 
 # codegen rule for target.
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/codegen: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/all
-Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/codegen: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/all
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/codegen: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/all
+Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/codegen: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55 "Finished codegen for target Beya_Waifu"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55 "Finished codegen for target Beya_Waifu"
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/codegen
 
 # clean rule for target.
@@ -167,14 +167,14 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/clean:
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/all:
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_qmlimportscan.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/depend
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_qmlimportscan.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=65 "Built target Beya_Waifu_qmlimportscan"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=65 "Built target Beya_Waifu_qmlimportscan"
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/all
 
 # Build rule for subdir invocation for target.
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 1
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 0
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/rule
 
 # Convenience name for target.
@@ -184,7 +184,7 @@ Beya_Waifu_qmlimportscan: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportsc
 # codegen rule for target.
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_qmlimportscan.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=65 "Finished codegen for target Beya_Waifu_qmlimportscan"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=65 "Finished codegen for target Beya_Waifu_qmlimportscan"
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/codegen
 
 # clean rule for target.
@@ -199,14 +199,14 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/clean:
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/all: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/all
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_autogen_timestamp_deps.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/depend
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_autogen_timestamp_deps.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num= "Built target Beya_Waifu_autogen_timestamp_deps"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num= "Built target Beya_Waifu_autogen_timestamp_deps"
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/all
 
 # Build rule for subdir invocation for target.
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 1
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 0
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/rule
 
 # Convenience name for target.
@@ -216,7 +216,7 @@ Beya_Waifu_autogen_timestamp_deps: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_au
 # codegen rule for target.
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_autogen_timestamp_deps.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num= "Finished codegen for target Beya_Waifu_autogen_timestamp_deps"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num= "Finished codegen for target Beya_Waifu_autogen_timestamp_deps"
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/codegen
 
 # clean rule for target.
@@ -231,14 +231,14 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/clean:
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/all: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_autogen.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/depend
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_autogen.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=64 "Built target Beya_Waifu_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=64 "Built target Beya_Waifu_autogen"
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/all
 
 # Build rule for subdir invocation for target.
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 0
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/rule
 
 # Convenience name for target.
@@ -248,7 +248,7 @@ Beya_Waifu_autogen: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/rule
 # codegen rule for target.
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/codegen: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_autogen.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=64 "Finished codegen for target Beya_Waifu_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=64 "Finished codegen for target Beya_Waifu_autogen"
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/codegen
 
 # clean rule for target.
@@ -260,18 +260,18 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/clean:
 # Target rules for target Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir
 
 # All Build rule for target.
-Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/all: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/all
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/all: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/all
+Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/all: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/all
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT-Launcher\CMakeFiles\Beya_Waifu-Launcher.dir\build.make Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/depend
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT-Launcher\CMakeFiles\Beya_Waifu-Launcher.dir\build.make Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=56,57,58,59,60,61,62 "Built target Beya_Waifu-Launcher"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=56,57,58,59,60,61,62 "Built target Beya_Waifu-Launcher"
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/all
 
 # Build rule for subdir invocation for target.
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 8
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 0
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/rule
 
 # Convenience name for target.
@@ -279,10 +279,10 @@ Beya_Waifu-Launcher: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launche
 .PHONY : Beya_Waifu-Launcher
 
 # codegen rule for target.
-Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/codegen: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/all
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/codegen: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/all
+Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/codegen: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/all
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT-Launcher\CMakeFiles\Beya_Waifu-Launcher.dir\build.make Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=56,57,58,59,60,61,62 "Finished codegen for target Beya_Waifu-Launcher"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=56,57,58,59,60,61,62 "Finished codegen for target Beya_Waifu-Launcher"
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/codegen
 
 # clean rule for target.
@@ -297,14 +297,14 @@ Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/clean:
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/all:
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT-Launcher\CMakeFiles\Beya_Waifu-Launcher_autogen_timestamp_deps.dir\build.make Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/depend
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT-Launcher\CMakeFiles\Beya_Waifu-Launcher_autogen_timestamp_deps.dir\build.make Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num= "Built target Beya_Waifu-Launcher_autogen_timestamp_deps"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num= "Built target Beya_Waifu-Launcher_autogen_timestamp_deps"
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/all
 
 # Build rule for subdir invocation for target.
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 0
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 0
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/rule
 
 # Convenience name for target.
@@ -314,7 +314,7 @@ Beya_Waifu-Launcher_autogen_timestamp_deps: Waifu2x-Extension-QT-Launcher/CMakeF
 # codegen rule for target.
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT-Launcher\CMakeFiles\Beya_Waifu-Launcher_autogen_timestamp_deps.dir\build.make Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num= "Finished codegen for target Beya_Waifu-Launcher_autogen_timestamp_deps"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num= "Finished codegen for target Beya_Waifu-Launcher_autogen_timestamp_deps"
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/codegen
 
 # clean rule for target.
@@ -329,14 +329,14 @@ Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_d
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/all: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT-Launcher\CMakeFiles\Beya_Waifu-Launcher_autogen.dir\build.make Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/depend
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT-Launcher\CMakeFiles\Beya_Waifu-Launcher_autogen.dir\build.make Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=63 "Built target Beya_Waifu-Launcher_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=63 "Built target Beya_Waifu-Launcher_autogen"
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/all
 
 # Build rule for subdir invocation for target.
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 1
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles 0
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/rule
 
 # Convenience name for target.
@@ -346,7 +346,7 @@ Beya_Waifu-Launcher_autogen: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu
 # codegen rule for target.
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/codegen: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/all
 	$(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT-Launcher\CMakeFiles\Beya_Waifu-Launcher_autogen.dir\build.make Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=63 "Finished codegen for target Beya_Waifu-Launcher_autogen"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=E:\GitHub\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=63 "Finished codegen for target Beya_Waifu-Launcher_autogen"
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/codegen
 
 # clean rule for target.

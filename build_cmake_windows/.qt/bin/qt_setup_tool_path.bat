@@ -1,3 +1,3 @@
 @echo off
-set PATH=C:/tmp/Qt/6.6.3/mingw_64/bin;%PATH%
+set PATH=E:/tmp/Qt/6.6.3/mingw_64/bin;%PATH%
 %*
