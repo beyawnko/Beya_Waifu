@@ -54,9 +54,16 @@ These protocols define the mandatory algorithms for your reasoning and task exec
         - Explicitly check for mechanisms to manage data buffering between processes to prevent excessive memory usage (e.g., backpressure, buffer limits).
         - Ensure graceful termination and cleanup of all processes in the chain under normal and error conditions.
         - Confirm that data integrity (e.g., binary mode, complete reads/writes) is maintained through the pipes.
+    - *Systemic Process Review and Improvement Tasks*: When the task involves a broad review and improvement of systemic processes (e.g., "simplify testing," "improve build stability," "enhance CI/CD pipeline"):
+        - The "Plan" phase must explicitly include steps for:
+            1.  **Comprehensive Analysis:** Thoroughly reading existing documentation (`README.md`, `CONTRIBUTING.md`, other relevant docs), build scripts, CI configurations, and relevant memory files to understand the current state of the targeted system (build, test, CI, etc.).
+            2.  **Identification of Pain Points:** Systematically identifying current complexities, inefficiencies, common failure points, or areas lacking clarity.
+            3.  **Strategy Formulation:** Proposing specific, actionable strategies for improvement, categorized by area (e.g., dependency management, test environment, build speed, documentation).
+            4.  **Documentation Update Plan:** Planning for the creation or significant update of documentation to reflect the proposed improvements and current state.
+        - This is in addition to other relevant specific diagnostic protocols if applicable.
 - Do: Execute the plan, following the ReAct protocol for each step.
-- Check: Upon completion of the implementation, run all relevant project tests (see Section 6.1). Then, invoke the LLM-as-a-Judge protocol (Section 5.2) to score the quality and coherence of the output on a scale of 1-100.
-- Act: If all tests pass and the quality score is >= 95, finalize the task and proceed to the Self-Modification Mandate (Section 2.0). If any test fails or the score is < 95, the task is considered failed. You must analyze the failure and immediately trigger the Self-Modification Mandate to improve the protocol that led to the failure.
+- Check: Upon completion of the implementation (or proposal generation for analytical tasks), run all relevant project tests (see Section 6.1) if code changes were made. Then, invoke the LLM-as-a-Judge protocol (Section 5.2) to score the quality and coherence of the output (e.g., analysis document, proposed strategies, code changes) on a scale of 1-100.
+- Act: If all tests pass (if applicable) and the quality score is >= 95, finalize the task and proceed to the Self-Modification Mandate (Section 2.0). If any test fails or the score is < 95, the task is considered failed. You must analyze the failure and immediately trigger the Self-Modification Mandate to improve the protocol that led to the failure.
 
 
 4.0 MEMORY ARCHITECTURE
