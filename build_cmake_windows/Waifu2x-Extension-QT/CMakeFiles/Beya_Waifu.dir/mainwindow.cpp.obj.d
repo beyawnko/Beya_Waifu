@@ -1,6 +1,6 @@
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/mainwindow.cpp.obj: \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\mainwindow.cpp \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\mainwindow.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\mainwindow.cpp \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\mainwindow.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QMainWindow \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qmainwindow.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -923,6 +923,27 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/mainwindow.cpp.obj: \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QMenu \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qmenu.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QMetaType \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/QNetworkAccessManager \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qnetworkaccessmanager.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qtnetworkglobal.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qtnetwork-config.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qtnetworkexports.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qnetworkrequest.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QSharedDataPointer \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QUrl \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/QSslConfiguration \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslconfiguration.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslsocket.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qtcpsocket.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qabstractsocket.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qhostaddress.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslerror.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslcertificate.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qssl.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFlags \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QMetaType \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QRandomGenerator \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QScrollBar \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qscrollbar.h \
@@ -960,25 +981,25 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/mainwindow.cpp.obj: \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qcombobox.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QPushButton \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qpushbutton.h \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\topsupporterslist.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\topsupporterslist.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QWidget \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qwidget.h \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\FileManager.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\FileManager.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QString \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QStringList \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QMutex \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\ProcessRunner.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\ProcessRunner.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QByteArray \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QEventLoop \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\GpuManager.h \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\UiController.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\GpuManager.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\UiController.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/QFont \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/qfont.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QFontComboBox \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qfontcombobox.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qcombobox.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/qfontdatabase.h \
- C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/include/ui_mainwindow.h \
+ C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/include/ui_mainwindow.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/QIcon \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/qicon.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QApplication \
@@ -1030,7 +1051,7 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/mainwindow.cpp.obj: \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qtextedit.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QVBoxLayout \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QWidget \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\LiquidGlassWidget.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\LiquidGlassWidget.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtOpenGLWidgets/QOpenGLWidget \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtOpenGLWidgets/qopenglwidget.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsglobal.h \
@@ -1219,23 +1240,32 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/mainwindow.cpp.obj: \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/qvectornd.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QPointF \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/QMouseEvent \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\LiquidGlassParams.h \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\anime4kprocessor.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\LiquidGlassParams.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\anime4kprocessor.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QObject \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\anime4k_settings.h \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\realesrganprocessor.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\anime4k_settings.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\realesrganprocessor.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QQueue \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\realesrgan_settings.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\realesrgan_settings.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtMultimedia/QVideoSink \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtMultimedia/qvideosink.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtMultimedia/QVideoFrame \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtMultimedia/qvideoframe.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtMultimedia/qvideoframeformat.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QUrl \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\RealCuganProcessor.h \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\realcugan_settings.h \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\VideoProcessor.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\RealCuganProcessor.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\realcugan_settings.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\VideoProcessor.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QGridLayout \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/QNetworkRequest \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qnetworkrequest.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/QNetworkReply \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qnetworkreply.h \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QIODevice \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/QNetworkRequest \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/QNetworkAccessManager \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/QPixmap \
+ C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/qpixmap.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QApplication \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QEvent \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QDebug \

@@ -1,6 +1,6 @@
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/realesrganprocessor.cpp.obj: \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\realesrganprocessor.cpp \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\realesrganprocessor.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\realesrganprocessor.cpp \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\realesrganprocessor.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QObject \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobject.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobjectdefs.h \
@@ -344,7 +344,7 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/realesrganprocessor.cpp.obj: \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qhash.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qvarlengtharray.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/q23utility.h \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\realesrgan_settings.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\realesrgan_settings.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QString \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qstring.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtMultimedia/QMediaPlayer \

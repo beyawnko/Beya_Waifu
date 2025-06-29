@@ -1,6 +1,6 @@
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassWidget.cpp.obj: \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\LiquidGlassWidget.cpp \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\LiquidGlassWidget.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\LiquidGlassWidget.cpp \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\LiquidGlassWidget.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtOpenGLWidgets/QOpenGLWidget \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtOpenGLWidgets/qopenglwidget.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtOpenGLWidgets/qtopenglwidgetsglobal.h \
@@ -698,7 +698,7 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassWidget.cpp.obj: \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QSizeF \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/QTransform \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/qtransform.h \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\LiquidGlassParams.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\LiquidGlassParams.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFile \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qfile.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qfiledevice.h \

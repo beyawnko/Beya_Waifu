@@ -52,10 +52,10 @@ RM = C:\tools\msys64\mingw64\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\Beyawnko\Beya_Waifu
+CMAKE_SOURCE_DIR = C:\Users\beyaw\Beya_Waifu
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows
+CMAKE_BINARY_DIR = C:\Users\beyaw\Beya_Waifu\build_cmake_windows
 
 # Utility rule file for Beya_Waifu_qmlimportscan.
 
@@ -69,8 +69,8 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan: Waifu2x-Extension-QT/.
 
 Waifu2x-Extension-QT/.qt_plugins/Qt6_QmlPlugins_Imports_Beya_Waifu.cmake: C:/tmp/Qt/6.6.3/mingw_64/bin/qmlimportscanner.exe
 Waifu2x-Extension-QT/.qt_plugins/Qt6_QmlPlugins_Imports_Beya_Waifu.cmake: Waifu2x-Extension-QT/.rcc/ShadersGenerated.qrc
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running qmlimportscanner for Beya_Waifu"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT && call C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\.qt\bin\qt_setup_tool_path.bat C:/tmp/Qt/6.6.3/mingw_64/./bin/qmlimportscanner.exe @C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/.qt_plugins/Qt6_QmlPlugins_Imports_Beya_Waifu.rsp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=C:\Users\beyaw\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running qmlimportscanner for Beya_Waifu"
+	cd /d C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT && call C:\Users\beyaw\Beya_Waifu\build_cmake_windows\.qt\bin\qt_setup_tool_path.bat C:/tmp/Qt/6.6.3/mingw_64/./bin/qmlimportscanner.exe @C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/.qt_plugins/Qt6_QmlPlugins_Imports_Beya_Waifu.rsp
 
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/codegen:
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/codegen
@@ -85,10 +85,10 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/build: Beya_Waifu_q
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/build
 
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/clean:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT && $(CMAKE_COMMAND) -P CMakeFiles\Beya_Waifu_qmlimportscan.dir\cmake_clean.cmake
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT && $(CMAKE_COMMAND) -P CMakeFiles\Beya_Waifu_qmlimportscan.dir\cmake_clean.cmake
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/clean
 
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\Beyawnko\Beya_Waifu C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_qmlimportscan.dir\DependInfo.cmake "--color=$(COLOR)"
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\beyaw\Beya_Waifu C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT C:\Users\beyaw\Beya_Waifu\build_cmake_windows C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_qmlimportscan.dir\DependInfo.cmake "--color=$(COLOR)"
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/depend
 

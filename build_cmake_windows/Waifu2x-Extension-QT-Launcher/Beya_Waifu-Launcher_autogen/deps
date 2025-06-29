@@ -1,10 +1,10 @@
 Beya_Waifu-Launcher_autogen/timestamp: \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/CMakeLists.txt \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/main.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/pic.qrc \
-	C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/moc_predefs.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/CMakeLists.txt \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/main.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/pic.qrc \
+	C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/moc_predefs.h \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtConcurrent/QtConcurrent \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtConcurrent/QtConcurrentDepends \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtConcurrent/qtaskbuilder.h \
@@ -972,5 +972,5 @@ Beya_Waifu-Launcher_autogen/timestamp: \
 	C:/tools/msys64/mingw64/share/cmake/Modules/FindPackageMessage.cmake \
 	C:/tools/msys64/mingw64/share/cmake/Modules/FindThreads.cmake \
 	C:/tools/msys64/mingw64/share/cmake/Modules/FindVulkan.cmake \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.ui \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.ui \
 	C:/tools/msys64/mingw64/bin/cmake.exe

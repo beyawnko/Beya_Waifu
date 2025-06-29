@@ -1,6 +1,6 @@
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/VideoProcessor.cpp.obj: \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\VideoProcessor.cpp \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\VideoProcessor.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\VideoProcessor.cpp \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\VideoProcessor.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QObject \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobject.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobjectdefs.h \

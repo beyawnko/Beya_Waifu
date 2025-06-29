@@ -52,10 +52,10 @@ RM = C:\tools\msys64\mingw64\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\Beyawnko\Beya_Waifu
+CMAKE_SOURCE_DIR = C:\Users\beyaw\Beya_Waifu
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows
+CMAKE_BINARY_DIR = C:\Users\beyaw\Beya_Waifu\build_cmake_windows
 
 # Utility rule file for Beya_Waifu_autogen.
 
@@ -70,9 +70,9 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen: Waifu2x-Extension-QT/Beya_Wa
 Waifu2x-Extension-QT/Beya_Waifu_autogen/timestamp: C:/tmp/Qt/6.6.3/mingw_64/./bin/moc.exe
 Waifu2x-Extension-QT/Beya_Waifu_autogen/timestamp: C:/tmp/Qt/6.6.3/mingw_64/./bin/uic.exe
 Waifu2x-Extension-QT/Beya_Waifu_autogen/timestamp: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target Beya_Waifu"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT && C:\tools\msys64\mingw64\bin\cmake.exe -E cmake_autogen C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/AutogenInfo.json Debug
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT && C:\tools\msys64\mingw64\bin\cmake.exe -E touch C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/timestamp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=C:\Users\beyaw\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target Beya_Waifu"
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT && C:\tools\msys64\mingw64\bin\cmake.exe -E cmake_autogen C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/AutogenInfo.json Debug
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT && C:\tools\msys64\mingw64\bin\cmake.exe -E touch C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/timestamp
 
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/codegen:
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/codegen
@@ -87,10 +87,10 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/build: Beya_Waifu_autogen
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/build
 
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/clean:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT && $(CMAKE_COMMAND) -P CMakeFiles\Beya_Waifu_autogen.dir\cmake_clean.cmake
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT && $(CMAKE_COMMAND) -P CMakeFiles\Beya_Waifu_autogen.dir\cmake_clean.cmake
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/clean
 
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\Beyawnko\Beya_Waifu C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_autogen.dir\DependInfo.cmake "--color=$(COLOR)"
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\beyaw\Beya_Waifu C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT C:\Users\beyaw\Beya_Waifu\build_cmake_windows C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_autogen.dir\DependInfo.cmake "--color=$(COLOR)"
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/depend
 

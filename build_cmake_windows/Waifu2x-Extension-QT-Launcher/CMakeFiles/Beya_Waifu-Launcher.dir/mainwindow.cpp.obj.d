@@ -1,6 +1,6 @@
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.obj: \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT-Launcher\mainwindow.cpp \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT-Launcher\mainwindow.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT-Launcher\mainwindow.cpp \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT-Launcher\mainwindow.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QMainWindow \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qmainwindow.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1031,7 +1031,7 @@ Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.
  C:/tmp/Qt/6.6.3/mingw_64/include/QtConcurrent/qtconcurrentversion.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QEventLoop \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFutureWatcher \
- C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/include/ui_mainwindow.h \
+ C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/include/ui_mainwindow.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QApplication \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QGridLayout \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qgridlayout.h \

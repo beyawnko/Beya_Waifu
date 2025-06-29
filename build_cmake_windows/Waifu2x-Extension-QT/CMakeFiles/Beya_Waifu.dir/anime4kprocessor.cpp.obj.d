@@ -1,6 +1,6 @@
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/anime4kprocessor.cpp.obj: \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\anime4kprocessor.cpp \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\anime4kprocessor.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\anime4kprocessor.cpp \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\anime4kprocessor.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QObject \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobject.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobjectdefs.h \
@@ -322,7 +322,7 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/anime4kprocessor.cpp.obj: \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qiodevice.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobject.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qshareddata.h \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\anime4k_settings.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\anime4k_settings.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QString \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qstring.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFileInfo \

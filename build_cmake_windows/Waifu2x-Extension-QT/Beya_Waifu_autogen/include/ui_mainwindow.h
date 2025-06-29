@@ -117,15 +117,15 @@ public:
     QHBoxLayout *horizontalLayout_CustRes_Checkboxes;
     QCheckBox *checkBox_custres_isAll;
     QCheckBox *checkBox_AutoSkip_CustomRes;
-    QGroupBox *groupBox_2;
+    QGroupBox *groupBox_ImageOutputSettings;
     QGridLayout *gridLayout_26;
-    QFrame *frame_2;
+    QFrame *frame_ImageQuality;
     QGridLayout *gridLayout_45;
     QLabel *label_63;
     QSpinBox *spinBox_ImageQualityLevel;
     QLabel *label_ImageStyle_W2xNCNNVulkan;
     QLabel *label_ImageStyle_W2xCaffe;
-    QFrame *frame;
+    QFrame *frame_ImageFormat;
     QGridLayout *gridLayout_42;
     QComboBox *comboBox_ImageSaveFormat;
     QLabel *label_20;
@@ -421,18 +421,18 @@ public:
     QLabel *label_62;
     QComboBox *comboBox_GPUID_RealsrNCNNVulkan;
     QPushButton *pushButton_DetectGPU_RealsrNCNNVulkan;
-    QCheckBox *checkBox_MultiGPU_RealesrganNcnnVulkan;
+    QCheckBox *checkBox_MultiGPU_RealSRNcnnVulkan;
     QSpacerItem *horizontalSpacer_42;
     QHBoxLayout *horizontalLayout_22;
     QLabel *label_61;
-    QFrame *frame_TileSize_RealesrganNcnnVulkan;
+    QFrame *frame_TileSize_RealsrNcnnVulkan;
     QGridLayout *gridLayout_56;
     QPushButton *pushButton_Minus_TileSize_RealsrNCNNVulkan;
     QSpinBox *spinBox_TileSize_RealsrNCNNVulkan;
     QPushButton *pushButton_Add_TileSize_RealsrNCNNVulkan;
     QSpacerItem *horizontalSpacer_26;
     QHBoxLayout *horizontalLayout_34;
-    QGroupBox *groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan;
+    QGroupBox *groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan;
     QGridLayout *gridLayout_43;
     QCheckBox *checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan;
     QLabel *label_73;
@@ -699,18 +699,15 @@ public:
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/new/prefix1/icon/icon_main.png"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
-        MainWindow->setStyleSheet(QString::fromUtf8(""));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         sizePolicy.setHeightForWidth(centralwidget->sizePolicy().hasHeightForWidth());
         centralwidget->setSizePolicy(sizePolicy);
-        centralwidget->setStyleSheet(QString::fromUtf8(""));
         gridLayout_40 = new QGridLayout(centralwidget);
         gridLayout_40->setObjectName("gridLayout_40");
         gridLayout_40->setContentsMargins(6, 6, 6, 6);
         splitter_4 = new QSplitter(centralwidget);
         splitter_4->setObjectName("splitter_4");
-        splitter_4->setStyleSheet(QString::fromUtf8(""));
         splitter_4->setOrientation(Qt::Vertical);
         splitter_4->setHandleWidth(5);
         tabWidget = new QTabWidget(splitter_4);
@@ -721,7 +718,6 @@ public:
         sizePolicy1.setHeightForWidth(tabWidget->sizePolicy().hasHeightForWidth());
         tabWidget->setSizePolicy(sizePolicy1);
         tabWidget->setMinimumSize(QSize(0, 0));
-        tabWidget->setStyleSheet(QString::fromUtf8("QSplitter::handle { background-color: #AAAAAA; } QSplitter::handle:horizontal { width: 1px; } QSplitter::handle:vertical { height: 1px; }"));
         tabWidget->setTabShape(QTabWidget::Rounded);
         tabWidget->setIconSize(QSize(23, 23));
         tabWidget->setElideMode(Qt::ElideNone);
@@ -732,7 +728,6 @@ public:
         tab_Donate = new QWidget();
         tab_Donate->setObjectName("tab_Donate");
         tab_Donate->setEnabled(true);
-        tab_Donate->setStyleSheet(QString::fromUtf8(""));
         gridLayout_22 = new QGridLayout(tab_Donate);
         gridLayout_22->setObjectName("gridLayout_22");
         label_DonateText = new QLabel(tab_Donate);
@@ -800,9 +795,8 @@ public:
         font3.setPointSize(13);
         font3.setBold(true);
         label_DonateQRCode->setFont(font3);
-        label_DonateQRCode->setStyleSheet(QString::fromUtf8("image: url(:/new/prefix1/donate/Donate_QRCode.jpg);"));
         label_DonateQRCode->setFrameShape(QFrame::NoFrame);
-        label_DonateQRCode->setScaledContents(false);
+        label_DonateQRCode->setScaledContents(true);
         label_DonateQRCode->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
 
         gridLayout_22->addWidget(label_DonateQRCode, 2, 0, 1, 1);
@@ -846,10 +840,6 @@ public:
         tableView_image = new QTableView(tab_Images);
         tableView_image->setObjectName("tableView_image");
         tableView_image->setContextMenuPolicy(Qt::ActionsContextMenu);
-        tableView_image->setStyleSheet(QString::fromUtf8("QTableView{\n"
-"                                       selection-background-color: rgb(52, 152, 219);\n"
-"\n"
-"                                       }"));
         tableView_image->setAutoScroll(false);
         tableView_image->setAutoScrollMargin(0);
         tableView_image->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -882,9 +872,6 @@ public:
         tableView_gif->setObjectName("tableView_gif");
         tableView_gif->setEnabled(true);
         tableView_gif->setContextMenuPolicy(Qt::ActionsContextMenu);
-        tableView_gif->setStyleSheet(QString::fromUtf8("QTableView{\n"
-"                                       selection-background-color: rgb(26, 188, 156);\n"
-"                                       }"));
         tableView_gif->setAutoScroll(false);
         tableView_gif->setAutoScrollMargin(0);
         tableView_gif->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -915,9 +902,6 @@ public:
         tableView_video = new QTableView(tab_Videos);
         tableView_video->setObjectName("tableView_video");
         tableView_video->setContextMenuPolicy(Qt::ActionsContextMenu);
-        tableView_video->setStyleSheet(QString::fromUtf8("QTableView{\n"
-"                                       selection-background-color: rgb(178, 58, 238);\n"
-"                                       }"));
         tableView_video->setAutoScroll(false);
         tableView_video->setAutoScrollMargin(0);
         tableView_video->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -950,7 +934,6 @@ public:
         sizePolicy3.setVerticalStretch(0);
         sizePolicy3.setHeightForWidth(label_FileCount->sizePolicy().hasHeightForWidth());
         label_FileCount->setSizePolicy(sizePolicy3);
-        label_FileCount->setStyleSheet(QString::fromUtf8(""));
         label_FileCount->setFrameShape(QFrame::Box);
         label_FileCount->setText(QString::fromUtf8("File count: 0"));
         label_FileCount->setAlignment(Qt::AlignCenter);
@@ -965,7 +948,9 @@ public:
         pushButton_ClearList = new QPushButton(groupBox_FileList);
         pushButton_ClearList->setObjectName("pushButton_ClearList");
         pushButton_ClearList->setMinimumSize(QSize(35, 35));
-        pushButton_ClearList->setStyleSheet(QString::fromUtf8("QPushButton{image: url(:/new/prefix1/icon/ClearList.png);border-style:transparent;} QPushButton:hover{image: url(:/new/prefix1/icon/ClearList_hover.png);border-style:transparent;} QPushButton:pressed{image: url(:/new/prefix1/icon/ClearList.png);border-style:transparent;} QPushButton:disabled{image: url(:/new/prefix1/icon/ClearList_disabled.png);border-style:transparent;}"));
+        QIcon icon4;
+        icon4.addFile(QString::fromUtf8(":/new/prefix1/icon/ClearList.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_ClearList->setIcon(icon4);
 
         horizontalLayout_FileListControls->addWidget(pushButton_ClearList);
 
@@ -973,28 +958,36 @@ public:
         pushButton_RemoveItem->setObjectName("pushButton_RemoveItem");
         pushButton_RemoveItem->setMinimumSize(QSize(35, 35));
         pushButton_RemoveItem->setContextMenuPolicy(Qt::ActionsContextMenu);
-        pushButton_RemoveItem->setStyleSheet(QString::fromUtf8("QPushButton{image: url(:/new/prefix1/icon/RemoveItem.png);border-style:transparent;} QPushButton:hover{image: url(:/new/prefix1/icon/RemoveItem_hover.png);border-style:transparent;} QPushButton:pressed{image: url(:/new/prefix1/icon/RemoveItem.png);border-style:transparent;} QPushButton:disabled{image: url(:/new/prefix1/icon/RemoveItem_disabled.png);border-style:transparent;}"));
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8(":/new/prefix1/icon/RemoveItem.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_RemoveItem->setIcon(icon5);
 
         horizontalLayout_FileListControls->addWidget(pushButton_RemoveItem);
 
         pushButton_SaveFileList = new QPushButton(groupBox_FileList);
         pushButton_SaveFileList->setObjectName("pushButton_SaveFileList");
         pushButton_SaveFileList->setMinimumSize(QSize(35, 35));
-        pushButton_SaveFileList->setStyleSheet(QString::fromUtf8("QPushButton{image: url(:/new/prefix1/icon/Save_FileList.png);border-style:transparent;} QPushButton:hover{image: url(:/new/prefix1/icon/Save_FileList_hover.png);border-style:transparent;} QPushButton:pressed{image: url(:/new/prefix1/icon/Save_FileList.png);border-style:transparent;} QPushButton:disabled{image: url(:/new/prefix1/icon/Save_FileList_disabled.png);border-style:transparent;}"));
+        QIcon icon6;
+        icon6.addFile(QString::fromUtf8(":/new/prefix1/icon/Save_FileList.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_SaveFileList->setIcon(icon6);
 
         horizontalLayout_FileListControls->addWidget(pushButton_SaveFileList);
 
         pushButton_ReadFileList = new QPushButton(groupBox_FileList);
         pushButton_ReadFileList->setObjectName("pushButton_ReadFileList");
         pushButton_ReadFileList->setMinimumSize(QSize(35, 35));
-        pushButton_ReadFileList->setStyleSheet(QString::fromUtf8("QPushButton{image: url(:/new/prefix1/icon/Read_FileList.png);border-style:transparent;} QPushButton:hover{image: url(:/new/prefix1/icon/Read_FileList_hover.png);border-style:transparent;} QPushButton:pressed{image: url(:/new/prefix1/icon/Read_FileList.png);border-style:transparent;} QPushButton:disabled{image: url(:/new/prefix1/icon/Read_FileList_disabled.png);border-style:transparent;}"));
+        QIcon icon7;
+        icon7.addFile(QString::fromUtf8(":/new/prefix1/icon/Read_FileList.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_ReadFileList->setIcon(icon7);
 
         horizontalLayout_FileListControls->addWidget(pushButton_ReadFileList);
 
         pushButton_BrowserFile = new QPushButton(groupBox_FileList);
         pushButton_BrowserFile->setObjectName("pushButton_BrowserFile");
         pushButton_BrowserFile->setMinimumSize(QSize(35, 35));
-        pushButton_BrowserFile->setStyleSheet(QString::fromUtf8("QPushButton{image: url(:/new/prefix1/icon/AddNewFile.png);border-style:transparent;} QPushButton:hover{image: url(:/new/prefix1/icon/AddNewFile_hover.png);border-style:transparent;} QPushButton:pressed{image: url(:/new/prefix1/icon/AddNewFile.png);border-style:transparent;} QPushButton:disabled{image: url(:/new/prefix1/icon/AddNewFile_disabled.png);border-style:transparent;}"));
+        QIcon icon8;
+        icon8.addFile(QString::fromUtf8(":/new/prefix1/icon/opne_folder.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_BrowserFile->setIcon(icon8);
 
         horizontalLayout_FileListControls->addWidget(pushButton_BrowserFile);
 
@@ -1097,17 +1090,17 @@ public:
 
         pushButton_Stop = new QPushButton(groupBox_Progress);
         pushButton_Stop->setObjectName("pushButton_Stop");
-        QIcon icon4;
-        icon4.addFile(QString::fromUtf8(":/new/prefix1/icon/pause-button.png"), QSize(), QIcon::Normal, QIcon::Off);
-        pushButton_Stop->setIcon(icon4);
+        QIcon icon9;
+        icon9.addFile(QString::fromUtf8(":/new/prefix1/icon/pause-button.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_Stop->setIcon(icon9);
 
         horizontalLayout_Progress->addWidget(pushButton_Stop);
 
         pushButton_ForceRetry = new QPushButton(groupBox_Progress);
         pushButton_ForceRetry->setObjectName("pushButton_ForceRetry");
-        QIcon icon5;
-        icon5.addFile(QString::fromUtf8(":/new/prefix1/icon/refresh.png"), QSize(), QIcon::Normal, QIcon::Off);
-        pushButton_ForceRetry->setIcon(icon5);
+        QIcon icon10;
+        icon10.addFile(QString::fromUtf8(":/new/prefix1/icon/refresh.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_ForceRetry->setIcon(icon10);
 
         horizontalLayout_Progress->addWidget(pushButton_ForceRetry);
 
@@ -1127,11 +1120,15 @@ public:
         horizontalLayout_HideButtons->setObjectName("horizontalLayout_HideButtons");
         pushButton_HideSettings = new QPushButton(groupBox_Setting);
         pushButton_HideSettings->setObjectName("pushButton_HideSettings");
+        QIcon icon11;
+        icon11.addFile(QString::fromUtf8(":/new/prefix1/icon/AddSetting.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_HideSettings->setIcon(icon11);
 
         horizontalLayout_HideButtons->addWidget(pushButton_HideSettings);
 
         pushButton_HideTextBro = new QPushButton(groupBox_Setting);
         pushButton_HideTextBro->setObjectName("pushButton_HideTextBro");
+        pushButton_HideTextBro->setIcon(icon11);
 
         horizontalLayout_HideButtons->addWidget(pushButton_HideTextBro);
 
@@ -1187,11 +1184,17 @@ public:
         horizontalLayout->setObjectName("horizontalLayout");
         pushButton_CustRes_apply = new QPushButton(groupBox_CustRes);
         pushButton_CustRes_apply->setObjectName("pushButton_CustRes_apply");
+        QIcon icon12;
+        icon12.addFile(QString::fromUtf8(":/new/prefix1/icon/Apply.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_CustRes_apply->setIcon(icon12);
 
         horizontalLayout->addWidget(pushButton_CustRes_apply);
 
         pushButton_CustRes_cancel = new QPushButton(groupBox_CustRes);
         pushButton_CustRes_cancel->setObjectName("pushButton_CustRes_cancel");
+        QIcon icon13;
+        icon13.addFile(QString::fromUtf8(":/new/prefix1/icon/cancel.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_CustRes_cancel->setIcon(icon13);
 
         horizontalLayout->addWidget(pushButton_CustRes_cancel);
 
@@ -1216,20 +1219,20 @@ public:
 
         verticalLayout_RightPane->addWidget(groupBox_CustRes);
 
-        groupBox_2 = new QGroupBox(groupBox_Setting);
-        groupBox_2->setObjectName("groupBox_2");
-        gridLayout_26 = new QGridLayout(groupBox_2);
+        groupBox_ImageOutputSettings = new QGroupBox(groupBox_Setting);
+        groupBox_ImageOutputSettings->setObjectName("groupBox_ImageOutputSettings");
+        gridLayout_26 = new QGridLayout(groupBox_ImageOutputSettings);
         gridLayout_26->setObjectName("gridLayout_26");
-        frame_2 = new QFrame(groupBox_2);
-        frame_2->setObjectName("frame_2");
-        gridLayout_45 = new QGridLayout(frame_2);
+        frame_ImageQuality = new QFrame(groupBox_ImageOutputSettings);
+        frame_ImageQuality->setObjectName("frame_ImageQuality");
+        gridLayout_45 = new QGridLayout(frame_ImageQuality);
         gridLayout_45->setObjectName("gridLayout_45");
-        label_63 = new QLabel(frame_2);
+        label_63 = new QLabel(frame_ImageQuality);
         label_63->setObjectName("label_63");
 
         gridLayout_45->addWidget(label_63, 1, 0, 1, 1);
 
-        spinBox_ImageQualityLevel = new QSpinBox(frame_2);
+        spinBox_ImageQualityLevel = new QSpinBox(frame_ImageQuality);
         spinBox_ImageQualityLevel->setObjectName("spinBox_ImageQualityLevel");
         spinBox_ImageQualityLevel->setMaximum(100);
         spinBox_ImageQualityLevel->setValue(100);
@@ -1237,23 +1240,23 @@ public:
         gridLayout_45->addWidget(spinBox_ImageQualityLevel, 2, 0, 1, 1);
 
 
-        gridLayout_26->addWidget(frame_2, 1, 1, 1, 1);
+        gridLayout_26->addWidget(frame_ImageQuality, 1, 1, 1, 1);
 
-        label_ImageStyle_W2xNCNNVulkan = new QLabel(groupBox_2);
+        label_ImageStyle_W2xNCNNVulkan = new QLabel(groupBox_ImageOutputSettings);
         label_ImageStyle_W2xNCNNVulkan->setObjectName("label_ImageStyle_W2xNCNNVulkan");
 
         gridLayout_26->addWidget(label_ImageStyle_W2xNCNNVulkan, 7, 0, 1, 1);
 
-        label_ImageStyle_W2xCaffe = new QLabel(groupBox_2);
+        label_ImageStyle_W2xCaffe = new QLabel(groupBox_ImageOutputSettings);
         label_ImageStyle_W2xCaffe->setObjectName("label_ImageStyle_W2xCaffe");
 
         gridLayout_26->addWidget(label_ImageStyle_W2xCaffe, 8, 0, 1, 1);
 
-        frame = new QFrame(groupBox_2);
-        frame->setObjectName("frame");
-        gridLayout_42 = new QGridLayout(frame);
+        frame_ImageFormat = new QFrame(groupBox_ImageOutputSettings);
+        frame_ImageFormat->setObjectName("frame_ImageFormat");
+        gridLayout_42 = new QGridLayout(frame_ImageFormat);
         gridLayout_42->setObjectName("gridLayout_42");
-        comboBox_ImageSaveFormat = new QComboBox(frame);
+        comboBox_ImageSaveFormat = new QComboBox(frame_ImageFormat);
         comboBox_ImageSaveFormat->addItem(QString::fromUtf8("png"));
         comboBox_ImageSaveFormat->addItem(QString::fromUtf8("jpg"));
         comboBox_ImageSaveFormat->addItem(QString::fromUtf8("webp"));
@@ -1261,15 +1264,15 @@ public:
 
         gridLayout_42->addWidget(comboBox_ImageSaveFormat, 1, 0, 1, 1);
 
-        label_20 = new QLabel(frame);
+        label_20 = new QLabel(frame_ImageFormat);
         label_20->setObjectName("label_20");
 
         gridLayout_42->addWidget(label_20, 0, 0, 1, 1);
 
 
-        gridLayout_26->addWidget(frame, 1, 0, 1, 1);
+        gridLayout_26->addWidget(frame_ImageFormat, 1, 0, 1, 1);
 
-        comboBox_ImageStyle = new QComboBox(groupBox_2);
+        comboBox_ImageStyle = new QComboBox(groupBox_ImageOutputSettings);
         comboBox_ImageStyle->addItem(QString());
         comboBox_ImageStyle->addItem(QString());
         comboBox_ImageStyle->setObjectName("comboBox_ImageStyle");
@@ -1277,14 +1280,14 @@ public:
 
         gridLayout_26->addWidget(comboBox_ImageStyle, 7, 1, 1, 1);
 
-        comboBox_ImageStyle_Waifu2xCaffe = new QComboBox(groupBox_2);
+        comboBox_ImageStyle_Waifu2xCaffe = new QComboBox(groupBox_ImageOutputSettings);
         comboBox_ImageStyle_Waifu2xCaffe->addItem(QString());
         comboBox_ImageStyle_Waifu2xCaffe->addItem(QString());
         comboBox_ImageStyle_Waifu2xCaffe->setObjectName("comboBox_ImageStyle_Waifu2xCaffe");
 
         gridLayout_26->addWidget(comboBox_ImageStyle_Waifu2xCaffe, 8, 1, 1, 1);
 
-        frame_13 = new QFrame(groupBox_2);
+        frame_13 = new QFrame(groupBox_ImageOutputSettings);
         frame_13->setObjectName("frame_13");
         gridLayout_66 = new QGridLayout(frame_13);
         gridLayout_66->setObjectName("gridLayout_66");
@@ -1306,19 +1309,19 @@ public:
 
         gridLayout_26->addWidget(frame_13, 4, 0, 1, 2);
 
-        comboBox_FinishAction = new QComboBox(groupBox_2);
+        comboBox_FinishAction = new QComboBox(groupBox_ImageOutputSettings);
         comboBox_FinishAction->addItem(QString());
         comboBox_FinishAction->setObjectName("comboBox_FinishAction");
 
         gridLayout_26->addWidget(comboBox_FinishAction, 5, 0, 1, 1);
 
-        checkBox_ReProcFinFiles = new QCheckBox(groupBox_2);
+        checkBox_ReProcFinFiles = new QCheckBox(groupBox_ImageOutputSettings);
         checkBox_ReProcFinFiles->setObjectName("checkBox_ReProcFinFiles");
 
         gridLayout_26->addWidget(checkBox_ReProcFinFiles, 5, 1, 1, 1);
 
 
-        verticalLayout_RightPane->addWidget(groupBox_2);
+        verticalLayout_RightPane->addWidget(groupBox_ImageOutputSettings);
 
         groupBox_OutPut = new QGroupBox(groupBox_Setting);
         groupBox_OutPut->setObjectName("groupBox_OutPut");
@@ -1492,9 +1495,9 @@ public:
 
         homeTabLayout->addWidget(homeMainSplitter);
 
-        QIcon icon6;
-        icon6.addFile(QString::fromUtf8(":/new/prefix1/icon/Home.png"), QSize(), QIcon::Normal, QIcon::Off);
-        tabWidget->addTab(tab_Home, icon6, QString());
+        QIcon icon14;
+        icon14.addFile(QString::fromUtf8(":/new/prefix1/icon/Home.png"), QSize(), QIcon::Normal, QIcon::Off);
+        tabWidget->addTab(tab_Home, icon14, QString());
         tab_EngineSettings = new QWidget();
         tab_EngineSettings->setObjectName("tab_EngineSettings");
         gridLayout_29 = new QGridLayout(tab_EngineSettings);
@@ -2104,34 +2107,6 @@ public:
         pushButton_DumpProcessorList_converter->setEnabled(true);
         sizePolicy5.setHeightForWidth(pushButton_DumpProcessorList_converter->sizePolicy().hasHeightForWidth());
         pushButton_DumpProcessorList_converter->setSizePolicy(sizePolicy5);
-        pushButton_DumpProcessorList_converter->setStyleSheet(QString::fromUtf8("QPushButton{\n"
-"	background-color: rgb(238, 119, 133);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:hover{\n"
-"	background-color: rgb(255, 127, 144);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:pressed{\n"
-"	background-color: rgb(226, 112, 128);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(166, 166, 166);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}"));
 
         horizontalLayout_16->addWidget(pushButton_DumpProcessorList_converter);
 
@@ -3187,12 +3162,12 @@ public:
 
         horizontalLayout_21->addWidget(pushButton_DetectGPU_RealsrNCNNVulkan);
 
-        checkBox_MultiGPU_RealesrganNcnnVulkan = new QCheckBox(tab_RealSRNcnnVulkan);
-        checkBox_MultiGPU_RealesrganNcnnVulkan->setObjectName("checkBox_MultiGPU_RealesrganNcnnVulkan");
-        sizePolicy4.setHeightForWidth(checkBox_MultiGPU_RealesrganNcnnVulkan->sizePolicy().hasHeightForWidth());
-        checkBox_MultiGPU_RealesrganNcnnVulkan->setSizePolicy(sizePolicy4);
+        checkBox_MultiGPU_RealSRNcnnVulkan = new QCheckBox(tab_RealSRNcnnVulkan);
+        checkBox_MultiGPU_RealSRNcnnVulkan->setObjectName("checkBox_MultiGPU_RealSRNcnnVulkan");
+        sizePolicy4.setHeightForWidth(checkBox_MultiGPU_RealSRNcnnVulkan->sizePolicy().hasHeightForWidth());
+        checkBox_MultiGPU_RealSRNcnnVulkan->setSizePolicy(sizePolicy4);
 
-        horizontalLayout_21->addWidget(checkBox_MultiGPU_RealesrganNcnnVulkan);
+        horizontalLayout_21->addWidget(checkBox_MultiGPU_RealSRNcnnVulkan);
 
         horizontalSpacer_42 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
 
@@ -3210,25 +3185,25 @@ public:
 
         horizontalLayout_22->addWidget(label_61);
 
-        frame_TileSize_RealesrganNcnnVulkan = new QFrame(tab_RealSRNcnnVulkan);
-        frame_TileSize_RealesrganNcnnVulkan->setObjectName("frame_TileSize_RealesrganNcnnVulkan");
-        frame_TileSize_RealesrganNcnnVulkan->setEnabled(true);
-        sizePolicy5.setHeightForWidth(frame_TileSize_RealesrganNcnnVulkan->sizePolicy().hasHeightForWidth());
-        frame_TileSize_RealesrganNcnnVulkan->setSizePolicy(sizePolicy5);
-        frame_TileSize_RealesrganNcnnVulkan->setMinimumSize(QSize(0, 0));
-        frame_TileSize_RealesrganNcnnVulkan->setFrameShape(QFrame::NoFrame);
-        frame_TileSize_RealesrganNcnnVulkan->setFrameShadow(QFrame::Raised);
-        gridLayout_56 = new QGridLayout(frame_TileSize_RealesrganNcnnVulkan);
+        frame_TileSize_RealsrNcnnVulkan = new QFrame(tab_RealSRNcnnVulkan);
+        frame_TileSize_RealsrNcnnVulkan->setObjectName("frame_TileSize_RealsrNcnnVulkan");
+        frame_TileSize_RealsrNcnnVulkan->setEnabled(true);
+        sizePolicy5.setHeightForWidth(frame_TileSize_RealsrNcnnVulkan->sizePolicy().hasHeightForWidth());
+        frame_TileSize_RealsrNcnnVulkan->setSizePolicy(sizePolicy5);
+        frame_TileSize_RealsrNcnnVulkan->setMinimumSize(QSize(0, 0));
+        frame_TileSize_RealsrNcnnVulkan->setFrameShape(QFrame::NoFrame);
+        frame_TileSize_RealsrNcnnVulkan->setFrameShadow(QFrame::Raised);
+        gridLayout_56 = new QGridLayout(frame_TileSize_RealsrNcnnVulkan);
         gridLayout_56->setObjectName("gridLayout_56");
         gridLayout_56->setContentsMargins(0, 0, 0, 0);
-        pushButton_Minus_TileSize_RealsrNCNNVulkan = new QPushButton(frame_TileSize_RealesrganNcnnVulkan);
+        pushButton_Minus_TileSize_RealsrNCNNVulkan = new QPushButton(frame_TileSize_RealsrNcnnVulkan);
         pushButton_Minus_TileSize_RealsrNCNNVulkan->setObjectName("pushButton_Minus_TileSize_RealsrNCNNVulkan");
         pushButton_Minus_TileSize_RealsrNCNNVulkan->setMaximumSize(QSize(30, 30));
         pushButton_Minus_TileSize_RealsrNCNNVulkan->setText(QString::fromUtf8("-"));
 
         gridLayout_56->addWidget(pushButton_Minus_TileSize_RealsrNCNNVulkan, 0, 0, 1, 1);
 
-        spinBox_TileSize_RealsrNCNNVulkan = new QSpinBox(frame_TileSize_RealesrganNcnnVulkan);
+        spinBox_TileSize_RealsrNCNNVulkan = new QSpinBox(frame_TileSize_RealsrNcnnVulkan);
         spinBox_TileSize_RealsrNCNNVulkan->setObjectName("spinBox_TileSize_RealsrNCNNVulkan");
         spinBox_TileSize_RealsrNCNNVulkan->setMinimum(32);
         spinBox_TileSize_RealsrNCNNVulkan->setMaximum(999999999);
@@ -3237,7 +3212,7 @@ public:
 
         gridLayout_56->addWidget(spinBox_TileSize_RealsrNCNNVulkan, 0, 1, 1, 1);
 
-        pushButton_Add_TileSize_RealsrNCNNVulkan = new QPushButton(frame_TileSize_RealesrganNcnnVulkan);
+        pushButton_Add_TileSize_RealsrNCNNVulkan = new QPushButton(frame_TileSize_RealsrNcnnVulkan);
         pushButton_Add_TileSize_RealsrNCNNVulkan->setObjectName("pushButton_Add_TileSize_RealsrNCNNVulkan");
         pushButton_Add_TileSize_RealsrNCNNVulkan->setMaximumSize(QSize(30, 30));
         pushButton_Add_TileSize_RealsrNCNNVulkan->setText(QString::fromUtf8("+"));
@@ -3245,7 +3220,7 @@ public:
         gridLayout_56->addWidget(pushButton_Add_TileSize_RealsrNCNNVulkan, 0, 2, 1, 1);
 
 
-        horizontalLayout_22->addWidget(frame_TileSize_RealesrganNcnnVulkan);
+        horizontalLayout_22->addWidget(frame_TileSize_RealsrNcnnVulkan);
 
         horizontalSpacer_26 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
 
@@ -3256,18 +3231,18 @@ public:
 
         horizontalLayout_34 = new QHBoxLayout();
         horizontalLayout_34->setObjectName("horizontalLayout_34");
-        groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan = new QGroupBox(tab_RealSRNcnnVulkan);
-        groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan->setObjectName("groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan");
-        groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan->setEnabled(false);
-        sizePolicy4.setHeightForWidth(groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan->sizePolicy().hasHeightForWidth());
-        groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan->setSizePolicy(sizePolicy4);
-        groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan->setMaximumSize(QSize(16777215, 16777215));
-        groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan->setAlignment(Qt::AlignCenter);
-        groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan->setFlat(true);
-        gridLayout_43 = new QGridLayout(groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan);
+        groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan = new QGroupBox(tab_RealSRNcnnVulkan);
+        groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan->setObjectName("groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan");
+        groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan->setEnabled(false);
+        sizePolicy4.setHeightForWidth(groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan->sizePolicy().hasHeightForWidth());
+        groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan->setSizePolicy(sizePolicy4);
+        groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan->setMaximumSize(QSize(16777215, 16777215));
+        groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan->setAlignment(Qt::AlignCenter);
+        groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan->setFlat(true);
+        gridLayout_43 = new QGridLayout(groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan);
         gridLayout_43->setObjectName("gridLayout_43");
         gridLayout_43->setContentsMargins(6, 6, 6, 6);
-        checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan = new QCheckBox(groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan);
+        checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan = new QCheckBox(groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan);
         checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setObjectName("checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan");
         sizePolicy5.setHeightForWidth(checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->sizePolicy().hasHeightForWidth());
         checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setSizePolicy(sizePolicy5);
@@ -3275,7 +3250,7 @@ public:
 
         gridLayout_43->addWidget(checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan, 0, 2, 1, 1);
 
-        label_73 = new QLabel(groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan);
+        label_73 = new QLabel(groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan);
         label_73->setObjectName("label_73");
         sizePolicy3.setHeightForWidth(label_73->sizePolicy().hasHeightForWidth());
         label_73->setSizePolicy(sizePolicy3);
@@ -3283,7 +3258,7 @@ public:
 
         gridLayout_43->addWidget(label_73, 0, 0, 1, 1);
 
-        label_72 = new QLabel(groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan);
+        label_72 = new QLabel(groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan);
         label_72->setObjectName("label_72");
         sizePolicy3.setHeightForWidth(label_72->sizePolicy().hasHeightForWidth());
         label_72->setSizePolicy(sizePolicy3);
@@ -3291,18 +3266,18 @@ public:
 
         gridLayout_43->addWidget(label_72, 0, 4, 1, 1);
 
-        pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan = new QPushButton(groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan);
+        pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan = new QPushButton(groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan);
         pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan->setObjectName("pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan");
 
         gridLayout_43->addWidget(pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan, 0, 6, 1, 1);
 
-        comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan = new QComboBox(groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan);
+        comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan = new QComboBox(groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan);
         comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan->setObjectName("comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan");
         comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan->setCurrentText(QString::fromUtf8(""));
 
         gridLayout_43->addWidget(comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan, 0, 1, 1, 1);
 
-        spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan = new QSpinBox(groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan);
+        spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan = new QSpinBox(groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan);
         spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setObjectName("spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan");
         spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setMinimum(32);
         spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setMaximum(999999999);
@@ -3311,7 +3286,7 @@ public:
 
         gridLayout_43->addWidget(spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan, 0, 5, 1, 1);
 
-        line_24 = new QFrame(groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan);
+        line_24 = new QFrame(groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan);
         line_24->setObjectName("line_24");
         line_24->setFrameShape(QFrame::VLine);
         line_24->setFrameShadow(QFrame::Sunken);
@@ -3319,7 +3294,7 @@ public:
         gridLayout_43->addWidget(line_24, 0, 3, 1, 1);
 
 
-        horizontalLayout_34->addWidget(groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan);
+        horizontalLayout_34->addWidget(groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan);
 
         horizontalSpacer_25 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
 
@@ -3643,9 +3618,9 @@ public:
 
         gridLayout_29->addWidget(groupBox_Engine, 0, 0, 1, 1);
 
-        QIcon icon7;
-        icon7.addFile(QString::fromUtf8(":/new/prefix1/icon/EngineSettings.png"), QSize(), QIcon::Normal, QIcon::Off);
-        tabWidget->addTab(tab_EngineSettings, icon7, QString());
+        QIcon icon15;
+        icon15.addFile(QString::fromUtf8(":/new/prefix1/icon/EngineSettings.png"), QSize(), QIcon::Normal, QIcon::Off);
+        tabWidget->addTab(tab_EngineSettings, icon15, QString());
         tab_VideoSettings = new QWidget();
         tab_VideoSettings->setObjectName("tab_VideoSettings");
         verticalLayout_VideoSettingsTab = new QVBoxLayout(tab_VideoSettings);
@@ -4210,9 +4185,9 @@ public:
 
         verticalLayout_VideoSettingsTab->addItem(verticalSpacer_VideoSettingsTab);
 
-        QIcon icon8;
-        icon8.addFile(QString::fromUtf8(":/new/prefix1/icon/VideoSettings.png"), QSize(), QIcon::Normal, QIcon::Off);
-        tabWidget->addTab(tab_VideoSettings, icon8, QString());
+        QIcon icon16;
+        icon16.addFile(QString::fromUtf8(":/new/prefix1/icon/VideoSettings.png"), QSize(), QIcon::Normal, QIcon::Off);
+        tabWidget->addTab(tab_VideoSettings, icon16, QString());
         tab_AdditionalSettings = new QWidget();
         tab_AdditionalSettings->setObjectName("tab_AdditionalSettings");
         horizontalLayout_AdditionalSettingsTab = new QHBoxLayout(tab_AdditionalSettings);
@@ -4399,34 +4374,6 @@ public:
 
         pushButton_ResetSettings = new QPushButton(groupBox_other_1);
         pushButton_ResetSettings->setObjectName("pushButton_ResetSettings");
-        pushButton_ResetSettings->setStyleSheet(QString::fromUtf8("QPushButton{\n"
-"background-color: rgb(238, 99, 99);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:hover{\n"
-"background-color: rgb(255, 106, 106);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:pressed{\n"
-"background-color: rgb(205, 85, 85);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(166, 166, 166);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}"));
 
         horizontalLayout_57->addWidget(pushButton_ResetSettings);
 
@@ -4455,34 +4402,6 @@ public:
         pushButton_ReadMe = new QPushButton(groupBox_other_1);
         pushButton_ReadMe->setObjectName("pushButton_ReadMe");
         pushButton_ReadMe->setFont(font7);
-        pushButton_ReadMe->setStyleSheet(QString::fromUtf8("QPushButton{\n"
-"background-color: rgb(255, 181, 6);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:hover{\n"
-"background-color: rgb(255, 200, 50);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:pressed{\n"
-"background-color: rgb(255, 170, 0);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(166, 166, 166);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}"));
 
         horizontalLayout_58->addWidget(pushButton_ReadMe);
 
@@ -4623,9 +4542,7 @@ public:
 
         horizontalLayout_AdditionalSettingsTab->addLayout(verticalLayout_col3_additional);
 
-        QIcon icon9;
-        icon9.addFile(QString::fromUtf8(":/new/prefix1/icon/AddSetting.png"), QSize(), QIcon::Normal, QIcon::Off);
-        tabWidget->addTab(tab_AdditionalSettings, icon9, QString());
+        tabWidget->addTab(tab_AdditionalSettings, icon11, QString());
         tab_CompatibilityTest = new QWidget();
         tab_CompatibilityTest->setObjectName("tab_CompatibilityTest");
         verticalLayout_CompatTestTab = new QVBoxLayout(tab_CompatibilityTest);
@@ -4951,40 +4868,12 @@ public:
         pushButton_compatibilityTest->setObjectName("pushButton_compatibilityTest");
         sizePolicy4.setHeightForWidth(pushButton_compatibilityTest->sizePolicy().hasHeightForWidth());
         pushButton_compatibilityTest->setSizePolicy(sizePolicy4);
-        pushButton_compatibilityTest->setStyleSheet(QString::fromUtf8("QPushButton{\n"
-"	background-color: rgb(92, 172, 238);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:hover{\n"
-"	background-color: rgb(99, 184, 255);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:pressed{\n"
-"background-color: rgb(79, 148,205);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(166, 166, 166);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}"));
 
         verticalLayout_CompatTestTab->addWidget(pushButton_compatibilityTest);
 
-        QIcon icon10;
-        icon10.addFile(QString::fromUtf8(":/new/prefix1/icon/CompatibilityTest.png"), QSize(), QIcon::Normal, QIcon::Off);
-        tabWidget->addTab(tab_CompatibilityTest, icon10, QString());
+        QIcon icon17;
+        icon17.addFile(QString::fromUtf8(":/new/prefix1/icon/CompatibilityTest.png"), QSize(), QIcon::Normal, QIcon::Off);
+        tabWidget->addTab(tab_CompatibilityTest, icon17, QString());
         splitter_4->addWidget(tabWidget);
         splitter_TextBrowser = new QSplitter(splitter_4);
         splitter_TextBrowser->setObjectName("splitter_TextBrowser");
@@ -5028,34 +4917,6 @@ public:
         sizePolicy7.setVerticalStretch(0);
         sizePolicy7.setHeightForWidth(pushButton_clear_textbrowser->sizePolicy().hasHeightForWidth());
         pushButton_clear_textbrowser->setSizePolicy(sizePolicy7);
-        pushButton_clear_textbrowser->setStyleSheet(QString::fromUtf8("QPushButton{\n"
-"	background-color: rgb(0, 140, 158);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:hover{\n"
-"	background-color: rgb(0, 190, 211);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:pressed{\n"
-"	background-color: rgb(0, 108, 120);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}\n"
-"QPushButton:disabled{\n"
-"background-color: rgb(166, 166, 166);\n"
-"color: rgb(255, 255, 255);\n"
-"border-style:outset;\n"
-"border-radius:8px;\n"
-"padding:10px;\n"
-"}"));
         pushButton_clear_textbrowser->setIconSize(QSize(25, 25));
 
         gridLayout_9->addWidget(pushButton_clear_textbrowser, 1, 0, 1, 1);
@@ -5124,27 +4985,33 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tab_Donate), QCoreApplication::translate("MainWindow", "Donate", nullptr));
         groupBox_FileList->setTitle(QCoreApplication::translate("MainWindow", "Files List", nullptr));
 #if QT_CONFIG(tooltip)
-        tableView_image->setToolTip(QCoreApplication::translate("MainWindow", "Press [Delete] key to remove file from the list.\n"
-"                                       Press [Ctrl + A] key to apply custom resolution.\n"
-"                                       Press [Ctrl + C] key to cancel custom resolution.\n"
-"\n"
-"                                       Right click to show more options.", nullptr));
+        tableView_image->setToolTip(QCoreApplication::translate("MainWindow", "<html><body>\n"
+"<p><b>Press [Delete]</b> key to remove file from the list.</p>\n"
+"<p><b>Press [Ctrl + A]</b> key to apply custom resolution.</p>\n"
+"<p><b>Press [Ctrl + C]</b> key to cancel custom resolution.</p>\n"
+"<br/>\n"
+"<p>Right click to show more options.</p>\n"
+"</body></html>", nullptr));
 #endif // QT_CONFIG(tooltip)
         fileListTabWidget->setTabText(fileListTabWidget->indexOf(tab_Images), QCoreApplication::translate("MainWindow", "Images", nullptr));
 #if QT_CONFIG(tooltip)
-        tableView_gif->setToolTip(QCoreApplication::translate("MainWindow", "Press [Delete] key to remove file from the list.\n"
-"                                       Press [Ctrl + A] key to apply custom resolution.\n"
-"                                       Press [Ctrl + C] key to cancel custom resolution.\n"
-"\n"
-"                                       Right click to show more options.", nullptr));
+        tableView_gif->setToolTip(QCoreApplication::translate("MainWindow", "<html><body>\n"
+"<p><b>Press [Delete]</b> key to remove file from the list.</p>\n"
+"<p><b>Press [Ctrl + A]</b> key to apply custom resolution.</p>\n"
+"<p><b>Press [Ctrl + C]</b> key to cancel custom resolution.</p>\n"
+"<br/>\n"
+"<p>Right click to show more options.</p>\n"
+"</body></html>", nullptr));
 #endif // QT_CONFIG(tooltip)
         fileListTabWidget->setTabText(fileListTabWidget->indexOf(tab_Gifs), QCoreApplication::translate("MainWindow", "GIF/APNG", nullptr));
 #if QT_CONFIG(tooltip)
-        tableView_video->setToolTip(QCoreApplication::translate("MainWindow", "Press [Delete] key to remove file from the list.\n"
-"                                       Press [Ctrl + A] key to apply custom resolution.\n"
-"                                       Press [Ctrl + C] key to cancel custom resolution.\n"
-"\n"
-"                                       Right click to show more options.", nullptr));
+        tableView_video->setToolTip(QCoreApplication::translate("MainWindow", "<html><body>\n"
+"<p><b>Press [Delete]</b> key to remove file from the list.</p>\n"
+"<p><b>Press [Ctrl + A]</b> key to apply custom resolution.</p>\n"
+"<p><b>Press [Ctrl + C]</b> key to cancel custom resolution.</p>\n"
+"<br/>\n"
+"<p>Right click to show more options.</p>\n"
+"</body></html>", nullptr));
 #endif // QT_CONFIG(tooltip)
         fileListTabWidget->setTabText(fileListTabWidget->indexOf(tab_Videos), QCoreApplication::translate("MainWindow", "Videos", nullptr));
 #if QT_CONFIG(tooltip)
@@ -5201,7 +5068,7 @@ public:
         pushButton_CustRes_cancel->setText(QCoreApplication::translate("MainWindow", "Cancel", nullptr));
         checkBox_custres_isAll->setText(QCoreApplication::translate("MainWindow", "Apply to all", nullptr));
         checkBox_AutoSkip_CustomRes->setText(QCoreApplication::translate("MainWindow", "Auto Skip", nullptr));
-        groupBox_2->setTitle(QString());
+        groupBox_ImageOutputSettings->setTitle(QCoreApplication::translate("MainWindow", "Image Output Settings", nullptr));
         label_63->setText(QCoreApplication::translate("MainWindow", "Image quality:", nullptr));
         label_ImageStyle_W2xNCNNVulkan->setText(QCoreApplication::translate("MainWindow", "Image Style(waifu2x-ncnn-vulkan):", nullptr));
         label_ImageStyle_W2xCaffe->setText(QCoreApplication::translate("MainWindow", "Image Style(waifu2x-caffe):", nullptr));
@@ -5706,21 +5573,21 @@ public:
 #endif // QT_CONFIG(tooltip)
         pushButton_DetectGPU_RealsrNCNNVulkan->setText(QCoreApplication::translate("MainWindow", "Detect available GPU ID", nullptr));
 #if QT_CONFIG(tooltip)
-        checkBox_MultiGPU_RealesrganNcnnVulkan->setToolTip(QCoreApplication::translate("MainWindow", "1.You need at least 2 available GPUs.\n"
+        checkBox_MultiGPU_RealSRNcnnVulkan->setToolTip(QCoreApplication::translate("MainWindow", "1.You need at least 2 available GPUs.\n"
 "\n"
 "2.If you wanna get all GPUs running together,\n"
 "the number of threads must = the number of GPUs.\n"
 "\n"
 "3.You need to [Detect available GPU ID] first.", nullptr));
 #endif // QT_CONFIG(tooltip)
-        checkBox_MultiGPU_RealesrganNcnnVulkan->setText(QCoreApplication::translate("MainWindow", "Enable Multi-GPU", nullptr));
+        checkBox_MultiGPU_RealSRNcnnVulkan->setText(QCoreApplication::translate("MainWindow", "Enable Multi-GPU", nullptr));
         label_61->setText(QCoreApplication::translate("MainWindow", "Tile size:", nullptr));
 #if QT_CONFIG(tooltip)
         spinBox_TileSize_RealsrNCNNVulkan->setToolTip(QCoreApplication::translate("MainWindow", "Tile size: This value will affects GPU memory usage.\n"
 "Larger tile size means Realsr will use more GPU memory and run faster.\n"
 "Smaller tile size means Realsr will use less GPU memory and run slower.", nullptr));
 #endif // QT_CONFIG(tooltip)
-        groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan->setTitle(QCoreApplication::translate("MainWindow", "GPU Settings(Multi-GPU)", nullptr));
+        groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan->setTitle(QCoreApplication::translate("MainWindow", "GPU Settings(Multi-GPU)", nullptr));
         checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setText(QCoreApplication::translate("MainWindow", "Enable", nullptr));
         label_73->setText(QCoreApplication::translate("MainWindow", "GPU ID:", nullptr));
         label_72->setText(QCoreApplication::translate("MainWindow", "Tile size:", nullptr));

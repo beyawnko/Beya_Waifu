@@ -1,6 +1,6 @@
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.obj: \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT-Launcher\main.cpp \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT-Launcher\mainwindow.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT-Launcher\main.cpp \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT-Launcher\mainwindow.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QMainWindow \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qmainwindow.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qtwidgetsglobal.h \

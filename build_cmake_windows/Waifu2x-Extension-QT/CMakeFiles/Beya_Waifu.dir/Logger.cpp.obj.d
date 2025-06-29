@@ -1,6 +1,6 @@
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Logger.cpp.obj: \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\Logger.cpp \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\Logger.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\Logger.cpp \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\Logger.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QString \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qstring.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qchar.h \

@@ -8,6 +8,7 @@
 
 #include "../../../../Waifu2x-Extension-QT/mainwindow.h"
 #include <QtGui/qtextcursor.h>
+#include <QtNetwork/QSslError>
 #include <QtCore/qmetatype.h>
 #include <QtCore/QList>
 

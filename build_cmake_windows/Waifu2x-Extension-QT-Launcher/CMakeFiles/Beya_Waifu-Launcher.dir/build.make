@@ -52,10 +52,10 @@ RM = C:\tools\msys64\mingw64\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\Beyawnko\Beya_Waifu
+CMAKE_SOURCE_DIR = C:\Users\beyaw\Beya_Waifu
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows
+CMAKE_BINARY_DIR = C:\Users\beyaw\Beya_Waifu\build_cmake_windows
 
 # Include any dependencies generated for this target.
 include Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/depend.make
@@ -71,17 +71,17 @@ include Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/flags.m
 Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/timestamp: C:/tmp/Qt/6.6.3/mingw_64/./bin/moc.exe
 Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/timestamp: C:/tmp/Qt/6.6.3/mingw_64/./bin/uic.exe
 Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/timestamp: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target Beya_Waifu-Launcher"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\cmake.exe -E cmake_autogen C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/AutogenInfo.json Release
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\cmake.exe -E touch C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/timestamp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=C:\Users\beyaw\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target Beya_Waifu-Launcher"
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\cmake.exe -E cmake_autogen C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/AutogenInfo.json Release
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\cmake.exe -E touch C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/timestamp
 
-Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp: C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/pic.qrc
+Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp: C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/pic.qrc
 Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/AutoRcc_pic_EWIEGA46WW_Info.json
-Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp: C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/NuTitleImageDark.png
+Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp: C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/NuTitleImageDark.png
 Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp: C:/tmp/Qt/6.6.3/mingw_64/./bin/rcc.exe
 Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp: C:/tmp/Qt/6.6.3/mingw_64/./bin/rcc.exe
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Automatic RCC for pic.qrc"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\cmake.exe -E cmake_autorcc C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/AutoRcc_pic_EWIEGA46WW_Info.json Release
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=C:\Users\beyaw\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Automatic RCC for pic.qrc"
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\cmake.exe -E cmake_autorcc C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/AutoRcc_pic_EWIEGA46WW_Info.json Release
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/codegen:
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/codegen
@@ -90,61 +90,61 @@ Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Laun
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp.obj: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/includes_CXX.rsp
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp.obj: Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp.obj: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp.obj"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp.obj -MF CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp.obj.d -o CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp.obj -c C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\beyaw\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp.obj"
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp.obj -MF CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp.obj.d -o CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp.obj -c C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp.i"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp > CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp > CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp.i
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp.s"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp -o CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp -o CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\mocs_compilation.cpp.s
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.obj: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/flags.make
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.obj: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/includes_CXX.rsp
-Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.obj: C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/main.cpp
+Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.obj: C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/main.cpp
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.obj: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.obj"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.obj -MF CMakeFiles\Beya_Waifu-Launcher.dir\main.cpp.obj.d -o CMakeFiles\Beya_Waifu-Launcher.dir\main.cpp.obj -c C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT-Launcher\main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\beyaw\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.obj"
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.obj -MF CMakeFiles\Beya_Waifu-Launcher.dir\main.cpp.obj.d -o CMakeFiles\Beya_Waifu-Launcher.dir\main.cpp.obj -c C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT-Launcher\main.cpp
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.i"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT-Launcher\main.cpp > CMakeFiles\Beya_Waifu-Launcher.dir\main.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT-Launcher\main.cpp > CMakeFiles\Beya_Waifu-Launcher.dir\main.cpp.i
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Beya_Waifu-Launcher.dir/main.cpp.s"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT-Launcher\main.cpp -o CMakeFiles\Beya_Waifu-Launcher.dir\main.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT-Launcher\main.cpp -o CMakeFiles\Beya_Waifu-Launcher.dir\main.cpp.s
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.obj: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/flags.make
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.obj: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/includes_CXX.rsp
-Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.obj: C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.cpp
+Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.obj: C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.cpp
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.obj: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.obj"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.obj -MF CMakeFiles\Beya_Waifu-Launcher.dir\mainwindow.cpp.obj.d -o CMakeFiles\Beya_Waifu-Launcher.dir\mainwindow.cpp.obj -c C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT-Launcher\mainwindow.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\beyaw\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.obj"
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.obj -MF CMakeFiles\Beya_Waifu-Launcher.dir\mainwindow.cpp.obj.d -o CMakeFiles\Beya_Waifu-Launcher.dir\mainwindow.cpp.obj -c C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT-Launcher\mainwindow.cpp
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.i"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT-Launcher\mainwindow.cpp > CMakeFiles\Beya_Waifu-Launcher.dir\mainwindow.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT-Launcher\mainwindow.cpp > CMakeFiles\Beya_Waifu-Launcher.dir\mainwindow.cpp.i
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Beya_Waifu-Launcher.dir/mainwindow.cpp.s"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT-Launcher\mainwindow.cpp -o CMakeFiles\Beya_Waifu-Launcher.dir\mainwindow.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT-Launcher\mainwindow.cpp -o CMakeFiles\Beya_Waifu-Launcher.dir\mainwindow.cpp.s
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp.obj: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/flags.make
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp.obj: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/includes_CXX.rsp
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp.obj: Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp.obj: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp.obj"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp.obj -MF CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp.obj.d -o CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp.obj -c C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\beyaw\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp.obj"
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp.obj -MF CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp.obj.d -o CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp.obj -c C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp.i"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp > CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp > CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp.i
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Beya_Waifu-Launcher.dir/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp.s"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp -o CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && C:\tools\msys64\mingw64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp -o CMakeFiles\Beya_Waifu-Launcher.dir\Beya_Waifu-Launcher_autogen\EWIEGA46WW\qrc_pic.cpp.s
 
 # Object files for target Beya_Waifu-Launcher
 Beya_Waifu__Launcher_OBJECTS = \
@@ -169,19 +169,19 @@ Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher.exe: C:/tmp/Qt/6.6.3/mingw_64/
 Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher.exe: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/linkLibs.rsp
 Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher.exe: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/objects1.rsp
 Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher.exe: Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable Beya_Waifu-Launcher.exe"
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\Beya_Waifu-Launcher.dir\link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\beyaw\Beya_Waifu\build_cmake_windows\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable Beya_Waifu-Launcher.exe"
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\Beya_Waifu-Launcher.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/build: Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher.exe
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/build
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/clean:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && $(CMAKE_COMMAND) -P CMakeFiles\Beya_Waifu-Launcher.dir\cmake_clean.cmake
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && $(CMAKE_COMMAND) -P CMakeFiles\Beya_Waifu-Launcher.dir\cmake_clean.cmake
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/clean
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/depend: Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/EWIEGA46WW/qrc_pic.cpp
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/depend: Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/timestamp
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\Beyawnko\Beya_Waifu C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT-Launcher C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\CMakeFiles\Beya_Waifu-Launcher.dir\DependInfo.cmake "--color=$(COLOR)"
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\beyaw\Beya_Waifu C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT-Launcher C:\Users\beyaw\Beya_Waifu\build_cmake_windows C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\CMakeFiles\Beya_Waifu-Launcher.dir\DependInfo.cmake "--color=$(COLOR)"
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher.dir/depend
 

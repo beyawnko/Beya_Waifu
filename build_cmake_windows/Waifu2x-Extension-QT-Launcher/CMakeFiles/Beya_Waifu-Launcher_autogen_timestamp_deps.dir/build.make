@@ -52,10 +52,10 @@ RM = C:\tools\msys64\mingw64\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\Beyawnko\Beya_Waifu
+CMAKE_SOURCE_DIR = C:\Users\beyaw\Beya_Waifu
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows
+CMAKE_BINARY_DIR = C:\Users\beyaw\Beya_Waifu\build_cmake_windows
 
 # Utility rule file for Beya_Waifu-Launcher_autogen_timestamp_deps.
 
@@ -76,10 +76,10 @@ Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_d
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/build
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/clean:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && $(CMAKE_COMMAND) -P CMakeFiles\Beya_Waifu-Launcher_autogen_timestamp_deps.dir\cmake_clean.cmake
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher && $(CMAKE_COMMAND) -P CMakeFiles\Beya_Waifu-Launcher_autogen_timestamp_deps.dir\cmake_clean.cmake
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/clean
 
 Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\Beyawnko\Beya_Waifu C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT-Launcher C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\CMakeFiles\Beya_Waifu-Launcher_autogen_timestamp_deps.dir\DependInfo.cmake "--color=$(COLOR)"
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\beyaw\Beya_Waifu C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT-Launcher C:\Users\beyaw\Beya_Waifu\build_cmake_windows C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT-Launcher\CMakeFiles\Beya_Waifu-Launcher_autogen_timestamp_deps.dir\DependInfo.cmake "--color=$(COLOR)"
 .PHONY : Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen_timestamp_deps.dir/depend
 

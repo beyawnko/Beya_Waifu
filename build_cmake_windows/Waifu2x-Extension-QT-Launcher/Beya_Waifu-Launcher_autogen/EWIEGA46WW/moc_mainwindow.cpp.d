@@ -1,5 +1,5 @@
-C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/EWIEGA46WW/moc_mainwindow.cpp: C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.h \
-  C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/moc_predefs.h \
+C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/EWIEGA46WW/moc_mainwindow.cpp: C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.h \
+  C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/moc_predefs.h \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtConcurrent/QtConcurrent \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtConcurrent/QtConcurrentDepends \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtConcurrent/qtaskbuilder.h \

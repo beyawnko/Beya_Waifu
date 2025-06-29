@@ -1,6 +1,6 @@
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/topsupporterslist.cpp.obj: \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\topsupporterslist.cpp \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\topsupporterslist.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\topsupporterslist.cpp \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\topsupporterslist.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QWidget \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qwidget.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -406,7 +406,7 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/topsupporterslist.cpp.obj: \
  C:/tools/msys64/mingw64/include/c++/15.1.0/bits/fs_ops.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/QDesktopServices \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/qdesktopservices.h \
- C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/include/ui_topsupporterslist.h \
+ C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/include/ui_topsupporterslist.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QVariant \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qvariant.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/QIcon \

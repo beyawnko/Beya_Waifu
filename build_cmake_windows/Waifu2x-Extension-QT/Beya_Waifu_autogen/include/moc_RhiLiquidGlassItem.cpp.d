@@ -1,6 +1,6 @@
-C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/include/moc_RhiLiquidGlassItem.cpp: C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RhiLiquidGlassItem.h \
-  C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/moc_predefs.h \
-  C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassParams.h \
+C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/include/moc_RhiLiquidGlassItem.cpp: C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RhiLiquidGlassItem.h \
+  C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/moc_predefs.h \
+  C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassParams.h \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QBasicTimer \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QList \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QObject \

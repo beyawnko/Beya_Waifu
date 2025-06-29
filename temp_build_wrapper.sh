@@ -35,7 +35,7 @@ unset MFLAGS
 export PATH='/c/tools/msys64/mingw64/bin:/c/tools/msys64/usr/bin:/c/tmp/Qt/6.6.3/mingw_64/bin':$PATH
 
 # Change to the project directory.
-cd '/c/Users/Beyawnko/Beya_Waifu'
+cd '/c/Users/beyaw/Beya_Waifu'
 
 # Execute the main build script.
 ././build_projects.sh

@@ -1,13 +1,13 @@
 {
 	"AUTOGEN_COMMAND_LINE_LENGTH_MAX" : 32000,
-	"BUILD_DIR" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen",
-	"CMAKE_BINARY_DIR" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows",
-	"CMAKE_CURRENT_BINARY_DIR" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher",
-	"CMAKE_CURRENT_SOURCE_DIR" : "C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher",
+	"BUILD_DIR" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen",
+	"CMAKE_BINARY_DIR" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows",
+	"CMAKE_CURRENT_BINARY_DIR" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher",
+	"CMAKE_CURRENT_SOURCE_DIR" : "C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher",
 	"CMAKE_EXECUTABLE" : "C:/tools/msys64/mingw64/bin/cmake.exe",
 	"CMAKE_LIST_FILES" : 
 	[
-		"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/CMakeLists.txt",
+		"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/CMakeLists.txt",
 		"C:/tmp/Qt/6.6.3/mingw_64/lib/cmake/Qt6/Qt6ConfigVersion.cmake",
 		"C:/tmp/Qt/6.6.3/mingw_64/lib/cmake/Qt6/Qt6ConfigVersionImpl.cmake",
 		"C:/tmp/Qt/6.6.3/mingw_64/lib/cmake/Qt6/Qt6Config.cmake",
@@ -185,24 +185,24 @@
 		"C:/tmp/Qt/6.6.3/mingw_64/lib/cmake/Qt6Widgets/Qt6QWindowsVistaStylePluginTargets.cmake",
 		"C:/tmp/Qt/6.6.3/mingw_64/lib/cmake/Qt6Widgets/Qt6QWindowsVistaStylePluginTargets-relwithdebinfo.cmake",
 		"C:/tmp/Qt/6.6.3/mingw_64/lib/cmake/Qt6Widgets/Qt6QWindowsVistaStylePluginAdditionalTargetInfo.cmake",
-		"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/pic.qrc"
+		"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/pic.qrc"
 	],
-	"CMAKE_SOURCE_DIR" : "C:/Users/Beyawnko/Beya_Waifu",
+	"CMAKE_SOURCE_DIR" : "C:/Users/beyaw/Beya_Waifu",
 	"CROSS_CONFIG" : false,
-	"DEP_FILE" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/deps",
+	"DEP_FILE" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/deps",
 	"DEP_FILE_RULE_NAME" : "Beya_Waifu-Launcher_autogen/timestamp",
 	"HEADERS" : 
 	[
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
 			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
-	"INCLUDE_DIR" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/include",
-	"MOC_COMPILATION_FILE" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp",
+	"INCLUDE_DIR" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/include",
+	"MOC_COMPILATION_FILE" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/mocs_compilation.cpp",
 	"MOC_DEFINITIONS" : 
 	[
 		"MINGW_HAS_SECURE_API=1",
@@ -262,26 +262,26 @@
 		"-E",
 		"C:/tools/msys64/mingw64/share/cmake/Modules/CMakeCXXCompilerABI.cpp"
 	],
-	"MOC_PREDEFS_FILE" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/moc_predefs.h",
+	"MOC_PREDEFS_FILE" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/Beya_Waifu-Launcher_autogen/moc_predefs.h",
 	"MOC_RELAXED_MODE" : false,
 	"MOC_SKIP" : [],
 	"MULTI_CONFIG" : false,
 	"PARALLEL" : 16,
-	"PARSE_CACHE_FILE" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/ParseCache.txt",
+	"PARSE_CACHE_FILE" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/ParseCache.txt",
 	"QT_MOC_EXECUTABLE" : "C:/tmp/Qt/6.6.3/mingw_64/./bin/moc.exe",
 	"QT_UIC_EXECUTABLE" : "C:/tmp/Qt/6.6.3/mingw_64/./bin/uic.exe",
 	"QT_VERSION_MAJOR" : 6,
 	"QT_VERSION_MINOR" : 6,
-	"SETTINGS_FILE" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/AutogenUsed.txt",
+	"SETTINGS_FILE" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT-Launcher/CMakeFiles/Beya_Waifu-Launcher_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/main.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/main.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT-Launcher/mainwindow.cpp",
 			"MU",
 			null
 		]

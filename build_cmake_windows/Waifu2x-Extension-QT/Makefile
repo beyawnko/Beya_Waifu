@@ -56,10 +56,10 @@ RM = C:\tools\msys64\mingw64\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\Beyawnko\Beya_Waifu
+CMAKE_SOURCE_DIR = C:\Users\beyaw\Beya_Waifu
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows
+CMAKE_BINARY_DIR = C:\Users\beyaw\Beya_Waifu\build_cmake_windows
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -131,14 +131,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT\\CMakeFiles\progress.marks
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows\CMakeFiles 0
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(CMAKE_COMMAND) -E cmake_progress_start C:\Users\beyaw\Beya_Waifu\build_cmake_windows\CMakeFiles C:\Users\beyaw\Beya_Waifu\build_cmake_windows\Waifu2x-Extension-QT\\CMakeFiles\progress.marks
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\beyaw\Beya_Waifu\build_cmake_windows\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/clean
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/clean
 .PHONY : clean
 
 # The main clean target
@@ -147,22 +147,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/preinstall
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/preinstall
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles\Makefile.cmake 1
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles\Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/rule:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/rule
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/rule
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/rule
 
 # Convenience name for target.
@@ -171,12 +171,12 @@ Beya_Waifu: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/rule
 
 # fast build rule for target.
 Beya_Waifu/fast:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/build
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/build
 .PHONY : Beya_Waifu/fast
 
 # Convenience name for target.
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/rule:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/rule
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/rule
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/rule
 
 # Convenience name for target.
@@ -185,12 +185,12 @@ Beya_Waifu_qmlimportscan: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportsc
 
 # fast build rule for target.
 Beya_Waifu_qmlimportscan/fast:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_qmlimportscan.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/build
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_qmlimportscan.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_qmlimportscan.dir/build
 .PHONY : Beya_Waifu_qmlimportscan/fast
 
 # Convenience name for target.
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/rule:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/rule
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/rule
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/rule
 
 # Convenience name for target.
@@ -199,12 +199,12 @@ Beya_Waifu_autogen_timestamp_deps: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_au
 
 # fast build rule for target.
 Beya_Waifu_autogen_timestamp_deps/fast:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_autogen_timestamp_deps.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/build
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_autogen_timestamp_deps.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen_timestamp_deps.dir/build
 .PHONY : Beya_Waifu_autogen_timestamp_deps/fast
 
 # Convenience name for target.
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/rule:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/rule
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/rule
 .PHONY : Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/rule
 
 # Convenience name for target.
@@ -213,7 +213,7 @@ Beya_Waifu_autogen: Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/rule
 
 # fast build rule for target.
 Beya_Waifu_autogen/fast:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_autogen.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/build
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu_autogen.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/build
 .PHONY : Beya_Waifu_autogen/fast
 
 .rcc/qrc_ShadersGenerated.obj: .rcc/qrc_ShadersGenerated.cpp.obj
@@ -221,7 +221,7 @@ Beya_Waifu_autogen/fast:
 
 # target to build an object file
 .rcc/qrc_ShadersGenerated.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/.rcc/qrc_ShadersGenerated.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/.rcc/qrc_ShadersGenerated.cpp.obj
 .PHONY : .rcc/qrc_ShadersGenerated.cpp.obj
 
 .rcc/qrc_ShadersGenerated.i: .rcc/qrc_ShadersGenerated.cpp.i
@@ -229,7 +229,7 @@ Beya_Waifu_autogen/fast:
 
 # target to preprocess a source file
 .rcc/qrc_ShadersGenerated.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/.rcc/qrc_ShadersGenerated.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/.rcc/qrc_ShadersGenerated.cpp.i
 .PHONY : .rcc/qrc_ShadersGenerated.cpp.i
 
 .rcc/qrc_ShadersGenerated.s: .rcc/qrc_ShadersGenerated.cpp.s
@@ -237,7 +237,7 @@ Beya_Waifu_autogen/fast:
 
 # target to generate assembly for a file
 .rcc/qrc_ShadersGenerated.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/.rcc/qrc_ShadersGenerated.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/.rcc/qrc_ShadersGenerated.cpp.s
 .PHONY : .rcc/qrc_ShadersGenerated.cpp.s
 
 AnimatedPNG.obj: AnimatedPNG.cpp.obj
@@ -245,7 +245,7 @@ AnimatedPNG.obj: AnimatedPNG.cpp.obj
 
 # target to build an object file
 AnimatedPNG.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/AnimatedPNG.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/AnimatedPNG.cpp.obj
 .PHONY : AnimatedPNG.cpp.obj
 
 AnimatedPNG.i: AnimatedPNG.cpp.i
@@ -253,7 +253,7 @@ AnimatedPNG.i: AnimatedPNG.cpp.i
 
 # target to preprocess a source file
 AnimatedPNG.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/AnimatedPNG.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/AnimatedPNG.cpp.i
 .PHONY : AnimatedPNG.cpp.i
 
 AnimatedPNG.s: AnimatedPNG.cpp.s
@@ -261,7 +261,7 @@ AnimatedPNG.s: AnimatedPNG.cpp.s
 
 # target to generate assembly for a file
 AnimatedPNG.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/AnimatedPNG.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/AnimatedPNG.cpp.s
 .PHONY : AnimatedPNG.cpp.s
 
 Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.obj: Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.obj
@@ -269,7 +269,7 @@ Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.obj: Beya_Waifu_autogen/EJ
 
 # target to build an object file
 Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.obj
 .PHONY : Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.obj
 
 Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.i: Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.i
@@ -277,7 +277,7 @@ Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.i: Beya_Waifu_autogen/EJRQ
 
 # target to preprocess a source file
 Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.i
 .PHONY : Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.i
 
 Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.s: Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.s
@@ -285,7 +285,7 @@ Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.s: Beya_Waifu_autogen/EJRQ
 
 # target to generate assembly for a file
 Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.s
 .PHONY : Beya_Waifu_autogen/EJRQKI7XPS/qrc_translations_static.cpp.s
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.obj: Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.obj
@@ -293,7 +293,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.obj: Beya_Waifu_autogen/EWIEGA46WW/qr
 
 # target to build an object file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.obj
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.obj
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.i: Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.i
@@ -301,7 +301,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.i: Beya_Waifu_autogen/EWIEGA46WW/qrc_
 
 # target to preprocess a source file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.i
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.i
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.s: Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.s
@@ -309,7 +309,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.s: Beya_Waifu_autogen/EWIEGA46WW/qrc_
 
 # target to generate assembly for a file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.s
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_OtherPic.cpp.s
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.obj: Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.obj
@@ -317,7 +317,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.obj: Beya_Waifu_autogen/EWIEGA46WW/qrc_
 
 # target to build an object file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.obj
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.obj
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.i: Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.i
@@ -325,7 +325,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.i: Beya_Waifu_autogen/EWIEGA46WW/qrc_do
 
 # target to preprocess a source file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.i
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.i
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.s: Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.s
@@ -333,7 +333,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.s: Beya_Waifu_autogen/EWIEGA46WW/qrc_do
 
 # target to generate assembly for a file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.s
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_donate.cpp.s
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.obj: Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.obj
@@ -341,7 +341,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.obj: Beya_Waifu_autogen/EWIEGA46WW/qrc_ic
 
 # target to build an object file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.obj
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.obj
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.i: Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.i
@@ -349,7 +349,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.i: Beya_Waifu_autogen/EWIEGA46WW/qrc_icon
 
 # target to preprocess a source file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.i
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.i
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.s: Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.s
@@ -357,7 +357,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.s: Beya_Waifu_autogen/EWIEGA46WW/qrc_icon
 
 # target to generate assembly for a file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.s
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_icon.cpp.s
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.obj: Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.obj
@@ -365,7 +365,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.obj: Beya_Waifu_autogen/EWIEGA46WW/qrc
 
 # target to build an object file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.obj
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.obj
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.i: Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.i
@@ -373,7 +373,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.i: Beya_Waifu_autogen/EWIEGA46WW/qrc_s
 
 # target to preprocess a source file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.i
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.i
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.s: Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.s
@@ -381,7 +381,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.s: Beya_Waifu_autogen/EWIEGA46WW/qrc_s
 
 # target to generate assembly for a file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.s
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_shaders.cpp.s
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_style.obj: Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.obj
@@ -389,7 +389,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_style.obj: Beya_Waifu_autogen/EWIEGA46WW/qrc_s
 
 # target to build an object file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.obj
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.obj
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_style.i: Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.i
@@ -397,7 +397,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_style.i: Beya_Waifu_autogen/EWIEGA46WW/qrc_sty
 
 # target to preprocess a source file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.i
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.i
 
 Beya_Waifu_autogen/EWIEGA46WW/qrc_style.s: Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.s
@@ -405,7 +405,7 @@ Beya_Waifu_autogen/EWIEGA46WW/qrc_style.s: Beya_Waifu_autogen/EWIEGA46WW/qrc_sty
 
 # target to generate assembly for a file
 Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.s
 .PHONY : Beya_Waifu_autogen/EWIEGA46WW/qrc_style.cpp.s
 
 Beya_Waifu_autogen/mocs_compilation.obj: Beya_Waifu_autogen/mocs_compilation.cpp.obj
@@ -413,7 +413,7 @@ Beya_Waifu_autogen/mocs_compilation.obj: Beya_Waifu_autogen/mocs_compilation.cpp
 
 # target to build an object file
 Beya_Waifu_autogen/mocs_compilation.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/mocs_compilation.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/mocs_compilation.cpp.obj
 .PHONY : Beya_Waifu_autogen/mocs_compilation.cpp.obj
 
 Beya_Waifu_autogen/mocs_compilation.i: Beya_Waifu_autogen/mocs_compilation.cpp.i
@@ -421,7 +421,7 @@ Beya_Waifu_autogen/mocs_compilation.i: Beya_Waifu_autogen/mocs_compilation.cpp.i
 
 # target to preprocess a source file
 Beya_Waifu_autogen/mocs_compilation.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/mocs_compilation.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/mocs_compilation.cpp.i
 .PHONY : Beya_Waifu_autogen/mocs_compilation.cpp.i
 
 Beya_Waifu_autogen/mocs_compilation.s: Beya_Waifu_autogen/mocs_compilation.cpp.s
@@ -429,7 +429,7 @@ Beya_Waifu_autogen/mocs_compilation.s: Beya_Waifu_autogen/mocs_compilation.cpp.s
 
 # target to generate assembly for a file
 Beya_Waifu_autogen/mocs_compilation.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/mocs_compilation.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Beya_Waifu_autogen/mocs_compilation.cpp.s
 .PHONY : Beya_Waifu_autogen/mocs_compilation.cpp.s
 
 CompatibilityTest.obj: CompatibilityTest.cpp.obj
@@ -437,7 +437,7 @@ CompatibilityTest.obj: CompatibilityTest.cpp.obj
 
 # target to build an object file
 CompatibilityTest.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/CompatibilityTest.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/CompatibilityTest.cpp.obj
 .PHONY : CompatibilityTest.cpp.obj
 
 CompatibilityTest.i: CompatibilityTest.cpp.i
@@ -445,7 +445,7 @@ CompatibilityTest.i: CompatibilityTest.cpp.i
 
 # target to preprocess a source file
 CompatibilityTest.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/CompatibilityTest.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/CompatibilityTest.cpp.i
 .PHONY : CompatibilityTest.cpp.i
 
 CompatibilityTest.s: CompatibilityTest.cpp.s
@@ -453,7 +453,7 @@ CompatibilityTest.s: CompatibilityTest.cpp.s
 
 # target to generate assembly for a file
 CompatibilityTest.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/CompatibilityTest.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/CompatibilityTest.cpp.s
 .PHONY : CompatibilityTest.cpp.s
 
 Current_File_Progress.obj: Current_File_Progress.cpp.obj
@@ -461,7 +461,7 @@ Current_File_Progress.obj: Current_File_Progress.cpp.obj
 
 # target to build an object file
 Current_File_Progress.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Current_File_Progress.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Current_File_Progress.cpp.obj
 .PHONY : Current_File_Progress.cpp.obj
 
 Current_File_Progress.i: Current_File_Progress.cpp.i
@@ -469,7 +469,7 @@ Current_File_Progress.i: Current_File_Progress.cpp.i
 
 # target to preprocess a source file
 Current_File_Progress.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Current_File_Progress.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Current_File_Progress.cpp.i
 .PHONY : Current_File_Progress.cpp.i
 
 Current_File_Progress.s: Current_File_Progress.cpp.s
@@ -477,7 +477,7 @@ Current_File_Progress.s: Current_File_Progress.cpp.s
 
 # target to generate assembly for a file
 Current_File_Progress.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Current_File_Progress.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Current_File_Progress.cpp.s
 .PHONY : Current_File_Progress.cpp.s
 
 CustomResolution.obj: CustomResolution.cpp.obj
@@ -485,7 +485,7 @@ CustomResolution.obj: CustomResolution.cpp.obj
 
 # target to build an object file
 CustomResolution.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/CustomResolution.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/CustomResolution.cpp.obj
 .PHONY : CustomResolution.cpp.obj
 
 CustomResolution.i: CustomResolution.cpp.i
@@ -493,7 +493,7 @@ CustomResolution.i: CustomResolution.cpp.i
 
 # target to preprocess a source file
 CustomResolution.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/CustomResolution.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/CustomResolution.cpp.i
 .PHONY : CustomResolution.cpp.i
 
 CustomResolution.s: CustomResolution.cpp.s
@@ -501,7 +501,7 @@ CustomResolution.s: CustomResolution.cpp.s
 
 # target to generate assembly for a file
 CustomResolution.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/CustomResolution.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/CustomResolution.cpp.s
 .PHONY : CustomResolution.cpp.s
 
 Donate.obj: Donate.cpp.obj
@@ -509,7 +509,7 @@ Donate.obj: Donate.cpp.obj
 
 # target to build an object file
 Donate.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Donate.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Donate.cpp.obj
 .PHONY : Donate.cpp.obj
 
 Donate.i: Donate.cpp.i
@@ -517,7 +517,7 @@ Donate.i: Donate.cpp.i
 
 # target to preprocess a source file
 Donate.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Donate.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Donate.cpp.i
 .PHONY : Donate.cpp.i
 
 Donate.s: Donate.cpp.s
@@ -525,7 +525,7 @@ Donate.s: Donate.cpp.s
 
 # target to generate assembly for a file
 Donate.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Donate.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Donate.cpp.s
 .PHONY : Donate.cpp.s
 
 FileManager.obj: FileManager.cpp.obj
@@ -533,7 +533,7 @@ FileManager.obj: FileManager.cpp.obj
 
 # target to build an object file
 FileManager.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/FileManager.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/FileManager.cpp.obj
 .PHONY : FileManager.cpp.obj
 
 FileManager.i: FileManager.cpp.i
@@ -541,7 +541,7 @@ FileManager.i: FileManager.cpp.i
 
 # target to preprocess a source file
 FileManager.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/FileManager.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/FileManager.cpp.i
 .PHONY : FileManager.cpp.i
 
 FileManager.s: FileManager.cpp.s
@@ -549,7 +549,7 @@ FileManager.s: FileManager.cpp.s
 
 # target to generate assembly for a file
 FileManager.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/FileManager.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/FileManager.cpp.s
 .PHONY : FileManager.cpp.s
 
 Finish_Action.obj: Finish_Action.cpp.obj
@@ -557,7 +557,7 @@ Finish_Action.obj: Finish_Action.cpp.obj
 
 # target to build an object file
 Finish_Action.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Finish_Action.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Finish_Action.cpp.obj
 .PHONY : Finish_Action.cpp.obj
 
 Finish_Action.i: Finish_Action.cpp.i
@@ -565,7 +565,7 @@ Finish_Action.i: Finish_Action.cpp.i
 
 # target to preprocess a source file
 Finish_Action.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Finish_Action.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Finish_Action.cpp.i
 .PHONY : Finish_Action.cpp.i
 
 Finish_Action.s: Finish_Action.cpp.s
@@ -573,7 +573,7 @@ Finish_Action.s: Finish_Action.cpp.s
 
 # target to generate assembly for a file
 Finish_Action.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Finish_Action.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Finish_Action.cpp.s
 .PHONY : Finish_Action.cpp.s
 
 Frame_Interpolation.obj: Frame_Interpolation.cpp.obj
@@ -581,7 +581,7 @@ Frame_Interpolation.obj: Frame_Interpolation.cpp.obj
 
 # target to build an object file
 Frame_Interpolation.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Frame_Interpolation.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Frame_Interpolation.cpp.obj
 .PHONY : Frame_Interpolation.cpp.obj
 
 Frame_Interpolation.i: Frame_Interpolation.cpp.i
@@ -589,7 +589,7 @@ Frame_Interpolation.i: Frame_Interpolation.cpp.i
 
 # target to preprocess a source file
 Frame_Interpolation.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Frame_Interpolation.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Frame_Interpolation.cpp.i
 .PHONY : Frame_Interpolation.cpp.i
 
 Frame_Interpolation.s: Frame_Interpolation.cpp.s
@@ -597,7 +597,7 @@ Frame_Interpolation.s: Frame_Interpolation.cpp.s
 
 # target to generate assembly for a file
 Frame_Interpolation.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Frame_Interpolation.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Frame_Interpolation.cpp.s
 .PHONY : Frame_Interpolation.cpp.s
 
 GpuManager.obj: GpuManager.cpp.obj
@@ -605,7 +605,7 @@ GpuManager.obj: GpuManager.cpp.obj
 
 # target to build an object file
 GpuManager.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/GpuManager.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/GpuManager.cpp.obj
 .PHONY : GpuManager.cpp.obj
 
 GpuManager.i: GpuManager.cpp.i
@@ -613,7 +613,7 @@ GpuManager.i: GpuManager.cpp.i
 
 # target to preprocess a source file
 GpuManager.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/GpuManager.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/GpuManager.cpp.i
 .PHONY : GpuManager.cpp.i
 
 GpuManager.s: GpuManager.cpp.s
@@ -621,7 +621,7 @@ GpuManager.s: GpuManager.cpp.s
 
 # target to generate assembly for a file
 GpuManager.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/GpuManager.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/GpuManager.cpp.s
 .PHONY : GpuManager.cpp.s
 
 LiquidGlassNode.obj: LiquidGlassNode.cpp.obj
@@ -629,7 +629,7 @@ LiquidGlassNode.obj: LiquidGlassNode.cpp.obj
 
 # target to build an object file
 LiquidGlassNode.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassNode.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassNode.cpp.obj
 .PHONY : LiquidGlassNode.cpp.obj
 
 LiquidGlassNode.i: LiquidGlassNode.cpp.i
@@ -637,7 +637,7 @@ LiquidGlassNode.i: LiquidGlassNode.cpp.i
 
 # target to preprocess a source file
 LiquidGlassNode.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassNode.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassNode.cpp.i
 .PHONY : LiquidGlassNode.cpp.i
 
 LiquidGlassNode.s: LiquidGlassNode.cpp.s
@@ -645,7 +645,7 @@ LiquidGlassNode.s: LiquidGlassNode.cpp.s
 
 # target to generate assembly for a file
 LiquidGlassNode.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassNode.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassNode.cpp.s
 .PHONY : LiquidGlassNode.cpp.s
 
 LiquidGlassWidget.obj: LiquidGlassWidget.cpp.obj
@@ -653,7 +653,7 @@ LiquidGlassWidget.obj: LiquidGlassWidget.cpp.obj
 
 # target to build an object file
 LiquidGlassWidget.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassWidget.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassWidget.cpp.obj
 .PHONY : LiquidGlassWidget.cpp.obj
 
 LiquidGlassWidget.i: LiquidGlassWidget.cpp.i
@@ -661,7 +661,7 @@ LiquidGlassWidget.i: LiquidGlassWidget.cpp.i
 
 # target to preprocess a source file
 LiquidGlassWidget.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassWidget.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassWidget.cpp.i
 .PHONY : LiquidGlassWidget.cpp.i
 
 LiquidGlassWidget.s: LiquidGlassWidget.cpp.s
@@ -669,7 +669,7 @@ LiquidGlassWidget.s: LiquidGlassWidget.cpp.s
 
 # target to generate assembly for a file
 LiquidGlassWidget.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassWidget.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/LiquidGlassWidget.cpp.s
 .PHONY : LiquidGlassWidget.cpp.s
 
 Logger.obj: Logger.cpp.obj
@@ -677,7 +677,7 @@ Logger.obj: Logger.cpp.obj
 
 # target to build an object file
 Logger.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Logger.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Logger.cpp.obj
 .PHONY : Logger.cpp.obj
 
 Logger.i: Logger.cpp.i
@@ -685,7 +685,7 @@ Logger.i: Logger.cpp.i
 
 # target to preprocess a source file
 Logger.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Logger.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Logger.cpp.i
 .PHONY : Logger.cpp.i
 
 Logger.s: Logger.cpp.s
@@ -693,7 +693,7 @@ Logger.s: Logger.cpp.s
 
 # target to generate assembly for a file
 Logger.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Logger.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Logger.cpp.s
 .PHONY : Logger.cpp.s
 
 ProcessRunner.obj: ProcessRunner.cpp.obj
@@ -701,7 +701,7 @@ ProcessRunner.obj: ProcessRunner.cpp.obj
 
 # target to build an object file
 ProcessRunner.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/ProcessRunner.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/ProcessRunner.cpp.obj
 .PHONY : ProcessRunner.cpp.obj
 
 ProcessRunner.i: ProcessRunner.cpp.i
@@ -709,7 +709,7 @@ ProcessRunner.i: ProcessRunner.cpp.i
 
 # target to preprocess a source file
 ProcessRunner.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/ProcessRunner.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/ProcessRunner.cpp.i
 .PHONY : ProcessRunner.cpp.i
 
 ProcessRunner.s: ProcessRunner.cpp.s
@@ -717,7 +717,7 @@ ProcessRunner.s: ProcessRunner.cpp.s
 
 # target to generate assembly for a file
 ProcessRunner.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/ProcessRunner.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/ProcessRunner.cpp.s
 .PHONY : ProcessRunner.cpp.s
 
 RealCuganProcessor.obj: RealCuganProcessor.cpp.obj
@@ -725,7 +725,7 @@ RealCuganProcessor.obj: RealCuganProcessor.cpp.obj
 
 # target to build an object file
 RealCuganProcessor.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealCuganProcessor.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealCuganProcessor.cpp.obj
 .PHONY : RealCuganProcessor.cpp.obj
 
 RealCuganProcessor.i: RealCuganProcessor.cpp.i
@@ -733,7 +733,7 @@ RealCuganProcessor.i: RealCuganProcessor.cpp.i
 
 # target to preprocess a source file
 RealCuganProcessor.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealCuganProcessor.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealCuganProcessor.cpp.i
 .PHONY : RealCuganProcessor.cpp.i
 
 RealCuganProcessor.s: RealCuganProcessor.cpp.s
@@ -741,7 +741,7 @@ RealCuganProcessor.s: RealCuganProcessor.cpp.s
 
 # target to generate assembly for a file
 RealCuganProcessor.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealCuganProcessor.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealCuganProcessor.cpp.s
 .PHONY : RealCuganProcessor.cpp.s
 
 RealcuganJobManager.obj: RealcuganJobManager.cpp.obj
@@ -749,7 +749,7 @@ RealcuganJobManager.obj: RealcuganJobManager.cpp.obj
 
 # target to build an object file
 RealcuganJobManager.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealcuganJobManager.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealcuganJobManager.cpp.obj
 .PHONY : RealcuganJobManager.cpp.obj
 
 RealcuganJobManager.i: RealcuganJobManager.cpp.i
@@ -757,7 +757,7 @@ RealcuganJobManager.i: RealcuganJobManager.cpp.i
 
 # target to preprocess a source file
 RealcuganJobManager.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealcuganJobManager.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealcuganJobManager.cpp.i
 .PHONY : RealcuganJobManager.cpp.i
 
 RealcuganJobManager.s: RealcuganJobManager.cpp.s
@@ -765,7 +765,7 @@ RealcuganJobManager.s: RealcuganJobManager.cpp.s
 
 # target to generate assembly for a file
 RealcuganJobManager.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealcuganJobManager.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealcuganJobManager.cpp.s
 .PHONY : RealcuganJobManager.cpp.s
 
 RealesrganJobManager.obj: RealesrganJobManager.cpp.obj
@@ -773,7 +773,7 @@ RealesrganJobManager.obj: RealesrganJobManager.cpp.obj
 
 # target to build an object file
 RealesrganJobManager.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealesrganJobManager.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealesrganJobManager.cpp.obj
 .PHONY : RealesrganJobManager.cpp.obj
 
 RealesrganJobManager.i: RealesrganJobManager.cpp.i
@@ -781,7 +781,7 @@ RealesrganJobManager.i: RealesrganJobManager.cpp.i
 
 # target to preprocess a source file
 RealesrganJobManager.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealesrganJobManager.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealesrganJobManager.cpp.i
 .PHONY : RealesrganJobManager.cpp.i
 
 RealesrganJobManager.s: RealesrganJobManager.cpp.s
@@ -789,7 +789,7 @@ RealesrganJobManager.s: RealesrganJobManager.cpp.s
 
 # target to generate assembly for a file
 RealesrganJobManager.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealesrganJobManager.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealesrganJobManager.cpp.s
 .PHONY : RealesrganJobManager.cpp.s
 
 RhiLiquidGlassItem.obj: RhiLiquidGlassItem.cpp.obj
@@ -797,7 +797,7 @@ RhiLiquidGlassItem.obj: RhiLiquidGlassItem.cpp.obj
 
 # target to build an object file
 RhiLiquidGlassItem.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RhiLiquidGlassItem.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RhiLiquidGlassItem.cpp.obj
 .PHONY : RhiLiquidGlassItem.cpp.obj
 
 RhiLiquidGlassItem.i: RhiLiquidGlassItem.cpp.i
@@ -805,7 +805,7 @@ RhiLiquidGlassItem.i: RhiLiquidGlassItem.cpp.i
 
 # target to preprocess a source file
 RhiLiquidGlassItem.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RhiLiquidGlassItem.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RhiLiquidGlassItem.cpp.i
 .PHONY : RhiLiquidGlassItem.cpp.i
 
 RhiLiquidGlassItem.s: RhiLiquidGlassItem.cpp.s
@@ -813,7 +813,7 @@ RhiLiquidGlassItem.s: RhiLiquidGlassItem.cpp.s
 
 # target to generate assembly for a file
 RhiLiquidGlassItem.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RhiLiquidGlassItem.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RhiLiquidGlassItem.cpp.s
 .PHONY : RhiLiquidGlassItem.cpp.s
 
 Right-click_Menu.obj: Right-click_Menu.cpp.obj
@@ -821,7 +821,7 @@ Right-click_Menu.obj: Right-click_Menu.cpp.obj
 
 # target to build an object file
 Right-click_Menu.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Right-click_Menu.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Right-click_Menu.cpp.obj
 .PHONY : Right-click_Menu.cpp.obj
 
 Right-click_Menu.i: Right-click_Menu.cpp.i
@@ -829,7 +829,7 @@ Right-click_Menu.i: Right-click_Menu.cpp.i
 
 # target to preprocess a source file
 Right-click_Menu.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Right-click_Menu.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Right-click_Menu.cpp.i
 .PHONY : Right-click_Menu.cpp.i
 
 Right-click_Menu.s: Right-click_Menu.cpp.s
@@ -837,7 +837,7 @@ Right-click_Menu.s: Right-click_Menu.cpp.s
 
 # target to generate assembly for a file
 Right-click_Menu.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Right-click_Menu.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Right-click_Menu.cpp.s
 .PHONY : Right-click_Menu.cpp.s
 
 SystemTrayIcon.obj: SystemTrayIcon.cpp.obj
@@ -845,7 +845,7 @@ SystemTrayIcon.obj: SystemTrayIcon.cpp.obj
 
 # target to build an object file
 SystemTrayIcon.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/SystemTrayIcon.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/SystemTrayIcon.cpp.obj
 .PHONY : SystemTrayIcon.cpp.obj
 
 SystemTrayIcon.i: SystemTrayIcon.cpp.i
@@ -853,7 +853,7 @@ SystemTrayIcon.i: SystemTrayIcon.cpp.i
 
 # target to preprocess a source file
 SystemTrayIcon.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/SystemTrayIcon.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/SystemTrayIcon.cpp.i
 .PHONY : SystemTrayIcon.cpp.i
 
 SystemTrayIcon.s: SystemTrayIcon.cpp.s
@@ -861,7 +861,7 @@ SystemTrayIcon.s: SystemTrayIcon.cpp.s
 
 # target to generate assembly for a file
 SystemTrayIcon.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/SystemTrayIcon.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/SystemTrayIcon.cpp.s
 .PHONY : SystemTrayIcon.cpp.s
 
 UiController.obj: UiController.cpp.obj
@@ -869,7 +869,7 @@ UiController.obj: UiController.cpp.obj
 
 # target to build an object file
 UiController.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/UiController.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/UiController.cpp.obj
 .PHONY : UiController.cpp.obj
 
 UiController.i: UiController.cpp.i
@@ -877,7 +877,7 @@ UiController.i: UiController.cpp.i
 
 # target to preprocess a source file
 UiController.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/UiController.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/UiController.cpp.i
 .PHONY : UiController.cpp.i
 
 UiController.s: UiController.cpp.s
@@ -885,7 +885,7 @@ UiController.s: UiController.cpp.s
 
 # target to generate assembly for a file
 UiController.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/UiController.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/UiController.cpp.s
 .PHONY : UiController.cpp.s
 
 VideoProcessor.obj: VideoProcessor.cpp.obj
@@ -893,7 +893,7 @@ VideoProcessor.obj: VideoProcessor.cpp.obj
 
 # target to build an object file
 VideoProcessor.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/VideoProcessor.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/VideoProcessor.cpp.obj
 .PHONY : VideoProcessor.cpp.obj
 
 VideoProcessor.i: VideoProcessor.cpp.i
@@ -901,7 +901,7 @@ VideoProcessor.i: VideoProcessor.cpp.i
 
 # target to preprocess a source file
 VideoProcessor.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/VideoProcessor.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/VideoProcessor.cpp.i
 .PHONY : VideoProcessor.cpp.i
 
 VideoProcessor.s: VideoProcessor.cpp.s
@@ -909,7 +909,7 @@ VideoProcessor.s: VideoProcessor.cpp.s
 
 # target to generate assembly for a file
 VideoProcessor.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/VideoProcessor.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/VideoProcessor.cpp.s
 .PHONY : VideoProcessor.cpp.s
 
 Web_Activities.obj: Web_Activities.cpp.obj
@@ -917,7 +917,7 @@ Web_Activities.obj: Web_Activities.cpp.obj
 
 # target to build an object file
 Web_Activities.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Web_Activities.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Web_Activities.cpp.obj
 .PHONY : Web_Activities.cpp.obj
 
 Web_Activities.i: Web_Activities.cpp.i
@@ -925,7 +925,7 @@ Web_Activities.i: Web_Activities.cpp.i
 
 # target to preprocess a source file
 Web_Activities.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Web_Activities.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Web_Activities.cpp.i
 .PHONY : Web_Activities.cpp.i
 
 Web_Activities.s: Web_Activities.cpp.s
@@ -933,7 +933,7 @@ Web_Activities.s: Web_Activities.cpp.s
 
 # target to generate assembly for a file
 Web_Activities.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Web_Activities.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/Web_Activities.cpp.s
 .PHONY : Web_Activities.cpp.s
 
 anime4kprocessor.obj: anime4kprocessor.cpp.obj
@@ -941,7 +941,7 @@ anime4kprocessor.obj: anime4kprocessor.cpp.obj
 
 # target to build an object file
 anime4kprocessor.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/anime4kprocessor.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/anime4kprocessor.cpp.obj
 .PHONY : anime4kprocessor.cpp.obj
 
 anime4kprocessor.i: anime4kprocessor.cpp.i
@@ -949,7 +949,7 @@ anime4kprocessor.i: anime4kprocessor.cpp.i
 
 # target to preprocess a source file
 anime4kprocessor.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/anime4kprocessor.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/anime4kprocessor.cpp.i
 .PHONY : anime4kprocessor.cpp.i
 
 anime4kprocessor.s: anime4kprocessor.cpp.s
@@ -957,7 +957,7 @@ anime4kprocessor.s: anime4kprocessor.cpp.s
 
 # target to generate assembly for a file
 anime4kprocessor.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/anime4kprocessor.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/anime4kprocessor.cpp.s
 .PHONY : anime4kprocessor.cpp.s
 
 checkupdate.obj: checkupdate.cpp.obj
@@ -965,7 +965,7 @@ checkupdate.obj: checkupdate.cpp.obj
 
 # target to build an object file
 checkupdate.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/checkupdate.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/checkupdate.cpp.obj
 .PHONY : checkupdate.cpp.obj
 
 checkupdate.i: checkupdate.cpp.i
@@ -973,7 +973,7 @@ checkupdate.i: checkupdate.cpp.i
 
 # target to preprocess a source file
 checkupdate.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/checkupdate.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/checkupdate.cpp.i
 .PHONY : checkupdate.cpp.i
 
 checkupdate.s: checkupdate.cpp.s
@@ -981,7 +981,7 @@ checkupdate.s: checkupdate.cpp.s
 
 # target to generate assembly for a file
 checkupdate.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/checkupdate.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/checkupdate.cpp.s
 .PHONY : checkupdate.cpp.s
 
 files.obj: files.cpp.obj
@@ -989,7 +989,7 @@ files.obj: files.cpp.obj
 
 # target to build an object file
 files.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/files.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/files.cpp.obj
 .PHONY : files.cpp.obj
 
 files.i: files.cpp.i
@@ -997,7 +997,7 @@ files.i: files.cpp.i
 
 # target to preprocess a source file
 files.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/files.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/files.cpp.i
 .PHONY : files.cpp.i
 
 files.s: files.cpp.s
@@ -1005,7 +1005,7 @@ files.s: files.cpp.s
 
 # target to generate assembly for a file
 files.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/files.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/files.cpp.s
 .PHONY : files.cpp.s
 
 gif.obj: gif.cpp.obj
@@ -1013,7 +1013,7 @@ gif.obj: gif.cpp.obj
 
 # target to build an object file
 gif.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/gif.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/gif.cpp.obj
 .PHONY : gif.cpp.obj
 
 gif.i: gif.cpp.i
@@ -1021,7 +1021,7 @@ gif.i: gif.cpp.i
 
 # target to preprocess a source file
 gif.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/gif.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/gif.cpp.i
 .PHONY : gif.cpp.i
 
 gif.s: gif.cpp.s
@@ -1029,7 +1029,7 @@ gif.s: gif.cpp.s
 
 # target to generate assembly for a file
 gif.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/gif.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/gif.cpp.s
 .PHONY : gif.cpp.s
 
 image.obj: image.cpp.obj
@@ -1037,7 +1037,7 @@ image.obj: image.cpp.obj
 
 # target to build an object file
 image.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/image.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/image.cpp.obj
 .PHONY : image.cpp.obj
 
 image.i: image.cpp.i
@@ -1045,7 +1045,7 @@ image.i: image.cpp.i
 
 # target to preprocess a source file
 image.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/image.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/image.cpp.i
 .PHONY : image.cpp.i
 
 image.s: image.cpp.s
@@ -1053,7 +1053,7 @@ image.s: image.cpp.s
 
 # target to generate assembly for a file
 image.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/image.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/image.cpp.s
 .PHONY : image.cpp.s
 
 main.obj: main.cpp.obj
@@ -1061,7 +1061,7 @@ main.obj: main.cpp.obj
 
 # target to build an object file
 main.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/main.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/main.cpp.obj
 .PHONY : main.cpp.obj
 
 main.i: main.cpp.i
@@ -1069,7 +1069,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/main.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -1077,7 +1077,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/main.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 mainwindow.obj: mainwindow.cpp.obj
@@ -1085,7 +1085,7 @@ mainwindow.obj: mainwindow.cpp.obj
 
 # target to build an object file
 mainwindow.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/mainwindow.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/mainwindow.cpp.obj
 .PHONY : mainwindow.cpp.obj
 
 mainwindow.i: mainwindow.cpp.i
@@ -1093,7 +1093,7 @@ mainwindow.i: mainwindow.cpp.i
 
 # target to preprocess a source file
 mainwindow.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/mainwindow.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/mainwindow.cpp.i
 .PHONY : mainwindow.cpp.i
 
 mainwindow.s: mainwindow.cpp.s
@@ -1101,7 +1101,7 @@ mainwindow.s: mainwindow.cpp.s
 
 # target to generate assembly for a file
 mainwindow.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/mainwindow.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/mainwindow.cpp.s
 .PHONY : mainwindow.cpp.s
 
 progressBar.obj: progressBar.cpp.obj
@@ -1109,7 +1109,7 @@ progressBar.obj: progressBar.cpp.obj
 
 # target to build an object file
 progressBar.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/progressBar.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/progressBar.cpp.obj
 .PHONY : progressBar.cpp.obj
 
 progressBar.i: progressBar.cpp.i
@@ -1117,7 +1117,7 @@ progressBar.i: progressBar.cpp.i
 
 # target to preprocess a source file
 progressBar.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/progressBar.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/progressBar.cpp.i
 .PHONY : progressBar.cpp.i
 
 progressBar.s: progressBar.cpp.s
@@ -1125,7 +1125,7 @@ progressBar.s: progressBar.cpp.s
 
 # target to generate assembly for a file
 progressBar.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/progressBar.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/progressBar.cpp.s
 .PHONY : progressBar.cpp.s
 
 realesrganprocessor.obj: realesrganprocessor.cpp.obj
@@ -1133,7 +1133,7 @@ realesrganprocessor.obj: realesrganprocessor.cpp.obj
 
 # target to build an object file
 realesrganprocessor.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/realesrganprocessor.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/realesrganprocessor.cpp.obj
 .PHONY : realesrganprocessor.cpp.obj
 
 realesrganprocessor.i: realesrganprocessor.cpp.i
@@ -1141,7 +1141,7 @@ realesrganprocessor.i: realesrganprocessor.cpp.i
 
 # target to preprocess a source file
 realesrganprocessor.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/realesrganprocessor.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/realesrganprocessor.cpp.i
 .PHONY : realesrganprocessor.cpp.i
 
 realesrganprocessor.s: realesrganprocessor.cpp.s
@@ -1149,7 +1149,7 @@ realesrganprocessor.s: realesrganprocessor.cpp.s
 
 # target to generate assembly for a file
 realesrganprocessor.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/realesrganprocessor.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/realesrganprocessor.cpp.s
 .PHONY : realesrganprocessor.cpp.s
 
 settings.obj: settings.cpp.obj
@@ -1157,7 +1157,7 @@ settings.obj: settings.cpp.obj
 
 # target to build an object file
 settings.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/settings.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/settings.cpp.obj
 .PHONY : settings.cpp.obj
 
 settings.i: settings.cpp.i
@@ -1165,7 +1165,7 @@ settings.i: settings.cpp.i
 
 # target to preprocess a source file
 settings.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/settings.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/settings.cpp.i
 .PHONY : settings.cpp.i
 
 settings.s: settings.cpp.s
@@ -1173,7 +1173,7 @@ settings.s: settings.cpp.s
 
 # target to generate assembly for a file
 settings.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/settings.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/settings.cpp.s
 .PHONY : settings.cpp.s
 
 table.obj: table.cpp.obj
@@ -1181,7 +1181,7 @@ table.obj: table.cpp.obj
 
 # target to build an object file
 table.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/table.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/table.cpp.obj
 .PHONY : table.cpp.obj
 
 table.i: table.cpp.i
@@ -1189,7 +1189,7 @@ table.i: table.cpp.i
 
 # target to preprocess a source file
 table.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/table.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/table.cpp.i
 .PHONY : table.cpp.i
 
 table.s: table.cpp.s
@@ -1197,7 +1197,7 @@ table.s: table.cpp.s
 
 # target to generate assembly for a file
 table.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/table.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/table.cpp.s
 .PHONY : table.cpp.s
 
 textBrowser.obj: textBrowser.cpp.obj
@@ -1205,7 +1205,7 @@ textBrowser.obj: textBrowser.cpp.obj
 
 # target to build an object file
 textBrowser.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/textBrowser.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/textBrowser.cpp.obj
 .PHONY : textBrowser.cpp.obj
 
 textBrowser.i: textBrowser.cpp.i
@@ -1213,7 +1213,7 @@ textBrowser.i: textBrowser.cpp.i
 
 # target to preprocess a source file
 textBrowser.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/textBrowser.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/textBrowser.cpp.i
 .PHONY : textBrowser.cpp.i
 
 textBrowser.s: textBrowser.cpp.s
@@ -1221,7 +1221,7 @@ textBrowser.s: textBrowser.cpp.s
 
 # target to generate assembly for a file
 textBrowser.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/textBrowser.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/textBrowser.cpp.s
 .PHONY : textBrowser.cpp.s
 
 topsupporterslist.obj: topsupporterslist.cpp.obj
@@ -1229,7 +1229,7 @@ topsupporterslist.obj: topsupporterslist.cpp.obj
 
 # target to build an object file
 topsupporterslist.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/topsupporterslist.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/topsupporterslist.cpp.obj
 .PHONY : topsupporterslist.cpp.obj
 
 topsupporterslist.i: topsupporterslist.cpp.i
@@ -1237,7 +1237,7 @@ topsupporterslist.i: topsupporterslist.cpp.i
 
 # target to preprocess a source file
 topsupporterslist.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/topsupporterslist.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/topsupporterslist.cpp.i
 .PHONY : topsupporterslist.cpp.i
 
 topsupporterslist.s: topsupporterslist.cpp.s
@@ -1245,7 +1245,7 @@ topsupporterslist.s: topsupporterslist.cpp.s
 
 # target to generate assembly for a file
 topsupporterslist.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/topsupporterslist.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/topsupporterslist.cpp.s
 .PHONY : topsupporterslist.cpp.s
 
 video.obj: video.cpp.obj
@@ -1253,7 +1253,7 @@ video.obj: video.cpp.obj
 
 # target to build an object file
 video.cpp.obj:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/video.cpp.obj
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/video.cpp.obj
 .PHONY : video.cpp.obj
 
 video.i: video.cpp.i
@@ -1261,7 +1261,7 @@ video.i: video.cpp.i
 
 # target to preprocess a source file
 video.cpp.i:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/video.cpp.i
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/video.cpp.i
 .PHONY : video.cpp.i
 
 video.s: video.cpp.s
@@ -1269,7 +1269,7 @@ video.s: video.cpp.s
 
 # target to generate assembly for a file
 video.cpp.s:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/video.cpp.s
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(MAKE) $(MAKESILENT) -f Waifu2x-Extension-QT\CMakeFiles\Beya_Waifu.dir\build.make Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/video.cpp.s
 .PHONY : video.cpp.s
 
 # Help Target
@@ -1431,6 +1431,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /d C:\Users\Beyawnko\Beya_Waifu\build_cmake_windows && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles\Makefile.cmake 0
+	cd /d C:\Users\beyaw\Beya_Waifu\build_cmake_windows && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles\Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

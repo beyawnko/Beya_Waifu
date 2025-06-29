@@ -1,13 +1,13 @@
 {
 	"AUTOGEN_COMMAND_LINE_LENGTH_MAX" : 32000,
-	"BUILD_DIR" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen",
-	"CMAKE_BINARY_DIR" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows",
-	"CMAKE_CURRENT_BINARY_DIR" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT",
-	"CMAKE_CURRENT_SOURCE_DIR" : "C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT",
+	"BUILD_DIR" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen",
+	"CMAKE_BINARY_DIR" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows",
+	"CMAKE_CURRENT_BINARY_DIR" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT",
+	"CMAKE_CURRENT_SOURCE_DIR" : "C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT",
 	"CMAKE_EXECUTABLE" : "C:/tools/msys64/mingw64/bin/cmake.exe",
 	"CMAKE_LIST_FILES" : 
 	[
-		"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/CMakeLists.txt",
+		"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/CMakeLists.txt",
 		"C:/tools/msys64/mingw64/share/cmake/Modules/FindOpenGL.cmake",
 		"C:/tools/msys64/mingw64/share/cmake/Modules/FindPackageHandleStandardArgs.cmake",
 		"C:/tools/msys64/mingw64/share/cmake/Modules/FindPackageMessage.cmake",
@@ -766,149 +766,149 @@
 		"C:/tmp/Qt/6.6.3/mingw_64/lib/cmake/Qt6Quick3D/Qt6Quick3DVersionlessTargets.cmake",
 		"C:/tmp/Qt/6.6.3/mingw_64/lib/cmake/Qt6Quick3D/Qt6Quick3DMacros.cmake",
 		"C:/tmp/Qt/6.6.3/mingw_64/lib/cmake/Qt6Core/Qt6CoreConfigureFileTemplate.in",
-		"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/OtherPic.qrc",
-		"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/donate.qrc",
-		"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/icon.qrc",
-		"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/style.qrc",
-		"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/shaders.qrc",
-		"C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/translations_static.qrc"
+		"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/OtherPic.qrc",
+		"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/donate.qrc",
+		"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/icon.qrc",
+		"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/style.qrc",
+		"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/shaders.qrc",
+		"C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/translations_static.qrc"
 	],
-	"CMAKE_SOURCE_DIR" : "C:/Users/Beyawnko/Beya_Waifu",
+	"CMAKE_SOURCE_DIR" : "C:/Users/beyaw/Beya_Waifu",
 	"CROSS_CONFIG" : false,
-	"DEP_FILE" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/deps",
+	"DEP_FILE" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/deps",
 	"DEP_FILE_RULE_NAME" : "Beya_Waifu_autogen/timestamp",
 	"HEADERS" : 
 	[
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/FileManager.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/FileManager.h",
 			"MU",
 			"EWIEGA46WW/moc_FileManager.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/GpuManager.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/GpuManager.h",
 			"MU",
 			"EWIEGA46WW/moc_GpuManager.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassNode.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassNode.h",
 			"MU",
 			"EWIEGA46WW/moc_LiquidGlassNode.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassParams.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassParams.h",
 			"MU",
 			"EWIEGA46WW/moc_LiquidGlassParams.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassWidget.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassWidget.h",
 			"MU",
 			"EWIEGA46WW/moc_LiquidGlassWidget.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Logger.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Logger.h",
 			"MU",
 			"EWIEGA46WW/moc_Logger.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/ProcessRunner.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/ProcessRunner.h",
 			"MU",
 			"EWIEGA46WW/moc_ProcessRunner.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RealCuganProcessor.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RealCuganProcessor.h",
 			"MU",
 			"EWIEGA46WW/moc_RealCuganProcessor.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RealcuganJobManager.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RealcuganJobManager.h",
 			"MU",
 			"EWIEGA46WW/moc_RealcuganJobManager.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RealesrganJobManager.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RealesrganJobManager.h",
 			"MU",
 			"EWIEGA46WW/moc_RealesrganJobManager.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RhiLiquidGlassItem.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RhiLiquidGlassItem.h",
 			"MU",
 			"EWIEGA46WW/moc_RhiLiquidGlassItem.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/UiController.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/UiController.h",
 			"MU",
 			"EWIEGA46WW/moc_UiController.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/VideoProcessor.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/VideoProcessor.h",
 			"MU",
 			"EWIEGA46WW/moc_VideoProcessor.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/anime4k_settings.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/anime4k_settings.h",
 			"MU",
 			"EWIEGA46WW/moc_anime4k_settings.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/anime4kprocessor.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/anime4kprocessor.h",
 			"MU",
 			"EWIEGA46WW/moc_anime4kprocessor.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/mainwindow.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/realcugan_settings.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/realcugan_settings.h",
 			"MU",
 			"EWIEGA46WW/moc_realcugan_settings.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/realesrgan_settings.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/realesrgan_settings.h",
 			"MU",
 			"EWIEGA46WW/moc_realesrgan_settings.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/realesrganprocessor.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/realesrganprocessor.h",
 			"MU",
 			"EWIEGA46WW/moc_realesrganprocessor.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/topsupporterslist.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/topsupporterslist.h",
 			"MU",
 			"EWIEGA46WW/moc_topsupporterslist.cpp",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/utils/ffprobe_helpers.h",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/utils/ffprobe_helpers.h",
 			"MU",
 			"7HEHEGDA3T/moc_ffprobe_helpers.cpp",
 			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
-	"INCLUDE_DIR" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/include",
-	"MOC_COMPILATION_FILE" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/mocs_compilation.cpp",
+	"INCLUDE_DIR" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/include",
+	"MOC_COMPILATION_FILE" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/mocs_compilation.cpp",
 	"MOC_DEFINITIONS" : 
 	[
 		"MINGW_HAS_SECURE_API=1",
@@ -997,199 +997,191 @@
 		"-E",
 		"C:/tools/msys64/mingw64/share/cmake/Modules/CMakeCXXCompilerABI.cpp"
 	],
-	"MOC_PREDEFS_FILE" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/moc_predefs.h",
+	"MOC_PREDEFS_FILE" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/moc_predefs.h",
 	"MOC_RELAXED_MODE" : false,
 	"MOC_SKIP" : 
 	[
-		"C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/.rcc/qrc_ShadersGenerated.cpp"
+		"C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/.rcc/qrc_ShadersGenerated.cpp"
 	],
 	"MULTI_CONFIG" : false,
 	"PARALLEL" : 16,
-	"PARSE_CACHE_FILE" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/ParseCache.txt",
+	"PARSE_CACHE_FILE" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/ParseCache.txt",
 	"QT_MOC_EXECUTABLE" : "C:/tmp/Qt/6.6.3/mingw_64/./bin/moc.exe",
 	"QT_UIC_EXECUTABLE" : "C:/tmp/Qt/6.6.3/mingw_64/./bin/uic.exe",
 	"QT_VERSION_MAJOR" : 6,
 	"QT_VERSION_MINOR" : 6,
-	"SETTINGS_FILE" : "C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/AutogenUsed.txt",
+	"SETTINGS_FILE" : "C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/AnimatedPNG.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/AnimatedPNG.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/CompatibilityTest.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/CompatibilityTest.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Current_File_Progress.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Current_File_Progress.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/CustomResolution.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/CustomResolution.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Donate.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Donate.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/FileManager.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/FileManager.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Finish_Action.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Finish_Action.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Frame_Interpolation.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Frame_Interpolation.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/GpuManager.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/GpuManager.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassNode.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassNode.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassWidget.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassWidget.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Logger.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Logger.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/ProcessRunner.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/ProcessRunner.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RealCuganProcessor.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RealCuganProcessor.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RealcuganJobManager.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RealcuganJobManager.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RealesrganJobManager.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RealesrganJobManager.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RhiLiquidGlassItem.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RhiLiquidGlassItem.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Right-click_Menu.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Right-click_Menu.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/SystemTrayIcon.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/SystemTrayIcon.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/UiController.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/UiController.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/VideoProcessor.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/VideoProcessor.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Web_Activities.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Web_Activities.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/anime4kprocessor.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/anime4kprocessor.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/checkupdate.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/checkupdate.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/files.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/files.cpp",
+			"MU",
+			null
+		],
+		[ "C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/gif.cpp", "MU", null ],
+		[
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/image.cpp",
+			"MU",
+			null
+		],
+		[ "C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/main.cpp", "MU", null ],
+		[
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/mainwindow.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/gif.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/progressBar.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/image.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/realesrganprocessor.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/main.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/settings.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/mainwindow.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/table.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/progressBar.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/textBrowser.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/realesrganprocessor.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/topsupporterslist.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/settings.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/table.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/textBrowser.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/topsupporterslist.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/video.cpp",
+			"C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/video.cpp",
 			"MU",
 			null
 		]
@@ -1198,7 +1190,7 @@
 	"UIC_SEARCH_PATHS" : [],
 	"UIC_SKIP" : 
 	[
-		"C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/.rcc/qrc_ShadersGenerated.cpp"
+		"C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/.rcc/qrc_ShadersGenerated.cpp"
 	],
 	"UIC_UI_FILES" : [],
 	"USE_BETTER_GRAPH" : false,

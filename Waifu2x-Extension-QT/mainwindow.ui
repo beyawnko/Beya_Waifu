@@ -627,6 +627,10 @@
                     <property name="text">
                      <string/>
                     </property>
+                    <property name="icon">
+                     <iconset resource="icon.qrc">
+                      <normaloff>:/new/prefix1/icon/ClearList.png</normaloff>:/new/prefix1/icon/ClearList.png</iconset>
+                    </property>
                    </widget>
                   </item>
                   <item>
@@ -646,6 +650,10 @@
                     <property name="text">
                      <string/>
                     </property>
+                    <property name="icon">
+                     <iconset resource="icon.qrc">
+                      <normaloff>:/new/prefix1/icon/RemoveItem.png</normaloff>:/new/prefix1/icon/RemoveItem.png</iconset>
+                    </property>
                    </widget>
                   </item>
                   <item>
@@ -661,6 +669,10 @@
                     </property>
                     <property name="text">
                      <string/>
+                    </property>
+                    <property name="icon">
+                     <iconset resource="icon.qrc">
+                      <normaloff>:/new/prefix1/icon/Save_FileList.png</normaloff>:/new/prefix1/icon/Save_FileList.png</iconset>
                     </property>
                    </widget>
                   </item>
@@ -678,6 +690,10 @@
                     <property name="text">
                      <string/>
                     </property>
+                    <property name="icon">
+                     <iconset resource="icon.qrc">
+                      <normaloff>:/new/prefix1/icon/Read_FileList.png</normaloff>:/new/prefix1/icon/Read_FileList.png</iconset>
+                    </property>
                    </widget>
                   </item>
                   <item>
@@ -693,6 +709,10 @@
                     </property>
                     <property name="text">
                      <string/>
+                    </property>
+                    <property name="icon">
+                     <iconset resource="icon.qrc">
+                      <normaloff>:/new/prefix1/icon/opne_folder.png</normaloff>:/new/prefix1/icon/opne_folder.png</iconset>
                     </property>
                    </widget>
                   </item>
@@ -910,12 +930,20 @@
                  <property name="text">
                   <string>Hide settings</string>
                  </property>
+                 <property name="icon">
+                  <iconset resource="icon.qrc">
+                   <normaloff>:/new/prefix1/icon/AddSetting.png</normaloff>:/new/prefix1/icon/AddSetting.png</iconset>
+                 </property>
                 </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_HideTextBro">
                  <property name="text">
                   <string>Hide Text Browser</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="icon.qrc">
+                   <normaloff>:/new/prefix1/icon/AddSetting.png</normaloff>:/new/prefix1/icon/AddSetting.png</iconset>
                  </property>
                 </widget>
                </item>
@@ -1016,12 +1044,20 @@
                     <property name="text">
                      <string>Apply</string>
                     </property>
+                    <property name="icon">
+                     <iconset resource="icon.qrc">
+                      <normaloff>:/new/prefix1/icon/Apply.png</normaloff>:/new/prefix1/icon/Apply.png</iconset>
+                    </property>
                    </widget>
                   </item>
                   <item>
                    <widget class="QPushButton" name="pushButton_CustRes_cancel">
                     <property name="text">
                      <string>Cancel</string>
+                    </property>
+                    <property name="icon">
+                     <iconset resource="icon.qrc">
+                      <normaloff>:/new/prefix1/icon/cancel.png</normaloff>:/new/prefix1/icon/cancel.png</iconset>
                     </property>
                    </widget>
                   </item>

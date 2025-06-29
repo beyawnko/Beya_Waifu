@@ -259,7 +259,7 @@ int MainWindow::Settings_Read_Apply()
     }
     {
         QVariant tmp = Settings_Read_value("/settings/checkBox_MultiGPU_RealesrganNcnnVulkan");
-        if (tmp.isValid()) if(ui->checkBox_MultiGPU_RealesrganNcnnVulkan) ui->checkBox_MultiGPU_RealesrganNcnnVulkan->setChecked(tmp.toBool());
+        if (tmp.isValid()) if(ui->checkBox_MultiGPU_RealESRGANEngine) ui->checkBox_MultiGPU_RealESRGANEngine->setChecked(tmp.toBool());
     }
     //Waifu2x-Converter
     {
@@ -375,12 +375,12 @@ int MainWindow::Settings_Read_Apply()
     RealESRGAN_ncnn_vulkan_DetectGPU_finished();
 
     QVariant gpuIDEsrgan = Settings_Read_value("/settings/RealESRGAN_GPUID");
-    if(ui->comboBox_GPUID_RealsrNCNNVulkan && gpuIDEsrgan.isValid()) ui->comboBox_GPUID_RealsrNCNNVulkan->setCurrentIndex(gpuIDEsrgan.toInt());
+    if(ui->comboBox_GPUIDs_MultiGPU_RealESRGAN && gpuIDEsrgan.isValid()) ui->comboBox_GPUIDs_MultiGPU_RealESRGAN->setCurrentIndex(gpuIDEsrgan.toInt());
     
     QVariant multiGpuEsrgan = Settings_Read_value("/settings/RealESRGAN_MultiGPU_Enabled");
-    if(ui->checkBox_MultiGPU_RealesrganNcnnVulkan && multiGpuEsrgan.isValid()) ui->checkBox_MultiGPU_RealesrganNcnnVulkan->setChecked(multiGpuEsrgan.toBool());
+    if(ui->checkBox_MultiGPU_RealESRGANEngine && multiGpuEsrgan.isValid()) ui->checkBox_MultiGPU_RealESRGANEngine->setChecked(multiGpuEsrgan.toBool());
     
-    if (ui->checkBox_MultiGPU_RealesrganNcnnVulkan && ui->checkBox_MultiGPU_RealesrganNcnnVulkan->isChecked()) {
+    if (ui->checkBox_MultiGPU_RealESRGANEngine && ui->checkBox_MultiGPU_RealESRGANEngine->isChecked()) {
         RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay();
     }
 
@@ -1048,7 +1048,7 @@ void MainWindow::on_pushButton_ResetSettings_clicked()
 
 void MainWindow::RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay()
 {
-    if (!ui->checkBox_MultiGPU_RealesrganNcnnVulkan || !ui->checkBox_MultiGPU_RealesrganNcnnVulkan->isChecked() || !ui->comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan) {
+    if (!ui->checkBox_MultiGPU_RealESRGANEngine || !ui->checkBox_MultiGPU_RealESRGANEngine->isChecked() || !ui->comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan) {
         if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan) ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setChecked(false);
         if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan) ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setValue(0);
         return;
@@ -1058,14 +1058,14 @@ void MainWindow::RealESRGAN_MultiGPU_UpdateSelectedGPUDisplay()
     if(selectedGPUID.isEmpty()) return;
 
     bool found = false;
-    //for (const auto& gpuConfig : m_realesrgan_gpuJobConfig_temp) { // Error: m_realesrgan_gpuJobConfig_temp not declared
-    //    if (gpuConfig.value("id") == selectedGPUID) {
-    //        if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan) ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setChecked(gpuConfig.value("enabled", "false") == "true");
-    //        if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan) ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setValue(gpuConfig.value("tilesize", "0").toInt());
-    //        found = true;
-    //        break;
-    //    }
-    //}
+    for (const auto& gpuConfig : GPUIDs_List_MultiGPU_Waifu2xNCNNVulkan) {
+        if (gpuConfig.value("id") == selectedGPUID) {
+            if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN) ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealESRGAN->setChecked(gpuConfig.value("isEnabled", "false") == "true");
+            if(ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN) ui->spinBox_TileSize_CurrentGPU_MultiGPU_RealESRGAN->setValue(gpuConfig.value("TileSize", "0").toInt());
+            found = true;
+            break;
+        }
+    }
 
     if (!found) {
         if(ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan) ui->checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan->setChecked(false);

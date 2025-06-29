@@ -1,6 +1,6 @@
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/RealcuganJobManager.cpp.obj: \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\RealcuganJobManager.cpp \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\RealcuganJobManager.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\RealcuganJobManager.cpp \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\RealcuganJobManager.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QObject \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobject.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qobjectdefs.h \

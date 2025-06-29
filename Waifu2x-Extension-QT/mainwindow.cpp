@@ -742,12 +742,12 @@ void MainWindow::on_checkBox_SpecifyGPU_Anime4k_stateChanged(int) { /* STUB */ }
 void MainWindow::on_checkBox_GPUMode_Anime4K_stateChanged(int) { /* STUB */ }
 void MainWindow::on_checkBox_ShowInterPro_stateChanged(int) { /* STUB */ }
 void MainWindow::on_comboBox_version_Waifu2xNCNNVulkan_currentIndexChanged(int) { /* STUB */ }
-void MainWindow::on_comboBox_Engine_GIF_currentIndexChanged(int) { /* STUB */ }
+
 void MainWindow::on_comboBox_Engine_Image_currentIndexChanged(int index)
 {
     // Q_UNUSED(index); // Keep if index not used, but good for debugging
-    if (!ui || !ui->stackedWidget_EngineSettings) {
-        qWarning("stackedWidget_EngineSettings is null!");
+    if (!ui || !ui->tabWidget_Engines) {
+        qWarning("tabWidget_Engines is null!");
         return;
     }
 
@@ -775,12 +775,12 @@ void MainWindow::on_comboBox_Engine_Image_currentIndexChanged(int index)
     }
     // Add other engines as needed
 
-    if (targetPage && ui->stackedWidget_EngineSettings->indexOf(targetPage) != -1) {
-        ui->stackedWidget_EngineSettings->setCurrentWidget(targetPage);
+    if (targetPage && ui->tabWidget_Engines->indexOf(targetPage) != -1) {
+        ui->tabWidget_Engines->setCurrentWidget(targetPage);
     } else {
         TextBrowser_NewMessage(tr("Settings page for engine '%1' not found. Displaying default.").arg(engineName));
-        if (ui->stackedWidget_EngineSettings->count() > 0) {
-            // ui->stackedWidget_EngineSettings->setCurrentIndex(0); // Fallback to first page
+        if (ui->tabWidget_Engines->count() > 0) {
+            // ui->tabWidget_Engines->setCurrentIndex(0); // Fallback to first page
         }
     }
     // Existing logic from this slot can be preserved here if necessary
@@ -1517,49 +1517,7 @@ void MainWindow::CurrentFileProgress_WatchFolderFileNum(QString) { /* STUB */ }
 void MainWindow::CurrentFileProgress_WatchFolderFileNum_Textbrower(QString, QString, int) { /* STUB */ }
 void MainWindow::Donate_ReplaceQRCode(QString) { /* STUB */ }
 
-// Function to download and display the QR code
-int MainWindow::Donate_DownloadOnlineQRCode()
-{
-    QString qrCodeImageUrl = "https://raw.githubusercontent.com/beyawnko/Waifu2x-Extension-GUI/master/icon/QRCode.png";
-    if (Settings_Read_value("/settings/BanGitee", false).toBool()) {
-        qrCodeImageUrl = "https://gitee.com/beyawnko/Waifu2x-Extension-GUI/raw/master/icon/QRCode.png";
-    }
 
-    QNetworkRequest request(qrCodeImageUrl);
-    QNetworkReply *reply = netManager->get(request);
-
-    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-        if (reply->error() == QNetworkReply::NoError) {
-            QByteArray imageData = reply->readAll();
-            QPixmap pixmap;
-            if (pixmap.loadFromData(imageData)) {
-                // Ensure label_DonateQRCode exists and scaledContents is true
-                if (ui->label_DonateQRCode) {
-                    // ui->label_DonateQRCode->setScaledContents(true); // Already set in UI file
-                    ui->label_DonateQRCode->setPixmap(pixmap.scaled(ui->label_DonateQRCode->size(),
-                                                                    Qt::KeepAspectRatio,
-                                                                    Qt::SmoothTransformation));
-                    TextBrowser_NewMessage(tr("QR Code loaded successfully."));
-                } else {
-                    TextBrowser_NewMessage(tr("Error: Donate QR Code label not found in UI."));
-                }
-            } else {
-                TextBrowser_NewMessage(tr("Error: Could not load QR Code image from downloaded data."));
-            }
-        } else {
-            TextBrowser_NewMessage(tr("Error downloading QR Code: %1").arg(reply->errorString()));
-            // Optionally, load a fallback local QR code if download fails
-            // QString localQRCodePath = ":/new/prefix1/icon/QRCode_local.png"; // Example path
-            // QPixmap fallbackPixmap(localQRCodePath);
-            // if (!fallbackPixmap.isNull() && ui->label_DonateQRCode) {
-            //     ui->label_DonateQRCode->setPixmap(fallbackPixmap.scaled(ui->label_DonateQRCode->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-            //     TextBrowser_NewMessage(tr("Loaded local fallback QR Code."));
-            // }
-        }
-        reply->deleteLater();
-    });
-    return 0; // Indicates the operation was initiated
-}
 
 void MainWindow::on_checkBox_BanGitee_clicked() { /* STUB */ }
 int MainWindow::CheckUpdate_NewUpdate(QString, QString) { return 0; }

@@ -1,6 +1,6 @@
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/GpuManager.cpp.obj: \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\GpuManager.cpp \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\GpuManager.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\GpuManager.cpp \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\GpuManager.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QStringList \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qstringlist.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qlist.h \

@@ -1,16 +1,16 @@
-C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/EWIEGA46WW/moc_mainwindow.cpp: C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/mainwindow.h \
-  C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/moc_predefs.h \
-  C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/FileManager.h \
-  C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/GpuManager.h \
-  C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassParams.h \
-  C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassWidget.h \
-  C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/ProcessRunner.h \
-  C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/UiController.h \
-  C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/anime4k_settings.h \
-  C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/anime4kprocessor.h \
-  C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/realesrgan_settings.h \
-  C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/realesrganprocessor.h \
-  C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/topsupporterslist.h \
+C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/EWIEGA46WW/moc_mainwindow.cpp: C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/mainwindow.h \
+  C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/moc_predefs.h \
+  C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/FileManager.h \
+  C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/GpuManager.h \
+  C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassParams.h \
+  C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassWidget.h \
+  C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/ProcessRunner.h \
+  C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/UiController.h \
+  C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/anime4k_settings.h \
+  C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/anime4kprocessor.h \
+  C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/realesrgan_settings.h \
+  C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/realesrganprocessor.h \
+  C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/topsupporterslist.h \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtConcurrent/QtConcurrent \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtConcurrent/QtConcurrentDepends \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtConcurrent/qtaskbuilder.h \
@@ -38,6 +38,7 @@ C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFile \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFileInfo \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFileSystemWatcher \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFlags \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFutureWatcher \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QHash \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QList \
@@ -55,6 +56,7 @@ C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QScopedPointer \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QSemaphore \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QSettings \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QSharedDataPointer \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QSize \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QSizeF \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QString \
@@ -402,6 +404,23 @@ C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu
   C:/tmp/Qt/6.6.3/mingw_64/include/QtMultimedia/qvideoframe.h \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtMultimedia/qvideoframeformat.h \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtMultimedia/qvideosink.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/QNetworkAccessManager \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/QSslConfiguration \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qabstractsocket.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qhostaddress.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qnetworkaccessmanager.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qnetworkrequest.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qssl.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslcertificate.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslconfiguration.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslerror.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslsocket.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qtcpsocket.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qtnetwork-config.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qtnetworkexports.h \
+  C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qtnetworkglobal.h \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtOpenGL/QOpenGLBuffer \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtOpenGL/QOpenGLFunctions_3_3_Core \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtOpenGL/QOpenGLShaderProgram \

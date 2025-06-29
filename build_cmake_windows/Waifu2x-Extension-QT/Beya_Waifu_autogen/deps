@@ -1,69 +1,69 @@
 Beya_Waifu_autogen/timestamp: \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/AnimatedPNG.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/CMakeLists.txt \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/CompatibilityTest.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Current_File_Progress.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/CustomResolution.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Donate.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/FileManager.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/FileManager.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Finish_Action.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Frame_Interpolation.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/GpuManager.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/GpuManager.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassNode.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassNode.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassParams.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassWidget.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassWidget.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Logger.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Logger.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/OtherPic.qrc \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/ProcessRunner.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/ProcessRunner.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RealCuganProcessor.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RealCuganProcessor.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RealcuganJobManager.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RealcuganJobManager.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RealesrganJobManager.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RealesrganJobManager.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RhiLiquidGlassItem.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RhiLiquidGlassItem.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Right-click_Menu.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/SystemTrayIcon.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/UiController.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/UiController.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/VideoProcessor.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/VideoProcessor.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/Web_Activities.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/anime4k_settings.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/anime4kprocessor.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/anime4kprocessor.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/checkupdate.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/donate.qrc \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/files.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/gif.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/icon.qrc \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/image.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/main.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/mainwindow.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/mainwindow.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/progressBar.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/realcugan_settings.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/realesrgan_settings.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/realesrganprocessor.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/realesrganprocessor.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/settings.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/shaders.qrc \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/style.qrc \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/table.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/textBrowser.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/topsupporterslist.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/topsupporterslist.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/utils/ffprobe_helpers.h \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/video.cpp \
-	C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/moc_predefs.h \
-	C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/translations_static.qrc \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/AnimatedPNG.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/CMakeLists.txt \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/CompatibilityTest.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Current_File_Progress.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/CustomResolution.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Donate.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/FileManager.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/FileManager.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Finish_Action.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Frame_Interpolation.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/GpuManager.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/GpuManager.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassNode.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassNode.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassParams.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassWidget.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/LiquidGlassWidget.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Logger.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Logger.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/OtherPic.qrc \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/ProcessRunner.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/ProcessRunner.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RealCuganProcessor.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RealCuganProcessor.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RealcuganJobManager.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RealcuganJobManager.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RealesrganJobManager.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RealesrganJobManager.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RhiLiquidGlassItem.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RhiLiquidGlassItem.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Right-click_Menu.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/SystemTrayIcon.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/UiController.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/UiController.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/VideoProcessor.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/VideoProcessor.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/Web_Activities.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/anime4k_settings.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/anime4kprocessor.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/anime4kprocessor.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/checkupdate.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/donate.qrc \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/files.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/gif.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/icon.qrc \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/image.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/main.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/mainwindow.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/mainwindow.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/progressBar.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/realcugan_settings.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/realesrgan_settings.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/realesrganprocessor.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/realesrganprocessor.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/settings.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/shaders.qrc \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/style.qrc \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/table.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/textBrowser.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/topsupporterslist.cpp \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/topsupporterslist.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/utils/ffprobe_helpers.h \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/video.cpp \
+	C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/moc_predefs.h \
+	C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/translations_static.qrc \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtConcurrent/QtConcurrent \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtConcurrent/QtConcurrentDepends \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtConcurrent/qtaskbuilder.h \
@@ -92,6 +92,7 @@ Beya_Waifu_autogen/timestamp: \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFile \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFileInfo \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFileSystemWatcher \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFlags \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QFutureWatcher \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QHash \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QList \
@@ -109,6 +110,7 @@ Beya_Waifu_autogen/timestamp: \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QScopedPointer \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QSemaphore \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QSettings \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QSharedDataPointer \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QSize \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QSizeF \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QString \
@@ -458,6 +460,20 @@ Beya_Waifu_autogen/timestamp: \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtMultimedia/qvideoframe.h \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtMultimedia/qvideoframeformat.h \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtMultimedia/qvideosink.h \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/QNetworkAccessManager \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/QSslConfiguration \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qabstractsocket.h \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qhostaddress.h \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qnetworkaccessmanager.h \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qnetworkrequest.h \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qssl.h \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslcertificate.h \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslconfiguration.h \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslerror.h \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qsslsocket.h \
+	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qtcpsocket.h \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qtnetwork-config.h \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qtnetworkexports.h \
 	C:/tmp/Qt/6.6.3/mingw_64/include/QtNetwork/qtnetworkglobal.h \
@@ -1592,6 +1608,6 @@ Beya_Waifu_autogen/timestamp: \
 	C:/tools/msys64/mingw64/share/cmake/Modules/Internal/CheckCompilerFlag.cmake \
 	C:/tools/msys64/mingw64/share/cmake/Modules/Internal/CheckFlagCommonConfig.cmake \
 	C:/tools/msys64/mingw64/share/cmake/Modules/Internal/CheckSourceCompiles.cmake \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/mainwindow.ui \
-	C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/topsupporterslist.ui \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/mainwindow.ui \
+	C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/topsupporterslist.ui \
 	C:/tools/msys64/mingw64/bin/cmake.exe

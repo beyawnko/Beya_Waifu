@@ -250,3 +250,42 @@
 2025-06-28T04:41:56 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_clicked()
 2025-06-28T20:24:41 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
 2025-06-28T20:24:41 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_clicked()
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\trash.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\trash.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\trash.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\play.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\play.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\play.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\stop.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\stop.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\stop.svg
+2025-06-29T02:12:30 - Cannot open file ':/icons/icons/chevron-up.svg', because: No such file or directory
+2025-06-29T02:12:30 - Cannot open file ':/icons/icons/chevron-up.svg', because: No such file or directory
+2025-06-29T02:12:30 - Cannot open file ':/icons/icons/chevron-down.svg', because: No such file or directory
+2025-06-29T02:12:30 - Cannot open file ':/icons/icons/chevron-down.svg', because: No such file or directory
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\trash.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\trash.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\trash.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\trash.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\play.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\play.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\play.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\play.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\stop.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\stop.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\stop.svg
+2025-06-29T02:12:30 - Could not create pixmap from :\icons\icons\stop.svg
+2025-06-29T02:12:30 - Cannot open file ':/icons/icons/check.svg', because: No such file or directory
+2025-06-29T02:12:30 - Cannot open file ':/icons/icons/check.svg', because: No such file or directory
+2025-06-29T02:12:30 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-29T02:12:30 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_clicked()
+2025-06-29T02:12:30 - Cannot open file ':/icons/icons/chevron-down.svg', because: No such file or directory
+2025-06-29T02:12:30 - Cannot open file ':/icons/icons/chevron-down.svg', because: No such file or directory
+2025-06-29T02:12:30 - Cannot open file ':/icons/icons/chevron-left.svg', because: No such file or directory
+2025-06-29T02:12:30 - Cannot open file ':/icons/icons/chevron-left.svg', because: No such file or directory
+2025-06-29T02:12:30 - Cannot open file ':/icons/icons/chevron-right.svg', because: No such file or directory
+2025-06-29T02:12:30 - Cannot open file ':/icons/icons/chevron-right.svg', because: No such file or directory
+2025-06-29T02:19:07 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-29T02:19:07 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_clicked()
+2025-06-29T02:24:50 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-29T02:24:50 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_clicked()

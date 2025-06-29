@@ -1,6 +1,6 @@
-C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/EWIEGA46WW/moc_RealCuganProcessor.cpp: C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/RealCuganProcessor.h \
-  C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/moc_predefs.h \
-  C:/Users/Beyawnko/Beya_Waifu/Waifu2x-Extension-QT/realcugan_settings.h \
+C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/EWIEGA46WW/moc_RealCuganProcessor.cpp: C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/RealCuganProcessor.h \
+  C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/moc_predefs.h \
+  C:/Users/beyaw/Beya_Waifu/Waifu2x-Extension-QT/realcugan_settings.h \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QObject \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QProcess \
   C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QQueue \

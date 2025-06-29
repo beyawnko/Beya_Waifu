@@ -1,6 +1,6 @@
 Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/UiController.cpp.obj: \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\UiController.cpp \
- C:\Users\Beyawnko\Beya_Waifu\Waifu2x-Extension-QT\UiController.h \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\UiController.cpp \
+ C:\Users\beyaw\Beya_Waifu\Waifu2x-Extension-QT\UiController.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/QFont \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/qfont.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qshareddata.h \
@@ -391,7 +391,7 @@ Waifu2x-Extension-QT/CMakeFiles/Beya_Waifu.dir/UiController.cpp.obj: \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/qfontdatabase.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/QSpinBox \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtWidgets/qspinbox.h \
- C:/Users/Beyawnko/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/include/ui_mainwindow.h \
+ C:/Users/beyaw/Beya_Waifu/build_cmake_windows/Waifu2x-Extension-QT/Beya_Waifu_autogen/include/ui_mainwindow.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/QVariant \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtCore/qvariant.h \
  C:/tmp/Qt/6.6.3/mingw_64/include/QtGui/QIcon \
