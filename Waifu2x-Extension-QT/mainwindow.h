@@ -53,6 +53,7 @@
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QMetaType>
+#include <QNetworkAccessManager> // For QR code download
 #include <QRandomGenerator>
 #include <QScrollBar>
 #include <QThread>
@@ -587,12 +588,12 @@ public:
   QPushButton *pushButton_Add_TileSize_RealsrNCNNVulkan;
   QPushButton *pushButton_Minus_TileSize_RealsrNCNNVulkan;
   QCheckBox *checkBox_TTA_RealsrNCNNVulkan;
-  QCheckBox *checkBox_MultiGPU_RealesrganNcnnVulkan;
-  QGroupBox *groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan;
-  QComboBox *comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan;
-  QCheckBox *checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan;
-  QSpinBox *spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan;
-  QPushButton *pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan;
+  QCheckBox *checkBox_MultiGPU_RealSRNcnnVulkan;
+  QGroupBox *groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan;
+  QComboBox *comboBox_GPUIDs_MultiGPU_RealesrganNcnnVulkan; // Name kept as it might be generic
+  QCheckBox *checkBox_isEnable_CurrentGPU_MultiGPU_RealesrganNcnnVulkan; // Name kept
+  QSpinBox *spinBox_TileSize_CurrentGPU_MultiGPU_RealesrganNcnnVulkan; // Name kept
+  QPushButton *pushButton_ShowMultiGPUSettings_RealesrganNcnnVulkan; // Name kept
 
 public slots:
   void Batch_Table_Update_slots(const QList<FileLoadInfo>& imageFiles,
@@ -822,6 +823,7 @@ private:
   LiquidGlassWidget *glassWidget {nullptr};
   bool glassEnabled {false};
 
+  QNetworkAccessManager* netManager = nullptr; // For QR code download
   ProcessingState m_currentState;
   QQueue<ProcessJob> m_jobQueue;
   bool isProcessing = false;

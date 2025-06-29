@@ -1,0 +1,423 @@
+/* General Styles */
+QWidget {
+    color: #DCE4EE;
+    font-family: "Microsoft YaHei UI";
+    font-size: 9pt;
+}
+
+/* QPushButton Styles */
+QPushButton {
+    background-color: #455364;
+    border-radius: 4px;
+    padding: 4px 8px;
+    border: 1px solid #3C4755;
+}
+
+QPushButton:hover {
+    background-color: #505F70;
+}
+
+QPushButton:pressed {
+    background-color: #3E4B59;
+}
+
+QPushButton:disabled {
+    background-color: #3A4552;
+    color: #788AA0;
+}
+
+/* Specific QPushButton Styles */
+QPushButton#pushButton_ClearList,
+QPushButton#pushButton_ClearList_Finished,
+QPushButton#pushButton_ClearList_Error {
+    background-image: url(:/icons/icons/trash.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    min-width: 20px;
+    min-height: 20px;
+    padding: 0; /* Adjust if text is also present */
+}
+
+QPushButton#pushButton_Start,
+QPushButton#pushButton_Pause,
+QPushButton#pushButton_Stop {
+    font-weight: bold;
+}
+
+QPushButton#pushButton_Start {
+    background-image: url(:/icons/icons/play.svg);
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 20px; /* Space for icon */
+}
+
+QPushButton#pushButton_Pause {
+    background-image: url(:/icons/icons/pause.svg);
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 20px; /* Space for icon */
+}
+
+QPushButton#pushButton_Stop {
+    background-image: url(:/icons/icons/stop.svg);
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 20px; /* Space for icon */
+}
+
+QPushButton#pushButton_LoadFile,
+QPushButton#pushButton_LoadFolder,
+QPushButton#pushButton_SetOutputFolder,
+QPushButton#pushButton_SetSavePath_ScreenShot,
+QPushButton#pushButton_Donate {
+    /* Assuming these are standard buttons without icons for now */
+}
+
+/* QGroupBox Styles */
+QGroupBox {
+    background-color: #3A4552;
+    border: 1px solid #3C4755;
+    border-radius: 4px;
+    margin-top: 10px; /* Space for title */
+    padding: 10px 5px 5px 5px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 3px 0 3px;
+    left: 10px;
+    color: #DCE4EE;
+}
+
+/* Specific QGroupBox Styles */
+QGroupBox#groupBox_Waifu2xNcnnVulkanSettings_Basic,
+QGroupBox#groupBox_Waifu2xNcnnVulkanSettings_Advanced,
+QGroupBox#groupBox_RealCUGANNcnnVulkanSettings_Basic,
+QGroupBox#groupBox_RealCUGANNcnnVulkanSettings_Advanced,
+QGroupBox#groupBox_RealESRGANNcnnVulkanSettings_Basic,
+QGroupBox#groupBox_RealESRGANNcnnVulkanSettings_Advanced,
+QGroupBox#groupBox_SRMDNcnnVulkanSettings_Basic,
+QGroupBox#groupBox_SRMDNcnnVulkanSettings_Advanced,
+QGroupBox#groupBox_RealSRNcnnVulkanSettings_Basic,
+QGroupBox#groupBox_RealSRNcnnVulkanSettings_Advanced,
+QGroupBox#groupBox_Anime4KUpscalerSettings_Basic,
+QGroupBox#groupBox_Anime4KUpscalerSettings_Advanced {
+     /* Common styles for engine settings group boxes */
+}
+
+
+/* QTabWidget Styles */
+QTabWidget::pane {
+    border: 1px solid #3C4755;
+    border-radius: 4px;
+    background-color: #3A4552;
+}
+
+QTabBar::tab {
+    background-color: #455364;
+    color: #DCE4EE;
+    border: 1px solid #3C4755;
+    border-bottom: none; /* To merge with pane border */
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    padding: 5px 10px;
+    margin-right: 2px;
+}
+
+QTabBar::tab:selected {
+    background-color: #505F70; /* Slightly lighter for selected tab */
+}
+
+QTabBar::tab:hover:!selected {
+    background-color: #4A5867;
+}
+
+/* QTableView Styles */
+QTableView {
+    background-color: #3A4552;
+    border: 1px solid #3C4755;
+    gridline-color: #455364;
+    selection-background-color: #505F70;
+    border-radius: 4px;
+}
+
+QHeaderView::section {
+    background-color: #455364;
+    color: #DCE4EE;
+    padding: 4px;
+    border: 1px solid #3C4755;
+    font-weight: bold;
+}
+
+/* QComboBox Styles */
+QComboBox {
+    background-color: #455364;
+    border: 1px solid #3C4755;
+    border-radius: 4px;
+    padding: 2px 18px 2px 3px; /* Right padding for arrow */
+    min-width: 6em;
+}
+
+QComboBox:editable {
+    background: #455364; /* Same as non-editable for consistency */
+}
+
+QComboBox:!editable, QComboBox::drop-down:editable {
+     background: #455364;
+}
+
+/* QComboBox arrow */
+QComboBox::down-arrow {
+    image: url(:/icons/icons/chevron-down.svg); /* Placeholder, replace with actual icon if available */
+    width: 12px;
+    height: 12px;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+    border-left-width: 1px;
+    border-left-color: #3C4755;
+    border-left-style: solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    background-color: #455364;
+}
+
+QComboBox QAbstractItemView { /* Dropdown list */
+    border: 1px solid #3C4755;
+    background-color: #455364;
+    selection-background-color: #505F70;
+    color: #DCE4EE;
+}
+
+/* QSpinBox and QDoubleSpinBox Styles */
+QSpinBox, QDoubleSpinBox {
+    background-color: #455364;
+    border: 1px solid #3C4755;
+    border-radius: 4px;
+    padding: 2px;
+    color: #DCE4EE;
+}
+
+QSpinBox::up-button, QDoubleSpinBox::up-button,
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+    subcontrol-origin: border;
+    background-color: #505F70;
+    border: 1px solid #3C4755;
+    border-radius: 2px; /* Smaller radius for buttons */
+}
+
+QSpinBox::up-button, QDoubleSpinBox::up-button {
+    subcontrol-position: top right;
+    width: 16px; /* Adjust as needed */
+    image: url(:/icons/icons/chevron-up.svg); /* Placeholder */
+}
+
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+    subcontrol-position: bottom right;
+    width: 16px; /* Adjust as needed */
+    image: url(:/icons/icons/chevron-down.svg); /* Placeholder */
+}
+
+QSpinBox::up-button:hover, QDoubleSpinBox::up-button:hover,
+QSpinBox::down-button:hover, QDoubleSpinBox::down-button:hover {
+    background-color: #5A6A7C;
+}
+
+/* QSlider Styles */
+QSlider::groove:horizontal {
+    border: 1px solid #3C4755;
+    height: 8px; /* Adjust as needed */
+    background: #3A4552;
+    margin: 2px 0;
+    border-radius: 4px;
+}
+
+QSlider::handle:horizontal {
+    background: #505F70;
+    border: 1px solid #3C4755;
+    width: 18px; /* Adjust as needed */
+    margin: -2px 0; /* handle is placed by default on the contents rect of the groove. Expand outside the groove */
+    border-radius: 4px;
+}
+
+QSlider::handle:horizontal:hover {
+    background: #5A6A7C;
+}
+
+/* QCheckBox Styles */
+QCheckBox {
+    spacing: 5px; /* Space between checkbox and text */
+}
+
+QCheckBox::indicator {
+    width: 13px;
+    height: 13px;
+    border: 1px solid #3C4755;
+    border-radius: 3px;
+    background-color: #455364;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #505F70;
+    image: url(:/icons/icons/check.svg); /* Placeholder */
+}
+
+QCheckBox::indicator:unchecked:hover {
+    border-color: #505F70;
+}
+
+QCheckBox::indicator:checked:hover {
+    background-color: #5A6A7C;
+}
+
+/* QLabel Styles */
+QLabel#label_DonateQRCode {
+    /* Styles for QR code will be handled by setPixmap and scaledContents=true */
+    border: 1px solid #3C4755; /* Optional: if you want a border */
+    background-color: white; /* QR codes typically have a white background */
+}
+
+/* QLineEdit Styles */
+QLineEdit {
+    background-color: #455364;
+    border: 1px solid #3C4755;
+    border-radius: 4px;
+    padding: 2px 4px;
+    color: #DCE4EE;
+}
+
+QLineEdit:focus {
+    border-color: #505F70; /* Highlight focus */
+}
+
+/* QProgressBar Styles */
+QProgressBar {
+    border: 1px solid #3C4755;
+    border-radius: 4px;
+    text-align: center;
+    color: #DCE4EE; /* Text color */
+    background-color: #3A4552; /* Background of the progress bar */
+}
+
+QProgressBar::chunk {
+    background-color: #505F70; /* Color of the progress chunk */
+    border-radius: 3px; /* Slightly rounded chunk */
+    margin: 1px; /* Margin for the chunk */
+}
+
+/* QPlainTextEdit Styles */
+QPlainTextEdit {
+    background-color: #3A4552;
+    border: 1px solid #3C4755;
+    border-radius: 4px;
+    color: #DCE4EE;
+    padding: 2px;
+}
+
+/* Tooltip Styles */
+QToolTip {
+    background-color: #2E3844; /* Slightly darker for tooltips */
+    color: #DCE4EE;
+    border: 1px solid #3C4755;
+    padding: 4px;
+    border-radius: 3px;
+    opacity: 230; /* Optional: for slight transparency */
+}
+
+/* ScrollBar Styles (often part of ScrollArea, TableView, etc.) */
+QScrollBar:horizontal {
+    border: 1px solid #3C4755;
+    background: #3A4552;
+    height: 12px; /* Adjust as needed */
+    margin: 0px 12px 0px 12px; /* Leave space for arrows */
+    border-radius: 4px;
+}
+
+QScrollBar::handle:horizontal {
+    background: #505F70;
+    min-width: 20px;
+    border-radius: 4px;
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    border: 1px solid #3C4755;
+    background: #455364;
+    width: 10px; /* Adjust as needed */
+    border-radius: 3px;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:horizontal {
+    subcontrol-position: right;
+    image: url(:/icons/icons/chevron-right.svg); /* Placeholder */
+}
+
+QScrollBar::sub-line:horizontal {
+    subcontrol-position: left;
+    image: url(:/icons/icons/chevron-left.svg); /* Placeholder */
+}
+
+
+QScrollBar:vertical {
+    border: 1px solid #3C4755;
+    background: #3A4552;
+    width: 12px; /* Adjust as needed */
+    margin: 12px 0px 12px 0px; /* Leave space for arrows */
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical {
+    background: #505F70;
+    min-height: 20px;
+    border-radius: 4px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    border: 1px solid #3C4755;
+    background: #455364;
+    height: 10px; /* Adjust as needed */
+    border-radius: 3px;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::add-line:vertical {
+    subcontrol-position: bottom;
+    image: url(:/icons/icons/chevron-down.svg); /* Placeholder */
+}
+
+QScrollBar::sub-line:vertical {
+    subcontrol-position: top;
+    image: url(:/icons/icons/chevron-up.svg); /* Placeholder */
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal,
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none; /* No background for page areas */
+}
+
+/* Styles for specific named widgets if needed */
+/* Example:
+QPushButton#mySpecificButton {
+    background-color: red;
+}
+*/
+
+/* Ensure icons paths are correct relative to qrc file or use absolute paths if necessary */
+/* For example, if icons are in a qrc file under "icons/myicon.png", use url(:/icons/myicon.png) */
+
+/*
+    Icons used (ensure these are available in your resources, e.g., a .qrc file):
+    :/icons/icons/trash.svg
+    :/icons/icons/play.svg
+    :/icons/icons/pause.svg
+    :/icons/icons/stop.svg
+    :/icons/icons/chevron-down.svg
+    :/icons/icons/chevron-up.svg
+    :/icons/icons/check.svg
+    :/icons/icons/chevron-right.svg
+    :/icons/icons/chevron-left.svg
+*/

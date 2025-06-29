@@ -62,6 +62,45 @@ int main(int argc, char *argv[])
     if (style)
         a.setStyle(style);
 
+    // Load custom stylesheet
+    QFile qssFile(":/new/prefix1/styles.qss"); // Updated path based on icon.qrc structure
+    if (qssFile.open(QFile::ReadOnly | QFile::Text)) {
+        QTextStream stream(&qssFile);
+        a.setStyleSheet(stream.readAll());
+        qssFile.close();
+        if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
+            QTextStream out(&debugFile);
+            out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+                << " : Custom stylesheet loaded from " << qssFile.fileName() << ".\n";
+            debugFile.close();
+        }
+    } else {
+        // Fallback for development if resource not compiled yet, try loading from parent of app dir
+        QDir appDir(QCoreApplication::applicationDirPath());
+        appDir.cdUp(); // Go to the directory containing styles.qss (repo root)
+        QString directPath = appDir.filePath("styles.qss");
+        qssFile.setFileName(directPath);
+        if (qssFile.open(QFile::ReadOnly | QFile::Text)) {
+            QTextStream stream(&qssFile);
+            a.setStyleSheet(stream.readAll());
+            qssFile.close();
+            if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
+                QTextStream out(&debugFile);
+                out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+                    << " : Custom stylesheet loaded from (fallback) " << qssFile.fileName() << ".\n";
+                debugFile.close();
+            }
+        } else {
+            if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
+                QTextStream out(&debugFile);
+                out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
+                    << " : Failed to load custom stylesheet. Searched: :/new/prefix1/styles.qss and "
+                    << directPath <<".\n";
+                debugFile.close();
+            }
+        }
+    }
+
     if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
         QTextStream out(&debugFile);
         out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")

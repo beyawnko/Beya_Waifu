@@ -50,5 +50,6 @@
         <file>icon/patreon.png</file>
         <file>icon/patreon_sysTray.png</file>
         <file>icon/donateTabIcon.png</file>
+        <file>../styles.qss</file>
     </qresource>
 </RCC>

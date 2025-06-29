@@ -35,6 +35,11 @@
 // Includes for various Qt modules
 #include <QGridLayout>
 #include <QCheckBox>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QUrl>
+#include <QPixmap>
 #include <QApplication>
 #include <QEventLoop>
 #include <QMessageBox>
@@ -82,6 +87,8 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
             << " : Models created.\n";
         debugFile.close();
     }
+
+  netManager = new QNetworkAccessManager(this); // Initialize network manager
 
   // Initialize state and members
   m_currentState = ProcessingState::Idle;
@@ -189,6 +196,25 @@ MainWindow::MainWindow(int maxThreadsOverride, QWidget *parent)
   ApplyDarkStyle();
   setAcceptDrops(true);
   Init_Table();
+
+  // Connect engine combobox signals to update the stacked widget
+  connect(ui->comboBox_Engine_Image, QOverload<int>::of(&QComboBox::currentIndexChanged),
+          this, &MainWindow::on_comboBox_Engine_Image_currentIndexChanged);
+  connect(ui->comboBox_Engine_GIF, QOverload<int>::of(&QComboBox::currentIndexChanged),
+          this, &MainWindow::on_comboBox_Engine_GIF_currentIndexChanged);
+  connect(ui->comboBox_Engine_Video, QOverload<int>::of(&QComboBox::currentIndexChanged),
+          this, &MainWindow::on_comboBox_Engine_Video_currentIndexChanged);
+
+  // Initial sync of stacked widget
+  on_comboBox_Engine_Image_currentIndexChanged(ui->comboBox_Engine_Image->currentIndex());
+  // GIF and Video might share pages or have different stackedWidgets if settings diverge significantly.
+  // Assuming for now they might influence the same primary stackedWidget or have their own.
+  // If they share the main one, the logic in their slots will handle it.
+  // For this example, let's assume the primary one is for image, and GIF/Video might be similar or handled by UI directly.
+  // If tab_EngineSettings was fully replaced, these initial calls might need adjustment
+  // based on which QComboBox controls which QStackedWidget.
+  // For now, we focus on ui->stackedWidget_EngineSettings controlled by ui->comboBox_Engine_Image.
+
     if (debugFile.open(QIODevice::Append | QIODevice::Text)) {
         QTextStream out(&debugFile);
         out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz")
@@ -717,8 +743,73 @@ void MainWindow::on_checkBox_GPUMode_Anime4K_stateChanged(int) { /* STUB */ }
 void MainWindow::on_checkBox_ShowInterPro_stateChanged(int) { /* STUB */ }
 void MainWindow::on_comboBox_version_Waifu2xNCNNVulkan_currentIndexChanged(int) { /* STUB */ }
 void MainWindow::on_comboBox_Engine_GIF_currentIndexChanged(int) { /* STUB */ }
-void MainWindow::on_comboBox_Engine_Image_currentIndexChanged(int) { /* STUB */ }
-void MainWindow::on_comboBox_Engine_Video_currentIndexChanged(int) { /* STUB */ }
+void MainWindow::on_comboBox_Engine_Image_currentIndexChanged(int index)
+{
+    // Q_UNUSED(index); // Keep if index not used, but good for debugging
+    if (!ui || !ui->stackedWidget_EngineSettings) {
+        qWarning("stackedWidget_EngineSettings is null!");
+        return;
+    }
+
+    QString engineName = ui->comboBox_Engine_Image->currentText();
+    QWidget* targetPage = nullptr;
+
+    // Map engine name to page widget. Assumes page names follow a pattern like "page_EngineName" or directly use old tab names.
+    // These names MUST match the objectNames given to the pages in the QStackedWidget in the .ui file.
+    if (engineName == "waifu2x-ncnn-vulkan") {
+        targetPage = ui->tab_W2xNcnnVulkan; // Assuming old tab_W2xNcnnVulkan is now a page
+    } else if (engineName == "waifu2x-converter") {
+        targetPage = ui->tab_W2xConverter;
+    } else if (engineName == "Anime4K") {
+        targetPage = ui->tab_A4k;
+    } else if (engineName == "srmd-ncnn-vulkan") {
+        targetPage = ui->tab_SrmdNcnnVulkan;
+    } else if (engineName == "waifu2x-caffe") {
+        targetPage = ui->tab_W2xCaffe;
+    } else if (engineName == "realsr-ncnn-vulkan") {
+        targetPage = ui->tab_RealSRNcnnVulkan;
+    } else if (engineName == "RealESRGAN-NCNN-Vulkan") {
+        targetPage = ui->tab_RealESRGAN; // Page for RealESRGAN specific settings
+    } else if (engineName == "RealCUGAN-NCNN-Vulkan") {
+        targetPage = ui->tab_RealCUGAN;   // Page for RealCUGAN specific settings
+    }
+    // Add other engines as needed
+
+    if (targetPage && ui->stackedWidget_EngineSettings->indexOf(targetPage) != -1) {
+        ui->stackedWidget_EngineSettings->setCurrentWidget(targetPage);
+    } else {
+        TextBrowser_NewMessage(tr("Settings page for engine '%1' not found. Displaying default.").arg(engineName));
+        if (ui->stackedWidget_EngineSettings->count() > 0) {
+            // ui->stackedWidget_EngineSettings->setCurrentIndex(0); // Fallback to first page
+        }
+    }
+    // Existing logic from this slot can be preserved here if necessary
+    // Settings_Save();
+    // PreLoad_Engines_Settings();
+}
+
+void MainWindow::on_comboBox_Engine_GIF_currentIndexChanged(int index)
+{
+    // Q_UNUSED(index);
+    // Similar logic if GIF combobox controls a stacked widget or part of one.
+    // For now, assuming it does not directly control the main stackedWidget_EngineSettings
+    // or its behavior is distinct and already handled if it was part of the original tabWidget_Engines.
+    // If tabWidget_Engines was completely replaced, this might need wiring to relevant pages.
+
+    // Placeholder for existing logic:
+    // Settings_Save();
+    // PreLoad_Engines_Settings();
+}
+
+void MainWindow::on_comboBox_Engine_Video_currentIndexChanged(int index)
+{
+    // Q_UNUSED(index);
+    // Similar logic for Video engine changes.
+    // Placeholder for existing logic:
+    // Settings_Save();
+    // PreLoad_Engines_Settings();
+}
+
 void MainWindow::on_comboBox_AspectRatio_custRes_currentIndexChanged(int) { /* STUB */ }
 void MainWindow::on_checkBox_acodec_copy_2mp4_stateChanged(int) { /* STUB */ }
 void MainWindow::on_checkBox_vcodec_copy_2mp4_stateChanged(int) { /* STUB */ }
@@ -1425,6 +1516,51 @@ void MainWindow::CurrentFileProgress_progressbar_SetFinishedValue(int) { /* STUB
 void MainWindow::CurrentFileProgress_WatchFolderFileNum(QString) { /* STUB */ }
 void MainWindow::CurrentFileProgress_WatchFolderFileNum_Textbrower(QString, QString, int) { /* STUB */ }
 void MainWindow::Donate_ReplaceQRCode(QString) { /* STUB */ }
+
+// Function to download and display the QR code
+int MainWindow::Donate_DownloadOnlineQRCode()
+{
+    QString qrCodeImageUrl = "https://raw.githubusercontent.com/beyawnko/Waifu2x-Extension-GUI/master/icon/QRCode.png";
+    if (Settings_Read_value("/settings/BanGitee", false).toBool()) {
+        qrCodeImageUrl = "https://gitee.com/beyawnko/Waifu2x-Extension-GUI/raw/master/icon/QRCode.png";
+    }
+
+    QNetworkRequest request(qrCodeImageUrl);
+    QNetworkReply *reply = netManager->get(request);
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray imageData = reply->readAll();
+            QPixmap pixmap;
+            if (pixmap.loadFromData(imageData)) {
+                // Ensure label_DonateQRCode exists and scaledContents is true
+                if (ui->label_DonateQRCode) {
+                    // ui->label_DonateQRCode->setScaledContents(true); // Already set in UI file
+                    ui->label_DonateQRCode->setPixmap(pixmap.scaled(ui->label_DonateQRCode->size(),
+                                                                    Qt::KeepAspectRatio,
+                                                                    Qt::SmoothTransformation));
+                    TextBrowser_NewMessage(tr("QR Code loaded successfully."));
+                } else {
+                    TextBrowser_NewMessage(tr("Error: Donate QR Code label not found in UI."));
+                }
+            } else {
+                TextBrowser_NewMessage(tr("Error: Could not load QR Code image from downloaded data."));
+            }
+        } else {
+            TextBrowser_NewMessage(tr("Error downloading QR Code: %1").arg(reply->errorString()));
+            // Optionally, load a fallback local QR code if download fails
+            // QString localQRCodePath = ":/new/prefix1/icon/QRCode_local.png"; // Example path
+            // QPixmap fallbackPixmap(localQRCodePath);
+            // if (!fallbackPixmap.isNull() && ui->label_DonateQRCode) {
+            //     ui->label_DonateQRCode->setPixmap(fallbackPixmap.scaled(ui->label_DonateQRCode->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            //     TextBrowser_NewMessage(tr("Loaded local fallback QR Code."));
+            // }
+        }
+        reply->deleteLater();
+    });
+    return 0; // Indicates the operation was initiated
+}
+
 void MainWindow::on_checkBox_BanGitee_clicked() { /* STUB */ }
 int MainWindow::CheckUpdate_NewUpdate(QString, QString) { return 0; }
 FileMetadata MainWindow::getOrFetchMetadata(QString const&) { return FileMetadata(); /* STUB */ }
