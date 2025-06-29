@@ -248,3 +248,5 @@
 2025-06-28T04:22:01 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_Home_clicked()
 2025-06-28T04:41:56 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
 2025-06-28T04:41:56 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_clicked()
+2025-06-28T20:24:41 - QMetaObject::connectSlotsByName: No matching signal for on_pushButton_TurnOffScreen_clicked()
+2025-06-28T20:24:41 - QMetaObject::connectSlotsByName: No matching signal for on_checkBox_EnableVFI_clicked()

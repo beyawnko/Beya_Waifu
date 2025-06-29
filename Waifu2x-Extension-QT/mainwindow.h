@@ -210,15 +210,16 @@ public:
   //======================= File Handling & Processing =======================
   void dragEnterEvent(QDragEnterEvent *event);
   void dropEvent(QDropEvent *event);
-  ReadUrlsResult Read_urls_Worker(QList<QUrl> urls, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set); // Renamed and return type changed
-  void Read_Input_paths_BrowserFile(QStringList Input_path_List);
+  ReadUrlsResult Read_urls_Worker(QList<QUrl> urls, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set, bool scanSubfolders, const QString& imageExts, const QString& videoExts);
+  void setUiEnabledState(bool enabled);
+  void Read_Input_paths_BrowserFile(QStringList Input_path_List, const QString& imageExts, const QString& videoExts);
   bool AddNew_gif=false;
   bool AddNew_image=false;
   bool AddNew_video=false;
-  void Add_File_Folder(QString Full_Path, QList<QPair<QString, QString>>& imagesToAdd, QList<QPair<QString, QString>>& gifsToAdd, QList<QPair<QString, QString>>& videosToAdd, bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
-  void Add_File_Folder_IncludeSubFolder(QString Full_Path, QList<QPair<QString, QString>>& imagesToAdd, QList<QPair<QString, QString>>& gifsToAdd, QList<QPair<QString, QString>>& videosToAdd, bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
+  void Add_File_Folder(QString Full_Path, const QString& imageExts, const QString& videoExts, QList<FileLoadInfo>& imagesToAdd, QList<FileLoadInfo>& gifsToAdd, QList<FileLoadInfo>& videosToAdd, bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
+  void Add_File_Folder_IncludeSubFolder(QString Full_Path, const QString& imageExts, const QString& videoExts, QList<FileLoadInfo>& imagesToAdd, QList<FileLoadInfo>& gifsToAdd, QList<FileLoadInfo>& videosToAdd, bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
   QStringList getFileNames_IncludeSubFolder(QString path);
-  int FileList_Add(QString fileName, QString SourceFile_fullPath, QList<QPair<QString, QString>>& imagesToAdd, QList<QPair<QString, QString>>& gifsToAdd, QList<QPair<QString, QString>>& videosToAdd, bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
+  int FileList_Add(QString fileName, QString SourceFile_fullPath, const QString& imageExts, const QString& videoExts, QList<FileLoadInfo>& imagesToAdd, QList<FileLoadInfo>& gifsToAdd, QList<FileLoadInfo>& videosToAdd, bool& localAddNewImage, bool& localAddNewGif, bool& localAddNewVideo, const QSet<QString>& existingImagePaths_set, const QSet<QString>& existingGifPaths_set, const QSet<QString>& existingVideoPaths_set);
   bool Deduplicate_filelist(QString SourceFile_fullPath); // This is the old main-thread one
   bool file_isDirExist(QString SourceFile_fullPath);
   void file_mkDir(QString SourceFile_fullPath);

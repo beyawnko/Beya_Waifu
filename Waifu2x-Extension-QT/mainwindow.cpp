@@ -725,7 +725,7 @@ void MainWindow::on_checkBox_vcodec_copy_2mp4_stateChanged(int) { /* STUB */ }
 void MainWindow::Add_progressBar_CompatibilityTest() { /* STUB */ }
 void MainWindow::TimeSlot() { /* STUB */ }
 int MainWindow::Waifu2x_Compatibility_Test_finished() { return 0; /* STUB */ }
-void MainWindow::Read_Input_paths_BrowserFile(QStringList Input_path_List)
+void MainWindow::Read_Input_paths_BrowserFile(QStringList Input_path_List, const QString& imageExts, const QString& videoExts)
 {
   // Clear AddNew flags before processing
   AddNew_image = false;
@@ -770,9 +770,9 @@ void MainWindow::Read_Input_paths_BrowserFile(QStringList Input_path_List)
         QString fullPath = dir.filePath(fileName);
         qDebug() << "[Debug] Read_Input_paths_BrowserFile: Processing file from dir:" << fullPath;
         if (!Deduplicate_filelist_worker(fullPath, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set)) {
-          QList<QPair<QString, QString>> img_tmp, gif_tmp, vid_tmp; // These are unused by FileList_Add's current signature
+          QList<FileLoadInfo> img_tmp, gif_tmp, vid_tmp; // These are unused by FileList_Add's current signature
           bool laImg = false, laGif = false, laVid = false; // Initialize local flags for FileList_Add
-          FileList_Add(fileName, fullPath, img_tmp, gif_tmp, vid_tmp, laImg, laGif, laVid, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+          FileList_Add(fileName, fullPath, imageExts, videoExts, imagesToAdd_info, gifsToAdd_info, videosToAdd_info, laImg, laGif, laVid, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
           qDebug() << "[Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg=" << laImg << "laGif=" << laGif << "laVid=" << laVid << "for" << fullPath;
           if (laImg) {
             imagesToAdd_info.append({fileName, fullPath, tr("Waiting"), "", ""});
@@ -798,9 +798,9 @@ void MainWindow::Read_Input_paths_BrowserFile(QStringList Input_path_List)
     {
       qDebug() << "[Debug] Read_Input_paths_BrowserFile: Path is a file:" << path;
       if (!Deduplicate_filelist_worker(path, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set)) {
-        QList<QPair<QString, QString>> img_tmp, gif_tmp, vid_tmp; // Unused
+        QList<FileLoadInfo> img_tmp, gif_tmp, vid_tmp; // Unused
         bool laImg = false, laGif = false, laVid = false; // Initialize
-        FileList_Add(fileInfo.fileName(), path, img_tmp, gif_tmp, vid_tmp, laImg, laGif, laVid, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
+        FileList_Add(fileInfo.fileName(), path, imageExts, videoExts, img_tmp, gif_tmp, vid_tmp, laImg, laGif, laVid, existingImagePaths_set, existingGifPaths_set, existingVideoPaths_set);
         qDebug() << "[Debug] Read_Input_paths_BrowserFile: FileList_Add returned: laImg=" << laImg << "laGif=" << laGif << "laVid=" << laVid << "for" << path;
         if (laImg) {
           imagesToAdd_info.append({fileInfo.fileName(), path, tr("Waiting"), "", ""});
@@ -921,15 +921,15 @@ void MainWindow::on_pushButton_ReadFileList_clicked()
 
   bool filesAdded = false;
   if (!imagePaths.isEmpty()) {
-    Read_Input_paths_BrowserFile(imagePaths);
+    Read_Input_paths_BrowserFile(imagePaths, ui->Ext_image->text(), ui->Ext_video->text());
     filesAdded = true;
   }
   if (!gifPaths.isEmpty()) {
-    Read_Input_paths_BrowserFile(gifPaths);
+    Read_Input_paths_BrowserFile(gifPaths, ui->Ext_image->text(), ui->Ext_video->text());
     filesAdded = true;
   }
   if (!videoPaths.isEmpty()) {
-    Read_Input_paths_BrowserFile(videoPaths);
+    Read_Input_paths_BrowserFile(videoPaths, ui->Ext_image->text(), ui->Ext_video->text());
     filesAdded = true;
   }
 
@@ -966,7 +966,7 @@ void MainWindow::on_pushButton_BrowserFile_clicked()
   {
     // The Read_Input_paths_BrowserFile function seems designed for this.
     // It internally calls FileList_Add which then calls Batch_Table_Update_slots.
-    Read_Input_paths_BrowserFile(selectedFiles);
+    Read_Input_paths_BrowserFile(selectedFiles, ui->Ext_image->text(), ui->Ext_video->text());
     Table_FileCount_reload(); // Update the file count display
   }
 }

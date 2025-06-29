@@ -35,3 +35,61 @@ Waifu2x-Extension-QT-Launcher/Waifu2x-Extension-QT-Launcher
 
 __pycache__/
 *.pyc
+
+# Ignore AppData and other user-specific directories
+/AppData/
+/Application Data/
+/Cookies/
+/Documents/My Music/
+/Documents/My Pictures/
+/Documents/My Videos/
+/Local Settings/
+/My Documents/
+/NetHood/
+/PrintHood/
+/Recent/
+/SendTo/
+/Start Menu/
+/Templates/
+/Desktop/
+/Contacts/
+/Downloads/
+/Favorites/
+/Intel/
+/Links/
+/Music/
+/OneDrive/
+/Pictures/
+/Saved Games/
+/Searches/
+/The Pokémon Company International/
+/Videos/
+/VulkanSDK/
+/vimfiles/
+/source/
+/logs/
+/memory/
+/persona/
+.bash_history
+.env
+.gitconfig
+.lesshst
+aqtinstall.log
+build_log.txt
+debug_trace.log
+GEMINI.md
+ntuser.dat
+ntuser.dat.log1
+ntuser.dat.log2
+ntuser.dat{*}
+ntuser.ini
+numbered.txt
+_viminfo
+.codex/
+.config/
+.dotnet/
+.gemini/
+.insomniac/
+.matplotlib/
+.nuget/
+.templateengine/
