@@ -38,18 +38,12 @@
    <iconset resource="icon.qrc">
     <normaloff>:/new/prefix1/icon/icon_main.png</normaloff>:/new/prefix1/icon/icon_main.png</iconset>
   </property>
-  <property name="styleSheet">
-   <string notr="true" />
-  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
-   </property>
-   <property name="styleSheet">
-    <string notr="true" />
    </property>
    <layout class="QGridLayout" name="gridLayout_40">
     <property name="leftMargin">
@@ -66,9 +60,6 @@
     </property>
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter_4">
-      <property name="styleSheet">
-       <string notr="true" />
-      </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -87,9 +78,6 @@
          <width>0</width>
          <height>0</height>
         </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QSplitter::handle { background-color: #AAAAAA; } QSplitter::handle:horizontal { width: 1px; } QSplitter::handle:vertical { height: 1px; }</string>
        </property>
        <property name="tabShape">
         <enum>QTabWidget::Rounded</enum>
@@ -121,9 +109,6 @@
        <widget class="QWidget" name="tab_Donate">
         <property name="enabled">
          <bool>true</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true" />
         </property>
         <attribute name="icon">
          <iconset resource="icon.qrc">
@@ -265,9 +250,6 @@
              <bold>true</bold>
             </font>
            </property>
-           <property name="styleSheet">
-            <string notr="true">image: url(:/new/prefix1/donate/Donate_QRCode.jpg);</string>
-           </property>
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
            </property>
@@ -275,7 +257,7 @@
             <string />
            </property>
            <property name="scaledContents">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -364,17 +346,13 @@
                                                            <enum>Qt::ActionsContextMenu</enum>
                                                           </property>
                                                           <property name="toolTip">
-                                                           <string>Press [Delete] key to remove file from the list.
-                                       Press [Ctrl + A] key to apply custom resolution.
-                                       Press [Ctrl + C] key to cancel custom resolution.
-
-                                       Right click to show more options.</string>
-                                                          </property>
-                                                          <property name="styleSheet">
-                                                           <string notr="true">QTableView{
-                                       selection-background-color: rgb(52, 152, 219);
-
-                                       }</string>
+                                                           <string>&lt;html&gt;&lt;body&gt;
+&lt;p&gt;&lt;b&gt;Press [Delete]&lt;/b&gt; key to remove file from the list.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Press [Ctrl + A]&lt;/b&gt; key to apply custom resolution.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Press [Ctrl + C]&lt;/b&gt; key to cancel custom resolution.&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;Right click to show more options.&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;</string>
                                                           </property>
                                                           <property name="autoScroll">
                                                            <bool>false</bool>
@@ -455,16 +433,13 @@
                                                            <enum>Qt::ActionsContextMenu</enum>
                                                           </property>
                                                           <property name="toolTip">
-                                                           <string>Press [Delete] key to remove file from the list.
-                                       Press [Ctrl + A] key to apply custom resolution.
-                                       Press [Ctrl + C] key to cancel custom resolution.
-
-                                       Right click to show more options.</string>
-                                                          </property>
-                                                          <property name="styleSheet">
-                                                           <string notr="true">QTableView{
-                                       selection-background-color: rgb(26, 188, 156);
-                                       }</string>
+                                                           <string>&lt;html&gt;&lt;body&gt;
+&lt;p&gt;&lt;b&gt;Press [Delete]&lt;/b&gt; key to remove file from the list.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Press [Ctrl + A]&lt;/b&gt; key to apply custom resolution.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Press [Ctrl + C]&lt;/b&gt; key to cancel custom resolution.&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;Right click to show more options.&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;</string>
                                                           </property>
                                                           <property name="autoScroll">
                                                            <bool>false</bool>
@@ -539,16 +514,13 @@
                                                            <enum>Qt::ActionsContextMenu</enum>
                                                           </property>
                                                           <property name="toolTip">
-                                                           <string>Press [Delete] key to remove file from the list.
-                                       Press [Ctrl + A] key to apply custom resolution.
-                                       Press [Ctrl + C] key to cancel custom resolution.
-
-                                       Right click to show more options.</string>
-                                                          </property>
-                                                          <property name="styleSheet">
-                                                           <string notr="true">QTableView{
-                                       selection-background-color: rgb(178, 58, 238);
-                                       }</string>
+                                                           <string>&lt;html&gt;&lt;body&gt;
+&lt;p&gt;&lt;b&gt;Press [Delete]&lt;/b&gt; key to remove file from the list.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Press [Ctrl + A]&lt;/b&gt; key to apply custom resolution.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Press [Ctrl + C]&lt;/b&gt; key to cancel custom resolution.&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;Right click to show more options.&lt;/p&gt;
+&lt;/body&gt;&lt;/html&gt;</string>
                                                           </property>
                                                           <property name="autoScroll">
                                                            <bool>false</bool>
@@ -614,9 +586,6 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="styleSheet">
-                     <string notr="true"/>
-                    </property>
                     <property name="frameShape">
                      <enum>QFrame::Box</enum>
                     </property>
@@ -655,9 +624,6 @@
                     <property name="toolTip">
                      <string>Remove all the files in the File list.</string>
                     </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{image: url(:/new/prefix1/icon/ClearList.png);border-style:transparent;} QPushButton:hover{image: url(:/new/prefix1/icon/ClearList_hover.png);border-style:transparent;} QPushButton:pressed{image: url(:/new/prefix1/icon/ClearList.png);border-style:transparent;} QPushButton:disabled{image: url(:/new/prefix1/icon/ClearList_disabled.png);border-style:transparent;}</string>
-                    </property>
                     <property name="text">
                      <string/>
                     </property>
@@ -677,9 +643,6 @@
                     <property name="toolTip">
                      <string>Remove the selected file from File List.</string>
                     </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{image: url(:/new/prefix1/icon/RemoveItem.png);border-style:transparent;} QPushButton:hover{image: url(:/new/prefix1/icon/RemoveItem_hover.png);border-style:transparent;} QPushButton:pressed{image: url(:/new/prefix1/icon/RemoveItem.png);border-style:transparent;} QPushButton:disabled{image: url(:/new/prefix1/icon/RemoveItem_disabled.png);border-style:transparent;}</string>
-                    </property>
                     <property name="text">
                      <string/>
                     </property>
@@ -695,9 +658,6 @@
                     </property>
                     <property name="toolTip">
                      <string>Save Files List</string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{image: url(:/new/prefix1/icon/Save_FileList.png);border-style:transparent;} QPushButton:hover{image: url(:/new/prefix1/icon/Save_FileList_hover.png);border-style:transparent;} QPushButton:pressed{image: url(:/new/prefix1/icon/Save_FileList.png);border-style:transparent;} QPushButton:disabled{image: url(:/new/prefix1/icon/Save_FileList_disabled.png);border-style:transparent;}</string>
                     </property>
                     <property name="text">
                      <string/>
@@ -715,9 +675,6 @@
                     <property name="toolTip">
                      <string>Read Files List</string>
                     </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{image: url(:/new/prefix1/icon/Read_FileList.png);border-style:transparent;} QPushButton:hover{image: url(:/new/prefix1/icon/Read_FileList_hover.png);border-style:transparent;} QPushButton:pressed{image: url(:/new/prefix1/icon/Read_FileList.png);border-style:transparent;} QPushButton:disabled{image: url(:/new/prefix1/icon/Read_FileList_disabled.png);border-style:transparent;}</string>
-                    </property>
                     <property name="text">
                      <string/>
                     </property>
@@ -733,9 +690,6 @@
                     </property>
                     <property name="toolTip">
                      <string>Browse and add files.</string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{image: url(:/new/prefix1/icon/AddNewFile.png);border-style:transparent;} QPushButton:hover{image: url(:/new/prefix1/icon/AddNewFile_hover.png);border-style:transparent;} QPushButton:pressed{image: url(:/new/prefix1/icon/AddNewFile.png);border-style:transparent;} QPushButton:disabled{image: url(:/new/prefix1/icon/AddNewFile_disabled.png);border-style:transparent;}</string>
                     </property>
                     <property name="text">
                      <string/>
@@ -1095,13 +1049,13 @@
               </widget>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupBox_2">
+              <widget class="QGroupBox" name="groupBox_ImageOutputSettings">
                <property name="title">
-                <string/>
+                <string>Image Output Settings</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_26">
                 <item row="1" column="1">
-                 <widget class="QFrame" name="frame_2">
+                 <widget class="QFrame" name="frame_ImageQuality">
                   <layout class="QGridLayout" name="gridLayout_45">
                    <item row="1" column="0">
                     <widget class="QLabel" name="label_63">
@@ -1138,7 +1092,7 @@
                  </widget>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QFrame" name="frame">
+                 <widget class="QFrame" name="frame_ImageFormat">
                   <layout class="QGridLayout" name="gridLayout_42">
                    <item row="1" column="0">
                     <widget class="QComboBox" name="comboBox_ImageSaveFormat">
@@ -2920,38 +2874,11 @@ but the effect may not be obvious. It is not recommended to enable it.</string>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <property name="styleSheet">
-                     <string notr="true">QPushButton{
-	background-color: rgb(238, 119, 133);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-	background-color: rgb(255, 127, 144);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-	background-color: rgb(226, 112, 128);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                    </property>
                     <property name="text">
                      <string>Dump processor list</string>
+             </property>
+             <property name="objectName">
+              <string>pushButton_DumpProcessorList_converter</string>
                     </property>
                    </widget>
                   </item>
@@ -5203,7 +5130,7 @@ but the effect may not be obvious. It is not recommended to enable it.</string>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QCheckBox" name="checkBox_MultiGPU_RealesrganNcnnVulkan">
+                   <widget class="QCheckBox" name="checkBox_MultiGPU_RealSRNcnnVulkan">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -5254,7 +5181,7 @@ the number of threads must = the number of GPUs.
                    </widget>
                   </item>
                   <item>
-                   <widget class="QFrame" name="frame_TileSize_RealesrganNcnnVulkan">
+                   <widget class="QFrame" name="frame_TileSize_RealsrNcnnVulkan">
                     <property name="enabled">
                      <bool>true</bool>
                     </property>
@@ -5357,7 +5284,7 @@ Smaller tile size means Realsr will use less GPU memory and run slower.</string>
                 <item row="6" column="0" colspan="2">
                  <layout class="QHBoxLayout" name="horizontalLayout_34" stretch="1,2">
                   <item>
-                   <widget class="QGroupBox" name="groupBox_GPUSettings_MultiGPU_RealesrganNcnnVulkan">
+                   <widget class="QGroupBox" name="groupBox_GPUSettings_MultiGPU_RealSRNcnnVulkan">
                     <property name="enabled">
                      <bool>false</bool>
                     </property>
@@ -7630,38 +7557,11 @@ frequently occurs when processing images, you can enable this option to save tim
                 </item>
                 <item>
                  <widget class="QPushButton" name="pushButton_ResetSettings">
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton{
-background-color: rgb(238, 99, 99);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(255, 106, 106);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(205, 85, 85);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                  </property>
                   <property name="text">
                    <string>Reset settings</string>
+             </property>
+             <property name="objectName">
+              <string>pushButton_ResetSettings</string>
                   </property>
                  </widget>
                 </item>
@@ -7701,38 +7601,11 @@ padding:10px;
                     <underline>false</underline>
                    </font>
                   </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton{
-background-color: rgb(255, 181, 6);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-background-color: rgb(255, 200, 50);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(255, 170, 0);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-                  </property>
                   <property name="text">
                    <string>Official website</string>
+             </property>
+             <property name="objectName">
+              <string>pushButton_ReadMe</string>
                   </property>
                  </widget>
                 </item>
@@ -8508,38 +8381,11 @@ DAIN-NCNN-Vulkan [Speed:☆     Image quality:★★★] [2D Anime][3D Real-life
            <property name="toolTip">
             <string>Run a compatibility test to see which engines your computer is compatible with.</string>
            </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton{
-	background-color: rgb(92, 172, 238);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-	background-color: rgb(99, 184, 255);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-background-color: rgb(79, 148,205);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
-           </property>
            <property name="text">
             <string>Start compatibility test</string>
+             </property>
+             <property name="objectName">
+              <string>pushButton_compatibilityTest</string>
            </property>
           </widget>
          </item>
@@ -8662,36 +8508,6 @@ padding:10px;
            </property>
            <property name="toolTip">
             <string>Clear text browser.</string>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton{
-	background-color: rgb(0, 140, 158);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:hover{
-	background-color: rgb(0, 190, 211);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:pressed{
-	background-color: rgb(0, 108, 120);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}
-QPushButton:disabled{
-background-color: rgb(166, 166, 166);
-color: rgb(255, 255, 255);
-border-style:outset;
-border-radius:8px;
-padding:10px;
-}</string>
            </property>
            <property name="text">
             <string>Clear</string>

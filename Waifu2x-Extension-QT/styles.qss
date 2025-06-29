@@ -1,0 +1,300 @@
+/*
+ * Waifu2x-Extension-QT Stylesheet
+ */
+
+/* General styling for QSplitter handles */
+QSplitter::handle {
+    background-color: #AAAAAA;
+}
+
+QSplitter::handle:horizontal {
+    width: 1px;
+}
+
+QSplitter::handle:vertical {
+    height: 1px;
+}
+
+/* Styling for QTableView selection */
+QTableView {
+    selection-background-color: rgb(52, 152, 219); /* Default selection for tableView_image */
+}
+
+QTableView#tableView_gif {
+    selection-background-color: rgb(26, 188, 156);
+}
+
+QTableView#tableView_video {
+    selection-background-color: rgb(178, 58, 238);
+}
+
+/* Styling for icon-based QPushButtons */
+QPushButton#pushButton_ClearList {
+    image: url(:/new/prefix1/icon/ClearList.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_ClearList:hover {
+    image: url(:/new/prefix1/icon/ClearList_hover.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_ClearList:pressed {
+    image: url(:/new/prefix1/icon/ClearList.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_ClearList:disabled {
+    image: url(:/new/prefix1/icon/ClearList_disabled.png);
+    border-style: transparent;
+}
+
+QPushButton#pushButton_RemoveItem {
+    image: url(:/new/prefix1/icon/RemoveItem.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_RemoveItem:hover {
+    image: url(:/new/prefix1/icon/RemoveItem_hover.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_RemoveItem:pressed {
+    image: url(:/new/prefix1/icon/RemoveItem.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_RemoveItem:disabled {
+    image: url(:/new/prefix1/icon/RemoveItem_disabled.png);
+    border-style: transparent;
+}
+
+QPushButton#pushButton_SaveFileList {
+    image: url(:/new/prefix1/icon/Save_FileList.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_SaveFileList:hover {
+    image: url(:/new/prefix1/icon/Save_FileList_hover.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_SaveFileList:pressed {
+    image: url(:/new/prefix1/icon/Save_FileList.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_SaveFileList:disabled {
+    image: url(:/new/prefix1/icon/Save_FileList_disabled.png);
+    border-style: transparent;
+}
+
+QPushButton#pushButton_ReadFileList {
+    image: url(:/new/prefix1/icon/Read_FileList.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_ReadFileList:hover {
+    image: url(:/new/prefix1/icon/Read_FileList_hover.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_ReadFileList:pressed {
+    image: url(:/new/prefix1/icon/Read_FileList.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_ReadFileList:disabled {
+    image: url(:/new/prefix1/icon/Read_FileList_disabled.png);
+    border-style: transparent;
+}
+
+QPushButton#pushButton_BrowserFile {
+    image: url(:/new/prefix1/icon/AddNewFile.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_BrowserFile:hover {
+    image: url(:/new/prefix1/icon/AddNewFile_hover.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_BrowserFile:pressed {
+    image: url(:/new/prefix1/icon/AddNewFile.png);
+    border-style: transparent;
+}
+QPushButton#pushButton_BrowserFile:disabled {
+    image: url(:/new/prefix1/icon/AddNewFile_disabled.png);
+    border-style: transparent;
+}
+
+/* Styling for specific QPushButtons (colored) */
+QPushButton#pushButton_DumpProcessorList_converter {
+    background-color: rgb(238, 119, 133);
+    color: rgb(255, 255, 255);
+    border-style: outset;
+    border-radius: 8px;
+    padding: 10px;
+}
+QPushButton#pushButton_DumpProcessorList_converter:hover {
+    background-color: rgb(255, 127, 144);
+    color: rgb(255, 255, 255);
+    border-style: outset;
+    border-radius: 8px;
+    padding: 10px;
+}
+QPushButton#pushButton_DumpProcessorList_converter:pressed {
+    background-color: rgb(226, 112, 128);
+    color: rgb(255, 255, 255);
+    border-style: outset;
+    border-radius: 8px;
+    padding: 10px;
+}
+QPushButton#pushButton_DumpProcessorList_converter:disabled {
+    background-color: rgb(166, 166, 166);
+    color: rgb(255, 255, 255);
+    border-style: outset;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+QPushButton#pushButton_ResetSettings {
+    background-color: rgb(238, 99, 99);
+    color: rgb(255, 255, 255);
+    border-style: outset;
+    border-radius: 8px;
+    padding: 10px;
+}
+QPushButton#pushButton_ResetSettings:hover {
+    background-color: rgb(255, 106, 106);
+    color: rgb(255, 255, 255);
+    border-style: outset;
+    border-radius: 8px;
+    padding: 10px;
+}
+QPushButton#pushButton_ResetSettings:pressed {
+    background-color: rgb(205, 85, 85);
+    color: rgb(255, 255, 255);
+    border-style: outset;
+    border-radius: 8px;
+    padding: 10px;
+}
+QPushButton#pushButton_ResetSettings:disabled {
+    background-color: rgb(166, 166, 166);
+    color: rgb(255, 255, 255);
+    border-style: outset;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+QPushButton#pushButton_ReadMe { /* Official Website button */
+    background-color: rgb(255, 181, 6);
+    color: rgb(255, 255, 255);
+    border-style: outset;
+    border-radius: 8px;
+    padding: 10px;
+}
+QPushButton#pushButton_ReadMe:hover {
+    background-color: rgb(255, 200, 50);
+    color: rgb(255, 255, 255);
+    border-style: outset;
+    border-radius: 8px;
+    padding: 10px;
+}
+QPushButton#pushButton_ReadMe:pressed {
+    background-color: rgb(255, 170, 0);
+    color: rgb(255, 255, 255);
+    border-style: outset;
+    border-radius: 8px;
+    padding: 10px;
+}
+QPushButton#pushButton_ReadMe:disabled {
+    background-color: rgb(166, 166, 166);
+    color: rgb(255, 255, 255);
+    border-style: outset;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+
+QPushButton#pushButton_compatibilityTest {
+	background-color: rgb(92, 172, 238);
+    color: rgb(255, 255, 255);
+    border-style:outset;
+    border-radius:8px;
+    padding:10px;
+}
+QPushButton#pushButton_compatibilityTest:hover {
+	background-color: rgb(99, 184, 255);
+    color: rgb(255, 255, 255);
+    border-style:outset;
+    border-radius:8px;
+    padding:10px;
+}
+QPushButton#pushButton_compatibilityTest:pressed {
+    background-color: rgb(79, 148,205);
+    color: rgb(255, 255, 255);
+    border-style:outset;
+    border-radius:8px;
+    padding:10px;
+}
+QPushButton#pushButton_compatibilityTest:disabled {
+    background-color: rgb(166, 166, 166);
+    color: rgb(255, 255, 255);
+    border-style:outset;
+    border-radius:8px;
+    padding:10px;
+}
+
+QPushButton#pushButton_clear_textbrowser {
+	background-color: rgb(0, 140, 158);
+    color: rgb(255, 255, 255);
+    border-style:outset;
+    border-radius:8px;
+    padding:10px;
+}
+QPushButton#pushButton_clear_textbrowser:hover {
+	background-color: rgb(0, 190, 211);
+    color: rgb(255, 255, 255);
+    border-style:outset;
+    border-radius:8px;
+    padding:10px;
+}
+QPushButton#pushButton_clear_textbrowser:pressed {
+	background-color: rgb(0, 108, 120);
+    color: rgb(255, 255, 255);
+    border-style:outset;
+    border-radius:8px;
+    padding:10px;
+}
+QPushButton#pushButton_clear_textbrowser:disabled {
+    background-color: rgb(166, 166, 166);
+    color: rgb(255, 255, 255);
+    border-style:outset;
+    border-radius:8px;
+    padding:10px;
+}
+
+/* QCheckBox styling for compatibility test results (keep text black when disabled) */
+QCheckBox#checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW:disabled,
+QCheckBox#checkBox_isCompatible_Waifu2x_NCNN_Vulkan_NEW_FP16P:disabled,
+QCheckBox#checkBox_isCompatible_Waifu2x_NCNN_Vulkan_OLD:disabled,
+QCheckBox#checkBox_isCompatible_SRMD_NCNN_Vulkan:disabled,
+QCheckBox#checkBox_isCompatible_Waifu2x_Converter:disabled,
+QCheckBox#checkBox_isCompatible_Anime4k_CPU:disabled,
+QCheckBox#checkBox_isCompatible_Anime4k_GPU:disabled,
+QCheckBox#checkBox_isCompatible_Waifu2x_Caffe_CPU:disabled,
+QCheckBox#checkBox_isCompatible_Waifu2x_Caffe_GPU:disabled,
+QCheckBox#checkBox_isCompatible_Waifu2x_Caffe_cuDNN:disabled,
+QCheckBox#checkBox_isCompatible_Realsr_NCNN_Vulkan:disabled,
+QCheckBox#checkBox_isCompatible_SRMD_CUDA:disabled,
+QCheckBox#checkBox_isCompatible_SoX:disabled,
+QCheckBox#checkBox_isCompatible_ImageMagick:disabled,
+QCheckBox#checkBox_isCompatible_Gifsicle:disabled,
+QCheckBox#checkBox_isCompatible_FFprobe:disabled,
+QCheckBox#checkBox_isCompatible_FFmpeg:disabled,
+QCheckBox#checkBox_isCompatible_RifeNcnnVulkan:disabled,
+QCheckBox#checkBox_isCompatible_CainNcnnVulkan:disabled,
+QCheckBox#checkBox_isCompatible_DainNcnnVulkan:disabled {
+	color: rgb(0, 0, 0);
+}
+
+/* QR Code Label - image will be set in C++ */
+QLabel#label_DonateQRCode {
+    /* image: url(:/new/prefix1/donate/Donate_QRCode.jpg); */ /* Moved to C++ */
+}
+
+/* Empty stylesheets (can be removed or left if UI designer needs them) */
+QMainWindow { /* stylesheet property was <string notr="true" /> */ }
+QWidget#centralwidget { /* stylesheet property was <string notr="true" /> */ }
+QSplitter#splitter_4 { /* stylesheet property was <string notr="true" /> */ }
+QWidget#tab_Donate { /* stylesheet property was <string notr="true" /> */ }
+QGroupBox#groupBox_textBrowserSettings { /* stylesheet property was <string notr="true" /> */ }
+
+/* Add any other specific styles here, using object names or properties */
